@@ -33,7 +33,7 @@ import { GmButton, GmStatusTag, GmRiskPicker } from "@goodmom/ui";
 | 规范 | 说明 | 本库落点 |
 | --- | --- | --- |
 | 00–16 号文档 | 视觉 DNA / Token / 组件 / 数据可视化 / 命名 / 词库 | 与本目录同级（README 为入口） |
-| preview/ | 首页全组件演示 · 示例中心 5 页 · 移动端 | 浏览器直接打开 |
+| preview/ | 首页全组件演示 · 示例中心 7 页 · 移动端 | 浏览器直接打开 |
 | icons/lg-icons.svg | 77 枚自绘图标 | 引入后 `npm run build` 前可直接 `<symbol>` 引用 |
 
 ## 贡献

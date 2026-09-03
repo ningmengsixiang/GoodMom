@@ -1,4 +1,4 @@
-# 妈咪好 GoodMom · 妇幼儿童全生命周期设计系统（V2.2）
+# 妈咪好 GoodMom · 妇幼儿童全生命周期设计系统（V2.3）
 
 > **高级液态玻璃 · 柔光蜜桃 · 妇女儿童健康管理**（视觉引擎：Liquid Glass / Ambient Liquid Glass）
 
@@ -7,7 +7,7 @@
 
 适用：妈妈/家庭 App（孕期首页、生长曲线、疫苗计划、儿保体检）、机构运营端、医护随访工作台与数据大屏。品牌定义见 [12](12-妈咪好品牌与设计语言.md)，妇幼领域组件见 [13](13-妇幼领域组件规范.md)；01–11 为通用视觉引擎文档。
 
-**交付统计（V2.2）**：18 份规范文档 · 94 项组件（00 总目录）· 77 枚自绘图标（icons/lg-icons.svg）· 90+ 状态标签 · 3 套可交互预览（首页 / 移动端 / 示例中心 5 页）· 1 个前端封装库（frontend-app/packages/gm-arco-ui）
+**交付统计（V2.3）**：18 份规范文档 · 94 项组件（00 总目录）· 77 枚自绘图标（icons/lg-icons.svg）· 90+ 状态标签 · 3 套可交互预览（首页 / 移动端 / 示例中心 7 页）· 1 个前端封装库（frontend-app/packages/gm-arco-ui）
 
 **体系架构**
 
@@ -46,7 +46,7 @@
 | [`16-优化与一致性审计.md`](16-优化与一致性审计.md) | **一致性体检与基线**：计数快照、命名/版本纪律、词库/颜色规则、变更登记 | 维护人（每次改结构先看这里） |
 | [`preview/index.html`](preview/index.html) | 液态玻璃视觉预览页（浏览器直接打开，可视化 Token、组件、微交互与图标库） | 全员对照参考 |
 | [`preview/mobile.html`](preview/mobile.html) | **移动端视觉预览**（手机框：NavBar、底部 TabBar、卡片流、触控按压反馈） | 移动端对照参考 |
-| [`preview/examples.html`](preview/examples.html) | **示例中心**：常用完整页面 5 套（列表/详情/表单向导/移动/iPad），支持顺序浏览 | 全员对照参考 |
+| [`preview/examples.html`](preview/examples.html) | **示例中心**：常用完整页面 7 套（列表/详情/表单/移动/iPad/工作站/孕妇档案），支持顺序浏览 | 全员对照参考 |
 | [`preview/manual.html`](preview/manual.html) | **总览手册（打印版）**：定位/架构/DNA/状态/文档地图，浏览器可另存 PDF | 全员（对外介绍用） |
 | [`site/index.html`](site/index.html) | **开源网站落地页**：品牌 Hero/能力/视觉/快速上手/开源治理（可直接部署 GitHub Pages） | 对外展示用 |
 | [`brand/`](brand/) | **品牌图形资产**：Logo v1 孕妇形象（logo-mark / logo / tile 三种 SVG，规范见 12 · 12.8） | 品牌使用 |
@@ -84,7 +84,7 @@
 3. **前端落地** → 复制 02 章末尾的 CSS 变量块，组件按 [`03-组件规范.md`](03-组件规范.md) 实现。
 4. **视觉对照** → 浏览器打开 [`preview/index.html`](preview/index.html) 实时查看效果（含微交互演示，悬停、按压、开关、分段控件等均可直接操作）。
 5. **移动端** → 规范见 [`10-移动端组件规范.md`](10-移动端组件规范.md)，预览 [`preview/mobile.html`](preview/mobile.html)（建议浏览器设备模式）。
-6. **完整示例页** → 打开 [`preview/examples.html`](preview/examples.html)，按“下一页”顺序走完 5 套常用页面。
+6. **完整示例页** → 打开 [`preview/examples.html`](preview/examples.html)，按“下一页”顺序走完 7 套常用页面。
 
 ---
 
@@ -154,3 +154,4 @@ bash scripts/print-manual.sh
 | V2.0 | — | 品牌化：命名「妈咪好 GoodMom」、蜜桃粉主色+淡紫柔光、品牌 Token（02.9/12）、妇幼领域组件（13）、母婴图标（09 B）、双端预览换肤 |
 | V2.1 | — | 全系统优化：名称/版本/域示例清扫（04/05/08/09/10）、示例中心 5 页、状态样式库 v2、五色分级、图标 77/10 类、前端封装骨架（16） |
 | V2.2 | — | 首页专业包装（分组菜单/速览条/三步指南）、打印版总览手册、README 交付统计与架构、仓库初始化（.gitignore/LICENSE/CHANGELOG） |
+| V2.3 | — | 网站整合：主站用户旅程+目录+统一页脚；导航 GitHub 开源入口；示例中心扩至 7 页（PC 工作站/孕妇档案）；Logo 全局接入；视觉与文档一致性同步 |
