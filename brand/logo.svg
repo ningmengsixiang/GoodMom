@@ -1,0 +1,35 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 520 150" width="520" height="150" role="img" aria-label="妈咪好 GoodMom">
+  <defs>
+    <linearGradient id="lgA" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#FFA9C2"/><stop offset=".55" stop-color="#F77FA3"/><stop offset="1" stop-color="#C94A77"/>
+    </linearGradient>
+  </defs>
+  <g transform="translate(8,10) scale(0.68)">
+  <defs>
+    <linearGradient id="gmBody" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#FFA9C2"/>
+      <stop offset="0.55" stop-color="#F77FA3"/>
+      <stop offset="1" stop-color="#C94A77"/>
+    </linearGradient>
+    <linearGradient id="gmRing" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#FFC4D6"/>
+      <stop offset="1" stop-color="#FFF0F4"/>
+    </linearGradient>
+  </defs>
+  <!-- 外圈柔光 -->
+  <circle cx="100" cy="104" r="78" fill="url(#gmRing)" opacity=".35"/>
+  <circle cx="100" cy="104" r="78" fill="none" stroke="rgba(247,127,163,.35)" stroke-width="2"/>
+  <!-- 孕妈剪影：头 + A字裙身 -->
+  <path d="M100 96 C76 96 62 108 58 126 C52 148 40 160 46 178 C50 191 72 196 100 196 C128 196 150 191 154 178 C160 160 148 148 142 126 C138 108 124 96 100 96 Z" fill="url(#lgA)"/>
+  <circle cx="100" cy="62" r="32" fill="url(#lgA)"/>
+  <!-- 发髻/高光 -->
+  <path d="M84 36 C 92 30 108 30 116 36" fill="none" stroke="rgba(255,255,255,.7)" stroke-width="5" stroke-linecap="round"/>
+  <!-- 孕肚弧线（形象点） -->
+  <path d="M64 136 C 78 166 122 166 136 136" fill="none" stroke="rgba(255,255,255,.85)" stroke-width="6" stroke-linecap="round"/>
+  <!-- 妈妈爱心 -->
+  <path d="M100 130 c-4.4 -6.4 -14.4 -5 -16.4 3.2 c-2 7.6 6.2 12.8 16.4 19.8 c10.2 -7 18.4 -12.2 16.4 -19.8 c-2 -8.2 -12 -9.6 -16.4 -3.2 z" fill="#FFFFFF"/>
+</g>
+  <text x="148" y="76" font-family="PingFang SC, Microsoft YaHei, sans-serif" font-size="48" font-weight="700" fill="#343A46" letter-spacing="2">妈咪好</text>
+  <text x="150" y="112" font-family="Inter, Helvetica, sans-serif" font-size="22" font-weight="600" fill="#E85D8F" letter-spacing="4">GOODMOM</text>
+  <text x="150" y="134" font-family="PingFang SC, sans-serif" font-size="13" fill="#9AA2B0" letter-spacing="3">妇幼儿童全生命周期 · 设计系统</text>
+</svg>

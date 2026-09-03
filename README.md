@@ -49,6 +49,7 @@
 | [`preview/examples.html`](preview/examples.html) | **示例中心**：常用完整页面 5 套（列表/详情/表单向导/移动/iPad），支持顺序浏览 | 全员对照参考 |
 | [`preview/manual.html`](preview/manual.html) | **总览手册（打印版）**：定位/架构/DNA/状态/文档地图，浏览器可另存 PDF | 全员（对外介绍用） |
 | [`site/index.html`](site/index.html) | **开源网站落地页**：品牌 Hero/能力/视觉/快速上手/开源治理（可直接部署 GitHub Pages） | 对外展示用 |
+| [`brand/`](brand/) | **品牌图形资产**：Logo v1 孕妇形象（logo-mark / logo / tile 三种 SVG，规范见 12 · 12.8） | 品牌使用 |
 
 ---
 
