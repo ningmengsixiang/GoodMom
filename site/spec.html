@@ -40,15 +40,14 @@ a{color:var(--rose-deep)}
 .md hr{border:none;border-top:1px dashed #e6c6bd;margin:16px 0}
 @media(max-width:760px){.chap{padding:16px}}
 
-/* 阅读器模式 */
 body.reader .wrap{max-width:100%;padding:20px 24px 90px}
 body.reader .chap{display:none;margin:0 auto 20px;max-width:960px;scroll-margin-top:80px}
 body.reader .chap.active{display:block}
-.readtoggle{margin-left:8px;font-size:12px;font-weight:600;color:var(--rose-deep);background:#fff;border:1px solid rgba(232,93,143,.3);padding:7px 14px;border-radius:999px;cursor:pointer;font-family:inherit}
+.readtoggle{margin-left:8px;font-size:12px;font-weight:600;color:#C94A77;background:#fff;border:1px solid rgba(232,93,143,.3);padding:7px 14px;border-radius:999px;cursor:pointer;font-family:inherit}
 body.reader .readtoggle{background:linear-gradient(135deg,#FFA9C2,#E85D8F);color:#fff;border-color:transparent}
 .chapnav{display:none;gap:8px;justify-content:space-between;max-width:960px;margin:0 auto 10px}
 body.reader .chapnav{display:flex}
-.chapnav button{border:none;cursor:pointer;font-family:inherit;font-size:12.5px;font-weight:600;padding:8px 16px;border-radius:999px;background:#fff;color:var(--rose-deep);border:1px solid rgba(232,93,143,.3)}
+.chapnav button{border:none;cursor:pointer;font-family:inherit;font-size:12.5px;font-weight:600;padding:8px 16px;border-radius:999px;background:#fff;color:#C94A77;border:1px solid rgba(232,93,143,.3)}
 
 </style>
 </head>
@@ -56,9 +55,12 @@ body.reader .chapnav{display:flex}
 <div class="top"><img src="../logo.png" alt="妈咪好"><b>妈咪好 GoodMom · 规范大全</b><div class="gp"><button type="button">概览</button><div class="drop"><a href="#ch-readme">总览与使用</a></div></div><div class="gp"><button type="button">组件索引</button><div class="drop"><a href="#ch-00">00-组件总目录</a></div></div><div class="gp"><button type="button">设计指南</button><div class="drop"><a href="#ch-01">01-设计总览与设计DNA</a><a href="#ch-12">12-妈咪好品牌与设计语言</a><a href="#ch-14">14-命名与术语规范</a><a href="#ch-16">16-优化与一致性审计</a><a href="#ch-17">17-页面布局与组件组合规范</a></div></div><div class="gp"><button type="button">开发指南</button><div class="drop"><a href="#ch-02">02-Token规范</a><a href="#ch-03">03-组件规范</a><a href="#ch-04">04-数据可视化规范</a><a href="#ch-05">05-AI生成Prompt库</a><a href="#ch-06">06-制作流程与验收清单</a><a href="#ch-07">07-交互动效与微交互规范</a><a href="#ch-08">08-组件覆盖清单与Semi对齐</a><a href="#ch-09">09-图标库规范</a></div></div><div class="gp"><button type="button">多端</button><div class="drop"><a href="#ch-10">10-移动端组件规范</a><a href="#ch-11">11-移动端组件全量库</a></div></div><div class="gp"><button type="button">妇幼业务</button><div class="drop"><a href="#ch-13">13-妇幼领域组件规范</a><a href="#ch-15">15-妇幼业务词库与状态大典</a></div></div><button class="readtoggle" id="modeBtn" type="button">阅读模式</button>
   <a class="ext" href="index.html">主站</a><a class="ext2" href="../preview/examples.html">示例中心</a></div>
 <div class="wrap">
-<div class="chapnav"><button id="prevCh" type="button">‹ 上一章</button><button id="allCh" type="button">回到全部（列表）</button><button id="nextCh" type="button">下一章 ›</button></div><section class="chap" id="ch-readme"><div class="chap-hd"><b>总览 · README</b></div><div class="md"><h2>妈咪好 GoodMom · 妇幼儿童全生命周期设计系统（V2.3）</h2>
-<blockquote><b>高级液态玻璃 · 柔光蜜桃 · 妇女儿童健康管理</b>（视觉引擎：Liquid Glass / Ambient Liquid Glass）</blockquote>
-<p>妈咪好 GoodMom 是 <b>妇幼儿童全生命周期健康管理平台</b> 的专属设计系统，覆盖 <b>孕期 · 婴幼儿/儿童保健 · 机构管理端 · 医护工作台</b> 四大板块。</p>
+<div class="chapnav"><button id="prevCh" type="button">‹ 上一章</button><button id="allCh" type="button">回到全部（列表）</button><button id="nextCh" type="button">下一章 ›</button></div><section class="chap" id="ch-readme"><div class="chap-hd"><b>总览 · README</b></div><div class="md"><p>&lt;p align="center"&gt; &lt;img src="logo.png" width="96" alt="妈咪好 GoodMom"&gt; &lt;/p&gt;</p>
+<h2>妈咪好 GoodMom · 妇幼儿童全生命周期设计系统</h2>
+<p>&lt;p align="center"&gt; &lt;b&gt;高级液态玻璃 · 柔光蜜桃 · 温暖可信 · 医疗克制&lt;/b&gt;&lt;br&gt; 妇幼儿童全生命周期健康管理平台专属设计系统 —— 孕期 · 婴幼儿/儿童保健 · 机构管理端 · 医护工作台 &lt;/p&gt;</p>
+<p>&lt;p align="center"&gt; &lt;img alt="版本" src="https://img.shields.io/badge/version-2.3-ff9ab6?style=flat-square"&gt; &lt;img alt="文档" src="https://img.shields.io/badge/规范文档-19-6fc9b4?style=flat-square"&gt; &lt;img alt="组件" src="https://img.shields.io/badge/组件-94-9a78ff?style=flat-square"&gt; &lt;img alt="图标" src="https://img.shields.io/badge/图标-77-ffc3a0?style=flat-square"&gt; &lt;img alt="示例" src="https://img.shields.io/badge/示例页面-7-e85d8f?style=flat-square"&gt; &lt;img alt="许可证" src="https://img.shields.io/badge/License-MIT-8066f0?style=flat-square"&gt; &lt;/p&gt;</p>
+<p>&lt;p align="center"&gt; &lt;a href="site/spec.html"&gt;📖 规范大全（HTML）&lt;/a&gt; · &lt;a href="site/index.html"&gt;🏠 主站&lt;/a&gt; · &lt;a href="site/docs.html"&gt;🗂 文档中心&lt;/a&gt; · &lt;a href="preview/examples.html"&gt;🖥 示例中心&lt;/a&gt; · &lt;a href="https://github.com/ningmengsixiang/GoodMom"&gt;GitHub ↗&lt;/a&gt; &lt;/p&gt;</p>
+<hr>
 <p>适用：妈妈/家庭 App（孕期首页、生长曲线、疫苗计划、儿保体检）、机构运营端、医护随访工作台与数据大屏。品牌定义见 [12](#ch-12)，妇幼领域组件见 [13](#ch-13)；01–11 为通用视觉引擎文档。</p>
 <p><b>交付统计（V2.3）</b>：19 份规范文档 · 94 项组件（00 总目录）· 77 枚自绘图标（icons/lg-icons.svg）· 90+ 状态标签 · 3 套可交互预览（首页 / 移动端 / 示例中心 7 页）· 1 个前端封装库（frontend-app/packages/gm-arco-ui）</p>
 <p><b>体系架构</b></p>
@@ -81,7 +83,7 @@ body.reader .chapnav{display:flex}
 <table><thead><tr><th>栏目</th><th>落点</th></tr></thead><tbody><tr><td>用法速查（Do/Don't）</td><td>[03 · 3.11](#ch-03)</td></tr><tr><td>页面与组合规范</td><td>[17](#ch-17)</td></tr><tr><td>状态词与语义色</td><td>[14 · 4.4.5](#ch-14) · [15](#ch-15)</td></tr><tr><td>动效/触控用法</td><td>[07](#ch-07) · [10.7](#ch-10)</td></tr><tr><td>合规审计</td><td>[16.6](#ch-16)</td></tr><tr><td>标准答案（可照抄页面）</td><td>preview/examples.html（7 套完整页）</td></tr></tbody></table>
 <hr>
 <h3>目录结构</h3>
-<table><thead><tr><th>文件</th><th>内容</th><th>适合谁</th></tr></thead><tbody><tr><td>[<code>00-组件总目录.md</code>](#ch-00)</td><td><b>全系统组件总目录</b>：PC + 移动 + 妇幼领域 94 项一张表平铺（端归属、章节速查、双端形态）</td><td>所有人，先查这张表</td></tr><tr><td>[<code>01-设计总览与设计DNA.md</code>](#ch-01)</td><td>风格定义、核心关键词、10 大视觉特征、5 层空间层级、L.Glass Design DNA</td><td>所有人，先读这一篇</td></tr><tr><td>[<code>02-Token规范.md</code>](#ch-02)</td><td>颜色 / 字体 / 间距 / 圆角 / 玻璃材质 / 阴影 全套 Token（含可直接复制的 CSS 变量）</td><td>设计师、前端</td></tr><tr><td>[<code>03-组件规范.md</code>](#ch-03)</td><td>按钮、卡片、导航、输入框、开关、徽章、状态点、3D 玻璃图标等组件规格</td><td>设计师、前端</td></tr><tr><td>[<code>04-数据可视化规范.md</code>](#ch-04)</td><td>图表类型、数据色序、KPI 卡、玻璃表格、行业大屏布局蓝图</td><td>数据可视化设计</td></tr><tr><td>[<code>05-AI生成Prompt库.md</code>](#ch-05)</td><td>通用 Master Prompt、分行业大屏 Prompt、负面提示词、HTML 实现指令</td><td>AI 出图 / AI 编程</td></tr><tr><td>[<code>06-制作流程与验收清单.md</code>](#ch-06)</td><td>AI→Figma→前端工作流、验收清单、常见错误与避坑</td><td>全员</td></tr><tr><td>[<code>07-交互动效与微交互规范.md</code>](#ch-07)</td><td>动效分级与 Token、组件级微交互配方（按钮/卡片/开关/图表…）、无障碍与性能纪律</td><td>前端、动效设计</td></tr><tr><td>[<code>08-组件覆盖清单与Semi对齐.md</code>](#ch-08)</td><td>对照 Semi Design 80+ 组件逐项核对 LG 覆盖度，本期补齐 FloatButton/Steps/Progress/DatePicker 等 17 项适配规范</td><td>设计师、前端（能力盘点）</td></tr><tr><td>[<code>09-图标库规范.md</code>](#ch-09)</td><td>LG 自绘线性图标库（GoodMom 版）：以 Semi Icons 为基准的绘制标准、77 枚图标清单（10 类，含孕产妇阶段/儿童年龄段/儿童健康五健+口腔镜）、颜色/尺寸/接入规范</td><td>全员（图标即代码）</td></tr><tr><td>[<code>10-移动端组件规范.md</code>](#ch-10)</td><td><b>移动端独立规范</b>：PC↔Mobile 差异、移动 Token/字号/安全区、TabBar/NavBar/ActionSheet 等移动组件、图表降级、触控反馈、性能与验收</td><td>移动端 UI / 前端</td></tr><tr><td>[<code>11-移动端组件全量库.md</code>](#ch-11)</td><td><b>移动端全量组件库</b>：60+ 组件覆盖地图（6 大类）、20+ 新增细则、6 套页面模板、Arco Mobile 对齐（按钮谱/CapsuleTabs/Calendar/Selector 等 11.6）</td><td>移动端 UI / 前端</td></tr><tr><td>[<code>12-妈咪好品牌与设计语言.md</code>](#ch-12)</td><td><b>品牌顶层</b>：妈咪好 GoodMom 定位/四大板块、视觉五关键词、品牌色板与双模式机制</td><td>全员（品牌口径）</td></tr><tr><td>[<code>13-妇幼领域组件规范.md</code>](#ch-13)</td><td><b>妇幼领域组件</b>：孕周卡/生长曲线（百分位带）/疫苗计划/随访队列等 14 项、医疗合规、医护大屏 Prompt</td><td>领域设计/前端</td></tr><tr><td>[<code>14-命名与术语规范.md</code>](#ch-14)</td><td><b>命名/术语/状态标签唯一标准</b>：组件官方名（含别名迁移）、妇幼常用词词典、状态标签集与颜色映射</td><td>全员（先查词再用）</td></tr><tr><td>[<code>15-妇幼业务词库与状态大典.md</code>](#ch-15)</td><td><b>业务语言权威</b>：按钮文案词典、九套状态 Tag、人员/档案/筛查/大屏词表、六语义色彩、PC/iPad/手机按钮分级</td><td>业务/产品/设计/前端</td></tr><tr><td>[<code>16-优化与一致性审计.md</code>](#ch-16)</td><td><b>一致性体检与基线</b>：计数快照、命名/版本纪律、词库/颜色规则、变更登记</td><td>维护人（每次改结构先看这里）</td></tr><tr><td>[<code>17-页面布局与组件组合规范.md</code>](#ch-17)</td><td><b>页面与组合全局规范</b>：页面壳/栅格留白/对齐基线（图标-文字）、组件组合顺序与间距档、实现验收</td><td>全员（先查后做）</td></tr><tr><td>[<code>preview/index.html</code>](preview/index.html)</td><td>液态玻璃视觉预览页（浏览器直接打开，可视化 Token、组件、微交互与图标库）</td><td>全员对照参考</td></tr><tr><td>[<code>preview/mobile.html</code>](preview/mobile.html)</td><td><b>移动端视觉预览</b>（手机框：NavBar、底部 TabBar、卡片流、触控按压反馈）</td><td>移动端对照参考</td></tr><tr><td>[<code>preview/examples.html</code>](preview/examples.html)</td><td><b>示例中心</b>：常用完整页面 7 套（列表/详情/表单/移动/iPad/工作站/孕妇档案），支持顺序浏览</td><td>全员对照参考</td></tr><tr><td>[<code>preview/manual.html</code>](preview/manual.html)</td><td><b>总览手册（打印版）</b>：定位/架构/DNA/状态/文档地图，浏览器可另存 PDF</td><td>全员（对外介绍用）</td></tr><tr><td>[<code>site/index.html</code>](site/index.html)</td><td><b>开源网站落地页</b>：品牌 Hero/能力/视觉/快速上手/开源治理（可直接部署 GitHub Pages）</td><td>对外展示用</td></tr><tr><td>[<code>brand/</code>](brand/)</td><td><b>品牌图形资产</b>：Logo v1 孕妇形象（logo-mark / logo / tile 三种 SVG，规范见 12 · 12.8）</td><td>品牌使用</td></tr></tbody></table>
+<table><thead><tr><th>文件</th><th>内容</th><th>适合谁</th></tr></thead><tbody><tr><td>[<code>00-组件总目录.md</code>](#ch-00)</td><td><b>全系统组件总目录</b>：PC + 移动 + 妇幼领域 94 项一张表平铺（端归属、章节速查、双端形态）</td><td>所有人，先查这张表</td></tr><tr><td>[<code>01-设计总览与设计DNA.md</code>](#ch-01)</td><td>风格定义、核心关键词、10 大视觉特征、5 层空间层级、L.Glass Design DNA</td><td>所有人，先读这一篇</td></tr><tr><td>[<code>02-Token规范.md</code>](#ch-02)</td><td>颜色 / 字体 / 间距 / 圆角 / 玻璃材质 / 阴影 全套 Token（含可直接复制的 CSS 变量）</td><td>设计师、前端</td></tr><tr><td>[<code>03-组件规范.md</code>](#ch-03)</td><td>按钮、卡片、导航、输入框、开关、徽章、状态点、3D 玻璃图标等组件规格</td><td>设计师、前端</td></tr><tr><td>[<code>04-数据可视化规范.md</code>](#ch-04)</td><td>图表类型、数据色序、KPI 卡、玻璃表格、行业大屏布局蓝图</td><td>数据可视化设计</td></tr><tr><td>[<code>05-AI生成Prompt库.md</code>](#ch-05)</td><td>通用 Master Prompt、分行业大屏 Prompt、负面提示词、HTML 实现指令</td><td>AI 出图 / AI 编程</td></tr><tr><td>[<code>06-制作流程与验收清单.md</code>](#ch-06)</td><td>AI→Figma→前端工作流、验收清单、常见错误与避坑</td><td>全员</td></tr><tr><td>[<code>07-交互动效与微交互规范.md</code>](#ch-07)</td><td>动效分级与 Token、组件级微交互配方（按钮/卡片/开关/图表…）、无障碍与性能纪律</td><td>前端、动效设计</td></tr><tr><td>[<code>08-组件覆盖清单与Semi对齐.md</code>](#ch-08)</td><td>对照 Semi Design 80+ 组件逐项核对 LG 覆盖度，本期补齐 FloatButton/Steps/Progress/DatePicker 等 17 项适配规范</td><td>设计师、前端（能力盘点）</td></tr><tr><td>[<code>09-图标库规范.md</code>](#ch-09)</td><td>LG 自绘线性图标库（GoodMom 版）：以 Semi Icons 为基准的绘制标准、77 枚图标清单（10 类，含孕产妇阶段/儿童年龄段/儿童健康五健+口腔镜）、颜色/尺寸/接入规范</td><td>全员（图标即代码）</td></tr><tr><td>[<code>10-移动端组件规范.md</code>](#ch-10)</td><td><b>移动端独立规范</b>：PC↔Mobile 差异、移动 Token/字号/安全区、TabBar/NavBar/ActionSheet 等移动组件、图表降级、触控反馈、性能与验收</td><td>移动端 UI / 前端</td></tr><tr><td>[<code>11-移动端组件全量库.md</code>](#ch-11)</td><td><b>移动端全量组件库</b>：60+ 组件覆盖地图（6 大类）、20+ 新增细则、6 套页面模板、Arco Mobile 对齐（按钮谱/CapsuleTabs/Calendar/Selector 等 11.6）</td><td>移动端 UI / 前端</td></tr><tr><td>[<code>12-妈咪好品牌与设计语言.md</code>](#ch-12)</td><td><b>品牌顶层</b>：妈咪好 GoodMom 定位/四大板块、视觉五关键词、品牌色板与双模式机制</td><td>全员（品牌口径）</td></tr><tr><td>[<code>13-妇幼领域组件规范.md</code>](#ch-13)</td><td><b>妇幼领域组件</b>：孕周卡/生长曲线（百分位带）/疫苗计划/随访队列等 14 项、医疗合规、医护大屏 Prompt</td><td>领域设计/前端</td></tr><tr><td>[<code>14-命名与术语规范.md</code>](#ch-14)</td><td><b>命名/术语/状态标签唯一标准</b>：组件官方名（含别名迁移）、妇幼常用词词典、状态标签集与颜色映射</td><td>全员（先查词再用）</td></tr><tr><td>[<code>15-妇幼业务词库与状态大典.md</code>](#ch-15)</td><td><b>业务语言权威</b>：按钮文案词典、九套状态 Tag、人员/档案/筛查/大屏词表、六语义色彩、PC/iPad/手机按钮分级</td><td>业务/产品/设计/前端</td></tr><tr><td>[<code>16-优化与一致性审计.md</code>](#ch-16)</td><td><b>一致性体检与基线</b>：计数快照、命名/版本纪律、词库/颜色规则、变更登记</td><td>维护人（每次改结构先看这里）</td></tr><tr><td>[<code>17-页面布局与组件组合规范.md</code>](#ch-17)</td><td><b>页面与组合全局规范</b>：页面壳/栅格留白/对齐基线（图标-文字）、组件组合顺序与间距档、实现验收</td><td>全员（先查后做）</td></tr><tr><td>[<code>18-视觉规范审计报告.md</code>](#ch-18)</td><td><b>视觉规范审计</b>：Token/字体/玻璃/图标/组件/页面/无障碍自查与整改行动清单</td><td>维护人/评审</td></tr><tr><td>[<code>preview/index.html</code>](preview/index.html)</td><td>液态玻璃视觉预览页（浏览器直接打开，可视化 Token、组件、微交互与图标库）</td><td>全员对照参考</td></tr><tr><td>[<code>preview/mobile.html</code>](preview/mobile.html)</td><td><b>移动端视觉预览</b>（手机框：NavBar、底部 TabBar、卡片流、触控按压反馈）</td><td>移动端对照参考</td></tr><tr><td>[<code>preview/examples.html</code>](preview/examples.html)</td><td><b>示例中心</b>：常用完整页面 7 套（列表/详情/表单/移动/iPad/工作站/孕妇档案），支持顺序浏览</td><td>全员对照参考</td></tr><tr><td>[<code>preview/manual.html</code>](preview/manual.html)</td><td><b>总览手册（打印版）</b>：定位/架构/DNA/状态/文档地图，浏览器可另存 PDF</td><td>全员（对外介绍用）</td></tr><tr><td>[<code>site/index.html</code>](site/index.html)</td><td><b>开源网站落地页</b>：品牌 Hero/能力/视觉/快速上手/开源治理（可直接部署 GitHub Pages）</td><td>对外展示用</td></tr><tr><td>[<code>brand/</code>](brand/)</td><td><b>品牌图形资产</b>：Logo v1 孕妇形象（logo-mark / logo / tile 三种 SVG，规范见 12 · 12.8）</td><td>品牌使用</td></tr></tbody></table>
 <hr>
 <h3>谁该读什么（角色 → 文档）</h3>
 <table><thead><tr><th>角色</th><th>先读</th><th>再读</th></tr></thead><tbody><tr><td>产品 / 业务</td><td>[12 品牌](#ch-12) · [15 业务词库/状态](#ch-15)</td><td>[13 妇幼领域](#ch-13)</td></tr><tr><td>设计师（PC/大屏）</td><td>[01 DNA](#ch-01) → [02 Token](#ch-02)</td><td>[03 组件](#ch-03) · [04 数据可视化](#ch-04)</td></tr><tr><td>设计师（移动）</td><td>[10 移动端](#ch-10) · [11 全量库](#ch-11)</td><td>[09 图标](#ch-09)</td></tr><tr><td>前端 / 组件封装</td><td>[02 Token](#ch-02) → [03 组件](#ch-03)</td><td>[07 动效](#ch-07) · [14 命名](#ch-14) · <code>frontend-app</code></td></tr><tr><td>AI 出图 / AI 编程</td><td>[05 Prompt 库](#ch-05)</td><td>[13 · 13.6](#ch-13) 妇幼 Prompt</td></tr><tr><td>交付验收 / 维护</td><td>[06 流程验收](#ch-06)</td><td>[16 一致性审计](#ch-16)</td></tr></tbody></table>
@@ -1818,45 +1820,57 @@ button{display:inline-flex;align-items:center;justify-content:center;gap:8px}</p
 <hr>
 <h3>17.4 实现与验收</h3>
 <ul><li>[ ] 图标与文字：按钮/标签/头像均 <code>inline-flex center</code>，无上下错位</li><li>[ ] 间距只用 Token 档位；板块间 48–72（不挤）</li><li>[ ] 每页 Primary 唯一；危险操作恒排最后</li><li>[ ] 页面按 17.1.1 壳结构组装；栅格对齐左右不留随机空隙</li><li>[ ] 组合顺序符合 17.3.1；无随机叠放、无多余发光装饰</li><li>[ ] 响应式：PC/iPad/Mobile 各回落到 17.1.2 栅格与页边</li></ul>
-<blockquote>相关：Token（02）· 动效反馈（07）· 验收（06）· 示例中心各页即本章“标准答案”；异常先复现 → 对照本章修正 → 回归预览。</blockquote></div></section></div>
-
+<blockquote>相关：Token（02）· 动效反馈（07）· 验收（06）· 示例中心各页即本章“标准答案”；异常先复现 → 对照本章修正 → 回归预览。</blockquote></div></section>
+<section class="chap" id="ch-18"><div class="chap-hd"><b>18-视觉规范审计报告</b></div><div class="md"><h2>18 · 视觉规范审计报告（Visual Spec Audit）</h2>
+<blockquote>依据全仓规范（01–17 + 12 品牌/14 命名/15 状态/17 布局组合）对视觉体系自查。<br>状态：✅ 合规 · ⚠ 建议优化 · ❌ 待整改（已列行动项）。基线：编号规范文档 19 份 · 组件 94 · 图标 77 · 状态约 90 · 示例 7 页。</blockquote>
+<hr>
+<h3>18.1 自查方法与自动化结果</h3>
+<table><thead><tr><th>检查项</th><th>命令/方式</th><th>结果</th></tr></thead><tbody><tr><td>文档链接</td><td>扫全部 md 内链</td><td>✅ 无失效</td></tr><tr><td>图标计数/命名</td><td><code>icons/lg-icons.svg</code> symbols</td><td>✅ 77 · 均 <code>lg-icon-</code></td></tr><tr><td>色彩合规</td><td>页面硬编码色 vs 品牌/引擎 Token 白名单</td><td>✅ 代码层 0；页面少量品牌渐变亮端/手机壳别名（低风险）</td></tr><tr><td>命名/词库</td><td>14/15 词表 vs 页面文案抽查</td><td>✅ 版本化同步中</td></tr><tr><td>编号文档</td><td><code>[0-9][0-9]-*.md</code></td><td>✅ 19 份（含本报告）</td></tr></tbody></table>
+<hr>
+<h3>18.2 逐项自查（Token → 页面）</h3>
+<h4>18.2.1 Token 与颜色</h4>
+<table><thead><tr><th>维度</th><th>结论</th><th>备注/行动</th></tr></thead><tbody><tr><td>品牌色板</td><td>✅</td><td><code>--mmh-rose/mint/peach</code> 与 02.9/12.3 一致</td></tr><tr><td>六语义色</td><td>✅</td><td>色块与状态标签已统一（正向 <code>#2f8f76</code> 等），历史近似色已归一</td></tr><tr><td>孕产妇五色</td><td>✅</td><td>02.10 五色与 RiskPicker/Five 标签一致</td></tr><tr><td>引擎辅色</td><td>✅</td><td>青/蓝/紫 ramp 属引擎档，保留于 02.1/12.3 说明</td></tr><tr><td>暖背景/渐变亮端别名</td><td>⚠</td><td>页面少量硬编码（<code>#F6E2DB/#FDF2EE/#F0D4CF…</code>）建议抽取为 <code>--mmh-bg-*</code> 档</td></tr><tr><td>数据色序</td><td>✅</td><td>12.3.3 序列与首页图库一致</td></tr></tbody></table>
+<h4>18.2.2 字体 · 间距 · 圆角 · 阴影</h4>
+<table><thead><tr><th>维度</th><th>结论</th><th>备注</th></tr></thead><tbody><tr><td>字体栈/字号档</td><td>✅</td><td>02.2 与预览一致；数字 tabular-nums</td></tr><tr><td>间距</td><td>✅</td><td>使用 4px 档；页面 48–72 呼吸感已在 v2.2 应用</td></tr><tr><td>圆角</td><td>✅</td><td>卡片 18–28、按钮 14–26、chip 999 全覆盖</td></tr><tr><td>阴影</td><td>✅</td><td>蓝紫调柔影；无纯黑硬阴影</td></tr><tr><td>暗黑模式</td><td>⚠</td><td>机制已备（theme.css data-theme 最小段 + 12.3.2）；全量暗色未开 → 行动 A2</td></tr></tbody></table>
+<h4>18.2.3 玻璃材质与层级</h4>
+<ul><li>L1–L4 档位 ✅（02.5）；页面主面板/卡片/控件按档使用</li><li>浮层（弹窗/下拉）使用 popover 档 ✅；层叠大面板 ≤3 已写入 17.3.3</li></ul>
+<h4>18.2.4 图标</h4>
+<ul><li>77 枚、24×24、1.7px 圆头 ✅；命名 <code>lg-icon-{语义}</code> ✅</li><li>母婴类（B/L/H）与图标语义表（09）一致 ✅</li><li>建议：新增图标后执行 <code>scripts/build-icons.py</code>（已建立）</li></ul>
+<h4>18.2.5 组件视觉与用法</h4>
+<table><thead><tr><th>组件</th><th>结论</th><th>说明</th></tr></thead><tbody><tr><td>Button 全谱</td><td>✅</td><td>类型/状态/尺寸/形状与 03.2.4 对齐；Primary 唯一规则落地</td></tr><tr><td>Tag/状态</td><td>✅</td><td>双通道（色点+文字）已在 GmStatusTag/GmTag 修复</td></tr><tr><td>Steps/Progress</td><td>✅</td><td>语义色状态；process 呼吸/error 红（07）已补</td></tr><tr><td>Card/Table/表单</td><td>✅</td><td>组合顺序按 17.3；示例页已应用对齐修复</td></tr><tr><td>图标按钮错位</td><td>✅</td><td>inline-flex 居中覆写（17.2）已应用</td></tr></tbody></table>
+<h4>18.2.6 页面与组合</h4>
+<ul><li>页面壳/栅格/留白：✅（17.1）并已在 site/spec、示例 7 页落地</li><li>组合顺序（头像→标签→数值→操作 等）：✅ 17.3.1 表化</li><li>全局统一菜单与 HTML 化：✅（spec.html / docs.html / index）</li></ul>
+<h4>18.2.7 无障碍与动效</h4>
+<ul><li>focus-visible 焦点环 ✅（07.8 + theme.css）；press 缩放 ✅</li><li>prefers-reduced-motion ✅；呼吸点周期 ≥2.4s ✅</li><li>待做：对 Gm 组件做键盘走查自动化（行动 A3）</li></ul>
+<hr>
+<h3>18.3 整改行动清单（按优先级）</h3>
+<pre>A1 页面暖色/手机壳等别名色 → 抽取 token（--mmh-bg-*、--gm-frame）
+A2 暗黑模式全量化：把 gm-arco-ui theme.css 变量数据化 + ConfigProvider 示例
+A3 Gm 组件键盘/焦点自动化走查（axe/ts 断言），并进入 CI
+A4 spec.html 阅读器增加“关键词高亮”与进度记录
+A5 每个新页面并入前执行 16.6 组件合规表 + 17 章验收</pre>
+<blockquote>修订记录：本报告随规范一起版本化；执行 A1–A3 后回填“✅/已实施”。</blockquote></div></section></div>
 <script>
 (function(){
-  var wrap=document.querySelector('.wrap');
   var chaps=[].slice.call(document.querySelectorAll('section.chap'));
-  var ids=chaps.map(function(c){return c.id;});
-  var btn=document.getElementById('modeBtn');
-  var allBtn=document.getElementById('allCh');
-  var prevBtn=document.getElementById('prevCh');
-  var nextBtn=document.getElementById('nextCh');
-  var cur=0;
-  function setActive(id,scrollTop){
-    chaps.forEach(function(c){c.classList.remove('active');});
-    var el=document.getElementById(id);
-    if(el){el.classList.add('active');}
-    cur=ids.indexOf(id);
-    if(scrollTop!==false)window.scrollTo(0,0);
-  }
-  function reader(on){
-    document.body.classList.toggle('reader',on);
-    btn.textContent=on?'回到列表':'阅读模式';
-    if(on){ var h=(location.hash||'').slice(1); setActive(h&&ids.indexOf(h)>=0?h:'ch-readme',true); }
-    else{ chaps.forEach(function(c){c.classList.remove('active');}); }
-  }
+  var ids=chaps.map(function(c){return c.id;});var cur=0;
+  var btn=document.getElementById('modeBtn'),allBtn=document.getElementById('allCh'),
+      prevBtn=document.getElementById('prevCh'),nextBtn=document.getElementById('nextCh');
+  function setActive(id,top){chaps.forEach(function(c){c.classList.remove('active');});
+    var el=document.getElementById(id);if(el)el.classList.add('active');
+    cur=ids.indexOf(id);if(top!==false)window.scrollTo(0,0);}
+  function reader(on){document.body.classList.toggle('reader',on);btn.textContent=on?'回到列表':'阅读模式';
+    if(on){var h=(location.hash||'').slice(1);setActive(ids.indexOf(h)>=0?h:'ch-readme',true);}
+    else chaps.forEach(function(c){c.classList.remove('active');});}
   btn.addEventListener('click',function(){reader(!document.body.classList.contains('reader'));});
   allBtn.addEventListener('click',function(){reader(false);location.hash='';});
   prevBtn.addEventListener('click',function(){cur=Math.max(0,cur-1);setActive(ids[cur],true);});
   nextBtn.addEventListener('click',function(){cur=Math.min(ids.length-1,cur+1);setActive(ids[cur],true);});
-  document.addEventListener('click',function(e){
-    if(!document.body.classList.contains('reader'))return;
-    var a=e.target.closest?e.target.closest('a[href^="#ch-"]'):null;
-    if(!a)return;
-    e.preventDefault(); setActive(a.getAttribute('href').slice(1),true);
-    history.replaceState(null,'',a.getAttribute('href'));
-  });
-  if(location.hash && location.hash.indexOf('ch-')===1){reader(true);}
+  document.addEventListener('click',function(e){if(!document.body.classList.contains('reader'))return;
+    var a=e.target.closest?e.target.closest('a[href^="#ch-"]'):null;if(!a)return;
+    e.preventDefault();var h=a.getAttribute('href');setActive(h.slice(1),true);history.replaceState(null,'',h);});
+  if(location.hash&&location.hash.indexOf('ch-')===1)reader(true);
 })();
 </script>
-
 </body>
 </html>

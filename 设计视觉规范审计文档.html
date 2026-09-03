@@ -1,0 +1,4640 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>设计视觉规范审计文档</title>
+<style>
+:root {
+  --bg-page: #F6F8FB;
+  --bg-card: #FFFFFF;
+  --text-1: #152033;
+  --text-2: #3D4D66;
+  --text-3: #637089;
+  --text-4: #99A3B3;
+  --brand: #2F6BFF;
+  --brand-light: #E8F0FF;
+  --success: #16A37B;
+  --warning: #E6950A;
+  --danger: #E2462C;
+  --info: #2F6BFF;
+  --border: #E6EAF2;
+  --radius: 6px;
+  --shadow-1: 0 1px 2px rgba(0,0,0,0.06);
+  --shadow-2: 0 2px 8px rgba(0,0,0,0.08);
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", "Helvetica Neue", Arial, sans-serif;
+  background: var(--bg-page);
+  color: var(--text-1);
+  line-height: 1.6;
+  font-size: 14px;
+}
+
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 24px;
+}
+
+.doc-header {
+  background: var(--bg-card);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow-2);
+  padding: 32px 40px;
+  margin-bottom: 24px;
+}
+
+.doc-header h1 {
+  font-size: 28px;
+  font-weight: 700;
+  color: var(--text-1);
+  margin-bottom: 8px;
+}
+
+.doc-header .subtitle {
+  font-size: 15px;
+  color: var(--text-3);
+  margin-bottom: 24px;
+}
+
+.audit-info {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 16px;
+  margin-top: 20px;
+}
+
+.audit-info .field {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.audit-info label {
+  font-size: 12px;
+  color: var(--text-3);
+  font-weight: 500;
+}
+
+.audit-info input {
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  padding: 8px 12px;
+  font-size: 14px;
+  color: var(--text-1);
+  background: var(--bg-page);
+  transition: border-color 0.2s;
+}
+
+.audit-info input:focus {
+  outline: none;
+  border-color: var(--brand);
+  box-shadow: 0 0 0 2px rgba(47,107,255,0.15);
+}
+
+.toc {
+  background: var(--bg-card);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow-1);
+  padding: 20px 28px;
+  margin-bottom: 24px;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
+
+.toc h2 {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--text-3);
+  margin-bottom: 12px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.toc-list {
+  list-style: none;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.toc-list a {
+  display: inline-block;
+  padding: 4px 12px;
+  font-size: 13px;
+  color: var(--text-2);
+  text-decoration: none;
+  border-radius: 4px;
+  background: var(--bg-page);
+  transition: all 0.15s;
+  border: 1px solid transparent;
+}
+
+.toc-list a:hover, .toc-list a:focus {
+  color: var(--brand);
+  background: var(--brand-light);
+  border-color: rgba(47,107,255,0.2);
+}
+
+.toc-list a:focus-visible {
+  outline: 2px solid var(--brand);
+  outline-offset: 2px;
+}
+
+a:focus-visible, input:focus-visible, select:focus-visible, textarea:focus-visible {
+  outline: 2px solid var(--brand);
+  outline-offset: 1px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+.section {
+  background: var(--bg-card);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow-1);
+  padding: 28px 32px;
+  margin-bottom: 24px;
+}
+
+.section h2 {
+  font-size: 22px;
+  font-weight: 700;
+  color: var(--text-1);
+  margin-bottom: 8px;
+  padding-bottom: 12px;
+  border-bottom: 2px solid var(--brand);
+}
+
+.section h3 {
+  font-size: 17px;
+  font-weight: 600;
+  color: var(--text-1);
+  margin: 24px 0 12px;
+}
+
+.section h4 {
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--text-2);
+  margin: 16px 0 8px;
+}
+
+.section p, .section li {
+  font-size: 14px;
+  color: var(--text-2);
+  line-height: 1.8;
+}
+
+.section ul, .section ol {
+  padding-left: 20px;
+  margin: 8px 0;
+}
+
+.subsection {
+  margin: 20px 0;
+  border-radius: var(--radius);
+  overflow: hidden;
+  border: 1px solid var(--border);
+}
+
+.subsection-header {
+  padding: 12px 20px;
+  font-size: 15px;
+  font-weight: 600;
+  color: #fff;
+}
+
+.sec-color .subsection-header { background: #5B6CBF; }
+.sec-font .subsection-header { background: #3D8B8B; }
+.sec-spacing .subsection-header { background: #7B6B4E; }
+.sec-radius .subsection-header { background: #8B6B8B; }
+.sec-shadow .subsection-header { background: #5E7D9A; }
+.sec-border .subsection-header { background: #6B8B6B; }
+.sec-size .subsection-header { background: #8B7B5E; }
+.sec-motion .subsection-header { background: #6B5E8B; }
+.sec-dark .subsection-header { background: #4A4A5E; }
+.sec-general .subsection-header { background: #4E7B6B; }
+.sec-layout .subsection-header { background: #6B5B4E; }
+.sec-nav .subsection-header { background: #4E6B7B; }
+.sec-entry .subsection-header { background: #7B5B4E; }
+.sec-display .subsection-header { background: #4E5B7B; }
+.sec-feedback .subsection-header { background: #5B7B4E; }
+.sec-other .subsection-header { background: #7B4E6B; }
+
+.table-wrap {
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 13px;
+}
+
+thead th {
+  background: #F0F3F8;
+  color: var(--text-2);
+  font-weight: 600;
+  text-align: left;
+  padding: 10px 12px;
+  border-bottom: 2px solid var(--border);
+  white-space: nowrap;
+  font-size: 12px;
+}
+
+tbody td {
+  padding: 9px 12px;
+  border-bottom: 1px solid var(--border);
+  color: var(--text-2);
+  vertical-align: top;
+}
+
+tbody tr:nth-child(even) {
+  background: #FAFBFD;
+}
+
+tbody tr:hover {
+  background: #F0F4FF;
+}
+
+.priority {
+  display: inline-block;
+  padding: 2px 8px;
+  border-radius: 3px;
+  font-size: 11px;
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.p-p0 { background: #FDE8E8; color: #C0392B; }
+.p-p1 { background: #FFF3E0; color: #E67E22; }
+.p-p2 { background: #FFF8E1; color: #F39C12; }
+.p-p3 { background: #E8F5E9; color: #27AE60; }
+
+.check-col {
+  text-align: center;
+  width: 50px;
+}
+
+.check-col input[type="checkbox"] {
+  width: 16px;
+  height: 16px;
+  cursor: pointer;
+}
+
+.score-table {
+  margin: 16px 0;
+}
+
+.score-table table {
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  overflow: hidden;
+}
+
+.score-table th {
+  background: var(--brand);
+  color: #fff;
+}
+
+.grade-badge {
+  display: inline-block;
+  padding: 4px 16px;
+  border-radius: 4px;
+  font-size: 18px;
+  font-weight: 700;
+  color: #fff;
+}
+
+.grade-a { background: var(--success); }
+.grade-b { background: #3498DB; }
+.grade-c { background: var(--warning); }
+.grade-d { background: var(--danger); }
+
+.summary-row {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 16px;
+  margin: 20px 0;
+}
+
+.summary-card {
+  background: var(--bg-page);
+  border-radius: var(--radius);
+  padding: 16px 20px;
+  text-align: center;
+  border: 1px solid var(--border);
+}
+
+.summary-card .num {
+  font-size: 28px;
+  font-weight: 700;
+  color: var(--brand);
+}
+
+.summary-card .label {
+  font-size: 12px;
+  color: var(--text-3);
+  margin-top: 4px;
+}
+
+.legend {
+  display: flex;
+  gap: 16px;
+  flex-wrap: wrap;
+  margin: 12px 0;
+}
+
+.legend-item {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 12px;
+  color: var(--text-3);
+}
+
+td.row-num {
+  color: var(--text-4);
+  font-size: 12px;
+  text-align: center;
+  width: 36px;
+}
+
+td.remark input {
+  width: 100%;
+  border: 1px solid transparent;
+  background: transparent;
+  padding: 2px 4px;
+  font-size: 12px;
+  color: var(--text-2);
+  border-radius: 3px;
+}
+
+td.remark input:focus {
+  border-color: var(--brand);
+  background: #fff;
+  outline: none;
+}
+
+@media print {
+  body { background: #fff; font-size: 12px; }
+  .container { max-width: 100%; padding: 0; }
+  .toc { position: static; box-shadow: none; border: 1px solid #ddd; }
+  .section { box-shadow: none; break-inside: avoid; border: 1px solid #ddd; }
+  .doc-header { box-shadow: none; border: 1px solid #ddd; }
+  .audit-info input { border: 1px solid #ccc; background: #fff; }
+  table { font-size: 11px; }
+  thead th { background: #eee; }
+  .subsection-header { print-color-adjust: exact; -webkit-print-color-adjust: exact; }
+  .priority { print-color-adjust: exact; -webkit-print-color-adjust: exact; }
+  .toc-list a { border: 1px solid #ccc; }
+}
+
+@media (max-width: 768px) {
+  .container { padding: 12px; }
+  .doc-header { padding: 20px; }
+  .doc-header h1 { font-size: 22px; }
+  .section { padding: 16px; }
+  .toc-list { gap: 4px; }
+  .toc-list a { font-size: 12px; padding: 3px 8px; }
+  .summary-row { grid-template-columns: repeat(2, 1fr); }
+}
+
+</style>
+</head>
+<body>
+<div class="container">
+
+<header class="doc-header">
+  <h1>设计视觉规范审计文档</h1>
+  <p class="subtitle">Design Visual Specification Audit Document — 全面审计产品界面是否符合设计视觉规范体系，覆盖9大约束类别与67个组件规范</p>
+  <div class="audit-info">
+    <div class="field">
+      <label>项目名称</label>
+      <input type="text" placeholder="请输入项目名称">
+    </div>
+    <div class="field">
+      <label>审计日期</label>
+      <input type="date">
+    </div>
+    <div class="field">
+      <label>审计人</label>
+      <input type="text" placeholder="请输入审计人姓名">
+    </div>
+    <div class="field">
+      <label>版本号</label>
+      <input type="text" placeholder="如 v1.0.0">
+    </div>
+  </div>
+</header>
+
+
+<nav class="toc">
+  <h2>目录导航</h2>
+  <ul class="toc-list">
+    <li><a href="#part1">审计概述</a></li>
+    <li><a href="#part2">设计约束审计</a></li>
+    <li><a href="#sec-color">色彩</a></li>
+    <li><a href="#sec-font">字体</a></li>
+    <li><a href="#sec-spacing">间距</a></li>
+    <li><a href="#sec-radius">圆角</a></li>
+    <li><a href="#sec-shadow">阴影</a></li>
+    <li><a href="#sec-border">边框</a></li>
+    <li><a href="#sec-size">尺寸</a></li>
+    <li><a href="#sec-motion">动效</a></li>
+    <li><a href="#sec-dark">暗黑模式</a></li>
+    <li><a href="#part3">组件规范审计</a></li>
+    <li><a href="#sec-general">通用组件</a></li>
+    <li><a href="#sec-layout">布局组件</a></li>
+    <li><a href="#sec-nav">导航组件</a></li>
+    <li><a href="#sec-dataentry">数据录入</a></li>
+    <li><a href="#sec-datadisplay">数据展示</a></li>
+    <li><a href="#sec-feedback">反馈组件</a></li>
+    <li><a href="#sec-other">其他组件</a></li>
+    <li><a href="#part4">审计评分</a></li>
+    <li><a href="#part5">审计报告</a></li>
+  </ul>
+</nav>
+
+
+<section class="section" id="part1">
+  <h2>第一部分：审计概述</h2>
+
+  <h3>一、审计目的</h3>
+  <p>本文档用于系统性审计现有产品界面是否符合设计视觉规范体系。通过标准化的审计流程，确保产品在色彩、字体、间距、组件等各维度保持一致性和专业性，提升用户体验与开发效率。</p>
+
+  <h3>二、审计范围</h3>
+  <p>本次审计覆盖以下范围：</p>
+  <ul>
+    <li><strong>9大设计约束类别</strong>：色彩、字体、间距、圆角、阴影、边框、尺寸、动效、暗黑模式</li>
+    <li><strong>67个组件规范</strong>：涵盖通用、布局、导航、数据录入、数据展示、反馈等11大类别</li>
+    <li><strong>全平台覆盖</strong>：桌面端、平板端、移动端</li>
+    <li><strong>全状态覆盖</strong>：默认、悬浮、聚焦、激活、禁用、加载、错误</li>
+  </ul>
+
+  <h3>三、审计流程</h3>
+  <ol>
+    <li><strong>准备阶段</strong>：明确审计范围、准备审计工具、获取最新设计规范文档</li>
+    <li><strong>走查阶段</strong>：逐项对照审计清单，在实际产品界面中进行逐一检查</li>
+    <li><strong>记录阶段</strong>：对发现的不符合项进行截图、标注、分类记录</li>
+    <li><strong>评分阶段</strong>：按评分体系计算各部分得分，汇总总分并确定等级</li>
+    <li><strong>整改阶段</strong>：按优先级制定整改计划，分配责任人，确定完成时间</li>
+    <li><strong>复验阶段</strong>：整改完成后逐项复验，确认问题已修复并更新评分</li>
+  </ol>
+
+  <h3>四、问题等级定义</h3>
+  <div class="legend">
+    <span class="legend-item"><span class="priority p-p0">P0 严重</span> 严重影响用户体验或规范一致性，必须立即修复</span>
+    <span class="legend-item"><span class="priority p-p1">P1 中等</span> 影响规范一致性或用户体验，应在当前迭代修复</span>
+    <span class="legend-item"><span class="priority p-p2">P2 轻微</span> 轻微偏差，不影响核心体验，建议修复</span>
+    <span class="legend-item"><span class="priority p-p3">P3 建议</span> 优化建议，可在后续版本考虑</span>
+  </div>
+
+  <h3>五、评分体系</h3>
+  <p>采用百分制评分，各部分权重如下：</p>
+  <div class="summary-row">
+    <div class="summary-card"><div class="num">40</div><div class="label">设计约束部分</div></div>
+    <div class="summary-card"><div class="num">40</div><div class="label">组件规范部分</div></div>
+    <div class="summary-card"><div class="num">10</div><div class="label">一致性与完整性</div></div>
+    <div class="summary-card"><div class="num">10</div><div class="label">可访问性</div></div>
+  </div>
+  <p>评分等级：A（90-100分）优秀 / B（75-89分）良好 / C（60-74分）合格 / D（&lt;60分）不合格</p>
+</section>
+
+
+<section class="section" id="part2">
+  <h2>第二部分：设计约束审计清单</h2>
+  <p>以下9大类别共计检查项，逐一核对产品界面是否符合设计约束规范。</p>
+  <div class="legend">
+    <span class="legend-item"><span class="priority p-p0">P0 严重</span></span>
+    <span class="legend-item"><span class="priority p-p1">P1 中等</span></span>
+    <span class="legend-item"><span class="priority p-p2">P2 轻微</span></span>
+    <span class="legend-item"><span class="priority p-p3">P3 建议</span></span>
+  </div>
+
+
+  <div class="subsection sec-color" id="sec-color">
+    <div class="subsection-header">2.1 色彩约束审计（15项）</div>
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th style="width:36px">序号</th>
+            <th>检查内容</th>
+            <th>检查方法</th>
+            <th style="width:60px">等级</th>
+            <th style="width:40px" class="check-col">通过</th>
+            <th style="width:40px" class="check-col">不通过</th>
+            <th style="width:120px">备注</th>
+          </tr>
+        </thead>
+        <tbody>
+
+          <tr>
+            <td class="row-num">1</td>
+            <td>主色是否使用规定的10级色阶（primary-1到primary-10）</td>
+            <td>检查CSS变量或设计Token中主色定义，对比色板文件</td>
+            <td><span class="priority p-p0">P0</span></td>
+            <td class="check-col"><input type="checkbox" aria-label="通过"></td>
+            <td class="check-col"><input type="checkbox" aria-label="不通过"></td>
+            <td class="remark"><input type="text" placeholder="备注"></td>
+          </tr>
+
+          <tr>
+            <td class="row-num">2</td>
+            <td>中性色是否使用规定的灰阶体系（neutral-1到neutral-10）</td>
+            <td>抽查各页面灰色系元素是否使用Token变量</td>
+            <td><span class="priority p-p0">P0</span></td>
+            <td class="check-col"><input type="checkbox" aria-label="通过"></td>
+            <td class="check-col"><input type="checkbox" aria-label="不通过"></td>
+            <td class="remark"><input type="text" placeholder="备注"></td>
+          </tr>
+
+          <tr>
+            <td class="row-num">3</td>
+            <td>功能色-成功色是否使用规定色值（#16A37B系列）</td>
+            <td>检查成功提示、成功状态的颜色值</td>
+            <td><span class="priority p-p1">P1</span></td>
+            <td class="check-col"><input type="checkbox" aria-label="通过"></td>
+            <td class="check-col"><input type="checkbox" aria-label="不通过"></td>
+            <td class="remark"><input type="text" placeholder="备注"></td>
+          </tr>
+
+          <tr>
+            <td class="row-num">4</td>
+            <td>功能色-警告色是否使用规定色值（#FAAD14系列）</td>
+            <td>检查警告提示、警告状态的颜色值</td>
+            <td><span class="priority p-p1">P1</span></td>
+            <td class="check-col"><input type="checkbox" aria-label="通过"></td>
+            <td class="check-col"><input type="checkbox" aria-label="不通过"></td>
+            <td class="remark"><input type="text" placeholder="备注"></td>
+          </tr>
+
+          <tr>
+            <td class="row-num">5</td>
+            <td>功能色-危险色是否使用规定色值（#F5222D系列）</td>
+            <td>检查错误提示、删除操作的颜色值</td>
+            <td><span class="priority p-p1">P1</span></td>
+            <td class="check-col"><input type="checkbox" aria-label="通过"></td>
+            <td class="check-col"><input type="checkbox" aria-label="不通过"></td>
+            <td class="remark"><input type="text" placeholder="备注"></td>
+          </tr>
+
+          <tr>
+            <td class="row-num">6</td>
+            <td>功能色-信息色是否使用规定色值（#2F6BFF系列）</td>
+            <td>检查信息提示、帮助信息的颜色值</td>
+            <td><span class="priority p-p1">P1</span></td>
+            <td class="check-col"><input type="checkbox" aria-label="通过"></td>
+            <td class="check-col"><input type="checkbox" aria-label="不通过"></td>
+            <td class="remark"><input type="text" placeholder="备注"></td>
+          </tr>
+
+          <tr>
+            <td class="row-num">7</td>
+            <td>遮罩色是否使用规定的3级透明度（0.45/0.65/0.85）</td>
+            <td>检查Modal、Drawer遮罩层的rgba值</td>
+            <td><span class="priority p-p1">P1</span></td>
+            <td class="check-col"><input type="checkbox" aria-label="通过"></td>
+            <td class="check-col"><input type="checkbox" aria-label="不通过"></td>
+            <td class="remark"><input type="text" placeholder="备注"></td>
+          </tr>
+
+          <tr>
+            <td class="row-num">8</td>
+            <td>渐变色是否使用规定的渐变方向与色值</td>
+            <td>检查按钮、卡片等渐变元素的CSS渐变定义</td>
+            <td><span class="priority p-p2">P2</span></td>
+            <td class="check-col"><input type="checkbox" aria-label="通过"></td>
+            <td class="check-col"><input type="checkbox" aria-label="不通过"></td>
+            <td class="remark"><input type="text" placeholder="备注"></td>
+          </tr>
+
+          <tr>
+            <td class="row-num">9</td>
+            <td>暗黑模式下色彩是否正确映射</td>
+            <td>切换暗黑模式后逐一检查所有色彩</td>
+            <td><span class="priority p-p0">P0</span></td>
+            <td class="check-col"><input type="checkbox" aria-label="通过"></td>
+            <td class="check-col"><input type="checkbox" aria-label="不通过"></td>
+            <td class="remark"><input type="text" placeholder="备注"></td>
+          </tr>
+
+          <tr>
+            <td class="row-num">10</td>
+            <td>色彩对比度是否满足WCAG AA标准（正文4.5:1/大文本3:1）</td>
+            <td>使用对比度检测工具测量文字与背景</td>
+            <td><span class="priority p-p1">P1</span></td>
+            <td class="check-col"><input type="checkbox" aria-label="通过"></td>
+            <td class="check-col"><input type="checkbox" aria-label="不通过"></td>
+            <td class="remark"><input type="text" placeholder="备注"></td>
+          </tr>
+
+          <tr>
+            <td class="row-num">11</td>
+            <td>是否有未使用Token而直接硬编码颜色的情况</td>
+            <td>全局搜索CSS中的十六进制/rgb色值</td>
+            <td><span class="priority p-p0">P0</span></td>
+            <td class="check-col"><input type="checkbox" aria-label="通过"></td>
+            <td class="check-col"><input type="checkbox" aria-label="不通过"></td>
+            <td class="remark"><input type="text" placeholder="备注"></td>
+          </tr>
+
+          <tr>
+            <td class="row-num">12</td>
+            <td>主色在不同场景下的一致性</td>
+            <td>跨页面比较主色使用是否一致</td>
+            <td><span class="priority p-p1">P1</span></td>
+            <td class="check-col"><input type="checkbox" aria-label="通过"></td>
+            <td class="check-col"><input type="checkbox" aria-label="不通过"></td>
+            <td class="remark"><input type="text" placeholder="备注"></td>
+          </tr>
+
+          <tr>
+            <td class="row-num">13</td>
+            <td>背景色层级（bg-1到bg-5）是否正确使用</td>
+            <td>检查页面各级背景色是否符合层级定义</td>
+            <td><span class="priority p-p1">P1</span></td>
+            <td class="check-col"><input type="checkbox" aria-label="通过"></td>
+            <td class="check-col"><input type="checkbox" aria-label="不通过"></td>
+            <td class="remark"><input type="text" placeholder="备注"></td>
+          </tr>
+
+          <tr>
+            <td class="row-num">14</td>
+            <td>文字色层级（text-1到text-4）是否正确使用</td>
+            <td>检查各级文字颜色是否匹配定义</td>
+            <td><span class="priority p-p0">P0</span></td>
+            <td class="check-col"><input type="checkbox" aria-label="通过"></td>
+            <td class="check-col"><input type="checkbox" aria-label="不通过"></td>
+            <td class="remark"><input type="text" placeholder="备注"></td>
+          </tr>
+
+          <tr>
+            <td class="row-num">15</td>
+            <td>链接色是否使用主色</td>
+            <td>检查所有可点击链接的颜色</td>
+            <td><span class="priority p-p2">P2</span></td>
+            <td class="check-col"><input type="checkbox" aria-label="通过"></td>
+            <td class="check-col"><input type="checkbox" aria-label="不通过"></td>
+            <td class="remark"><input type="text" placeholder="备注"></td>
+          </tr>
+
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+
+  <div class="subsection sec-font" id="sec-font">
+    <div class="subsection-header">2.2 字体约束审计（15项）</div>
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th style="width:36px">序号</th>
+            <th>检查内容</th>
+            <th>检查方法</th>
+            <th style="width:60px">等级</th>
+            <th style="width:40px" class="check-col">通过</th>
+            <th style="width:40px" class="check-col">不通过</th>
+            <th style="width:120px">备注</th>
+          </tr>
+        </thead>
+        <tbody>
+
+          <tr>
+            <td class="row-num">16</td>
+            <td>中文字体族是否正确（系统默认字体栈）</td>
+            <td>检查CSS font-family声明中的中文字体</td>
+            <td><span class="priority p-p0">P0</span></td>
+            <td class="check-col"><input type="checkbox" aria-label="通过"></td>
+            <td class="check-col"><input type="checkbox" aria-label="不通过"></td>
+            <td class="remark"><input type="text" placeholder="备注"></td>
+          </tr>
+
+          <tr>
+            <td class="row-num">17</td>
+            <td>英文字体族是否正确（Inter/系统无衬线）</td>
+            <td>检查英文字符的字体渲染效果</td>
+            <td><span class="priority p-p1">P1</span></td>
+            <td class="check-col"><input type="checkbox" aria-label="通过"></td>
+            <td class="check-col"><input type="checkbox" aria-label="不通过"></td>
+            <td class="remark"><input type="text" placeholder="备注"></td>
+          </tr>
+
+          <tr>
+            <td class="row-num">18</td>
+            <td>等宽字体是否正确（代码/数据场景）</td>
+            <td>检查代码块、数字列的font-family</td>
+            <td><span class="priority p-p1">P1</span></td>
+            <td class="check-col"><input type="checkbox" aria-label="通过"></td>
+            <td class="check-col"><input type="checkbox" aria-label="不通过"></td>
+            <td class="remark"><input type="text" placeholder="备注"></td>
+          </tr>
+
+          <tr>
+            <td class="row-num">19</td>
+            <td>字号是否全部落在12级阶梯内（12/14/16/20/24/28/32/36/40/48/56/64px）</td>
+            <td>全局搜索font-size值</td>
+            <td><span class="priority p-p0">P0</span></td>
+            <td class="check-col"><input type="checkbox" aria-label="通过"></td>
+            <td class="check-col"><input type="checkbox" aria-label="不通过"></td>
+            <td class="remark"><input type="text" placeholder="备注"></td>
+          </tr>
+
+          <tr>
+            <td class="row-num">20</td>
+            <td>是否有非标字号（如13px、15px、18px等）</td>
+            <td>搜索12级阶梯以外的字号值</td>
+            <td><span class="priority p-p0">P0</span></td>
+            <td class="check-col"><input type="checkbox" aria-label="通过"></td>
+            <td class="check-col"><input type="checkbox" aria-label="不通过"></td>
+            <td class="remark"><input type="text" placeholder="备注"></td>
+          </tr>
+
+          <tr>
+            <td class="row-num">21</td>
+            <td>行高是否符合公式（字号×1.5+2px）</td>
+            <td>抽查各字号对应的line-height值</td>
+            <td><span class="priority p-p1">P1</span></td>
+            <td class="check-col"><input type="checkbox" aria-label="通过"></td>
+            <td class="check-col"><input type="checkbox" aria-label="不通过"></td>
+            <td class="remark"><input type="text" placeholder="备注"></td>
+          </tr>
+
+          <tr>
+            <td class="row-num">22</td>
+            <td>字重是否只使用4档（400/500/600/700）</td>
+            <td>全局搜索font-weight值</td>
+            <td><span class="priority p-p1">P1</span></td>
+            <td class="check-col"><input type="checkbox" aria-label="通过"></td>
+            <td class="check-col"><input type="checkbox" aria-label="不通过"></td>
+            <td class="remark"><input type="text" placeholder="备注"></td>
+          </tr>
+
+          <tr>
+            <td class="row-num">23</td>
+            <td>标题H1-H6的字号/字重/间距是否符合规范</td>
+            <td>逐一检查各级标题样式</td>
+            <td><span class="priority p-p0">P0</span></td>
+            <td class="check-col"><input type="checkbox" aria-label="通过"></td>
+            <td class="check-col"><input type="checkbox" aria-label="不通过"></td>
+            <td class="remark"><input type="text" placeholder="备注"></td>
+          </tr>
+
+          <tr>
+            <td class="row-num">24</td>
+            <td>正文3级字号是否正确使用（14/16/20px）</td>
+            <td>检查正文、小正文、大正文场景</td>
+            <td><span class="priority p-p1">P1</span></td>
+            <td class="check-col"><input type="checkbox" aria-label="通过"></td>
+            <td class="check-col"><input type="checkbox" aria-label="不通过"></td>
+            <td class="remark"><input type="text" placeholder="备注"></td>
+          </tr>
+
+          <tr>
+            <td class="row-num">25</td>
+            <td>段间距是否符合规范</td>
+            <td>检查段落间margin-bottom值</td>
+            <td><span class="priority p-p2">P2</span></td>
+            <td class="check-col"><input type="checkbox" aria-label="通过"></td>
+            <td class="check-col"><input type="checkbox" aria-label="不通过"></td>
+            <td class="remark"><input type="text" placeholder="备注"></td>
+          </tr>
+
+          <tr>
+            <td class="row-num">26</td>
+            <td>文字颜色层级是否匹配（text-1标题/text-2正文/text-3辅助/text-4占位）</td>
+            <td>抽查各级文字颜色使用场景</td>
+            <td><span class="priority p-p1">P1</span></td>
+            <td class="check-col"><input type="checkbox" aria-label="通过"></td>
+            <td class="check-col"><input type="checkbox" aria-label="不通过"></td>
+            <td class="remark"><input type="text" placeholder="备注"></td>
+          </tr>
+
+          <tr>
+            <td class="row-num">27</td>
+            <td>文字截断方式是否正确（省略号/换行/裁切）</td>
+            <td>检查长文本截断的CSS实现</td>
+            <td><span class="priority p-p2">P2</span></td>
+            <td class="check-col"><input type="checkbox" aria-label="通过"></td>
+            <td class="check-col"><input type="checkbox" aria-label="不通过"></td>
+            <td class="remark"><input type="text" placeholder="备注"></td>
+          </tr>
+
+          <tr>
+            <td class="row-num">28</td>
+            <td>最小可读字号是否≥12px</td>
+            <td>搜索小于12px的字号声明</td>
+            <td><span class="priority p-p1">P1</span></td>
+            <td class="check-col"><input type="checkbox" aria-label="通过"></td>
+            <td class="check-col"><input type="checkbox" aria-label="不通过"></td>
+            <td class="remark"><input type="text" placeholder="备注"></td>
+          </tr>
+
+          <tr>
+            <td class="row-num">29</td>
+            <td>中英文混排是否有间距处理</td>
+            <td>检查中英文混排时letter-spacing</td>
+            <td><span class="priority p-p3">P3</span></td>
+            <td class="check-col"><input type="checkbox" aria-label="通过"></td>
+            <td class="check-col"><input type="checkbox" aria-label="不通过"></td>
+            <td class="remark"><input type="text" placeholder="备注"></td>
+          </tr>
+
+          <tr>
+            <td class="row-num">30</td>
+            <td>数字是否使用等宽字体（金额/数据场景）</td>
+            <td>检查金额、数据表格的数字字体</td>
+            <td><span class="priority p-p1">P1</span></td>
+            <td class="check-col"><input type="checkbox" aria-label="通过"></td>
+            <td class="check-col"><input type="checkbox" aria-label="不通过"></td>
+            <td class="remark"><input type="text" placeholder="备注"></td>
+          </tr>
+
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+
+  <div class="subsection sec-spacing" id="sec-spacing">
+    <div class="subsection-header">2.3 间距约束审计（15项）</div>
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th style="width:36px">序号</th>
+            <th>检查内容</th>
+            <th>检查方法</th>
+            <th style="width:60px">等级</th>
+            <th style="width:40px" class="check-col">通过</th>
+            <th style="width:40px" class="check-col">不通过</th>
+            <th style="width:120px">备注</th>
+          </tr>
+        </thead>
+        <tbody>
+
+          <tr>
+            <td class="row-num">31</td>
+            <td>所有间距值是否落在8级阶梯内（4/8/12/16/20/24/32/48px）</td>
+            <td>全局搜索padding/margin/gap值</td>
+            <td><span class="priority p-p0">P0</span></td>
+            <td class="check-col"><input type="checkbox" aria-label="通过"></td>
+            <td class="check-col"><input type="checkbox" aria-label="不通过"></td>
+            <td class="remark"><input type="text" placeholder="备注"></td>
+          </tr>
+
+          <tr>
+            <td class="row-num">32</td>
+            <td>组件内间距是否统一</td>
+            <td>比较同类组件的内部间距</td>
+            <td><span class="priority p-p1">P1</span></td>
+            <td class="check-col"><input type="checkbox" aria-label="通过"></td>
+            <td class="check-col"><input type="checkbox" aria-label="不通过"></td>
+            <td class="remark"><input type="text" placeholder="备注"></td>
+          </tr>
+
+          <tr>
+            <td class="row-num">33</td>
+            <td>组件间间距是否统一</td>
+            <td>比较相邻组件之间的间距</td>
+            <td><span class="priority p-p1">P1</span></td>
+            <td class="check-col"><input type="checkbox" aria-label="通过"></td>
+            <td class="check-col"><input type="checkbox" aria-label="不通过"></td>
+            <td class="remark"><input type="text" placeholder="备注"></td>
+          </tr>
+
+          <tr>
+            <td class="row-num">34</td>
+            <td>页面边距是否符合设备要求（桌面24/平板手机16）</td>
+            <td>检查各断点下的页面边距</td>
+            <td><span class="priority p-p0">P0</span></td>
+            <td class="check-col"><input type="checkbox" aria-label="通过"></td>
+            <td class="check-col"><input type="checkbox" aria-label="不通过"></td>
+            <td class="remark"><input type="text" placeholder="备注"></td>
+          </tr>
+
+          <tr>
+            <td class="row-num">35</td>
+            <td>栅格列间距（gutter）是否统一</td>
+            <td>检查Grid系统gutter值</td>
+            <td><span class="priority p-p1">P1</span></td>
+            <td class="check-col"><input type="checkbox" aria-label="通过"></td>
+            <td class="check-col"><input type="checkbox" aria-label="不通过"></td>
+            <td class="remark"><input type="text" placeholder="备注"></td>
+          </tr>
+
+          <tr>
+            <td class="row-num">36</td>
+            <td>表单标签与输入框间距是否一致</td>
+            <td>比较各表单中label与input间距</td>
+            <td><span class="priority p-p2">P2</span></td>
+            <td class="check-col"><input type="checkbox" aria-label="通过"></td>
+            <td class="check-col"><input type="checkbox" aria-label="不通过"></td>
+            <td class="remark"><input type="text" placeholder="备注"></td>
+          </tr>
+
+          <tr>
+            <td class="row-num">37</td>
+            <td>列表项之间间距是否统一</td>
+            <td>检查同类列表的item间距</td>
+            <td><span class="priority p-p2">P2</span></td>
+            <td class="check-col"><input type="checkbox" aria-label="通过"></td>
+            <td class="check-col"><input type="checkbox" aria-label="不通过"></td>
+            <td class="remark"><input type="text" placeholder="备注"></td>
+          </tr>
+
+          <tr>
+            <td class="row-num">38</td>
+            <td>卡片内边距是否符合规范</td>
+            <td>检查Card组件的padding值</td>
+            <td><span class="priority p-p1">P1</span></td>
+            <td class="check-col"><input type="checkbox" aria-label="通过"></td>
+            <td class="check-col"><input type="checkbox" aria-label="不通过"></td>
+            <td class="remark"><input type="text" placeholder="备注"></td>
+          </tr>
+
+          <tr>
+            <td class="row-num">39</td>
+            <td>模态框内边距是否符合规范</td>
+            <td>检查Modal的padding值</td>
+            <td><span class="priority p-p1">P1</span></td>
+            <td class="check-col"><input type="checkbox" aria-label="通过"></td>
+            <td class="check-col"><input type="checkbox" aria-label="不通过"></td>
+            <td class="remark"><input type="text" placeholder="备注"></td>
+          </tr>
+
+          <tr>
+            <td class="row-num">40</td>
+            <td>按钮组间距是否统一</td>
+            <td>检查Button.Group的gap值</td>
+            <td><span class="priority p-p2">P2</span></td>
+            <td class="check-col"><input type="checkbox" aria-label="通过"></td>
+            <td class="check-col"><input type="checkbox" aria-label="不通过"></td>
+            <td class="remark"><input type="text" placeholder="备注"></td>
+          </tr>
+
+          <tr>
+            <td class="row-num">41</td>
+            <td>面包屑各项间距是否统一</td>
+            <td>检查Breadcrumb分隔符间距</td>
+            <td><span class="priority p-p2">P2</span></td>
+            <td class="check-col"><input type="checkbox" aria-label="通过"></td>
+            <td class="check-col"><input type="checkbox" aria-label="不通过"></td>
+            <td class="remark"><input type="text" placeholder="备注"></td>
+          </tr>
+
+          <tr>
+            <td class="row-num">42</td>
+            <td>标签页内容区与标签间距是否一致</td>
+            <td>检查Tabs组件上下间距</td>
+            <td><span class="priority p-p2">P2</span></td>
+            <td class="check-col"><input type="checkbox" aria-label="通过"></td>
+            <td class="check-col"><input type="checkbox" aria-label="不通过"></td>
+            <td class="remark"><input type="text" placeholder="备注"></td>
+          </tr>
+
+          <tr>
+            <td class="row-num">43</td>
+            <td>表格单元格内边距是否符合规范</td>
+            <td>检查Table td的padding值</td>
+            <td><span class="priority p-p1">P1</span></td>
+            <td class="check-col"><input type="checkbox" aria-label="通过"></td>
+            <td class="check-col"><input type="checkbox" aria-label="不通过"></td>
+            <td class="remark"><input type="text" placeholder="备注"></td>
+          </tr>
+
+          <tr>
+            <td class="row-num">44</td>
+            <td>弹窗与屏幕边缘距离是否符合规范</td>
+            <td>检查Modal左右边距</td>
+            <td><span class="priority p-p2">P2</span></td>
+            <td class="check-col"><input type="checkbox" aria-label="通过"></td>
+            <td class="check-col"><input type="checkbox" aria-label="不通过"></td>
+            <td class="remark"><input type="text" placeholder="备注"></td>
+          </tr>
+
+          <tr>
+            <td class="row-num">45</td>
+            <td>是否有像素级间距硬编码（如7px、13px等非标值）</td>
+            <td>搜索不在阶梯内的间距值</td>
+            <td><span class="priority p-p0">P0</span></td>
+            <td class="check-col"><input type="checkbox" aria-label="通过"></td>
+            <td class="check-col"><input type="checkbox" aria-label="不通过"></td>
+            <td class="remark"><input type="text" placeholder="备注"></td>
+          </tr>
+
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+
+  <div class="subsection sec-radius" id="sec-radius">
+    <div class="subsection-header">2.4 圆角约束审计（8项）</div>
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th style="width:36px">序号</th>
+            <th>检查内容</th>
+            <th>检查方法</th>
+            <th style="width:60px">等级</th>
+            <th style="width:40px" class="check-col">通过</th>
+            <th style="width:40px" class="check-col">不通过</th>
+            <th style="width:120px">备注</th>
+          </tr>
+        </thead>
+        <tbody>
+
+          <tr>
+            <td class="row-num">46</td>
+            <td>卡片圆角是否为8px</td>
+            <td>检查Card组件的border-radius</td>
+            <td><span class="priority p-p1">P1</span></td>
+            <td class="check-col"><input type="checkbox" aria-label="通过"></td>
+            <td class="check-col"><input type="checkbox" aria-label="不通过"></td>
+            <td class="remark"><input type="text" placeholder="备注"></td>
+          </tr>
+
+          <tr>
+            <td class="row-num">47</td>
+            <td>按钮/输入框圆角是否为4px</td>
+            <td>检查Button/Input的border-radius</td>
+            <td><span class="priority p-p1">P1</span></td>
+            <td class="check-col"><input type="checkbox" aria-label="通过"></td>
+            <td class="check-col"><input type="checkbox" aria-label="不通过"></td>
+            <td class="remark"><input type="text" placeholder="备注"></td>
+          </tr>
+
+          <tr>
+            <td class="row-num">48</td>
+            <td>标签/徽标圆角是否为2px</td>
+            <td>检查Tag/Badge的border-radius</td>
+            <td><span class="priority p-p2">P2</span></td>
+            <td class="check-col"><input type="checkbox" aria-label="通过"></td>
+            <td class="check-col"><input type="checkbox" aria-label="不通过"></td>
+            <td class="remark"><input type="text" placeholder="备注"></td>
+          </tr>
+
+          <tr>
+            <td class="row-num">49</td>
+            <td>模态框圆角是否符合规范（8px）</td>
+            <td>检查Modal的border-radius</td>
+            <td><span class="priority p-p2">P2</span></td>
+            <td class="check-col"><input type="checkbox" aria-label="通过"></td>
+            <td class="check-col"><input type="checkbox" aria-label="不通过"></td>
+            <td class="remark"><input type="text" placeholder="备注"></td>
+          </tr>
+
+          <tr>
+            <td class="row-num">50</td>
+            <td>头像圆角是否正确（圆形50%/方形对应档位）</td>
+            <td>检查Avatar的border-radius</td>
+            <td><span class="priority p-p1">P1</span></td>
+            <td class="check-col"><input type="checkbox" aria-label="通过"></td>
+            <td class="check-col"><input type="checkbox" aria-label="不通过"></td>
+            <td class="remark"><input type="text" placeholder="备注"></td>
+          </tr>
+
+          <tr>
+            <td class="row-num">51</td>
+            <td>弹层/浮层圆角是否统一</td>
+            <td>比较Popover/Dropdown/Tooltip圆角</td>
+            <td><span class="priority p-p2">P2</span></td>
+            <td class="check-col"><input type="checkbox" aria-label="通过"></td>
+            <td class="check-col"><input type="checkbox" aria-label="不通过"></td>
+            <td class="remark"><input type="text" placeholder="备注"></td>
+          </tr>
+
+          <tr>
+            <td class="row-num">52</td>
+            <td>是否有非标圆角值</td>
+            <td>全局搜索border-radius值</td>
+            <td><span class="priority p-p1">P1</span></td>
+            <td class="check-col"><input type="checkbox" aria-label="通过"></td>
+            <td class="check-col"><input type="checkbox" aria-label="不通过"></td>
+            <td class="remark"><input type="text" placeholder="备注"></td>
+          </tr>
+
+          <tr>
+            <td class="row-num">53</td>
+            <td>圆角是否在暗黑模式下保持一致</td>
+            <td>切换暗黑模式检查圆角</td>
+            <td><span class="priority p-p2">P2</span></td>
+            <td class="check-col"><input type="checkbox" aria-label="通过"></td>
+            <td class="check-col"><input type="checkbox" aria-label="不通过"></td>
+            <td class="remark"><input type="text" placeholder="备注"></td>
+          </tr>
+
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+
+  <div class="subsection sec-shadow" id="sec-shadow">
+    <div class="subsection-header">2.5 阴影约束审计（6项）</div>
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th style="width:36px">序号</th>
+            <th>检查内容</th>
+            <th>检查方法</th>
+            <th style="width:60px">等级</th>
+            <th style="width:40px" class="check-col">通过</th>
+            <th style="width:40px" class="check-col">不通过</th>
+            <th style="width:120px">备注</th>
+          </tr>
+        </thead>
+        <tbody>
+
+          <tr>
+            <td class="row-num">54</td>
+            <td>是否只使用4级阴影（shadow-1到shadow-4）</td>
+            <td>全局搜索box-shadow定义</td>
+            <td><span class="priority p-p0">P0</span></td>
+            <td class="check-col"><input type="checkbox" aria-label="通过"></td>
+            <td class="check-col"><input type="checkbox" aria-label="不通过"></td>
+            <td class="remark"><input type="text" placeholder="备注"></td>
+          </tr>
+
+          <tr>
+            <td class="row-num">55</td>
+            <td>弹层是否使用shadow-1</td>
+            <td>检查Dropdown/Popover的阴影</td>
+            <td><span class="priority p-p1">P1</span></td>
+            <td class="check-col"><input type="checkbox" aria-label="通过"></td>
+            <td class="check-col"><input type="checkbox" aria-label="不通过"></td>
+            <td class="remark"><input type="text" placeholder="备注"></td>
+          </tr>
+
+          <tr>
+            <td class="row-num">56</td>
+            <td>卡片悬浮是否使用shadow-2</td>
+            <td>检查Card hover状态的阴影</td>
+            <td><span class="priority p-p1">P1</span></td>
+            <td class="check-col"><input type="checkbox" aria-label="通过"></td>
+            <td class="check-col"><input type="checkbox" aria-label="不通过"></td>
+            <td class="remark"><input type="text" placeholder="备注"></td>
+          </tr>
+
+          <tr>
+            <td class="row-num">57</td>
+            <td>模态框是否使用shadow-3</td>
+            <td>检查Modal的阴影</td>
+            <td><span class="priority p-p1">P1</span></td>
+            <td class="check-col"><input type="checkbox" aria-label="通过"></td>
+            <td class="check-col"><input type="checkbox" aria-label="不通过"></td>
+            <td class="remark"><input type="text" placeholder="备注"></td>
+          </tr>
+
+          <tr>
+            <td class="row-num">58</td>
+            <td>全局浮层是否使用shadow-4</td>
+            <td>检查Notification等的阴影</td>
+            <td><span class="priority p-p2">P2</span></td>
+            <td class="check-col"><input type="checkbox" aria-label="通过"></td>
+            <td class="check-col"><input type="checkbox" aria-label="不通过"></td>
+            <td class="remark"><input type="text" placeholder="备注"></td>
+          </tr>
+
+          <tr>
+            <td class="row-num">59</td>
+            <td>是否有自定义阴影值未纳入Token</td>
+            <td>搜索非Token定义的box-shadow</td>
+            <td><span class="priority p-p1">P1</span></td>
+            <td class="check-col"><input type="checkbox" aria-label="通过"></td>
+            <td class="check-col"><input type="checkbox" aria-label="不通过"></td>
+            <td class="remark"><input type="text" placeholder="备注"></td>
+          </tr>
+
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+
+  <div class="subsection sec-border" id="sec-border">
+    <div class="subsection-header">2.6 边框约束审计（6项）</div>
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th style="width:36px">序号</th>
+            <th>检查内容</th>
+            <th>检查方法</th>
+            <th style="width:60px">等级</th>
+            <th style="width:40px" class="check-col">通过</th>
+            <th style="width:40px" class="check-col">不通过</th>
+            <th style="width:120px">备注</th>
+          </tr>
+        </thead>
+        <tbody>
+
+          <tr>
+            <td class="row-num">60</td>
+            <td>边框粗细是否只使用1px或2px</td>
+            <td>全局搜索border-width值</td>
+            <td><span class="priority p-p1">P1</span></td>
+            <td class="check-col"><input type="checkbox" aria-label="通过"></td>
+            <td class="check-col"><input type="checkbox" aria-label="不通过"></td>
+            <td class="remark"><input type="text" placeholder="备注"></td>
+          </tr>
+
+          <tr>
+            <td class="row-num">61</td>
+            <td>边框颜色是否使用Token变量</td>
+            <td>检查border-color是否引用Token</td>
+            <td><span class="priority p-p1">P1</span></td>
+            <td class="check-col"><input type="checkbox" aria-label="通过"></td>
+            <td class="check-col"><input type="checkbox" aria-label="不通过"></td>
+            <td class="remark"><input type="text" placeholder="备注"></td>
+          </tr>
+
+          <tr>
+            <td class="row-num">62</td>
+            <td>分割线颜色是否统一</td>
+            <td>比较Divider和border-bottom颜色</td>
+            <td><span class="priority p-p1">P1</span></td>
+            <td class="check-col"><input type="checkbox" aria-label="通过"></td>
+            <td class="check-col"><input type="checkbox" aria-label="不通过"></td>
+            <td class="remark"><input type="text" placeholder="备注"></td>
+          </tr>
+
+          <tr>
+            <td class="row-num">63</td>
+            <td>输入框边框在聚焦/错误/成功态是否正确变化</td>
+            <td>逐一测试Input各状态边框</td>
+            <td><span class="priority p-p0">P0</span></td>
+            <td class="check-col"><input type="checkbox" aria-label="通过"></td>
+            <td class="check-col"><input type="checkbox" aria-label="不通过"></td>
+            <td class="remark"><input type="text" placeholder="备注"></td>
+          </tr>
+
+          <tr>
+            <td class="row-num">64</td>
+            <td>表格边框样式是否统一</td>
+            <td>检查Table各边框颜色和粗细</td>
+            <td><span class="priority p-p2">P2</span></td>
+            <td class="check-col"><input type="checkbox" aria-label="通过"></td>
+            <td class="check-col"><input type="checkbox" aria-label="不通过"></td>
+            <td class="remark"><input type="text" placeholder="备注"></td>
+          </tr>
+
+          <tr>
+            <td class="row-num">65</td>
+            <td>禁用态边框是否正确</td>
+            <td>检查disabled状态下的边框样式</td>
+            <td><span class="priority p-p1">P1</span></td>
+            <td class="check-col"><input type="checkbox" aria-label="通过"></td>
+            <td class="check-col"><input type="checkbox" aria-label="不通过"></td>
+            <td class="remark"><input type="text" placeholder="备注"></td>
+          </tr>
+
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+
+  <div class="subsection sec-size" id="sec-size">
+    <div class="subsection-header">2.7 尺寸约束审计（8项）</div>
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th style="width:36px">序号</th>
+            <th>检查内容</th>
+            <th>检查方法</th>
+            <th style="width:60px">等级</th>
+            <th style="width:40px" class="check-col">通过</th>
+            <th style="width:40px" class="check-col">不通过</th>
+            <th style="width:120px">备注</th>
+          </tr>
+        </thead>
+        <tbody>
+
+          <tr>
+            <td class="row-num">66</td>
+            <td>交互组件高度是否落在4档内（24/28/32/36px）</td>
+            <td>检查Button/Input/Select高度</td>
+            <td><span class="priority p-p0">P0</span></td>
+            <td class="check-col"><input type="checkbox" aria-label="通过"></td>
+            <td class="check-col"><input type="checkbox" aria-label="不通过"></td>
+            <td class="remark"><input type="text" placeholder="备注"></td>
+          </tr>
+
+          <tr>
+            <td class="row-num">67</td>
+            <td>同一表单内组件尺寸是否一致</td>
+            <td>比较同一Form内各组件高度</td>
+            <td><span class="priority p-p1">P1</span></td>
+            <td class="check-col"><input type="checkbox" aria-label="通过"></td>
+            <td class="check-col"><input type="checkbox" aria-label="不通过"></td>
+            <td class="remark"><input type="text" placeholder="备注"></td>
+          </tr>
+
+          <tr>
+            <td class="row-num">68</td>
+            <td>表格行高是否为40px</td>
+            <td>检查Table tr高度</td>
+            <td><span class="priority p-p1">P1</span></td>
+            <td class="check-col"><input type="checkbox" aria-label="通过"></td>
+            <td class="check-col"><input type="checkbox" aria-label="不通过"></td>
+            <td class="remark"><input type="text" placeholder="备注"></td>
+          </tr>
+
+          <tr>
+            <td class="row-num">69</td>
+            <td>头像3种尺寸是否正确（24/32/40px）</td>
+            <td>检查Avatar的width/height</td>
+            <td><span class="priority p-p2">P2</span></td>
+            <td class="check-col"><input type="checkbox" aria-label="通过"></td>
+            <td class="check-col"><input type="checkbox" aria-label="不通过"></td>
+            <td class="remark"><input type="text" placeholder="备注"></td>
+          </tr>
+
+          <tr>
+            <td class="row-num">70</td>
+            <td>图标尺寸是否落在规范阶梯内（12/14/16/20/24px）</td>
+            <td>检查Icon的font-size/width/height</td>
+            <td><span class="priority p-p1">P1</span></td>
+            <td class="check-col"><input type="checkbox" aria-label="通过"></td>
+            <td class="check-col"><input type="checkbox" aria-label="不通过"></td>
+            <td class="remark"><input type="text" placeholder="备注"></td>
+          </tr>
+
+          <tr>
+            <td class="row-num">71</td>
+            <td>按钮内边距（水平padding）是否与尺寸档位匹配</td>
+            <td>检查各档位Button的padding</td>
+            <td><span class="priority p-p2">P2</span></td>
+            <td class="check-col"><input type="checkbox" aria-label="通过"></td>
+            <td class="check-col"><input type="checkbox" aria-label="不通过"></td>
+            <td class="remark"><input type="text" placeholder="备注"></td>
+          </tr>
+
+          <tr>
+            <td class="row-num">72</td>
+            <td>全局尺寸档位设置是否一致</td>
+            <td>检查ConfigProvider的componentSize</td>
+            <td><span class="priority p-p1">P1</span></td>
+            <td class="check-col"><input type="checkbox" aria-label="通过"></td>
+            <td class="check-col"><input type="checkbox" aria-label="不通过"></td>
+            <td class="remark"><input type="text" placeholder="备注"></td>
+          </tr>
+
+          <tr>
+            <td class="row-num">73</td>
+            <td>最小可点击区域是否≥24×24px</td>
+            <td>检查可交互元素的最小尺寸</td>
+            <td><span class="priority p-p0">P0</span></td>
+            <td class="check-col"><input type="checkbox" aria-label="通过"></td>
+            <td class="check-col"><input type="checkbox" aria-label="不通过"></td>
+            <td class="remark"><input type="text" placeholder="备注"></td>
+          </tr>
+
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+
+  <div class="subsection sec-motion" id="sec-motion">
+    <div class="subsection-header">2.8 动效约束审计（10项）</div>
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th style="width:36px">序号</th>
+            <th>检查内容</th>
+            <th>检查方法</th>
+            <th style="width:60px">等级</th>
+            <th style="width:40px" class="check-col">通过</th>
+            <th style="width:40px" class="check-col">不通过</th>
+            <th style="width:120px">备注</th>
+          </tr>
+        </thead>
+        <tbody>
+
+          <tr>
+            <td class="row-num">74</td>
+            <td>过渡时长是否只使用4档（100/200/300/400ms）</td>
+            <td>全局搜索transition-duration值</td>
+            <td><span class="priority p-p1">P1</span></td>
+            <td class="check-col"><input type="checkbox" aria-label="通过"></td>
+            <td class="check-col"><input type="checkbox" aria-label="不通过"></td>
+            <td class="remark"><input type="text" placeholder="备注"></td>
+          </tr>
+
+          <tr>
+            <td class="row-num">75</td>
+            <td>缓动函数是否使用规范值（ease-in-out等）</td>
+            <td>检查transition-timing-function</td>
+            <td><span class="priority p-p1">P1</span></td>
+            <td class="check-col"><input type="checkbox" aria-label="通过"></td>
+            <td class="check-col"><input type="checkbox" aria-label="不通过"></td>
+            <td class="remark"><input type="text" placeholder="备注"></td>
+          </tr>
+
+          <tr>
+            <td class="row-num">76</td>
+            <td>是否有弹跳/回弹等过度动效</td>
+            <td>搜索cubic-bezier中的过度参数</td>
+            <td><span class="priority p-p2">P2</span></td>
+            <td class="check-col"><input type="checkbox" aria-label="通过"></td>
+            <td class="check-col"><input type="checkbox" aria-label="不通过"></td>
+            <td class="remark"><input type="text" placeholder="备注"></td>
+          </tr>
+
+          <tr>
+            <td class="row-num">77</td>
+            <td>页面切换动画是否统一</td>
+            <td>比较各页面间切换动效</td>
+            <td><span class="priority p-p1">P1</span></td>
+            <td class="check-col"><input type="checkbox" aria-label="通过"></td>
+            <td class="check-col"><input type="checkbox" aria-label="不通过"></td>
+            <td class="remark"><input type="text" placeholder="备注"></td>
+          </tr>
+
+          <tr>
+            <td class="row-num">78</td>
+            <td>展开/收起动画是否统一</td>
+            <td>比较Collapse/Panel的展开动效</td>
+            <td><span class="priority p-p2">P2</span></td>
+            <td class="check-col"><input type="checkbox" aria-label="通过"></td>
+            <td class="check-col"><input type="checkbox" aria-label="不通过"></td>
+            <td class="remark"><input type="text" placeholder="备注"></td>
+          </tr>
+
+          <tr>
+            <td class="row-num">79</td>
+            <td>悬浮反馈动画时长是否一致</td>
+            <td>比较各hover效果时长</td>
+            <td><span class="priority p-p2">P2</span></td>
+            <td class="check-col"><input type="checkbox" aria-label="通过"></td>
+            <td class="check-col"><input type="checkbox" aria-label="不通过"></td>
+            <td class="remark"><input type="text" placeholder="备注"></td>
+          </tr>
+
+          <tr>
+            <td class="row-num">80</td>
+            <td>加载动画是否使用规范样式</td>
+            <td>检查Spin/Loading的动画</td>
+            <td><span class="priority p-p1">P1</span></td>
+            <td class="check-col"><input type="checkbox" aria-label="通过"></td>
+            <td class="check-col"><input type="checkbox" aria-label="不通过"></td>
+            <td class="remark"><input type="text" placeholder="备注"></td>
+          </tr>
+
+          <tr>
+            <td class="row-num">81</td>
+            <td>动画是否在减弱动效（prefers-reduced-motion）模式下禁用</td>
+            <td>检查@media prefers-reduced-motion</td>
+            <td><span class="priority p-p1">P1</span></td>
+            <td class="check-col"><input type="checkbox" aria-label="通过"></td>
+            <td class="check-col"><input type="checkbox" aria-label="不通过"></td>
+            <td class="remark"><input type="text" placeholder="备注"></td>
+          </tr>
+
+          <tr>
+            <td class="row-num">82</td>
+            <td>弹窗出现/消失动画是否统一</td>
+            <td>比较Modal/Drawer的进出动画</td>
+            <td><span class="priority p-p2">P2</span></td>
+            <td class="check-col"><input type="checkbox" aria-label="通过"></td>
+            <td class="check-col"><input type="checkbox" aria-label="不通过"></td>
+            <td class="remark"><input type="text" placeholder="备注"></td>
+          </tr>
+
+          <tr>
+            <td class="row-num">83</td>
+            <td>是否有>500ms的过长动画</td>
+            <td>搜索超过500ms的动画时长</td>
+            <td><span class="priority p-p1">P1</span></td>
+            <td class="check-col"><input type="checkbox" aria-label="通过"></td>
+            <td class="check-col"><input type="checkbox" aria-label="不通过"></td>
+            <td class="remark"><input type="text" placeholder="备注"></td>
+          </tr>
+
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+
+  <div class="subsection sec-dark" id="sec-dark">
+    <div class="subsection-header">2.9 暗黑模式约束审计（10项）</div>
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th style="width:36px">序号</th>
+            <th>检查内容</th>
+            <th>检查方法</th>
+            <th style="width:60px">等级</th>
+            <th style="width:40px" class="check-col">通过</th>
+            <th style="width:40px" class="check-col">不通过</th>
+            <th style="width:120px">备注</th>
+          </tr>
+        </thead>
+        <tbody>
+
+          <tr>
+            <td class="row-num">84</td>
+            <td>所有颜色是否正确映射到暗黑模式</td>
+            <td>切换暗黑模式逐一检查所有元素</td>
+            <td><span class="priority p-p0">P0</span></td>
+            <td class="check-col"><input type="checkbox" aria-label="通过"></td>
+            <td class="check-col"><input type="checkbox" aria-label="不通过"></td>
+            <td class="remark"><input type="text" placeholder="备注"></td>
+          </tr>
+
+          <tr>
+            <td class="row-num">85</td>
+            <td>背景层级（bg-1到bg-5）在暗色下是否正确</td>
+            <td>检查暗色模式下各级背景</td>
+            <td><span class="priority p-p0">P0</span></td>
+            <td class="check-col"><input type="checkbox" aria-label="通过"></td>
+            <td class="check-col"><input type="checkbox" aria-label="不通过"></td>
+            <td class="remark"><input type="text" placeholder="备注"></td>
+          </tr>
+
+          <tr>
+            <td class="row-num">86</td>
+            <td>文字层级在暗色下是否可读</td>
+            <td>检查暗色模式下各级文字可见性</td>
+            <td><span class="priority p-p0">P0</span></td>
+            <td class="check-col"><input type="checkbox" aria-label="通过"></td>
+            <td class="check-col"><input type="checkbox" aria-label="不通过"></td>
+            <td class="remark"><input type="text" placeholder="备注"></td>
+          </tr>
+
+          <tr>
+            <td class="row-num">87</td>
+            <td>图片/插画是否有暗色适配</td>
+            <td>检查图片和插画的暗色版本</td>
+            <td><span class="priority p-p2">P2</span></td>
+            <td class="check-col"><input type="checkbox" aria-label="通过"></td>
+            <td class="check-col"><input type="checkbox" aria-label="不通过"></td>
+            <td class="remark"><input type="text" placeholder="备注"></td>
+          </tr>
+
+          <tr>
+            <td class="row-num">88</td>
+            <td>阴影在暗色下是否调整（用更重阴影或边框替代）</td>
+            <td>检查暗色模式下阴影/边框表现</td>
+            <td><span class="priority p-p1">P1</span></td>
+            <td class="check-col"><input type="checkbox" aria-label="通过"></td>
+            <td class="check-col"><input type="checkbox" aria-label="不通过"></td>
+            <td class="remark"><input type="text" placeholder="备注"></td>
+          </tr>
+
+          <tr>
+            <td class="row-num">89</td>
+            <td>图标透明度在暗色下是否正确</td>
+            <td>检查暗色模式下图标不透明度</td>
+            <td><span class="priority p-p2">P2</span></td>
+            <td class="check-col"><input type="checkbox" aria-label="通过"></td>
+            <td class="check-col"><input type="checkbox" aria-label="不通过"></td>
+            <td class="remark"><input type="text" placeholder="备注"></td>
+          </tr>
+
+          <tr>
+            <td class="row-num">90</td>
+            <td>渐变色在暗色下是否适配</td>
+            <td>检查暗色模式下渐变元素</td>
+            <td><span class="priority p-p2">P2</span></td>
+            <td class="check-col"><input type="checkbox" aria-label="通过"></td>
+            <td class="check-col"><input type="checkbox" aria-label="不通过"></td>
+            <td class="remark"><input type="text" placeholder="备注"></td>
+          </tr>
+
+          <tr>
+            <td class="row-num">91</td>
+            <td>品牌色在暗色下是否需要调整明度</td>
+            <td>检查暗色模式下品牌色可读性</td>
+            <td><span class="priority p-p1">P1</span></td>
+            <td class="check-col"><input type="checkbox" aria-label="通过"></td>
+            <td class="check-col"><input type="checkbox" aria-label="不通过"></td>
+            <td class="remark"><input type="text" placeholder="备注"></td>
+          </tr>
+
+          <tr>
+            <td class="row-num">92</td>
+            <td>暗色模式下是否有残留的亮色元素</td>
+            <td>全面扫描暗色模式下的异常亮色</td>
+            <td><span class="priority p-p0">P0</span></td>
+            <td class="check-col"><input type="checkbox" aria-label="通过"></td>
+            <td class="check-col"><input type="checkbox" aria-label="不通过"></td>
+            <td class="remark"><input type="text" placeholder="备注"></td>
+          </tr>
+
+          <tr>
+            <td class="row-num">93</td>
+            <td>暗色模式切换是否平滑无闪烁</td>
+            <td>手动切换亮暗模式观察过渡效果</td>
+            <td><span class="priority p-p1">P1</span></td>
+            <td class="check-col"><input type="checkbox" aria-label="通过"></td>
+            <td class="check-col"><input type="checkbox" aria-label="不通过"></td>
+            <td class="remark"><input type="text" placeholder="备注"></td>
+          </tr>
+
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+</section>
+
+<section class="section" id="part3">
+  <h2>第三部分：组件使用规范审计清单</h2>
+  <p>以下11大类别涵盖67个组件的检查项，逐一核对组件使用是否符合规范。</p>
+  <div class="legend">
+    <span class="legend-item"><span class="priority p-p0">P0 严重</span></span>
+    <span class="legend-item"><span class="priority p-p1">P1 中等</span></span>
+    <span class="legend-item"><span class="priority p-p2">P2 轻微</span></span>
+    <span class="legend-item"><span class="priority p-p3">P3 建议</span></span>
+  </div>
+
+
+  <div class="subsection sec-general" id="sec-general">
+    <div class="subsection-header">3.1 通用组件（6个组件，20项）</div>
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th style="width:36px">序号</th>
+            <th>检查内容</th>
+            <th>检查方法</th>
+            <th style="width:60px">等级</th>
+            <th style="width:40px" class="check-col">通过</th>
+            <th style="width:40px" class="check-col">不通过</th>
+            <th style="width:120px">备注</th>
+          </tr>
+        </thead>
+        <tbody>
+
+          <tr>
+            <td class="row-num">1</td>
+            <td>Button-主按钮是否唯一</td>
+            <td>检查每个操作区域是否只有一个主按钮</td>
+            <td><span class="priority p-p1">P1</span></td>
+            <td class="check-col"><input type="checkbox" aria-label="通过"></td>
+            <td class="check-col"><input type="checkbox" aria-label="不通过"></td>
+            <td class="remark"><input type="text" placeholder="备注"></td>
+          </tr>
+
+          <tr>
+            <td class="row-num">2</td>
+            <td>Button-按钮类型是否正确使用（主/次/虚线/文字/危险）</td>
+            <td>检查各场景按钮type属性</td>
+            <td><span class="priority p-p1">P1</span></td>
+            <td class="check-col"><input type="checkbox" aria-label="通过"></td>
+            <td class="check-col"><input type="checkbox" aria-label="不通过"></td>
+            <td class="remark"><input type="text" placeholder="备注"></td>
+          </tr>
+
+          <tr>
+            <td class="row-num">3</td>
+            <td>Button-按钮尺寸是否与场景匹配</td>
+            <td>检查表单/表格/工具栏按钮尺寸</td>
+            <td><span class="priority p-p2">P2</span></td>
+            <td class="check-col"><input type="checkbox" aria-label="通过"></td>
+            <td class="check-col"><input type="checkbox" aria-label="不通过"></td>
+            <td class="remark"><input type="text" placeholder="备注"></td>
+          </tr>
+
+          <tr>
+            <td class="row-num">4</td>
+            <td>Button-危险操作按钮是否有二次确认</td>
+            <td>检查删除等危险按钮的交互</td>
+            <td><span class="priority p-p0">P0</span></td>
+            <td class="check-col"><input type="checkbox" aria-label="通过"></td>
+            <td class="check-col"><input type="checkbox" aria-label="不通过"></td>
+            <td class="remark"><input type="text" placeholder="备注"></td>
+          </tr>
+
+          <tr>
+            <td class="row-num">5</td>
+            <td>Button-按钮loading状态是否正确</td>
+            <td>检查loading属性使用</td>
+            <td><span class="priority p-p1">P1</span></td>
+            <td class="check-col"><input type="checkbox" aria-label="通过"></td>
+            <td class="check-col"><input type="checkbox" aria-label="不通过"></td>
+            <td class="remark"><input type="text" placeholder="备注"></td>
+          </tr>
+
+          <tr>
+            <td class="row-num">6</td>
+            <td>Button-按钮disabled状态样式是否正确</td>
+            <td>检查disabled视觉反馈</td>
+            <td><span class="priority p-p1">P1</span></td>
+            <td class="check-col"><input type="checkbox" aria-label="通过"></td>
+            <td class="check-col"><input type="checkbox" aria-label="不通过"></td>
+            <td class="remark"><input type="text" placeholder="备注"></td>
+          </tr>
+
+          <tr>
+            <td class="row-num">7</td>
+            <td>Icon-图标尺寸是否对齐文字</td>
+            <td>检查图标与文字基线对齐</td>
+            <td><span class="priority p-p1">P1</span></td>
+            <td class="check-col"><input type="checkbox" aria-label="通过"></td>
+            <td class="check-col"><input type="checkbox" aria-label="不通过"></td>
+            <td class="remark"><input type="text" placeholder="备注"></td>
+          </tr>
+
+          <tr>
+            <td class="row-num">8</td>
+            <td>Icon-图标语义是否与功能匹配</td>
+            <td>逐一检查图标的功能含义</td>
+            <td><span class="priority p-p1">P1</span></td>
+            <td class="check-col"><input type="checkbox" aria-label="通过"></td>
+            <td class="check-col"><input type="checkbox" aria-label="不通过"></td>
+            <td class="remark"><input type="text" placeholder="备注"></td>
+          </tr>
+
+          <tr>
+            <td class="row-num">9</td>
+            <td>Icon-图标风格是否统一（线性/填充不混用）</td>
+            <td>检查同一区域图标风格一致性</td>
+            <td><span class="priority p-p1">P1</span></td>
+            <td class="check-col"><input type="checkbox" aria-label="通过"></td>
+            <td class="check-col"><input type="checkbox" aria-label="不通过"></td>
+            <td class="remark"><input type="text" placeholder="备注"></td>
+          </tr>
+
+          <tr>
+            <td class="row-num">10</td>
+            <td>Icon-图标颜色是否跟随文字颜色</td>
+            <td>检查currentColor使用</td>
+            <td><span class="priority p-p2">P2</span></td>
+            <td class="check-col"><input type="checkbox" aria-label="通过"></td>
+            <td class="check-col"><input type="checkbox" aria-label="不通过"></td>
+            <td class="remark"><input type="text" placeholder="备注"></td>
+          </tr>
+
+          <tr>
+            <td class="row-num">11</td>
+            <td>Link-链接颜色是否使用主色</td>
+            <td>检查所有文字链接颜色</td>
+            <td><span class="priority p-p2">P2</span></td>
+            <td class="check-col"><input type="checkbox" aria-label="通过"></td>
+            <td class="check-col"><input type="checkbox" aria-label="不通过"></td>
+            <td class="remark"><input type="text" placeholder="备注"></td>
+          </tr>
+
+          <tr>
+            <td class="row-num">12</td>
+            <td>Link-链接hover状态是否正确</td>
+            <td>检查链接悬停效果</td>
+            <td><span class="priority p-p2">P2</span></td>
+            <td class="check-col"><input type="checkbox" aria-label="通过"></td>
+            <td class="check-col"><input type="checkbox" aria-label="不通过"></td>
+            <td class="remark"><input type="text" placeholder="备注"></td>
+          </tr>
+
+          <tr>
+            <td class="row-num">13</td>
+            <td>Link-链接是否有visited状态</td>
+            <td>检查已访问链接样式</td>
+            <td><span class="priority p-p2">P2</span></td>
+            <td class="check-col"><input type="checkbox" aria-label="通过"></td>
+            <td class="check-col"><input type="checkbox" aria-label="不通过"></td>
+            <td class="remark"><input type="text" placeholder="备注"></td>
+          </tr>
+
+          <tr>
+            <td class="row-num">14</td>
+            <td>Typography-标题层级是否完整连续（H1-H6）</td>
+            <td>检查页面标题层级无跳级</td>
+            <td><span class="priority p-p1">P1</span></td>
+            <td class="check-col"><input type="checkbox" aria-label="通过"></td>
+            <td class="check-col"><input type="checkbox" aria-label="不通过"></td>
+            <td class="remark"><input type="text" placeholder="备注"></td>
+          </tr>
+
+          <tr>
+            <td class="row-num">15</td>
+            <td>Typography-段落文本行宽是否合理</td>
+            <td>检查最大行宽设置</td>
+            <td><span class="priority p-p2">P2</span></td>
+            <td class="check-col"><input type="checkbox" aria-label="通过"></td>
+            <td class="check-col"><input type="checkbox" aria-label="不通过"></td>
+            <td class="remark"><input type="text" placeholder="备注"></td>
+          </tr>
+
+          <tr>
+            <td class="row-num">16</td>
+            <td>Divider-分割线类型是否正确（水平/垂直）</td>
+            <td>检查分割线使用场景</td>
+            <td><span class="priority p-p2">P2</span></td>
+            <td class="check-col"><input type="checkbox" aria-label="通过"></td>
+            <td class="check-col"><input type="checkbox" aria-label="不通过"></td>
+            <td class="remark"><input type="text" placeholder="备注"></td>
+          </tr>
+
+          <tr>
+            <td class="row-num">17</td>
+            <td>Divider-分割线颜色是否使用Token</td>
+            <td>检查分割线颜色值</td>
+            <td><span class="priority p-p2">P2</span></td>
+            <td class="check-col"><input type="checkbox" aria-label="通过"></td>
+            <td class="check-col"><input type="checkbox" aria-label="不通过"></td>
+            <td class="remark"><input type="text" placeholder="备注"></td>
+          </tr>
+
+          <tr>
+            <td class="row-num">18</td>
+            <td>Space-间距组件是否替代硬编码间距</td>
+            <td>检查布局中是否使用Space组件</td>
+            <td><span class="priority p-p2">P2</span></td>
+            <td class="check-col"><input type="checkbox" aria-label="通过"></td>
+            <td class="check-col"><input type="checkbox" aria-label="不通过"></td>
+            <td class="remark"><input type="text" placeholder="备注"></td>
+          </tr>
+
+          <tr>
+            <td class="row-num">19</td>
+            <td>Space-间距尺寸是否统一</td>
+            <td>检查Space组件的size属性</td>
+            <td><span class="priority p-p2">P2</span></td>
+            <td class="check-col"><input type="checkbox" aria-label="通过"></td>
+            <td class="check-col"><input type="checkbox" aria-label="不通过"></td>
+            <td class="remark"><input type="text" placeholder="备注"></td>
+          </tr>
+
+          <tr>
+            <td class="row-num">20</td>
+            <td>Typography-文本复制功能是否正确</td>
+            <td>检查copyable属性</td>
+            <td><span class="priority p-p2">P2</span></td>
+            <td class="check-col"><input type="checkbox" aria-label="通过"></td>
+            <td class="check-col"><input type="checkbox" aria-label="不通过"></td>
+            <td class="remark"><input type="text" placeholder="备注"></td>
+          </tr>
+
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+
+  <div class="subsection sec-layout" id="sec-layout">
+    <div class="subsection-header">3.2 布局组件（3个组件，11项）</div>
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th style="width:36px">序号</th>
+            <th>检查内容</th>
+            <th>检查方法</th>
+            <th style="width:60px">等级</th>
+            <th style="width:40px" class="check-col">通过</th>
+            <th style="width:40px" class="check-col">不通过</th>
+            <th style="width:120px">备注</th>
+          </tr>
+        </thead>
+        <tbody>
+
+          <tr>
+            <td class="row-num">21</td>
+            <td>Layout-页面骨架是否一致（Header/Sider/Content/Footer）</td>
+            <td>比较各页面布局结构</td>
+            <td><span class="priority p-p0">P0</span></td>
+            <td class="check-col"><input type="checkbox" aria-label="通过"></td>
+            <td class="check-col"><input type="checkbox" aria-label="不通过"></td>
+            <td class="remark"><input type="text" placeholder="备注"></td>
+          </tr>
+
+          <tr>
+            <td class="row-num">22</td>
+            <td>Layout-侧边栏宽度是否统一</td>
+            <td>检查各页面Sider宽度</td>
+            <td><span class="priority p-p1">P1</span></td>
+            <td class="check-col"><input type="checkbox" aria-label="通过"></td>
+            <td class="check-col"><input type="checkbox" aria-label="不通过"></td>
+            <td class="remark"><input type="text" placeholder="备注"></td>
+          </tr>
+
+          <tr>
+            <td class="row-num">23</td>
+            <td>Layout-内容区最大宽度是否统一</td>
+            <td>检查Content区maxWidth</td>
+            <td><span class="priority p-p1">P1</span></td>
+            <td class="check-col"><input type="checkbox" aria-label="通过"></td>
+            <td class="check-col"><input type="checkbox" aria-label="不通过"></td>
+            <td class="remark"><input type="text" placeholder="备注"></td>
+          </tr>
+
+          <tr>
+            <td class="row-num">24</td>
+            <td>Layout-页脚样式是否统一</td>
+            <td>检查Footer样式一致性</td>
+            <td><span class="priority p-p2">P2</span></td>
+            <td class="check-col"><input type="checkbox" aria-label="通过"></td>
+            <td class="check-col"><input type="checkbox" aria-label="不通过"></td>
+            <td class="remark"><input type="text" placeholder="备注"></td>
+          </tr>
+
+          <tr>
+            <td class="row-num">25</td>
+            <td>Layout-内容区滚动区域是否正确</td>
+            <td>检查overflow设置</td>
+            <td><span class="priority p-p1">P1</span></td>
+            <td class="check-col"><input type="checkbox" aria-label="通过"></td>
+            <td class="check-col"><input type="checkbox" aria-label="不通过"></td>
+            <td class="remark"><input type="text" placeholder="备注"></td>
+          </tr>
+
+          <tr>
+            <td class="row-num">26</td>
+            <td>Grid-栅格是否使用24列系统</td>
+            <td>检查Row/Col的span值</td>
+            <td><span class="priority p-p1">P1</span></td>
+            <td class="check-col"><input type="checkbox" aria-label="通过"></td>
+            <td class="check-col"><input type="checkbox" aria-label="不通过"></td>
+            <td class="remark"><input type="text" placeholder="备注"></td>
+          </tr>
+
+          <tr>
+            <td class="row-num">27</td>
+            <td>Grid-栅格间距是否统一</td>
+            <td>检查gutter值一致性</td>
+            <td><span class="priority p-p1">P1</span></td>
+            <td class="check-col"><input type="checkbox" aria-label="通过"></td>
+            <td class="check-col"><input type="checkbox" aria-label="不通过"></td>
+            <td class="remark"><input type="text" placeholder="备注"></td>
+          </tr>
+
+          <tr>
+            <td class="row-num">28</td>
+            <td>Grid-响应式断点是否正确设置</td>
+            <td>检查各断点下的栅格表现</td>
+            <td><span class="priority p-p1">P1</span></td>
+            <td class="check-col"><input type="checkbox" aria-label="通过"></td>
+            <td class="check-col"><input type="checkbox" aria-label="不通过"></td>
+            <td class="remark"><input type="text" placeholder="备注"></td>
+          </tr>
+
+          <tr>
+            <td class="row-num">29</td>
+            <td>Grid-栅格偏移是否合理</td>
+            <td>检查offset使用</td>
+            <td><span class="priority p-p2">P2</span></td>
+            <td class="check-col"><input type="checkbox" aria-label="通过"></td>
+            <td class="check-col"><input type="checkbox" aria-label="不通过"></td>
+            <td class="remark"><input type="text" placeholder="备注"></td>
+          </tr>
+
+          <tr>
+            <td class="row-num">30</td>
+            <td>Breadcrumb-面包屑层级是否与页面层级匹配</td>
+            <td>检查面包屑文字与路由层级</td>
+            <td><span class="priority p-p1">P1</span></td>
+            <td class="check-col"><input type="checkbox" aria-label="通过"></td>
+            <td class="check-col"><input type="checkbox" aria-label="不通过"></td>
+            <td class="remark"><input type="text" placeholder="备注"></td>
+          </tr>
+
+          <tr>
+            <td class="row-num">31</td>
+            <td>Breadcrumb-面包屑最后一项是否不可点击</td>
+            <td>检查末项是否为当前页</td>
+            <td><span class="priority p-p2">P2</span></td>
+            <td class="check-col"><input type="checkbox" aria-label="通过"></td>
+            <td class="check-col"><input type="checkbox" aria-label="不通过"></td>
+            <td class="remark"><input type="text" placeholder="备注"></td>
+          </tr>
+
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+
+  <div class="subsection sec-nav" id="sec-nav">
+    <div class="subsection-header">3.3 导航组件（9个组件，32项）</div>
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th style="width:36px">序号</th>
+            <th>检查内容</th>
+            <th>检查方法</th>
+            <th style="width:60px">等级</th>
+            <th style="width:40px" class="check-col">通过</th>
+            <th style="width:40px" class="check-col">不通过</th>
+            <th style="width:120px">备注</th>
+          </tr>
+        </thead>
+        <tbody>
+
+          <tr>
+            <td class="row-num">32</td>
+            <td>Menu-菜单模式是否一致（内嵌/水平）</td>
+            <td>检查全局菜单模式统一性</td>
+            <td><span class="priority p-p1">P1</span></td>
+            <td class="check-col"><input type="checkbox" aria-label="通过"></td>
+            <td class="check-col"><input type="checkbox" aria-label="不通过"></td>
+            <td class="remark"><input type="text" placeholder="备注"></td>
+          </tr>
+
+          <tr>
+            <td class="row-num">33</td>
+            <td>Menu-菜单选中态是否正确高亮</td>
+            <td>检查当前路由对应的菜单项</td>
+            <td><span class="priority p-p0">P0</span></td>
+            <td class="check-col"><input type="checkbox" aria-label="通过"></td>
+            <td class="check-col"><input type="checkbox" aria-label="不通过"></td>
+            <td class="remark"><input type="text" placeholder="备注"></td>
+          </tr>
+
+          <tr>
+            <td class="row-num">34</td>
+            <td>Menu-菜单折叠/展开是否流畅</td>
+            <td>测试菜单折叠交互</td>
+            <td><span class="priority p-p2">P2</span></td>
+            <td class="check-col"><input type="checkbox" aria-label="通过"></td>
+            <td class="check-col"><input type="checkbox" aria-label="不通过"></td>
+            <td class="remark"><input type="text" placeholder="备注"></td>
+          </tr>
+
+          <tr>
+            <td class="row-num">35</td>
+            <td>Menu-菜单层级是否不超过3级</td>
+            <td>检查菜单嵌套深度</td>
+            <td><span class="priority p-p1">P1</span></td>
+            <td class="check-col"><input type="checkbox" aria-label="通过"></td>
+            <td class="check-col"><input type="checkbox" aria-label="不通过"></td>
+            <td class="remark"><input type="text" placeholder="备注"></td>
+          </tr>
+
+          <tr>
+            <td class="row-num">36</td>
+            <td>Menu-菜单图标是否与功能匹配</td>
+            <td>检查菜单项图标的语义</td>
+            <td><span class="priority p-p2">P2</span></td>
+            <td class="check-col"><input type="checkbox" aria-label="通过"></td>
+            <td class="check-col"><input type="checkbox" aria-label="不通过"></td>
+            <td class="remark"><input type="text" placeholder="备注"></td>
+          </tr>
+
+          <tr>
+            <td class="row-num">37</td>
+            <td>Menu-菜单选中是否支持键盘导航</td>
+            <td>检查键盘操作</td>
+            <td><span class="priority p-p1">P1</span></td>
+            <td class="check-col"><input type="checkbox" aria-label="通过"></td>
+            <td class="check-col"><input type="checkbox" aria-label="不通过"></td>
+            <td class="remark"><input type="text" placeholder="备注"></td>
+          </tr>
+
+          <tr>
+            <td class="row-num">38</td>
+            <td>Tabs-标签页溢出时是否有滚动或下拉处理</td>
+            <td>测试标签过多时的表现</td>
+            <td><span class="priority p-p1">P1</span></td>
+            <td class="check-col"><input type="checkbox" aria-label="通过"></td>
+            <td class="check-col"><input type="checkbox" aria-label="不通过"></td>
+            <td class="remark"><input type="text" placeholder="备注"></td>
+          </tr>
+
+          <tr>
+            <td class="row-num">39</td>
+            <td>Tabs-标签页内容切换是否保留状态</td>
+            <td>检查切换标签后表单数据</td>
+            <td><span class="priority p-p2">P2</span></td>
+            <td class="check-col"><input type="checkbox" aria-label="通过"></td>
+            <td class="check-col"><input type="checkbox" aria-label="不通过"></td>
+            <td class="remark"><input type="text" placeholder="备注"></td>
+          </tr>
+
+          <tr>
+            <td class="row-num">40</td>
+            <td>Tabs-标签页类型是否统一（线框/卡片）</td>
+            <td>检查全局Tabs类型</td>
+            <td><span class="priority p-p2">P2</span></td>
+            <td class="check-col"><input type="checkbox" aria-label="通过"></td>
+            <td class="check-col"><input type="checkbox" aria-label="不通过"></td>
+            <td class="remark"><input type="text" placeholder="备注"></td>
+          </tr>
+
+          <tr>
+            <td class="row-num">41</td>
+            <td>Tabs-标签页关闭按钮位置是否正确</td>
+            <td>检查可关闭标签的关闭按钮</td>
+            <td><span class="priority p-p2">P2</span></td>
+            <td class="check-col"><input type="checkbox" aria-label="通过"></td>
+            <td class="check-col"><input type="checkbox" aria-label="不通过"></td>
+            <td class="remark"><input type="text" placeholder="备注"></td>
+          </tr>
+
+          <tr>
+            <td class="row-num">42</td>
+            <td>Tabs-标签页是否有键盘导航</td>
+            <td>检查键盘操作支持</td>
+            <td><span class="priority p-p2">P2</span></td>
+            <td class="check-col"><input type="checkbox" aria-label="通过"></td>
+            <td class="check-col"><input type="checkbox" aria-label="不通过"></td>
+            <td class="remark"><input type="text" placeholder="备注"></td>
+          </tr>
+
+          <tr>
+            <td class="row-num">43</td>
+            <td>Dropdown-下拉触发方式是否统一（hover/click）</td>
+            <td>检查各下拉菜单触发方式</td>
+            <td><span class="priority p-p1">P1</span></td>
+            <td class="check-col"><input type="checkbox" aria-label="通过"></td>
+            <td class="check-col"><input type="checkbox" aria-label="不通过"></td>
+            <td class="remark"><input type="text" placeholder="备注"></td>
+          </tr>
+
+          <tr>
+            <td class="row-num">44</td>
+            <td>Dropdown-下拉菜单最大高度是否限制</td>
+            <td>检查选项过多时是否有滚动</td>
+            <td><span class="priority p-p2">P2</span></td>
+            <td class="check-col"><input type="checkbox" aria-label="通过"></td>
+            <td class="check-col"><input type="checkbox" aria-label="不通过"></td>
+            <td class="remark"><input type="text" placeholder="备注"></td>
+          </tr>
+
+          <tr>
+            <td class="row-num">45</td>
+            <td>Dropdown-下拉菜单宽度是否自适应</td>
+            <td>检查下拉菜单内容截断情况</td>
+            <td><span class="priority p-p2">P2</span></td>
+            <td class="check-col"><input type="checkbox" aria-label="通过"></td>
+            <td class="check-col"><input type="checkbox" aria-label="不通过"></td>
+            <td class="remark"><input type="text" placeholder="备注"></td>
+          </tr>
+
+          <tr>
+            <td class="row-num">46</td>
+            <td>Dropdown-下拉菜单分组是否正确</td>
+            <td>检查分组标题</td>
+            <td><span class="priority p-p2">P2</span></td>
+            <td class="check-col"><input type="checkbox" aria-label="通过"></td>
+            <td class="check-col"><input type="checkbox" aria-label="不通过"></td>
+            <td class="remark"><input type="text" placeholder="备注"></td>
+          </tr>
+
+          <tr>
+            <td class="row-num">47</td>
+            <td>Pagination-分页信息是否完整（总数/页码/每页条数）</td>
+            <td>检查分页组件各元素</td>
+            <td><span class="priority p-p1">P1</span></td>
+            <td class="check-col"><input type="checkbox" aria-label="通过"></td>
+            <td class="check-col"><input type="checkbox" aria-label="不通过"></td>
+            <td class="remark"><input type="text" placeholder="备注"></td>
+          </tr>
+
+          <tr>
+            <td class="row-num">48</td>
+            <td>Pagination-分页默认每页条数是否统一</td>
+            <td>检查各列表默认pageSize</td>
+            <td><span class="priority p-p2">P2</span></td>
+            <td class="check-col"><input type="checkbox" aria-label="通过"></td>
+            <td class="check-col"><input type="checkbox" aria-label="不通过"></td>
+            <td class="remark"><input type="text" placeholder="备注"></td>
+          </tr>
+
+          <tr>
+            <td class="row-num">49</td>
+            <td>Pagination-分页是否支持快速跳转</td>
+            <td>检查showQuickJumper设置</td>
+            <td><span class="priority p-p2">P2</span></td>
+            <td class="check-col"><input type="checkbox" aria-label="通过"></td>
+            <td class="check-col"><input type="checkbox" aria-label="不通过"></td>
+            <td class="remark"><input type="text" placeholder="备注"></td>
+          </tr>
+
+          <tr>
+            <td class="row-num">50</td>
+            <td>Pagination-分页disabled状态是否正确</td>
+            <td>检查禁用态样式</td>
+            <td><span class="priority p-p2">P2</span></td>
+            <td class="check-col"><input type="checkbox" aria-label="通过"></td>
+            <td class="check-col"><input type="checkbox" aria-label="不通过"></td>
+            <td class="remark"><input type="text" placeholder="备注"></td>
+          </tr>
+
+          <tr>
+            <td class="row-num">51</td>
+            <td>Steps-步骤条状态是否完整（等待/进行/完成/错误）</td>
+            <td>检查步骤各状态样式</td>
+            <td><span class="priority p-p1">P1</span></td>
+            <td class="check-col"><input type="checkbox" aria-label="通过"></td>
+            <td class="check-col"><input type="checkbox" aria-label="不通过"></td>
+            <td class="remark"><input type="text" placeholder="备注"></td>
+          </tr>
+
+          <tr>
+            <td class="row-num">52</td>
+            <td>Steps-步骤条方向是否合理（水平/垂直）</td>
+            <td>检查步骤数与方向匹配</td>
+            <td><span class="priority p-p2">P2</span></td>
+            <td class="check-col"><input type="checkbox" aria-label="通过"></td>
+            <td class="check-col"><input type="checkbox" aria-label="不通过"></td>
+            <td class="remark"><input type="text" placeholder="备注"></td>
+          </tr>
+
+          <tr>
+            <td class="row-num">53</td>
+            <td>Steps-步骤条描述是否对齐</td>
+            <td>检查description位置</td>
+            <td><span class="priority p-p2">P2</span></td>
+            <td class="check-col"><input type="checkbox" aria-label="通过"></td>
+            <td class="check-col"><input type="checkbox" aria-label="不通过"></td>
+            <td class="remark"><input type="text" placeholder="备注"></td>
+          </tr>
+
+          <tr>
+            <td class="row-num">54</td>
+            <td>Steps-步骤条可点击是否合理</td>
+            <td>检查onChange逻辑</td>
+            <td><span class="priority p-p2">P2</span></td>
+            <td class="check-col"><input type="checkbox" aria-label="通过"></td>
+            <td class="check-col"><input type="checkbox" aria-label="不通过"></td>
+            <td class="remark"><input type="text" placeholder="备注"></td>
+          </tr>
+
+          <tr>
+            <td class="row-num">55</td>
+            <td>Affix-固钉位置是否合理不遮挡内容</td>
+            <td>检查固钉固定后是否遮挡</td>
+            <td><span class="priority p-p2">P2</span></td>
+            <td class="check-col"><input type="checkbox" aria-label="通过"></td>
+            <td class="check-col"><input type="checkbox" aria-label="不通过"></td>
+            <td class="remark"><input type="text" placeholder="备注"></td>
+          </tr>
+
+          <tr>
+            <td class="row-num">56</td>
+            <td>Affix-固钉偏移量是否合理</td>
+            <td>检查offset设置</td>
+            <td><span class="priority p-p2">P2</span></td>
+            <td class="check-col"><input type="checkbox" aria-label="通过"></td>
+            <td class="check-col"><input type="checkbox" aria-label="不通过"></td>
+            <td class="remark"><input type="text" placeholder="备注"></td>
+          </tr>
+
+          <tr>
+            <td class="row-num">57</td>
+            <td>Anchor-锚点是否与实际内容绑定</td>
+            <td>检查锚点链接对应内容区</td>
+            <td><span class="priority p-p2">P2</span></td>
+            <td class="check-col"><input type="checkbox" aria-label="通过"></td>
+            <td class="check-col"><input type="checkbox" aria-label="不通过"></td>
+            <td class="remark"><input type="text" placeholder="备注"></td>
+          </tr>
+
+          <tr>
+            <td class="row-num">58</td>
+            <td>Anchor-锚点是否有滚动偏移</td>
+            <td>检查offsetTop</td>
+            <td><span class="priority p-p2">P2</span></td>
+            <td class="check-col"><input type="checkbox" aria-label="通过"></td>
+            <td class="check-col"><input type="checkbox" aria-label="不通过"></td>
+            <td class="remark"><input type="text" placeholder="备注"></td>
+          </tr>
+
+          <tr>
+            <td class="row-num">59</td>
+            <td>BackTop-回到顶部按钮显示时机是否合理</td>
+            <td>检查滚动距离触发值</td>
+            <td><span class="priority p-p2">P2</span></td>
+            <td class="check-col"><input type="checkbox" aria-label="通过"></td>
+            <td class="check-col"><input type="checkbox" aria-label="不通过"></td>
+            <td class="remark"><input type="text" placeholder="备注"></td>
+          </tr>
+
+          <tr>
+            <td class="row-num">60</td>
+            <td>PageHeader-页头是否与面包屑配合</td>
+            <td>检查页头返回按钮与面包屑</td>
+            <td><span class="priority p-p2">P2</span></td>
+            <td class="check-col"><input type="checkbox" aria-label="通过"></td>
+            <td class="check-col"><input type="checkbox" aria-label="不通过"></td>
+            <td class="remark"><input type="text" placeholder="备注"></td>
+          </tr>
+
+          <tr>
+            <td class="row-num">61</td>
+            <td>PageHeader-页头操作区是否放置正确操作</td>
+            <td>检查页头extra区域内容</td>
+            <td><span class="priority p-p2">P2</span></td>
+            <td class="check-col"><input type="checkbox" aria-label="通过"></td>
+            <td class="check-col"><input type="checkbox" aria-label="不通过"></td>
+            <td class="remark"><input type="text" placeholder="备注"></td>
+          </tr>
+
+          <tr>
+            <td class="row-num">62</td>
+            <td>PageHeader-页头返回按钮是否可用</td>
+            <td>检查onBack功能</td>
+            <td><span class="priority p-p2">P2</span></td>
+            <td class="check-col"><input type="checkbox" aria-label="通过"></td>
+            <td class="check-col"><input type="checkbox" aria-label="不通过"></td>
+            <td class="remark"><input type="text" placeholder="备注"></td>
+          </tr>
+
+          <tr>
+            <td class="row-num">63</td>
+            <td>Breadcrumb-面包屑是否有图标</td>
+            <td>检查icon使用</td>
+            <td><span class="priority p-p2">P2</span></td>
+            <td class="check-col"><input type="checkbox" aria-label="通过"></td>
+            <td class="check-col"><input type="checkbox" aria-label="不通过"></td>
+            <td class="remark"><input type="text" placeholder="备注"></td>
+          </tr>
+
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+
+  <div class="subsection sec-dataentry" id="sec-dataentry">
+    <div class="subsection-header">3.4 数据录入组件（15个组件，57项）</div>
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th style="width:36px">序号</th>
+            <th>检查内容</th>
+            <th>检查方法</th>
+            <th style="width:60px">等级</th>
+            <th style="width:40px" class="check-col">通过</th>
+            <th style="width:40px" class="check-col">不通过</th>
+            <th style="width:120px">备注</th>
+          </tr>
+        </thead>
+        <tbody>
+
+          <tr>
+            <td class="row-num">64</td>
+            <td>Input-输入框状态是否完整（默认/聚焦/错误/成功/禁用）</td>
+            <td>逐一测试各状态样式</td>
+            <td><span class="priority p-p0">P0</span></td>
+            <td class="check-col"><input type="checkbox" aria-label="通过"></td>
+            <td class="check-col"><input type="checkbox" aria-label="不通过"></td>
+            <td class="remark"><input type="text" placeholder="备注"></td>
+          </tr>
+
+          <tr>
+            <td class="row-num">65</td>
+            <td>Input-输入框placeholder是否使用text-4色</td>
+            <td>检查placeholder颜色</td>
+            <td><span class="priority p-p2">P2</span></td>
+            <td class="check-col"><input type="checkbox" aria-label="通过"></td>
+            <td class="check-col"><input type="checkbox" aria-label="不通过"></td>
+            <td class="remark"><input type="text" placeholder="备注"></td>
+          </tr>
+
+          <tr>
+            <td class="row-num">66</td>
+            <td>Input-前后缀图标对齐是否正确</td>
+            <td>检查addon图标对齐</td>
+            <td><span class="priority p-p2">P2</span></td>
+            <td class="check-col"><input type="checkbox" aria-label="通过"></td>
+            <td class="check-col"><input type="checkbox" aria-label="不通过"></td>
+            <td class="remark"><input type="text" placeholder="备注"></td>
+          </tr>
+
+          <tr>
+            <td class="row-num">67</td>
+            <td>Input-密码输入框是否有明文切换</td>
+            <td>检查密码框切换功能</td>
+            <td><span class="priority p-p1">P1</span></td>
+            <td class="check-col"><input type="checkbox" aria-label="通过"></td>
+            <td class="check-col"><input type="checkbox" aria-label="不通过"></td>
+            <td class="remark"><input type="text" placeholder="备注"></td>
+          </tr>
+
+          <tr>
+            <td class="row-num">68</td>
+            <td>Input-输入框label是否左对齐统一</td>
+            <td>检查form内各label对齐</td>
+            <td><span class="priority p-p2">P2</span></td>
+            <td class="check-col"><input type="checkbox" aria-label="通过"></td>
+            <td class="check-col"><input type="checkbox" aria-label="不通过"></td>
+            <td class="remark"><input type="text" placeholder="备注"></td>
+          </tr>
+
+          <tr>
+            <td class="row-num">69</td>
+            <td>Input-密码框强度提示是否合理</td>
+            <td>检查密码强度指示器</td>
+            <td><span class="priority p-p2">P2</span></td>
+            <td class="check-col"><input type="checkbox" aria-label="通过"></td>
+            <td class="check-col"><input type="checkbox" aria-label="不通过"></td>
+            <td class="remark"><input type="text" placeholder="备注"></td>
+          </tr>
+
+          <tr>
+            <td class="row-num">70</td>
+            <td>Input-输入框clearable是否合理使用</td>
+            <td>检查allowClear属性</td>
+            <td><span class="priority p-p2">P2</span></td>
+            <td class="check-col"><input type="checkbox" aria-label="通过"></td>
+            <td class="check-col"><input type="checkbox" aria-label="不通过"></td>
+            <td class="remark"><input type="text" placeholder="备注"></td>
+          </tr>
+
+          <tr>
+            <td class="row-num">71</td>
+            <td>Input-搜索框是否有loading状态</td>
+            <td>检查搜索loading效果</td>
+            <td><span class="priority p-p2">P2</span></td>
+            <td class="check-col"><input type="checkbox" aria-label="通过"></td>
+            <td class="check-col"><input type="checkbox" aria-label="不通过"></td>
+            <td class="remark"><input type="text" placeholder="备注"></td>
+          </tr>
+
+          <tr>
+            <td class="row-num">72</td>
+            <td>TextArea-文本域是否有字数限制提示</td>
+            <td>检查maxLength与showCount</td>
+            <td><span class="priority p-p1">P1</span></td>
+            <td class="check-col"><input type="checkbox" aria-label="通过"></td>
+            <td class="check-col"><input type="checkbox" aria-label="不通过"></td>
+            <td class="remark"><input type="text" placeholder="备注"></td>
+          </tr>
+
+          <tr>
+            <td class="row-num">73</td>
+            <td>TextArea-文本域是否支持自适应高度</td>
+            <td>检查autoSize属性</td>
+            <td><span class="priority p-p2">P2</span></td>
+            <td class="check-col"><input type="checkbox" aria-label="通过"></td>
+            <td class="check-col"><input type="checkbox" aria-label="不通过"></td>
+            <td class="remark"><input type="text" placeholder="备注"></td>
+          </tr>
+
+          <tr>
+            <td class="row-num">74</td>
+            <td>Checkbox-复选框半选状态是否正确显示</td>
+            <td>检查indeterminate状态</td>
+            <td><span class="priority p-p1">P1</span></td>
+            <td class="check-col"><input type="checkbox" aria-label="通过"></td>
+            <td class="check-col"><input type="checkbox" aria-label="不通过"></td>
+            <td class="remark"><input type="text" placeholder="备注"></td>
+          </tr>
+
+          <tr>
+            <td class="row-num">75</td>
+            <td>Checkbox-复选框组间距是否统一</td>
+            <td>检查Checkbox.Group间距</td>
+            <td><span class="priority p-p2">P2</span></td>
+            <td class="check-col"><input type="checkbox" aria-label="通过"></td>
+            <td class="check-col"><input type="checkbox" aria-label="不通过"></td>
+            <td class="remark"><input type="text" placeholder="备注"></td>
+          </tr>
+
+          <tr>
+            <td class="row-num">76</td>
+            <td>Checkbox-复选框文字是否左对齐</td>
+            <td>检查label对齐方式</td>
+            <td><span class="priority p-p2">P2</span></td>
+            <td class="check-col"><input type="checkbox" aria-label="通过"></td>
+            <td class="check-col"><input type="checkbox" aria-label="不通过"></td>
+            <td class="remark"><input type="text" placeholder="备注"></td>
+          </tr>
+
+          <tr>
+            <td class="row-num">77</td>
+            <td>Radio-单选框互斥逻辑是否正确</td>
+            <td>测试同组单选互斥</td>
+            <td><span class="priority p-p0">P0</span></td>
+            <td class="check-col"><input type="checkbox" aria-label="通过"></td>
+            <td class="check-col"><input type="checkbox" aria-label="不通过"></td>
+            <td class="remark"><input type="text" placeholder="备注"></td>
+          </tr>
+
+          <tr>
+            <td class="row-num">78</td>
+            <td>Radio-单选按钮组样式是否统一</td>
+            <td>检查Radio与RadioButton混用</td>
+            <td><span class="priority p-p1">P1</span></td>
+            <td class="check-col"><input type="checkbox" aria-label="通过"></td>
+            <td class="check-col"><input type="checkbox" aria-label="不通过"></td>
+            <td class="remark"><input type="text" placeholder="备注"></td>
+          </tr>
+
+          <tr>
+            <td class="row-num">79</td>
+            <td>Radio-单选框组换行是否合理</td>
+            <td>检查选项换行逻辑</td>
+            <td><span class="priority p-p2">P2</span></td>
+            <td class="check-col"><input type="checkbox" aria-label="通过"></td>
+            <td class="check-col"><input type="checkbox" aria-label="不通过"></td>
+            <td class="remark"><input type="text" placeholder="备注"></td>
+          </tr>
+
+          <tr>
+            <td class="row-num">80</td>
+            <td>Switch-开关是否有加载状态</td>
+            <td>检查异步操作时的loading</td>
+            <td><span class="priority p-p2">P2</span></td>
+            <td class="check-col"><input type="checkbox" aria-label="通过"></td>
+            <td class="check-col"><input type="checkbox" aria-label="不通过"></td>
+            <td class="remark"><input type="text" placeholder="备注"></td>
+          </tr>
+
+          <tr>
+            <td class="row-num">81</td>
+            <td>Switch-开关标签位置是否正确</td>
+            <td>检查checkedChildren/unCheckedChildren</td>
+            <td><span class="priority p-p2">P2</span></td>
+            <td class="check-col"><input type="checkbox" aria-label="通过"></td>
+            <td class="check-col"><input type="checkbox" aria-label="不通过"></td>
+            <td class="remark"><input type="text" placeholder="备注"></td>
+          </tr>
+
+          <tr>
+            <td class="row-num">82</td>
+            <td>Select-选择器是否支持搜索（长列表）</td>
+            <td>检查选项>10个时是否可搜索</td>
+            <td><span class="priority p-p1">P1</span></td>
+            <td class="check-col"><input type="checkbox" aria-label="通过"></td>
+            <td class="check-col"><input type="checkbox" aria-label="不通过"></td>
+            <td class="remark"><input type="text" placeholder="备注"></td>
+          </tr>
+
+          <tr>
+            <td class="row-num">83</td>
+            <td>Select-选择器空值显示是否正确</td>
+            <td>检查无匹配时的empty提示</td>
+            <td><span class="priority p-p1">P1</span></td>
+            <td class="check-col"><input type="checkbox" aria-label="通过"></td>
+            <td class="check-col"><input type="checkbox" aria-label="不通过"></td>
+            <td class="remark"><input type="text" placeholder="备注"></td>
+          </tr>
+
+          <tr>
+            <td class="row-num">84</td>
+            <td>Select-多选选择器是否有数量限制</td>
+            <td>检查maxTagCount设置</td>
+            <td><span class="priority p-p2">P2</span></td>
+            <td class="check-col"><input type="checkbox" aria-label="通过"></td>
+            <td class="check-col"><input type="checkbox" aria-label="不通过"></td>
+            <td class="remark"><input type="text" placeholder="备注"></td>
+          </tr>
+
+          <tr>
+            <td class="row-num">85</td>
+            <td>Select-选择器选项排序是否合理</td>
+            <td>检查下拉选项排序逻辑</td>
+            <td><span class="priority p-p2">P2</span></td>
+            <td class="check-col"><input type="checkbox" aria-label="通过"></td>
+            <td class="check-col"><input type="checkbox" aria-label="不通过"></td>
+            <td class="remark"><input type="text" placeholder="备注"></td>
+          </tr>
+
+          <tr>
+            <td class="row-num">86</td>
+            <td>Select-选择器虚拟滚动是否开启（>100条）</td>
+            <td>检查大数据量时virtual</td>
+            <td><span class="priority p-p1">P1</span></td>
+            <td class="check-col"><input type="checkbox" aria-label="通过"></td>
+            <td class="check-col"><input type="checkbox" aria-label="不通过"></td>
+            <td class="remark"><input type="text" placeholder="备注"></td>
+          </tr>
+
+          <tr>
+            <td class="row-num">87</td>
+            <td>Select-选择器下拉面板位置是否正确</td>
+            <td>检查popupPlacement</td>
+            <td><span class="priority p-p2">P2</span></td>
+            <td class="check-col"><input type="checkbox" aria-label="通过"></td>
+            <td class="check-col"><input type="checkbox" aria-label="不通过"></td>
+            <td class="remark"><input type="text" placeholder="备注"></td>
+          </tr>
+
+          <tr>
+            <td class="row-num">88</td>
+            <td>Cascader-级联选择是否支持懒加载</td>
+            <td>检查大数据量下的加载方式</td>
+            <td><span class="priority p-p1">P1</span></td>
+            <td class="check-col"><input type="checkbox" aria-label="通过"></td>
+            <td class="check-col"><input type="checkbox" aria-label="不通过"></td>
+            <td class="remark"><input type="text" placeholder="备注"></td>
+          </tr>
+
+          <tr>
+            <td class="row-num">89</td>
+            <td>Cascader-级联选择各层级宽度是否合理</td>
+            <td>检查各列宽度</td>
+            <td><span class="priority p-p2">P2</span></td>
+            <td class="check-col"><input type="checkbox" aria-label="通过"></td>
+            <td class="check-col"><input type="checkbox" aria-label="不通过"></td>
+            <td class="remark"><input type="text" placeholder="备注"></td>
+          </tr>
+
+          <tr>
+            <td class="row-num">90</td>
+            <td>Cascader-级联选择搜索高亮是否正确</td>
+            <td>检查搜索结果高亮</td>
+            <td><span class="priority p-p2">P2</span></td>
+            <td class="check-col"><input type="checkbox" aria-label="通过"></td>
+            <td class="check-col"><input type="checkbox" aria-label="不通过"></td>
+            <td class="remark"><input type="text" placeholder="备注"></td>
+          </tr>
+
+          <tr>
+            <td class="row-num">91</td>
+            <td>TreeSelect-树选择是否支持搜索</td>
+            <td>检查搜索功能</td>
+            <td><span class="priority p-p2">P2</span></td>
+            <td class="check-col"><input type="checkbox" aria-label="通过"></td>
+            <td class="check-col"><input type="checkbox" aria-label="不通过"></td>
+            <td class="remark"><input type="text" placeholder="备注"></td>
+          </tr>
+
+          <tr>
+            <td class="row-num">92</td>
+            <td>TreeSelect-树选择展开行为是否合理</td>
+            <td>检查节点展开逻辑</td>
+            <td><span class="priority p-p2">P2</span></td>
+            <td class="check-col"><input type="checkbox" aria-label="通过"></td>
+            <td class="check-col"><input type="checkbox" aria-label="不通过"></td>
+            <td class="remark"><input type="text" placeholder="备注"></td>
+          </tr>
+
+          <tr>
+            <td class="row-num">93</td>
+            <td>TreeSelect-树选择复选模式是否正确</td>
+            <td>检查checkable模式</td>
+            <td><span class="priority p-p2">P2</span></td>
+            <td class="check-col"><input type="checkbox" aria-label="通过"></td>
+            <td class="check-col"><input type="checkbox" aria-label="不通过"></td>
+            <td class="remark"><input type="text" placeholder="备注"></td>
+          </tr>
+
+          <tr>
+            <td class="row-num">94</td>
+            <td>DatePicker-日期格式是否统一（YYYY-MM-DD）</td>
+            <td>检查全局日期格式</td>
+            <td><span class="priority p-p0">P0</span></td>
+            <td class="check-col"><input type="checkbox" aria-label="通过"></td>
+            <td class="check-col"><input type="checkbox" aria-label="不通过"></td>
+            <td class="remark"><input type="text" placeholder="备注"></td>
+          </tr>
+
+          <tr>
+            <td class="row-num">95</td>
+            <td>DatePicker-日期范围选择是否限制合理</td>
+            <td>检查disabledDate逻辑</td>
+            <td><span class="priority p-p1">P1</span></td>
+            <td class="check-col"><input type="checkbox" aria-label="通过"></td>
+            <td class="check-col"><input type="checkbox" aria-label="不通过"></td>
+            <td class="remark"><input type="text" placeholder="备注"></td>
+          </tr>
+
+          <tr>
+            <td class="row-num">96</td>
+            <td>DatePicker-快捷选项是否统一</td>
+            <td>检查presets设置</td>
+            <td><span class="priority p-p2">P2</span></td>
+            <td class="check-col"><input type="checkbox" aria-label="通过"></td>
+            <td class="check-col"><input type="checkbox" aria-label="不通过"></td>
+            <td class="remark"><input type="text" placeholder="备注"></td>
+          </tr>
+
+          <tr>
+            <td class="row-num">97</td>
+            <td>DatePicker-日历面板是否支持键盘导航</td>
+            <td>检查键盘操作支持</td>
+            <td><span class="priority p-p2">P2</span></td>
+            <td class="check-col"><input type="checkbox" aria-label="通过"></td>
+            <td class="check-col"><input type="checkbox" aria-label="不通过"></td>
+            <td class="remark"><input type="text" placeholder="备注"></td>
+          </tr>
+
+          <tr>
+            <td class="row-num">98</td>
+            <td>TimePicker-时间选择步长是否合理</td>
+            <td>检查step值设置</td>
+            <td><span class="priority p-p2">P2</span></td>
+            <td class="check-col"><input type="checkbox" aria-label="通过"></td>
+            <td class="check-col"><input type="checkbox" aria-label="不通过"></td>
+            <td class="remark"><input type="text" placeholder="备注"></td>
+          </tr>
+
+          <tr>
+            <td class="row-num">99</td>
+            <td>InputNumber-数字输入精度是否正确</td>
+            <td>检查precision属性</td>
+            <td><span class="priority p-p1">P1</span></td>
+            <td class="check-col"><input type="checkbox" aria-label="通过"></td>
+            <td class="check-col"><input type="checkbox" aria-label="不通过"></td>
+            <td class="remark"><input type="text" placeholder="备注"></td>
+          </tr>
+
+          <tr>
+            <td class="row-num">100</td>
+            <td>InputNumber-数字输入范围限制是否正确</td>
+            <td>检查min/max属性</td>
+            <td><span class="priority p-p1">P1</span></td>
+            <td class="check-col"><input type="checkbox" aria-label="通过"></td>
+            <td class="check-col"><input type="checkbox" aria-label="不通过"></td>
+            <td class="remark"><input type="text" placeholder="备注"></td>
+          </tr>
+
+          <tr>
+            <td class="row-num">101</td>
+            <td>InputNumber-步进按钮是否可点击</td>
+            <td>检查up/down按钮</td>
+            <td><span class="priority p-p2">P2</span></td>
+            <td class="check-col"><input type="checkbox" aria-label="通过"></td>
+            <td class="check-col"><input type="checkbox" aria-label="不通过"></td>
+            <td class="remark"><input type="text" placeholder="备注"></td>
+          </tr>
+
+          <tr>
+            <td class="row-num">102</td>
+            <td>Transfer-穿梭框是否支持搜索</td>
+            <td>检查搜索功能</td>
+            <td><span class="priority p-p2">P2</span></td>
+            <td class="check-col"><input type="checkbox" aria-label="通过"></td>
+            <td class="check-col"><input type="checkbox" aria-label="不通过"></td>
+            <td class="remark"><input type="text" placeholder="备注"></td>
+          </tr>
+
+          <tr>
+            <td class="row-num">103</td>
+            <td>Transfer-穿梭框列表高度是否合理</td>
+            <td>检查列表可视区域</td>
+            <td><span class="priority p-p2">P2</span></td>
+            <td class="check-col"><input type="checkbox" aria-label="通过"></td>
+            <td class="check-col"><input type="checkbox" aria-label="不通过"></td>
+            <td class="remark"><input type="text" placeholder="备注"></td>
+          </tr>
+
+          <tr>
+            <td class="row-num">104</td>
+            <td>Transfer-穿梭框全选功能是否正确</td>
+            <td>检查全选/反选逻辑</td>
+            <td><span class="priority p-p2">P2</span></td>
+            <td class="check-col"><input type="checkbox" aria-label="通过"></td>
+            <td class="check-col"><input type="checkbox" aria-label="不通过"></td>
+            <td class="remark"><input type="text" placeholder="备注"></td>
+          </tr>
+
+          <tr>
+            <td class="row-num">105</td>
+            <td>Upload-上传是否有文件类型限制</td>
+            <td>检查accept属性</td>
+            <td><span class="priority p-p0">P0</span></td>
+            <td class="check-col"><input type="checkbox" aria-label="通过"></td>
+            <td class="check-col"><input type="checkbox" aria-label="不通过"></td>
+            <td class="remark"><input type="text" placeholder="备注"></td>
+          </tr>
+
+          <tr>
+            <td class="row-num">106</td>
+            <td>Upload-上传是否有文件大小限制</td>
+            <td>检查beforeUpload逻辑</td>
+            <td><span class="priority p-p0">P0</span></td>
+            <td class="check-col"><input type="checkbox" aria-label="通过"></td>
+            <td class="check-col"><input type="checkbox" aria-label="不通过"></td>
+            <td class="remark"><input type="text" placeholder="备注"></td>
+          </tr>
+
+          <tr>
+            <td class="row-num">107</td>
+            <td>Upload-上传进度与结果反馈是否完整</td>
+            <td>检查上传各状态提示</td>
+            <td><span class="priority p-p1">P1</span></td>
+            <td class="check-col"><input type="checkbox" aria-label="通过"></td>
+            <td class="check-col"><input type="checkbox" aria-label="不通过"></td>
+            <td class="remark"><input type="text" placeholder="备注"></td>
+          </tr>
+
+          <tr>
+            <td class="row-num">108</td>
+            <td>Upload-图片上传是否支持预览</td>
+            <td>检查图片预览功能</td>
+            <td><span class="priority p-p2">P2</span></td>
+            <td class="check-col"><input type="checkbox" aria-label="通过"></td>
+            <td class="check-col"><input type="checkbox" aria-label="不通过"></td>
+            <td class="remark"><input type="text" placeholder="备注"></td>
+          </tr>
+
+          <tr>
+            <td class="row-num">109</td>
+            <td>Upload-拖拽上传区域是否合理</td>
+            <td>检查drag区域大小</td>
+            <td><span class="priority p-p2">P2</span></td>
+            <td class="check-col"><input type="checkbox" aria-label="通过"></td>
+            <td class="check-col"><input type="checkbox" aria-label="不通过"></td>
+            <td class="remark"><input type="text" placeholder="备注"></td>
+          </tr>
+
+          <tr>
+            <td class="row-num">110</td>
+            <td>Form-表单校验时机是否统一（blur/change）</td>
+            <td>检查validateTrigger</td>
+            <td><span class="priority p-p1">P1</span></td>
+            <td class="check-col"><input type="checkbox" aria-label="通过"></td>
+            <td class="check-col"><input type="checkbox" aria-label="不通过"></td>
+            <td class="remark"><input type="text" placeholder="备注"></td>
+          </tr>
+
+          <tr>
+            <td class="row-num">111</td>
+            <td>Form-表单布局是否统一（水平/垂直/内联）</td>
+            <td>检查layout属性一致性</td>
+            <td><span class="priority p-p0">P0</span></td>
+            <td class="check-col"><input type="checkbox" aria-label="通过"></td>
+            <td class="check-col"><input type="checkbox" aria-label="不通过"></td>
+            <td class="remark"><input type="text" placeholder="备注"></td>
+          </tr>
+
+          <tr>
+            <td class="row-num">112</td>
+            <td>Form-表单必填标识是否明显</td>
+            <td>检查required标记</td>
+            <td><span class="priority p-p1">P1</span></td>
+            <td class="check-col"><input type="checkbox" aria-label="通过"></td>
+            <td class="check-col"><input type="checkbox" aria-label="不通过"></td>
+            <td class="remark"><input type="text" placeholder="备注"></td>
+          </tr>
+
+          <tr>
+            <td class="row-num">113</td>
+            <td>Form-表单错误提示位置是否统一</td>
+            <td>检查错误信息展示位置</td>
+            <td><span class="priority p-p1">P1</span></td>
+            <td class="check-col"><input type="checkbox" aria-label="通过"></td>
+            <td class="check-col"><input type="checkbox" aria-label="不通过"></td>
+            <td class="remark"><input type="text" placeholder="备注"></td>
+          </tr>
+
+          <tr>
+            <td class="row-num">114</td>
+            <td>Form-表单标签对齐方式是否统一</td>
+            <td>检查labelAlign</td>
+            <td><span class="priority p-p2">P2</span></td>
+            <td class="check-col"><input type="checkbox" aria-label="通过"></td>
+            <td class="check-col"><input type="checkbox" aria-label="不通过"></td>
+            <td class="remark"><input type="text" placeholder="备注"></td>
+          </tr>
+
+          <tr>
+            <td class="row-num">115</td>
+            <td>Form-表单行间距是否统一</td>
+            <td>检查form-item间距</td>
+            <td><span class="priority p-p1">P1</span></td>
+            <td class="check-col"><input type="checkbox" aria-label="通过"></td>
+            <td class="check-col"><input type="checkbox" aria-label="不通过"></td>
+            <td class="remark"><input type="text" placeholder="备注"></td>
+          </tr>
+
+          <tr>
+            <td class="row-num">116</td>
+            <td>Form-表单分组是否有视觉区分</td>
+            <td>检查card/divider分组</td>
+            <td><span class="priority p-p2">P2</span></td>
+            <td class="check-col"><input type="checkbox" aria-label="通过"></td>
+            <td class="check-col"><input type="checkbox" aria-label="不通过"></td>
+            <td class="remark"><input type="text" placeholder="备注"></td>
+          </tr>
+
+          <tr>
+            <td class="row-num">117</td>
+            <td>Form-表单提交按钮loading状态是否正确</td>
+            <td>检查提交时按钮状态</td>
+            <td><span class="priority p-p1">P1</span></td>
+            <td class="check-col"><input type="checkbox" aria-label="通过"></td>
+            <td class="check-col"><input type="checkbox" aria-label="不通过"></td>
+            <td class="remark"><input type="text" placeholder="备注"></td>
+          </tr>
+
+          <tr>
+            <td class="row-num">118</td>
+            <td>AutoComplete-自动补全匹配逻辑是否正确</td>
+            <td>检查匹配算法</td>
+            <td><span class="priority p-p2">P2</span></td>
+            <td class="check-col"><input type="checkbox" aria-label="通过"></td>
+            <td class="check-col"><input type="checkbox" aria-label="不通过"></td>
+            <td class="remark"><input type="text" placeholder="备注"></td>
+          </tr>
+
+          <tr>
+            <td class="row-num">119</td>
+            <td>AutoComplete-自动补全结果数量是否限制</td>
+            <td>检查options最大数量</td>
+            <td><span class="priority p-p2">P2</span></td>
+            <td class="check-col"><input type="checkbox" aria-label="通过"></td>
+            <td class="check-col"><input type="checkbox" aria-label="不通过"></td>
+            <td class="remark"><input type="text" placeholder="备注"></td>
+          </tr>
+
+          <tr>
+            <td class="row-num">120</td>
+            <td>AutoComplete-自动补全防抖是否设置</td>
+            <td>检查debounce时间</td>
+            <td><span class="priority p-p2">P2</span></td>
+            <td class="check-col"><input type="checkbox" aria-label="通过"></td>
+            <td class="check-col"><input type="checkbox" aria-label="不通过"></td>
+            <td class="remark"><input type="text" placeholder="备注"></td>
+          </tr>
+
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+
+  <div class="subsection sec-datadisplay" id="sec-datadisplay">
+    <div class="subsection-header">3.5 数据展示组件（14个组件，50项）</div>
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th style="width:36px">序号</th>
+            <th>检查内容</th>
+            <th>检查方法</th>
+            <th style="width:60px">等级</th>
+            <th style="width:40px" class="check-col">通过</th>
+            <th style="width:40px" class="check-col">不通过</th>
+            <th style="width:120px">备注</th>
+          </tr>
+        </thead>
+        <tbody>
+
+          <tr>
+            <td class="row-num">121</td>
+            <td>Table-表格是否有固定表头</td>
+            <td>检查scroll属性与sticky表头</td>
+            <td><span class="priority p-p1">P1</span></td>
+            <td class="check-col"><input type="checkbox" aria-label="通过"></td>
+            <td class="check-col"><input type="checkbox" aria-label="不通过"></td>
+            <td class="remark"><input type="text" placeholder="备注"></td>
+          </tr>
+
+          <tr>
+            <td class="row-num">122</td>
+            <td>Table-表格空数据状态是否友好</td>
+            <td>检查locale.emptyText</td>
+            <td><span class="priority p-p1">P1</span></td>
+            <td class="check-col"><input type="checkbox" aria-label="通过"></td>
+            <td class="check-col"><input type="checkbox" aria-label="不通过"></td>
+            <td class="remark"><input type="text" placeholder="备注"></td>
+          </tr>
+
+          <tr>
+            <td class="row-num">123</td>
+            <td>Table-表格列宽是否合理不截断</td>
+            <td>检查各列内容显示完整性</td>
+            <td><span class="priority p-p1">P1</span></td>
+            <td class="check-col"><input type="checkbox" aria-label="通过"></td>
+            <td class="check-col"><input type="checkbox" aria-label="不通过"></td>
+            <td class="remark"><input type="text" placeholder="备注"></td>
+          </tr>
+
+          <tr>
+            <td class="row-num">124</td>
+            <td>Table-表格排序/筛选交互是否一致</td>
+            <td>检查排序和筛选UI</td>
+            <td><span class="priority p-p2">P2</span></td>
+            <td class="check-col"><input type="checkbox" aria-label="通过"></td>
+            <td class="check-col"><input type="checkbox" aria-label="不通过"></td>
+            <td class="remark"><input type="text" placeholder="备注"></td>
+          </tr>
+
+          <tr>
+            <td class="row-num">125</td>
+            <td>Table-表格操作列是否固定右侧</td>
+            <td>检查长表格操作列fixed</td>
+            <td><span class="priority p-p2">P2</span></td>
+            <td class="check-col"><input type="checkbox" aria-label="通过"></td>
+            <td class="check-col"><input type="checkbox" aria-label="不通过"></td>
+            <td class="remark"><input type="text" placeholder="备注"></td>
+          </tr>
+
+          <tr>
+            <td class="row-num">126</td>
+            <td>Table-表格斑马线是否统一</td>
+            <td>检查stripe属性一致性</td>
+            <td><span class="priority p-p2">P2</span></td>
+            <td class="check-col"><input type="checkbox" aria-label="通过"></td>
+            <td class="check-col"><input type="checkbox" aria-label="不通过"></td>
+            <td class="remark"><input type="text" placeholder="备注"></td>
+          </tr>
+
+          <tr>
+            <td class="row-num">127</td>
+            <td>Table-表格分页是否在底部</td>
+            <td>检查分页组件位置</td>
+            <td><span class="priority p-p2">P2</span></td>
+            <td class="check-col"><input type="checkbox" aria-label="通过"></td>
+            <td class="check-col"><input type="checkbox" aria-label="不通过"></td>
+            <td class="remark"><input type="text" placeholder="备注"></td>
+          </tr>
+
+          <tr>
+            <td class="row-num">128</td>
+            <td>Table-表格列是否支持拖拽排序</td>
+            <td>检查dragSort功能</td>
+            <td><span class="priority p-p2">P2</span></td>
+            <td class="check-col"><input type="checkbox" aria-label="通过"></td>
+            <td class="check-col"><input type="checkbox" aria-label="不通过"></td>
+            <td class="remark"><input type="text" placeholder="备注"></td>
+          </tr>
+
+          <tr>
+            <td class="row-num">129</td>
+            <td>Table-表格是否支持行选择</td>
+            <td>检查selection配置</td>
+            <td><span class="priority p-p1">P1</span></td>
+            <td class="check-col"><input type="checkbox" aria-label="通过"></td>
+            <td class="check-col"><input type="checkbox" aria-label="不通过"></td>
+            <td class="remark"><input type="text" placeholder="备注"></td>
+          </tr>
+
+          <tr>
+            <td class="row-num">130</td>
+            <td>Tag-标签语义色是否正确使用</td>
+            <td>检查Tag颜色与语义匹配</td>
+            <td><span class="priority p-p1">P1</span></td>
+            <td class="check-col"><input type="checkbox" aria-label="通过"></td>
+            <td class="check-col"><input type="checkbox" aria-label="不通过"></td>
+            <td class="remark"><input type="text" placeholder="备注"></td>
+          </tr>
+
+          <tr>
+            <td class="row-num">131</td>
+            <td>Tag-标签是否有统一的最大宽度</td>
+            <td>检查长文本标签截断</td>
+            <td><span class="priority p-p2">P2</span></td>
+            <td class="check-col"><input type="checkbox" aria-label="通过"></td>
+            <td class="check-col"><input type="checkbox" aria-label="不通过"></td>
+            <td class="remark"><input type="text" placeholder="备注"></td>
+          </tr>
+
+          <tr>
+            <td class="row-num">132</td>
+            <td>Tag-标签尺寸是否统一</td>
+            <td>检查同类Tag大小</td>
+            <td><span class="priority p-p2">P2</span></td>
+            <td class="check-col"><input type="checkbox" aria-label="通过"></td>
+            <td class="check-col"><input type="checkbox" aria-label="不通过"></td>
+            <td class="remark"><input type="text" placeholder="备注"></td>
+          </tr>
+
+          <tr>
+            <td class="row-num">133</td>
+            <td>Tag-标签可关闭时交互是否一致</td>
+            <td>检查onClose回调</td>
+            <td><span class="priority p-p2">P2</span></td>
+            <td class="check-col"><input type="checkbox" aria-label="通过"></td>
+            <td class="check-col"><input type="checkbox" aria-label="不通过"></td>
+            <td class="remark"><input type="text" placeholder="备注"></td>
+          </tr>
+
+          <tr>
+            <td class="row-num">134</td>
+            <td>Badge-徽标数字溢出是否显示省略（99+）</td>
+            <td>检查overflowCount</td>
+            <td><span class="priority p-p1">P1</span></td>
+            <td class="check-col"><input type="checkbox" aria-label="通过"></td>
+            <td class="check-col"><input type="checkbox" aria-label="不通过"></td>
+            <td class="remark"><input type="text" placeholder="备注"></td>
+          </tr>
+
+          <tr>
+            <td class="row-num">135</td>
+            <td>Badge-徽标位置是否正确</td>
+            <td>检查徽标偏移位置</td>
+            <td><span class="priority p-p2">P2</span></td>
+            <td class="check-col"><input type="checkbox" aria-label="通过"></td>
+            <td class="check-col"><input type="checkbox" aria-label="不通过"></td>
+            <td class="remark"><input type="text" placeholder="备注"></td>
+          </tr>
+
+          <tr>
+            <td class="row-num">136</td>
+            <td>Badge-徽标状态点大小是否统一</td>
+            <td>检查dot大小</td>
+            <td><span class="priority p-p2">P2</span></td>
+            <td class="check-col"><input type="checkbox" aria-label="通过"></td>
+            <td class="check-col"><input type="checkbox" aria-label="不通过"></td>
+            <td class="remark"><input type="text" placeholder="备注"></td>
+          </tr>
+
+          <tr>
+            <td class="row-num">137</td>
+            <td>Avatar-头像尺寸是否在同一区域一致</td>
+            <td>检查同类列表头像大小</td>
+            <td><span class="priority p-p1">P1</span></td>
+            <td class="check-col"><input type="checkbox" aria-label="通过"></td>
+            <td class="check-col"><input type="checkbox" aria-label="不通过"></td>
+            <td class="remark"><input type="text" placeholder="备注"></td>
+          </tr>
+
+          <tr>
+            <td class="row-num">138</td>
+            <td>Avatar-头像组间距是否合理</td>
+            <td>检查Avatar.Group间距</td>
+            <td><span class="priority p-p2">P2</span></td>
+            <td class="check-col"><input type="checkbox" aria-label="通过"></td>
+            <td class="check-col"><input type="checkbox" aria-label="不通过"></td>
+            <td class="remark"><input type="text" placeholder="备注"></td>
+          </tr>
+
+          <tr>
+            <td class="row-num">139</td>
+            <td>Avatar-头像加载失败是否有兜底</td>
+            <td>检查src错误处理</td>
+            <td><span class="priority p-p1">P1</span></td>
+            <td class="check-col"><input type="checkbox" aria-label="通过"></td>
+            <td class="check-col"><input type="checkbox" aria-label="不通过"></td>
+            <td class="remark"><input type="text" placeholder="备注"></td>
+          </tr>
+
+          <tr>
+            <td class="row-num">140</td>
+            <td>Card-卡片操作区是否统一（顶部/底部）</td>
+            <td>检查actions位置一致性</td>
+            <td><span class="priority p-p2">P2</span></td>
+            <td class="check-col"><input type="checkbox" aria-label="通过"></td>
+            <td class="check-col"><input type="checkbox" aria-label="不通过"></td>
+            <td class="remark"><input type="text" placeholder="备注"></td>
+          </tr>
+
+          <tr>
+            <td class="row-num">141</td>
+            <td>Card-卡片hover效果是否统一</td>
+            <td>检查hoverable属性</td>
+            <td><span class="priority p-p2">P2</span></td>
+            <td class="check-col"><input type="checkbox" aria-label="通过"></td>
+            <td class="check-col"><input type="checkbox" aria-label="不通过"></td>
+            <td class="remark"><input type="text" placeholder="备注"></td>
+          </tr>
+
+          <tr>
+            <td class="row-num">142</td>
+            <td>Card-卡片内容区是否有最大高度</td>
+            <td>检查长内容截断</td>
+            <td><span class="priority p-p2">P2</span></td>
+            <td class="check-col"><input type="checkbox" aria-label="通过"></td>
+            <td class="check-col"><input type="checkbox" aria-label="不通过"></td>
+            <td class="remark"><input type="text" placeholder="备注"></td>
+          </tr>
+
+          <tr>
+            <td class="row-num">143</td>
+            <td>Card-卡片封面图比例是否统一</td>
+            <td>检查cover图片比例</td>
+            <td><span class="priority p-p2">P2</span></td>
+            <td class="check-col"><input type="checkbox" aria-label="通过"></td>
+            <td class="check-col"><input type="checkbox" aria-label="不通过"></td>
+            <td class="remark"><input type="text" placeholder="备注"></td>
+          </tr>
+
+          <tr>
+            <td class="row-num">144</td>
+            <td>Carousel-走马灯自动播放间隔是否合理</td>
+            <td>检查autoplay速度</td>
+            <td><span class="priority p-p2">P2</span></td>
+            <td class="check-col"><input type="checkbox" aria-label="通过"></td>
+            <td class="check-col"><input type="checkbox" aria-label="不通过"></td>
+            <td class="remark"><input type="text" placeholder="备注"></td>
+          </tr>
+
+          <tr>
+            <td class="row-num">145</td>
+            <td>Carousel-走马灯指示器位置是否正确</td>
+            <td>检查dots位置</td>
+            <td><span class="priority p-p2">P2</span></td>
+            <td class="check-col"><input type="checkbox" aria-label="通过"></td>
+            <td class="check-col"><input type="checkbox" aria-label="不通过"></td>
+            <td class="remark"><input type="text" placeholder="备注"></td>
+          </tr>
+
+          <tr>
+            <td class="row-num">146</td>
+            <td>Collapse-折叠面板展开逻辑是否合理</td>
+            <td>检查accordion设置</td>
+            <td><span class="priority p-p2">P2</span></td>
+            <td class="check-col"><input type="checkbox" aria-label="通过"></td>
+            <td class="check-col"><input type="checkbox" aria-label="不通过"></td>
+            <td class="remark"><input type="text" placeholder="备注"></td>
+          </tr>
+
+          <tr>
+            <td class="row-num">147</td>
+            <td>Collapse-折叠面板标题是否可自定义</td>
+            <td>检查header区域</td>
+            <td><span class="priority p-p2">P2</span></td>
+            <td class="check-col"><input type="checkbox" aria-label="通过"></td>
+            <td class="check-col"><input type="checkbox" aria-label="不通过"></td>
+            <td class="remark"><input type="text" placeholder="备注"></td>
+          </tr>
+
+          <tr>
+            <td class="row-num">148</td>
+            <td>Descriptions-描述列表对齐方式是否统一</td>
+            <td>检查label与content对齐</td>
+            <td><span class="priority p-p2">P2</span></td>
+            <td class="check-col"><input type="checkbox" aria-label="通过"></td>
+            <td class="check-col"><input type="checkbox" aria-label="不通过"></td>
+            <td class="remark"><input type="text" placeholder="备注"></td>
+          </tr>
+
+          <tr>
+            <td class="row-num">149</td>
+            <td>Descriptions-描述列表列数是否合理</td>
+            <td>检查column设置</td>
+            <td><span class="priority p-p2">P2</span></td>
+            <td class="check-col"><input type="checkbox" aria-label="通过"></td>
+            <td class="check-col"><input type="checkbox" aria-label="不通过"></td>
+            <td class="remark"><input type="text" placeholder="备注"></td>
+          </tr>
+
+          <tr>
+            <td class="row-num">150</td>
+            <td>Descriptions-描述列表是否有边框模式</td>
+            <td>检查border模式统一</td>
+            <td><span class="priority p-p2">P2</span></td>
+            <td class="check-col"><input type="checkbox" aria-label="通过"></td>
+            <td class="check-col"><input type="checkbox" aria-label="不通过"></td>
+            <td class="remark"><input type="text" placeholder="备注"></td>
+          </tr>
+
+          <tr>
+            <td class="row-num">151</td>
+            <td>Empty-空状态是否有引导操作</td>
+            <td>检查空状态的按钮/链接</td>
+            <td><span class="priority p-p1">P1</span></td>
+            <td class="check-col"><input type="checkbox" aria-label="通过"></td>
+            <td class="check-col"><input type="checkbox" aria-label="不通过"></td>
+            <td class="remark"><input type="text" placeholder="备注"></td>
+          </tr>
+
+          <tr>
+            <td class="row-num">152</td>
+            <td>Empty-空状态图片是否统一</td>
+            <td>检查各页面空状态图片一致性</td>
+            <td><span class="priority p-p2">P2</span></td>
+            <td class="check-col"><input type="checkbox" aria-label="通过"></td>
+            <td class="check-col"><input type="checkbox" aria-label="不通过"></td>
+            <td class="remark"><input type="text" placeholder="备注"></td>
+          </tr>
+
+          <tr>
+            <td class="row-num">153</td>
+            <td>Image-图片是否支持懒加载</td>
+            <td>检查大列表图片lazy</td>
+            <td><span class="priority p-p2">P2</span></td>
+            <td class="check-col"><input type="checkbox" aria-label="通过"></td>
+            <td class="check-col"><input type="checkbox" aria-label="不通过"></td>
+            <td class="remark"><input type="text" placeholder="备注"></td>
+          </tr>
+
+          <tr>
+            <td class="row-num">154</td>
+            <td>Image-图片加载失败是否有兜底</td>
+            <td>检查fallback属性</td>
+            <td><span class="priority p-p1">P1</span></td>
+            <td class="check-col"><input type="checkbox" aria-label="通过"></td>
+            <td class="check-col"><input type="checkbox" aria-label="不通过"></td>
+            <td class="remark"><input type="text" placeholder="备注"></td>
+          </tr>
+
+          <tr>
+            <td class="row-num">155</td>
+            <td>Image-图片预览是否可用</td>
+            <td>检查Preview功能</td>
+            <td><span class="priority p-p2">P2</span></td>
+            <td class="check-col"><input type="checkbox" aria-label="通过"></td>
+            <td class="check-col"><input type="checkbox" aria-label="不通过"></td>
+            <td class="remark"><input type="text" placeholder="备注"></td>
+          </tr>
+
+          <tr>
+            <td class="row-num">156</td>
+            <td>Image-图片加载是否有loading态</td>
+            <td>检查加载占位</td>
+            <td><span class="priority p-p2">P2</span></td>
+            <td class="check-col"><input type="checkbox" aria-label="通过"></td>
+            <td class="check-col"><input type="checkbox" aria-label="不通过"></td>
+            <td class="remark"><input type="text" placeholder="备注"></td>
+          </tr>
+
+          <tr>
+            <td class="row-num">157</td>
+            <td>List-长列表是否使用虚拟滚动</td>
+            <td>检查>100条列表的性能</td>
+            <td><span class="priority p-p1">P1</span></td>
+            <td class="check-col"><input type="checkbox" aria-label="通过"></td>
+            <td class="check-col"><input type="checkbox" aria-label="不通过"></td>
+            <td class="remark"><input type="text" placeholder="备注"></td>
+          </tr>
+
+          <tr>
+            <td class="row-num">158</td>
+            <td>List-列表加载更多/分页是否合理</td>
+            <td>检查loadMore逻辑</td>
+            <td><span class="priority p-p2">P2</span></td>
+            <td class="check-col"><input type="checkbox" aria-label="通过"></td>
+            <td class="check-col"><input type="checkbox" aria-label="不通过"></td>
+            <td class="remark"><input type="text" placeholder="备注"></td>
+          </tr>
+
+          <tr>
+            <td class="row-num">159</td>
+            <td>List-列表项操作是否一致</td>
+            <td>检查各列表项操作区</td>
+            <td><span class="priority p-p2">P2</span></td>
+            <td class="check-col"><input type="checkbox" aria-label="通过"></td>
+            <td class="check-col"><input type="checkbox" aria-label="不通过"></td>
+            <td class="remark"><input type="text" placeholder="备注"></td>
+          </tr>
+
+          <tr>
+            <td class="row-num">160</td>
+            <td>Popover-气泡卡片宽度是否限制</td>
+            <td>检查overlyStyle max-width</td>
+            <td><span class="priority p-p2">P2</span></td>
+            <td class="check-col"><input type="checkbox" aria-label="通过"></td>
+            <td class="check-col"><input type="checkbox" aria-label="不通过"></td>
+            <td class="remark"><input type="text" placeholder="备注"></td>
+          </tr>
+
+          <tr>
+            <td class="row-num">161</td>
+            <td>Popover-气泡卡片触发方式是否统一</td>
+            <td>检查hover/click一致性</td>
+            <td><span class="priority p-p2">P2</span></td>
+            <td class="check-col"><input type="checkbox" aria-label="通过"></td>
+            <td class="check-col"><input type="checkbox" aria-label="不通过"></td>
+            <td class="remark"><input type="text" placeholder="备注"></td>
+          </tr>
+
+          <tr>
+            <td class="row-num">162</td>
+            <td>Popover-气泡卡片内容区是否有最大宽度</td>
+            <td>检查content区限制</td>
+            <td><span class="priority p-p2">P2</span></td>
+            <td class="check-col"><input type="checkbox" aria-label="通过"></td>
+            <td class="check-col"><input type="checkbox" aria-label="不通过"></td>
+            <td class="remark"><input type="text" placeholder="备注"></td>
+          </tr>
+
+          <tr>
+            <td class="row-num">163</td>
+            <td>Statistic-统计数值格式是否统一</td>
+            <td>检查formatter设置</td>
+            <td><span class="priority p-p1">P1</span></td>
+            <td class="check-col"><input type="checkbox" aria-label="通过"></td>
+            <td class="check-col"><input type="checkbox" aria-label="不通过"></td>
+            <td class="remark"><input type="text" placeholder="备注"></td>
+          </tr>
+
+          <tr>
+            <td class="row-num">164</td>
+            <td>Statistic-统计数值趋势标识是否正确</td>
+            <td>检查prefix箭头方向</td>
+            <td><span class="priority p-p2">P2</span></td>
+            <td class="check-col"><input type="checkbox" aria-label="通过"></td>
+            <td class="check-col"><input type="checkbox" aria-label="不通过"></td>
+            <td class="remark"><input type="text" placeholder="备注"></td>
+          </tr>
+
+          <tr>
+            <td class="row-num">165</td>
+            <td>Statistic-统计数值是否响应式</td>
+            <td>检查不同屏幕下表现</td>
+            <td><span class="priority p-p2">P2</span></td>
+            <td class="check-col"><input type="checkbox" aria-label="通过"></td>
+            <td class="check-col"><input type="checkbox" aria-label="不通过"></td>
+            <td class="remark"><input type="text" placeholder="备注"></td>
+          </tr>
+
+          <tr>
+            <td class="row-num">166</td>
+            <td>Tree-树控件是否支持搜索高亮</td>
+            <td>检查搜索功能</td>
+            <td><span class="priority p-p2">P2</span></td>
+            <td class="check-col"><input type="checkbox" aria-label="通过"></td>
+            <td class="check-col"><input type="checkbox" aria-label="不通过"></td>
+            <td class="remark"><input type="text" placeholder="备注"></td>
+          </tr>
+
+          <tr>
+            <td class="row-num">167</td>
+            <td>Tree-树控件展开/折叠动画是否流畅</td>
+            <td>检查动画效果</td>
+            <td><span class="priority p-p2">P2</span></td>
+            <td class="check-col"><input type="checkbox" aria-label="通过"></td>
+            <td class="check-col"><input type="checkbox" aria-label="不通过"></td>
+            <td class="remark"><input type="text" placeholder="备注"></td>
+          </tr>
+
+          <tr>
+            <td class="row-num">168</td>
+            <td>Tree-树控件节点高度是否统一</td>
+            <td>检查节点行高</td>
+            <td><span class="priority p-p2">P2</span></td>
+            <td class="check-col"><input type="checkbox" aria-label="通过"></td>
+            <td class="check-col"><input type="checkbox" aria-label="不通过"></td>
+            <td class="remark"><input type="text" placeholder="备注"></td>
+          </tr>
+
+          <tr>
+            <td class="row-num">169</td>
+            <td>Tooltip-文字气泡内容是否过长</td>
+            <td>检查Tooltip最大宽度</td>
+            <td><span class="priority p-p2">P2</span></td>
+            <td class="check-col"><input type="checkbox" aria-label="通过"></td>
+            <td class="check-col"><input type="checkbox" aria-label="不通过"></td>
+            <td class="remark"><input type="text" placeholder="备注"></td>
+          </tr>
+
+          <tr>
+            <td class="row-num">170</td>
+            <td>Tooltip-文字气泡位置是否合理</td>
+            <td>检查placement设置</td>
+            <td><span class="priority p-p2">P2</span></td>
+            <td class="check-col"><input type="checkbox" aria-label="通过"></td>
+            <td class="check-col"><input type="checkbox" aria-label="不通过"></td>
+            <td class="remark"><input type="text" placeholder="备注"></td>
+          </tr>
+
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+
+  <div class="subsection sec-feedback" id="sec-feedback">
+    <div class="subsection-header">3.6 反馈组件（9个组件，34项）</div>
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th style="width:36px">序号</th>
+            <th>检查内容</th>
+            <th>检查方法</th>
+            <th style="width:60px">等级</th>
+            <th style="width:40px" class="check-col">通过</th>
+            <th style="width:40px" class="check-col">不通过</th>
+            <th style="width:120px">备注</th>
+          </tr>
+        </thead>
+        <tbody>
+
+          <tr>
+            <td class="row-num">171</td>
+            <td>Modal-对话框按钮位置是否正确（确认在右）</td>
+            <td>检查footer按钮顺序</td>
+            <td><span class="priority p-p1">P1</span></td>
+            <td class="check-col"><input type="checkbox" aria-label="通过"></td>
+            <td class="check-col"><input type="checkbox" aria-label="不通过"></td>
+            <td class="remark"><input type="text" placeholder="备注"></td>
+          </tr>
+
+          <tr>
+            <td class="row-num">172</td>
+            <td>Modal-对话框是否禁止嵌套</td>
+            <td>检查是否有Modal中弹Modal</td>
+            <td><span class="priority p-p0">P0</span></td>
+            <td class="check-col"><input type="checkbox" aria-label="通过"></td>
+            <td class="check-col"><input type="checkbox" aria-label="不通过"></td>
+            <td class="remark"><input type="text" placeholder="备注"></td>
+          </tr>
+
+          <tr>
+            <td class="row-num">173</td>
+            <td>Modal-对话框关闭方式是否完整（X/ESC/遮罩）</td>
+            <td>测试各关闭方式</td>
+            <td><span class="priority p-p1">P1</span></td>
+            <td class="check-col"><input type="checkbox" aria-label="通过"></td>
+            <td class="check-col"><input type="checkbox" aria-label="不通过"></td>
+            <td class="remark"><input type="text" placeholder="备注"></td>
+          </tr>
+
+          <tr>
+            <td class="row-num">174</td>
+            <td>Modal-对话框宽度是否合理（不超屏宽80%）</td>
+            <td>检查width设置</td>
+            <td><span class="priority p-p1">P1</span></td>
+            <td class="check-col"><input type="checkbox" aria-label="通过"></td>
+            <td class="check-col"><input type="checkbox" aria-label="不通过"></td>
+            <td class="remark"><input type="text" placeholder="备注"></td>
+          </tr>
+
+          <tr>
+            <td class="row-num">175</td>
+            <td>Modal-对话框标题是否明确</td>
+            <td>检查title属性</td>
+            <td><span class="priority p-p1">P1</span></td>
+            <td class="check-col"><input type="checkbox" aria-label="通过"></td>
+            <td class="check-col"><input type="checkbox" aria-label="不通过"></td>
+            <td class="remark"><input type="text" placeholder="备注"></td>
+          </tr>
+
+          <tr>
+            <td class="row-num">176</td>
+            <td>Modal-对话框内容是否可滚动</td>
+            <td>检查body overflow</td>
+            <td><span class="priority p-p1">P1</span></td>
+            <td class="check-col"><input type="checkbox" aria-label="通过"></td>
+            <td class="check-col"><input type="checkbox" aria-label="不通过"></td>
+            <td class="remark"><input type="text" placeholder="备注"></td>
+          </tr>
+
+          <tr>
+            <td class="row-num">177</td>
+            <td>Modal-对话框遮罩是否可点击关闭</td>
+            <td>检查maskClosable</td>
+            <td><span class="priority p-p1">P1</span></td>
+            <td class="check-col"><input type="checkbox" aria-label="通过"></td>
+            <td class="check-col"><input type="checkbox" aria-label="不通过"></td>
+            <td class="remark"><input type="text" placeholder="备注"></td>
+          </tr>
+
+          <tr>
+            <td class="row-num">178</td>
+            <td>Drawer-抽屉宽度是否合理（不超屏宽60%）</td>
+            <td>检查width设置</td>
+            <td><span class="priority p-p1">P1</span></td>
+            <td class="check-col"><input type="checkbox" aria-label="通过"></td>
+            <td class="check-col"><input type="checkbox" aria-label="不通过"></td>
+            <td class="remark"><input type="text" placeholder="备注"></td>
+          </tr>
+
+          <tr>
+            <td class="row-num">179</td>
+            <td>Drawer-抽屉方向是否统一</td>
+            <td>检查placement一致性</td>
+            <td><span class="priority p-p2">P2</span></td>
+            <td class="check-col"><input type="checkbox" aria-label="通过"></td>
+            <td class="check-col"><input type="checkbox" aria-label="不通过"></td>
+            <td class="remark"><input type="text" placeholder="备注"></td>
+          </tr>
+
+          <tr>
+            <td class="row-num">180</td>
+            <td>Drawer-抽屉是否有关闭确认（有未保存数据时）</td>
+            <td>检查onClose逻辑</td>
+            <td><span class="priority p-p1">P1</span></td>
+            <td class="check-col"><input type="checkbox" aria-label="通过"></td>
+            <td class="check-col"><input type="checkbox" aria-label="不通过"></td>
+            <td class="remark"><input type="text" placeholder="备注"></td>
+          </tr>
+
+          <tr>
+            <td class="row-num">181</td>
+            <td>Drawer-抽屉内容是否可滚动</td>
+            <td>检查body overflow</td>
+            <td><span class="priority p-p1">P1</span></td>
+            <td class="check-col"><input type="checkbox" aria-label="通过"></td>
+            <td class="check-col"><input type="checkbox" aria-label="不通过"></td>
+            <td class="remark"><input type="text" placeholder="备注"></td>
+          </tr>
+
+          <tr>
+            <td class="row-num">182</td>
+            <td>Message-全局提示时长是否统一（3s）</td>
+            <td>检查duration设置</td>
+            <td><span class="priority p-p1">P1</span></td>
+            <td class="check-col"><input type="checkbox" aria-label="通过"></td>
+            <td class="check-col"><input type="checkbox" aria-label="不通过"></td>
+            <td class="remark"><input type="text" placeholder="备注"></td>
+          </tr>
+
+          <tr>
+            <td class="row-num">183</td>
+            <td>Message-全局提示位置是否统一（顶部居中）</td>
+            <td>检查top位置</td>
+            <td><span class="priority p-p2">P2</span></td>
+            <td class="check-col"><input type="checkbox" aria-label="通过"></td>
+            <td class="check-col"><input type="checkbox" aria-label="不通过"></td>
+            <td class="remark"><input type="text" placeholder="备注"></td>
+          </tr>
+
+          <tr>
+            <td class="row-num">184</td>
+            <td>Message-全局提示类型是否正确</td>
+            <td>检查success/error等类型</td>
+            <td><span class="priority p-p1">P1</span></td>
+            <td class="check-col"><input type="checkbox" aria-label="通过"></td>
+            <td class="check-col"><input type="checkbox" aria-label="不通过"></td>
+            <td class="remark"><input type="text" placeholder="备注"></td>
+          </tr>
+
+          <tr>
+            <td class="row-num">185</td>
+            <td>Message-全局提示是否避免堆叠过多</td>
+            <td>检查maxCount设置</td>
+            <td><span class="priority p-p2">P2</span></td>
+            <td class="check-col"><input type="checkbox" aria-label="通过"></td>
+            <td class="check-col"><input type="checkbox" aria-label="不通过"></td>
+            <td class="remark"><input type="text" placeholder="备注"></td>
+          </tr>
+
+          <tr>
+            <td class="row-num">186</td>
+            <td>Message-全局提示类型图标是否正确</td>
+            <td>检查类型图标</td>
+            <td><span class="priority p-p2">P2</span></td>
+            <td class="check-col"><input type="checkbox" aria-label="通过"></td>
+            <td class="check-col"><input type="checkbox" aria-label="不通过"></td>
+            <td class="remark"><input type="text" placeholder="备注"></td>
+          </tr>
+
+          <tr>
+            <td class="row-num">187</td>
+            <td>Notification-通知是否自动关闭</td>
+            <td>检查autoClose设置</td>
+            <td><span class="priority p-p1">P1</span></td>
+            <td class="check-col"><input type="checkbox" aria-label="通过"></td>
+            <td class="check-col"><input type="checkbox" aria-label="不通过"></td>
+            <td class="remark"><input type="text" placeholder="备注"></td>
+          </tr>
+
+          <tr>
+            <td class="row-num">188</td>
+            <td>Notification-通知展示时长是否合理（4.5s）</td>
+            <td>检查duration</td>
+            <td><span class="priority p-p2">P2</span></td>
+            <td class="check-col"><input type="checkbox" aria-label="通过"></td>
+            <td class="check-col"><input type="checkbox" aria-label="不通过"></td>
+            <td class="remark"><input type="text" placeholder="备注"></td>
+          </tr>
+
+          <tr>
+            <td class="row-num">189</td>
+            <td>Notification-通知位置是否统一</td>
+            <td>检查placement</td>
+            <td><span class="priority p-p2">P2</span></td>
+            <td class="check-col"><input type="checkbox" aria-label="通过"></td>
+            <td class="check-col"><input type="checkbox" aria-label="不通过"></td>
+            <td class="remark"><input type="text" placeholder="备注"></td>
+          </tr>
+
+          <tr>
+            <td class="row-num">190</td>
+            <td>Notification-通知是否支持自定义图标</td>
+            <td>检查icon使用</td>
+            <td><span class="priority p-p2">P2</span></td>
+            <td class="check-col"><input type="checkbox" aria-label="通过"></td>
+            <td class="check-col"><input type="checkbox" aria-label="不通过"></td>
+            <td class="remark"><input type="text" placeholder="备注"></td>
+          </tr>
+
+          <tr>
+            <td class="row-num">191</td>
+            <td>Popconfirm-气泡确认是否仅用于简单确认</td>
+            <td>检查是否误用于复杂表单</td>
+            <td><span class="priority p-p2">P2</span></td>
+            <td class="check-col"><input type="checkbox" aria-label="通过"></td>
+            <td class="check-col"><input type="checkbox" aria-label="不通过"></td>
+            <td class="remark"><input type="text" placeholder="备注"></td>
+          </tr>
+
+          <tr>
+            <td class="row-num">192</td>
+            <td>Popconfirm-气泡确认位置是否合理</td>
+            <td>检查placement</td>
+            <td><span class="priority p-p2">P2</span></td>
+            <td class="check-col"><input type="checkbox" aria-label="通过"></td>
+            <td class="check-col"><input type="checkbox" aria-label="不通过"></td>
+            <td class="remark"><input type="text" placeholder="备注"></td>
+          </tr>
+
+          <tr>
+            <td class="row-num">193</td>
+            <td>Spin-加载是否有延迟渲染（>200ms才显示）</td>
+            <td>检查delay属性</td>
+            <td><span class="priority p-p1">P1</span></td>
+            <td class="check-col"><input type="checkbox" aria-label="通过"></td>
+            <td class="check-col"><input type="checkbox" aria-label="不通过"></td>
+            <td class="remark"><input type="text" placeholder="备注"></td>
+          </tr>
+
+          <tr>
+            <td class="row-num">194</td>
+            <td>Spin-加载遮罩是否覆盖完整区域</td>
+            <td>检查loading区域范围</td>
+            <td><span class="priority p-p2">P2</span></td>
+            <td class="check-col"><input type="checkbox" aria-label="通过"></td>
+            <td class="check-col"><input type="checkbox" aria-label="不通过"></td>
+            <td class="remark"><input type="text" placeholder="备注"></td>
+          </tr>
+
+          <tr>
+            <td class="row-num">195</td>
+            <td>Spin-加载文本是否清晰</td>
+            <td>检查tip属性</td>
+            <td><span class="priority p-p2">P2</span></td>
+            <td class="check-col"><input type="checkbox" aria-label="通过"></td>
+            <td class="check-col"><input type="checkbox" aria-label="不通过"></td>
+            <td class="remark"><input type="text" placeholder="备注"></td>
+          </tr>
+
+          <tr>
+            <td class="row-num">196</td>
+            <td>Progress-进度条状态是否完整</td>
+            <td>检查各状态样式</td>
+            <td><span class="priority p-p2">P2</span></td>
+            <td class="check-col"><input type="checkbox" aria-label="通过"></td>
+            <td class="check-col"><input type="checkbox" aria-label="不通过"></td>
+            <td class="remark"><input type="text" placeholder="备注"></td>
+          </tr>
+
+          <tr>
+            <td class="row-num">197</td>
+            <td>Progress-进度条格式是否统一</td>
+            <td>检查format设置</td>
+            <td><span class="priority p-p2">P2</span></td>
+            <td class="check-col"><input type="checkbox" aria-label="通过"></td>
+            <td class="check-col"><input type="checkbox" aria-label="不通过"></td>
+            <td class="remark"><input type="text" placeholder="备注"></td>
+          </tr>
+
+          <tr>
+            <td class="row-num">198</td>
+            <td>Progress-进度条动画是否流畅</td>
+            <td>检查动画效果</td>
+            <td><span class="priority p-p2">P2</span></td>
+            <td class="check-col"><input type="checkbox" aria-label="通过"></td>
+            <td class="check-col"><input type="checkbox" aria-label="不通过"></td>
+            <td class="remark"><input type="text" placeholder="备注"></td>
+          </tr>
+
+          <tr>
+            <td class="row-num">199</td>
+            <td>Result-结果页状态类型是否正确</td>
+            <td>检查success/error/info等状态</td>
+            <td><span class="priority p-p1">P1</span></td>
+            <td class="check-col"><input type="checkbox" aria-label="通过"></td>
+            <td class="check-col"><input type="checkbox" aria-label="不通过"></td>
+            <td class="remark"><input type="text" placeholder="备注"></td>
+          </tr>
+
+          <tr>
+            <td class="row-num">200</td>
+            <td>Result-结果页是否有后续操作引导</td>
+            <td>检查extra区域按钮</td>
+            <td><span class="priority p-p1">P1</span></td>
+            <td class="check-col"><input type="checkbox" aria-label="通过"></td>
+            <td class="check-col"><input type="checkbox" aria-label="不通过"></td>
+            <td class="remark"><input type="text" placeholder="备注"></td>
+          </tr>
+
+          <tr>
+            <td class="row-num">201</td>
+            <td>Result-结果页图标是否语义化</td>
+            <td>检查icon类型</td>
+            <td><span class="priority p-p2">P2</span></td>
+            <td class="check-col"><input type="checkbox" aria-label="通过"></td>
+            <td class="check-col"><input type="checkbox" aria-label="不通过"></td>
+            <td class="remark"><input type="text" placeholder="备注"></td>
+          </tr>
+
+          <tr>
+            <td class="row-num">202</td>
+            <td>Skeleton-骨架屏是否用于首次加载</td>
+            <td>检查骨架屏使用场景</td>
+            <td><span class="priority p-p2">P2</span></td>
+            <td class="check-col"><input type="checkbox" aria-label="通过"></td>
+            <td class="check-col"><input type="checkbox" aria-label="不通过"></td>
+            <td class="remark"><input type="text" placeholder="备注"></td>
+          </tr>
+
+          <tr>
+            <td class="row-num">203</td>
+            <td>Skeleton-骨架屏形状是否与内容匹配</td>
+            <td>检查skeleton形状</td>
+            <td><span class="priority p-p2">P2</span></td>
+            <td class="check-col"><input type="checkbox" aria-label="通过"></td>
+            <td class="check-col"><input type="checkbox" aria-label="不通过"></td>
+            <td class="remark"><input type="text" placeholder="备注"></td>
+          </tr>
+
+          <tr>
+            <td class="row-num">204</td>
+            <td>Skeleton-骨架屏是否有动画</td>
+            <td>检查active属性</td>
+            <td><span class="priority p-p2">P2</span></td>
+            <td class="check-col"><input type="checkbox" aria-label="通过"></td>
+            <td class="check-col"><input type="checkbox" aria-label="不通过"></td>
+            <td class="remark"><input type="text" placeholder="备注"></td>
+          </tr>
+
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+
+  <div class="subsection sec-other" id="sec-other">
+    <div class="subsection-header">3.7 其他组件（11个组件，34项）</div>
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th style="width:36px">序号</th>
+            <th>检查内容</th>
+            <th>检查方法</th>
+            <th style="width:60px">等级</th>
+            <th style="width:40px" class="check-col">通过</th>
+            <th style="width:40px" class="check-col">不通过</th>
+            <th style="width:120px">备注</th>
+          </tr>
+        </thead>
+        <tbody>
+
+          <tr>
+            <td class="row-num">205</td>
+            <td>Alert-警告提示类型是否匹配场景</td>
+            <td>检查info/success/warning/error使用</td>
+            <td><span class="priority p-p1">P1</span></td>
+            <td class="check-col"><input type="checkbox" aria-label="通过"></td>
+            <td class="check-col"><input type="checkbox" aria-label="不通过"></td>
+            <td class="remark"><input type="text" placeholder="备注"></td>
+          </tr>
+
+          <tr>
+            <td class="row-num">206</td>
+            <td>Alert-警告提示是否可关闭（需要时）</td>
+            <td>检查closable属性</td>
+            <td><span class="priority p-p2">P2</span></td>
+            <td class="check-col"><input type="checkbox" aria-label="通过"></td>
+            <td class="check-col"><input type="checkbox" aria-label="不通过"></td>
+            <td class="remark"><input type="text" placeholder="备注"></td>
+          </tr>
+
+          <tr>
+            <td class="row-num">207</td>
+            <td>Alert-警告提示是否有图标</td>
+            <td>检查showIcon设置</td>
+            <td><span class="priority p-p2">P2</span></td>
+            <td class="check-col"><input type="checkbox" aria-label="通过"></td>
+            <td class="check-col"><input type="checkbox" aria-label="不通过"></td>
+            <td class="remark"><input type="text" placeholder="备注"></td>
+          </tr>
+
+          <tr>
+            <td class="row-num">208</td>
+            <td>Alert-警告提示是否支持自定义内容</td>
+            <td>检查description使用</td>
+            <td><span class="priority p-p2">P2</span></td>
+            <td class="check-col"><input type="checkbox" aria-label="通过"></td>
+            <td class="check-col"><input type="checkbox" aria-label="不通过"></td>
+            <td class="remark"><input type="text" placeholder="备注"></td>
+          </tr>
+
+          <tr>
+            <td class="row-num">209</td>
+            <td>Alert-警告提示内容是否过长需折叠</td>
+            <td>检查banner模式</td>
+            <td><span class="priority p-p2">P2</span></td>
+            <td class="check-col"><input type="checkbox" aria-label="通过"></td>
+            <td class="check-col"><input type="checkbox" aria-label="不通过"></td>
+            <td class="remark"><input type="text" placeholder="备注"></td>
+          </tr>
+
+          <tr>
+            <td class="row-num">210</td>
+            <td>Calendar-日历模式是否统一</td>
+            <td>检查全屏/卡片模式</td>
+            <td><span class="priority p-p2">P2</span></td>
+            <td class="check-col"><input type="checkbox" aria-label="通过"></td>
+            <td class="check-col"><input type="checkbox" aria-label="不通过"></td>
+            <td class="remark"><input type="text" placeholder="备注"></td>
+          </tr>
+
+          <tr>
+            <td class="row-num">211</td>
+            <td>Calendar-日历可选范围是否合理</td>
+            <td>检查disabledDate</td>
+            <td><span class="priority p-p2">P2</span></td>
+            <td class="check-col"><input type="checkbox" aria-label="通过"></td>
+            <td class="check-col"><input type="checkbox" aria-label="不通过"></td>
+            <td class="remark"><input type="text" placeholder="备注"></td>
+          </tr>
+
+          <tr>
+            <td class="row-num">212</td>
+            <td>Calendar-日历事件标记是否统一</td>
+            <td>检查dateFullCellRender</td>
+            <td><span class="priority p-p2">P2</span></td>
+            <td class="check-col"><input type="checkbox" aria-label="通过"></td>
+            <td class="check-col"><input type="checkbox" aria-label="不通过"></td>
+            <td class="remark"><input type="text" placeholder="备注"></td>
+          </tr>
+
+          <tr>
+            <td class="row-num">213</td>
+            <td>Calendar-日历事件点击是否有反馈</td>
+            <td>检查onSelect回调</td>
+            <td><span class="priority p-p2">P2</span></td>
+            <td class="check-col"><input type="checkbox" aria-label="通过"></td>
+            <td class="check-col"><input type="checkbox" aria-label="不通过"></td>
+            <td class="remark"><input type="text" placeholder="备注"></td>
+          </tr>
+
+          <tr>
+            <td class="row-num">214</td>
+            <td>Comment-评论层级是否不超过3级</td>
+            <td>检查评论嵌套深度</td>
+            <td><span class="priority p-p2">P2</span></td>
+            <td class="check-col"><input type="checkbox" aria-label="通过"></td>
+            <td class="check-col"><input type="checkbox" aria-label="不通过"></td>
+            <td class="remark"><input type="text" placeholder="备注"></td>
+          </tr>
+
+          <tr>
+            <td class="row-num">215</td>
+            <td>Comment-评论时间格式是否统一</td>
+            <td>检查时间显示格式</td>
+            <td><span class="priority p-p2">P2</span></td>
+            <td class="check-col"><input type="checkbox" aria-label="通过"></td>
+            <td class="check-col"><input type="checkbox" aria-label="不通过"></td>
+            <td class="remark"><input type="text" placeholder="备注"></td>
+          </tr>
+
+          <tr>
+            <td class="row-num">216</td>
+            <td>Comment-评论操作按钮是否统一</td>
+            <td>检查操作区一致性</td>
+            <td><span class="priority p-p2">P2</span></td>
+            <td class="check-col"><input type="checkbox" aria-label="通过"></td>
+            <td class="check-col"><input type="checkbox" aria-label="不通过"></td>
+            <td class="remark"><input type="text" placeholder="备注"></td>
+          </tr>
+
+          <tr>
+            <td class="row-num">217</td>
+            <td>ConfigProvider-全局配置是否设置</td>
+            <td>检查前缀/尺寸/国际化</td>
+            <td><span class="priority p-p1">P1</span></td>
+            <td class="check-col"><input type="checkbox" aria-label="通过"></td>
+            <td class="check-col"><input type="checkbox" aria-label="不通过"></td>
+            <td class="remark"><input type="text" placeholder="备注"></td>
+          </tr>
+
+          <tr>
+            <td class="row-num">218</td>
+            <td>ConfigProvider-国际化是否正确配置</td>
+            <td>检查locale设置</td>
+            <td><span class="priority p-p1">P1</span></td>
+            <td class="check-col"><input type="checkbox" aria-label="通过"></td>
+            <td class="check-col"><input type="checkbox" aria-label="不通过"></td>
+            <td class="remark"><input type="text" placeholder="备注"></td>
+          </tr>
+
+          <tr>
+            <td class="row-num">219</td>
+            <td>ConfigProvider-主题切换是否平滑</td>
+            <td>检查切换动画</td>
+            <td><span class="priority p-p1">P1</span></td>
+            <td class="check-col"><input type="checkbox" aria-label="通过"></td>
+            <td class="check-col"><input type="checkbox" aria-label="不通过"></td>
+            <td class="remark"><input type="text" placeholder="备注"></td>
+          </tr>
+
+          <tr>
+            <td class="row-num">220</td>
+            <td>Mentions-提及触发字符是否正确</td>
+            <td>检查prefix设置</td>
+            <td><span class="priority p-p2">P2</span></td>
+            <td class="check-col"><input type="checkbox" aria-label="通过"></td>
+            <td class="check-col"><input type="checkbox" aria-label="不通过"></td>
+            <td class="remark"><input type="text" placeholder="备注"></td>
+          </tr>
+
+          <tr>
+            <td class="row-num">221</td>
+            <td>Mentions-提及列表是否异步加载</td>
+            <td>检查加载方式</td>
+            <td><span class="priority p-p2">P2</span></td>
+            <td class="check-col"><input type="checkbox" aria-label="通过"></td>
+            <td class="check-col"><input type="checkbox" aria-label="不通过"></td>
+            <td class="remark"><input type="text" placeholder="备注"></td>
+          </tr>
+
+          <tr>
+            <td class="row-num">222</td>
+            <td>Mentions-提及弹层位置是否正确</td>
+            <td>检查placement</td>
+            <td><span class="priority p-p2">P2</span></td>
+            <td class="check-col"><input type="checkbox" aria-label="通过"></td>
+            <td class="check-col"><input type="checkbox" aria-label="不通过"></td>
+            <td class="remark"><input type="text" placeholder="备注"></td>
+          </tr>
+
+          <tr>
+            <td class="row-num">223</td>
+            <td>Rate-评分精度是否统一</td>
+            <td>检查allowHalf设置</td>
+            <td><span class="priority p-p2">P2</span></td>
+            <td class="check-col"><input type="checkbox" aria-label="通过"></td>
+            <td class="check-col"><input type="checkbox" aria-label="不通过"></td>
+            <td class="remark"><input type="text" placeholder="备注"></td>
+          </tr>
+
+          <tr>
+            <td class="row-num">224</td>
+            <td>Rate-评分数量是否统一（默认5）</td>
+            <td>检查count设置</td>
+            <td><span class="priority p-p2">P2</span></td>
+            <td class="check-col"><input type="checkbox" aria-label="通过"></td>
+            <td class="check-col"><input type="checkbox" aria-label="不通过"></td>
+            <td class="remark"><input type="text" placeholder="备注"></td>
+          </tr>
+
+          <tr>
+            <td class="row-num">225</td>
+            <td>Rate-评分只读状态是否正确</td>
+            <td>检查disabled/readonly</td>
+            <td><span class="priority p-p2">P2</span></td>
+            <td class="check-col"><input type="checkbox" aria-label="通过"></td>
+            <td class="check-col"><input type="checkbox" aria-label="不通过"></td>
+            <td class="remark"><input type="text" placeholder="备注"></td>
+          </tr>
+
+          <tr>
+            <td class="row-num">226</td>
+            <td>Slider-滑动条步长是否合理</td>
+            <td>检查step值</td>
+            <td><span class="priority p-p2">P2</span></td>
+            <td class="check-col"><input type="checkbox" aria-label="通过"></td>
+            <td class="check-col"><input type="checkbox" aria-label="不通过"></td>
+            <td class="remark"><input type="text" placeholder="备注"></td>
+          </tr>
+
+          <tr>
+            <td class="row-num">227</td>
+            <td>Slider-滑动条是否显示刻度</td>
+            <td>检查marks设置</td>
+            <td><span class="priority p-p2">P2</span></td>
+            <td class="check-col"><input type="checkbox" aria-label="通过"></td>
+            <td class="check-col"><input type="checkbox" aria-label="不通过"></td>
+            <td class="remark"><input type="text" placeholder="备注"></td>
+          </tr>
+
+          <tr>
+            <td class="row-num">228</td>
+            <td>Slider-滑动条tooltip是否显示</td>
+            <td>检查tooltipVisible</td>
+            <td><span class="priority p-p2">P2</span></td>
+            <td class="check-col"><input type="checkbox" aria-label="通过"></td>
+            <td class="check-col"><input type="checkbox" aria-label="不通过"></td>
+            <td class="remark"><input type="text" placeholder="备注"></td>
+          </tr>
+
+          <tr>
+            <td class="row-num">229</td>
+            <td>Timeline-时间轴方向是否合理</td>
+            <td>检查mode设置</td>
+            <td><span class="priority p-p2">P2</span></td>
+            <td class="check-col"><input type="checkbox" aria-label="通过"></td>
+            <td class="check-col"><input type="checkbox" aria-label="不通过"></td>
+            <td class="remark"><input type="text" placeholder="备注"></td>
+          </tr>
+
+          <tr>
+            <td class="row-num">230</td>
+            <td>Timeline-时间轴节点颜色是否语义化</td>
+            <td>检查color设置</td>
+            <td><span class="priority p-p2">P2</span></td>
+            <td class="check-col"><input type="checkbox" aria-label="通过"></td>
+            <td class="check-col"><input type="checkbox" aria-label="不通过"></td>
+            <td class="remark"><input type="text" placeholder="备注"></td>
+          </tr>
+
+          <tr>
+            <td class="row-num">231</td>
+            <td>Timeline-时间轴标签对齐是否正确</td>
+            <td>检查label位置</td>
+            <td><span class="priority p-p2">P2</span></td>
+            <td class="check-col"><input type="checkbox" aria-label="通过"></td>
+            <td class="check-col"><input type="checkbox" aria-label="不通过"></td>
+            <td class="remark"><input type="text" placeholder="备注"></td>
+          </tr>
+
+          <tr>
+            <td class="row-num">232</td>
+            <td>Tooltip-文字气泡位置是否避免遮挡</td>
+            <td>检查placement合理性</td>
+            <td><span class="priority p-p2">P2</span></td>
+            <td class="check-col"><input type="checkbox" aria-label="通过"></td>
+            <td class="check-col"><input type="checkbox" aria-label="不通过"></td>
+            <td class="remark"><input type="text" placeholder="备注"></td>
+          </tr>
+
+          <tr>
+            <td class="row-num">233</td>
+            <td>WaterMark-水印透明度是否合理</td>
+            <td>检查opacity/fontSize</td>
+            <td><span class="priority p-p1">P1</span></td>
+            <td class="check-col"><input type="checkbox" aria-label="通过"></td>
+            <td class="check-col"><input type="checkbox" aria-label="不通过"></td>
+            <td class="remark"><input type="text" placeholder="备注"></td>
+          </tr>
+
+          <tr>
+            <td class="row-num">234</td>
+            <td>WaterMark-水印是否覆盖全页面</td>
+            <td>检查水印容器范围</td>
+            <td><span class="priority p-p2">P2</span></td>
+            <td class="check-col"><input type="checkbox" aria-label="通过"></td>
+            <td class="check-col"><input type="checkbox" aria-label="不通过"></td>
+            <td class="remark"><input type="text" placeholder="备注"></td>
+          </tr>
+
+          <tr>
+            <td class="row-num">235</td>
+            <td>WaterMark-水印内容是否正确</td>
+            <td>检查content文字</td>
+            <td><span class="priority p-p2">P2</span></td>
+            <td class="check-col"><input type="checkbox" aria-label="通过"></td>
+            <td class="check-col"><input type="checkbox" aria-label="不通过"></td>
+            <td class="remark"><input type="text" placeholder="备注"></td>
+          </tr>
+
+          <tr>
+            <td class="row-num">236</td>
+            <td>VerificationCode-验证码位数是否统一</td>
+            <td>检查length属性</td>
+            <td><span class="priority p-p2">P2</span></td>
+            <td class="check-col"><input type="checkbox" aria-label="通过"></td>
+            <td class="check-col"><input type="checkbox" aria-label="不通过"></td>
+            <td class="remark"><input type="text" placeholder="备注"></td>
+          </tr>
+
+          <tr>
+            <td class="row-num">237</td>
+            <td>VerificationCode-验证码输入反馈是否及时</td>
+            <td>检查onChange触发</td>
+            <td><span class="priority p-p2">P2</span></td>
+            <td class="check-col"><input type="checkbox" aria-label="通过"></td>
+            <td class="check-col"><input type="checkbox" aria-label="不通过"></td>
+            <td class="remark"><input type="text" placeholder="备注"></td>
+          </tr>
+
+          <tr>
+            <td class="row-num">238</td>
+            <td>VerificationCode-验证码分隔是否清晰</td>
+            <td>检查分隔样式</td>
+            <td><span class="priority p-p2">P2</span></td>
+            <td class="check-col"><input type="checkbox" aria-label="通过"></td>
+            <td class="check-col"><input type="checkbox" aria-label="不通过"></td>
+            <td class="remark"><input type="text" placeholder="备注"></td>
+          </tr>
+
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+</section>
+
+<section class="section" id="part4">
+  <h2>第四部分：审计评分表</h2>
+
+  <h3>一、设计约束部分评分（满分40分）</h3>
+  <div class="score-table">
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>审计类别</th>
+            <th style="text-align:center">检查项数</th>
+            <th style="text-align:center">权重（分）</th>
+            <th style="text-align:center">不合格项数</th>
+            <th style="text-align:center">扣分</th>
+            <th style="text-align:center">得分</th>
+          </tr>
+        </thead>
+        <tbody>
+
+          <tr>
+            <td>2.1 色彩约束审计（15项）</td>
+            <td style="text-align:center">15</td>
+            <td style="text-align:center">6.5</td>
+            <td style="text-align:center"><input type="number" min="0" max="15" style="width:60px;text-align:center;border:1px solid var(--border);border-radius:3px;padding:4px;"></td>
+            <td style="text-align:center">—</td>
+            <td style="text-align:center">—</td>
+          </tr>
+
+          <tr>
+            <td>2.2 字体约束审计（15项）</td>
+            <td style="text-align:center">15</td>
+            <td style="text-align:center">6.5</td>
+            <td style="text-align:center"><input type="number" min="0" max="15" style="width:60px;text-align:center;border:1px solid var(--border);border-radius:3px;padding:4px;"></td>
+            <td style="text-align:center">—</td>
+            <td style="text-align:center">—</td>
+          </tr>
+
+          <tr>
+            <td>2.3 间距约束审计（15项）</td>
+            <td style="text-align:center">15</td>
+            <td style="text-align:center">6.5</td>
+            <td style="text-align:center"><input type="number" min="0" max="15" style="width:60px;text-align:center;border:1px solid var(--border);border-radius:3px;padding:4px;"></td>
+            <td style="text-align:center">—</td>
+            <td style="text-align:center">—</td>
+          </tr>
+
+          <tr>
+            <td>2.4 圆角约束审计（8项）</td>
+            <td style="text-align:center">8</td>
+            <td style="text-align:center">3.4</td>
+            <td style="text-align:center"><input type="number" min="0" max="8" style="width:60px;text-align:center;border:1px solid var(--border);border-radius:3px;padding:4px;"></td>
+            <td style="text-align:center">—</td>
+            <td style="text-align:center">—</td>
+          </tr>
+
+          <tr>
+            <td>2.5 阴影约束审计（6项）</td>
+            <td style="text-align:center">6</td>
+            <td style="text-align:center">2.6</td>
+            <td style="text-align:center"><input type="number" min="0" max="6" style="width:60px;text-align:center;border:1px solid var(--border);border-radius:3px;padding:4px;"></td>
+            <td style="text-align:center">—</td>
+            <td style="text-align:center">—</td>
+          </tr>
+
+          <tr>
+            <td>2.6 边框约束审计（6项）</td>
+            <td style="text-align:center">6</td>
+            <td style="text-align:center">2.6</td>
+            <td style="text-align:center"><input type="number" min="0" max="6" style="width:60px;text-align:center;border:1px solid var(--border);border-radius:3px;padding:4px;"></td>
+            <td style="text-align:center">—</td>
+            <td style="text-align:center">—</td>
+          </tr>
+
+          <tr>
+            <td>2.7 尺寸约束审计（8项）</td>
+            <td style="text-align:center">8</td>
+            <td style="text-align:center">3.4</td>
+            <td style="text-align:center"><input type="number" min="0" max="8" style="width:60px;text-align:center;border:1px solid var(--border);border-radius:3px;padding:4px;"></td>
+            <td style="text-align:center">—</td>
+            <td style="text-align:center">—</td>
+          </tr>
+
+          <tr>
+            <td>2.8 动效约束审计（10项）</td>
+            <td style="text-align:center">10</td>
+            <td style="text-align:center">4.3</td>
+            <td style="text-align:center"><input type="number" min="0" max="10" style="width:60px;text-align:center;border:1px solid var(--border);border-radius:3px;padding:4px;"></td>
+            <td style="text-align:center">—</td>
+            <td style="text-align:center">—</td>
+          </tr>
+
+          <tr>
+            <td>2.9 暗黑模式约束审计（10项）</td>
+            <td style="text-align:center">10</td>
+            <td style="text-align:center">4.3</td>
+            <td style="text-align:center"><input type="number" min="0" max="10" style="width:60px;text-align:center;border:1px solid var(--border);border-radius:3px;padding:4px;"></td>
+            <td style="text-align:center">—</td>
+            <td style="text-align:center">—</td>
+          </tr>
+
+          <tr style="font-weight:600;background:#F0F3F8;">
+            <td>设计约束小计</td>
+            <td style="text-align:center">93</td>
+            <td style="text-align:center">40</td>
+            <td style="text-align:center">—</td>
+            <td style="text-align:center">—</td>
+            <td style="text-align:center">—</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <h3>二、组件规范部分评分（满分40分）</h3>
+  <div class="score-table">
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>审计类别</th>
+            <th style="text-align:center">检查项数</th>
+            <th style="text-align:center">权重（分）</th>
+            <th style="text-align:center">不合格项数</th>
+            <th style="text-align:center">扣分</th>
+            <th style="text-align:center">得分</th>
+          </tr>
+        </thead>
+        <tbody>
+
+          <tr>
+            <td>3.1 通用组件（6个组件，20项）</td>
+            <td style="text-align:center">20</td>
+            <td style="text-align:center">3.4</td>
+            <td style="text-align:center"><input type="number" min="0" max="20" style="width:60px;text-align:center;border:1px solid var(--border);border-radius:3px;padding:4px;"></td>
+            <td style="text-align:center">—</td>
+            <td style="text-align:center">—</td>
+          </tr>
+
+          <tr>
+            <td>3.2 布局组件（3个组件，11项）</td>
+            <td style="text-align:center">11</td>
+            <td style="text-align:center">1.8</td>
+            <td style="text-align:center"><input type="number" min="0" max="11" style="width:60px;text-align:center;border:1px solid var(--border);border-radius:3px;padding:4px;"></td>
+            <td style="text-align:center">—</td>
+            <td style="text-align:center">—</td>
+          </tr>
+
+          <tr>
+            <td>3.3 导航组件（9个组件，32项）</td>
+            <td style="text-align:center">32</td>
+            <td style="text-align:center">5.4</td>
+            <td style="text-align:center"><input type="number" min="0" max="32" style="width:60px;text-align:center;border:1px solid var(--border);border-radius:3px;padding:4px;"></td>
+            <td style="text-align:center">—</td>
+            <td style="text-align:center">—</td>
+          </tr>
+
+          <tr>
+            <td>3.4 数据录入组件（15个组件，57项）</td>
+            <td style="text-align:center">57</td>
+            <td style="text-align:center">9.6</td>
+            <td style="text-align:center"><input type="number" min="0" max="57" style="width:60px;text-align:center;border:1px solid var(--border);border-radius:3px;padding:4px;"></td>
+            <td style="text-align:center">—</td>
+            <td style="text-align:center">—</td>
+          </tr>
+
+          <tr>
+            <td>3.5 数据展示组件（14个组件，50项）</td>
+            <td style="text-align:center">50</td>
+            <td style="text-align:center">8.4</td>
+            <td style="text-align:center"><input type="number" min="0" max="50" style="width:60px;text-align:center;border:1px solid var(--border);border-radius:3px;padding:4px;"></td>
+            <td style="text-align:center">—</td>
+            <td style="text-align:center">—</td>
+          </tr>
+
+          <tr>
+            <td>3.6 反馈组件（9个组件，34项）</td>
+            <td style="text-align:center">34</td>
+            <td style="text-align:center">5.7</td>
+            <td style="text-align:center"><input type="number" min="0" max="34" style="width:60px;text-align:center;border:1px solid var(--border);border-radius:3px;padding:4px;"></td>
+            <td style="text-align:center">—</td>
+            <td style="text-align:center">—</td>
+          </tr>
+
+          <tr>
+            <td>3.7 其他组件（11个组件，34项）</td>
+            <td style="text-align:center">34</td>
+            <td style="text-align:center">5.7</td>
+            <td style="text-align:center"><input type="number" min="0" max="34" style="width:60px;text-align:center;border:1px solid var(--border);border-radius:3px;padding:4px;"></td>
+            <td style="text-align:center">—</td>
+            <td style="text-align:center">—</td>
+          </tr>
+
+          <tr style="font-weight:600;background:#F0F3F8;">
+            <td>组件规范小计</td>
+            <td style="text-align:center">238</td>
+            <td style="text-align:center">40</td>
+            <td style="text-align:center">—</td>
+            <td style="text-align:center">—</td>
+            <td style="text-align:center">—</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <h3>三、一致性与完整性评分（满分10分）</h3>
+  <div class="score-table">
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr><th>审计项目</th><th style="text-align:center">权重（分）</th><th style="text-align:center">扣分原因</th><th style="text-align:center">得分</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>跨页面视觉一致性</td><td style="text-align:center">3</td><td><input type="text" style="width:100%;border:1px solid var(--border);border-radius:3px;padding:4px;" placeholder="如有扣分请填写原因"></td><td style="text-align:center">—</td></tr>
+          <tr><td>跨模块交互一致性</td><td style="text-align:center">3</td><td><input type="text" style="width:100%;border:1px solid var(--border);border-radius:3px;padding:4px;" placeholder="如有扣分请填写原因"></td><td style="text-align:center">—</td></tr>
+          <tr><td>规范文档完整性</td><td style="text-align:center">2</td><td><input type="text" style="width:100%;border:1px solid var(--border);border-radius:3px;padding:4px;" placeholder="如有扣分请填写原因"></td><td style="text-align:center">—</td></tr>
+          <tr><td>Token覆盖率</td><td style="text-align:center">2</td><td><input type="text" style="width:100%;border:1px solid var(--border);border-radius:3px;padding:4px;" placeholder="如有扣分请填写原因"></td><td style="text-align:center">—</td></tr>
+          <tr style="font-weight:600;background:#F0F3F8;"><td>一致性与完整性小计</td><td style="text-align:center">10</td><td>—</td><td style="text-align:center">—</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <h3>四、可访问性评分（满分10分）</h3>
+  <div class="score-table">
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr><th>审计项目</th><th style="text-align:center">权重（分）</th><th style="text-align:center">扣分原因</th><th style="text-align:center">得分</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>键盘操作支持</td><td style="text-align:center">3</td><td><input type="text" style="width:100%;border:1px solid var(--border);border-radius:3px;padding:4px;" placeholder="如有扣分请填写原因"></td><td style="text-align:center">—</td></tr>
+          <tr><td>屏幕阅读器兼容</td><td style="text-align:center">3</td><td><input type="text" style="width:100%;border:1px solid var(--border);border-radius:3px;padding:4px;" placeholder="如有扣分请填写原因"></td><td style="text-align:center">—</td></tr>
+          <tr><td>色彩对比度达标</td><td style="text-align:center">2</td><td><input type="text" style="width:100%;border:1px solid var(--border);border-radius:3px;padding:4px;" placeholder="如有扣分请填写原因"></td><td style="text-align:center">—</td></tr>
+          <tr><td>焦点状态可见</td><td style="text-align:center">2</td><td><input type="text" style="width:100%;border:1px solid var(--border);border-radius:3px;padding:4px;" placeholder="如有扣分请填写原因"></td><td style="text-align:center">—</td></tr>
+          <tr style="font-weight:600;background:#F0F3F8;"><td>可访问性小计</td><td style="text-align:center">10</td><td>—</td><td style="text-align:center">—</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <h3>五、总分汇总与等级</h3>
+  <div class="summary-row">
+    <div class="summary-card"><div class="num">40</div><div class="label">设计约束（满分）</div></div>
+    <div class="summary-card"><div class="num">40</div><div class="label">组件规范（满分）</div></div>
+    <div class="summary-card"><div class="num">10</div><div class="label">一致性与完整性（满分）</div></div>
+    <div class="summary-card"><div class="num">10</div><div class="label">可访问性（满分）</div></div>
+  </div>
+  <div class="table-wrap">
+    <table style="max-width:600px">
+      <thead><tr><th>总分</th><th>等级</th><th>评价</th></tr></thead>
+      <tbody>
+        <tr><td>90 - 100</td><td><span class="grade-badge grade-a">A</span></td><td>优秀 — 规范执行到位，仅需微调</td></tr>
+        <tr><td>75 - 89</td><td><span class="grade-badge grade-b">B</span></td><td>良好 — 存在少量偏差，整体可控</td></tr>
+        <tr><td>60 - 74</td><td><span class="grade-badge grade-c">C</span></td><td>合格 — 偏差较多，需要专项整改</td></tr>
+        <tr><td>&lt; 60</td><td><span class="grade-badge grade-d">D</span></td><td>不合格 — 规范执行严重不足</td></tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+
+<section class="section" id="part5">
+  <h2>第五部分：审计报告模板</h2>
+
+  <h3>一、基本信息</h3>
+  <div class="table-wrap">
+    <table style="max-width:700px">
+      <thead>
+        <tr><th scope="col" style="width:140px">字段</th><th scope="col">内容</th></tr>
+      </thead>
+      <tbody>
+        <tr><th scope="row">项目名称</th><td><input type="text" style="width:100%;border:1px solid var(--border);border-radius:3px;padding:6px 10px;" placeholder="填写项目名称"></td></tr>
+        <tr><th scope="row">审计日期</th><td><input type="date" style="width:100%;border:1px solid var(--border);border-radius:3px;padding:6px 10px;"></td></tr>
+        <tr><th scope="row">审计人</th><td><input type="text" style="width:100%;border:1px solid var(--border);border-radius:3px;padding:6px 10px;" placeholder="填写审计人"></td></tr>
+        <tr><th scope="row">审计版本</th><td><input type="text" style="width:100%;border:1px solid var(--border);border-radius:3px;padding:6px 10px;" placeholder="如 v1.0.0"></td></tr>
+        <tr><th scope="row">审计总分</th><td><input type="text" style="width:100%;border:1px solid var(--border);border-radius:3px;padding:6px 10px;" placeholder="如 82分 / B级"></td></tr>
+        <tr><th scope="row">检查项总数</th><td>331</td></tr>
+        <tr><th scope="row">通过项数</th><td><input type="number" style="width:100%;border:1px solid var(--border);border-radius:3px;padding:6px 10px;" placeholder="填写通过项数"></td></tr>
+        <tr><th scope="row">通过率</th><td><input type="text" style="width:100%;border:1px solid var(--border);border-radius:3px;padding:6px 10px;" placeholder="如 85%"></td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <h3>二、P0问题清单（严重 — 必须修复）</h3>
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr><th style="width:36px">序号</th><th>问题描述</th><th>所属类别</th><th>影响范围</th><th>责任人</th><th>计划修复日期</th><th>状态</th></tr>
+      </thead>
+      <tbody>
+
+        <tr><td class="row-num">1</td><td><input type="text" style="width:100%;border:1px solid var(--border);border-radius:3px;padding:4px;"></td><td><input type="text" style="width:100%;border:1px solid var(--border);border-radius:3px;padding:4px;"></td><td><input type="text" style="width:100%;border:1px solid var(--border);border-radius:3px;padding:4px;"></td><td><input type="text" style="width:100%;border:1px solid var(--border);border-radius:3px;padding:4px;"></td><td><input type="date" style="width:100%;border:1px solid var(--border);border-radius:3px;padding:4px;"></td><td><select style="border:1px solid var(--border);border-radius:3px;padding:4px;"><option>待修复</option><option>修复中</option><option>已修复</option><option>已验证</option></select></td></tr>
+
+        <tr><td class="row-num">2</td><td><input type="text" style="width:100%;border:1px solid var(--border);border-radius:3px;padding:4px;"></td><td><input type="text" style="width:100%;border:1px solid var(--border);border-radius:3px;padding:4px;"></td><td><input type="text" style="width:100%;border:1px solid var(--border);border-radius:3px;padding:4px;"></td><td><input type="text" style="width:100%;border:1px solid var(--border);border-radius:3px;padding:4px;"></td><td><input type="date" style="width:100%;border:1px solid var(--border);border-radius:3px;padding:4px;"></td><td><select style="border:1px solid var(--border);border-radius:3px;padding:4px;"><option>待修复</option><option>修复中</option><option>已修复</option><option>已验证</option></select></td></tr>
+
+        <tr><td class="row-num">3</td><td><input type="text" style="width:100%;border:1px solid var(--border);border-radius:3px;padding:4px;"></td><td><input type="text" style="width:100%;border:1px solid var(--border);border-radius:3px;padding:4px;"></td><td><input type="text" style="width:100%;border:1px solid var(--border);border-radius:3px;padding:4px;"></td><td><input type="text" style="width:100%;border:1px solid var(--border);border-radius:3px;padding:4px;"></td><td><input type="date" style="width:100%;border:1px solid var(--border);border-radius:3px;padding:4px;"></td><td><select style="border:1px solid var(--border);border-radius:3px;padding:4px;"><option>待修复</option><option>修复中</option><option>已修复</option><option>已验证</option></select></td></tr>
+
+      </tbody>
+    </table>
+  </div>
+
+  <h3>三、P1问题清单（中等 — 应该修复）</h3>
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr><th style="width:36px">序号</th><th>问题描述</th><th>所属类别</th><th>影响范围</th><th>责任人</th><th>计划修复日期</th><th>状态</th></tr>
+      </thead>
+      <tbody>
+
+        <tr><td class="row-num">1</td><td><input type="text" style="width:100%;border:1px solid var(--border);border-radius:3px;padding:4px;"></td><td><input type="text" style="width:100%;border:1px solid var(--border);border-radius:3px;padding:4px;"></td><td><input type="text" style="width:100%;border:1px solid var(--border);border-radius:3px;padding:4px;"></td><td><input type="text" style="width:100%;border:1px solid var(--border);border-radius:3px;padding:4px;"></td><td><input type="date" style="width:100%;border:1px solid var(--border);border-radius:3px;padding:4px;"></td><td><select style="border:1px solid var(--border);border-radius:3px;padding:4px;"><option>待修复</option><option>修复中</option><option>已修复</option><option>已验证</option></select></td></tr>
+
+        <tr><td class="row-num">2</td><td><input type="text" style="width:100%;border:1px solid var(--border);border-radius:3px;padding:4px;"></td><td><input type="text" style="width:100%;border:1px solid var(--border);border-radius:3px;padding:4px;"></td><td><input type="text" style="width:100%;border:1px solid var(--border);border-radius:3px;padding:4px;"></td><td><input type="text" style="width:100%;border:1px solid var(--border);border-radius:3px;padding:4px;"></td><td><input type="date" style="width:100%;border:1px solid var(--border);border-radius:3px;padding:4px;"></td><td><select style="border:1px solid var(--border);border-radius:3px;padding:4px;"><option>待修复</option><option>修复中</option><option>已修复</option><option>已验证</option></select></td></tr>
+
+        <tr><td class="row-num">3</td><td><input type="text" style="width:100%;border:1px solid var(--border);border-radius:3px;padding:4px;"></td><td><input type="text" style="width:100%;border:1px solid var(--border);border-radius:3px;padding:4px;"></td><td><input type="text" style="width:100%;border:1px solid var(--border);border-radius:3px;padding:4px;"></td><td><input type="text" style="width:100%;border:1px solid var(--border);border-radius:3px;padding:4px;"></td><td><input type="date" style="width:100%;border:1px solid var(--border);border-radius:3px;padding:4px;"></td><td><select style="border:1px solid var(--border);border-radius:3px;padding:4px;"><option>待修复</option><option>修复中</option><option>已修复</option><option>已验证</option></select></td></tr>
+
+      </tbody>
+    </table>
+  </div>
+
+  <h3>四、P2问题清单（轻微 — 建议修复）</h3>
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr><th style="width:36px">序号</th><th>问题描述</th><th>所属类别</th><th>影响范围</th><th>责任人</th><th>计划修复日期</th><th>状态</th></tr>
+      </thead>
+      <tbody>
+
+        <tr><td class="row-num">1</td><td><input type="text" style="width:100%;border:1px solid var(--border);border-radius:3px;padding:4px;"></td><td><input type="text" style="width:100%;border:1px solid var(--border);border-radius:3px;padding:4px;"></td><td><input type="text" style="width:100%;border:1px solid var(--border);border-radius:3px;padding:4px;"></td><td><input type="text" style="width:100%;border:1px solid var(--border);border-radius:3px;padding:4px;"></td><td><input type="date" style="width:100%;border:1px solid var(--border);border-radius:3px;padding:4px;"></td><td><select style="border:1px solid var(--border);border-radius:3px;padding:4px;"><option>待修复</option><option>修复中</option><option>已修复</option><option>已验证</option></select></td></tr>
+
+        <tr><td class="row-num">2</td><td><input type="text" style="width:100%;border:1px solid var(--border);border-radius:3px;padding:4px;"></td><td><input type="text" style="width:100%;border:1px solid var(--border);border-radius:3px;padding:4px;"></td><td><input type="text" style="width:100%;border:1px solid var(--border);border-radius:3px;padding:4px;"></td><td><input type="text" style="width:100%;border:1px solid var(--border);border-radius:3px;padding:4px;"></td><td><input type="date" style="width:100%;border:1px solid var(--border);border-radius:3px;padding:4px;"></td><td><select style="border:1px solid var(--border);border-radius:3px;padding:4px;"><option>待修复</option><option>修复中</option><option>已修复</option><option>已验证</option></select></td></tr>
+
+      </tbody>
+    </table>
+  </div>
+
+  <h3>五、P3建议清单</h3>
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr><th style="width:36px">序号</th><th>建议描述</th><th>所属类别</th><th>优先级建议</th><th>备注</th></tr>
+      </thead>
+      <tbody>
+
+        <tr><td class="row-num">1</td><td><input type="text" style="width:100%;border:1px solid var(--border);border-radius:3px;padding:4px;"></td><td><input type="text" style="width:100%;border:1px solid var(--border);border-radius:3px;padding:4px;"></td><td><input type="text" style="width:100%;border:1px solid var(--border);border-radius:3px;padding:4px;"></td><td><input type="text" style="width:100%;border:1px solid var(--border);border-radius:3px;padding:4px;"></td></tr>
+
+        <tr><td class="row-num">2</td><td><input type="text" style="width:100%;border:1px solid var(--border);border-radius:3px;padding:4px;"></td><td><input type="text" style="width:100%;border:1px solid var(--border);border-radius:3px;padding:4px;"></td><td><input type="text" style="width:100%;border:1px solid var(--border);border-radius:3px;padding:4px;"></td><td><input type="text" style="width:100%;border:1px solid var(--border);border-radius:3px;padding:4px;"></td></tr>
+
+      </tbody>
+    </table>
+  </div>
+
+  <h3>六、整改计划与复验时间</h3>
+  <div class="table-wrap">
+    <table style="max-width:800px">
+      <thead>
+        <tr><th>阶段</th><th>整改内容</th><th>责任人</th><th>计划完成日期</th><th>复验日期</th><th>状态</th></tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td style="font-weight:600">第一阶段</td>
+          <td>P0问题修复</td>
+          <td><input type="text" style="width:100%;border:1px solid var(--border);border-radius:3px;padding:4px;"></td>
+          <td><input type="date" style="border:1px solid var(--border);border-radius:3px;padding:4px;"></td>
+          <td><input type="date" style="border:1px solid var(--border);border-radius:3px;padding:4px;"></td>
+          <td><select style="border:1px solid var(--border);border-radius:3px;padding:4px;"><option>未开始</option><option>进行中</option><option>已完成</option></select></td>
+        </tr>
+        <tr>
+          <td style="font-weight:600">第二阶段</td>
+          <td>P1问题修复</td>
+          <td><input type="text" style="width:100%;border:1px solid var(--border);border-radius:3px;padding:4px;"></td>
+          <td><input type="date" style="border:1px solid var(--border);border-radius:3px;padding:4px;"></td>
+          <td><input type="date" style="border:1px solid var(--border);border-radius:3px;padding:4px;"></td>
+          <td><select style="border:1px solid var(--border);border-radius:3px;padding:4px;"><option>未开始</option><option>进行中</option><option>已完成</option></select></td>
+        </tr>
+        <tr>
+          <td style="font-weight:600">第三阶段</td>
+          <td>P2问题修复</td>
+          <td><input type="text" style="width:100%;border:1px solid var(--border);border-radius:3px;padding:4px;"></td>
+          <td><input type="date" style="border:1px solid var(--border);border-radius:3px;padding:4px;"></td>
+          <td><input type="date" style="border:1px solid var(--border);border-radius:3px;padding:4px;"></td>
+          <td><select style="border:1px solid var(--border);border-radius:3px;padding:4px;"><option>未开始</option><option>进行中</option><option>已完成</option></select></td>
+        </tr>
+        <tr>
+          <td style="font-weight:600">复验总结</td>
+          <td>全部问题整改后复验，更新评分</td>
+          <td><input type="text" style="width:100%;border:1px solid var(--border);border-radius:3px;padding:4px;"></td>
+          <td><input type="date" style="border:1px solid var(--border);border-radius:3px;padding:4px;"></td>
+          <td>—</td>
+          <td><select style="border:1px solid var(--border);border-radius:3px;padding:4px;"><option>未开始</option><option>进行中</option><option>已完成</option></select></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <h3>七、审计结论</h3>
+  <div style="border:1px solid var(--border);border-radius:var(--radius);padding:20px;background:var(--bg-page);">
+    <p style="margin-bottom:12px"><strong>本次审计共检查 331 项，覆盖9大设计约束类别与67个组件规范。</strong></p>
+    <textarea style="width:100%;min-height:120px;border:1px solid var(--border);border-radius:4px;padding:10px;font-family:inherit;font-size:14px;resize:vertical;" placeholder="请填写审计结论，包括：&#10;1. 总体评价&#10;2. 主要问题归纳&#10;3. 改进建议&#10;4. 下次审计建议时间"></textarea>
+  </div>
+</section>
+
+
+<footer style="text-align:center;padding:24px;color:var(--text-4);font-size:12px;">
+  <p>设计视觉规范审计文档 · 共计 331 项检查</p>
+</footer>
+</div>
+
+<script>
+document.querySelectorAll('.toc-list a').forEach(function(link) {
+  link.addEventListener('click', function(e) {
+    var target = document.querySelector(this.getAttribute('href'));
+    if (target) {
+      e.preventDefault();
+      target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+  });
+});
+</script>
+</body>
+</html>
