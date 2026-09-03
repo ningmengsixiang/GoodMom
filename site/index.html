@@ -74,6 +74,15 @@ pre{background:#fff7f4;border:1px solid #f0d4cf;border-radius:14px;padding:14px 
 footer{margin-top:44px;text-align:center;color:var(--t3);font-size:12px;line-height:2.1}
 footer a{color:var(--rose-deep);text-decoration:none}
 @media(max-width:720px){.hero h1{font-size:30px}nav .out{margin-left:0}}
+
+/* —— 规范一致性（遵循 02/07/14）：焦点环 · press · 减少动态 —— */
+:focus-visible{outline:2px solid rgba(232,93,143,.6);outline-offset:2px}
+.btn:active,.card:active,a:active{transform:scale(.97)}
+html{scroll-behavior:smooth}
+h2[id],nav~.wrap h2{scroll-margin-top:96px}
+::selection{background:rgba(247,127,163,.3)}
+@media(prefers-reduced-motion:reduce){*,*::before,*::after{animation:none!important;transition:none!important}}
+
 </style>
 </head>
 <body>
@@ -85,7 +94,7 @@ footer a{color:var(--rose-deep);text-decoration:none}
 <div class="wrap">
 
   <div class="hero glass">
-    <span class="k">妇幼儿童全生命周期 · OPEN SOURCE · V2.2</span>
+    <span class="k">遵循 GoodMom 规范 00–16 · OPEN SOURCE · V2.2</span>
     <h1>妈咪好 <em>GoodMom</em> 开源设计系统</h1>
     <p class="lead">高级液态玻璃 · 柔光蜜桃。覆盖孕期 / 婴幼儿与儿童保健 / 机构管理端 / 医护工作台的「文档 — 设计资产 — 组件库」一体化开源体系。</p>
     <div class="stat">
@@ -130,9 +139,9 @@ footer a{color:var(--rose-deep);text-decoration:none}
   <h2 id="vision">视觉与状态</h2>
   <p class="sub">Design DNA · 六语义 · 孕产妇五色</p>
   <div class="sem">
-    <div class="s"><i style="background:#3f9c88"></i><b>正向 · 正常</b><span>mint-500 · 已完成/通过</span></div>
+    <div class="s"><i style="background:#2f8f76"></i><b>正向 · 正常</b><span>mint-500 · 已完成/通过</span></div>
     <div class="s"><i style="background:#4a76d0"></i><b>信息 · 进行</b><span>info-500 · 建档/服务中</span></div>
-    <div class="s"><i style="background:#c98825"></i><b>注意 · 待办</b><span>warning-500 · 待复查/随访</span></div>
+    <div class="s"><i style="background:#b9771c"></i><b>注意 · 待办</b><span>warning-500 · 待复查/随访</span></div>
     <div class="s"><i style="background:#d35466"></i><b>风险 · 异常</b><span>danger-500 · 高危/阳性</span></div>
     <div class="s"><i style="background:#757e8e"></i><b>中性 · 未动</b><span>text-tertiary · 草稿/已结案</span></div>
     <div class="s"><i style="background:#7a5ce0"></i><b>特殊 · 协作</b><span>purple-500 · 转诊/重点管理</span></div>
