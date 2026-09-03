@@ -101,18 +101,29 @@ pre{line-height:2;padding:18px 22px}
 .gov{gap:12px}
 footer{margin-top:70px;line-height:2.4}
 
+
+/* 菜单悬停下拉 */
+nav .ng{position:relative;display:inline-flex}
+nav .ngt{font-family:inherit;font-size:12.5px;color:var(--t2);background:none;border:none;padding:6px 12px;border-radius:999px;cursor:pointer}
+nav .ngt::after{content:"▾";margin-left:4px;font-size:10px;opacity:.6}
+nav .ngdrop{position:absolute;top:calc(100% + 12px);left:0;min-width:190px;z-index:80;padding:6px;border-radius:16px;background:#fff;border:1px solid rgba(232,93,143,.22);box-shadow:0 16px 40px rgba(90,70,70,.14);
+  opacity:0;pointer-events:none;transform:translateY(6px);transition:.2s var(--ease, ease-out)}
+nav .ng:hover .ngdrop,nav .ng:focus-within .ngdrop{opacity:1;pointer-events:auto;transform:none}
+nav .ngdrop a{display:block;padding:8px 12px;border-radius:10px}
+nav .ngdrop a:hover{background:rgba(247,127,163,.1)}
+
 </style>
 </head>
 <body>
 <nav>
-  <b><img src="../brand/logo-mark.svg" width="22" height="22" style="border-radius:50%" alt="Logo">妈咪好 GoodMom</b>
+  <b><img src="../logo.png" width="24" height="24" style="border-radius:50%;object-fit:cover" alt="Logo">妈咪好 GoodMom</b>
   <a href="#about">概览</a><a href="#ability">能力</a><a href="#vision">视觉</a><a href="#code">快速上手</a><a href="#opensrc">开源</a>
-  <a href="#ds">完整设计系统</a><a class="out" href="../preview/index.html">全屏打开 ›</a>
+  <span class="ng"><button class="ngt">设计系统</button><span class="ngdrop"><a href="#ds">本站在线演示</a><a href="../preview/index.html">设计系统首页 ›</a><a href="../preview/examples.html">示例中心</a><a href="../preview/mobile.html">移动端</a><a href="../preview/manual.html">总览手册</a></span></span><a class="out" href="../preview/index.html">全屏打开 ›</a>
 </nav>
 <div class="wrap">
 
   <div class="hero glass">
-    <span class="k">遵循 GoodMom 规范 00–16 · OPEN SOURCE · V2.2</span>
+    <img src="../logo.png" alt="妈咪好" style="width:84px;height:84px;border-radius:24px;object-fit:cover;box-shadow:0 14px 30px rgba(240,127,163,.3);margin-bottom:4px">
     <h1>妈咪好 <em>GoodMom</em> 开源设计系统</h1>
     <p class="lead">高级液态玻璃 · 柔光蜜桃。覆盖孕期 / 婴幼儿与儿童保健 / 机构管理端 / 医护工作台的「文档 — 设计资产 — 组件库」一体化开源体系。</p>
     <div class="stat">

@@ -881,13 +881,18 @@ section.block:first-of-type{margin-top:8px}
 .cc-title,.cc-sub{margin-bottom:8px}
 @media(max-width:900px){.panel{padding:22px 18px}.grid{gap:18px}}
 
+/* 悬停下拉（桌面） */
+.ng:hover .ngdrop{opacity:1;pointer-events:auto;transform:none}
+.ng:hover .ngt{background:#fff;color:var(--mmh-rose-600,#E85D8F);box-shadow:var(--lg-shadow-xs)}
+.ng:hover .ngt::after{color:var(--mmh-rose-600,#E85D8F)}
+
 </style>
 </head>
 <body>
 
 <!-- floating top nav -->
 <nav class="topnav">
-  <a class="brand" href="#top" style="display:flex;align-items:center;gap:8px;text-decoration:none;padding:4px 8px"><img src="../brand/logo-mark.svg" width="24" height="24" style="border-radius:50%" alt="妈咪好 Logo"><b style="font-size:14px;color:var(--lg-text-primary)">妈咪好 GoodMom</b><span style="font-size:10px;color:var(--lg-text-tertiary);font-weight:600">DS V2.2</span></a>
+  <a class="brand" href="#top" style="display:flex;align-items:center;gap:8px;text-decoration:none;padding:4px 8px"><img src="../logo.png" width="26" height="26" style="border-radius:50%;object-fit:cover" alt="妈咪好 Logo"><b style="font-size:14px;color:var(--lg-text-primary)">妈咪好 GoodMom</b><span style="font-size:10px;color:var(--lg-text-tertiary);font-weight:600">DS V2.2</span></a>
   <div class="navgroups">
     <div class="ng"><button class="ngt" aria-haspopup="true">概览</button><div class="ngdrop">
       <a href="#dna">Design DNA</a><a href="#guide">三步使用指南</a><a href="#exhome">示例页面入口</a><a href="examples.html">示例中心 ›</a>
