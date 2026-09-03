@@ -39,11 +39,24 @@ a{color:var(--rose-deep)}
 .md blockquote{border-left:4px solid var(--rose);margin:12px 0;padding:4px 14px;color:var(--t2);background:rgba(247,127,163,.06);border-radius:0 10px 10px 0}
 .md hr{border:none;border-top:1px dashed #e6c6bd;margin:16px 0}
 @media(max-width:760px){.chap{padding:16px}}
+
+/* 阅读器模式 */
+body.reader .wrap{max-width:100%;padding:20px 24px 90px}
+body.reader .chap{display:none;margin:0 auto 20px;max-width:960px;scroll-margin-top:80px}
+body.reader .chap.active{display:block}
+.readtoggle{margin-left:8px;font-size:12px;font-weight:600;color:var(--rose-deep);background:#fff;border:1px solid rgba(232,93,143,.3);padding:7px 14px;border-radius:999px;cursor:pointer;font-family:inherit}
+body.reader .readtoggle{background:linear-gradient(135deg,#FFA9C2,#E85D8F);color:#fff;border-color:transparent}
+.chapnav{display:none;gap:8px;justify-content:space-between;max-width:960px;margin:0 auto 10px}
+body.reader .chapnav{display:flex}
+.chapnav button{border:none;cursor:pointer;font-family:inherit;font-size:12.5px;font-weight:600;padding:8px 16px;border-radius:999px;background:#fff;color:var(--rose-deep);border:1px solid rgba(232,93,143,.3)}
+
 </style>
 </head>
 <body>
-<div class="top"><img src="../logo.png" alt="妈咪好"><b>妈咪好 GoodMom · 规范大全</b><div class="gp"><button type="button">概览</button><div class="drop"><a href="#ch-readme">总览与使用</a></div></div><div class="gp"><button type="button">组件索引</button><div class="drop"><a href="#ch-00">00-组件总目录</a></div></div><div class="gp"><button type="button">设计指南</button><div class="drop"><a href="#ch-01">01-设计总览与设计DNA</a><a href="#ch-12">12-妈咪好品牌与设计语言</a><a href="#ch-14">14-命名与术语规范</a><a href="#ch-16">16-优化与一致性审计</a><a href="#ch-17">17-页面布局与组件组合规范</a></div></div><div class="gp"><button type="button">开发指南</button><div class="drop"><a href="#ch-02">02-Token规范</a><a href="#ch-03">03-组件规范</a><a href="#ch-04">04-数据可视化规范</a><a href="#ch-05">05-AI生成Prompt库</a><a href="#ch-06">06-制作流程与验收清单</a><a href="#ch-07">07-交互动效与微交互规范</a><a href="#ch-08">08-组件覆盖清单与Semi对齐</a><a href="#ch-09">09-图标库规范</a></div></div><div class="gp"><button type="button">多端</button><div class="drop"><a href="#ch-10">10-移动端组件规范</a><a href="#ch-11">11-移动端组件全量库</a></div></div><div class="gp"><button type="button">妇幼业务</button><div class="drop"><a href="#ch-13">13-妇幼领域组件规范</a><a href="#ch-15">15-妇幼业务词库与状态大典</a></div></div><a class="ext" href="index.html">主站</a><a class="ext2" href="../preview/examples.html">示例中心</a></div>
-<div class="wrap"><section class="chap" id="ch-readme"><div class="chap-hd"><b>总览 · README</b></div><div class="md"><h2>妈咪好 GoodMom · 妇幼儿童全生命周期设计系统（V2.3）</h2>
+<div class="top"><img src="../logo.png" alt="妈咪好"><b>妈咪好 GoodMom · 规范大全</b><div class="gp"><button type="button">概览</button><div class="drop"><a href="#ch-readme">总览与使用</a></div></div><div class="gp"><button type="button">组件索引</button><div class="drop"><a href="#ch-00">00-组件总目录</a></div></div><div class="gp"><button type="button">设计指南</button><div class="drop"><a href="#ch-01">01-设计总览与设计DNA</a><a href="#ch-12">12-妈咪好品牌与设计语言</a><a href="#ch-14">14-命名与术语规范</a><a href="#ch-16">16-优化与一致性审计</a><a href="#ch-17">17-页面布局与组件组合规范</a></div></div><div class="gp"><button type="button">开发指南</button><div class="drop"><a href="#ch-02">02-Token规范</a><a href="#ch-03">03-组件规范</a><a href="#ch-04">04-数据可视化规范</a><a href="#ch-05">05-AI生成Prompt库</a><a href="#ch-06">06-制作流程与验收清单</a><a href="#ch-07">07-交互动效与微交互规范</a><a href="#ch-08">08-组件覆盖清单与Semi对齐</a><a href="#ch-09">09-图标库规范</a></div></div><div class="gp"><button type="button">多端</button><div class="drop"><a href="#ch-10">10-移动端组件规范</a><a href="#ch-11">11-移动端组件全量库</a></div></div><div class="gp"><button type="button">妇幼业务</button><div class="drop"><a href="#ch-13">13-妇幼领域组件规范</a><a href="#ch-15">15-妇幼业务词库与状态大典</a></div></div><button class="readtoggle" id="modeBtn" type="button">阅读模式</button>
+  <a class="ext" href="index.html">主站</a><a class="ext2" href="../preview/examples.html">示例中心</a></div>
+<div class="wrap">
+<div class="chapnav"><button id="prevCh" type="button">‹ 上一章</button><button id="allCh" type="button">回到全部（列表）</button><button id="nextCh" type="button">下一章 ›</button></div><section class="chap" id="ch-readme"><div class="chap-hd"><b>总览 · README</b></div><div class="md"><h2>妈咪好 GoodMom · 妇幼儿童全生命周期设计系统（V2.3）</h2>
 <blockquote><b>高级液态玻璃 · 柔光蜜桃 · 妇女儿童健康管理</b>（视觉引擎：Liquid Glass / Ambient Liquid Glass）</blockquote>
 <p>妈咪好 GoodMom 是 <b>妇幼儿童全生命周期健康管理平台</b> 的专属设计系统，覆盖 <b>孕期 · 婴幼儿/儿童保健 · 机构管理端 · 医护工作台</b> 四大板块。</p>
 <p>适用：妈妈/家庭 App（孕期首页、生长曲线、疫苗计划、儿保体检）、机构运营端、医护随访工作台与数据大屏。品牌定义见 [12](#ch-12)，妇幼领域组件见 [13](#ch-13)；01–11 为通用视觉引擎文档。</p>
@@ -1806,5 +1819,44 @@ button{display:inline-flex;align-items:center;justify-content:center;gap:8px}</p
 <h3>17.4 实现与验收</h3>
 <ul><li>[ ] 图标与文字：按钮/标签/头像均 <code>inline-flex center</code>，无上下错位</li><li>[ ] 间距只用 Token 档位；板块间 48–72（不挤）</li><li>[ ] 每页 Primary 唯一；危险操作恒排最后</li><li>[ ] 页面按 17.1.1 壳结构组装；栅格对齐左右不留随机空隙</li><li>[ ] 组合顺序符合 17.3.1；无随机叠放、无多余发光装饰</li><li>[ ] 响应式：PC/iPad/Mobile 各回落到 17.1.2 栅格与页边</li></ul>
 <blockquote>相关：Token（02）· 动效反馈（07）· 验收（06）· 示例中心各页即本章“标准答案”；异常先复现 → 对照本章修正 → 回归预览。</blockquote></div></section></div>
+
+<script>
+(function(){
+  var wrap=document.querySelector('.wrap');
+  var chaps=[].slice.call(document.querySelectorAll('section.chap'));
+  var ids=chaps.map(function(c){return c.id;});
+  var btn=document.getElementById('modeBtn');
+  var allBtn=document.getElementById('allCh');
+  var prevBtn=document.getElementById('prevCh');
+  var nextBtn=document.getElementById('nextCh');
+  var cur=0;
+  function setActive(id,scrollTop){
+    chaps.forEach(function(c){c.classList.remove('active');});
+    var el=document.getElementById(id);
+    if(el){el.classList.add('active');}
+    cur=ids.indexOf(id);
+    if(scrollTop!==false)window.scrollTo(0,0);
+  }
+  function reader(on){
+    document.body.classList.toggle('reader',on);
+    btn.textContent=on?'回到列表':'阅读模式';
+    if(on){ var h=(location.hash||'').slice(1); setActive(h&&ids.indexOf(h)>=0?h:'ch-readme',true); }
+    else{ chaps.forEach(function(c){c.classList.remove('active');}); }
+  }
+  btn.addEventListener('click',function(){reader(!document.body.classList.contains('reader'));});
+  allBtn.addEventListener('click',function(){reader(false);location.hash='';});
+  prevBtn.addEventListener('click',function(){cur=Math.max(0,cur-1);setActive(ids[cur],true);});
+  nextBtn.addEventListener('click',function(){cur=Math.min(ids.length-1,cur+1);setActive(ids[cur],true);});
+  document.addEventListener('click',function(e){
+    if(!document.body.classList.contains('reader'))return;
+    var a=e.target.closest?e.target.closest('a[href^="#ch-"]'):null;
+    if(!a)return;
+    e.preventDefault(); setActive(a.getAttribute('href').slice(1),true);
+    history.replaceState(null,'',a.getAttribute('href'));
+  });
+  if(location.hash && location.hash.indexOf('ch-')===1){reader(true);}
+})();
+</script>
+
 </body>
 </html>
