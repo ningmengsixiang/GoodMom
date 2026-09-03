@@ -18,5 +18,14 @@
   "devDependencies": {
     "@types/react": "^18.2.0",
     "typescript": "^5.3.0"
+  },
+  "license": "MIT",
+  "author": "妈咪好 GoodMom Design System",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/ningmengsixiang/GoodMom.git"
+  },
+  "publishConfig": {
+    "access": "public"
   }
 }

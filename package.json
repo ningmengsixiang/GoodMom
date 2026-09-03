@@ -1,0 +1,19 @@
+{
+  "name": "goodmom-design-system",
+  "private": true,
+  "version": "2.2.0",
+  "workspaces": [
+    "goodmom-ui",
+    "goodmom-icons"
+  ],
+  "scripts": {
+    "typecheck": "npm run typecheck -w @goodmom/ui && npm run typecheck -w @goodmom/icons",
+    "build": "npm run build -w @goodmom/ui && npm run build -w @goodmom/icons",
+    "publish:icons": "npm run build -w @goodmom/icons && npm publish ./goodmom-icons --access public",
+    "publish:ui": "npm run build -w @goodmom/ui && npm publish ./goodmom-ui --access public",
+    "publish": "npm run publish:icons && npm run publish:ui"
+  },
+  "devDependencies": {
+    "typescript": "^5.3.0"
+  }
+}
