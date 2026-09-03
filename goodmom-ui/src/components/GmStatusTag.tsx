@@ -23,6 +23,7 @@ const GmStatusTag = ({ children, semantic, five, color, size = "small", closable
   const c = color || (five ? FIVE_COLOR[five] : semantic ? SEMANTIC_COLOR[semantic] : "#757e8e");
   return (
     <Tag color={c} size={size} closable={closable}>
+      <span className="gm-status-dot" style={{ background: c }} aria-hidden="true" />
       {children}
     </Tag>
   );

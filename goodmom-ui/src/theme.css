@@ -57,3 +57,9 @@
 .gm-step .gs-main span{font-size:11px;color:#9AA2B0}
 .gm-steps.sm .gs-dot{width:24px;height:24px;font-size:10px}
 @keyframes pulse{0%,100%{opacity:1}50%{opacity:.6}}
+
+/* 合规补充：状态双通道色点 / 焦点环 / 步骤呼吸 */
+.gm-status-dot{display:inline-block;width:7px;height:7px;border-radius:50%;margin-right:6px;vertical-align:1px}
+.gm-tag,.gm-steps,.gm-status-dot,.gm-risk-it,:focus-within .gm-*:focus{outline:none}
+.gm-tag:focus-visible,.gm-steps .gm-step .gs-dot:focus-visible{outline:2px solid rgba(232,93,143,.6);outline-offset:2px}
+.gm-step.process .gs-dot{animation:pulse 2.4s ease-in-out infinite}
