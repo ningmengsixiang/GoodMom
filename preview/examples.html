@@ -1,0 +1,560 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>妈咪好 GoodMom · 常用示例页面</title>
+<style>
+/* ═══ GoodMom Tokens（精简，同 02/12）═══ */
+:root{
+  --text:#343A46;--t2:#586273;--t3:#9AA2B0;--line:rgba(58,52,84,.09);
+  --rose:#F77FA3;--rose-d:#E85D8F;--rose-deep:#C94A77;--mint:#6FC9B4;--mint-d:#4FB59C;
+  --info:#6D9EFF;--warn:#F2B25C;--danger:#EF6A7B;--purple:#9A78FF;
+  --grad-p:linear-gradient(135deg,#FFA9C2,#F77FA3 45%,#E85D8F);
+  --font:"Inter","SF Pro Display",-apple-system,"PingFang SC","MiSans","Noto Sans SC","Helvetica Neue",sans-serif;
+  --ease:cubic-bezier(.22,1,.36,1);
+  --sh:0 10px 26px rgba(58,52,84,.08),0 2px 6px rgba(58,52,84,.05);
+}
+*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+body{font-family:var(--font);color:var(--text);background:#E7D4CB;
+  background:radial-gradient(1100px 620px at 90% -8%,rgba(247,127,163,.20),transparent 65%),
+  radial-gradient(900px 560px at -6% 24%,rgba(182,154,255,.15),transparent 65%),
+  linear-gradient(165deg,#FDF2EE,#F6E2DB 55%,#E6CFC6);min-height:100vh;-webkit-font-smoothing:antialiased}
+.num{font-variant-numeric:tabular-nums}
+svg.i{width:16px;height:16px;stroke:currentColor;fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round;vertical-align:-3px;flex:none}
+.glass{border-radius:20px;background:linear-gradient(160deg,rgba(255,255,255,.55),rgba(255,255,255,.24) 55%,rgba(255,255,255,.32));
+  border:1px solid rgba(255,255,255,.7);box-shadow:inset 0 1px 0 rgba(255,255,255,.8),var(--sh);
+  -webkit-backdrop-filter:blur(24px);backdrop-filter:blur(24px)}
+.card{border-radius:18px;background:linear-gradient(160deg,rgba(255,255,255,.62),rgba(255,255,255,.3));
+  border:1px solid rgba(255,255,255,.75);box-shadow:inset 0 1px 0 rgba(255,255,255,.8),0 8px 20px rgba(58,52,84,.06)}
+/* Hub 切换条 */
+.hub{position:sticky;top:12px;z-index:60;max-width:1180px;margin:14px auto;padding:10px 16px;border-radius:999px;
+  display:flex;gap:8px;align-items:center;flex-wrap:wrap;
+  background:linear-gradient(160deg,rgba(255,255,255,.7),rgba(255,255,255,.42));
+  border:1px solid rgba(255,255,255,.85);box-shadow:var(--sh);-webkit-backdrop-filter:blur(20px);backdrop-filter:blur(20px)}
+.hub b{font-size:14px;color:var(--rose-deep);display:flex;align-items:center;gap:8px;margin-right:6px}
+.hub b i{width:14px;height:14px;border-radius:50%;background:var(--grad-p);display:inline-block}
+.hub a{font-size:12px;color:var(--t2);text-decoration:none;padding:6px 14px;border-radius:999px}
+.hub a:hover{background:rgba(255,255,255,.7)}
+.chip{font-size:12.5px;font-weight:500;color:var(--t2);padding:8px 16px;border-radius:999px;cursor:pointer;
+  background:rgba(255,255,255,.5);border:1px solid rgba(255,255,255,.75);user-select:none;transition:.2s}
+.chip.on{background:var(--grad-p);color:#fff;font-weight:600;box-shadow:0 6px 16px rgba(240,127,163,.35)}
+.chip:active{transform:scale(.96)}
+.view{display:none;max-width:1180px;margin:0 auto 60px;padding:8px 18px}
+.view.on{display:block;animation:fade .35s ease}
+@keyframes fade{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+.pgtag{font-size:11px;color:var(--t3);margin:6px 2px 14px}
+.pgtag b{color:var(--t2)}
+/* 标签 */
+.tg{display:inline-flex;align-items:center;gap:6px;padding:4px 12px;border-radius:999px;font-size:12px;font-weight:500;white-space:nowrap}
+.tg i{width:7px;height:7px;border-radius:50%;background:currentColor}
+.g{color:#2f8f76;background:rgba(79,181,156,.13)} .b{color:#4a76d0;background:rgba(109,158,255,.13)}
+.o{color:#b9771c;background:rgba(242,178,92,.18)} .r{color:#d35466;background:rgba(239,106,123,.13)}
+.n{color:#757e8e;background:rgba(88,98,115,.09)} .p{color:#7a5ce0;background:rgba(154,120,255,.14)}
+.y{color:#8a6d10;background:rgba(242,193,78,.22)}
+/* 按钮 */
+.btn{display:inline-flex;align-items:center;gap:8px;border:none;cursor:pointer;border-radius:12px;font-family:var(--font);
+  font-size:13px;font-weight:600;padding:0 16px;height:36px;transition:transform .12s,box-shadow .2s;white-space:nowrap}
+.btn:active{transform:scale(.96)}
+.btn.pri{background:var(--grad-p);color:#fff;box-shadow:0 6px 16px rgba(240,127,163,.35)}
+.btn.mint{background:linear-gradient(135deg,#7FD8C2,#4FB59C);color:#fff}
+.btn.gho{background:transparent;color:var(--rose-deep)}
+.btn.line{background:transparent;border:1.5px solid var(--rose);color:var(--rose-deep)}
+.btn.danger{background:linear-gradient(135deg,#F79AA8,#E25B72);color:#fff}
+.btn.mini{height:30px;font-size:12px;padding:0 12px}
+/* PC 顶栏 */
+.pcbar{position:relative;max-width:1180px;margin:14px auto 0;padding:8px 12px;border-radius:999px;display:flex;align-items:center;gap:12px}
+.pcbar .logo{font-weight:700;color:var(--rose-deep);display:flex;align-items:center;gap:8px;font-size:15px}
+.pcbar .logo i{width:22px;height:22px;border-radius:8px;background:var(--grad-p);display:inline-block}
+.pcbar .search{margin-left:auto;display:flex;align-items:center;gap:8px;background:rgba(255,255,255,.55);
+  border:1px solid rgba(255,255,255,.8);border-radius:999px;padding:0 14px;height:38px;min-width:260px;color:var(--t3)}
+.pcbar .search input{border:none;outline:none;background:transparent;font-size:13px;color:var(--text);flex:1;font-family:var(--font)}
+.pcbar .u{width:36px;height:36px;border-radius:50%;background:linear-gradient(150deg,#B9A0FF,#8066F0);color:#fff;
+  display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:600}
+.kpis{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin:14px 0}
+.kpi{padding:14px 16px}
+.kpi .l{font-size:12px;color:var(--t2);display:flex;align-items:center;gap:6px}
+.kpi .v{font-size:26px;font-weight:700;margin-top:6px}
+.kpi .d{font-size:11.5px;color:var(--t3);margin-top:4px}
+table.t{width:100%;border-collapse:separate;border-spacing:0;font-size:13px}
+table.t th{text-align:left;font-size:11.5px;color:var(--t3);font-weight:500;padding:10px 14px;border-bottom:1px solid var(--line)}
+table.t td{padding:12px 14px;border-bottom:1px solid rgba(58,52,84,.06)}
+table.t tr{transition:background .2s}
+table.t tbody tr:hover{background:rgba(255,255,255,.5)}
+.av{width:32px;height:32px;border-radius:50%;display:inline-flex;align-items:center;justify-content:center;font-weight:600;color:#fff;
+  background:linear-gradient(150deg,#FFA9C2,#E85D8F);font-size:12px}
+.av.mint{background:linear-gradient(150deg,#7FD8C2,#4FB59C)} .av.purp{background:linear-gradient(150deg,#B9A0FF,#8066F0)}
+.op a{color:var(--rose-deep);text-decoration:none;font-size:12.5px;margin-right:12px;font-weight:500}
+.op a:hover{opacity:.7}
+.desc{display:grid;grid-template-columns:repeat(3,1fr);gap:12px 22px;padding:14px}
+.desc .k{font-size:11.5px;color:var(--t3);margin-bottom:3px}
+.desc .v{font-size:14px;font-weight:600}
+.hr{height:1px;background:var(--line);margin:12px 0}
+/* 生命周期轴 */
+.lca{display:flex;align-items:flex-start;gap:0;padding:10px 6px 2px}
+.lc{flex:1;text-align:center;position:relative;font-size:10.5px;color:var(--t2)}
+.lc .d{width:22px;height:22px;border-radius:50%;margin:0 auto 4px;display:flex;align-items:center;justify-content:center;
+  background:rgba(255,255,255,.85);border:1px solid rgba(255,255,255,.9);color:var(--t3);font-size:10px;font-weight:600}
+.lc.done .d{background:var(--grad-p);color:#fff;border-color:transparent}
+.lc.cur .d{background:#fff;border:2px solid var(--rose-d);color:var(--rose-deep)}
+.lc::before{content:"";position:absolute;top:10px;left:calc(50% + 14px);width:calc(100% - 28px);height:2px;background:var(--line)}
+.lc.done::before{background:linear-gradient(90deg,#FFC4D6,#F77FA3)}
+.lc:first-child::before{display:none}
+/* 五健行 */
+.wjrow{display:flex;align-items:center;gap:12px;padding:10px 14px;border-radius:16px;margin-bottom:8px;
+  background:rgba(255,255,255,.5);border:1px solid rgba(255,255,255,.75)}
+.wjrow .ic{width:40px;height:40px;border-radius:12px;display:flex;align-items:center;justify-content:center;flex:none;
+  background:linear-gradient(150deg,#FFDEE8,#FFF0F4);color:var(--rose-d)}
+.wjrow .ic svg{width:22px;height:22px}
+.wjrow .m{flex:1;min-width:0}
+.wjrow .m b{font-size:13px;display:block}
+.wjrow .m span{font-size:11px;color:var(--t3)}
+/* 步骤/表单 */
+.steps{display:flex;gap:8px;align-items:center;margin:6px 0 18px}
+.stp{display:flex;align-items:center;gap:8px;font-size:12.5px;color:var(--t3)}
+.stp .n{width:26px;height:26px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:600;
+  background:rgba(255,255,255,.7);border:1px solid rgba(255,255,255,.9);font-size:12px}
+.stp.done .n{background:var(--grad-p);color:#fff}
+.stp.cur{color:var(--rose-deep);font-weight:600}
+.stp.cur .n{border:2px solid var(--rose-d);color:var(--rose-deep)}
+.stp .ln{width:70px;height:1.5px;background:var(--line)}
+.form2{display:grid;grid-template-columns:1fr 1fr;gap:14px 22px;padding:16px}
+.fld label{font-size:12px;color:var(--t2);display:block;margin-bottom:6px}
+.fld input,.fld select{width:100%;height:40px;border-radius:12px;border:1px solid rgba(255,255,255,.8);
+  background:rgba(255,255,255,.55);padding:0 12px;font-size:14px;color:var(--text);outline:none;font-family:var(--font)}
+.fld input:focus{border-color:rgba(232,93,143,.5);box-shadow:0 0 0 3px rgba(232,93,143,.12)}
+.fld .err{font-size:11px;color:var(--danger);margin-top:5px}
+/* 移动 */
+.mwrap{max-width:420px;margin:0 auto;position:relative;min-height:calc(100vh - 60px)}
+.mnav{position:sticky;top:12px;z-index:20;display:flex;align-items:center;gap:8px;padding:6px 10px;border-radius:22px;margin-bottom:12px}
+.mnav .t{flex:1;text-align:center;font-size:15px;font-weight:600}
+.mnav .ic{width:40px;height:40px;border-radius:50%;display:flex;align-items:center;justify-content:center;color:var(--t2)}
+.mobottom{position:sticky;bottom:14px;display:flex;gap:8px;padding:8px;border-radius:22px}
+.mobottom .b1{flex:1;display:flex;align-items:center;justify-content:center;gap:6px;border:none;cursor:pointer;border-radius:14px;
+  font-size:14px;font-weight:600;height:44px;font-family:var(--font)}
+.b1.pri{background:var(--grad-p);color:#fff}
+.b1.mint{background:linear-gradient(135deg,#7FD8C2,#4FB59C);color:#fff}
+.b1.ghost{background:rgba(255,255,255,.5);border:1px solid rgba(255,255,255,.8);color:var(--t2)}
+.b1.danger{background:linear-gradient(135deg,#F79AA8,#E25B72);color:#fff}
+.lv{display:flex;flex-direction:column;gap:10px;margin-top:10px}
+.lvitem{display:flex;align-items:center;gap:12px;padding:14px;border-radius:18px}
+.lvitem .ic{width:42px;height:42px;border-radius:14px;flex:none;display:flex;align-items:center;justify-content:center;
+  background:rgba(255,255,255,.6);border:1px solid rgba(255,255,255,.85);color:var(--rose-d)}
+.lvitem .m{flex:1;min-width:0}
+.lvitem .m b{display:block;font-size:14.5px;font-weight:600}
+.lvitem .m span{font-size:11.5px;color:var(--t3)}
+.lvitem .arr{color:var(--t3)}
+.two{display:grid;grid-template-columns:1.6fr 1fr;gap:16px;margin-top:14px}
+@media(max-width:980px){.two{grid-template-columns:1fr}.kpis{grid-template-columns:repeat(2,1fr)}.desc{grid-template-columns:1fr 1fr}}
+@media(max-width:640px){.kpis{grid-template-columns:1fr 1fr}.form2{grid-template-columns:1fr}.desc{grid-template-columns:1fr}}
+footer.note{max-width:1180px;margin:10px auto 40px;text-align:center;font-size:11.5px;color:var(--t3);line-height:2;padding:0 18px}
+footer.note a{color:var(--rose-deep);text-decoration:none}
+
+/* ═══ 规范对齐修复 ═══ */
+.view{padding-bottom:130px}
+.view>.pgtag{margin-top:6px}
+.hub{overflow-x:auto;justify-content:flex-start;scrollbar-width:thin}
+.hub::-webkit-scrollbar{height:0}
+.pcbar{flex-wrap:wrap;row-gap:10px}
+.pcbar .search{flex:1 1 220px;min-width:200px}
+.t th,.t td{vertical-align:middle}
+.td-group{white-space:nowrap}
+.chip{white-space:nowrap}
+.tg.pill-sel{outline:2px solid currentColor;outline-offset:1px;font-weight:600}
+.mwrap{padding-bottom:120px}
+.lc{white-space:nowrap}
+.btn.lg{height:50px;padding:0 30px;font-size:15.5px;border-radius:16px}
+.btnrow{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
+.btn:hover{filter:brightness(.97)}
+.desc .v{line-height:1.5}
+.mobottom{display:flex;gap:8px;padding:10px;border-radius:24px}
+.lvitem .m span{line-height:1.6;display:block;margin-top:2px}
+table.t .op a:last-child{margin-right:0}
+/* iPad 页 */
+.ipadgrid{display:grid;grid-template-columns:1.7fr 1fr;gap:16px;margin-top:14px}
+@media(max-width:980px){.ipadgrid{grid-template-columns:1fr}}
+.avrow{display:flex;align-items:center;gap:12px;padding:12px 14px;border-radius:16px;margin-bottom:10px;background:rgba(255,255,255,.5);border:1px solid rgba(255,255,255,.75);cursor:pointer}
+.avrow.cur{outline:2px solid rgba(232,93,143,.5);outline-offset:1px;background:#fff}
+.avrow .m{flex:1;min-width:0}
+.avrow .m b{font-size:14px;display:block}
+.avrow .m span{font-size:11px;color:var(--t3)}
+textarea.note{width:100%;min-height:84px;border-radius:12px;border:1px solid rgba(255,255,255,.8);background:rgba(255,255,255,.55);padding:10px 12px;font-size:13.5px;color:var(--text);font-family:var(--font);outline:none;resize:vertical}
+
+
+/* ═══ 示例优化 v2：向导 / 多选 / 即时反馈 ═══ */
+.spwrap .sp{display:block;animation:fade .3s ease}
+.spwrap .sp.off{display:none}
+.tg.multi{cursor:pointer;user-select:none}
+.tg.multi.m-on{outline:2px solid currentColor;outline-offset:1px;font-weight:600}
+.fx{position:fixed;left:50%;bottom:26px;transform:translateX(-50%) translateY(16px);z-index:99;max-width:88%;
+  padding:10px 20px;border-radius:999px;background:rgba(52,58,70,.84);color:#fff;font-size:13px;font-weight:600;
+  -webkit-backdrop-filter:blur(12px);backdrop-filter:blur(12px);opacity:0;pointer-events:none;transition:.25s ease;text-align:center}
+.fx.show{opacity:1;transform:translateX(-50%) translateY(0)}
+.wizfoot{display:flex;justify-content:space-between;align-items:center;margin-top:16px;gap:10px;flex-wrap:wrap}
+
+
+/* ═══ 规范性 & 图标显示修复 ═══ */
+.view svg{flex:none}
+.view .btn svg{width:15px;height:15px;vertical-align:-2px}
+.view .ic svg,.view .fi svg,.wjrow .ic svg,.lvitem .ic svg{width:21px;height:21px;display:block}
+.view .btn.lg svg{width:17px;height:17px}
+.tg{line-height:1;white-space:nowrap}
+.op{white-space:nowrap}
+.op a{display:inline-block;padding:2px 2px}
+table.t td,table.t th{padding-left:12px;padding-right:12px}
+.av{flex:none;line-height:1}
+.kpis .kpi{min-width:0}
+.kpis .kpi .l{white-space:nowrap}
+.lca .lc .d svg{width:11px;height:11px;stroke:#fff;margin:0 auto}
+.stp .n svg{width:12px;height:12px;stroke:#fff;display:inline-block;vertical-align:-2px}
+.view .desc{min-width:0}
+.view .desc .v{overflow-wrap:anywhere}
+.mobottom .b1 svg{width:17px;height:17px}
+.pcbar .btn svg{width:15px;height:15px}
+.wiz .pcbar .search{min-width:0}
+
+</style>
+</head>
+<body>
+
+<div class="hub">
+  <b><i></i>妈咪好 GoodMom · 常用示例页</b>
+  <span class="chip on" data-v="list">列表页 · 筛查队列</span>
+  <span class="chip" data-v="detail">详情页 · 儿童档案</span>
+  <span class="chip" data-v="form">表单页 · 建档登记</span>
+  <span class="chip" data-v="mobile">移动端 · 随访工作</span>
+  <span class="chip" data-v="ipad">iPad · 接诊评估</span>
+  <a href="index.html" style="margin-left:auto">← 返回设计系统首页</a>
+</div>
+
+<!-- ════════ P1 · PC 筛查队列列表页 ════════ -->
+<div class="view on" data-v="list">
+  <div class="pgtag">页面模板：机构端列表页（对应规范 03.7 表格 / 15.2 状态 / 15.4 PC）· 常用于两癌筛查 · 孕产妇管理 · 儿童保健队列</div>
+  <div class="pcbar glass">
+    <span class="logo"><i></i>妈咪好 · 机构管理端</span>
+    <div class="search"><svg class="i"><circle cx="10.5" cy="10.5" r="6.5"/><path d="M15.4 15.4 21 21"/></svg><input placeholder="搜索服务对象 / 身份证 / 档案号"></div>
+    <button class="btn pri" style="height:38px">新增建档 <svg class="i"><path d="M12 5.5v13M5.5 12h13"/></svg></button>
+    <span class="u">王</span>
+  </div>
+
+  <div class="kpis">
+    <div class="kpi card"><div class="l">管理对象总数</div><div class="v num" style="color:var(--rose-d)">12,849</div><div class="d">本月新增 320 · 今日 18</div></div>
+    <div class="kpi card"><div class="l">待筛查 / 待体检</div><div class="v num" style="color:var(--info)">1,026</div><div class="d">宫颈 612 · 乳腺 414</div></div>
+    <div class="kpi card"><div class="l">异常待管理</div><div class="v num" style="color:var(--warn)">86</div><div class="d">待复查 41 · 待随访 45</div></div>
+    <div class="kpi card"><div class="l">高危 / 重点对象</div><div class="v num" style="color:var(--danger)">23</div><div class="d">孕产妇橙红 12 · 高危儿 11</div></div>
+  </div>
+
+  <div class="card" style="padding:16px 18px">
+    <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:12px">
+      <span class="chip on">全部</span><span class="chip">待筛查</span><span class="chip">异常</span><span class="chip">待随访</span><span class="chip">已结案</span>
+      <span style="font-size:11.5px;color:var(--t3);margin-left:auto">共 12,849 条 · 导出 / 打印 / 批量操作</span>
+    </div>
+    <table class="t">
+      <thead><tr><th style="width:34px"><input type="checkbox"></th><th>服务对象</th><th>档案类型</th><th>最近筛查 / 体检</th><th>风险与五色</th><th>结果</th><th>随访</th><th style="text-align:right">操作</th></tr></thead>
+      <tbody>
+        <tr><td><input type="checkbox"></td><td><span style="display:flex;align-items:center;gap:9px"><span class="av purp">李</span><b>李慧 · 女 36</b></span></td><td>妇女 · 两癌</td><td class="num">宫颈 TCT · 05-12</td><td><span class="tg r"><i></i>检查异常</span></td><td><span class="tg o">待复查</span></td><td><span class="tg o">待随访</span></td><td style="text-align:right"><span class="op"><a href="#">查看</a><a href="#">随访</a><a href="#">转诊</a></span></td></tr>
+        <tr><td><input type="checkbox"></td><td><span style="display:flex;align-items:center;gap:9px"><span class="av">张</span><b>张敏 · 孕 28 周</b></span></td><td>孕产妇</td><td class="num">产检 · 04-28</td><td><span class="tg y"><i></i>黄 · 一般风险</span></td><td><span class="tg g">正常</span></td><td><span class="tg b">已预约</span></td><td style="text-align:right"><span class="op"><a href="#">查看</a><a href="#">产检</a><a href="#">更多</a></span></td></tr>
+        <tr><td><input type="checkbox"></td><td><span style="display:flex;align-items:center;gap:9px"><span class="av">王</span><b>王雨桐 · 女 32</b></span></td><td>妇女 · 两癌</td><td class="num">乳腺 B 超 · 05-20</td><td><span class="tg o"><i></i>橙 · 较高风险</span></td><td><span class="tg r">可疑</span></td><td><span class="tg o">待随访</span></td><td style="text-align:right"><span class="op"><a href="#">查看</a><a href="#">随访</a><a href="#">转诊</a></span></td></tr>
+        <tr><td><input type="checkbox"></td><td><span style="display:flex;align-items:center;gap:9px"><span class="av mint">赵</span><b>赵甜甜 · 18 月龄</b></span></td><td>儿童 · 儿保</td><td class="num">儿保体检 · 05-06</td><td><span class="tg r"><i></i>生长低于 P3</span></td><td><span class="tg r">异常</span></td><td><span class="tg o">待随访</span></td><td style="text-align:right"><span class="op"><a href="#">查看</a><a href="#">随访</a><a href="#">更多</a></span></td></tr>
+        <tr><td><input type="checkbox"></td><td><span style="display:flex;align-items:center;gap:9px"><span class="av purp">陈</span><b>陈静 · 孕 12 周</b></span></td><td>孕产妇</td><td class="num">首次产检 · 06-02</td><td><span class="tg r"><i></i>红 · 高风险</span></td><td><span class="tg o">待复核</span></td><td><span class="tg b">随访中</span></td><td style="text-align:right"><span class="op"><a href="#">查看</a><a href="#">评估</a><a href="#">转诊</a></span></td></tr>
+        <tr><td><input type="checkbox"></td><td><span style="display:flex;align-items:center;gap:9px"><span class="av">刘</span><b>刘佳 · 女 28</b></span></td><td>妇女 · 两癌</td><td class="num">— 未筛查</td><td><span class="tg n"><i></i>待筛查</span></td><td><span class="tg n">未出结果</span></td><td><span class="tg n">未随访</span></td><td style="text-align:right"><span class="op"><a href="#">查看</a><a href="#">开始筛查</a></span></td></tr>
+      </tbody>
+    </table>
+    <div style="display:flex;align-items:center;gap:8px;justify-content:flex-end;margin-top:14px;font-size:12px;color:var(--t3)">
+      第 1/428 页 · 共 12,849 条
+      <span class="chip on" style="padding:5px 12px">1</span><span class="chip" style="padding:5px 12px">2</span><span class="chip" style="padding:5px 12px">3</span><span class="chip" style="padding:5px 12px">…</span><span class="chip" style="padding:5px 12px">428</span>
+    </div>
+  </div>
+  <div style="height:14px"></div>
+  <div class="card" style="padding:14px 18px;font-size:12.5px;color:var(--t2);line-height:2">
+    <b style="color:var(--rose-deep)">列表页要点：</b> 顶栏全局搜索 + 新增建档（Primary 唯一）· KPI 统计条 · 状态筛选 chips · 表格内状态一律六语义标签（15.5）· 孕产妇行显示五色分级（02.10）· 危险>逾期>待处理排序（15.2.7）· 行操作 查看/随访/转诊/更多（15.4 PC）
+  </div>
+</div>
+
+<!-- ════════ P2 · PC 儿童档案详情页 ════════ -->
+<div class="view" data-v="detail">
+  <div class="pgtag">页面模板：档案详情页（规范 13.4 生命周期轴 / 13.3.8 五健清单 / 04.3.9 时间线）· 医护工作台打开儿童档案</div>
+  <div class="two">
+    <div>
+      <div class="card" style="padding:18px">
+        <div style="display:flex;align-items:center;gap:14px;flex-wrap:wrap">
+          <span class="av" style="width:56px;height:56px;font-size:22px">朵</span>
+          <div style="flex:1;min-width:200px">
+            <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap">
+              <b style="font-size:18px">朵朵 · 女</b>
+              <span class="tg g"><i></i>生长正常</span>
+              <span class="tg b"><i></i>已建档 · 管理中</span>
+              <span class="tg o"><i></i>疫苗待种</span>
+            </div>
+            <div style="font-size:12px;color:var(--t3);margin-top:6px">档案号 MMB-2024-0318 · 儿童保健科 · 管理医生 王医生 · 建档 2023-04-12</div>
+          </div>
+          <div style="display:flex;gap:8px">
+            <button class="btn pri">开始随访 <svg class="i"><path d="M5 12h14M13 6l6 6-6 6"/></svg></button>
+            <button class="btn line">转诊</button>
+            <button class="btn gho">更多</button>
+          </div>
+        </div>
+        <div class="lca">
+          <div class="lc done"><div class="d"><svg class="i" viewBox="0 0 24 24"><path d="M5 13l5 5L20 7"/></svg></div>新生儿</div>
+          <div class="lc done"><div class="d"><svg class="i" viewBox="0 0 24 24"><path d="M5 13l5 5L20 7"/></svg></div>婴儿期</div>
+          <div class="lc cur"><div class="d">18</div>幼儿 18 月龄</div>
+          <div class="lc"><div class="d">24</div>24 月龄</div>
+          <div class="lc"><div class="d">36</div>36 月龄</div>
+          <div class="lc"><div class="d">48</div>学龄前</div>
+        </div>
+        <div class="hr"></div>
+        <div style="display:flex;gap:8px;margin-bottom:12px">
+          <span class="chip on">基本信息</span><span class="chip">健康保健</span><span class="chip">生长曲线</span><span class="chip">疫苗</span><span class="chip">随访记录</span>
+        </div>
+        <div class="desc">
+          <div><div class="k">出生日期</div><div class="v num">2023-04-12 · 足月顺产</div></div>
+          <div><div class="k">出生体重 / 身长</div><div class="v num">3.2kg / 50cm</div></div>
+          <div><div class="k">监护人</div><div class="v">刘女士（妈妈）· 138****5210</div></div>
+          <div><div class="k">户籍 / 现住址</div><div class="v">朝阳区 · 望京街道</div></div>
+          <div><div class="k">建档机构</div><div class="v">望京社区卫生服务中心</div></div>
+          <div><div class="k">过敏史</div><div class="v">青霉素过敏史（医生备注）</div></div>
+        </div>
+      </div>
+
+      <div class="card" style="padding:16px 18px;margin-top:14px">
+        <div style="display:flex;align-items:center;margin-bottom:12px"><b style="font-size:15px">儿童健康保健清单（五健 + 口腔）</b><span style="font-size:11.5px;color:var(--t3);margin-left:auto">最近评估：05-06 · 王医生</span></div>
+        <div class="wjrow"><span class="ic"><svg class="i" viewBox="0 0 24 24"><circle cx="8.6" cy="6.9" r="2.1"/><path d="M8.6 9.1v3.4M6.9 10.9l1.7.7M10.3 10.9l-1.7.7M8.6 12.5 7.5 15.2M8.6 12.5l1.1 2.7"/><path d="M16.6 5v12M15.2 7.3 16.6 5l1.4 2.3M15.2 14.7 16.6 17l1.4-2.3"/></svg></span><div class="m"><b>生长发育</b><span>身长 83cm P75 · 体重 11.2kg P62</span></div><span class="tg g"><i></i>正常</span></div>
+        <div class="wjrow"><span class="ic" style="color:var(--rose-d)"><svg class="i" viewBox="0 0 24 24"><circle cx="11.8" cy="14.6" r="5.4"/><path d="M11.8 9.5c.3-1.9 1.2-3.1 2.9-3.8"/><path d="M14.5 6.1c1.7-.7 3.1-.5 4 .4"/></svg></span><div class="m"><b>营养喂养</b><span>辅食结构良好 · 奶量充足</span></div><span class="tg g"><i></i>正常</span></div>
+        <div class="wjrow"><span class="ic" style="color:var(--rose-d)"><svg class="i" viewBox="0 0 24 24"><circle cx="12" cy="12.2" r="6.4"/><circle cx="9.8" cy="11" r=".9" fill="currentColor" stroke="none"/><circle cx="14.2" cy="11" r=".9" fill="currentColor" stroke="none"/><path d="M9.5 14.3c1.5 1.2 3.5 1.2 5 0"/></svg></span><div class="m"><b>心理行为发育</b><span>语言发育良好 · 社交回应佳</span></div><span class="tg g"><i></i>正常</span></div>
+        <div class="wjrow"><span class="ic" style="color:var(--rose-d)"><svg class="i" viewBox="0 0 24 24"><path d="M3.6 13.2s3-6.2 8.4-6.2 8.4 6.2 8.4 6.2-3 6.2-8.4 6.2S3.6 13.2 3.6 13.2z"/><circle cx="12" cy="13.2" r="3.1"/></svg></span><div class="m"><b>视力保健</b><span>屈光筛查 · 建议 3 月后复查</span></div><span class="tg o"><i></i>待复查</span></div>
+        <div class="wjrow"><span class="ic" style="color:var(--rose-d)"><svg class="i" viewBox="0 0 24 24"><path d="M4.4 12.8a7.6 7.6 0 0 1 15.2 0"/><rect x="2.2" y="11.8" width="4.2" height="6" rx="1.9"/><rect x="17.6" y="11.8" width="4.2" height="6" rx="1.9"/></svg></span><div class="m"><b>听力保健</b><span>听力筛查 · 双耳通过</span></div><span class="tg g"><i></i>正常</span></div>
+        <div class="wjrow"><span class="ic" style="color:var(--rose-d)"><svg class="i" viewBox="0 0 24 24"><path d="M17.2 4.6c-1.6 0-2.6.8-3.5 1.8a3 3 0 0 1-3.4 0C9.4 5.4 8.4 4.6 6.8 4.6c-2.1 0-3.7 1.7-3.7 3.8 0 1.6.7 2.8 1.7 3.8 1.3 1.5 2.3 3.2 2.5 5.3.1 1.3.9 2.1 1.9 2.1.9 0 1.3-.6 1.6-1.6.5-1.2.9-2.5 1.9-2.5 1 0 1.5 1.2 2 2.4.3 1 .7 1.7 1.6 1.7 1 0 1.8-.8 1.9-2.1.2-2 1-3.7 2.3-5.1 1-1.1 1.7-2.4 1.7-3.9 0-2.1-1.6-3.9-3.7-3.9z"/></svg></span><div class="m"><b>口腔保健</b><span>出牙 16 颗 · 建议涂氟</span></div><span class="tg o"><i></i>待检</span></div>
+      </div>
+    </div>
+
+    <div>
+      <div class="card" style="padding:16px 18px">
+        <div style="display:flex;align-items:baseline;gap:10px"><b style="font-size:15px">体重生长曲线</b><span style="font-size:11.5px;color:var(--t3)">WHO · P3–P97 · 示例</span><span class="tg g" style="margin-left:auto">P62 · 正常</span></div>
+        <svg width="100%" height="150" viewBox="0 0 380 150" preserveAspectRatio="none" style="margin-top:10px">
+          <path d="M0,26 L60,22 L130,17 L200,13 L270,10 L340,7 L380,6 L380,62 L340,64 L270,67 L200,70 L130,74 L60,78 L0,82 Z" fill="rgba(169,227,212,.5)"/>
+          <path d="M0,26 L60,22 L130,17 L200,13 L270,10 L340,7 L380,6" fill="none" stroke="#6FC9B4" stroke-width="1.3" stroke-dasharray="4 5"/>
+          <path d="M0,82 L60,78 L130,74 L200,70 L270,67 L340,64 L380,62" fill="none" stroke="#6FC9B4" stroke-width="1.3" stroke-dasharray="4 5"/>
+          <path d="M0,56 L60,50 L130,46 L200,42 L270,36 L340,30 L380,26" fill="none" stroke="#F77FA3" stroke-width="2.6" stroke-linecap="round"/>
+          <circle cx="270" cy="36" r="4.5" fill="#fff" stroke="#F77FA3" stroke-width="2.4"/>
+        </svg>
+        <div style="display:flex;gap:14px;font-size:11px;color:var(--t3);margin-top:6px"><span><i style="display:inline-block;width:10px;height:10px;background:rgba(169,227,212,.7);border-radius:2px;margin-right:4px"></i>P3–P97</span><span><i style="display:inline-block;width:10px;height:10px;background:#F77FA3;border-radius:2px;margin-right:4px"></i>实测</span></div>
+      </div>
+      <div class="card" style="padding:16px 18px;margin-top:14px">
+        <div style="display:flex;align-items:center;margin-bottom:10px"><b style="font-size:15px">疫苗计划</b><span class="tg o" style="margin-left:auto">麻腮风 · 剩 5 天</span></div>
+        <div style="font-size:12.5px;color:var(--t2);line-height:2.3">
+          <div>✓ 出生 · 乙肝①</div>
+          <div>✓ 2 月龄 · 脊灰① / 百白破①</div>
+          <div>✓ 4 月龄 · 百白破②</div>
+          <div><b style="color:var(--rose-deep)">● 12 月龄 · 麻腮风 · 已预约 06-20</b></div>
+        </div>
+        <div class="hr"></div>
+        <div style="display:flex;align-items:center;margin-bottom:8px"><b style="font-size:15px">最近随访</b></div>
+        <div style="font-size:12.5px;color:var(--t2);line-height:2">
+          <div>05-06 · 王医生：18 月龄儿保 · 生长正常，<b>视力待复查</b>，建议涂氟</div>
+          <div>02-14 · 李护士：12 月龄随访 · 电话回访无异常</div>
+        </div>
+      </div>
+      <div class="card" style="padding:14px 16px;margin-top:14px;border-left:3px solid var(--warn)">
+        <b style="font-size:13px;color:#b9771c">随访提醒</b>
+        <div style="font-size:12px;color:var(--t2);margin-top:6px;line-height:1.9">21 月龄儿保体检 · 剩余 90 天 · 已开启自动提醒；建议在「健康保健」完成视力复查与涂氟预约。</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ════════ P3 · PC 建档表单页（四步向导） ════════ -->
+<div class="view" data-v="form">
+  <div class="pgtag">页面模板：表单页-建档登记向导（规范 08 · 8.2.8 Form / 步骤条 / 五色初评 02.10）· 孕产妇建档 · 两癌建档同构</div>
+  <div class="wiz" style="max-width:900px;margin:0 auto">
+    <div class="pcbar glass" style="margin:0 0 14px"><span class="logo"><i></i>妈咪好 · 建档登记</span><span style="color:var(--t3);font-size:12.5px">孕产妇健康档案 · 编号建档后自动生成</span><button class="btn gho" style="margin-left:auto">暂存草稿</button></div>
+    <div class="steps" id="wizSteps">
+      <span class="stp done" data-i="0"><span class="n"><svg class="i" viewBox="0 0 24 24"><path d="M5 13l5 5L20 7"/></svg></span>基本信息</span>
+      <span class="stp cur" data-i="1"><span class="n">2</span><span class="ln"></span>孕产信息</span>
+      <span class="stp" data-i="2"><span class="n">3</span><span class="ln"></span>检查与风险</span>
+      <span class="stp" data-i="3"><span class="n">4</span><span class="ln"></span>完成建档</span>
+    </div>
+    <div class="spwrap">
+      <div class="sp off" data-i="0">
+        <div class="card" style="padding:18px 20px">
+          <div style="display:flex;align-items:center;margin-bottom:6px"><b style="font-size:15px">基本信息</b><span style="font-size:11.5px;color:var(--t3);margin-left:auto">带 * 为必填</span></div>
+          <div class="hr"></div>
+          <div class="form2">
+            <div class="fld"><label>服务对象姓名 *</label><input placeholder="请输入真实姓名"></div>
+            <div class="fld"><label>身份证号 *</label><input placeholder="18 位身份证号"></div>
+            <div class="fld"><label>出生日期</label><input type="date"></div>
+            <div class="fld"><label>联系电话 *</label><input placeholder="手机号码"><div class="err">手机号格式不正确</div></div>
+            <div class="fld"><label>常住地址</label><input placeholder="省 / 市 / 区 / 街道"></div>
+            <div class="fld"><label>建档类型</label><select><option>孕产妇档案</option><option>妇女健康档案</option><option>儿童健康档案</option></select></div>
+          </div>
+        </div>
+      </div>
+      <div class="sp off" data-i="1">
+        <div class="card" style="padding:18px 20px">
+          <div style="display:flex;align-items:center;margin-bottom:6px"><b style="font-size:15px">孕产信息</b><span style="font-size:11.5px;color:var(--t3);margin-left:auto">带 * 为必填 · 信息仅用于健康管理</span></div>
+          <div class="hr"></div>
+          <div class="form2">
+            <div class="fld"><label>末次月经（LMP）*</label><input type="date" value="2025-01-10"></div>
+            <div class="fld"><label>预产期（EDC）*</label><input type="date" value="2025-10-17"><div class="err">与 LMP 推算不一致，请核对</div></div>
+            <div class="fld"><label>孕产次 *</label><input placeholder="孕 1 产 0"></div>
+            <div class="fld"><label>本次妊娠来源</label><select><option>门诊建档</option><option>转诊转入</option><option>基层随访发现</option></select></div>
+            <div class="fld"><label>孕期合并症</label><input placeholder="妊娠期高血压 / 糖尿病…"></div>
+            <div class="fld"><label>联系方式（监护）</label><input placeholder="138****5210"></div>
+          </div>
+          <div style="padding:4px 2px 2px">
+            <div style="font-size:12px;color:var(--t2);margin-bottom:8px">妊娠风险初评（五色分级 · 02.10）</div>
+            <div id="riskPick" style="display:flex;gap:10px;flex-wrap:wrap;align-items:center">
+              <span class="tg g" style="cursor:pointer">绿 · 低风险</span><span class="tg y pill-sel" style="cursor:pointer">黄 · 一般风险</span><span class="tg o" style="cursor:pointer">橙 · 较高风险</span><span class="tg r" style="cursor:pointer">红 · 高风险</span><span class="tg p" style="cursor:pointer">紫 · 合并传染病</span>
+              <span style="font-size:11px;color:var(--t3)">黄级 → 增加产检频次 · 保健机构专案管理（15.2.10）</span>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="sp off" data-i="2">
+        <div class="card" style="padding:18px 20px">
+          <div style="display:flex;align-items:center;margin-bottom:6px"><b style="font-size:15px">检查与风险</b><span style="font-size:11.5px;color:var(--t3);margin-left:auto">可多选</span></div>
+          <div class="hr"></div>
+          <div style="font-size:12px;color:var(--t2);margin-bottom:8px">已完成的孕期检查</div>
+          <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:14px">
+            <span class="tg g multi m-on">血常规</span><span class="tg g multi m-on">尿常规</span><span class="tg g multi m-on">传染病四项</span><span class="tg b multi">早唐筛查</span><span class="tg n multi">NT 超声</span><span class="tg n multi">大排畸</span>
+          </div>
+          <div style="font-size:12px;color:var(--t2);margin-bottom:8px">高危因素（可多选）</div>
+          <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:14px">
+            <span class="tg o multi">妊娠期高血压史</span><span class="tg o multi">妊娠期糖尿病史</span><span class="tg n multi">双胎 / 多胎</span><span class="tg o multi">高龄（≥35）</span><span class="tg n multi">无</span>
+          </div>
+          <div class="fld"><label>医生备注</label><textarea class="note" style="min-height:70px" placeholder="补充说明（自动带入档案与随访计划）"></textarea></div>
+        </div>
+      </div>
+      <div class="sp off" data-i="3">
+        <div class="card" style="padding:20px">
+          <div style="text-align:center;margin-bottom:8px"><span style="font-size:13px;color:var(--t3)">即将完成</span><div style="font-size:17px;font-weight:700;color:var(--rose-deep);margin-top:4px">张敏 · 孕产妇健康档案</div></div>
+          <div class="hr"></div>
+          <div class="desc" style="grid-template-columns:repeat(2,1fr)">
+            <div><div class="k">预产期 / 孕周</div><div class="v num">2025-10-17 · 孕 22 周</div></div>
+            <div><div class="k">妊娠风险初评</div><div class="v"><span class="tg y pill-sel">黄 · 一般风险</span></div></div>
+            <div><div class="k">建档机构 / 医生</div><div class="v">望京社区卫生服务中心 · 王医生</div></div>
+            <div><div class="k">随访计划</div><div class="v">自动生成：按黄级增加产检频次（15.2.10）</div></div>
+          </div>
+          <div style="font-size:11.5px;color:var(--t3);line-height:1.8;margin-top:10px">提交即创建档案并开始随访管理；如需修改可返回上一步或保存草稿。</div>
+          <div style="display:flex;gap:10px;justify-content:flex-end;margin-top:14px">
+            <button class="btn gho">另存草稿</button>
+            <button class="btn pri lg">提交并完成建档</button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="wizfoot">
+      <button class="btn line" id="bPrev"><svg class="i"><path d="M20 12H5.5M11 6.5 5.5 12l5.5 5.5"/></svg> 上一步</button>
+      <div style="display:flex;gap:8px;align-items:center">
+        <span style="font-size:11.5px;color:var(--t3)" id="wizProg">第 1 / 4 步 · 孕产信息</span>
+        <button class="btn pri" id="bNext" style="height:42px;padding:0 24px">下一步 <svg class="i"><path d="M5 12h14M13 6l6 6-6 6"/></svg></button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ════════ P4 · 移动端随访工作页 ════════ -->
+<div class="view" data-v="mobile">
+  <div class="pgtag">页面模板：移动端工作页（规范 10/11 + 15.4.1 底部操作栏）· 医护随访 · 家长 App 同构</div>
+  <div class="mwrap">
+    <div class="mnav glass"><span class="ic"><svg class="i"><path d="M20 12H5.5M11 6.5 5.5 12l5.5 5.5"/></svg></span><span class="t">李慧 · 宫颈筛查</span><span class="ic"><svg class="i"><circle cx="10.5" cy="10.5" r="6.5"/><path d="M15.4 15.4 21 21"/></svg></span></div>
+    <div class="card" style="padding:14px 16px">
+      <div style="display:flex;gap:12px;align-items:center">
+        <span class="av purp" style="width:48px;height:48px;font-size:17px">李</span>
+        <div style="flex:1;min-width:0">
+          <b style="font-size:15px">李慧 · 女 · 36 岁</b>
+          <div style="font-size:11px;color:var(--t3);margin-top:2px">妇女 · 两癌筛查 · 管理医生 王医生</div>
+          <div style="display:flex;gap:6px;margin-top:6px;flex-wrap:wrap"><span class="tg b"><i></i>已建档</span><span class="tg r"><i></i>检查异常</span><span class="tg o"><i></i>待复查</span></div>
+        </div>
+      </div>
+    </div>
+    <div class="lv">
+      <div class="lvitem card"><span class="ic"><svg class="i"><path d="M3.5 20.5h17"/><path d="M6.8 20.5v-5.4M12 20.5v-11M17.2 20.5v-8"/></svg></span><div class="m"><b>宫颈筛查（TCT）复查</b><span>建议 06-25 · 待预约 · 异常需复查</span></div><span class="arr"><svg class="i"><path d="M9.5 6.5l5.5 5.5-5.5 5.5"/></svg></span></div>
+      <div class="lvitem card"><span class="ic" style="color:var(--mint-d)"><svg class="i"><circle cx="12" cy="12" r="9"/><path d="M12 7v5.2l3.4 2"/></svg></span><div class="m"><b>3 日内随访回访</b><span>上次 05-13 已完成 · 本次待执行</span></div><span class="arr"><svg class="i"><path d="M9.5 6.5l5.5 5.5-5.5 5.5"/></svg></span></div>
+      <div class="lvitem card"><span class="ic" style="color:#b9771c"><svg class="i"><path d="M18 8.2a6 6 0 0 0-12 0c0 6.8-2.8 8.8-2.8 8.8h17.6S18 15 18 8.2"/><path d="M13.9 20.4a2 2 0 0 1-3.8 0"/></svg></span><div class="m"><b>转诊回执待确认</b><span>上级医院 06-18 已接诊 · 待反馈</span></div><span class="tg p">转诊中</span></div>
+    </div>
+    <div style="height:10px"></div>
+    <div class="mobottom glass">
+      <button class="b1 pri">记录随访 <svg class="i"><circle cx="12" cy="12" r="9"/><path d="M12 7v5.2l3.4 2"/></svg></button>
+      <button class="b1 mint">开始复查</button>
+      <button class="b1 ghost">更多</button>
+    </div>
+  </div>
+</div>
+
+<footer class="note">
+  妈咪好 GoodMom · 常用示例页 = ① 列表页(两癌筛查队列) ② 档案详情(儿童 · 五健+疫苗+生长曲线) ③ 建档表单(孕产妇 · 五色初评) ④ 移动随访工作页 ⑤ iPad 接诊评估页<br>
+  对应规范：页面模板 11.3 / 13；状态 15.2 · 15.2.10；五色 02.10；端 15.4。<br>
+  按顺序浏览：<button class="chip" id="seqPrev" style="padding:5px 16px">‹ 上一页</button><button class="chip" id="seqNext" style="padding:5px 16px">下一页 ›</button> · 返回 <a href="index.html">设计系统首页</a>
+</footer>
+
+<script>
+(function(){
+  /* 页面切换 */
+  var chips=[].slice.call(document.querySelectorAll('.hub .chip'));
+  var views=[].slice.call(document.querySelectorAll('.view'));
+  function show(v){
+    chips.forEach(function(c){c.classList.toggle('on',c.getAttribute('data-v')===v);});
+    views.forEach(function(x){x.classList.toggle('on',x.getAttribute('data-v')===v);});
+    window.scrollTo(0,0);
+  }
+  chips.forEach(function(c){c.addEventListener('click',function(){show(c.getAttribute('data-v'));});});
+
+  /* 顺序浏览 1→5 */
+  var ORDER=['list','detail','form','mobile','ipad'];
+  function curIdx(){
+    var i=0;
+    views.forEach(function(x,k){if(x.classList.contains('on'))i=k;});
+    return i;
+  }
+  var pv=document.getElementById('seqPrev'), nx=document.getElementById('seqNext');
+  if(pv)pv.addEventListener('click',function(){var i=curIdx();show(ORDER[(i-1+ORDER.length)%ORDER.length]);});
+  if(nx)nx.addEventListener('click',function(){var i=curIdx();show(ORDER[(i+1)%ORDER.length]);});
+  if(location.hash)show(location.hash.slice(1));
+
+  /* 五色初评单选 */
+  var rp=document.getElementById('riskPick');
+  if(rp){[].slice.call(rp.querySelectorAll('.tg')).forEach(function(t){
+    t.addEventListener('click',function(){
+      [].slice.call(rp.querySelectorAll('.tg')).forEach(function(x){x.classList.remove('pill-sel');});
+      t.classList.add('pill-sel');
+    });
+  });}
+
+  /* 即时反馈 toast */
+  var fxEl=document.getElementById('fx');
+  function fx(m){
+    if(!fxEl){fxEl=document.createElement('div');fxEl.className='fx';fxEl.id='fx';document.body.appendChild(fxEl);}
+    fxEl.textContent=m;fxEl.classList.add('show');
+    clearTimeout(fxEl._h);fxEl._h=setTimeout(function(){fxEl.classList.remove('show');},1600);
+  }
+  [].slice.call(document.querySelectorAll('.view .btn')).forEach(function(b){
+    b.addEventListener('click',function(){fx((b.textContent.trim()||'操作')+'（示例反馈）');});
+  });
+
+  /* 建档四步向导 */
+  var stps=[].slice.call(document.querySelectorAll('#wizSteps .stp'));
+  var pans=[].slice.call(document.querySelectorAll('.spwrap .sp'));
+  var names=['基本信息','孕产信息','检查与风险','完成建档'];
+  var cur=1, bP=document.getElementById('bPrev'), bN=document.getElementById('bNext'), prog=document.getElementById('wizProg');
+  function paint(){
+    stps.forEach(function(x,i){
+      x.className='stp'+(i<cur?' done':i===cur?' cur':'');
+      x.querySelector('.n').innerHTML=i<cur?'<svg viewBox=\"0 0 24 24\"><path d=\"M5 13l5 5L20 7\"/></svg>':(i+1);
+    });
+    pans.forEach(function(x,i){x.classList.toggle('off',i!==cur);});
+    if(bP)bP.disabled=cur===0;
+    if(bN)bN.style.display=cur===3?'none':'';
+    if(prog)prog.textContent='第 '+(cur+1)+' / 4 步 · '+names[cur];
+  }
+  if(bP)bP.addEventListener('click',function(){if(cur>0){cur--;paint();}});
+  if(bN)bN.addEventListener('click',function(){if(cur<3){cur++;paint();}});
+  paint();
+
+  /* 可多选标签 */
+  [].slice.call(document.querySelectorAll('.tg.multi')).forEach(function(t){
+    t.addEventListener('click',function(){t.classList.toggle('m-on');});
+  });
+})();
+</script>
+</body>
+</html>

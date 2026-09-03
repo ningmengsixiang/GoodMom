@@ -1,0 +1,30 @@
+{
+  "name": "@goodmom/gm-arco-ui",
+  "version": "0.1.0",
+  "private": true,
+  "description": "妈咪好 GoodMom × Arco Design 封装层：按 LG/GoodMom 设计系统（02 Token、03 组件谱、09 图标、14 命名、15 状态）封装组件",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "files": [
+    "dist",
+    "src/gm.css"
+  ],
+  "scripts": {
+    "build": "tsc -p tsconfig.json",
+    "typecheck": "tsc -p tsconfig.json --noEmit"
+  },
+  "peerDependencies": {
+    "@arco-design/web-react": "^2.60.0",
+    "react": ">=17.0.0",
+    "react-dom": ">=17.0.0"
+  },
+  "devDependencies": {
+    "@types/react": "^18.2.0",
+    "@types/react-dom": "^18.2.0",
+    "typescript": "^5.3.0"
+  },
+  "type": "commonjs",
+  "sideEffects": [
+    "**/*.css"
+  ]
+}

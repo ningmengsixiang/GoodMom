@@ -1,0 +1,18 @@
+# Node / frontend
+node_modules/
+dist/
+*.local
+
+# 设计与文档缓存
+.DS_Store
+Thumbs.db
+*.log
+
+# IDE
+.idea/
+.vscode/*
+!.vscode/extensions.json
+
+# 前端工程构建
+frontend-app/node_modules/
+frontend-app/packages/*/dist/

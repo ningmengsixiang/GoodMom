@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>妈咪好 GoodMom · 设计系统总览手册（打印版）</title>
+<style>
+:root{--rose:#E85D8F;--text:#343A46;--t2:#586273;--t3:#9AA2B0}
+*{box-sizing:border-box}
+body{font-family:"PingFang SC","Inter","MiSans","Noto Sans SC",sans-serif;color:var(--text);margin:0;
+  background:#F6E2DB;line-height:1.7}
+.page{max-width:860px;margin:0 auto;padding:34px 40px 60px;background:#FDF6F2;
+  box-shadow:0 10px 30px rgba(90,70,70,.12)}
+h1{font-size:26px;margin:0 0 2px;letter-spacing:-.02em}
+h1 small{font-size:14px;color:var(--t3);font-weight:400;display:block;margin-top:6px}
+h2{font-size:17px;margin:22px 0 6px;color:#C94A77;border-left:4px solid var(--rose);padding-left:10px}
+p{margin:6px 0}
+a{color:var(--rose);text-decoration:none}
+.meta{color:var(--t3);font-size:12px}
+.stat{display:flex;gap:0;flex-wrap:wrap;border:1px solid #f0d4cf;border-radius:14px;overflow:hidden;margin:10px 0}
+.stat span{flex:1 1 120px;padding:10px 12px;text-align:center;border-right:1px solid #f0d4cf}
+.stat span:last-child{border-right:none}
+.stat b{display:block;font-size:18px;color:#C94A77}
+.stat i{font-style:normal;font-size:11px;color:var(--t3)}
+pre{background:#fff7f4;border:1px solid #f0d4cf;border-radius:12px;padding:12px 16px;font-size:12px;line-height:1.8;overflow:auto;font-family:ui-monospace,Menlo,monospace}
+table{width:100%;border-collapse:collapse;font-size:12.5px;margin:8px 0}
+th,td{border-bottom:1px solid #eed9d3;text-align:left;padding:7px 8px;vertical-align:top}
+th{color:#C94A77;font-weight:600}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.card{border:1px solid #f0d4cf;border-radius:14px;padding:12px 14px;background:#fffaf7}
+.foot{margin-top:26px;padding-top:12px;border-top:1px dashed #e0c2bb;color:var(--t3);font-size:11px;line-height:2}
+@media print{
+  body{background:#fff}
+  .page{box-shadow:none;max-width:none;padding:12mm 10mm}
+  a{color:#C94A77}
+}
+</style>
+</head>
+<body>
+<div class="page">
+  <h1>妈咪好 GoodMom · 妇幼儿童全生命周期设计系统<small>Design System Overview · V2.2（打印版总览 · 规范正文见同仓 Markdown 文档）</small></h1>
+  <p class="meta">高级液态玻璃 · 柔光蜜桃 · 温暖可信 · 医疗克制 · 生长曲线</p>
+
+  <div class="stat">
+    <span><b>18</b><i>份规范文档</i></span>
+    <span><b>94</b><i>组件（00 总目录）</i></span>
+    <span><b>77</b><i>自绘图标</i></span>
+    <span><b>90+</b><i>状态标签</i></span>
+    <span><b>5</b><i>套示例页面</i></span>
+    <span><b>1</b><i>前端封装库</i></span>
+  </div>
+
+  <h2>定位与覆盖</h2>
+  <p>妈咪好 GoodMom 是妇幼儿童健康管理平台专属设计系统，覆盖四大板块：<b>孕期</b> · <b>婴幼儿/儿童保健</b> · <b>机构管理端</b> · <b>医护工作台</b>，并承载两癌筛查、妇女保健、随访、转诊、结案等业务模块的复用语言。</p>
+  <p>视觉基因：Liquid Glass（液态玻璃引擎 01–07）+ 蜜桃粉品牌主色 + 淡紫柔光（品牌 12）；所有页面遵循「透明的材质、柔和的光、漂浮的结构、克制的颜色、极简的文字、强烈的空间层级」。</p>
+
+  <h2>体系架构</h2>
+  <pre>妈咪好 GoodMom
+├─ 品牌与业务层  12 品牌 · 13 妇幼领域组件 · 14 命名术语 · 15 业务词库/状态大典 · 16 一致性审计
+├─ 视觉引擎层   01 DNA · 02 Token · 03 PC 组件 · 04 数据可视化 · 07 动效 · 08 Semi 对齐 · 09 图标
+├─ 多端层      10 移动端规范 · 11 移动端全量库（含 iPad / Arco Mobile 对齐）
+├─ 落地工具     05 AI Prompt 库 · 06 制作流程与验收
+└─ 交付资产     preview（首页/移动/示例中心）· icons · frontend-app（@goodmom/gm-arco-ui）</pre>
+
+  <h2>Design DNA（速览）</h2>
+  <table>
+    <tr><th>维度</th><th>原则</th></tr>
+    <tr><td>材质</td><td>Translucent Liquid Glass（高透亚克力）</td></tr>
+    <tr><td>结构</td><td>Floating / Layered（5 级景深 L0–L4）</td></tr>
+    <tr><td>圆角 / 边框 / 阴影</td><td>24–48px · 1px 半透明白描边 · 大柔带色相阴影</td></tr>
+    <tr><td>背景 / 主色</td><td>奶杏暖调 · 蜜桃粉（--mmh-rose-*，淡紫为引擎氛围档）</td></tr>
+    <tr><td>辅色语义</td><td>薄荷=正向 · 蓝=信息/进行 · 琥珀=注意 · 珊瑚=风险 · 灰=中性 · 紫=特殊/协作</td></tr>
+    <tr><td>图标 / 字体</td><td>LG 线性 24×24（77 枚）· Inter / PingFang SC / MiSans</td></tr>
+    <tr><td>禁止</td><td>霓虹 / 扁平生硬 / 纯黑硬影 / 幼齿卡通 / 恐慌化文案</td></tr>
+  </table>
+
+  <h2>组件体系（00 总目录 · 94 项）</h2>
+  <div class="grid2">
+    <div class="card"><b>基础与布局</b><br><span style="color:var(--t2);font-size:12px">Button 全谱（对齐 Arco/Semi）、卡片、表单、表格、导航、页签、步骤、进度、弹层、Toast、状态标签…</span></div>
+    <div class="card"><b>妇幼领域</b><br><span style="color:var(--t2);font-size:12px">孕周卡、产检计划、胎动记录、宝宝卡、生长曲线（百分位带）、疫苗计划、儿保体检卡、随访队列、高危提醒、生命周期轴、档案…</span></div>
+  </div>
+
+  <h2>状态与色彩（全局唯一语义）</h2>
+  <table>
+    <tr><th>语义</th><th>Token</th><th>代表状态</th></tr>
+    <tr><td>🟢 正常/正向</td><td>--mmh-mint-500</td><td>正常 · 已完成 · 已通过 · 阴性</td></tr>
+    <tr><td>🔵 信息/进行</td><td>--lg-info-500</td><td>已建档 · 管理中 · 筛查中 · 服务中</td></tr>
+    <tr><td>🟠 注意/待办</td><td>--lg-warning-500</td><td>待复查 · 待随访 · 待审核 · 即将到期</td></tr>
+    <tr><td>🔴 风险/异常</td><td>--lg-danger-500</td><td>异常 · 高风险 · 阳性 · 失访</td></tr>
+    <tr><td>⚪ 中性/未动</td><td>--lg-text-tertiary</td><td>未开始 · 草稿 · 已取消 · 已结案</td></tr>
+    <tr><td>🟣 特殊/协作</td><td>--lg-purple-500</td><td>转诊 · 会诊 · 重点管理 · 暂停管理</td></tr>
+  </table>
+  <p style="font-size:12px;color:var(--t2)">专项：孕产妇妊娠风险五色管理（绿/黄/橙/红/紫，02.10）；随访/筛查/转诊/预约等九套业务状态见 15.2。</p>
+
+  <h2>多端与交互</h2>
+  <p style="font-size:12.5px">PC=空间操作系统（多图联动/批量）· iPad=医护移动办公（≥48 大钮，底部“保存并提交”）· Mobile=拇指卡片流（底部操作栏/下拉刷新）· 动效分级 M1 反馈≤250ms → M4 环境循环 ≥2.4s，尊重 prefers-reduced-motion（07/10）。</p>
+
+  <h2>文档地图</h2>
+  <table>
+    <tr><th>阶段</th><th>文档</th></tr>
+    <tr><td>品牌与口径</td><td>12 品牌 · 13 妇幼领域 · 14 命名术语 · 15 业务词库/状态 · 16 一致性审计</td></tr>
+    <tr><td>视觉引擎</td><td>01 DNA · 02 Token · 03 PC 组件 · 04 数据可视化 · 07 动效 · 08 Semi 对齐 · 09 图标库</td></tr>
+    <tr><td>多端与落地</td><td>10 移动端规范 · 11 移动端全量库 · 05 Prompt 库 · 06 流程验收</td></tr>
+    <tr><td>入口</td><td>README（总索引）· 00 组件总目录 · preview/index.html · examples.html</td></tr>
+  </table>
+
+  <div class="foot">
+    妈咪好 GoodMom · 妇幼儿童全生命周期设计系统 V2.2<br>
+    入口：README.md（角色→文档矩阵）· preview/index.html（全组件/样式/状态演示）· preview/examples.html（示例中心 5 页）· frontend-app（封装库）<br>
+    本页为打印版总览：浏览器“打印/另存为 PDF”即可导出。
+  </div>
+</div>
+</body>
+</html>

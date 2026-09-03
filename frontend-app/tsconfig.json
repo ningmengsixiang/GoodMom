@@ -1,0 +1,20 @@
+{
+  "compilerOptions": {
+    "target": "ES2020",
+    "useDefineForClassFields": true,
+    "lib": ["ES2020", "DOM", "DOM.Iterable"],
+    "module": "ESNext",
+    "moduleResolution": "bundler",
+    "resolveJsonModule": true,
+    "jsx": "react-jsx",
+    "strict": true,
+    "noEmit": true,
+    "skipLibCheck": true,
+    "baseUrl": ".",
+    "paths": {
+      "@goodmom/gm-arco-ui": ["packages/gm-arco-ui/src/index.ts"],
+      "@gm/*": ["packages/gm-arco-ui/src/*"]
+    }
+  },
+  "include": ["src", "packages/gm-arco-ui/src"]
+}

@@ -1,0 +1,494 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>妈咪好 GoodMom · 移动端预览</title>
+<style>
+/* ── LG Tokens（精简，同 02；移动增量见 10-移动端组件规范.md）── */
+:root{
+  --warm-ivory:#E6D9D0; --soft-beige:#D7C5BC;
+  --text:#343A46; --text-2:#586273; --text-3:#9AA2B0;
+  --purple:#B69AFF; --purple-d:#9A78FF; --cyan:#72DDE5;
+  --rose-600:#E85D8F; --rose-500:#F77FA3; --rose-100:#FFF0F4; --mint-500:#6FC9B4;
+  --success:#42C7A1; --warning:#F2B25C; --danger:#EF6A7B;
+  --grad-p:linear-gradient(135deg,#FFA9C2,#F77FA3 45%,#E85D8F);
+  --font:"Inter","SF Pro Display",-apple-system,BlinkMacSystemFont,"PingFang SC","MiSans","Noto Sans SC",sans-serif;
+  --ease:cubic-bezier(.22,1,.36,1); --spring:cubic-bezier(.34,1.56,.64,1);
+  --shadow-card:0 10px 24px rgba(58,52,84,.10),0 2px 6px rgba(58,52,84,.05);
+  --shadow-tab:0 -6px 24px rgba(58,52,84,.10),0 2px 6px rgba(58,52,84,.04);
+}
+*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{height:100%}
+body{
+  font-family:var(--font);color:var(--text);background:var(--soft-beige);
+  -webkit-font-smoothing:antialiased;
+}
+/* 页面舞台：暖底 + 光斑 */
+.stage{
+  position:relative;max-width:430px;min-height:100dvh;margin:0 auto;
+  padding:calc(env(safe-area-inset-top) + 8px) 0 calc(env(safe-area-inset-bottom) + 132px);
+  background:
+    radial-gradient(420px 260px at 88% -2%, rgba(247,127,163,.22), transparent 70%),
+    radial-gradient(380px 240px at -8% 24%, rgba(182,154,255,.16), transparent 70%),
+    radial-gradient(300px 220px at 60% 104%, rgba(255,214,226,.22), transparent 70%),
+    radial-gradient(520px 300px at 20% -6%, rgba(255,255,255,.7), transparent 75%),
+    linear-gradient(165deg,#FDF2EE 0%,#F6E2DB 48%,#E9D2C9 100%);
+  background-attachment:fixed;
+}
+.wrap{padding:0 16px}
+.num{font-variant-numeric:tabular-nums}
+svg.i{width:22px;height:22px;stroke:currentColor;fill:none;stroke-width:1.7;
+  stroke-linecap:round;stroke-linejoin:round;display:block;flex:none}
+
+/* ── 顶部 NavBar（玻璃条，滚动显现用 shadow 区分即可）── */
+.navbar{position:sticky;top:calc(env(safe-area-inset-top) + 8px);z-index:20;
+  display:flex;align-items:center;gap:6px;margin:0 12px 14px;padding:6px;
+  border-radius:24px;
+  background:linear-gradient(160deg,rgba(255,255,255,.72),rgba(255,255,255,.42));
+  -webkit-backdrop-filter:blur(32px) saturate(1.2);backdrop-filter:blur(32px) saturate(1.2);
+  border:1px solid rgba(255,255,255,.8);
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.85),var(--shadow-card)}
+.navbar .back{width:44px;height:44px;border-radius:50%;display:flex;align-items:center;justify-content:center;
+  color:var(--text-2);flex:none;transition:transform .12s ease}
+.navbar .back:active{transform:scale(.9)}
+.navbar h1{flex:1;font-size:18px;font-weight:600;letter-spacing:-.01em;text-align:center;
+  white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.navbar .ops{display:flex;gap:2px}
+.navbar .ops .o{width:44px;height:44px;border-radius:50%;display:flex;align-items:center;justify-content:center;
+  color:var(--text-2);transition:transform .12s ease}
+.navbar .ops .o:active{transform:scale(.9);color:var(--purple)}
+
+/* 玻璃卡（L2 移动档：blur 28） */
+.gcard{border-radius:20px;padding:16px;
+  background:linear-gradient(160deg,rgba(255,255,255,.5),rgba(255,255,255,.2) 55%,rgba(255,255,255,.3));
+  -webkit-backdrop-filter:blur(28px) saturate(1.15);backdrop-filter:blur(28px) saturate(1.15);
+  border:1px solid rgba(255,255,255,.6);
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.7),var(--shadow-card);
+  transition:transform .16s var(--ease)}
+.gcard:active{transform:scale(.985)}
+
+/* KPI 对排卡 */
+.kpis{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:14px}
+.kpi h4{font-size:13px;color:var(--text-2);font-weight:500;margin-bottom:8px;display:flex;align-items:center;gap:6px}
+.kpi .v{font-size:34px;font-weight:700;line-height:1;letter-spacing:-.02em}
+.kpi .d{font-size:12px;margin-top:8px;color:var(--text-3);display:flex;align-items:center;gap:6px}
+.kpi .d b.up{color:var(--success);font-weight:600}
+.kpi .d b.down{color:var(--danger);font-weight:600}
+
+/* 区块 */
+.sec{margin:18px 0 10px;padding:0 4px;font-size:17px;font-weight:600;letter-spacing:-.01em;
+  display:flex;align-items:baseline;gap:8px}
+.sec small{font-size:12px;color:var(--text-3);font-weight:400}
+
+/* 状态行列表 */
+.lst{display:flex;flex-direction:column;gap:10px;margin-bottom:14px}
+.rowitem{display:flex;align-items:center;gap:12px;padding:14px 14px;border-radius:18px}
+.rowitem .ic{width:40px;height:40px;border-radius:14px;flex:none;display:flex;align-items:center;justify-content:center;
+  background:rgba(255,255,255,.55);border:1px solid rgba(255,255,255,.75);color:var(--text-2)}
+.rowitem .md{flex:1;min-width:0}
+.rowitem .md b{display:block;font-size:15px;font-weight:500;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.rowitem .md span{display:block;font-size:12px;color:var(--text-3);margin-top:2px}
+.rowitem .rv{font-size:15px;font-weight:600;color:var(--text-2)}
+.rowitem .rv.good{color:var(--success)}.rowitem .rv.bad{color:var(--danger)}
+
+/* 开关（移动 48×28） */
+.switch{position:relative;width:48px;height:28px;border-radius:999px;flex:none;cursor:pointer;
+  background:rgba(58,52,84,.12);border:1px solid rgba(255,255,255,.8);
+  box-shadow:inset 0 1px 2px rgba(58,52,84,.10);transition:background .25s ease,box-shadow .25s ease}
+.switch::after{content:"";position:absolute;top:2px;left:2px;width:22px;height:22px;border-radius:50%;
+  background:#fff;box-shadow:0 2px 6px rgba(58,52,84,.22);transition:left .3s var(--spring)}
+.switch.on{background:var(--grad-p);border-color:transparent;box-shadow:0 8px 18px rgba(154,120,255,.35)}
+.switch.on::after{left:22px}
+
+/* 仪表条 */
+.meter{height:8px;border-radius:999px;background:rgba(58,52,84,.08);overflow:hidden;margin-top:8px}
+.meter i{display:block;height:100%;border-radius:999px;width:0;transition:width 1s var(--ease);
+  background:linear-gradient(90deg,#9A78FF,#8066F0)}
+.meter i.ok{background:linear-gradient(90deg,#96E6CF,#42C7A1)}
+.meter i.warn{background:linear-gradient(90deg,#FAE1B3,#F2B25C)}
+
+/* 图表卡 */
+.spark{width:100%;height:64px;display:block;margin-top:10px}
+.footnote{font-size:12px;color:var(--text-3);line-height:1.8;padding:0 6px 6px;text-align:center}
+
+/* ── 底部 TabBar（玻璃悬浮条，移动 10.3.2）── */
+.tabbar{position:fixed;left:50%;bottom:calc(env(safe-area-inset-bottom) + 12px);
+  transform:translateX(-50%);z-index:30;width:min(406px,calc(100% - 24px));
+  display:flex;padding:6px;border-radius:24px;
+  background:linear-gradient(160deg,rgba(255,255,255,.78),rgba(255,255,255,.5));
+  -webkit-backdrop-filter:blur(32px) saturate(1.25);backdrop-filter:blur(32px) saturate(1.25);
+  border:1px solid rgba(255,255,255,.85);
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.9),var(--shadow-tab)}
+.tab{flex:1;height:56px;border-radius:18px;display:flex;flex-direction:column;gap:3px;align-items:center;
+  justify-content:center;color:var(--text-3);font-size:10px;font-weight:500;cursor:pointer;
+  transition:color .22s ease,background .26s var(--ease),transform .26s var(--ease),box-shadow .26s ease}
+.tab svg{width:22px;height:22px}
+.tab.on{color:#fff;background:var(--grad-p);box-shadow:0 10px 22px rgba(154,120,255,.4);transform:translateY(-5px)}
+.tab.on svg{transform:scale(1.04)}
+
+/* 底部主行动 */
+.cta{display:flex;align-items:center;justify-content:center;gap:8px;width:100%;height:50px;
+  border:none;border-radius:18px;font-family:var(--font);font-size:16px;font-weight:600;color:#fff;
+  background:linear-gradient(160deg,rgba(255,255,255,.38),transparent 46%),var(--grad-p);
+  border:1px solid rgba(255,255,255,.6);
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.5),0 12px 26px rgba(154,120,255,.35);
+  transition:transform .12s ease;cursor:pointer;margin:6px 0 4px}
+.cta:active{transform:scale(.97)}
+
+/* 桌面侧批注 */
+.desk-note{display:none}
+@media(min-width:900px){
+  body::before{content:"妈咪好 GoodMom · 移动端液态玻璃预览 — 品牌 12 / 领域 13（手机宽度预览，可用设备模式查看）";
+    position:fixed;left:12px;bottom:12px;z-index:99;font-size:12px;color:#fff;font-weight:600;
+    background:rgba(58,52,84,.75);padding:8px 14px;border-radius:999px}
+}
+@media (prefers-reduced-motion:reduce){
+  *,*::before,*::after{animation-duration:.01ms!important;transition-duration:.01ms!important}
+}
+
+/* ── 11 章新增组件演示样式 ── */
+/* NoticeBar 公告条 */
+.notice{display:flex;align-items:center;gap:8px;padding:10px 14px;border-radius:16px;
+  background:rgba(255,255,255,.42);border:1px solid rgba(255,255,255,.65);font-size:12px;color:var(--text-2)}
+.notice .nt{flex:1;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.notice svg{flex:none;color:var(--purple)}
+.notice .x{color:var(--text-3);flex:none;display:flex;padding:6px}
+/* SearchBar */
+.sbar{display:flex;align-items:center;gap:8px;padding:0 6px 0 14px;height:44px;border-radius:18px;
+  background:rgba(255,255,255,.4);border:1px solid rgba(255,255,255,.75);
+  box-shadow:inset 0 1px 2px rgba(58,52,84,.05)}
+.sbar svg{flex:none;color:var(--text-3)}
+.sbar input{flex:1;border:none;outline:none;background:transparent;font-family:var(--font);
+  font-size:16px;color:var(--text);height:100%}
+.sbar input::placeholder{color:rgba(88,98,115,.55)}
+.sbar .go{flex:none;font-size:14px;font-weight:600;color:var(--purple);padding:8px 8px}
+/* chips 筛选 */
+.chips{display:flex;gap:8px;flex-wrap:wrap}
+.chip{padding:8px 16px;border-radius:999px;font-size:13px;color:var(--text-2);cursor:pointer;
+  background:rgba(255,255,255,.4);border:1px solid rgba(255,255,255,.65);
+  transition:color .2s ease,background .25s ease,box-shadow .25s ease;user-select:none}
+.chip:active{transform:scale(.96)}
+.chip.on{color:#fff;background:var(--grad-p);border-color:transparent;box-shadow:0 6px 14px rgba(154,120,255,.35)}
+/* Segmented 移动版 */
+.seg2{display:flex;gap:4px;padding:4px;border-radius:16px;background:rgba(255,255,255,.4);
+  border:1px solid rgba(255,255,255,.65);overflow-x:auto;scrollbar-width:none}
+.seg2::-webkit-scrollbar{display:none}
+.seg2 .s2{flex:1;min-width:64px;text-align:center;padding:8px 10px;font-size:13px;color:var(--text-2);
+  border-radius:12px;cursor:pointer;white-space:nowrap;user-select:none;transition:color .2s ease,background .25s ease}
+.seg2 .s2.on{background:var(--grad-p);color:#fff;font-weight:600;box-shadow:0 4px 10px rgba(154,120,255,.3)}
+/* Upload 九宫格 */
+.upgrid{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}
+.up{position:relative;aspect-ratio:1;border-radius:16px;background:linear-gradient(160deg,rgba(255,255,255,.7),rgba(255,255,255,.4));
+  border:1px solid rgba(255,255,255,.8);box-shadow:var(--shadow-card);display:flex;align-items:center;justify-content:center;
+  color:var(--text-2);overflow:hidden;cursor:pointer;transition:transform .14s var(--ease)}
+.up:active{transform:scale(.95)}
+.up .del{position:absolute;top:5px;right:5px;width:20px;height:20px;border-radius:50%;
+  background:rgba(239,106,123,.92);color:#fff;display:flex;align-items:center;justify-content:center;font-size:12px}
+.up.add{border:1.5px dashed rgba(154,120,255,.55);background:rgba(255,255,255,.3);box-shadow:none;color:var(--purple)}
+.up .busy{position:absolute;inset:0;background:rgba(255,255,255,.6);display:flex;align-items:center;justify-content:center;
+  -webkit-backdrop-filter:blur(6px);backdrop-filter:blur(6px)}
+.up .ring{width:22px;height:22px;border-radius:50%;border:2px solid rgba(154,120,255,.25);border-top-color:var(--purple);
+  animation:spin .9s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+/* 底部玻璃 Toast */
+.mtoast{position:fixed;left:50%;top:calc(env(safe-area-inset-top) + 96px);transform:translateX(-50%) translateY(-8px);
+  z-index:50;padding:10px 18px;border-radius:999px;font-size:13px;color:#fff;font-weight:600;
+  background:rgba(58,52,84,.78);-webkit-backdrop-filter:blur(16px);backdrop-filter:blur(16px);
+  opacity:0;pointer-events:none;transition:opacity .25s ease,transform .25s var(--ease);max-width:86%}
+.mtoast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+
+/* 移动端补充：评分与步骤（组件丰富化） */
+.mrate{display:flex;gap:8px;cursor:pointer}
+.mrate svg{width:30px;height:30px;color:rgba(58,52,84,.16);fill:currentColor;stroke:currentColor;stroke-width:1.2;transition:transform .2s var(--spring),color .2s}
+.mrate svg.on{color:var(--rose-500)}
+.mrate svg:active{transform:scale(.85)}
+.msteps{display:flex;gap:6px;flex-wrap:wrap}
+.msteps span{display:flex;align-items:center;gap:5px;font-size:12px;color:var(--text-3)}
+.msteps span b{width:18px;height:18px;border-radius:50%;display:inline-flex;align-items:center;justify-content:center;font-size:10px;font-weight:600}
+.msteps span.done b{background:var(--grad-p);color:#fff}
+.msteps span.cur b{background:#fff;border:2px solid var(--rose-500);color:var(--rose-600)}
+.msteps span.todo b{border:1px solid rgba(58,52,84,.2);color:var(--text-3)}
+
+
+/* ═══ Arco Mobile 对齐 · 移动按钮谱 ═══ */
+.mbb{display:inline-flex;align-items:center;justify-content:center;gap:6px;height:44px;padding:0 20px;
+  border-radius:20px;border:1px solid transparent;font-family:var(--font);font-size:15px;font-weight:600;
+  cursor:pointer;white-space:nowrap;transition:transform .12s ease}
+.mbb:active{transform:scale(.96)}
+.mbb svg{width:17px;height:17px;stroke:currentColor;fill:none;stroke-width:1.9;stroke-linecap:round;stroke-linejoin:round}
+.mbb-primary{background:linear-gradient(160deg,rgba(255,255,255,.4),transparent 48%),var(--grad-p);color:#fff;border-color:rgba(255,255,255,.65);box-shadow:0 8px 18px rgba(240,127,163,.32)}
+.mbb-default{background:linear-gradient(160deg,rgba(255,255,255,.7),rgba(255,255,255,.4));color:var(--text);border-color:rgba(255,255,255,.8)}
+.mbb-secondary{background:linear-gradient(135deg,#7FD8C2,#4FB59C);color:#fff;border-color:rgba(255,255,255,.6)}
+.mbb-outline{background:transparent;color:#C94A77;border:1.5px solid #F77FA3}
+.mbb-dashed{background:transparent;color:#C94A77;border:1.5px dashed #F77FA3}
+.mbb-text{background:none;color:#C94A77;padding:0 8px}
+.mbb-success{background:linear-gradient(135deg,#7FD8C2,#4FB59C);color:#fff}
+.mbb-warning{background:linear-gradient(135deg,#F8CE8C,#EFAF55);color:#fff}
+.mbb-danger{background:linear-gradient(135deg,#F79AA8,#E25B72);color:#fff}
+.mbb-danger.mbb-outline{background:transparent;color:#E25B72;border:1.5px solid #E25B72}
+.mbb-xs{height:28px;font-size:12px;padding:0 14px;border-radius:12px}
+.mbb-sm{height:32px;font-size:13px;padding:0 16px;border-radius:14px}
+.mbb-lg{height:48px;font-size:16px;padding:0 26px;border-radius:22px}
+.mbb.round{border-radius:999px}
+.mbb.cr{border-radius:50%;width:44px;height:44px;padding:0}
+.mbb.block{width:100%;justify-content:center}
+.mbb.disabled{opacity:.4;pointer-events:none}
+.mbb.loading svg{animation:spin .9s linear infinite}
+.abox{display:flex;flex-wrap:wrap;gap:10px;align-items:center;margin:10px 0}
+.abl{font-size:12px;color:var(--text-3);width:80px;flex:none}
+
+</style>
+</head>
+<body>
+<div class="stage">
+
+  <!-- NavBar -->
+  <header class="navbar">
+    <span class="back" aria-label="返回"><svg class="i" viewBox="0 0 24 24"><path d="M20 12H5.5M11 6.5 5.5 12l5.5 5.5"/></svg></span>
+    <h1>妈咪好 · 孕 20 周 + 3</h1>
+    <span class="ops">
+      <span class="o" aria-label="搜索"><svg class="i" viewBox="0 0 24 24"><circle cx="10.5" cy="10.5" r="6.5"/><path d="M15.4 15.4 21 21"/></svg></span>
+      <span class="o" aria-label="通知"><svg class="i" viewBox="0 0 24 24"><path d="M18 8.2a6 6 0 0 0-12 0c0 6.8-2.8 8.8-2.8 8.8h17.6S18 15 18 8.2"/><path d="M13.9 20.4a2 2 0 0 1-3.8 0"/></svg></span>
+    </span>
+  </header>
+
+  <div class="wrap">
+    <!-- 区块标题 -->
+    <div class="sec">今日状态 <small>孕期 · 儿保 · 实时同步</small></div>
+
+    <!-- KPI 对排 -->
+    <div class="kpis">
+      <div class="gcard kpi">
+        <h4><svg class="i" style="width:15px;height:15px;color:var(--purple)" viewBox="0 0 24 24"><path d="M12 3.2 19 5.7v5.4c0 4.6-3 8.3-7 9.7-4-1.4-7-5.1-7-9.7V5.7z"/><path d="m9.2 11.9 2 2 3.6-3.9"/></svg>累计随访记录</h4>
+        <div class="v num" style="color:var(--rose-600)">12,849</div>
+        <div class="d"><b class="up">↑ 8.4%</b>较上月</div>
+      </div>
+      <div class="gcard kpi">
+        <h4><svg class="i" style="width:15px;height:15px;color:var(--success)" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="m8.2 12.4 2.6 2.6 5-5.6"/></svg>疫苗应种率</h4>
+        <div class="v num" style="color:var(--success)">96.2%</div>
+        <div class="d"><b class="up">↑ 1.4pt</b>本月应种率</div>
+      </div>
+    </div>
+
+    <!-- 待处理：状态行列表 -->
+    <!-- 移动按钮谱：对齐 Arco Mobile -->
+    <div class="sec" style="margin-top:16px">移动按钮 <small>Arco Mobile 对齐 · 类型 / 状态 / 尺寸 / 形状 / Loading</small></div>
+    <div class="gcard" style="margin-bottom:14px">
+      <div class="abox"><span class="abl">类型 Type</span><button class="mbb mbb-primary">Primary 随访</button><button class="mbb mbb-default">Default</button><button class="mbb mbb-secondary">Secondary 已约</button><button class="mbb mbb-outline">Outline</button><button class="mbb mbb-dashed">Dashed</button><button class="mbb mbb-text">Text</button></div>
+      <div class="abox"><span class="abl">状态 Status</span><button class="mbb mbb-success">成功</button><button class="mbb mbb-warning">警告</button><button class="mbb mbb-danger">危险</button><button class="mbb mbb-danger mbb-outline">危险描边</button></div>
+      <div class="abox"><span class="abl">尺寸 Size</span><button class="mbb mbb-primary mbb-xs">mini</button><button class="mbb mbb-primary mbb-sm">small</button><button class="mbb mbb-primary">middle</button><button class="mbb mbb-primary mbb-lg">large</button></div>
+      <div class="abox"><span class="abl">形状 Shape</span><button class="mbb mbb-primary round" style="height:40px">胶囊 round · 立即随访</button><button class="mbb mbb-primary cr" aria-label="添加"><svg viewBox="0 0 24 24"><path d="M12 5.5v13M5.5 12h13"/></svg></button></div>
+      <div class="abox"><span class="abl">Loading / 禁用</span><button class="mbb mbb-primary" id="mbLoad">保存并预约</button><button class="mbb mbb-primary disabled">Disabled</button></div>
+      <p style="font-size:11px;color:var(--text-3);margin:4px 0 8px">点「保存并预约」体验 1.4s 假加载；全部按钮为 press 缩放反馈（无 hover）</p>
+      <button class="mbb mbb-primary block" id="mbLong">全宽主行动 Block · 提交产检记录</button>
+      <p class="footnote" style="text-align:left;padding:8px 2px 0;color:var(--text-3)">细则见 <b>11-移动端组件全量库.md · 11.6.1</b>（对齐 Arco Mobile Button）</p>
+    </div>
+    <div class="lst">
+      <div class="rowitem gcard">
+        <span class="ic" style="color:var(--danger)"><svg class="i" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="m9.4 9.4 5.2 5.2M14.6 9.4l-5.2 5.2"/></svg></span>
+        <div class="md"><b>高危 · 生长低于 P3</b><span>18 月龄 · 建议尽快复查</span></div>
+        <span class="rv bad">随访</span>
+      </div>
+      <div class="rowitem gcard">
+        <span class="ic" style="color:var(--warning)"><svg class="i" viewBox="0 0 24 24"><path d="M12 3.8 21.4 19.7a1.5 1.5 0 0 1-1.3 2.2H3.9a1.5 1.5 0 0 1-1.3-2.2z"/><path d="M12 10.2v4.6"/></svg></span>
+        <div class="md"><b>疫苗到期提醒</b><span>12 月龄 · 剩余 5 天</span></div>
+        <span class="rv" style="color:var(--warning)">预约</span>
+      </div>
+      <div class="rowitem gcard">
+        <span class="ic" style="color:var(--purple)"><svg class="i" viewBox="0 0 24 24"><path d="M12 3.4l2.1 5.2 5.2 2.1-5.2 2.1-2.1 5.2-2.1-5.2-5.2-2.1 5.2-2.1z"/></svg></span>
+        <div class="md"><b>AI 已生成随访建议</b><span>05:12 · 待家长确认</span></div>
+        <span class="rv good">查看</span>
+      </div>
+    </div>
+
+    <!-- 开关设置卡 -->
+    <div class="gcard" style="display:flex;flex-direction:column;gap:14px;margin-bottom:14px">
+      <div style="display:flex;align-items:center;gap:12px">
+        <span class="ic" style="color:var(--purple)"><svg class="i" viewBox="0 0 24 24"><path d="M12 3.2 19 5.7v5.4c0 4.6-3 8.3-7 9.7-4-1.4-7-5.1-7-9.7V5.7z"/></svg></span>
+        <div class="md"><b>产检提醒</b><span>按孕周自动提醒检查项</span></div>
+        <span class="switch on" onclick="this.classList.toggle('on')"></span>
+      </div>
+      <div style="display:flex;align-items:center;gap:12px">
+        <span class="ic" style="color:var(--cyan)"><svg class="i" viewBox="0 0 24 24"><path d="M17.5 19H9a7 7 0 1 1 6.7-9.4A5.5 5.5 0 0 1 17.5 19Z"/></svg></span>
+        <div class="md"><b>儿保云档案</b><span>记录自动同步各医院</span></div>
+        <span class="switch on" onclick="this.classList.toggle('on')"></span>
+      </div>
+      <div style="display:flex;align-items:center;gap:12px">
+        <span class="ic"><svg class="i" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 7v5.2l3.4 2"/></svg></span>
+        <div class="md"><b>疫苗提醒</b><span>到期前 3 天提醒接种</span></div>
+        <span class="switch" onclick="this.classList.toggle('on')"></span>
+      </div>
+    </div>
+
+    <!-- 搜索与公告：SearchBar / NoticeBar -->
+    <div class="sec" style="margin-top:18px">发现与提醒 <small>SearchBar · NoticeBar</small></div>
+    <div class="gcard" style="display:flex;flex-direction:column;gap:12px;margin-bottom:14px">
+      <div class="sbar">
+        <svg class="i" viewBox="0 0 24 24"><circle cx="10.5" cy="10.5" r="6.5"/><path d="M15.4 15.4 21 21"/></svg>
+        <input placeholder="搜索宝宝 / 孕周 / 疫苗…" aria-label="搜索">
+        <span class="go">搜索</span>
+      </div>
+      <div class="notice">
+        <svg class="i" style="width:15px;height:15px" viewBox="0 0 24 24"><path d="M18 8.2a6 6 0 0 0-12 0c0 6.8-2.8 8.8-2.8 8.8h17.6S18 15 18 8.2"/><path d="M13.9 20.4a2 2 0 0 1-3.8 0"/></svg>
+        <span class="nt">本周日 09:30 有 3 月龄儿保体检，记得带上接种本</span>
+        <span class="x" onclick="toastM('公告已收起')">×</span>
+      </div>
+    </div>
+
+    <!-- 筛选与分段：Chips / Segmented -->
+    <div class="sec">快速筛选 <small>Chips · Segmented</small></div>
+    <div class="gcard" style="display:flex;flex-direction:column;gap:12px;margin-bottom:14px">
+      <div class="chips">
+        <span class="chip on">全部</span><span class="chip">P3 以下</span><span class="chip">待随访</span><span class="chip">疫苗</span><span class="chip">儿保</span>
+      </div>
+      <div class="seg2">
+        <span class="s2 on">今日</span><span class="s2">本周</span><span class="s2">本月</span><span class="s2">自定义</span>
+      </div>
+    </div>
+
+    <!-- 资产附件：Upload 九宫格 -->
+    <div class="sec">成长相册 <small>Upload · 拍照/相册 · 上传中状态</small></div>
+    <div class="gcard" style="display:flex;flex-direction:column;gap:12px;margin-bottom:14px">
+      <div class="upgrid">
+        <div class="up" style="background:linear-gradient(150deg,#EDE7FE,#D9CBFE)"><svg class="i" style="color:#7D66F2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 3.2 19 5.7v5.4c0 4.6-3 8.3-7 9.7-4-1.4-7-5.1-7-9.7V5.7z"/><path d="m9.2 11.9 2 2 3.6-3.9"/></svg><span class="del" onclick="toastM('已移除附件')">×</span></div>
+        <div class="up" style="background:linear-gradient(150deg,#E0F8F6,#A5F1EE)"><svg class="i" style="color:#2a8d92" viewBox="0 0 24 24"><rect x="4" y="5.4" width="16" height="14.6" rx="2.2"/><path d="M4 9.6h16M8.4 3.6v3.6M15.6 3.6v3.6"/></svg><span class="del" onclick="toastM('已移除附件')">×</span></div>
+        <div class="up"><div class="busy"><span class="ring"></span></div><svg class="i" viewBox="0 0 24 24"><path d="M17.5 19H9a7 7 0 1 1 6.7-9.4A5.5 5.5 0 0 1 17.5 19Z"/></svg></div>
+        <div class="up add" onclick="toastM('已唤起系统相册（示例）')"><svg class="i" viewBox="0 0 24 24"><path d="M12 5.5v13M5.5 12h13"/></svg></div>
+      </div>
+      <div style="font-size:12px;color:var(--text-3)">生长/体检记录图 · 点击预览大图 · 右上角移除 · 第三张为上传中（玻璃环）</div>
+    </div>
+
+
+    <!-- 评估与工具：Rating · Progress · Steps -->
+    <div class="sec" style="margin-top:18px">评估与工具 <small>Rating · Progress · Steps</small></div>
+    <div class="gcard" style="display:flex;flex-direction:column;gap:14px;margin-bottom:14px">
+      <div style="display:flex;align-items:center;gap:12px">
+        <span class="ic" style="color:var(--rose-500)"><svg class="i" viewBox="0 0 24 24"><path d="m12 3.6 2.5 5.4 5.9.8-4.3 4.2 1 5.9-5.1-2.7-5.1 2.7 1-5.9L3.6 9.8l5.9-.8z"/></svg></span>
+        <div class="md"><b>本次儿保服务评分</b><span>点按星形评分（Rate · spring 弹动）</span></div>
+        <div class="mrate" id="mrate" style="margin-left:auto">
+          <svg data-v="1" viewBox="0 0 24 24"><path d="m12 3.6 2.5 5.4 5.9.8-4.3 4.2 1 5.9-5.1-2.7-5.1 2.7 1-5.9L3.6 9.8l5.9-.8z"/></svg>
+          <svg data-v="2" viewBox="0 0 24 24"><path d="m12 3.6 2.5 5.4 5.9.8-4.3 4.2 1 5.9-5.1-2.7-5.1 2.7 1-5.9L3.6 9.8l5.9-.8z"/></svg>
+          <svg data-v="3" viewBox="0 0 24 24"><path d="m12 3.6 2.5 5.4 5.9.8-4.3 4.2 1 5.9-5.1-2.7-5.1 2.7 1-5.9L3.6 9.8l5.9-.8z"/></svg>
+          <svg data-v="4" viewBox="0 0 24 24"><path d="m12 3.6 2.5 5.4 5.9.8-4.3 4.2 1 5.9-5.1-2.7-5.1 2.7 1-5.9L3.6 9.8l5.9-.8z"/></svg>
+          <svg data-v="5" viewBox="0 0 24 24"><path d="m12 3.6 2.5 5.4 5.9.8-4.3 4.2 1 5.9-5.1-2.7-5.1 2.7 1-5.9L3.6 9.8l5.9-.8z"/></svg>
+        </div>
+      </div>
+      <div><div style="display:flex;justify-content:space-between;font-size:14px;font-weight:500;margin-bottom:6px"><span>疫苗全程率</span><b class="num" style="color:var(--success)">96%</b></div><div class="meter"><i class="ok" style="width:0" data-w="96"></i></div></div>
+      <div><div style="display:flex;justify-content:space-between;font-size:14px;font-weight:500;margin-bottom:6px"><span>高危随访闭环</span><b class="num" style="color:var(--warning)">68%</b></div><div class="meter"><i class="warn" style="width:0" data-w="68"></i></div></div>
+      <div>
+        <div style="font-size:13px;font-weight:500;margin-bottom:8px">随访进度（Steps）</div>
+        <div class="msteps">
+          <span class="done"><b><svg style="width:10px;height:10px;stroke:#fff;fill:none;stroke-width:3;stroke-linecap:round;stroke-linejoin:round" viewBox="0 0 24 24"><path d="M5 13l5 5L20 7"/></svg></b>建卡</span>
+          <span class="done"><b><svg style="width:10px;height:10px;stroke:#fff;fill:none;stroke-width:3;stroke-linecap:round;stroke-linejoin:round" viewBox="0 0 24 24"><path d="M5 13l5 5L20 7"/></svg></b>首访</span>
+          <span class="cur"><b>3</b>评估</span>
+          <span class="todo"><b>4</b>随访</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- 趋势卡（单图单卡 + 数字聚焦） -->
+    <div class="sec">随访完成趋势 <small>机构示例数据 · 蜜桃粉主序列</small></div>
+    <div class="gcard">
+      <div style="display:flex;align-items:baseline;gap:8px">
+        <b class="num" style="font-size:28px;font-weight:700;color:var(--rose-600)">64.2k</b>
+        <span style="font-size:12px;color:var(--text-2)">当前时段</span>
+        <b class="up num" style="font-size:12px;color:var(--success);margin-left:auto">↑ 12.6%</b>
+      </div>
+      <svg class="spark" viewBox="0 0 380 64" preserveAspectRatio="none">
+        <defs><linearGradient id="mg" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#9A78FF" stop-opacity=".30"/><stop offset="1" stop-color="#9A78FF" stop-opacity="0"/></linearGradient></defs>
+        <line x1="0" y1="18" x2="380" y2="18" stroke="rgba(58,52,84,.06)"/>
+        <line x1="0" y1="36" x2="380" y2="36" stroke="rgba(58,52,84,.06)"/>
+        <line x1="0" y1="54" x2="380" y2="54" stroke="rgba(58,52,84,.06)"/>
+        <path d="M0,50 L25,46 L50,48 L75,40 L100,42 L125,33 L150,36 L175,28 L200,30 L225,21 L250,24 L275,16 L300,19 L325,12 L350,14 L380,8 L380,64 L0,64 Z" fill="url(#mg)"/>
+        <path d="M0,50 L25,46 L50,48 L75,40 L100,42 L125,33 L150,36 L175,28 L200,30 L225,21 L250,24 L275,16 L300,19 L325,12 L350,14 L380,8" fill="none" stroke="#9A78FF" stroke-width="2.4" stroke-linecap="round"/>
+      </svg>
+    </div>
+
+    <!-- 资产水位 -->
+    <div class="sec" style="margin-top:18px">健康进度（示例）</div>
+    <div class="gcard" style="display:flex;flex-direction:column;gap:14px;margin-bottom:6px">
+      <div><div style="display:flex;justify-content:space-between;font-size:14px;font-weight:500"><span>儿童建档率</span><b class="num" style="color:var(--text)">72%</b></div><div class="meter"><i style="width:0" data-w="72"></i></div></div>
+      <div><div style="display:flex;justify-content:space-between;font-size:14px;font-weight:500"><span>疫苗全程率</span><b class="num" style="color:var(--text)">46%</b></div><div class="meter"><i style="width:0" data-w="46"></i></div></div>
+      <div><div style="display:flex;justify-content:space-between;font-size:14px;font-weight:500"><span>高危随访闭环</span><b class="num" style="color:var(--warning)">68%</b></div><div class="meter"><i class="warn" style="width:0" data-w="68"></i></div></div>
+    </div>
+
+    <button class="cta"><svg class="i" style="width:18px;height:18px;color:#fff" viewBox="0 0 24 24"><path d="M12 5.5v13M5.5 12h13"/></svg>新建巡检任务</button>
+    <div class="footnote">妈咪好 GoodMom · 移动端液态玻璃（孕期 / 儿保示例）<br>规范见 <b>10-13 章</b>；品牌见 <b>12</b>、妇幼领域见 <b>13</b></div>
+  </div>
+</div>
+
+<!-- 底部 TabBar -->
+<nav class="tabbar">
+  <div class="tab on" data-k="总览"><svg class="i" viewBox="0 0 24 24"><rect x="4" y="4" width="6.6" height="6.6" rx="1.8"/><rect x="13.4" y="4" width="6.6" height="6.6" rx="1.8"/><rect x="4" y="13.4" width="6.6" height="6.6" rx="1.8"/><rect x="13.4" y="13.4" width="6.6" height="6.6" rx="1.8"/></svg>总览</div>
+  <div class="tab" data-k="告警"><svg class="i" viewBox="0 0 24 24"><path d="M18 8.2a6 6 0 0 0-12 0c0 6.8-2.8 8.8-2.8 8.8h17.6S18 15 18 8.2"/><path d="M13.9 20.4a2 2 0 0 1-3.8 0"/></svg>告警</div>
+  <div class="tab" data-k="资产"><svg class="i" viewBox="0 0 24 24"><path d="M17.5 19H9a7 7 0 1 1 6.7-9.4A5.5 5.5 0 0 1 17.5 19Z"/></svg>资产</div>
+  <div class="tab" data-k="我的"><svg class="i" viewBox="0 0 24 24"><circle cx="12" cy="8.2" r="3.7"/><path d="M5 20.4c1.3-3.6 4.1-5.3 7-5.3s5.7 1.7 7 5.3"/></svg>我的</div>
+</nav>
+
+<script>
+(function(){
+  /* TabBar 切换 */
+  var tabs=[].slice.call(document.querySelectorAll('.tab'));
+  tabs.forEach(function(t){
+    t.addEventListener('click',function(){
+      tabs.forEach(function(x){x.classList.remove('on')});
+      t.classList.add('on');
+    });
+  });
+  /* 资源水位条形生长（延迟播放） */
+  var meters=[].slice.call(document.querySelectorAll('.meter i'));
+  setTimeout(function(){
+    meters.forEach(function(m){m.style.width=m.getAttribute('data-w')+'%'});
+  },350);
+})();
+</script>
+<div class="mtoast" id="mtoast"></div>
+<script>
+/* 11 章组件演示：Toast / Chips / Segmented */
+(function(){
+  var mt=document.getElementById('mtoast'), h=null;
+  window.toastM=function(msg){
+    mt.textContent=msg; mt.classList.add('show');
+    clearTimeout(h); h=setTimeout(function(){ mt.classList.remove('show'); },1600);
+  };
+  [].slice.call(document.querySelectorAll('.chip')).forEach(function(c){
+    c.addEventListener('click',function(){
+      [].slice.call(c.parentNode.children).forEach(function(x){x.classList.remove('on')});
+      c.classList.add('on');
+      toastM('筛选：' + c.textContent);
+    });
+  });
+  [].slice.call(document.querySelectorAll('.seg2 .s2')).forEach(function(s){
+    s.addEventListener('click',function(){
+      [].slice.call(s.parentNode.children).forEach(function(x){x.classList.remove('on')});
+      s.classList.add('on');
+    });
+  });
+
+  /* Rate（移动） */
+  var mrate=document.getElementById('mrate');
+  if(mrate){[].slice.call(mrate.querySelectorAll('svg')).forEach(function(st){
+    st.addEventListener('click',function(){
+      var n=parseInt(st.getAttribute('data-v'),10)||0;
+      [].slice.call(mrate.querySelectorAll('svg')).forEach(function(x){
+        x.classList.toggle('on',parseInt(x.getAttribute('data-v'),10)<=n);});
+    });});}
+
+  /* 移动按钮 Loading 模拟 */
+  var mb=document.getElementById('mbLoad');
+  if(mb){
+    var mbTxt=mb.innerHTML;
+    mb.addEventListener('click',function(){
+      if(mb.getAttribute('data-run'))return;
+      mb.setAttribute('data-run','1');
+      mb.innerHTML='<svg class="ldc" viewBox="0 0 24 24"><circle cx="12" cy="12" r="8.5" fill="none" stroke="rgba(255,255,255,.4)" stroke-width="2.4"/><path d="M20.5 12A8.5 8.5 0 0 0 12 3.5" fill="none" stroke="#fff" stroke-width="2.4" stroke-linecap="round"/></svg>保存中…';
+      mb.classList.add('loading');
+      mb.setAttribute('disabled','');
+      setTimeout(function(){mb.innerHTML=mbTxt;mb.classList.remove('loading');mb.removeAttribute('disabled');mb.removeAttribute('data-run');},1400);
+    });
+  }
+})();
+</script>
+</body>
+</html>

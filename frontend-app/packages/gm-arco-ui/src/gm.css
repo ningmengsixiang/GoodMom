@@ -1,0 +1,38 @@
+/* GoodMom 主题覆盖（在引入 @arco-design/web-react/dist/css/arco.css 之后引入本文件）
+   对应：02 · 2.9 品牌 Token / 12.3 语义重映射 */
+:root{
+  --primary-6:#E85D8F; --primary-5:#F77FA3; --primary-4:#FFA3BE; --primary-3:#FFC4D6;
+  --primary-2:#FFDEE8; --primary-1:#FFF0F4; --primary-7:#C94A77;
+  --success-6:#4FB59C; --success-5:#6FC9B4;
+  --warning-6:#EFAF55; --danger-6:#E25B72;
+}
+.gm-btn.arco-btn-primary{
+  background:linear-gradient(135deg,#FFA9C2,#F77FA3 45%,#E85D8F) !important;
+  border:none !important;
+  box-shadow:0 6px 16px rgba(240,127,163,.35);
+}
+.gm-btn.arco-btn-size-large{border-radius:22px}
+.gm-btn.arco-btn-size-default{border-radius:18px}
+.gm-btn.arco-btn-size-small{border-radius:14px}
+.gm-btn.arco-btn-size-mini{border-radius:12px}
+
+/* —— gm-arco-ui 组件辅助样式 —— */
+.gm-card{background:linear-gradient(160deg,rgba(255,255,255,.62),rgba(255,255,255,.3));
+  border:1px solid rgba(255,255,255,.78);box-shadow:0 8px 20px rgba(58,52,84,.07);padding:16px}
+.gm-card-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:12px}
+.gm-card-head b{font-size:15px;color:#343A46}
+.gm-card-head span{font-size:12px;color:#9AA2B0}
+.gm-avatar{display:inline-flex;align-items:center;justify-content:center;color:#fff;font-weight:600;
+  border-radius:50%;border:2px solid rgba(255,255,255,.9);box-shadow:0 4px 12px rgba(58,52,84,.12);flex:none;line-height:1}
+.gm-client{display:flex;align-items:center;gap:12px;padding:14px;border-radius:16px;background:rgba(255,255,255,.5);
+  border:1px solid rgba(255,255,255,.75)}
+.gm-client-main{flex:1;min-width:0}
+.gm-client-name{display:flex;align-items:center;gap:6px;flex-wrap:wrap}
+.gm-client-name b{font-size:14px}
+.gm-client-sub{font-size:12px;color:#9AA2B0;margin-top:3px}
+.gm-client-ops{display:flex;gap:6px;flex-wrap:wrap}
+.gm-risk{display:flex;gap:8px;flex-wrap:wrap}
+.gm-risk-it{display:inline-flex;align-items:center;gap:6px;border-radius:999px;padding:5px 12px;font-size:12.5px;
+  background:rgba(255,255,255,.45);border:1px solid;user-select:none}
+.gm-risk-it i{width:8px;height:8px;border-radius:50%}
+.gm-risk-it.on{outline:2px solid currentColor;outline-offset:1px;font-weight:600}

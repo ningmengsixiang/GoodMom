@@ -1,0 +1,29 @@
+{
+  "name": "mom-health-web",
+  "private": true,
+  "version": "0.1.0",
+  "type": "module",
+  "workspaces": [
+    "packages/*"
+  ],
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview",
+    "gm:build": "npm run build -w @goodmom/gm-arco-ui",
+    "gm:typecheck": "npm run typecheck -w @goodmom/gm-arco-ui"
+  },
+  "dependencies": {
+    "@arco-design/web-react": "^2.63.0",
+    "@goodmom/gm-arco-ui": "*",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1"
+  },
+  "devDependencies": {
+    "@types/react": "^18.3.0",
+    "@types/react-dom": "^18.3.0",
+    "@vitejs/plugin-react": "^4.3.0",
+    "typescript": "^5.3.0",
+    "vite": "^5.4.0"
+  }
+}

@@ -1,0 +1,13 @@
+html,body,#root{min-height:100%}
+body{margin:0;font-family:"Inter","PingFang SC","MiSans","Noto Sans SC",sans-serif;
+  color:#343A46;background:#F3E5DE;
+  background:radial-gradient(1000px 600px at 88% -8%,rgba(247,127,163,.18),transparent 65%),
+  radial-gradient(900px 560px at -6% 24%,rgba(182,154,255,.13),transparent 65%),
+  linear-gradient(165deg,#FDF2EE,#F6E2DB 55%,#E6CFC6)}
+.demo-wrap{max-width:1080px;margin:0 auto;padding:26px 20px 60px}
+.demo-card{border-radius:20px;padding:20px;margin:14px 0;
+  background:linear-gradient(160deg,rgba(255,255,255,.62),rgba(255,255,255,.3));
+  border:1px solid rgba(255,255,255,.78);box-shadow:0 8px 20px rgba(58,52,84,.07)}
+.demo-row{display:flex;gap:10px;flex-wrap:wrap;align-items:center;margin:8px 0}
+h1 small{font-weight:400;color:#9AA2B0;font-size:14px}
+h2{font-size:16px;margin:4px 0 8px}
