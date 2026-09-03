@@ -1,8 +1,32 @@
-# 妈咪好 GoodMom · 妇幼儿童全生命周期设计系统（V2.3）
+<p align="center">
+  <img src="logo.png" width="96" alt="妈咪好 GoodMom">
+</p>
 
-> **高级液态玻璃 · 柔光蜜桃 · 妇女儿童健康管理**（视觉引擎：Liquid Glass / Ambient Liquid Glass）
+# 妈咪好 GoodMom · 妇幼儿童全生命周期设计系统
 
-妈咪好 GoodMom 是 **妇幼儿童全生命周期健康管理平台** 的专属设计系统，覆盖 **孕期 · 婴幼儿/儿童保健 · 机构管理端 · 医护工作台** 四大板块。
+<p align="center">
+  <b>高级液态玻璃 · 柔光蜜桃 · 温暖可信 · 医疗克制</b><br>
+  妇幼儿童全生命周期健康管理平台专属设计系统 —— 孕期 · 婴幼儿/儿童保健 · 机构管理端 · 医护工作台
+</p>
+
+<p align="center">
+  <img alt="版本" src="https://img.shields.io/badge/version-2.3-ff9ab6?style=flat-square">
+  <img alt="文档" src="https://img.shields.io/badge/规范文档-19-6fc9b4?style=flat-square">
+  <img alt="组件" src="https://img.shields.io/badge/组件-94-9a78ff?style=flat-square">
+  <img alt="图标" src="https://img.shields.io/badge/图标-77-ffc3a0?style=flat-square">
+  <img alt="示例" src="https://img.shields.io/badge/示例页面-7-e85d8f?style=flat-square">
+  <img alt="许可证" src="https://img.shields.io/badge/License-MIT-8066f0?style=flat-square">
+</p>
+
+<p align="center">
+  <a href="site/spec.html">📖 规范大全（HTML）</a> ·
+  <a href="site/index.html">🏠 主站</a> ·
+  <a href="site/docs.html">🗂 文档中心</a> ·
+  <a href="preview/examples.html">🖥 示例中心</a> ·
+  <a href="https://github.com/ningmengsixiang/GoodMom">GitHub ↗</a>
+</p>
+
+---
 
 
 适用：妈妈/家庭 App（孕期首页、生长曲线、疫苗计划、儿保体检）、机构运营端、医护随访工作台与数据大屏。品牌定义见 [12](12-妈咪好品牌与设计语言.md)，妇幼领域组件见 [13](13-妇幼领域组件规范.md)；01–11 为通用视觉引擎文档。
