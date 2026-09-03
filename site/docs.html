@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>妈咪好 GoodMom · 文档中心</title>
+<link rel="icon" type="image/png" href="../logo.png">
+<style>
+:root{--t:#343A46;--t2:#586273;--t3:#9AA2B0;--rose-d:#E85D8F;--rose-deep:#C94A77;
+  --card-bg:rgba(255,255,255,.66);--card-bd:rgba(255,255,255,.85);--shadow:0 10px 26px rgba(90,70,70,.08);
+  --bg:linear-gradient(165deg,#FDF2EE,#F6E2DB 52%,#EAD3CA)}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:"PingFang SC","Inter","MiSans","Noto Sans SC",sans-serif;color:var(--t);background:var(--bg);min-height:100vh}
+a{color:var(--rose-deep);text-decoration:none}
+.top{position:sticky;top:0;z-index:60;display:flex;align-items:center;gap:10px;padding:10px 18px;
+  background:rgba(255,255,255,.7);border-bottom:1px solid rgba(255,255,255,.9);-webkit-backdrop-filter:blur(16px);backdrop-filter:blur(16px)}
+.top img{width:26px;height:26px;border-radius:50%;object-fit:cover}
+.top b{color:var(--rose-deep)}
+.top .r{margin-left:auto;display:flex;gap:8px}
+.top .r a{font-size:12.5px;padding:6px 12px;border-radius:999px;background:#fff;border:1px solid rgba(232,93,143,.3);font-weight:600}
+.layout{display:flex;gap:0;max-width:1280px;margin:0 auto;padding:18px 16px 70px}
+nav.tree{width:236px;flex:none;padding-right:14px}
+nav.tree details{border-radius:14px;margin-bottom:8px;overflow:hidden;background:var(--card-bg);border:1px solid var(--card-bd)}
+nav.tree summary{cursor:pointer;padding:10px 14px;font-weight:600;font-size:13.5px;color:var(--rose-deep);list-style:none}
+nav.tree summary::-webkit-details-marker{display:none}
+nav.tree .in{padding:4px 12px 10px;display:flex;flex-direction:column;gap:2px}
+nav.tree .in a{font-size:12.5px;color:var(--t2);padding:5px 8px;border-radius:9px}
+nav.tree .in a:hover{background:rgba(247,127,163,.12);color:var(--rose-deep)}
+main.doc{flex:1;min-width:0}
+.panel{border-radius:22px;padding:22px;margin-bottom:16px;background:var(--card-bg);border:1px solid var(--card-bd);box-shadow:var(--shadow)}
+.panel h2{font-size:20px;margin-bottom:8px;display:flex;align-items:center;gap:10px}
+.panel h2 .n{width:28px;height:28px;border-radius:10px;background:linear-gradient(135deg,#FFA9C2,#E85D8F);color:#fff;display:inline-flex;align-items:center;justify-content:center;font-size:13px}
+.panel .sub{color:var(--t3);font-size:13px;margin-bottom:14px}
+table{width:100%;border-collapse:collapse;font-size:12.5px}
+th,td{border-bottom:1px solid rgba(232,93,143,.12);text-align:left;padding:8px 8px;vertical-align:top}
+th{color:var(--rose-deep)}
+.chip{display:inline-block;font-size:10.5px;padding:2px 9px;border-radius:999px;background:rgba(111,201,180,.16);color:#2f8f76;font-weight:600}
+.chip.p{background:rgba(242,178,92,.2);color:#b9771c}
+.demoBtn{border:none;border-radius:999px;padding:9px 18px;cursor:pointer;font-weight:600;background:linear-gradient(135deg,#FFA9C2,#E85D8F);color:#fff}
+code,pre{font-family:ui-monospace,Menlo,monospace}
+pre{background:#fff7f4;border:1px solid #f0d4cf;border-radius:12px;padding:12px;font-size:12px;overflow:auto;line-height:1.8}
+/* 暗色演示（页面内最小示例：切换 data-theme） */
+[data-theme="dark"]{--t:#F0E6E0;--t2:#C9BDB5;--t3:#9C8E86;--card-bg:rgba(40,34,40,.82);--card-bd:rgba(255,255,255,.12);
+  --rose-deep:#FF9AB6;--rose-d:#FF8FAE;--bg:linear-gradient(165deg,#241d24,#3a2b33 55%,#55333d)}
+[data-theme="dark"] body{color-scheme:dark}
+[data-theme="dark"] pre{background:rgba(255,255,255,.06);border-color:rgba(255,255,255,.12)}
+[data-theme="dark"] .top{background:rgba(30,25,31,.8)}
+@media(max-width:860px){.layout{flex-direction:column}nav.tree{width:100%}}
+</style>
+</head>
+<body>
+<div class="top"><img src="../logo.png" alt="妈咪好"><b>妈咪好 GoodMom · 文档中心</b>
+  <span class="r"><a href="index.html">主站</a><a href="../preview/index.html">设计系统首页</a><a href="../preview/examples.html">示例中心</a><a href="../README.md">README</a></span>
+</div>
+
+<div class="layout" id="doc">
+  <nav class="tree">
+    <details open><summary>开发指南</summary><div class="in">
+      <a href="index.html#code">快速上手</a><a href="../02-Token规范.md">设计变量 Token</a><a href="../02-Token规范.md">颜色</a>
+      <a href="../goodmom-ui/README.md">定制主题</a><a href="#i18n">国际化（示例）</a><a href="#dark">暗黑模式（示例）</a>
+      <a href="../04-数据可视化规范.md">VChart / 图表</a><a href="../00-组件总目录.md">组件索引</a>
+    </div></details>
+    <details open><summary>组件</summary><div class="in">
+      <a href="../03-组件规范.md">通用（Button/Icon/Typography）</a>
+      <a href="../17-页面布局与组件组合规范.md">布局</a>
+      <a href="../03-组件规范.md#卡片与面板">数据展示</a>
+      <a href="../03-组件规范.md#表单控件">数据输入</a>
+      <a href="../03-组件规范.md#浮层组件">反馈</a>
+      <a href="../03-组件规范.md#导航">导航</a>
+      <a href="../13-妇幼领域组件规范.md">其他（妇幼领域）</a>
+    </div></details>
+    <details open><summary>设计指南</summary><div class="in">
+      <a href="../12-妈咪好品牌与设计语言.md">简介 / 品牌</a>
+      <a href="../01-设计总览与设计DNA.md">设计价值观</a>
+      <a href="../01-设计总览与设计DNA.md">设计原则</a>
+      <a href="../02-Token规范.md">样式指南（Token）</a>
+    </div></details>
+    <details open><summary>组件用法</summary><div class="in">
+      <a href="../03-组件规范.md">Do/Don't 速查（3.11）</a>
+      <a href="../17-页面布局与组件组合规范.md">页面与组合</a>
+      <a href="../14-命名与术语规范.md">命名 / 状态色</a>
+      <a href="../07-交互动效与微交互规范.md">动效用法</a>
+    </div></details>
+  </nav>
+
+  <main class="doc">
+    <div class="panel">
+      <h2>欢迎使用文档中心</h2>
+      <p class="sub">按“开发指南 / 组件 / 设计指南 / 组件用法”四区组织，左侧目录树点开直达；规范正文均在同仓 Markdown。</p>
+      <p style="font-size:13px;color:var(--t2)">快速入口：<a href="../README.md">README 全索引</a> · <a href="../00-组件总目录.md">组件总目录（94）</a> · <a href="../preview/examples.html">示例中心（7 页）</a> · <a href="https://github.com/ningmengsixiang/GoodMom">GitHub 开源</a></p>
+    </div>
+
+    <div class="panel">
+      <h2>② 组件用法（按分类 · 速查）</h2>
+      <p class="sub">完整 Do/Don't 见 03 · 3.11；此处按组件分类给出用法要点。</p>
+      <table>
+        <tr><th>分类</th><th>正确用法</th><th>禁止</th></tr>
+        <tr><td>通用 · Button</td><td>动词短语 ≤8 字；主行动唯一；loading 保留文案</td><td>多 Primary / 按钮当超长链接</td></tr>
+        <tr><td>通用 · Icon</td><td>lg-icon-*；同屏同描边；行内 -2px、按钮内 15–18</td><td>Emoji / 字体图标混排 / &lt;12px</td></tr>
+        <tr><td>数据展示 · 状态Tag</td><td>15.2 词表 + 六语义/五色；色点+文字双通道</td><td>自造状态 / 单色传义 / 一义多色</td></tr>
+        <tr><td>数据展示 · Table/Card</td><td>首列头像+名称；操作 ≤3；玻璃三层</td><td>hover 承载信息 / 卡套卡≥3</td></tr>
+        <tr><td>数据输入 · Form/Input</td><td>一屏一任务；错误三通道；提交唯一 Primary</td><td>键盘遮挡 / 只变红提示</td></tr>
+        <tr><td>反馈 · Dialog/Toast</td><td>一次一层；危险操作在最后并给理由</td><td>弹窗叠弹窗 / 装饰动画</td></tr>
+        <tr><td>导航 · Nav/Tab</td><td>分组 ≤6、唯一高亮；桌面悬停、移动点按</td><td>hover-only（触屏粘滞）/ 深导航</td></tr>
+      </table>
+    </div>
+
+    <div class="panel" id="i18n">
+      <h2>③ 国际化 · 最小示例</h2>
+      <p class="sub">词库以 15 章为唯一语言源；应用侧做键值字典即可扩展。示例模式：<code>t('待随访', 'zh'|'en')</code></p>
+      <pre>// goodmom-ui/src/i18n.ts（最小实现）
+export const DICT = {
+  '待随访': { zh: '待随访', en: 'Pending follow-up' },
+  '已建档': { zh: '已建档', en: 'Registered' },
+  '提交':   { zh: '提交',   en: 'Submit' },
+} as const;
+export function t(key: keyof typeof DICT, lang: 'zh'|'en' = 'zh') {
+  return DICT[key][lang];
+}</pre>
+      <p style="font-size:12px;color:var(--t2)">落地：接入 i18next / react-i18next 后，把 DICT 作为资源合并即可；界面字串统一来自 15 词库。</p>
+    </div>
+
+    <div class="panel" id="dark">
+      <h2>③ 暗黑模式 · 最小示例（点击体验）</h2>
+      <p class="sub">机制：顶层 `data-theme="dark"` 覆盖 Token → 页面即换肤。设计口径见 12.3.2「冷静模式/双模式」。</p>
+      <button class="demoBtn" id="darkToggle">切换暗黑 / 亮色</button>
+      <pre style="margin-top:10px">&lt;html data-theme="dark"&gt; …
+:root / [data-theme="dark"]{ --bg / --t / --card-bg … 覆盖 }</pre>
+      <p style="font-size:12px;color:var(--t2)">本页即演示：变量化的背景/文字/卡片在 data-theme 下整体换肤；生产端把 gm-arco-ui 的 theme.css 变量同样数据化即可全库暗色。</p>
+    </div>
+  </main>
+</div>
+<script>
+(function(){var b=document.getElementById('darkToggle');
+  b.addEventListener('click',function(){var h=document.documentElement;
+    var dark=h.getAttribute('data-theme')==='dark';
+    h.setAttribute('data-theme',dark?'':'dark');
+    b.textContent=dark?'切换暗黑 / 亮色':'切换回亮色';});
+})();
+</script>
+</body>
+</html>

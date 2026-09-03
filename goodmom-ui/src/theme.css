@@ -63,3 +63,9 @@
 .gm-tag,.gm-steps,.gm-status-dot,.gm-risk-it,:focus-within .gm-*:focus{outline:none}
 .gm-tag:focus-visible,.gm-steps .gm-step .gs-dot:focus-visible{outline:2px solid rgba(232,93,143,.6);outline-offset:2px}
 .gm-step.process .gs-dot{animation:pulse 2.4s ease-in-out infinite}
+
+/* —— 暗黑模式最小示例（双模式机制，12.3.2）：在需要暗色的容器根设 data-theme="dark" —— */
+[data-theme="dark"]{
+  --mmh-rose-700:#FF9AB6; --mmh-rose-600:#FF8FAE; --mmh-rose-500:#F77FA3;
+  --mmh-rose-100:rgba(247,127,163,.14); --mmh-mint-500:#7FD8C2;
+}

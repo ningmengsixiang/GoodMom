@@ -10,3 +10,4 @@ export * from "./tokens/business";
 export { DesignTokens } from "./tokens/design";
 export { default as GmTag } from "./adapters/GmTag";
 export { default as GmSteps } from "./adapters/GmSteps";
+export * from "./i18n";
