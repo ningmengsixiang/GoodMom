@@ -4,6 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>妈咪好 GoodMom · 液态玻璃设计系统视觉预览</title>
+<link rel="icon" type="image/png" href="../logo.png">
 <style>
 /* ═══════════════ Liquid Glass Design Tokens (与 02-Token规范.md 附录一致) ═══════════════ */
 :root{
@@ -804,6 +805,7 @@ details.gfold .gfb{padding:0 14px 12px;font-size:12px;color:var(--lg-text-second
 
 
 /* ═══ 首页专业版：分组菜单 + 速览条 ═══ */
+.hero-logo{width:88px;height:88px;border-radius:24px;object-fit:cover;box-shadow:0 14px 30px rgba(240,127,163,.3);margin-bottom:8px}
 .topnav{overflow:visible}
 .navgroups{display:flex;gap:4px;align-items:center;margin-left:6px;flex-wrap:wrap}
 .ng{position:relative}
@@ -925,7 +927,7 @@ section.block:first-of-type{margin-top:8px}
   <header class="hero glass">
     <div class="hero-main">
       <span class="kicker">妈咪好 · GOODMOM · 妇幼全生命周期 · V2.0</span>
-      <h1>妈咪好 GoodMom<br>妇幼儿童全生命周期<br><em>Liquid Glass Design System</em></h1>
+      <img class="hero-logo" src="../logo.png" alt="妈咪好"><h1>妈咪好 GoodMom<br>妇幼儿童全生命周期<br><em>Liquid Glass Design System</em></h1>
       <p class="sub">高级液态玻璃 · 柔光蜜桃 · 妇女儿童健康管理。覆盖孕期 / 婴幼儿儿保 / 机构管理端 / 医护工作台四大板块——专业医疗数据，妈妈友好的温度。</p>
       <div class="dna-chips">
         <span>材质 <b>Liquid Glass</b></span>
@@ -1962,10 +1964,12 @@ section.block:first-of-type{margin-top:8px}
 
   <!-- EXAMPLES ENTRANCE -->
   <section class="block" id="exhome">
-    <div class="sec-head"><h2>示例页面 Examples</h2><span class="en">常用完整页面 · 1 列表 2 详情 3 表单 4 移动 5 iPad 6 工作站 7 档案 · 可顺序浏览</span></div>
+    <div class="sec-head"><h2>示例页面 Examples</h2><span class="en">常用完整页面 · 1–7 全部集中到示例中心（列表/详情/表单/移动/iPad/工作站/孕妇档案）</span></div>
     <div class="exgrid">
       <a class="excard glass-l2" href="examples.html#list"><span style="display:flex;align-items:center;gap:10px"><span class="no">1</span><h4 style="margin:0">筛查队列列表页</h4></span><p>机构端两癌筛查/孕产妇/儿保队列：KPI + 状态筛选 + 玻璃表格 + 五色分级 + 分页</p><span class="ends"><i>P</i><i>C</i></span><span class="go">打开示例 <svg viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span></a>      <a class="excard glass-l2" href="examples.html#detail"><span style="display:flex;align-items:center;gap:10px"><span class="no">2</span><h4 style="margin:0">儿童档案详情页</h4></span><p>生命周期轴 + 五健/口腔清单 + 生长曲线百分位带 + 疫苗随访</p><span class="ends"><i>P</i><i>C</i></span><span class="go">打开示例 <svg viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span></a>      <a class="excard glass-l2" href="examples.html#form"><span style="display:flex;align-items:center;gap:10px"><span class="no">3</span><h4 style="margin:0">孕产妇建档表单页</h4></span><p>四步建档：孕产信息 + 五色风险初评 + 校验与暂存</p><span class="ends"><i>P</i><i>C</i></span><span class="go">打开示例 <svg viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span></a>      <a class="excard glass-l2" href="examples.html#mobile"><span style="display:flex;align-items:center;gap:10px"><span class="no">4</span><h4 style="margin:0">移动随访工作页</h4></span><p>服务对象卡 + 待办流 + 底部操作栏（记录随访/开始复查/更多）</p><span class="ends"><i>M</i><i>o</i><i>b</i><i>i</i><i>l</i><i>e</i></span><span class="go">打开示例 <svg viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span></a>
       <a class="excard glass-l2" href="examples.html#ipad"><span style="display:flex;align-items:center;gap:10px"><span class="no">5</span><h4 style="margin:0">iPad 接诊评估页</h4></span><p>医护 iPad 接诊：8/4 分栏队列 + 当前对象评估（五健结论 / 医嘱 / 五色）· 底部「保存并提交」</p><span class="ends"><i>iPad</i><i>15.4</i></span><span class="go">打开示例 <svg viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span></a>
+<a class="excard glass-l2" href="examples.html#work"><span style="display:flex;align-items:center;gap:10px"><span class="no">6</span><h4 style="margin:0">PC 妇幼工作站</h4></span><p>今日待办·风险队列(五色)·快捷工具·质量概览——机构/医护工作台总览</p><span class="ends"><i>P</i><i>C</i></span><span class="go">打开示例 <svg viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span></a>
+<a class="excard glass-l2" href="examples.html#preg"><span style="display:flex;align-items:center;gap:10px"><span class="no">7</span><h4 style="margin:0">孕妇档案详情页</h4></span><p>孕周轴·产检计划·检查结果·体重曲线·黄级随访——孕产妇档案全览</p><span class="ends"><i>P</i><i>C</i></span><span class="go">打开示例 <svg viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span></a>
     </div>
     <div style="margin-top:14px;display:flex;gap:10px;align-items:center;flex-wrap:wrap">
       <a class="btn btn-primary btn-md" href="examples.html">打开示例中心（按顺序浏览 1→7）
@@ -1988,7 +1992,7 @@ section.block:first-of-type{margin-top:8px}
   </section>
 
   <footer>
-    <b style="color:var(--lg-text-secondary)">妈咪好 GoodMom · Design DNA</b> —— 柔光蜜桃 · 液态玻璃 · 生长曲线 · 医疗克制 · 妈妈的温度<br>
+    <img src="../logo.png" alt="妈咪好" style="width:34px;height:34px;border-radius:10px;object-fit:cover;vertical-align:-8px;margin-right:8px"><b style="color:var(--lg-text-secondary)">妈咪好 GoodMom · Design DNA</b> —— 柔光蜜桃 · 液态玻璃 · 生长曲线 · 医疗克制 · 妈妈的温度<br>
     规范详见《妈咪好 GoodMom 设计系统 V2.0》：<a href="../README.md">README</a> ·
     <a href="../01-设计总览与设计DNA.md">DNA</a> · <a href="../02-Token规范.md">Token</a> ·
     <a href="../03-组件规范.md">组件</a> · <a href="../04-数据可视化规范.md">数据可视化</a> ·
