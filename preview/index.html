@@ -886,6 +886,10 @@ section.block:first-of-type{margin-top:8px}
 .ng:hover .ngt{background:#fff;color:var(--mmh-rose-600,#E85D8F);box-shadow:var(--lg-shadow-xs)}
 .ng:hover .ngt::after{color:var(--mmh-rose-600,#E85D8F)}
 
+/* 悬停下拉：菜单 → 下拉之间的桥接区，鼠标可平滑下移 */
+.ng::after{content:"";position:absolute;left:0;right:0;top:100%;height:14px;z-index:5}
+.ngdrop a:active{background:var(--mmh-rose-100,#FFF0F4);color:var(--mmh-rose-deep,#C94A77)}
+
 </style>
 </head>
 <body>
