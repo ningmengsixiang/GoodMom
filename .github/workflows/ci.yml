@@ -30,6 +30,8 @@ jobs:
       - name: 残留词扫描（旧称/版本）
         run: |
           grep -RIn --include='*.md' -E '未来 SaaS|数据安全态势大屏|Liquid Glass Enterprise Design System' . || echo "无旧称残留"
+      - name: 全自动规范审计（链接/章节/图标/HTML 无 md/色彩/spec）
+        run: python3 scripts/audit.py
 
   gm-ui-typecheck:
     name: 封装层 typecheck

@@ -1745,7 +1745,7 @@ with amber badges, premium medical dashboard, clean minimal, 16:9
 <h3>16.3 词库与颜色一致性</h3>
 <ul><li>界面文案只取 [14](#ch-14)（命名/术语）与 [15](#ch-15)（业务词/状态）；</li><li>状态色只取六语义 + 五色专项；禁止在预览/示例/封装层自行发明新色语义；</li><li>医学写法（孕周、月龄、百分位 P、身长/身高分界 2 岁）见 14.3.4；</li><li>图标新语义先走 09.6 流程再入库；封装层新增组件先登记 00 + 15.6.1。</li></ul>
 <h3>16.4 优化记录（V2.1 → V2.3）</h3>
-<ul><li>品牌一致性清扫：移除章节“V1.0”残留与“未来 SaaS”旧定位；README 图标库行与 08 覆盖度措辞对齐；</li><li>域示例对齐：04 三张大屏蓝图更名为妇幼域驾驶舱（孕产妇/儿保/机构管理），05 提示词标注通用示例并指向 13.6 妇幼 Prompt；</li><li>交付物落位：示例中心 7 页（列表/详情/表单/移动/iPad/工作站/孕妇档案，V2.3 扩展）+ 首页入口卡 ×5 + 顺序浏览；</li><li>前端封装：monorepo 骨架 <code>frontend-app</code> + <code>@goodmom/gm-arco-ui</code>（GmButton/GmStatusTag/主题 CSS）。</li></ul>
+<ul><li>品牌一致性清扫：移除章节“V1.0”残留与旧“SaaS 科技感”定位；README 图标库行与 08 覆盖度措辞对齐；</li><li>域示例对齐：04 三张大屏蓝图更名为妇幼域驾驶舱（孕产妇/儿保/机构管理），05 提示词标注通用示例并指向 13.6 妇幼 Prompt；</li><li>交付物落位：示例中心 7 页（列表/详情/表单/移动/iPad/工作站/孕妇档案，V2.3 扩展）+ 首页入口卡 ×5 + 顺序浏览；</li><li>前端封装：monorepo 骨架 <code>frontend-app</code> + <code>@goodmom/gm-arco-ui</code>（GmButton/GmStatusTag/主题 CSS）。</li></ul>
 <h3>16.5 一致性检查清单（改动前对照）</h3>
 <ul><li>[ ] 新词/状态先查 14/15；新组件先登记 00 与 09.6</li><li>[ ] 图标/状态/组件计数同步（README、09、首页、16.1）</li><li>[ ] 预览与示例页用色=六语义+品牌 Token（无硬编码新色）</li><li>[ ] 系统名使用规范（16.2）；示例/大屏文案走妇幼词库</li><li>[ ] 封装层 props 命名与 Arco 基线一致（gm-arco-ui README）</li></ul>
 <h3>16.6 组件合规审计（V2.3 快照）</h3>
@@ -1851,26 +1851,17 @@ A4 spec.html 阅读器增加“关键词高亮”与进度记录
 A5 每个新页面并入前执行 16.6 组件合规表 + 17 章验收</pre>
 <blockquote>修订记录：本报告随规范一起版本化；执行 A1–A3 后回填“✅/已实施”。</blockquote></div></section></div>
 <script>
-(function(){
-  var chaps=[].slice.call(document.querySelectorAll('section.chap'));
-  var ids=chaps.map(function(c){return c.id;});var cur=0;
-  var btn=document.getElementById('modeBtn'),allBtn=document.getElementById('allCh'),
-      prevBtn=document.getElementById('prevCh'),nextBtn=document.getElementById('nextCh');
-  function setActive(id,top){chaps.forEach(function(c){c.classList.remove('active');});
-    var el=document.getElementById(id);if(el)el.classList.add('active');
-    cur=ids.indexOf(id);if(top!==false)window.scrollTo(0,0);}
-  function reader(on){document.body.classList.toggle('reader',on);btn.textContent=on?'回到列表':'阅读模式';
-    if(on){var h=(location.hash||'').slice(1);setActive(ids.indexOf(h)>=0?h:'ch-readme',true);}
-    else chaps.forEach(function(c){c.classList.remove('active');});}
-  btn.addEventListener('click',function(){reader(!document.body.classList.contains('reader'));});
-  allBtn.addEventListener('click',function(){reader(false);location.hash='';});
-  prevBtn.addEventListener('click',function(){cur=Math.max(0,cur-1);setActive(ids[cur],true);});
-  nextBtn.addEventListener('click',function(){cur=Math.min(ids.length-1,cur+1);setActive(ids[cur],true);});
-  document.addEventListener('click',function(e){if(!document.body.classList.contains('reader'))return;
-    var a=e.target.closest?e.target.closest('a[href^="#ch-"]'):null;if(!a)return;
-    e.preventDefault();var h=a.getAttribute('href');setActive(h.slice(1),true);history.replaceState(null,'',h);});
-  if(location.hash&&location.hash.indexOf('ch-')===1)reader(true);
-})();
+(function(){var chaps=[].slice.call(document.querySelectorAll('section.chap'));
+var ids=chaps.map(function(c){return c.id;});var cur=0;
+var btn=document.getElementById('modeBtn'),allBtn=document.getElementById('allCh'),prevBtn=document.getElementById('prevCh'),nextBtn=document.getElementById('nextCh');
+function setActive(id,top){chaps.forEach(function(c){c.classList.remove('active');});var el=document.getElementById(id);if(el)el.classList.add('active');cur=ids.indexOf(id);if(top!==false)window.scrollTo(0,0);}
+function reader(on){document.body.classList.toggle('reader',on);btn.textContent=on?'回到列表':'阅读模式';if(on){var h=(location.hash||'').slice(1);setActive(ids.indexOf(h)>=0?h:'ch-readme',true);}else chaps.forEach(function(c){c.classList.remove('active');});}
+btn.addEventListener('click',function(){reader(!document.body.classList.contains('reader'));});
+allBtn.addEventListener('click',function(){reader(false);location.hash='';});
+prevBtn.addEventListener('click',function(){cur=Math.max(0,cur-1);setActive(ids[cur],true);});
+nextBtn.addEventListener('click',function(){cur=Math.min(ids.length-1,cur+1);setActive(ids[cur],true);});
+document.addEventListener('click',function(e){if(!document.body.classList.contains('reader'))return;var a=e.target.closest?e.target.closest('a[href^="#ch-"]'):null;if(!a)return;e.preventDefault();var h=a.getAttribute('href');setActive(h.slice(1),true);history.replaceState(null,'',h);});
+if(location.hash&&location.hash.indexOf('ch-')===1)reader(true);})();
 </script>
 </body>
 </html>
