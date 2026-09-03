@@ -213,18 +213,33 @@ table.t td,table.t th{padding-left:12px;padding-right:12px}
 .pcbar .btn svg{width:15px;height:15px}
 .wiz .pcbar .search{min-width:0}
 
+
+/* 统一悬停下拉导航（与 site/preview 一致） */
+.hub{position:relative;overflow:visible}
+.hub .ng{position:relative;display:inline-flex}
+.hub .ngt{font-family:inherit;font-size:12.5px;font-weight:500;color:var(--t2);background:none;border:none;
+  padding:7px 14px;border-radius:999px;cursor:pointer}
+.hub .ngt::after{content:"▾";margin-left:5px;font-size:10px;opacity:.6}
+.hub .ngdrop{position:absolute;top:calc(100% + 10px);right:0;min-width:200px;z-index:80;padding:6px;border-radius:16px;
+  background:#fff;border:1px solid rgba(232,93,143,.22);box-shadow:0 16px 40px rgba(90,70,70,.14);
+  opacity:0;pointer-events:none;transform:translateY(6px);transition:.2s ease}
+.hub .ng:hover .ngdrop,.hub .ng:focus-within .ngdrop{opacity:1;pointer-events:auto;transform:none}
+.hub .ng::after{content:"";position:absolute;left:-8px;right:-8px;top:100%;height:12px}
+.hub .ngdrop a{display:block;padding:9px 12px;border-radius:10px;font-size:13px;color:var(--t2);text-decoration:none}
+.hub .ngdrop a:hover{background:rgba(247,127,163,.1);color:#C94A77}
+
 </style>
 </head>
 <body>
 
 <div class="hub">
-  <b><img src="../logo.png" alt="妈咪好" style="width:22px;height:22px;border-radius:50%;object-fit:cover">妈咪好 GoodMom · 常用示例页</b>
+  <b><img src="../logo.png" alt="妈咪好" style="width:22px;height:22px;border-radius:50%;object-fit:cover">妈咪好 · 示例中心</b><span class="ng" style="margin-left:auto"><button class="ngt" type="button">站点导航 ▾</button><span class="ngdrop"><a href="../site/index.html">主站 · 落地 ›</a><a href="index.html">设计系统首页</a><a href="mobile.html">移动端预览</a><a href="manual.html">总览手册</a><a href="examples.html#list">回到本页顶部</a></span></span>
   <span class="chip on" data-v="list">列表页 · 筛查队列</span>
   <span class="chip" data-v="detail">详情页 · 儿童档案</span>
   <span class="chip" data-v="form">表单页 · 建档登记</span>
   <span class="chip" data-v="mobile">移动端 · 随访工作</span>
   <span class="chip" data-v="ipad">iPad · 接诊评估</span>
-  <a href="index.html" style="margin-left:auto">← 返回设计系统首页</a>
+  
 </div>
 
 <!-- ════════ P1 · PC 筛查队列列表页 ════════ -->
