@@ -109,6 +109,37 @@
 | 视觉关键词 | 温暖可信 · 液态玻璃 · 医疗克制 · 生长曲线 |
 | 禁止 | Neon / Flat / Clutter / 幼齿卡通 / 恐慌化文案 |
 
+## 开源使用说明（安装 / 构建 / 贡献）
+
+```bash
+# 克隆
+git clone git@github.com:ningmengsixiang/GoodMom.git && cd GoodMom
+
+# 本地预览（无需构建，双击打开即可）
+open preview/index.html      # 首页 · 全组件/样式/状态
+open preview/examples.html   # 示例中心（5 套完整页面，可顺序浏览）
+open preview/mobile.html     # 移动端预览（建议浏览器设备模式）
+open preview/manual.html     # 总览手册（打印 → 另存 PDF）
+
+# 前端封装库（Vite + React + Arco）
+cd frontend-app
+npm install
+npm run dev            # http://localhost:3081（GmButton/GmStatusTag/领域组件演示）
+npm run gm:typecheck   # 封装层类型检查
+npm run build          # 应用构建
+
+# 导出总览手册 PDF（本机需安装 Google Chrome）
+bash scripts/print-manual.sh
+```
+
+**贡献约定**
+1. 新增组件/状态/词：先登记 [00](00-组件总目录.md) + [14](14-命名与术语规范.md)/[15](15-妇幼业务词库与状态大典.md)，再产出设计稿/代码；
+2. 图标新语义走 [09 · 9.6](09-图标库规范.md) 流程，并同步 `icons/lg-icons.svg` 与计数（README / 09 / 16）；
+3. 预览与示例页用色只用六语义 + 品牌 Token（02.9/12.3），禁止发明新色；
+4. 推送前跑 CI：文档链接检查 + 封装层 typecheck（`.github/workflows/ci.yml`）；
+5. 版本与变更记录写入 [CHANGELOG.md](CHANGELOG.md)，README「版本记录」同步。
+
+---
 ---
 
 ## 版本记录
