@@ -68,7 +68,8 @@
 | --- | --- | --- |
 | `frontend-app/` | Vite + React + Arco 前端骨架（npm workspaces） | 需可联网执行 `npm install && npm run dev`（沙箱无外网） |
 | `frontend-app/packages/gm-arco-ui/` | `@goodmom/gm-arco-ui` 封装层：GmButton / GmStatusTag / 主题 CSS | 骨架完成，待依赖构建验证 |
-| `goodmom-ui/` | **妈咪好开源组件库 @goodmom/ui**（Arco 基底 + GoodMom 封装）：组件/主题/语义字典 + LICENSE/NOTICE/CONTRIBUTING | 独立开源子库，待联网构建 |
+| `goodmom-ui/` | **妈咪好开源组件库 @goodmom/ui**（Arco 基底 + GoodMom 封装）：Gm* 组件/主题/语义字典 + LICENSE/NOTICE | 独立开源子库，待联网构建 |
+| `goodmom-icons/` | **图标子包 @goodmom/icons**：77 枚自绘线性图标（registry.ts 编译产物） | 源码就绪，联网构建 |
 
 ## 找组件（两步定位）
 

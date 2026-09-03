@@ -36,3 +36,24 @@
   background:rgba(255,255,255,.45);border:1px solid;user-select:none}
 .gm-risk-it i{width:8px;height:8px;border-radius:50%}
 .gm-risk-it.on{outline:2px solid currentColor;outline-offset:1px;font-weight:600}
+
+/* —— GmTag / GmSteps（自包含适配组件） —— */
+.gm-tag{display:inline-flex;align-items:center;gap:6px;padding:4px 12px;border-radius:999px;font-size:12px;font-weight:500;
+  border:1px solid;line-height:1.4;white-space:nowrap}
+.gm-tag.lg{font-size:13px;padding:5px 14px}
+.gm-tag i{width:7px;height:7px;border-radius:50%;flex:none}
+.gm-steps{display:flex;gap:0;align-items:flex-start}
+.gm-step{flex:1;display:flex;gap:8px;position:relative;padding-top:4px}
+.gm-step::before{content:"";position:absolute;top:17px;left:-50%;width:100%;height:2px;background:rgba(58,52,84,.12)}
+.gm-step:first-child::before{display:none}
+.gm-step .gs-dot{width:32px;height:32px;border-radius:50%;flex:none;display:flex;align-items:center;justify-content:center;
+  font-size:12px;font-weight:600;background:rgba(255,255,255,.8);border:1px solid rgba(58,52,84,.18);color:#586273;z-index:1}
+.gm-step .gs-dot svg{width:13px;height:13px;stroke:#fff;fill:none;stroke-width:2.6;stroke-linecap:round;stroke-linejoin:round}
+.gm-step.finish::before{background:linear-gradient(90deg,#FFC4D6,#F77FA3)}
+.gm-step.finish .gs-dot{background:linear-gradient(135deg,#FFA9C2,#E85D8F);color:#fff;border-color:transparent}
+.gm-step.process .gs-dot{border:2px solid #E85D8F;color:#C94A77;animation:pulse 2.4s ease-in-out infinite}
+.gm-step.error .gs-dot{border:2px solid #EE5C70;color:#d35466}
+.gm-step .gs-main b{display:block;font-size:13px;color:#343A46;line-height:1.4}
+.gm-step .gs-main span{font-size:11px;color:#9AA2B0}
+.gm-steps.sm .gs-dot{width:24px;height:24px;font-size:10px}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.6}}

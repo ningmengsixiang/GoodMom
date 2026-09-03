@@ -8,3 +8,5 @@ export { default as GmClientCard } from "./components/GmClientCard";
 export * from "./tokens/status";
 export * from "./tokens/business";
 export { DesignTokens } from "./tokens/design";
+export { default as GmTag } from "./adapters/GmTag";
+export { default as GmSteps } from "./adapters/GmSteps";
