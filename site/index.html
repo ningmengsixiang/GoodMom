@@ -160,13 +160,26 @@ h2 small{font-weight:600;letter-spacing:.18em;color:#C94A77;font-size:10px}
 .fcols a{display:block;font-size:12px;color:var(--t2);text-decoration:none;line-height:2.1}
 .fcols a:hover{color:#C94A77}
 
+
+/* GitHub 入口 & 图标点缀 */
+nav .git{display:inline-flex;align-items:center;gap:6px;padding:7px 14px;border-radius:999px;text-decoration:none;
+  font-size:12.5px;font-weight:600;color:var(--rose-deep);background:#fff;border:1px solid rgba(232,93,143,.3)}
+nav .git svg{width:15px;height:15px;fill:currentColor}
+nav .git:hover{background:linear-gradient(135deg,#FFA9C2,#E85D8F);color:#fff;border-color:transparent}
+.gx{position:absolute;right:16px;top:16px;width:56px;height:56px;opacity:.14;color:#C94A77;pointer-events:none}
+.gx svg{width:100%;height:100%}
+.card,.jc{position:relative;overflow:hidden}
+.journey,.grid{row-gap:18px}
+.jc h3,.card h3{padding-right:0}
+
 </style>
 </head>
 <body>
 <nav>
   <b><img src="../logo.png" width="24" height="24" style="border-radius:50%;object-fit:cover" alt="Logo">妈咪好 GoodMom</b>
   <a href="#start">开始</a><a href="#about">概览</a><a href="#sitemap">目录</a><a href="#ability">能力</a><a href="#vision">视觉</a><a href="#code">快速上手</a><a href="#opensrc">开源</a>
-  <span class="ng"><button class="ngt">设计系统</button><span class="ngdrop"><a href="#ds">本站在线演示</a><a href="../preview/index.html">设计系统首页 ›</a><a href="../preview/examples.html">示例中心</a><a href="../preview/mobile.html">移动端</a><a href="../preview/manual.html">总览手册</a></span></span><a class="out" href="../preview/index.html">全屏打开 ›</a>
+  <span class="ng"><button class="ngt">设计系统</button><span class="ngdrop"><a href="#ds">本站在线演示</a><a href="../preview/index.html">设计系统首页 ›</a><a href="../preview/examples.html">示例中心</a><a href="../preview/mobile.html">移动端</a><a href="../preview/manual.html">总览手册</a></span></span><a class="git" href="https://github.com/ningmengsixiang/GoodMom" target="_blank" rel="noopener" title="GitHub 开源仓库"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 .5C5.6.5.5 5.6.5 12c0 5.1 3.3 9.4 7.9 10.9.6.1.8-.2.8-.6v-2c-3.2.7-3.9-1.5-3.9-1.5-.5-1.3-1.3-1.7-1.3-1.7-1-.7.1-.7.1-.7 1.2.1 1.8 1.2 1.8 1.2 1 1.8 2.7 1.3 3.4 1 .1-.8.4-1.3.7-1.6-2.6-.3-5.3-1.3-5.3-5.7 0-1.3.4-2.3 1.2-3.1-.1-.3-.5-1.5.1-3.1 0 0 1-.3 3.2 1.2a11 11 0 0 1 5.8 0c2.2-1.5 3.2-1.2 3.2-1.2.6 1.6.2 2.8.1 3.1.7.8 1.2 1.8 1.2 3.1 0 4.4-2.7 5.4-5.3 5.7.4.4.8 1.1.8 2.2v3.2c0 .4.2.7.8.6a11.5 11.5 0 0 0 7.9-10.9C23.5 5.6 18.4.5 12 .5z"/></svg>开源</a>
+  <a class="out" href="../preview/index.html">全屏打开 ›</a>
 </nav>
 <div class="wrap">
 
@@ -191,10 +204,10 @@ h2 small{font-weight:600;letter-spacing:.18em;color:#C94A77;font-size:10px}
   <h2 id="start"><span class="secnum">0</span><span>从一个角色开始</span><small>USER JOURNEY · 选择你的身份</small></h2>
 <p class="sub">不按文档编号，按“你是谁、想干什么”给路径 —— 三步走：选角色 → 打开对应入口 → 落地复用。</p>
 <div class="journey">
-  <div class="jc"><span class="who">设计师</span><h3>想定义妇幼产品视觉</h3><ol><li>读 <a href="../01-设计总览与设计DNA.md">Design DNA（01）</a> → <a href="../02-Token规范.md">Token（02）</a></li><li>查 <a href="../00-组件总目录.md">组件总目录（00）</a></li><li>去 <a href="#ds">设计系统首页</a> 看全量样式</li></ol></div>
-  <div class="jc"><span class="who">前端 / 封装</span><h3>要直接“拿来用”</h3><ol><li>看 <a href="#code">快速上手</a> 的 npm 用法</li><li>组件遵循 <a href="../14-命名与术语规范.md">命名（14）</a></li><li>取代码：<a href="https://github.com/ningmengsixiang/GoodMom">GitHub</a></li></ol></div>
-  <div class="jc"><span class="who">产品 / 内容</span><h3>要业务词与状态口径</h3><ol><li>词库/状态：<a href="../15-妇幼业务词库与状态大典.md">15</a> · 妇幼组件：<a href="../13-妇幼领域组件规范.md">13</a></li><li>看 <a href="../preview/examples.html">示例中心</a> 里的真实页面</li></ol></div>
-  <div class="jc"><span class="who">AI 创作者</span><h3>要生成视觉稿</h3><ol><li>复制 <a href="../05-AI生成Prompt库.md">Prompt 库（05）</a></li><li>或进入 <a href="#ds">全量首页</a> 取图标/Tag 参照</li></ol></div>
+  <div class="jc"><span class="who">设计师</span><h3>想定义妇幼产品视觉</h3><span class="gx" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="3.6"/><path d="M5 20c1.3-3.4 4-5 7-5s5.7 1.6 7 5"/></svg></span><ol><li>读 <a href="../01-设计总览与设计DNA.md">Design DNA（01）</a> → <a href="../02-Token规范.md">Token（02）</a></li><li>查 <a href="../00-组件总目录.md">组件总目录（00）</a></li><li>去 <a href="#ds">设计系统首页</a> 看全量样式</li></ol></div>
+  <div class="jc"><span class="who">前端 / 封装</span><h3>要直接“拿来用”</h3><span class="gx" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l8 4.2v9.6L12 21l-8-4.2V7.2z"/><path d="M4 7.2l8 4.2 8-4.2M12 11.4V21"/></svg></span><ol><li>看 <a href="#code">快速上手</a> 的 npm 用法</li><li>组件遵循 <a href="../14-命名与术语规范.md">命名（14）</a></li><li>取代码：<a href="https://github.com/ningmengsixiang/GoodMom">GitHub</a></li></ol></div>
+  <div class="jc"><span class="who">产品 / 内容</span><h3>要业务词与状态口径</h3><span class="gx" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="4"/><circle cx="9" cy="12" r="1.6"/><path d="M9 12h6"/></svg></span><ol><li>词库/状态：<a href="../15-妇幼业务词库与状态大典.md">15</a> · 妇幼组件：<a href="../13-妇幼领域组件规范.md">13</a></li><li>看 <a href="../preview/examples.html">示例中心</a> 里的真实页面</li></ol></div>
+  <div class="jc"><span class="who">AI 创作者</span><h3>要生成视觉稿</h3><span class="gx" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="m12 3 2.5 5.4 5.9.8-4.3 4.2 1 5.9-5.1-2.7-5.1 2.7 1-5.9L3.6 9.2l5.9-.8z"/></svg></span><ol><li>复制 <a href="../05-AI生成Prompt库.md">Prompt 库（05）</a></li><li>或进入 <a href="#ds">全量首页</a> 取图标/Tag 参照</li></ol></div>
 </div>
 <h2 id="about"><span class="secnum">01</span><span>这是什么</span><small>ABOUT · 定位与架构</small></h2>
   <p class="sub">定位 · 覆盖 · 架构</p>
@@ -213,12 +226,12 @@ h2 small{font-weight:600;letter-spacing:.18em;color:#C94A77;font-size:10px}
   <h2 id="ability"><span class="secnum">02</span><span>能力清单</span><small>CAPABILITY · 规范到代码的链路</small></h2>
   <div class="secpad" style="margin-top:-4px"><p class="sub">从规范到代码的完整链路</p>
   <div class="grid">
-    <div class="card"><h3><i></i>设计规范（00–16）</h3><p>Token、组件全谱、数据可视化、命名术语、业务状态大典、一致性审计——18 份文档互相引用。</p><a class="go" href="../00-组件总目录.md">组件总目录 ›</a></div>
-    <div class="card"><h3><i></i>组件与图标</h3><p>Gm* 组件（按钮全谱/状态标签/卡片/服务对象卡/五色选择…）+ 77 枚自绘线性图标。</p><a class="go" href="../preview/index.html#icons">浏览图标 ›</a></div>
-    <div class="card"><h3><i></i>数据可视化</h3><p>KPI/趋势/比较/构成/雷达/拓扑/流程/进度 8 大模块，妇幼指标示例与语义色绑定。</p><a class="go" href="../preview/index.html#chart">打开图库 ›</a></div>
-    <div class="card"><h3><i></i>示例中心</h3><p>列表页 · 档案详情 · 建档向导 · 移动随访 · iPad 接诊——五套完整页面可顺序浏览。</p><a class="go" href="../preview/examples.html">进入示例 ›</a></div>
-    <div class="card"><h3><i></i>前端封装</h3><p>@goodmom/ui（Arco 基底 + GoodMom 主题与语义封装）与 @goodmom/icons 图标子包，发布型 monorepo。</p><a class="go" href="#code">快速上手 ›</a></div>
-    <div class="card"><h3><i></i>总览手册</h3><p>定位/架构/DNA/状态/文档地图一页纸，浏览器即可另存 PDF 对外分发。</p><a class="go" href="../preview/manual.html">查看手册 ›</a></div>
+    <div class="card"><h3><i></i>设计规范（00–16）</h3><span class="gx" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H7a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V7z"/><path d="M14 2v5h5"/><path d="M9 13h6M9 17h4"/></svg></span><p>Token、组件全谱、数据可视化、命名术语、业务状态大典、一致性审计——18 份文档互相引用。</p><a class="go" href="../00-组件总目录.md">组件总目录 ›</a></div>
+    <div class="card"><h3><i></i>组件与图标</h3><span class="gx" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="4" width="7" height="7" rx="2"/><rect x="13" y="4" width="7" height="7" rx="2"/><rect x="4" y="13" width="7" height="7" rx="2"/><rect x="13" y="13" width="7" height="7" rx="2"/></svg></span><p>Gm* 组件（按钮全谱/状态标签/卡片/服务对象卡/五色选择…）+ 77 枚自绘线性图标。</p><a class="go" href="../preview/index.html#icons">浏览图标 ›</a></div>
+    <div class="card"><h3><i></i>数据可视化</h3><span class="gx" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M3.5 20.5h17"/><path d="M7 20.5v-6M12 20.5V8M17 20.5v-10"/></svg></span><p>KPI/趋势/比较/构成/雷达/拓扑/流程/进度 8 大模块，妇幼指标示例与语义色绑定。</p><a class="go" href="../preview/index.html#chart">打开图库 ›</a></div>
+    <div class="card"><h3><i></i>示例中心</h3><span class="gx" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="16" rx="3"/><path d="M3 10h18M10 10v10"/></svg></span><p>列表页 · 档案详情 · 建档向导 · 移动随访 · iPad 接诊——五套完整页面可顺序浏览。</p><a class="go" href="../preview/examples.html">进入示例 ›</a></div>
+    <div class="card"><h3><i></i>前端封装</h3><span class="gx" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M8 8l-4 4 4 4M16 8l4 4-4 4"/><path d="M13 5l-2 14"/></svg></span><p>@goodmom/ui（Arco 基底 + GoodMom 主题与语义封装）与 @goodmom/icons 图标子包，发布型 monorepo。</p><a class="go" href="#code">快速上手 ›</a></div>
+    <div class="card"><h3><i></i>总览手册</h3><span class="gx" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M4 5a2 2 0 0 1 2-2h14v18H6a2 2 0 0 0-2 2z"/><path d="M4 5v16"/></svg></span><p>定位/架构/DNA/状态/文档地图一页纸，浏览器即可另存 PDF 对外分发。</p><a class="go" href="../preview/manual.html">查看手册 ›</a></div>
   </div></div>
 
   <h2 id="vision"><span class="secnum">03</span><span>视觉与状态</span><small>VISION · 六语义与五色</small></h2>
