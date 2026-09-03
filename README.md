@@ -48,6 +48,7 @@
 | [`preview/mobile.html`](preview/mobile.html) | **移动端视觉预览**（手机框：NavBar、底部 TabBar、卡片流、触控按压反馈） | 移动端对照参考 |
 | [`preview/examples.html`](preview/examples.html) | **示例中心**：常用完整页面 5 套（列表/详情/表单向导/移动/iPad），支持顺序浏览 | 全员对照参考 |
 | [`preview/manual.html`](preview/manual.html) | **总览手册（打印版）**：定位/架构/DNA/状态/文档地图，浏览器可另存 PDF | 全员（对外介绍用） |
+| [`site/index.html`](site/index.html) | **开源网站落地页**：品牌 Hero/能力/视觉/快速上手/开源治理（可直接部署 GitHub Pages） | 对外展示用 |
 
 ---
 

@@ -25,5 +25,5 @@ Third-party notices
 ──────────────────────────────────────────────────────────────────────────
 本组件库以 Arco Design（@arco-design/web-react）为工程基底并进行视觉封装。
 Arco Design 源码授权：MIT License，Copyright (c) 2021 Bytedance, Inc. and its affiliates.
-（完整条款见 arco-design-main/LICENSE 或 npm 包内 LICENSE。）
+（完整条款见上游仓库 github.com/arco-design/arco-design/LICENSE 或 npm 包内 LICENSE。）
 设计规范与封装遵循 GoodMom 设计系统（本仓 00–16 号文档）。

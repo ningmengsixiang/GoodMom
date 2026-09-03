@@ -1,6 +1,6 @@
 # @goodmom/ui · 妈咪好 GoodMom 视觉设计规范开源组件库
 
-妈咪好 GoodMom 妇幼儿童全生命周期设计系统的 **开源组件代码层**：以 [Arco Design (React)](https://github.com/arco-design/arco-design)（MIT，本目录同级 `arco-design-main/` 为源码参考）为工程基底，按 GoodMom 设计系统（00–16 号规范文档）进行主题与语义封装。
+妈咪好 GoodMom 妇幼儿童全生命周期设计系统的 **开源组件代码层**：以 [Arco Design (React)](https://github.com/arco-design/arco-design)（MIT）为工程基底，源码仅作 API 参考，运行期依赖 npm 包 `@arco-design/web-react`，按 GoodMom 设计系统（00–16 号规范文档）进行主题与语义封装。
 
 ## 特性
 - **主题开箱即用**：`src/theme.css` 将 Arco 主色变量覆盖为 GoodMom 蜜桃粉（--mmh-rose-*）+ 六语义状态色（02.9/12.3）
