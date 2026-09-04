@@ -9,12 +9,17 @@
 :root{--t:#343A46;--t2:#586273;--t3:#9AA2B0;--rose-d:#E85D8F;--rose-deep:#C94A77;--mint:#6FC9B4;--info:#6D9EFF;--warn:#F2B25C;--danger:#EF6A7B;--purple:#9A78FF;--purple-deep:#8066F0;
 --g:linear-gradient(135deg,#FFA9C2,#F77FA3 45%,#E85D8F);--gp:linear-gradient(135deg,#C7A6FF,#8F6AE0)}
 *{box-sizing:border-box;margin:0;padding:0}
-body{font-family:"PingFang SC","Inter","MiSans","Noto Sans SC",sans-serif;color:var(--t);line-height:1.7;background:#E9D2C9;
+body{font-family:"PingFang SC","Inter","MiSans","Noto Sans SC",sans-serif;color:var(--t);line-height:1.7;background:#E9D2C9;padding-left:0;transition:padding .25s ease;
  background:radial-gradient(1000px 600px at 90% -8%,rgba(247,127,163,.2),transparent 65%),radial-gradient(900px 560px at -6% 24%,rgba(182,154,255,.15),transparent 65%),linear-gradient(165deg,#FDF2EE,#F6E2DB 55%,#E6CFC6)}
 .num{font-variant-numeric:tabular-nums}
 .glass{border-radius:20px;background:linear-gradient(160deg,rgba(255,255,255,.6),rgba(255,255,255,.26) 60%,rgba(255,255,255,.35));border:1px solid rgba(255,255,255,.8);box-shadow:inset 0 1px 0 rgba(255,255,255,.85),0 10px 24px rgba(90,70,70,.09);-webkit-backdrop-filter:blur(20px);backdrop-filter:blur(20px)}
 .card{border-radius:18px;background:linear-gradient(160deg,rgba(255,255,255,.64),rgba(255,255,255,.32));border:1px solid rgba(255,255,255,.82);box-shadow:0 8px 18px rgba(90,70,70,.07)}
-.wrap{max-width:1200px;margin:0 auto;padding:16px 18px 90px;transition:margin .25s ease}
+.wrap{max-width:1200px;margin:0 auto;padding:16px 18px 90px}
+/* ---------- 宽屏分级（1440 / 1920 / 2K） ---------- */
+@media(min-width:1366px){.wrap{max-width:1300px;padding:18px 24px 90px}}
+@media(min-width:1600px){.wrap{max-width:1440px}}
+@media(min-width:1920px){.wrap{max-width:1600px}}
+@media(min-width:2304px){.wrap{max-width:1820px}}
 /* ============ 侧栏模式（规范 03 · 3.4.1） ============ */
 .side{position:fixed;left:16px;top:16px;bottom:16px;width:252px;z-index:70;display:flex;flex-direction:column;gap:2px;padding:14px 12px;border-radius:24px;overflow-y:auto;
  background:linear-gradient(160deg,rgba(255,255,255,.62),rgba(255,255,255,.30) 60%,rgba(255,255,255,.42));border:1px solid rgba(255,255,255,.85);
@@ -46,8 +51,8 @@ body.collapsed .side .brand{justify-content:center}
 body.collapsed .nv{justify-content:center;padding:10px 0}
 body.collapsed .side .foot{justify-content:center;border-top:none}
 body.collapsed .nv{position:relative}
-body.mode-sider .wrap{margin-left:306px;margin-right:auto}
-body.mode-sider.collapsed .wrap{margin-left:130px}
+body.mode-sider{padding-left:306px}
+body.mode-sider.collapsed{padding-left:130px}
 body.mode-top .side{display:none}
 body.mode-top .wrap{margin-left:auto;margin-right:auto}
 /* 顶栏（含模式分段 + 页签） */
@@ -104,21 +109,16 @@ th{color:var(--t3);font-size:11px;font-weight:500}
 .flex{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
 .mla{margin-left:auto}
 .ops{display:inline-flex;gap:6px;flex-wrap:wrap;justify-content:flex-end}
-/* 平板：内容区不再让位侧栏 */
-@media(max-width:1180px){
-  body.mode-sider .wrap{margin-left:18px;margin-right:18px}
-  body.mode-sider.collapsed .wrap{margin-left:18px}
+/* 平板及以下：侧栏隐藏、内容居中、回顶栏页签（规范 10.3） */
+@media(max-width:1280px){
+  .side{display:none}
+  body.mode-sider,body.mode-sider.collapsed{padding-left:0}
+  body.mode-sider .tabs{display:flex}
 }
 @media(max-width:960px){
   .two,.g15{grid-template-columns:1fr}
   .g4{grid-template-columns:repeat(2,1fr)}
   .desc{grid-template-columns:1fr 1fr}
-}
-/* 移动：侧栏禁用（规范 10.3：TabBar/NavBar），回顶栏页签 */
-@media(max-width:960px){
-  .side{display:none}
-  body.mode-sider .wrap,body.mode-sider.collapsed .wrap{margin-left:auto;margin-right:auto}
-  body.mode-sider .tabs{display:flex}
 }
 @media(max-width:720px){
   .wrap{padding:12px 12px 70px}
@@ -143,6 +143,9 @@ th{color:var(--t3);font-size:11px;font-weight:500}
   .rowb{gap:6px}
   .mla{margin-left:0}
 }
+/* 2K 以上（≥1920）：侧栏略宽，内容让位同步（放末位保证优先级） */
+@media(min-width:1920px){.side{width:272px}}
+@media(min-width:1920px){body.mode-sider{padding-left:326px}}
 </style>
 </head>
 <body class="mode-sider">
@@ -397,11 +400,11 @@ th{color:var(--t3);font-size:11px;font-weight:500}
   var seg=document.getElementById('seg');
   segs.forEach(function(s){s.addEventListener('click',function(){
     mode(s.getAttribute('data-m'));window.scrollTo(0,0);});});
-  // 默认：首次进入按宽度选择（≥1180 侧栏，否则顶栏），之后记忆用户选择
+  // 默认：首次进入按宽度选择（≥1281 侧栏，否则顶栏），之后记忆用户选择
   var saved=null;try{saved=localStorage.getItem('gm-nav-mode')}catch(e){}
-  var start=(saved==='sider'||saved==='top')?saved:(window.innerWidth>=1180?'sider':'top');
+  var start=(saved==='sider'||saved==='top')?saved:(window.innerWidth>=1281?'sider':'top');
   mode(start);
-  if(!saved){window.addEventListener('resize',function(){var w=window.innerWidth;if((w>=1180)!==body.classList.contains('mode-sider')){mode(w>=1180?'sider':'top')}})}
+  if(!saved){window.addEventListener('resize',function(){var w=window.innerWidth;if((w>=1281)!==body.classList.contains('mode-sider')){mode(w>=1281?'sider':'top')}})}
   // 视图切换（顶栏页签 + 侧栏项共用）
   function go(v){
     navs.forEach(function(x){x.classList.toggle('on',x.getAttribute('data-v')===v)});
