@@ -85,7 +85,6 @@ h2{font-size:20px;margin:16px 0 6px}
 .av{width:42px;height:42px;border-radius:50%;display:inline-flex;align-items:center;justify-content:center;color:#fff;font-weight:700;background:var(--g);flex:none;font-size:16px}
 .av.mint{background:linear-gradient(150deg,#7FD8C2,#4FB59C)}.av.purp{background:linear-gradient(150deg,#B9A0FF,#8066F0)}
 .two{display:grid;grid-template-columns:1.7fr 1fr;gap:16px}
-.g15{display:grid;grid-template-columns:1.5fr 1fr;gap:16px}
 .g4{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}
 .g2auto{display:grid;grid-template-columns:repeat(auto-fit,minmax(185px,1fr));gap:10px}
 .chk{display:flex;gap:8px;align-items:center;background:rgba(255,255,255,.5);border:1px solid rgba(255,255,255,.8);border-radius:14px;padding:10px 12px}
@@ -130,7 +129,7 @@ th{color:var(--t3);font-size:11px;font-weight:500}
   body.mode-sider .tabs{display:flex}
 }
 @media(max-width:960px){
-  .two,.g15{grid-template-columns:1fr}
+  .two{grid-template-columns:1fr}
   .g4{grid-template-columns:repeat(2,1fr)}
   .desc{grid-template-columns:1fr 1fr}
 }
@@ -232,7 +231,7 @@ th{color:var(--t3);font-size:11px;font-weight:500}
         <div style="margin-top:10px"><button class="btn pri sm">发送给助手</button></div>
       </div>
     </div>
-    <div class="g15" style="margin-top:16px">
+    <div class="two" style="margin-top:16px">
       <div class="card pad"><b>今日日程 / 在办会诊</b>
         <div class="rowb"><span class="tag p">会诊</span><span>09:00 · 陈静（红级）多学科会诊</span><span class="mla" style="color:var(--t3)">进行中</span></div>
         <div class="rowb"><span class="tag b">门诊</span><span>10:30 · 张敏 GDM 门诊随访</span><span class="mla" style="color:var(--t3)">待开始</span></div>
