@@ -6,19 +6,60 @@
 <title>妇幼智能辅助诊疗 · GoodMom 重画版</title>
 <link rel="icon" type="image/png" href="../logo.png">
 <style>
-:root{--t:#343A46;--t2:#586273;--t3:#9AA2B0;--rose-d:#E85D8F;--rose-deep:#C94A77;--mint:#6FC9B4;--info:#6D9EFF;--warn:#F2B25C;--danger:#EF6A7B;--purple:#9A78FF;
---g:linear-gradient(135deg,#FFA9C2,#F77FA3 45%,#E85D8F)}
+:root{--t:#343A46;--t2:#586273;--t3:#9AA2B0;--rose-d:#E85D8F;--rose-deep:#C94A77;--mint:#6FC9B4;--info:#6D9EFF;--warn:#F2B25C;--danger:#EF6A7B;--purple:#9A78FF;--purple-deep:#8066F0;
+--g:linear-gradient(135deg,#FFA9C2,#F77FA3 45%,#E85D8F);--gp:linear-gradient(135deg,#C7A6FF,#8F6AE0)}
 *{box-sizing:border-box;margin:0;padding:0}
 body{font-family:"PingFang SC","Inter","MiSans","Noto Sans SC",sans-serif;color:var(--t);line-height:1.7;background:#E9D2C9;
  background:radial-gradient(1000px 600px at 90% -8%,rgba(247,127,163,.2),transparent 65%),radial-gradient(900px 560px at -6% 24%,rgba(182,154,255,.15),transparent 65%),linear-gradient(165deg,#FDF2EE,#F6E2DB 55%,#E6CFC6)}
 .num{font-variant-numeric:tabular-nums}
 .glass{border-radius:20px;background:linear-gradient(160deg,rgba(255,255,255,.6),rgba(255,255,255,.26) 60%,rgba(255,255,255,.35));border:1px solid rgba(255,255,255,.8);box-shadow:inset 0 1px 0 rgba(255,255,255,.85),0 10px 24px rgba(90,70,70,.09);-webkit-backdrop-filter:blur(20px);backdrop-filter:blur(20px)}
 .card{border-radius:18px;background:linear-gradient(160deg,rgba(255,255,255,.64),rgba(255,255,255,.32));border:1px solid rgba(255,255,255,.82);box-shadow:0 8px 18px rgba(90,70,70,.07)}
-.wrap{max-width:1200px;margin:0 auto;padding:16px 18px 90px}
+.wrap{max-width:1200px;margin:0 auto;padding:16px 18px 90px;transition:margin .25s ease}
+/* ============ 侧栏模式（规范 03 · 3.4.1） ============ */
+.side{position:fixed;left:16px;top:16px;bottom:16px;width:252px;z-index:70;display:flex;flex-direction:column;gap:2px;padding:14px 12px;border-radius:24px;overflow-y:auto;
+ background:linear-gradient(160deg,rgba(255,255,255,.62),rgba(255,255,255,.30) 60%,rgba(255,255,255,.42));border:1px solid rgba(255,255,255,.85);
+ box-shadow:inset 0 1px 0 rgba(255,255,255,.9),0 16px 40px rgba(90,70,70,.12);-webkit-backdrop-filter:blur(22px);backdrop-filter:blur(22px);transition:width .25s ease}
+.side .brand{display:flex;align-items:center;gap:10px;padding:6px 8px 14px;border-bottom:1px dashed rgba(58,52,84,.08);margin-bottom:10px}
+.side .brand img{width:34px;height:34px;border-radius:50%;object-fit:cover;flex:none}
+.side .brand b{font-size:14px;line-height:1.35;color:var(--rose-deep)}
+.side .brand .min{font-size:10px;color:var(--t3);font-weight:400}
+.side .gt{font-size:10.5px;color:var(--t3);letter-spacing:.1em;padding:8px 12px 4px}
+.nv{display:flex;align-items:center;gap:10px;width:100%;border:none;background:transparent;cursor:pointer;font-family:inherit;color:var(--t2);
+ font-size:13.5px;font-weight:500;border-radius:16px;padding:9px 12px;text-align:left;transition:background .15s ease,color .15s}
+.nv svg{width:17px;height:17px;flex:none;stroke:currentColor;fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+.nv:hover{background:rgba(255,255,255,.6);color:var(--t)}
+.nv.on{background:var(--gp);color:#fff;font-weight:600;box-shadow:0 8px 18px rgba(143,106,224,.35)}
+.nv .bdg{margin-left:auto;min-width:20px;height:20px;padding:0 7px;display:inline-flex;align-items:center;justify-content:center;border-radius:999px;
+ font-size:11px;font-weight:600;color:var(--purple-deep);background:rgba(255,255,255,.9);border:1px solid rgba(143,106,224,.25)}
+.nv.on .bdg{color:#fff;background:rgba(255,255,255,.25);border-color:rgba(255,255,255,.4)}
+.side .foot{margin-top:auto;padding-top:12px;border-top:1px dashed rgba(58,52,84,.08);display:flex;align-items:center;gap:10px}
+.side .foot .who{flex:1;min-width:0}
+.side .foot .who b{font-size:12.5px;display:block;line-height:1.3}
+.side .foot .who span{font-size:11px;color:var(--t3)}
+.iconb{width:30px;height:30px;flex:none;display:inline-flex;align-items:center;justify-content:center;border-radius:10px;border:none;cursor:pointer;background:rgba(255,255,255,.6);color:var(--t2);transition:background .15s}
+.iconb:hover{background:rgba(255,255,255,.9)}
+.iconb svg{width:15px;height:15px;stroke:currentColor;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+body.collapsed .side{width:80px;padding:14px 10px}
+body.collapsed .side .brand{padding:6px 4px 14px;border-bottom:none}
+body.collapsed .side .brand b,body.collapsed .side .brand .min,body.collapsed .side .gt,body.collapsed .nv span,body.collapsed .nv .bdg,body.collapsed .side .foot .who,body.collapsed .side .foot .lb{display:none}
+body.collapsed .side .brand{justify-content:center}
+body.collapsed .nv{justify-content:center;padding:10px 0}
+body.collapsed .side .foot{justify-content:center;border-top:none}
+body.collapsed .nv{position:relative}
+body.mode-sider .wrap{margin-left:306px;margin-right:auto}
+body.mode-sider.collapsed .wrap{margin-left:130px}
+body.mode-top .side{display:none}
+body.mode-top .wrap{margin-left:auto;margin-right:auto}
+/* 顶栏（含模式分段 + 页签） */
 .top{position:sticky;top:12px;z-index:60;display:flex;align-items:center;gap:10px;flex-wrap:wrap;padding:8px 14px;border-radius:999px;margin-bottom:14px}
 .top img{width:24px;height:24px;border-radius:50%;object-fit:cover;flex:none}
-.top b{color:var(--rose-deep);font-size:14px}
-.tabs{margin-left:auto;display:flex;gap:6px;flex-wrap:wrap}
+.top .tb-brand{display:flex;align-items:center;gap:10px;flex:none}
+.top .tb-brand b{color:var(--rose-deep);font-size:14px}
+.seg{margin-left:auto;display:inline-flex;gap:3px;padding:3px;border-radius:999px;background:rgba(255,255,255,.55);border:1px solid rgba(255,255,255,.8)}
+.seg span{padding:5px 12px;border-radius:999px;font-size:11.5px;color:var(--t2);cursor:pointer;white-space:nowrap}
+.seg span.on{background:var(--g);color:#fff;font-weight:600;box-shadow:0 4px 10px rgba(240,127,163,.3)}
+.tabs{display:flex;gap:6px;flex-wrap:wrap}
+body.mode-sider .tabs{display:none}
 .tabs .tb{padding:7px 13px;border-radius:999px;cursor:pointer;font-size:12.5px;font-weight:500;color:var(--t2);background:rgba(255,255,255,.5);border:1px solid rgba(255,255,255,.8);white-space:nowrap}
 .tabs .tb.on{background:var(--g);color:#fff;font-weight:600;box-shadow:0 6px 14px rgba(240,127,163,.3)}
 .view{display:none}
@@ -38,7 +79,6 @@ h2{font-size:20px;margin:16px 0 6px}
 .btn.sm{height:32px;padding:0 13px;font-size:12.5px;border-radius:12px}
 .av{width:42px;height:42px;border-radius:50%;display:inline-flex;align-items:center;justify-content:center;color:#fff;font-weight:700;background:var(--g);flex:none;font-size:16px}
 .av.mint{background:linear-gradient(150deg,#7FD8C2,#4FB59C)}.av.purp{background:linear-gradient(150deg,#B9A0FF,#8066F0)}
-/* ---------- 响应式网格（统一由媒体查询控制） ---------- */
 .two{display:grid;grid-template-columns:1.7fr 1fr;gap:16px}
 .g15{display:grid;grid-template-columns:1.5fr 1fr;gap:16px}
 .g4{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}
@@ -64,19 +104,28 @@ th{color:var(--t3);font-size:11px;font-weight:500}
 .flex{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
 .mla{margin-left:auto}
 .ops{display:inline-flex;gap:6px;flex-wrap:wrap;justify-content:flex-end}
-
-/* ---------- 平板 ---------- */
+/* 平板：内容区不再让位侧栏 */
+@media(max-width:1180px){
+  body.mode-sider .wrap{margin-left:18px;margin-right:18px}
+  body.mode-sider.collapsed .wrap{margin-left:18px}
+}
 @media(max-width:960px){
   .two,.g15{grid-template-columns:1fr}
   .g4{grid-template-columns:repeat(2,1fr)}
   .desc{grid-template-columns:1fr 1fr}
 }
-/* ---------- 手机 ---------- */
+/* 移动：侧栏禁用（规范 10.3：TabBar/NavBar），回顶栏页签 */
+@media(max-width:960px){
+  .side{display:none}
+  body.mode-sider .wrap,body.mode-sider.collapsed .wrap{margin-left:auto;margin-right:auto}
+  body.mode-sider .tabs{display:flex}
+}
 @media(max-width:720px){
   .wrap{padding:12px 12px 70px}
-  .top{top:0;border-radius:16px;position:sticky}
-  .top b{font-size:12.5px;line-height:1.4}
-  .tabs{margin-left:0;width:100%;flex-wrap:nowrap;overflow-x:auto;padding-bottom:2px;-webkit-overflow-scrolling:touch}
+  .top{top:0;border-radius:16px}
+  .tb-brand b{font-size:12.5px;line-height:1.4}
+  .seg{display:none}
+  .tabs{width:100%;flex-wrap:nowrap;overflow-x:auto;padding-bottom:2px;-webkit-overflow-scrolling:touch;margin-left:0}
   .tabs::-webkit-scrollbar{display:none}
   .tabs .tb{flex:none;font-size:12px;padding:6px 12px}
   h2{font-size:18px}
@@ -96,13 +145,39 @@ th{color:var(--t3);font-size:11px;font-weight:500}
 }
 </style>
 </head>
-<body>
+<body class="mode-sider">
+<!-- 左侧玻璃导航栏（侧栏模式 · 规范 03 · 3.4.1） -->
+<nav class="side glass" id="side">
+  <div class="brand">
+    <img src="../logo.png" alt="妈咪好">
+    <div style="flex:1;min-width:0"><b>妇幼智能辅助诊疗</b><div class="min">GoodMom 重画版</div></div>
+    <button class="iconb" id="colBtn" title="收起 / 展开侧栏"><svg viewBox="0 0 24 24"><path d="M15 6l-6 6 6 6"/><path d="M4 6v12"/></svg></button>
+  </div>
+  <div class="gt">诊疗工作台</div>
+  <button class="nv on" data-v="work"><svg viewBox="0 0 24 24"><rect x="3.5" y="3.5" width="7" height="7" rx="2"/><rect x="13.5" y="3.5" width="7" height="7" rx="2"/><rect x="3.5" y="13.5" width="7" height="7" rx="2"/><rect x="13.5" y="13.5" width="7" height="7" rx="2"/></svg><span>专家工作台</span><em class="bdg">42</em></button>
+  <button class="nv" data-v="archive"><svg viewBox="0 0 24 24"><circle cx="12" cy="8" r="3.4"/><path d="M5 20c.6-3.6 3.4-5.4 7-5.4s6.4 1.8 7 5.4"/></svg><span>全生命周期档案</span></button>
+  <button class="nv" data-v="consult"><svg viewBox="0 0 24 24"><path d="M4 6.5h16v10H10.5L7 20v-3.5H4z"/><path d="M8.5 10.5h.01M12 10.5h.01M15.5 10.5h.01"/></svg><span>多智能体会诊</span><em class="bdg">2</em></button>
+  <button class="nv" data-v="detail"><svg viewBox="0 0 24 24"><rect x="5" y="3.5" width="14" height="17" rx="2.5"/><path d="M8.5 8h7M8.5 12h7M8.5 16h4"/></svg><span>诊疗详情</span></button>
+  <div class="gt" style="margin-top:6px">系统</div>
+  <button class="nv" data-v="work"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="2.2"/><path d="M12 3v3M12 18v3M3 12h3M18 12h3M5.6 5.6l2.1 2.1M16.3 16.3l2.1 2.1M18.4 5.6l-2.1 2.1M7.7 16.3l-2.1 2.1"/></svg><span>五色队列</span></button>
+  <div class="foot">
+    <span class="av purp" style="width:36px;height:36px;font-size:13px">王</span>
+    <div class="who"><b>王立 · 主任医师</b><span><i style="display:inline-block;width:6px;height:6px;border-radius:50%;background:#2f8f76;margin-right:4px"></i>在线</span></div>
+    <button class="iconb lb" title="设置"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 0 0 .34 1.87l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.7 1.7 0 0 0-1.87-.34 1.7 1.7 0 0 0-1 1.55V21a2 2 0 1 1-4 0v-.09a1.7 1.7 0 0 0-1-1.55 1.7 1.7 0 0 0-1.87.34l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.7 1.7 0 0 0 .34-1.87 1.7 1.7 0 0 0-1.55-1H3a2 2 0 1 1 0-4h.09a1.7 1.7 0 0 0 1.55-1 1.7 1.7 0 0 0-.34-1.87l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.7 1.7 0 0 0 1.87.34h.01a1.7 1.7 0 0 0 1-1.55V3a2 2 0 1 1 4 0v.09a1.7 1.7 0 0 0 1 1.55h.01a1.7 1.7 0 0 0 1.87-.34l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.7 1.7 0 0 0-.34 1.87v.01a1.7 1.7 0 0 0 1.55 1H21a2 2 0 1 1 0 4h-.09a1.7 1.7 0 0 0-1.55 1z"/></svg></button>
+  </div>
+</nav>
+
 <div class="wrap">
   <div class="top glass">
-    <img src="../logo.png" alt="妈咪好"><b>妇幼智能辅助诊疗 · GoodMom 重画版</b>
+    <div class="tb-brand">
+      <img src="../logo.png" alt="妈咪好"><b>妇幼智能辅助诊疗 · GoodMom 重画版</b>
+    </div>
     <div class="tabs">
       <span class="tb on" data-v="work">专家工作台</span><span class="tb" data-v="archive">全生命周期档案</span>
       <span class="tb" data-v="consult">多智能体会诊</span><span class="tb" data-v="detail">诊疗详情</span>
+    </div>
+    <div class="seg" id="seg">
+      <span class="on" data-m="sider">侧栏</span><span data-m="top">顶栏</span>
     </div>
   </div>
 
@@ -308,13 +383,41 @@ th{color:var(--t3);font-size:11px;font-weight:500}
 </div>
 
 <script>
-(function(){var tabs=[].slice.call(document.querySelectorAll('.tabs .tb'));
-var views=[].slice.call(document.querySelectorAll('.view'));
-tabs.forEach(function(t){t.addEventListener('click',function(){
-  var v=t.getAttribute('data-v');
-  tabs.forEach(function(x){x.classList.toggle('on',x===t)});
-  views.forEach(function(x){x.classList.toggle('on',x.getAttribute('data-v')===v)});
-  window.scrollTo(0,0);});});})();
+(function(){
+  var body=document.body;
+  var navs=[].slice.call(document.querySelectorAll('.nv,.tabs .tb'));
+  var views=[].slice.call(document.querySelectorAll('.view'));
+  var segs=[].slice.call(document.querySelectorAll('#seg span'));
+  var mode=function(m){
+    body.classList.remove('mode-sider','mode-top');
+    body.classList.add('mode-'+m);
+    segs.forEach(function(s){s.classList.toggle('on',s.getAttribute('data-m')===m)});
+    try{localStorage.setItem('gm-nav-mode',m)}catch(e){}
+  };
+  var seg=document.getElementById('seg');
+  segs.forEach(function(s){s.addEventListener('click',function(){
+    mode(s.getAttribute('data-m'));window.scrollTo(0,0);});});
+  // 默认：首次进入按宽度选择（≥1180 侧栏，否则顶栏），之后记忆用户选择
+  var saved=null;try{saved=localStorage.getItem('gm-nav-mode')}catch(e){}
+  var start=(saved==='sider'||saved==='top')?saved:(window.innerWidth>=1180?'sider':'top');
+  mode(start);
+  if(!saved){window.addEventListener('resize',function(){var w=window.innerWidth;if((w>=1180)!==body.classList.contains('mode-sider')){mode(w>=1180?'sider':'top')}})}
+  // 视图切换（顶栏页签 + 侧栏项共用）
+  function go(v){
+    navs.forEach(function(x){x.classList.toggle('on',x.getAttribute('data-v')===v)});
+    views.forEach(function(x){x.classList.toggle('on',x.getAttribute('data-v')===v)});
+    window.scrollTo(0,0);
+  }
+  navs.forEach(function(n){n.addEventListener('click',function(){go(n.getAttribute('data-v'))})});
+  // 侧栏收起 / 展开（仅图标）
+  var colBtn=document.getElementById('colBtn');
+  var collapsed=null;try{collapsed=localStorage.getItem('gm-nav-coll')==='1'}catch(e){}
+  if(collapsed)body.classList.add('collapsed');
+  colBtn.addEventListener('click',function(){
+    body.classList.toggle('collapsed');
+    try{localStorage.setItem('gm-nav-coll',body.classList.contains('collapsed')?'1':'0')}catch(e){}
+  });
+})();
 </script>
 </body>
 </html>
