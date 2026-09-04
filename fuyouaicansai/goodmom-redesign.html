@@ -100,6 +100,25 @@ th{color:var(--t3);font-size:11px;font-weight:500}
     </div>
   </div>
 
+
+
+    <div style="display:grid;grid-template-columns:1.7fr 1fr;gap:16px;margin-top:16px">
+      <div class="card pad"><b>今日日程 / 在办会诊</b>
+        <div class="rowb"><span class="tag p">会诊</span><span>09:00 · 陈静（红级）多学科会诊</span><span style="margin-left:auto;color:var(--t3)">进行中</span></div>
+        <div class="rowb"><span class="tag b">门诊</span><span>10:30 · 张敏 GDM 门诊随访</span><span style="margin-left:auto;color:var(--t3)">待开始</span></div>
+        <div class="rowb"><span class="tag o">复核</span><span>14:00 · 安安 高危儿专案复核</span><span style="margin-left:auto;color:var(--t3)">待开始</span></div>
+        <div class="rowb"><span class="tag g">归档</span><span>16:00 · 今日随访记录归档</span><span style="margin-left:auto;color:var(--t3)">待开始</span></div>
+      </div>
+      <div class="card pad"><b>周内随访完成率</b>
+        <div style="display:flex;align-items:center;gap:14px">
+          <svg width="96" height="96" viewBox="0 0 80 80"><circle cx="40" cy="40" r="30" fill="none" stroke="rgba(58,52,84,.08)" stroke-width="9"/><circle cx="40" cy="40" r="30" fill="none" stroke="#F77FA3" stroke-width="9" stroke-linecap="round" stroke-dasharray="150 189" transform="rotate(-90 40 40)"/><text x="40" y="36" text-anchor="middle" font-size="13" font-weight="700" fill="#C94A77" class="num">83%</text><text x="40" y="50" text-anchor="middle" font-size="6.5" fill="#9AA2B0">随访完成</text></svg>
+          <div style="font-size:12.5px;color:var(--t2);line-height:2.2">
+            <div>高危随访 96%</div><div>产后访视 91%</div><div>两癌复查 74%</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
   <!-- P2 全生命周期档案 -->
   <div class="view" data-v="archive">
     <h2>全生命周期数据档案</h2>
@@ -144,6 +163,24 @@ th{color:var(--t3);font-size:11px;font-weight:500}
     </div>
   </div>
 
+
+
+    <div style="margin-top:16px" class="card pad"><b>健康保健清单（五健 + 口腔）</b>
+      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:10px;margin-top:10px">
+        <div style="display:flex;gap:8px;align-items:center;background:rgba(255,255,255,.5);border:1px solid rgba(255,255,255,.8);border-radius:14px;padding:10px 12px"><b style="font-size:13px">生长发育</b><span class="tag g" style="margin-left:auto">P62</span></div>
+        <div style="display:flex;gap:8px;align-items:center;background:rgba(255,255,255,.5);border:1px solid rgba(255,255,255,.8);border-radius:14px;padding:10px 12px"><b style="font-size:13px">营养喂养</b><span class="tag g" style="margin-left:auto">通过</span></div>
+        <div style="display:flex;gap:8px;align-items:center;background:rgba(255,255,255,.5);border:1px solid rgba(255,255,255,.8);border-radius:14px;padding:10px 12px"><b style="font-size:13px">心理行为</b><span class="tag g" style="margin-left:auto">正常</span></div>
+        <div style="display:flex;gap:8px;align-items:center;background:rgba(255,255,255,.5);border:1px solid rgba(255,255,255,.8);border-radius:14px;padding:10px 12px"><b style="font-size:13px">视力保健</b><span class="tag o" style="margin-left:auto">待复查</span></div>
+        <div style="display:flex;gap:8px;align-items:center;background:rgba(255,255,255,.5);border:1px solid rgba(255,255,255,.8);border-radius:14px;padding:10px 12px"><b style="font-size:13px">听力保健</b><span class="tag g" style="margin-left:auto">通过</span></div>
+        <div style="display:flex;gap:8px;align-items:center;background:rgba(255,255,255,.5);border:1px solid rgba(255,255,255,.8);border-radius:14px;padding:10px 12px"><b style="font-size:13px">口腔保健</b><span class="tag o" style="margin-left:auto">待检</span></div>
+      </div>
+    </div>
+    <div style="margin-top:12px" class="card pad"><b>疫苗计划</b>
+      <div class="rowb"><span class="tag g">已完成</span><span>出生 · 乙肝① / 2 月龄 · 脊灰① / 4 月龄 · 百白破②</span></div>
+      <div class="rowb"><span class="tag o">待种</span><span>18 月龄 · 百白破④ · 甲肝 · 剩余 26 天可预约</span></div>
+      <div class="rowb"><span class="tag n">计划</span><span>24 月龄 · 乙脑/流脑加强 · 届时提醒</span></div>
+    </div>
+
   <!-- P3 多智能体会诊 -->
   <div class="view" data-v="consult">
     <h2>多智能体协同会诊室</h2>
@@ -168,6 +205,25 @@ th{color:var(--t3);font-size:11px;font-weight:500}
       </div>
     </div>
   </div>
+
+
+
+    <div style="display:grid;grid-template-columns:1.5fr 1fr;gap:16px;margin-top:16px">
+      <div class="card pad"><b>会诊流程</b>
+        <div style="display:flex;gap:6px;align-items:center;flex-wrap:wrap;margin-top:6px">
+          <span class="stepdot">✓</span><span style="font-size:11px">发起会诊</span>
+          <span style="color:#ccc">→</span><span class="stepdot">✓</span><span style="font-size:11px">AI 分诊</span>
+          <span style="color:#ccc">→</span><span class="stepdot" style="background:#fff;border:2px solid var(--rose-d);color:var(--rose-deep)">3</span><span style="font-size:11px">多学科会诊</span>
+          <span style="color:#ccc">→</span><span class="stepdot" style="background:#fff;border:1px dashed #ccc;color:var(--t3)">4</span><span style="font-size:11px">专家签发</span>
+          <span style="color:#ccc">→</span><span class="stepdot" style="background:#fff;border:1px dashed #ccc;color:var(--t3)">5</span><span style="font-size:11px">下达随访</span>
+        </div>
+      </div>
+      <div class="card pad"><b>历史会诊记录</b>
+        <div class="rowb"><span>2025-06-18 · 产科单学科 · 建议转诊评估</span></div>
+        <div class="rowb"><span>2025-06-25 · AI 风险复核 · 推送多学科会诊</span></div>
+        <div class="rowb"><span>2025-06-26 · 心内科咨询 · 拉贝洛尔建议</span></div>
+      </div>
+    </div>
 
   <!-- P4 诊疗详情 -->
   <div class="view" data-v="detail">
@@ -195,6 +251,30 @@ th{color:var(--t3);font-size:11px;font-weight:500}
     </div>
   </div>
 </div>
+
+    <div class="card pad" style="margin-top:12px"><b>相关检查与筛查结果</b>
+      <table style="margin-top:8px"><tr><th>日期</th><th>项目</th><th>结果</th><th>结论</th></tr>
+        <tr><td class="num">06-25</td><td>OGTT 糖耐量</td><td class="num">空腹5.4/1h 10.6/2h 9.3</td><td><span class="tag o">异常</span></td></tr>
+        <tr><td class="num">06-28</td><td>血常规 / 肝肾功能</td><td class="num">大致正常</td><td><span class="tag g">正常</span></td></tr>
+        <tr><td class="num">06-28</td><td>产科 B 超</td><td class="num">胎心 148bpm</td><td><span class="tag g">正常</span></td></tr>
+      </table>
+    </div>
+    <div class="two" style="margin-top:12px">
+      <div class="card pad"><b>近 7 日空腹血糖趋势</b>
+        <svg width="100%" height="110" viewBox="0 0 320 110" preserveAspectRatio="none" style="margin-top:6px">
+          <path d="M0,70 L45,60 L90,52 L135,58 L180,40 L225,46 L270,30 L320,34 L320,110 L0,110 Z" fill="rgba(242,178,92,.16)"/>
+          <path d="M0,70 L45,60 L90,52 L135,58 L180,40 L225,46 L270,30 L320,34" fill="none" stroke="#EFAF55" stroke-width="2.4"/>
+        </svg>
+        <div style="font-size:11px;color:var(--t3)">空腹 4.8–6.1 波动 · 建议维持饮食干预并监测</div>
+      </div>
+      <div class="card pad"><b>医嘱与待办</b>
+        <div class="rowb"><span class="tag g">医嘱</span><span>营养科会诊（3 日内）</span></div>
+        <div class="rowb"><span class="tag o">监测</span><span>每日 4 点血糖并 App 上报</span></div>
+        <div class="rowb"><span class="tag b">复诊</span><span>07-08 产科随访 · 血糖评估</span></div>
+        <div style="margin-top:10px"><button class="btn pri sm">完成医嘱下发</button></div>
+      </div>
+    </div>
+
 <script>
 (function(){var tabs=[].slice.call(document.querySelectorAll('.tabs .tb'));
 var views=[].slice.call(document.querySelectorAll('.view'));
