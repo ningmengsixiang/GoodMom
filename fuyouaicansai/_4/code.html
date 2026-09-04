@@ -1,0 +1,381 @@
+<!DOCTYPE html>
+
+<html class="light" lang="zh-CN"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>专家工作站首页 - 妇幼智能辅助诊疗</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700&amp;family=Inter:wght@400;500;600&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "secondary-fixed": "#bee9ff",
+                        "outline": "#867277",
+                        "error-container": "#ffdad6",
+                        "tertiary-fixed-dim": "#8fd790",
+                        "background": "#fff8f8",
+                        "surface-variant": "#eedfe1",
+                        "peach-accent": "#FFCCBC",
+                        "inverse-primary": "#ffb0c9",
+                        "primary-container": "#f48fb1",
+                        "lavender-accent": "#E1BEE7",
+                        "tertiary-container": "#77be79",
+                        "soft-grey": "#94A3B8",
+                        "surface-container-high": "#f4e4e7",
+                        "on-error-container": "#93000a",
+                        "primary": "#964261",
+                        "secondary-container": "#84d7fd",
+                        "on-primary-fixed": "#3e001e",
+                        "on-secondary": "#ffffff",
+                        "on-surface": "#21191c",
+                        "surface-dim": "#e6d6d9",
+                        "mint-accent": "#B2DFDB",
+                        "surface-tint": "#964261",
+                        "on-background": "#21191c",
+                        "on-error": "#ffffff",
+                        "on-primary": "#ffffff",
+                        "error": "#ba1a1a",
+                        "surface-container-low": "#fff0f2",
+                        "surface-container": "#faeaed",
+                        "on-tertiary-container": "#004d17",
+                        "on-secondary-fixed-variant": "#004d65",
+                        "surface-container-highest": "#eedfe1",
+                        "on-tertiary-fixed-variant": "#04531b",
+                        "primary-fixed-dim": "#ffb0c9",
+                        "inverse-on-surface": "#fdedf0",
+                        "charcoal-text": "#2C3E50",
+                        "tertiary": "#266b31",
+                        "on-secondary-container": "#005d79",
+                        "inverse-surface": "#372e30",
+                        "on-primary-container": "#722544",
+                        "on-secondary-fixed": "#001f2a",
+                        "outline-variant": "#d8c1c6",
+                        "surface-container-lowest": "#ffffff",
+                        "primary-fixed": "#ffd9e2",
+                        "secondary": "#006685",
+                        "on-primary-fixed-variant": "#792b4a",
+                        "surface-bright": "#fff8f8",
+                        "on-tertiary-fixed": "#002106",
+                        "surface": "#fff8f8",
+                        "tertiary-fixed": "#aaf4aa",
+                        "on-tertiary": "#ffffff",
+                        "secondary-fixed-dim": "#7ed1f7",
+                        "on-surface-variant": "#534247"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "unit": "4px",
+                        "card-padding": "32px",
+                        "gutter": "24px",
+                        "margin-page": "40px"
+                    },
+                    "fontFamily": {
+                        "label-caps": ["Inter"],
+                        "display-lg": ["Plus Jakarta Sans"],
+                        "title-lg": ["Plus Jakarta Sans"],
+                        "headline-lg-mobile": ["Plus Jakarta Sans"],
+                        "body-sm": ["Inter"],
+                        "headline-md": ["Plus Jakarta Sans"],
+                        "body-md": ["Inter"],
+                        "headline-sm": ["Plus Jakarta Sans"]
+                    },
+                    "fontSize": {
+                        "label-caps": ["12px", { "lineHeight": "1", "letterSpacing": "0.02em", "fontWeight": "600" }],
+                        "display-lg": ["32px", { "lineHeight": "1.25", "letterSpacing": "-0.02em", "fontWeight": "700" }],
+                        "title-lg": ["18px", { "lineHeight": "1.5", "fontWeight": "600" }],
+                        "headline-lg-mobile": ["24px", { "lineHeight": "1.3", "fontWeight": "700" }],
+                        "body-sm": ["14px", { "lineHeight": "1.6", "fontWeight": "400" }],
+                        "headline-md": ["24px", { "lineHeight": "1.3", "fontWeight": "600" }],
+                        "body-md": ["16px", { "lineHeight": "1.6", "fontWeight": "400" }],
+                        "headline-sm": ["20px", { "lineHeight": "1.4", "fontWeight": "600" }]
+                    },
+                    "boxShadow": {
+                        'soft': '0px 10px 30px rgba(0,0,0,0.04)'
+                    }
+                }
+            }
+        }
+    </script>
+<style>
+        body { background-color: #fff8f8; }
+        .glass-panel {
+            background: rgba(255, 255, 255, 0.6);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.4);
+        }
+        .gradient-btn {
+            background: linear-gradient(135deg, #ffb0c9 0%, #FFCCBC 100%);
+        }
+        .card-hover:hover {
+            transform: translateY(-2px);
+            box-shadow: 0px 15px 35px rgba(0,0,0,0.06);
+        }
+    </style>
+</head>
+<body class="text-on-background font-body-md overflow-x-hidden min-h-screen flex bg-background">
+<!-- SideNavBar (from JSON) -->
+<nav class="fixed left-0 top-0 h-full flex flex-col py-6 z-40 bg-surface-container-low dark:bg-inverse-surface backdrop-blur-lg docked w-64 rounded-r-xl shadow-md transition-transform duration-300 transform -translate-x-full md:translate-x-0" id="sidebar">
+<div class="px-6 mb-8 flex items-center space-x-3">
+<div class="w-10 h-10 rounded-full bg-primary-container flex items-center justify-center">
+<span class="material-symbols-outlined text-on-primary-container">medical_services</span>
+</div>
+<div>
+<h1 class="font-headline-md text-headline-md text-primary dark:text-inverse-primary tracking-tight">妇幼智诊</h1>
+<p class="font-label-caps text-label-caps text-on-surface-variant">智能辅助诊疗平台</p>
+</div>
+</div>
+<div class="flex-1 overflow-y-auto px-2 space-y-2">
+<a class="flex items-center space-x-3 bg-primary-container text-on-primary-container font-bold rounded-full mx-2 px-4 py-3 scale-95 transition-transform duration-150" href="#">
+<span class="material-symbols-outlined" data-weight="fill" style="font-variation-settings: 'FILL' 1;">dashboard</span>
+<span>工作台</span>
+</a>
+<a class="flex items-center space-x-3 text-on-surface-variant dark:text-outline-variant hover:bg-surface-variant/30 rounded-full mx-2 px-4 py-3 hover:bg-primary-fixed-dim/20 transition-all duration-300" href="#">
+<span class="material-symbols-outlined">psychology</span>
+<span>AI 诊断</span>
+</a>
+<a class="flex items-center space-x-3 text-on-surface-variant dark:text-outline-variant hover:bg-surface-variant/30 rounded-full mx-2 px-4 py-3 hover:bg-primary-fixed-dim/20 transition-all duration-300" href="#">
+<span class="material-symbols-outlined">groups</span>
+<span>会诊中心</span>
+</a>
+<a class="flex items-center space-x-3 text-on-surface-variant dark:text-outline-variant hover:bg-surface-variant/30 rounded-full mx-2 px-4 py-3 hover:bg-primary-fixed-dim/20 transition-all duration-300" href="#">
+<span class="material-symbols-outlined">folder_shared</span>
+<span>数据归档</span>
+</a>
+<a class="flex items-center space-x-3 text-on-surface-variant dark:text-outline-variant hover:bg-surface-variant/30 rounded-full mx-2 px-4 py-3 hover:bg-primary-fixed-dim/20 transition-all duration-300" href="#">
+<span class="material-symbols-outlined">settings</span>
+<span>设置</span>
+</a>
+</div>
+<div class="px-6 mt-auto">
+<button class="w-full py-3 rounded-full gradient-btn text-on-primary-fixed font-title-lg text-title-lg shadow-sm hover:opacity-90 transition-opacity">
+                开启新诊断
+            </button>
+</div>
+</nav>
+<!-- Main Content Wrapper -->
+<div class="flex-1 md:ml-64 flex flex-col min-h-screen">
+<!-- TopAppBar (from JSON) -->
+<header class="flex justify-between items-center w-full px-margin-page py-4 z-50 bg-surface/80 dark:bg-inverse-surface/80 backdrop-blur-xl docked full-width top-0 shadow-sm sticky top-0">
+<div class="flex items-center">
+<button class="md:hidden mr-4 text-on-surface" id="menu-btn">
+<span class="material-symbols-outlined">menu</span>
+</button>
+<div class="hidden md:flex items-center bg-surface-container-high rounded-full px-4 py-2 border border-surface-variant">
+<span class="material-symbols-outlined text-outline mr-2">search</span>
+<input class="bg-transparent border-none focus:ring-0 text-body-sm w-64 text-on-surface outline-none" placeholder="搜索患者或病历..." type="text"/>
+</div>
+</div>
+<div class="flex items-center space-x-4">
+<button class="w-10 h-10 rounded-full hover:bg-surface-variant/50 flex items-center justify-center text-on-surface-variant transition-colors relative">
+<span class="material-symbols-outlined">notifications</span>
+<span class="absolute top-2 right-2 w-2 h-2 bg-error rounded-full"></span>
+</button>
+<button class="w-10 h-10 rounded-full hover:bg-surface-variant/50 flex items-center justify-center text-on-surface-variant transition-colors">
+<span class="material-symbols-outlined">settings</span>
+</button>
+<div class="w-10 h-10 rounded-full bg-surface-variant overflow-hidden cursor-pointer border-2 border-surface-container-lowest">
+<img alt="Medical Practitioner Profile" class="w-full h-full object-cover" data-alt="A professional headshot of a female doctor in a white coat, brightly lit with a soft pink background, conveying trust and warmth." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAfT_ly9Q3kS96hDxuO1oLVgbOYMVr6Ge7OMA3PQLLighp9HgbwmuzFDdaSTvh_wF3y8G4d15vb3iH0N2fuaanv6FRhKbIWeJiZ9pHDDi54YL2HP84K1KGBTkyaTQIK4zaRCMe7JfaVSwS2TX6JTH6JuRMuEo0q9dAJSf_s8cEtfQtoEFIMLOkVa9e5Qacjwq1dRZBUBdSdCHrm3wGe6527XhNp_hnirv24HgMhBonrASZO4MsTPUhuIg"/>
+</div>
+</div>
+</header>
+<!-- Canvas -->
+<main class="flex-1 p-margin-page overflow-y-auto">
+<div class="max-w-7xl mx-auto space-y-8">
+<!-- Hero Section -->
+<div class="glass-panel rounded-3xl p-8 relative overflow-hidden shadow-soft flex flex-col md:flex-row items-center justify-between" style="background: linear-gradient(105deg, rgba(255,248,248,0.9) 0%, rgba(244,143,177,0.1) 100%);">
+<div class="z-10 max-w-xl">
+<h2 class="font-display-lg text-display-lg text-primary mb-2">欢迎您，张医生</h2>
+<p class="font-body-md text-body-md text-on-surface-variant mb-6">今日概览：已有 12 位患者预约，其中 2 位高危风险需重点关注。系统已完成初步筛查。</p>
+<div class="flex space-x-4">
+<div class="bg-white/80 rounded-2xl p-4 shadow-sm flex items-center space-x-3">
+<div class="w-12 h-12 rounded-full bg-peach-accent/30 flex items-center justify-center text-primary">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">pregnant_woman</span>
+</div>
+<div>
+<div class="font-label-caps text-label-caps text-outline">待接诊</div>
+<div class="font-headline-md text-headline-md text-on-surface">5</div>
+</div>
+</div>
+<div class="bg-white/80 rounded-2xl p-4 shadow-sm flex items-center space-x-3">
+<div class="w-12 h-12 rounded-full bg-lavender-accent/30 flex items-center justify-center text-primary">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">assignment_turned_in</span>
+</div>
+<div>
+<div class="font-label-caps text-label-caps text-outline">今日完成</div>
+<div class="font-headline-md text-headline-md text-on-surface">7</div>
+</div>
+</div>
+</div>
+</div>
+<div class="hidden md:block w-64 h-64 relative z-0">
+<img class="w-full h-full object-contain drop-shadow-2xl" data-alt="A highly stylized, cute 3D render of a medical clipboard with a pink heart floating above it, rendered in soft pastel colors, glossy materials, light mode aesthetic, perfectly fitting a modern maternal health app." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCEvl02qZoEc-jbdC1gApnqggW_7mGE1KakiuQq1jH-3d_pyLQmfgpT5xHHJP7qw7DeoKRf-U-RjVl_Grp_CnT-i4OVpnMip4twGTUDyYcVr4_iIBzFApy5n8g8zpullL4dKWhfa1wA_7d_bkyxIf0Dh15FainGN7koRWuk_mnxEopCEsoJJAM8XuoYJlNmoZbBOxFMPpA0_dRewnT-oUfKBcfSTbVkyh_eMhJTj3sBxWjN9gujtBC5Rw"/>
+</div>
+</div>
+<!-- Main Content Grid -->
+<div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+<!-- Left Column: High Risk & AI Status -->
+<div class="lg:col-span-2 space-y-8">
+<!-- High-Risk Table -->
+<div class="bg-surface-container-lowest rounded-3xl p-8 shadow-soft card-hover transition-all duration-300">
+<div class="flex justify-between items-center mb-6">
+<h3 class="font-headline-sm text-headline-sm text-on-surface flex items-center">
+<span class="material-symbols-outlined text-error mr-2" style="font-variation-settings: 'FILL' 1;">warning</span>
+                                    高危孕产妇监测
+                                </h3>
+<button class="text-primary font-body-sm hover:underline">查看全部</button>
+</div>
+<div class="overflow-x-auto">
+<table class="w-full text-left border-collapse">
+<thead>
+<tr class="border-b border-surface-variant">
+<th class="pb-3 font-label-caps text-label-caps text-outline">患者姓名</th>
+<th class="pb-3 font-label-caps text-label-caps text-outline">孕周</th>
+<th class="pb-3 font-label-caps text-label-caps text-outline">风险等级</th>
+<th class="pb-3 font-label-caps text-label-caps text-outline">AI 评估建议</th>
+<th class="pb-3 font-label-caps text-label-caps text-outline">操作</th>
+</tr>
+</thead>
+<tbody class="text-body-sm text-on-surface">
+<tr class="border-b border-surface-container-high hover:bg-surface-container-low transition-colors">
+<td class="py-4 font-medium">李明华</td>
+<td class="py-4">32周+3</td>
+<td class="py-4">
+<span class="px-3 py-1 rounded-full bg-error-container text-on-error-container font-label-caps text-[10px]">危重</span>
+</td>
+<td class="py-4 text-outline max-w-[200px] truncate">血压持续升高，建议复查尿蛋白并进行胎心监护。</td>
+<td class="py-4">
+<button class="w-8 h-8 rounded-full bg-surface-variant flex items-center justify-center text-primary hover:bg-primary-container transition-colors">
+<span class="material-symbols-outlined text-sm">chevron_right</span>
+</button>
+</td>
+</tr>
+<tr class="hover:bg-surface-container-low transition-colors">
+<td class="py-4 font-medium">王静</td>
+<td class="py-4">28周+1</td>
+<td class="py-4">
+<span class="px-3 py-1 rounded-full bg-peach-accent text-on-surface font-label-caps text-[10px]">高风险</span>
+</td>
+<td class="py-4 text-outline max-w-[200px] truncate">血糖波动异常，建议调整饮食结构并增加内分泌科会诊。</td>
+<td class="py-4">
+<button class="w-8 h-8 rounded-full bg-surface-variant flex items-center justify-center text-primary hover:bg-primary-container transition-colors">
+<span class="material-symbols-outlined text-sm">chevron_right</span>
+</button>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<!-- System AI Status Bento -->
+<div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+<div class="bg-gradient-to-br from-mint-accent/40 to-surface-container-lowest rounded-3xl p-6 shadow-soft relative overflow-hidden card-hover">
+<div class="flex items-center space-x-3 mb-4">
+<div class="w-10 h-10 rounded-full bg-mint-accent flex items-center justify-center text-on-secondary-container">
+<span class="material-symbols-outlined">smart_toy</span>
+</div>
+<h4 class="font-title-lg text-title-lg text-on-surface">产科智能助理</h4>
+</div>
+<div class="text-display-lg font-display-lg text-primary mb-1">98.5%</div>
+<div class="font-body-sm text-outline mb-4">当前诊断置信度 (基于最近50例)</div>
+<div class="flex items-center text-tertiary font-label-caps">
+<span class="w-2 h-2 rounded-full bg-tertiary-container mr-2 animate-pulse"></span>
+                                    在线且活跃
+                                </div>
+<div class="absolute -bottom-4 -right-4 opacity-20 pointer-events-none">
+<span class="material-symbols-outlined" style="font-size: 100px;">ecg_heart</span>
+</div>
+</div>
+<div class="bg-gradient-to-br from-secondary-fixed/40 to-surface-container-lowest rounded-3xl p-6 shadow-soft relative overflow-hidden card-hover">
+<div class="flex items-center space-x-3 mb-4">
+<div class="w-10 h-10 rounded-full bg-secondary-fixed flex items-center justify-center text-on-secondary-fixed-variant">
+<span class="material-symbols-outlined">child_care</span>
+</div>
+<h4 class="font-title-lg text-title-lg text-on-surface">儿科智能助理</h4>
+</div>
+<div class="text-display-lg font-display-lg text-secondary mb-1">96.2%</div>
+<div class="font-body-sm text-outline mb-4">当前生长评估准确率</div>
+<div class="flex items-center text-tertiary font-label-caps">
+<span class="w-2 h-2 rounded-full bg-tertiary-container mr-2 animate-pulse"></span>
+                                    在线且活跃
+                                </div>
+<div class="absolute -bottom-4 -right-4 opacity-20 pointer-events-none">
+<span class="material-symbols-outlined" style="font-size: 100px;">toys</span>
+</div>
+</div>
+</div>
+</div>
+<!-- Right Column: Collaboration Queue -->
+<div class="space-y-8">
+<div class="bg-surface-container-lowest rounded-3xl p-6 shadow-soft h-full flex flex-col">
+<h3 class="font-headline-sm text-headline-sm text-on-surface mb-6 flex items-center justify-between">
+<span class="flex items-center">
+<span class="material-symbols-outlined text-primary mr-2" style="font-variation-settings: 'FILL' 1;">groups</span>
+                                    多学科会诊队列
+                                </span>
+<span class="px-2 py-1 bg-surface-variant text-on-surface-variant rounded-full font-label-caps text-[10px]">3 待处理</span>
+</h3>
+<div class="space-y-4 flex-1">
+<!-- Queue Item -->
+<div class="p-4 rounded-2xl bg-surface-container-low border border-surface-container-highest hover:border-primary/30 transition-colors cursor-pointer">
+<div class="flex justify-between items-start mb-2">
+<div class="font-title-lg text-title-lg text-on-surface">复杂妊娠合并症评估</div>
+<span class="font-label-caps text-label-caps text-error">紧急</span>
+</div>
+<p class="font-body-sm text-outline mb-3">患者：赵** · 发起方：内分泌科</p>
+<div class="flex items-center justify-between">
+<div class="flex -space-x-2">
+<img alt="Doctor 1" class="w-6 h-6 rounded-full border-2 border-white" data-alt="Small circular avatar of a male doctor in light blue scrubs." src="https://lh3.googleusercontent.com/aida-public/AB6AXuA0SXgWIEnyXtcukl5h4ucjHnnvnGQG7so8ELYrJMRgHi16VfzxxzP-x9Ab1kKsoxNvZIES1wGUBTHUzLH-1fMLs7tgxH8z4v9T3e18GMc0aI9eTL-rfsIDS1StPPGZsUKUEBMfs9EVhvGE7En0xveEfVB5BjnHuD4DSgpmF69Od2qEaio5y-ujZS3p098rfcZiWt8mvR-uTKEekeSvvywQtP7daXqVVOZ-ai8OGVeR7SoNceJu4cqU2w"/>
+<img alt="AI Agent" class="w-6 h-6 rounded-full border-2 border-white bg-mint-accent p-1" data-alt="Small circular avatar of an AI icon indicating system involvement." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCJizBuY_OamtyzIJFYdZponoCPgrgsSJ7hPt8OP6R2daSXu4ZXya9JkWIvLwJQP2H-xrEv1Jxd22NnnATOk3UY3QkphN5rrPpcBGkAyn5_ZfV__XxmJoai4RCfQjmfpsEpRVz8lUtlLdwF3vpUCDfXzGfnuX-3BI6X5fnWV57erA1nNu0_ccxV9MsWfxrjdeqRcHm1a8teWTTwt_T6g_KQ_VnDfPLZ1yBOympwV5CFdRSieoSeemb1Qw"/>
+</div>
+<button class="text-primary font-label-caps flex items-center">
+                                            进入会议室 <span class="material-symbols-outlined text-sm ml-1">arrow_forward</span>
+</button>
+</div>
+</div>
+<!-- Queue Item -->
+<div class="p-4 rounded-2xl bg-surface-container-low border border-surface-container-highest hover:border-primary/30 transition-colors cursor-pointer">
+<div class="flex justify-between items-start mb-2">
+<div class="font-title-lg text-title-lg text-on-surface">新生儿黄疸复查</div>
+<span class="font-label-caps text-label-caps text-outline">常规</span>
+</div>
+<p class="font-body-sm text-outline mb-3">患者：孙**宝宝 · 发起方：儿保科</p>
+<div class="flex items-center justify-between">
+<div class="flex -space-x-2">
+<img alt="Doctor 2" class="w-6 h-6 rounded-full border-2 border-white" data-alt="Small circular avatar of a female pediatrician smiling." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDxyvA2vyFMqdedM8p6J-aofyqXw9MP47UIj4TOumJVtMuSM0z6TnsSnLjj9ZQ5dG_P6H921Ist810nG08JdqGvGnCZcTCr4SINhjQuq00KMBjoAwX0c9H8o41Euj9DqdNPAv_wonV6mlRTJdDjOKm_90eXB0R8HL8a1fu4svL1ZzqB3ixuYQyAYg_JeQnPPh2RTKKsQke57jdAhgbLRS-0A8c6zFWa2YTxy7S38j9Qxa2zAfJOI5Z-0w"/>
+</div>
+<button class="text-primary font-label-caps flex items-center">
+                                            查看资料 <span class="material-symbols-outlined text-sm ml-1">description</span>
+</button>
+</div>
+</div>
+</div>
+<button class="w-full mt-4 py-3 border border-outline-variant text-on-surface rounded-full font-label-caps hover:bg-surface-variant/30 transition-colors">
+                                查看完整队列
+                            </button>
+</div>
+</div>
+</div>
+</div>
+</main>
+</div>
+<script>
+        // Simple mobile menu toggle
+        const menuBtn = document.getElementById('menu-btn');
+        const sidebar = document.getElementById('sidebar');
+        
+        menuBtn.addEventListener('click', () => {
+            sidebar.classList.toggle('-translate-x-full');
+        });
+    </script>
+</body></html>

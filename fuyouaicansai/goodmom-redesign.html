@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>妇幼智能辅助诊疗 · GoodMom 重画版</title>
+<link rel="icon" type="image/png" href="../logo.png">
+<style>
+:root{--t:#343A46;--t2:#586273;--t3:#9AA2B0;--rose-d:#E85D8F;--rose-deep:#C94A77;--mint:#6FC9B4;--info:#6D9EFF;--warn:#F2B25C;--danger:#EF6A7B;--purple:#9A78FF;
+--g:linear-gradient(135deg,#FFA9C2,#F77FA3 45%,#E85D8F)}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:"PingFang SC","Inter","MiSans","Noto Sans SC",sans-serif;color:var(--t);line-height:1.7;background:#E9D2C9;
+ background:radial-gradient(1000px 600px at 90% -8%,rgba(247,127,163,.2),transparent 65%),radial-gradient(900px 560px at -6% 24%,rgba(182,154,255,.15),transparent 65%),linear-gradient(165deg,#FDF2EE,#F6E2DB 55%,#E6CFC6)}
+.num{font-variant-numeric:tabular-nums}
+.glass{border-radius:20px;background:linear-gradient(160deg,rgba(255,255,255,.6),rgba(255,255,255,.26) 60%,rgba(255,255,255,.35));border:1px solid rgba(255,255,255,.8);box-shadow:inset 0 1px 0 rgba(255,255,255,.85),0 10px 24px rgba(90,70,70,.09);-webkit-backdrop-filter:blur(20px);backdrop-filter:blur(20px)}
+.card{border-radius:18px;background:linear-gradient(160deg,rgba(255,255,255,.64),rgba(255,255,255,.32));border:1px solid rgba(255,255,255,.82);box-shadow:0 8px 18px rgba(90,70,70,.07)}
+.wrap{max-width:1200px;margin:0 auto;padding:16px 18px 90px}
+.top{position:sticky;top:12px;z-index:60;display:flex;align-items:center;gap:10px;flex-wrap:wrap;padding:8px 14px;border-radius:999px;margin-bottom:14px}
+.top img{width:24px;height:24px;border-radius:50%;object-fit:cover}
+.top b{color:var(--rose-deep);font-size:14px}
+.tabs{margin-left:auto;display:flex;gap:6px;flex-wrap:wrap}
+.tabs .tb{padding:7px 13px;border-radius:999px;cursor:pointer;font-size:12.5px;font-weight:500;color:var(--t2);background:rgba(255,255,255,.5);border:1px solid rgba(255,255,255,.8)}
+.tabs .tb.on{background:var(--g);color:#fff;font-weight:600;box-shadow:0 6px 14px rgba(240,127,163,.3)}
+.view{display:none}
+.view.on{display:block;animation:fade .3s ease}
+@keyframes fade{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+h2{font-size:20px;margin:16px 0 6px}
+.tag{display:inline-flex;align-items:center;gap:6px;font-size:12px;border-radius:999px;padding:4px 12px;font-weight:500;white-space:nowrap}
+.tag i{width:7px;height:7px;border-radius:50%;background:currentColor}
+.g{color:#2f8f76;background:rgba(79,181,156,.13)}.b{color:#4a76d0;background:rgba(109,158,255,.13)}
+.o{color:#b9771c;background:rgba(242,178,92,.16)}.r{color:#d35466;background:rgba(239,106,123,.13)}
+.n{color:#757e8e;background:rgba(88,98,115,.09)}.p{color:#7a5ce0;background:rgba(154,120,255,.14)}
+.y{color:#8a6d10;background:rgba(242,193,78,.22)}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;border:none;cursor:pointer;border-radius:14px;padding:0 18px;height:40px;font-family:inherit;font-size:13.5px;font-weight:600}
+.btn.pri{background:var(--g);color:#fff;box-shadow:0 8px 18px rgba(240,127,163,.32)}
+.btn.mint{background:linear-gradient(135deg,#7FD8C2,#4FB59C);color:#fff}
+.btn.line{background:#fff;color:var(--rose-deep);border:1.5px solid rgba(232,93,143,.35)}
+.btn.sm{height:32px;padding:0 13px;font-size:12.5px;border-radius:12px}
+.av{width:42px;height:42px;border-radius:50%;display:inline-flex;align-items:center;justify-content:center;color:#fff;font-weight:700;background:var(--g);flex:none;font-size:16px}
+.av.mint{background:linear-gradient(150deg,#7FD8C2,#4FB59C)}.av.purp{background:linear-gradient(150deg,#B9A0FF,#8066F0)}
+.two{display:grid;grid-template-columns:1.7fr 1fr;gap:16px}
+.desc{display:grid;grid-template-columns:repeat(3,1fr);gap:12px 20px}
+.desc .k{font-size:11.5px;color:var(--t3)}.desc .v{font-size:14px;font-weight:600;margin-top:2px}
+table{width:100%;border-collapse:collapse;font-size:12.5px}
+th,td{text-align:left;padding:9px 8px;border-bottom:1px solid rgba(58,52,84,.08);vertical-align:middle}
+th{color:var(--t3);font-size:11px;font-weight:500}
+.pad{padding:16px 18px}
+.rowb{display:flex;gap:12px;align-items:center;padding:11px 4px;border-bottom:1px dashed rgba(58,52,84,.07)}
+.bubble{max-width:82%;padding:12px 14px;border-radius:16px;font-size:13px;line-height:1.85}
+.bubble.ai{background:rgba(255,255,255,.82);border:1px solid rgba(255,255,255,.9);border-top-left-radius:4px}
+.bubble.doc{background:var(--g);color:#fff;margin-left:auto;border-top-right-radius:4px}
+.chip{font-size:11.5px;padding:3px 11px;border-radius:999px;background:rgba(154,120,255,.12);color:#7a5ce0;font-weight:600;border:1px solid rgba(154,120,255,.22)}
+.stepdot{display:inline-flex;width:24px;height:24px;border-radius:50%;align-items:center;justify-content:center;font-size:11px;font-weight:700;color:#fff;background:var(--g)}
+@media(max-width:900px){.two{grid-template-columns:1fr}.desc{grid-template-columns:1fr 1fr}}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="top glass">
+    <img src="../logo.png" alt="妈咪好"><b>妇幼智能辅助诊疗 · GoodMom 重画版</b>
+    <div class="tabs">
+      <span class="tb on" data-v="work">专家工作台</span><span class="tb" data-v="archive">全生命周期档案</span>
+      <span class="tb" data-v="consult">多智能体会诊</span><span class="tb" data-v="detail">诊疗详情</span>
+    </div>
+  </div>
+
+  <!-- P1 专家工作台 -->
+  <div class="view on" data-v="work">
+    <h2>专家工作站 · 今日概览</h2>
+    <div class="card pad" style="display:flex;gap:10px;flex-wrap:wrap;align-items:center;margin-bottom:12px">
+      <span class="av">王</span><b>王立 · 妇产科主任医师</b>
+      <span class="tag b"><i></i>在线</span>
+      <span style="font-size:12px;color:var(--t3)">今日会诊 12 · AI 辅助建议 34 · 待复核 6</span>
+      <span class="btn pri sm" style="margin-left:auto">＋ 新建会诊</span>
+    </div>
+    <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:14px">
+      <div class="card pad"><div style="font-size:12px;color:var(--t2)">今日待处理</div><div class="num" style="font-size:26px;font-weight:700;color:var(--rose-d)">42</div><div style="font-size:11px;color:var(--t3)">会诊 18 · 复核 24</div></div>
+      <div class="card pad"><div style="font-size:12px;color:var(--t2)">高危对象</div><div class="num" style="font-size:26px;font-weight:700;color:#d35466">23</div><div style="font-size:11px;color:var(--t3)">橙红紫 五色队列</div></div>
+      <div class="card pad"><div style="font-size:12px;color:var(--t2)">AI 建议采纳率</div><div class="num" style="font-size:26px;font-weight:700;color:#4FB59C">86%</div><div style="font-size:11px;color:var(--t3)">较上周 +3%</div></div>
+      <div class="card pad"><div style="font-size:12px;color:var(--t2)">今日新建档</div><div class="num" style="font-size:26px;font-weight:700;color:#4a76d0">18</div><div style="font-size:11px;color:var(--t3)">孕产妇 9 · 儿童 9</div></div>
+    </div>
+    <div class="two">
+      <div class="card pad">
+        <b>待复核智能建议</b><span style="font-size:11px;color:var(--t3);margin-left:8px">AI 已分析 · 需专家确认</span>
+        <table><tr><th>对象</th><th>AI 建议</th><th>置信</th><th style="text-align:right">操作</th></tr>
+        <tr><td>陈静 · 孕 12 周</td><td>妊娠合并心脏病 · 建议转市妇幼绿色通道</td><td><span class="tag o"><i></i>0.86</span></td><td style="text-align:right"><button class="btn mint sm">采纳</button> <button class="btn line sm">复核</button></td></tr>
+        <tr><td>安安 · 36 月龄</td><td>生长低于 P3 · 建议专案随访 + 内分泌转诊</td><td><span class="tag r"><i></i>0.93</span></td><td style="text-align:right"><button class="btn mint sm">采纳</button></td></tr>
+        <tr><td>赵甜甜 · 18 月龄</td><td>屈光异常趋势 · 建议 3 月后复查并涂氟</td><td><span class="tag g"><i></i>0.72</span></td><td style="text-align:right"><button class="btn line sm">复核</button></td></tr>
+        </table>
+      </div>
+      <div class="card pad">
+        <b>AI 智能助手</b>
+        <div style="font-size:12px;color:var(--t2);line-height:2.1;margin-top:8px">
+          <div class="bubble ai">今日共梳理 <b>34</b> 条建议，其中高危相关 <b>6</b> 条已置顶；建议先处理陈静（五色红）。</div>
+          <div style="margin:8px 0;text-align:right"><div class="bubble doc">好的，先转诊陈静，并把安安纳入高危儿随访。</div></div>
+          <div class="bubble ai">已创建转诊单（绿色通道）并挂起随访提醒，将按 15.2.10 黄红升级规则跟踪。</div>
+        </div>
+        <div style="margin-top:10px"><button class="btn pri sm">发送给助手</button></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- P2 全生命周期档案 -->
+  <div class="view" data-v="archive">
+    <h2>全生命周期数据档案</h2>
+    <div class="card pad" style="margin-bottom:12px">
+      <div style="display:flex;gap:12px;align-items:center;flex-wrap:wrap">
+        <span class="av">朵</span>
+        <div style="flex:1;min-width:220px">
+          <div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap"><b style="font-size:17px">朵朵 · 女</b><span class="tag g"><i></i>生长正常</span><span class="tag b"><i></i>已建档</span></div>
+          <div style="font-size:12px;color:var(--t3)">档案 MMB-2024-0318 · 18 月龄 · 儿保</div>
+        </div>
+        <div style="display:flex;gap:6px"><span class="stepdot">✓</span><span class="stepdot">✓</span><span class="stepdot">✓</span><span class="stepdot" style="background:#fff;border:2px solid var(--rose-d);color:var(--rose-deep)">18</span><span class="stepdot" style="background:#fff;border:1px dashed #ccc;color:var(--t3)">24</span></div>
+        <button class="btn pri sm">开始随访</button>
+      </div>
+    </div>
+    <div class="two">
+      <div>
+        <div class="card pad"><b>基本信息 · 最近评估</b>
+          <div class="desc" style="margin-top:10px">
+            <div><div class="k">出生</div><div class="v num">2023-04-12 · 3.2kg/50cm</div></div>
+            <div><div class="k">生长</div><div class="v">P75 · P62 · P58</div></div>
+            <div><div class="k">营养</div><div class="v">评估通过</div></div>
+            <div><div class="k">心理行为</div><div class="v">发育正常</div></div>
+            <div><div class="k">视力 / 听力</div><div class="v">待复查 / 通过</div></div>
+            <div><div class="k">口腔</div><div class="v">建议涂氟</div></div>
+          </div>
+        </div>
+        <div class="card pad" style="margin-top:12px"><b>健康事件时间线</b>
+          <div class="rowb"><span class="tag g">体检</span><span>2025-05-06 · 18 月龄儿保，生长正常</span></div>
+          <div class="rowb"><span class="tag o">视力</span><span>2025-05-06 · 屈光筛查提示复查</span></div>
+          <div class="rowb"><span class="tag g">疫苗</span><span>2025-04 · 麻腮风 · 已接种</span></div>
+        </div>
+      </div>
+      <div class="card pad">
+        <b>体重生长曲线（WHO P3–P97）</b>
+        <svg width="100%" height="150" viewBox="0 0 300 150" preserveAspectRatio="none" style="margin-top:8px">
+          <path d="M0,34 L60,30 L130,25 L200,21 L260,17 L300,15 L300,92 L260,95 L200,98 L130,102 L60,107 L0,111 Z" fill="rgba(169,227,212,.5)"/>
+          <path d="M0,72 L60,66 L130,61 L200,56 L260,50 L300,45" fill="none" stroke="#F77FA3" stroke-width="2.4"/>
+        </svg>
+        <div style="font-size:11px;color:var(--t3)">当前 P62 · 处于正常带；右侧未来 24–36 月节点待更新</div>
+        <div style="margin-top:10px"><span class="btn mint sm">智能随访建议</span></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- P3 多智能体会诊 -->
+  <div class="view" data-v="consult">
+    <h2>多智能体协同会诊室</h2>
+    <div class="two">
+      <div class="card pad">
+        <div style="display:flex;align-items:center;gap:8px;margin-bottom:8px"><b>会诊对象</b><span class="tag r"><i></i>五色红 · 高危</span></div>
+        <div style="display:flex;gap:8px;align-items:center;margin-bottom:10px"><span class="av">陈</span><div><b>陈静 · 孕 12 周</b><div style="font-size:12px;color:var(--t3)">妊娠合并心脏病 · 复发性子痫前期史</div></div></div>
+        <div style="display:flex;gap:6px;flex-wrap:wrap"><span class="chip">产科智能体</span><span class="chip">心内科智能体</span><span class="chip">药学智能体</span><span class="chip">随访智能体</span></div>
+        <div style="margin-top:12px">
+          <div class="bubble ai">产科：孕 12 周高危 · 建议 2 周内多学科会诊并评估心功能（NYHA 分级）。</div>
+          <div class="bubble ai" style="margin-top:8px">心内科：既往子痫前期史 + 心脏病变，β 受体阻滞剂可用但需监测胎心；建议产科-心内联合门诊。</div>
+          <div class="bubble ai" style="margin-top:8px">随访：将自动纳入红级专案管理，每周随访，提醒见 02.10 五色规则。</div>
+          <div class="bubble doc" style="margin-top:8px">同意转诊并安排 06-28 多学科门诊，同时开启红级随访。</div>
+        </div>
+      </div>
+      <div class="card pad">
+        <b>会诊结论与建议（待专家签发）</b>
+        <div class="rowb"><span class="tag r">风险</span><span>心功能待评估 · 转诊市妇幼绿色通道</span></div>
+        <div class="rowb"><span class="tag o">用药</span><span>拉贝洛尔 100mg bid 起用，血压随访</span></div>
+        <div class="rowb"><span class="tag b">随访</span><span>红级专案：每周 1 次血压与胎心记录</span></div>
+        <div style="margin-top:12px;display:flex;gap:8px"><button class="btn pri sm">采纳并下发</button><button class="btn line sm">退回修改</button><button class="btn line sm">转人工复核</button></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- P4 诊疗详情 -->
+  <div class="view" data-v="detail">
+    <h2>智能辅助诊疗详情</h2>
+    <div class="card pad">
+      <div style="display:flex;gap:8px;flex-wrap:wrap;align-items:center">
+        <b style="font-size:16px">张敏 · 孕 28 周 · GDM 随访</b>
+        <span class="tag y"><i></i>黄 · 一般风险</span><span class="tag b"><i></i>随访中</span>
+        <span style="margin-left:auto;font-size:12px;color:var(--t3)">王立医生 · 06-25</span>
+      </div>
+      <div class="desc" style="margin-top:12px">
+        <div><div class="k">主诉 / 本次评估</div><div class="v">OGTT 异常 · 血糖控制波动</div></div>
+        <div><div class="k">AI 辅助结论</div><div class="v">GDM · 建议强化饮食 + 血糖监测</div></div>
+        <div><div class="k">置信度</div><div class="v"><span class="tag o"><i></i>0.91</span></div></div>
+      </div>
+    </div>
+    <div class="card pad" style="margin-top:12px"><b>证据链</b>
+      <div class="rowb"><span class="tag g">指标</span><span>空腹 5.4 / 1h 10.6 / 2h 9.3（OGTT）</span></div>
+      <div class="rowb"><span class="tag b">记录</span><span>近 7 日空腹血糖 4.8–6.1 波动</span></div>
+      <div class="rowb"><span class="tag p">模型</span><span>多智能体汇总 · 产科/营养/随访一致</span></div>
+    </div>
+    <div class="two" style="margin-top:12px">
+      <div class="card pad"><b>智能建议</b><div class="rowb"><span class="tag g">用药</span><span>暂不启用胰岛素，营养科会诊 3 日完成</span></div><div class="rowb"><span class="tag o">监测</span><span>每日 4 点血糖 · App 上报</span></div><div class="rowb"><span class="tag b">复诊</span><span>07-08 产科随访 + 血糖评估</span></div></div>
+      <div class="card pad"><b>历史建议对比</b><div class="rowb">06-18 · 饮食指导（已执行）</div><div class="rowb">05-28 · 建议建档黄级专案（已采纳）</div><div class="rowb">05-20 · 建议 OGTT（已执行并出结果）</div></div>
+    </div>
+  </div>
+</div>
+<script>
+(function(){var tabs=[].slice.call(document.querySelectorAll('.tabs .tb'));
+var views=[].slice.call(document.querySelectorAll('.view'));
+tabs.forEach(function(t){t.addEventListener('click',function(){
+  var v=t.getAttribute('data-v');
+  tabs.forEach(function(x){x.classList.toggle('on',x===t)});
+  views.forEach(function(x){x.classList.toggle('on',x.getAttribute('data-v')===v)});
+  window.scrollTo(0,0);});});})();
+</script>
+</body>
+</html>
