@@ -91,6 +91,20 @@ h2{font-size:20px;margin:16px 0 6px}
 .chk{display:flex;gap:8px;align-items:center;background:rgba(255,255,255,.5);border:1px solid rgba(255,255,255,.8);border-radius:14px;padding:10px 12px}
 .chk b{font-size:13px}
 .chk .tag{margin-left:auto}
+/* 周内随访完成率 */
+.fol{display:flex;flex-direction:column}
+.fol-body{flex:1;display:flex;align-items:center;justify-content:center;gap:20px;padding:8px 2px 2px;min-height:150px}
+.fol-ring{flex:none}
+.fol-leg{flex:1;min-width:0;list-style:none;display:flex;flex-direction:column;gap:14px;justify-content:center;max-width:230px}
+.fol-leg li{display:grid;grid-template-columns:auto 1fr 34px;align-items:center;gap:8px;font-size:12px;color:var(--t2);white-space:nowrap}
+.fol-leg .bar{height:6px;border-radius:999px;background:rgba(58,52,84,.09);overflow:hidden}
+.fol-leg .bar i{display:block;height:100%;border-radius:999px}
+.fol-leg b{font-size:12px;font-weight:700;text-align:right;color:var(--t);font-variant-numeric:tabular-nums}
+.fol-fig{display:flex;flex-direction:column;align-items:center}
+@media(max-width:720px){
+  .fol-body{flex-wrap:wrap;gap:14px;min-height:0}
+  .fol-leg{flex:1 1 100%;max-width:none}
+}
 .stitle{display:block;font-size:12px;color:var(--t2);white-space:nowrap}
 .snum{display:block;font-size:26px;font-weight:700;line-height:1.3}
 .snote{display:block;font-size:11px;color:var(--t3)}
@@ -225,12 +239,14 @@ th{color:var(--t3);font-size:11px;font-weight:500}
         <div class="rowb"><span class="tag o">复核</span><span>14:00 · 安安 高危儿专案复核</span><span class="mla" style="color:var(--t3)">待开始</span></div>
         <div class="rowb"><span class="tag g">归档</span><span>16:00 · 今日随访记录归档</span><span class="mla" style="color:var(--t3)">待开始</span></div>
       </div>
-      <div class="card pad"><b>周内随访完成率</b>
-        <div style="display:flex;align-items:center;gap:14px;flex-wrap:wrap">
-          <svg width="96" height="96" viewBox="0 0 80 80" style="flex:none"><circle cx="40" cy="40" r="30" fill="none" stroke="rgba(58,52,84,.08)" stroke-width="9"/><circle cx="40" cy="40" r="30" fill="none" stroke="#F77FA3" stroke-width="9" stroke-linecap="round" stroke-dasharray="150 189" transform="rotate(-90 40 40)"/><text x="40" y="36" text-anchor="middle" font-size="13" font-weight="700" fill="#C94A77" class="num">83%</text><text x="40" y="50" text-anchor="middle" font-size="6.5" fill="#9AA2B0">随访完成</text></svg>
-          <div style="font-size:12.5px;color:var(--t2);line-height:2.2">
-            <div>高危随访 96%</div><div>产后访视 91%</div><div>两癌复查 74%</div>
-          </div>
+      <div class="card pad fol"><b>周内随访完成率</b>
+        <div class="fol-body">
+          <svg class="fol-ring" width="112" height="112" viewBox="0 0 80 80"><circle cx="40" cy="40" r="30" fill="none" stroke="rgba(58,52,84,.08)" stroke-width="9"/><circle cx="40" cy="40" r="30" fill="none" stroke="#F77FA3" stroke-width="9" stroke-linecap="round" stroke-dasharray="156 189" transform="rotate(-90 40 40)"/><text x="40" y="38" text-anchor="middle" font-size="15" font-weight="700" fill="#C94A77" class="num">83%</text><text x="40" y="52" text-anchor="middle" font-size="6.5" fill="#9AA2B0">随访完成</text></svg>
+          <ul class="fol-leg">
+            <li><span>高危随访</span><div class="bar"><i style="width:96%;background:linear-gradient(90deg,#FFB3CB,#F77FA3)"></i></div><b class="num">96%</b></li>
+            <li><span>产后访视</span><div class="bar"><i style="width:91%;background:linear-gradient(90deg,#A9E3D4,#5FC4A8)"></i></div><b class="num">91%</b></li>
+            <li><span>两癌复查</span><div class="bar"><i style="width:74%;background:linear-gradient(90deg,#FBD9A8,#F2B25C)"></i></div><b class="num">74%</b></li>
+          </ul>
         </div>
       </div>
     </div>
