@@ -6,7 +6,7 @@
 <title>妈咪好 GoodMom · 设计系统总览手册（打印版）</title>
 <link rel="icon" type="image/png" href="../logo.png">
 <style>
-:root{--rose:#E85D8F;--text:#343A46;--t2:#586273;--t3:#9AA2B0}
+:root{--rose:#E85D8F;--text:#343A46;--t2:#4F5B6E;--t3:#4F5B6E}
 *{box-sizing:border-box}
 body{font-family:"PingFang SC","Inter","MiSans","Noto Sans SC",sans-serif;color:var(--text);margin:0;
   background:#F6E2DB;line-height:1.7}
@@ -14,26 +14,26 @@ body{font-family:"PingFang SC","Inter","MiSans","Noto Sans SC",sans-serif;color:
   box-shadow:0 10px 30px rgba(90,70,70,.12)}
 h1{font-size:26px;margin:0 0 2px;letter-spacing:-.02em}
 h1 small{font-size:14px;color:var(--t3);font-weight:400;display:block;margin-top:6px}
-h2{font-size:17px;margin:22px 0 6px;color:#C94A77;border-left:4px solid var(--rose);padding-left:10px}
+h2{font-size:17px;margin:22px 0 6px;color:#B23A63;border-left:4px solid var(--rose);padding-left:10px}
 p{margin:6px 0}
 a{color:var(--rose);text-decoration:none}
 .meta{color:var(--t3);font-size:12px}
 .stat{display:flex;gap:0;flex-wrap:wrap;border:1px solid #f0d4cf;border-radius:14px;overflow:hidden;margin:10px 0}
 .stat span{flex:1 1 120px;padding:10px 12px;text-align:center;border-right:1px solid #f0d4cf}
 .stat span:last-child{border-right:none}
-.stat b{display:block;font-size:18px;color:#C94A77}
+.stat b{display:block;font-size:18px;color:#B23A63}
 .stat i{font-style:normal;font-size:11px;color:var(--t3)}
 pre{background:#fff7f4;border:1px solid #f0d4cf;border-radius:12px;padding:12px 16px;font-size:12px;line-height:1.8;overflow:auto;font-family:ui-monospace,Menlo,monospace}
 table{width:100%;border-collapse:collapse;font-size:12.5px;margin:8px 0}
 th,td{border-bottom:1px solid #eed9d3;text-align:left;padding:7px 8px;vertical-align:top}
-th{color:#C94A77;font-weight:600}
+th{color:#B23A63;font-weight:600}
 .grid2{display:grid;grid-template-columns:1fr 1fr;gap:10px}
 .card{border:1px solid #f0d4cf;border-radius:14px;padding:12px 14px;background:#fffaf7}
 .foot{margin-top:26px;padding-top:12px;border-top:1px dashed #e0c2bb;color:var(--t3);font-size:11px;line-height:2}
 @media print{
   body{background:#fff}
   .page{box-shadow:none;max-width:none;padding:12mm 10mm}
-  a{color:#C94A77}
+  a{color:#B23A63}
 }
 
 /* 顶部导航（悬停下拉，与全站一致） */
@@ -41,17 +41,17 @@ th{color:#C94A77;font-weight:600}
   display:flex;align-items:center;gap:10px;background:rgba(255,255,255,.8);border:1px solid #f0d4cf;
   box-shadow:0 6px 16px rgba(90,70,70,.08)}
 .topm img{width:24px;height:24px;border-radius:50%;object-fit:cover}
-.topm b{color:#C94A77;font-size:13px}
+.topm b{color:#B23A63;font-size:13px}
 .topm .ng{position:relative;margin-left:auto;display:inline-flex}
-.topm .ngt{font-family:inherit;font-size:12px;color:#586273;background:#fff;border:1px solid #f0d4cf;border-radius:999px;padding:6px 12px;cursor:pointer}
+.topm .ngt{font-family:inherit;font-size:12px;color:#4F5B6E;background:#fff;border:1px solid #f0d4cf;border-radius:999px;padding:6px 12px;cursor:pointer}
 .topm .ngt::after{content:"▾";margin-left:4px;font-size:10px;opacity:.6}
 .topm .ngdrop{position:absolute;top:calc(100% + 10px);right:0;min-width:190px;z-index:80;padding:6px;border-radius:14px;
   background:#fff;border:1px solid rgba(232,93,143,.22);box-shadow:0 14px 34px rgba(90,70,70,.14);
   opacity:0;pointer-events:none;transform:translateY(6px);transition:.2s}
 .topm .ng:hover .ngdrop{opacity:1;pointer-events:auto;transform:none}
 .topm .ng::after{content:"";position:absolute;left:-6px;right:-6px;top:100%;height:12px}
-.topm .ngdrop a{display:block;padding:8px 12px;border-radius:10px;font-size:12.5px;color:#586273;text-decoration:none}
-.topm .ngdrop a:hover{background:rgba(247,127,163,.1);color:#C94A77}
+.topm .ngdrop a{display:block;padding:8px 12px;border-radius:10px;font-size:12.5px;color:#4F5B6E;text-decoration:none}
+.topm .ngdrop a:hover{background:rgba(247,127,163,.1);color:#B23A63}
 
 </style>
 </head>

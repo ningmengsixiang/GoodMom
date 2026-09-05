@@ -16,9 +16,9 @@ def write(p, s):
 
 def extract_reader_assets(old):
     css_a = old.find("body.reader .wrap{max-width:100%")
-    css_b = old.find(".chapnav button{border:none;cursor:pointer;font-family:inherit;font-size:12.5px;font-weight:600;padding:8px 16px;border-radius:999px;background:#fff;color:#C94A77;border:1px solid rgba(232,93,143,.3)}")
+    css_b = old.find(".chapnav button{border:none;cursor:pointer;font-family:inherit;font-size:12.5px;font-weight:600;padding:8px 16px;border-radius:999px;background:#fff;color:#B23A63;border:1px solid rgba(232,93,143,.3)}")
     assert css_a != -1 and css_b != -1, "旧 spec.html 中未找到阅读器 CSS"
-    css = old[css_a:css_b + len(".chapnav button{border:none;cursor:pointer;font-family:inherit;font-size:12.5px;font-weight:600;padding:8px 16px;border-radius:999px;background:#fff;color:#C94A77;border:1px solid rgba(232,93,143,.3)}")]
+    css = old[css_a:css_b + len(".chapnav button{border:none;cursor:pointer;font-family:inherit;font-size:12.5px;font-weight:600;padding:8px 16px;border-radius:999px;background:#fff;color:#B23A63;border:1px solid rgba(232,93,143,.3)}")]
     tb_a = old.find('<button class="readtoggle"')
     tb_b = old.find("</button>", tb_a)
     assert tb_a != -1 and tb_b != -1

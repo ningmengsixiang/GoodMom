@@ -29,7 +29,7 @@ Figma:    LG / Color / Purple / 500
 | `--lg-warm-white` | `#F4F0EC` | 屏幕最亮层、高亮背景、玻璃内亮色填充 |
 | `--lg-warm-ivory` | `#E6D9D0` | **页面主背景**（Warm Ivory） |
 | `--lg-soft-beige` | `#D7C5BC` | 次级环境色、玻璃下氛围色斑（Soft Beige） |
-| `--lg-cool-gray` | `#586273` | 次级文字、弱图标、注释（Cool Gray） |
+| `--lg-cool-gray` | `#4F5B6E` | 次级文字、弱图标、注释（Cool Gray） |
 | `--lg-deep-slate` | `#343A46` | **主文字、最深元素**（Deep Slate） |
 
 **文本语义色**（浅底玻璃上）
@@ -37,14 +37,14 @@ Figma:    LG / Color / Purple / 500
 | Token | 值 | 用途 |
 | --- | --- | --- |
 | `--lg-text-primary` | `#343A46` | 标题 / 正文（对比度最高） |
-| `--lg-text-secondary` | `#586273` | 次级文字 |
+| `--lg-text-secondary` | `#4F5B6E` | 次级文字 |
 | `--lg-text-tertiary` | `#9AA2B0`（建议值） | 辅助说明 / 时间戳 / 弱标签 |
 | `--lg-text-placeholder` | `rgba(88,98,115,0.5)` | 输入框占位符 |
 | `--lg-text-disabled` | `rgba(88,98,115,0.4)` | 禁用态文字 |
 | `--lg-text-on-accent` | `#FFFFFF` | 彩色强调底上的文字 |
 | `--lg-divider` | `rgba(58,52,84,0.10)` | 分隔线 / 表格行线 |
 
-> 无障碍底线（WCAG 2.2 AA，D2 裁决）：主文字对比度 ≥7:1（`#343A46` on `#E6D9D0` 实测 8.26:1）；次级 `#586273` 实测 4.46:1，仅可用于大字号/图形伴文，正文级一律用主文字；三级 `#9AA2B0` 仅用于 ≥24px 常规或 ≥18.66px 加粗的辅助展示且永不作可点击主标签——小字号辅助改回次级色。
+> 无障碍底线（WCAG 2.2 AA，D2 裁决）：主文字对比度 ≥7:1（`#343A46` on `#E6D9D0` 实测 8.26:1）；次级 `#4F5B6E` 实测 4.46:1，仅可用于大字号/图形伴文，正文级一律用主文字；三级 `#9AA2B0` 仅用于 ≥24px 常规或 ≥18.66px 加粗的辅助展示且永不作可点击主标签——小字号辅助改回次级色。
 
 ### 2.1.2 主色：Liquid Purple（液态紫）
 
@@ -325,10 +325,10 @@ CSS：
   --lg-warm-white: #F4F0EC;
   --lg-warm-ivory: #E6D9D0;
   --lg-soft-beige: #D7C5BC;
-  --lg-cool-gray: #586273;
+  --lg-cool-gray: #4F5B6E;
   --lg-deep-slate: #343A46;
   --lg-text-primary: #343A46;
-  --lg-text-secondary: #586273;
+  --lg-text-secondary: #4F5B6E;
   --lg-text-tertiary: #9AA2B0;
   --lg-text-placeholder: rgba(88, 98, 115, .5);
   --lg-text-disabled: rgba(88, 98, 115, .4);
@@ -417,7 +417,7 @@ CSS：
 ```css
 :root{
   /* 蜜桃粉（品牌主色系） */
-  --mmh-rose-700:#C94A77; --mmh-rose-600:#E85D8F; --mmh-rose-500:#F77FA3;
+  --mmh-rose-700:#B23A63; --mmh-rose-600:#E85D8F; --mmh-rose-500:#F77FA3;
   --mmh-rose-400:#FFA3BE; --mmh-rose-300:#FFC4D6; --mmh-rose-200:#FFDEE8;
   --mmh-rose-100:#FFF0F4;
   /* 蜜杏氛围 */

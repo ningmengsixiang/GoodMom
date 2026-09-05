@@ -124,7 +124,7 @@ for fn in FILES:
     sections.append('<section class="chap" id="%s"><div class="chap-hd"><b>%s</b></div><div class="md">%s</div></section>'%(anchor(fn),html.escape(title),render_md(t)))
 
 css='''
-:root{--t:#343A46;--t2:#586273;--t3:#9AA2B0;--rose:#E85D8F;--rose-deep:#C94A77;--bg:linear-gradient(165deg,#FDF2EE,#F6E2DB 55%,#E7D3CB)}
+:root{--t:#343A46;--t2:#4F5B6E;--t3:#4F5B6E;--rose:#E85D8F;--rose-deep:#B23A63;--bg:linear-gradient(165deg,#FDF2EE,#F6E2DB 55%,#E7D3CB)}
 *{box-sizing:border-box}body{margin:0;font-family:"PingFang SC","Inter","MiSans","Noto Sans SC",sans-serif;color:var(--t);background:var(--bg)}
 a{color:var(--rose-deep)}
 .top{position:sticky;top:0;z-index:90;display:flex;flex-wrap:wrap;gap:4px;align-items:center;padding:10px 16px;background:rgba(255,255,255,.78);border-bottom:1px solid #f0d4cf;-webkit-backdrop-filter:blur(14px);backdrop-filter:blur(14px)}
@@ -138,7 +138,7 @@ a{color:var(--rose-deep)}
 .gp:hover .drop{opacity:1;pointer-events:auto;transform:none}
 .gp::after{content:"";position:absolute;left:0;right:0;top:100%;height:12px}
 .drop a{display:block;padding:8px 12px;border-radius:10px;font-size:13px;color:var(--t2);text-decoration:none;white-space:nowrap}
-.drop a:hover{background:rgba(247,127,163,.1);color:#C94A77}
+.drop a:hover{background:rgba(247,127,163,.1);color:#B23A63}
 .top .ext{margin-left:auto;font-size:12.5px;font-weight:600;text-decoration:none;padding:7px 14px;border-radius:999px;background:#fff;border:1px solid rgba(232,93,143,.3);color:var(--rose-deep)}
 .top .ext2{margin-left:8px;background:linear-gradient(135deg,#FFA9C2,#E85D8F);color:#fff;font-weight:600;text-decoration:none;font-size:12.5px;padding:7px 14px;border-radius:999px}
 .wrap{max-width:1080px;margin:0 auto;padding:20px 18px 80px}

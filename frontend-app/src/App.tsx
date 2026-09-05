@@ -57,7 +57,7 @@ export default function App() {
           actions={<><GmButton size="small" type="primary">随访</GmButton><GmButton size="small" type="outline">转诊</GmButton></>}
         />
         <div style={{ height: 12 }} />
-        <div style={{ fontSize: 13, color: "#586273", marginBottom: 8 }}>妊娠风险五色单选（受控）</div>
+        <div style={{ fontSize: 13, color: "#4F5B6E", marginBottom: 8 }}>妊娠风险五色单选（受控）</div>
         <GmRiskPicker value={risk} onChange={setRisk} />
         <div style={{ height: 12 }} />
         <div className="demo-row"><GmProgress percent={72} text style={{ flex: 1 }} /><GmProgress percent={96} positive style={{ flex: 1 }} /></div>
@@ -68,7 +68,7 @@ export default function App() {
       </div>
 
       <Card style={{ borderRadius: 18 }} title="下一步封装（00 总目录推进）">
-        <ul style={{ lineHeight: 2, color: "#586273" }}>
+        <ul style={{ lineHeight: 2, color: "#4F5B6E" }}>
           <li>GmTag 业务字典表格 / 随访队列表格（07/13）· Form 包装</li>
           <li>领域组件：筛查流程 Steps、转诊状态链、生命周期轴、生长曲线卡（13）</li>
           <li>npm 联网后：npm install && npm run gm:typecheck && npm run build 验证</li>

@@ -3,7 +3,7 @@
     <linearGradient id="gmBody" x1="0" y1="0" x2="1" y2="1">
       <stop offset="0" stop-color="#FFA9C2"/>
       <stop offset="0.55" stop-color="#F77FA3"/>
-      <stop offset="1" stop-color="#C94A77"/>
+      <stop offset="1" stop-color="#B23A63"/>
     </linearGradient>
     <linearGradient id="gmRing" x1="0" y1="0" x2="0" y2="1">
       <stop offset="0" stop-color="#FFC4D6"/>
