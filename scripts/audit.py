@@ -91,6 +91,12 @@ ALLOWED = {h.upper() for h in """#343A46 #586273 #9AA2B0 #F4F0EC #E6D9D0 #D7C5BC
 #FFC3A0 #FFDCC7 #FFF3EA #4FB59C #6FC9B4 #A9E3D4 #E2F6F0 #42C7A1 #96E6CF #F2B25C #FAE1B3 #EF6A7B #FAC9D0 #6D9EFF
 #9A78FF #8066F0 #B9A0FF #B69AFF #7D8CFF #4CB98A #F2C14E #F0954A #EE5C70 #8F6AE0 #2f8f76 #4a76d0 #b9771c #d35466 #757e8e
 #7a5ce0 #b98d1f #8a6d10 #B23A63 #FFA9C2 #FF9AB6 #FF8FAE #7FD8C2 #EFAF55 #F79AA8 #E25B72 #FFFFFF #FFF """.split()}
+""" 页面档别名 / 引擎展示色（A1 收口，2026-09；仅用于 site/preview 静态页，代码层仍受 ALLOWED 严格约束）
+暖底/玻璃框别名 + 02.1/12.3.3 引擎 ramp 与渐变样例色；详见 docs/审查决策记录.md D4。"""
+PAGE_ALIAS = {h.upper() for h in """#F0D4CF #FDF2EE #F6E2DB #EAD3CA #E7D4CB #E6CFC6 #E7D3CB #EED5CD #E6C6BD #FFF7F4 #FDF6F2
+#EED9D3 #FFFAF7 #E0C2BB #F0E6E0 #C9BDB5 #9C8E86 #EADFD6 #D9C9BF #F7E4DD #EBD3CA #E9D2C9 #72DDE5 #A5F1EE #F5B8C6 #D9CBFE #EDE7FE
+#FFD0D8 #F6C0A0 #A98BFF #7D66F2 #69D8D2 #E0F8F6 #9CAEFF #E4EAFF #F2A5B7 #FDE9EE #FBD9BE #F0AE86 #3A3642 #191720 #F8CE8C
+#A6ADB9 #8A92A3 #F6A97E #2A8D92 #241D24 #3A2B33 #55333D #A03F60""".split()}
 COLOR_SOURCES = ["goodmom-ui/src/theme.css", "goodmom-ui/src/tokens/status.ts",
                  "goodmom-ui/src/tokens/design.ts", "frontend-app/packages/gm-arco-ui/src/gm.css",
                  "frontend-app/packages/gm-arco-ui/src/tokens/status.ts"]
@@ -103,11 +109,15 @@ def colors():
         bad = sorted({m.group(0).upper() for m in pat.finditer(t)} - ALLOWED)
         if bad:
             rec("FAIL", "color-css", "%s 硬编码 %s" % (f, bad[:6])); ok = False
+    html_ok = True
     for f in glob.glob("site/*.html") + glob.glob("preview/*.html"):
         t = open(f, encoding="utf-8").read()
-        bad = sorted({m.group(0).upper() for m in pat.finditer(t)} - ALLOWED)
+        css = " ".join(re.findall(r"<style[^>]*>(.*?)</style>", t, re.S)) + " " + " ".join(re.findall(r'style="([^"]*)"', t))
+        bad = sorted({m.group(0).upper() for m in pat.finditer(css)} - (ALLOWED | PAGE_ALIAS))
         if bad:
+            html_ok = False
             rec("WARN", "color-html", "%s 非白名单色 %d 个（低风险别名）" % (f, len(bad)))
+    if html_ok: rec("OK", "color-html", "页面样式色全部处于 ALLOWED/PAGE_ALIAS（A1 收口）")
     if ok: rec("OK", "color-css", "代码/Tokem 层无硬编码色（严格层）")
     return ok
 
