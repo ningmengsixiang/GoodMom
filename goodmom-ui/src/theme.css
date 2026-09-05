@@ -5,6 +5,11 @@
   --primary-2:#FFDEE8; --primary-1:#FFF0F4; --primary-7:#C94A77;
   --success-6:#4FB59C; --success-5:#6FC9B4;
   --warning-6:#EFAF55; --danger-6:#E25B72;
+  /* 14 · 4.4.5 语义 alias（文字/色点/标签，浅底 ≥4.5:1；-500 仅供填充） */
+  --lg-sem-positive:#2f8f76; --lg-sem-info:#4a76d0; --lg-sem-attention:#b9771c;
+  --lg-sem-risk:#d35466; --lg-sem-neutral:#757e8e; --lg-sem-special:#7a5ce0;
+  /* 高对比主行动（D2）：小字号白字可读 */
+  --mmh-grad-action-hc:linear-gradient(135deg,#C94A77 0%,#B23A63 100%);
 }
 .gm-btn.arco-btn-primary{
   background:linear-gradient(135deg,#FFA9C2,#F77FA3 45%,#E85D8F) !important;
@@ -64,6 +69,8 @@
 .gm-step .gs-main span{font-size:11px;color:#9AA2B0}
 .gm-steps.sm .gs-dot{width:24px;height:24px;font-size:10px}
 @keyframes pulse{0%,100%{opacity:1}50%{opacity:.6}}
+
+.gm-btn-hc.arco-btn-primary,.arco-btn-primary.gm-btn-hc{background:var(--mmh-grad-action-hc)!important;border:none!important;box-shadow:0 6px 16px rgba(178,58,99,.28)}
 
 /* 合规补充：状态双通道色点 / 焦点环 / 步骤呼吸 */
 .gm-status-dot{display:inline-block;width:7px;height:7px;border-radius:50%;margin-right:6px;vertical-align:1px}
