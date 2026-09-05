@@ -240,6 +240,15 @@ textarea.inp{resize:vertical;min-height:76px;line-height:1.7}
   .dlg{width:100%;border-radius:20px}
   .dhead{padding:14px 16px 10px}.dbody{padding:14px 16px}.dfoot{padding:10px 16px 14px}
 }
+/* ============ Status & Loading 强化 ============ */
+.tag.live i{animation:live 1.6s ease-in-out infinite}
+@keyframes live{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.3;transform:scale(.7)}}
+.btn.busy{pointer-events:none}
+.btn.busy .bx{display:inline-block;width:12px;height:12px;border:2px solid currentColor;border-right-color:transparent;border-radius:50%;opacity:.8;animation:spin .6s linear infinite;vertical-align:-2px}
+.btn .bx{display:none}
+@keyframes spin{to{transform:rotate(360deg)}}
+.dfoot button:disabled{opacity:.45;pointer-events:none}
+.waiting{opacity:.6}
 </style>
 </head>
 <body class="mode-sider">
@@ -314,10 +323,10 @@ textarea.inp{resize:vertical;min-height:76px;line-height:1.7}
     </div>
     <div class="two" style="margin-top:16px">
       <div class="card pad"><b>今日日程 / 在办会诊</b>
-        <div class="rowb"><span class="tag p">会诊</span><span>09:00 · 陈静（红级）多学科会诊</span><span class="mla" style="color:var(--t3)">进行中</span></div>
-        <div class="rowb"><span class="tag b">门诊</span><span>10:30 · 张敏 GDM 门诊随访</span><span class="mla" style="color:var(--t3)">待开始</span></div>
-        <div class="rowb"><span class="tag o">复核</span><span>14:00 · 安安 高危儿专案复核</span><span class="mla" style="color:var(--t3)">待开始</span></div>
-        <div class="rowb"><span class="tag g">归档</span><span>16:00 · 今日随访记录归档</span><span class="mla" style="color:var(--t3)">待开始</span></div>
+        <div class="rowb"><span class="tag p">会诊</span><span>09:00 · 陈静（红级）多学科会诊</span><span class="mla"><span class="tag b live"><i></i>进行中</span></span></div>
+        <div class="rowb"><span class="tag b">门诊</span><span>10:30 · 张敏 GDM 门诊随访</span><span class="mla"><span class="tag n"><i></i>待开始</span></span></div>
+        <div class="rowb"><span class="tag o">复核</span><span>14:00 · 安安 高危儿专案复核</span><span class="mla"><span class="tag n"><i></i>待开始</span></span></div>
+        <div class="rowb"><span class="tag g">归档</span><span>16:00 · 今日随访记录归档</span><span class="mla"><span class="tag n"><i></i>待开始</span></span></div>
       </div>
       <div class="card pad fol"><b>周内随访完成率</b>
         <div class="fol-body">
@@ -567,6 +576,14 @@ function closeMask(m){
   m.classList.remove('in');
   setTimeout(function(){if(m.parentNode)m.parentNode.removeChild(m)},250);
 }
+function busyFor(mask,act,ms,done){
+  var b=q('[data-act2="'+act+'"]',mask);
+  if(!b){done();return}
+  if(!b.querySelector('.bx'))b.insertAdjacentHTML('afterbegin','<span class="bx"></span>');
+  b.classList.add('busy');
+  qa('button',mask).forEach(function(x){x.disabled=true});
+  setTimeout(function(){b.classList.remove('busy');qa('button',mask).forEach(function(x){x.disabled=false});if(done)done()},ms);
+}
 ROOT.addEventListener('click',function(e){
   var c=e.target.closest&&e.target.closest('[data-close]');
   if(c){closeMask(c.closest('.mask'));return}
@@ -602,13 +619,14 @@ R['m-new']=function(m){
   var rk=(q('input[name=nc-rk]:checked',m)||{}).value||'y';
   var date=q('#nc-date',m).value||today();
   var teams=qa('input[name=nc-teams]:checked',m).map(function(x){return x.value}).join('、');
-  var sched=cardByHead('今日日程');if(sched){
-    var row=document.createElement('div');row.className='rowb row-glow';
-    row.innerHTML='<span class="tag '+RISK[rk][0]+'">会诊</span><span>'+esc(date)+' · '+esc(name)+'（'+RISK[rk][1]+'级）'+esc(why?' · '+why:'')+'</span><span class="mla" style="color:var(--t3)">待分诊</span>';
-    q('.rowb',sched).insertAdjacentElement('beforebegin',row);
-  }
-  closeMask(m);
-  toast('已提交 · AI 分诊中'+(teams?' · 已邀 '+teams+' 智能体':''));
+  var sched=cardByHead('今日日程');
+  var row=document.createElement('div');row.className='rowb row-glow';
+  row.innerHTML='<span class="tag '+RISK[rk][0]+'">会诊</span><span>'+esc(date)+' · '+esc(name)+'（'+RISK[rk][1]+'级）'+esc(why?' · '+why:'')+'</span><span class="mla"><span class="tag n"><i></i>待分诊</span></span>';
+  busyFor(m,'m-new',950,function(){
+    if(sched)q('.rowb',sched).insertAdjacentElement('beforebegin',row);
+    closeMask(m);
+    toast('AI 分诊完成 · '+name+(teams?' · 已邀 '+teams+' 智能体':''));
+  });
 };
 
 /* ---------- 工作台：采纳 / 复核 AI 建议 ---------- */
@@ -631,9 +649,11 @@ A['review']=function(btn){
 R['m-review']=function(m){
   var rv=(q('input[name=rv-r]:checked',m)||{}).value;if(!rv)return;
   var note=q('#rv-note',m).value.trim();
-  closeMask(m);
-  if(rv==='ok'&&reviewCtx){var tr=reviewCtx.tr;if(!tr.classList.contains('row-done')){tr.classList.add('row-done','row-glow');var tds=qa('td',tr);if(tds[1])tds[1].insertAdjacentHTML('beforeend',' <span class="tag g">已采纳</span>')}}
-  toast(rv==='ok'?'已采纳该建议':rv==='no'?'已驳回并反馈给模型':'已转人工复核',rv==='ok'?'good':rv==='no'?'warn':'info');
+  busyFor(m,'m-review',650,function(){
+    closeMask(m);
+    if(rv==='ok'&&reviewCtx){var tr=reviewCtx.tr;if(!tr.classList.contains('row-done')){tr.classList.add('row-done','row-glow');var tds=qa('td',tr);if(tds[1])tds[1].insertAdjacentHTML('beforeend',' <span class="tag g">已采纳</span>')}}
+    toast(rv==='ok'?'已采纳该建议':rv==='no'?'已驳回并反馈给模型':'已转人工复核',rv==='ok'?'good':rv==='no'?'warn':'info');
+  });
 };
 
 /* ---------- 工作台：AI 助手对话 ---------- */
@@ -645,7 +665,8 @@ A['chat']=function(){
     body:'<div class="ct" style="display:flex;flex-direction:column;gap:8px;min-height:200px;max-height:38vh;overflow:auto;padding:2px"></div><div style="display:flex;gap:8px;margin-top:12px"><input class="inp" id="chat-in" placeholder="输入指令，如：把安安加入今日随访清单"><button class="btn pri sm" type="button" data-act2="m-send" style="flex:none">发送</button></div>',
     foot:[]});
   var ct=q('.ct',m);
-  ct.appendChild(chatBubble('ai','您好，王医生。今日已整理 34 条建议、6 条高危提醒，我可以协助分诊、随访与医嘱。'));
+  var ty=document.createElement('div');ty.className='bubble ai dotty';ty.innerHTML='<i></i><i></i><i></i>';ty.style.cssText='';ct.appendChild(ty);
+  setTimeout(function(){if(ty.parentNode){ct.removeChild(ty);ct.appendChild(chatBubble('ai','您好，王医生。今日已整理 34 条建议、6 条高危提醒，我可以协助分诊、随访与医嘱。'));}},850);
   var input=q('#chat-in',m);
   function ask(text){
     if(!text)return;
@@ -671,9 +692,11 @@ R['m-follow']=function(m){
   var keys=qa('input[name=fl-k]:checked',m).map(function(x){return x.value});
   var note=q('#fl-note',m).value.trim();
   if(!keys.length){toast('请选择完成项目','warn');return}
-  keys.forEach(function(k){var c=qa('.chk').filter(function(x){return q('b',x)&&txt(q('b',x))===k});c.forEach(function(x){var t=q('.tag',x);if(t){t.className='tag g';t.textContent='通过'}})});
-  addTimeline(date,type,(note?note:'随访完成，各项目评估通过'),'g');
-  closeMask(m);toast('随访记录已保存 · '+type);
+  busyFor(m,'m-follow',900,function(){
+    keys.forEach(function(k){var c=qa('.chk').filter(function(x){return q('b',x)&&txt(q('b',x))===k});c.forEach(function(x){var t=q('.tag',x);if(t){t.className='tag g';t.textContent='通过'}})});
+    addTimeline(date,type,(note?note:'随访完成，各项目评估通过'),'g');
+    closeMask(m);toast('随访记录已保存 · '+type);
+  });
 };
 
 /* ---------- 档案：智能随访建议 ---------- */
@@ -682,7 +705,7 @@ A['advice']=function(){
     body:'<div class="rowb"><span class="tag o">视力</span><span>屈光筛查提示复查，建议 3 个月后复查并同步涂氟</span></div><div class="rowb"><span class="tag g">生长</span><span>P62 位于正常带，维持现喂养，下月复测身高体重</span></div><div class="rowb"><span class="tag b">疫苗</span><span>18 月龄百白破④ / 甲肝待种，剩余 26 天，可预约提醒</span></div><div class="rowb"><span class="tag p">心理</span><span>语言与社交里程碑符合月龄，建议亲子阅读记录</span></div><div class="hint">以上由生长发育 / 眼保健 / 疫苗三个智能体协同生成，置信度 0.91。</div>',
     foot:[{label:'关闭',cls:'line',close:1},{label:'生成随访计划',cls:'mint',act:'m-plan'}]});
 };
-R['m-plan']=function(m){closeMask(m);toast('随访计划已生成 · 已下发随访智能体');};
+R['m-plan']=function(m){busyFor(m,'m-plan',900,function(){closeMask(m);toast('随访计划已生成 · 已下发随访智能体');});};
 
 /* ---------- 会诊：采纳并下发 / 退回 / 人工 ---------- */
 function consultCard(){return cardByHead('会诊结论与建议')}
@@ -701,19 +724,19 @@ A['sign']=function(){
     body:'<div class="hint" style="margin-top:0;color:var(--t2);line-height:2">确认后将：<br>① 心功能评估转诊单推送市妇幼绿色通道<br>② 拉贝洛尔用药建议进入医嘱草稿<br>③ 开启红级专案 · 每周血压与胎心随访<br>按 15.2.10 升级规则自动跟踪。</div>',
     foot:[{label:'取消',cls:'line',close:1},{label:'确认采纳并下发',cls:'pri',act:'m-sign'}]});
 };
-R['m-sign']=function(m){closeMask(m);signHeader();var d=stepDot('4');if(d){d.style.cssText='background:var(--g);border:0;color:#fff';d.textContent='✓'}toast('已采纳并下发 · 已通知各科室');};
+R['m-sign']=function(m){busyFor(m,'m-sign',900,function(){closeMask(m);signHeader();var d=stepDot('4');if(d){d.style.cssText='background:var(--g);border:0;color:#fff';d.textContent='✓'}toast('已采纳并下发 · 已通知各科室');});};
 A['reject']=function(){
   modal({title:'退回修改',w:'540px',
     body:'<label class="lbl">退回原因 / 修改意见</label><textarea class="inp" id="rj-note" placeholder="例如：拉贝洛尔剂量需按血压再评估"></textarea><div class="hint">退回后将通知对应智能体重新拟定建议。</div>',
     foot:[{label:'取消',cls:'line',close:1},{label:'确认退回',cls:'line',act:'m-reject'}]});
 };
-R['m-reject']=function(m){var n=q('#rj-note',m).value.trim();closeMask(m);toast(n?'已退回 · '+n:'已退回修改','warn');var b=q('b',consultCard());if(b)b.textContent='会诊结论与建议（退回修改中）';};
+R['m-reject']=function(m){var n=q('#rj-note',m).value.trim();busyFor(m,'m-reject',600,function(){closeMask(m);toast(n?'已退回 · '+n:'已退回修改','warn');var b=q('b',consultCard());if(b)b.textContent='会诊结论与建议（退回修改中）';});};
 A['human']=function(){
   modal({title:'转人工复核',w:'500px',
     body:'<div class="hint" style="margin-top:0;color:var(--t2)">将本案交由质控专家组复核，保留当前智能体全部结论与证据链。</div>',
     foot:[{label:'取消',cls:'line',close:1},{label:'确认转人工',cls:'pri',act:'m-human'}]});
 };
-R['m-human']=function(m){closeMask(m);toast('已转人工复核 · 推送质控组','info');var b=q('b',consultCard());if(b)b.textContent='会诊结论与建议（人工复核中）';};
+R['m-human']=function(m){busyFor(m,'m-human',800,function(){closeMask(m);toast('已转人工复核 · 推送质控组','info');var b=q('b',consultCard());if(b)b.textContent='会诊结论与建议（人工复核中）';});};
 
 /* ---------- 详情：完成医嘱下发 ---------- */
 A['issue']=function(){
@@ -722,9 +745,11 @@ A['issue']=function(){
     foot:[{label:'取消',cls:'line',close:1},{label:'确认下发',cls:'pri',act:'m-issue'}]});
 };
 R['m-issue']=function(m){
-  closeMask(m);
-  var c=cardByHead('医嘱与待办');if(c){var t=q('.rowb .tag',c);if(t){t.className='tag g';t.textContent='已下发'}}
-  toast('医嘱已下发 · 患者端可查收');
+  busyFor(m,'m-issue',800,function(){
+    closeMask(m);
+    var c=cardByHead('医嘱与待办');if(c){var t=q('.rowb .tag',c);if(t){t.className='tag g';t.textContent='已下发'}}
+    toast('医嘱已下发 · 患者端可查收');
+  });
 };
 
 /* ---------- 五色队列 ---------- */
