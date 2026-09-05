@@ -297,7 +297,7 @@ Figma:    LG / Color / Purple / 500
 <table><thead><tr><th>Token</th><th>值</th><th></th><th>Token</th><th>值</th></tr></thead><tbody><tr><td><code>--lg-space-0</code></td><td>0</td><td></td><td><code>--lg-space-6</code></td><td>24</td></tr><tr><td><code>--lg-space-1</code></td><td>4</td><td></td><td><code>--lg-space-7</code></td><td>32</td></tr><tr><td><code>--lg-space-2</code></td><td>8</td><td></td><td><code>--lg-space-8</code></td><td>40</td></tr><tr><td><code>--lg-space-3</code></td><td>12</td><td></td><td><code>--lg-space-9</code></td><td>48</td></tr><tr><td><code>--lg-space-4</code></td><td>16</td><td></td><td><code>--lg-space-10</code></td><td>64</td></tr><tr><td><code>--lg-space-5</code></td><td>20</td><td></td><td><code>--lg-space-11</code></td><td>96</td></tr></tbody></table>
 <h4>2.3.2 语义间距</h4>
 <table><thead><tr><th>Token</th><th>值</th><th>用途</th></tr></thead><tbody><tr><td><code>--lg-gutter-page</code></td><td>40（桌面）/ 24（移动）</td><td>页面左右留白</td></tr><tr><td><code>--lg-gap-panel</code></td><td>24</td><td>面板之间</td></tr><tr><td><code>--lg-gap-card</code></td><td>16</td><td>卡片之间</td></tr><tr><td><code>--lg-pad-panel</code></td><td>24</td><td>玻璃面板内边距</td></tr><tr><td><code>--lg-pad-card</code></td><td>20–24</td><td>卡片内边距</td></tr><tr><td><code>--lg-pad-compact</code></td><td>12–16</td><td>紧凑控件内边距</td></tr><tr><td><code>--lg-stack-section</code></td><td>32–40</td><td>区块纵向间距</td></tr></tbody></table>
-<blockquote>大屏（远距观看）建议整体内边距与字号 ×1.15–1.25；网格列数 12，栅栏间隙 24。控件最小可点区域 ≥40px。</blockquote>
+<blockquote>大屏（远距观看）建议整体内边距与字号 ×1.15–1.25；网格列数 12，栅栏间隙 24。控件最小可点区域 ≥44×44（移动/触屏基准）；桌面鼠标场景允许 ≥40；关键按钮 ≥48。</blockquote>
 <hr>
 <h3>2.4 圆角 Token</h3>
 <p><b>总原则：一切皆圆；层级越高圆角可略小，但永不出现 &lt;16px 的交互组件圆角。</b></p>
@@ -1165,7 +1165,7 @@ xl 32–40px  大屏状态图标      stroke 1.8</pre>
 4. 图标不承载颜色语义时用三级色，让数据与文字更亮。</pre>
 <h4>布局与可点区域</h4>
 <pre>- 图标与文字间距 8px（按钮内 6–8px，对齐文字基线 ±2px）。
-- 独立可点图标 ≥40×40 热区（视觉 20–24 居中）。
+- 独立可点图标 ≥44×44 热区（视觉 20–24 居中；桌面鼠标场景可降至 40）。
 - 列表/表格内图标 16–18px，行高内垂直居中。</pre>
 <hr>
 <h3>9.5 开发者接入</h3>
@@ -1189,7 +1189,7 @@ xl 32–40px  大屏状态图标      stroke 1.8</pre>
 <blockquote>现有 03/08 等章节默认指 <b>PC / 桌面端</b>（键盘鼠标 + 大屏可视化）；本章定义 <b>移动端</b>（≤767px 的移动 Web 与 App 壳内页面）的独立组件规范。<br>移动端<b>全量组件库</b>（60+ 覆盖地图、20+ 新增组件细则、页面模板）见 [11-移动端组件全量库.md](#ch-11)——本章为框架与核心差异，11 章为组件清单与扩展。<br>同一套 L.Glass DNA（透明材质、柔光、漂浮、克制配色、大字号、空间层级）<b>不因端而改变</b>；改变的是：输入方式（鼠标→拇指）、屏幕密度、性能约束与信息密度。<br>触控动效遵循 [07](#ch-07)，但 <b>hover 概念整体移除</b>，改用 press / tap 反馈（见 10.7）。</blockquote>
 <hr>
 <h3>10.1 两端差异总则（PC ↔ Mobile）</h3>
-<table><thead><tr><th>维度</th><th>PC（03/04/08 已有规范）</th><th>移动端（本章）</th></tr></thead><tbody><tr><td>输入</td><td>鼠标：hover / 点击 / 拖拽</td><td>拇指：tap / 长按 / 滑动，无 hover</td></tr><tr><td>视口</td><td>≥1024，鼠标精确</td><td>≤767，触屏目标大</td></tr><tr><td>布局</td><td>12 列栅格、多面板平铺</td><td>单列卡片流 + 底部导航承载切换</td></tr><tr><td>导航</td><td>左侧玻璃导航栏</td><td>顶部 NavBar（返回/标题）+ 底部 TabBar</td></tr><tr><td>反馈</td><td>hover 浮起 + 辉光</td><td>press 按压回弹（scale .97）+ 无 hover 态</td></tr><tr><td>玻璃</td><td>blur 48 可用，桌面 GPU 充裕</td><td>blur ≤32，减少 backdrop 节点（性能）</td></tr><tr><td>字体</td><td>正文 15</td><td>正文 16（避免 iOS 聚焦缩放），行距更松</td></tr><tr><td>触控目标</td><td>≥40×40</td><td>≥44×44（iOS）/ ≥48 关键按钮</td></tr><tr><td>阴影</td><td>可多层深影</td><td>收窄压扁（贴地阴影，避免"飘出屏幕"）</td></tr><tr><td>信息密度</td><td>Medium（可高）</td><td>Low–Medium（一屏一主任务）</td></tr><tr><td>图表</td><td>多图联动、KPI 横排</td><td>单图单卡、纵向堆叠、数字聚焦</td></tr><tr><td>弹层</td><td>居中 Modal / 侧滑 Drawer</td><td>底部弹层为主（ActionSheet / 底部面板）</td></tr><tr><td>图标</td><td>16–24（hover 有文字说明）</td><td>22–24 更大 + 标签兜底，不依赖 title</td></tr></tbody></table>
+<table><thead><tr><th>维度</th><th>PC（03/04/08 已有规范）</th><th>移动端（本章）</th></tr></thead><tbody><tr><td>输入</td><td>鼠标：hover / 点击 / 拖拽</td><td>拇指：tap / 长按 / 滑动，无 hover</td></tr><tr><td>视口</td><td>≥1024，鼠标精确</td><td>≤767，触屏目标大</td></tr><tr><td>布局</td><td>12 列栅格、多面板平铺</td><td>单列卡片流 + 底部导航承载切换</td></tr><tr><td>导航</td><td>左侧玻璃导航栏</td><td>顶部 NavBar（返回/标题）+ 底部 TabBar</td></tr><tr><td>反馈</td><td>hover 浮起 + 辉光</td><td>press 按压回弹（scale .97）+ 无 hover 态</td></tr><tr><td>玻璃</td><td>blur 48 可用，桌面 GPU 充裕</td><td>blur ≤32，减少 backdrop 节点（性能）</td></tr><tr><td>字体</td><td>正文 15</td><td>正文 16（避免 iOS 聚焦缩放），行距更松</td></tr><tr><td>触控目标</td><td>≥40×40（鼠标）</td><td>≥44×44（触屏基准）/ ≥48 关键按钮</td></tr><tr><td>阴影</td><td>可多层深影</td><td>收窄压扁（贴地阴影，避免"飘出屏幕"）</td></tr><tr><td>信息密度</td><td>Medium（可高）</td><td>Low–Medium（一屏一主任务）</td></tr><tr><td>图表</td><td>多图联动、KPI 横排</td><td>单图单卡、纵向堆叠、数字聚焦</td></tr><tr><td>弹层</td><td>居中 Modal / 侧滑 Drawer</td><td>底部弹层为主（ActionSheet / 底部面板）</td></tr><tr><td>图标</td><td>16–24（hover 有文字说明）</td><td>22–24 更大 + 标签兜底，不依赖 title</td></tr></tbody></table>
 <blockquote>一句话：<b>PC 是"空间操作系统"，移动端是"拇指可及的玻璃卡片流"。</b></blockquote>
 <hr>
 <h4>10.1.1 iPad（中端 · 医护移动办公）—— 新增端</h4>
@@ -1490,7 +1490,7 @@ large 48 高 / 15px      底部主行动推荐，可 block 全宽</pre>
 <p>状态色（success/warning/danger/info）语义不变，仍只表状态。</p>
 <hr>
 <h3>12.4 图标与插图基调</h3>
-<ul><li>图标：一律 [09](#ch-09) <code>lg-icon-*</code>，新增「母婴与保健」类（B 类 6 枚：baby/mom/milk/vaccine/vital/clinic）。</li><li>插图：柔和圆角的扁平/2.5D，暖杏粉底，人物为孕妈、宝宝与医护；禁止惊悚医学细节、禁止卡通贴纸感。</li><li>头像：宝宝/妈妈头像用圆形玻璃头像 + 真实照片（机构实名场景）或柔和插画头像（社区场景）。</li><li>Logo：文字标「妈咪好 GoodMom」；图标建议“心形 + 生长曲线”意象——具体视觉资产待品牌设计，规范见 12.5。</li></ul>
+<ul><li>图标：一律 [09](#ch-09) <code>lg-icon-*</code>，新增「母婴与保健」类（B 类 6 枚：baby/mom/milk/vaccine/vital/clinic）。</li><li>插图：柔和圆角的扁平/2.5D，暖杏粉底，人物为孕妈、宝宝与医护；禁止惊悚医学细节、禁止卡通贴纸感。</li><li>头像：宝宝/妈妈头像用圆形玻璃头像 + 真实照片（机构实名场景）或柔和插画头像（社区场景）。</li><li>Logo：文字标「妈咪好 GoodMom」；图标以「孕妈剪影 + 爱心 + GOODMOM」为<b>正式 v2 稿</b>（<code>brand/logo-mark.svg</code> / <code>logo.svg</code>，见 12.8），“心形 + 生长曲线”仅作概念意向，v1 几何版退役。规范见 12.5 / 12.8。</li></ul>
 <hr>
 <h3>12.5 文案与 Tone of Voice</h3>
 <pre>称呼用户：妈妈 / 家长（亲切但不用“亲”）；医生端：医生/医护老师
@@ -1498,7 +1498,7 @@ large 48 高 / 15px      底部主行动推荐，可 block 全宽</pre>
 语气：安心、鼓励、不说教；异常提醒专业且不制造恐慌（“建议尽快预约复查”优于“很危险”）
 禁忌词：不要用“胖”“黑历史”类词；避免幼龄化“嘛、啦”堆砌</pre>
 <p><b>文案示例</b></p>
-<pre>孕期首页标题：宝宝第 20 周 🌱（图标非 emoji，用 lg-icon 语义标识）
+<pre>孕期首页标题：宝宝第 20 周 · 生长曲线图标（用 lg-icon 语义标识，禁止 emoji）
 儿保提醒：3 月龄儿保该做啦 · 已预约 周四 09:30
 高危随访（医护端）：生长曲线低于 P3，已加入随访队列</pre>
 <blockquote>提示：系统内不使用 emoji 图标（09 规则）；文案中的温情感通过语气与配色传达。</blockquote>
@@ -1516,7 +1516,7 @@ large 48 高 / 15px      底部主行动推荐，可 block 全宽</pre>
 <blockquote>图形 = 「孕妈剪影（头 + 孕肚 + A 字裙）+ 妈妈爱心」，以蜜桃粉渐变呈现；体现 温暖·孕育·守护。</blockquote>
 <table><thead><tr><th>文件</th><th>用途</th></tr></thead><tbody><tr><td><code>brand/logo-mark.svg</code></td><td>图形标（透明底 · 渐变孕妈 + 爱心）</td></tr><tr><td><code>brand/logo.svg</code></td><td>完整标：图形 + 「妈咪好 / GOODMOM / 副标语」</td></tr><tr><td><code>brand/logo-tile.svg</code></td><td>应用图标 Tile（512 · 蜜桃渐变底 + 白色剪影）</td></tr></tbody></table>
 <p><b>使用规则</b>（与 12.1 一致）</p>
-<ol><li>正式场景用 <code>logo.svg</code>（中文优先）；小尺寸/圆形头像用 <code>logo-mark.svg</code>；应用图标用 tile。</li><li>深色背景上请提供白色剪影版（后续由设计师出全套），禁止反色混用。</li><li>周边安全区 ≥ mark 高度的 20%；最小展示：完整标 ≥96px、图形标 ≥32px。</li><li>v1 为几何版，正式发布前按品牌精修（可增加宝宝元素/曲线母题），精修稿遵循 02.9 色板。</li></ol></div></section>
+<ol><li>正式场景用 <code>logo.svg</code>（中文优先）；小尺寸/圆形头像用 <code>logo-mark.svg</code>；应用图标用 tile。</li><li>深色背景上请提供白色剪影版（后续由设计师出全套），禁止反色混用。</li><li>周边安全区 ≥ mark 高度的 20%；最小展示：完整标 ≥96px、图形标 ≥32px。</li><li>正式稿 = v2「孕妈剪影 + 爱心」版（2026-09 定案；资产 <code>brand/logo-mark.svg</code> / <code>logo.svg</code>，遵循 02.9 色板）；v1 几何版仅留档、不用于交付。</li></ol></div></section>
 <section class="chap" id="ch-13"><div class="chap-hd"><b>13-妇幼领域组件规范</b></div><div class="md"><h2>13 · 妇幼领域组件规范（妈咪好 GoodMom · Domain Components）</h2>
 <blockquote>通用组件引擎见 01–11；本章定义<b>妇幼全生命周期的领域组件与数据规范</b>（孕期 / 婴幼儿儿保 / 机构管理端 / 医护工作台）。<br>颜色一律走 [12 · 12.3](#ch-12) 品牌色板与数据色序；图标用 [09](#ch-09) 含母婴类（B）；<b>组件名/术语/状态标签以 [14](#ch-14) 为准</b>。<br>端判定：C 端 = M（10/11），机构端/医护工作台 = PC（03/08），双端同源形态按 [00](#ch-00) 登记。</blockquote>
 <hr>
