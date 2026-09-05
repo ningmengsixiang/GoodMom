@@ -34,6 +34,8 @@ jobs:
         run: python3 scripts/audit.py
       - name: 覆盖度量（组件/资产）
         run: python3 scripts/coverage.py --ci
+      - name: 静态可访问性走查（A3）
+        run: python3 scripts/a11y.py --ci
 
   gm-ui-typecheck:
     name: 封装层 typecheck
