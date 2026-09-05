@@ -1,0 +1,22 @@
+{
+  "date": "2026-09-05",
+  "docs": 19,
+  "components_spec_defined": 94,
+  "components_code_implemented": 12,
+  "component_names": [
+    "GmAvatar",
+    "GmButton",
+    "GmCard",
+    "GmClientCard",
+    "GmEmpty",
+    "GmProgress",
+    "GmRiskPicker",
+    "GmSkeleton",
+    "GmSpin",
+    "GmStatusTag",
+    "GmSteps",
+    "GmTag"
+  ],
+  "icons_sprite": 77,
+  "icons_registry": 77
+}

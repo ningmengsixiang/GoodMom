@@ -111,6 +111,28 @@ def colors():
     if ok: rec("OK", "color-css", "代码/Tokem 层无硬编码色（严格层）")
     return ok
 
+def banned_colors():
+    """历史近似色回归检测（G-P1-2）：代码层命中=FAIL，HTML 层=WARN。"""
+    banned = {"#3F9C88"}  # 旧正向绿（已归一为 #2f8f76，禁止回归）
+    src_files = COLOR_SOURCES + ["goodmom-ui/src/theme.css"]
+    bad_src, bad_html = [], []
+    pat = re.compile(r"#[0-9a-fA-F]{6}\b")
+    for f in src_files:
+        if not os.path.exists(f): continue
+        hit = sorted({m.group(0).upper() for m in pat.finditer(open(f, encoding="utf-8").read())} & banned)
+        if hit: bad_src.append((f, hit))
+    for f in glob.glob("site/*.html") + glob.glob("preview/*.html"):
+        hit = sorted({m.group(0).upper() for m in pat.finditer(open(f, encoding="utf-8").read())} & banned)
+        if hit: bad_html.append((f, hit))
+    ok = True
+    if bad_src:
+        rec("FAIL", "color-banned", "旧色回归(代码层) %s" % bad_src[:3]); ok = False
+    else:
+        rec("OK", "color-banned", "无历史近似色回归")
+    if bad_html:
+        rec("WARN", "color-banned-html", "旧色回归(HTML 层) %s" % bad_html[:3])
+    return ok
+
 def spec_health():
     f = "site/spec.html"
     if not os.path.exists(f):
@@ -125,7 +147,7 @@ def spec_health():
 def main():
     hard = []
     hard.append(md_links()); hard.append(chapter_seq()); hard.append(icons())
-    hard.append(html_no_md()); hard.append(stale_words()); hard.append(colors()); hard.append(spec_health())
+    hard.append(html_no_md()); hard.append(stale_words()); hard.append(colors()); hard.append(banned_colors()); hard.append(spec_health())
     passed = all(hard)
     report = ["# 规范审计报告（自动）", "",
               "- 命令：`python3 scripts/audit.py`", "- 时间：%(now)s" % {"now": __import__("datetime").datetime.now().strftime("%Y-%m-%d %H:%M")},
