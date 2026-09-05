@@ -9,7 +9,9 @@
   --lg-sem-positive:#2f8f76; --lg-sem-info:#4a76d0; --lg-sem-attention:#b9771c;
   --lg-sem-risk:#d35466; --lg-sem-neutral:#757e8e; --lg-sem-special:#7a5ce0;
   /* 高对比主行动（D2）：小字号白字可读 */
-  --mmh-grad-action-hc:linear-gradient(135deg,#C94A77 0%,#B23A63 100%);
+  --mmh-grad-action-hc:linear-gradient(135deg,#B23A63 0%,#9E3054 100%); /* D5：两端白字均 ≥4.5 */
+  /* D5：小字号白字实底填充（AA 达标档） */
+  --mmh-solid-positive:#1e6b52; --mmh-solid-attention:#9a5a0e; --mmh-solid-danger:#b04052; --mmh-solid-info:#385cb3; --mmh-solid-special:#6242b8;
   /* 02.10 孕产妇五色 var 别名（RiskPicker 主题可覆盖） */
   --mmh-m5-m1:#4CB98A; --mmh-m5-m2:#F2C14E; --mmh-m5-m3:#F0954A; --mmh-m5-m4:#EE5C70; --mmh-m5-m5:#8F6AE0;
 }
