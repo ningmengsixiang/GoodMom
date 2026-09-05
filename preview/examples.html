@@ -146,7 +146,7 @@ table.t tbody tr:hover{background:rgba(255,255,255,.5)}
 .lvitem .m span{font-size:11.5px;color:var(--t3)}
 .lvitem .arr{color:var(--t3)}
 .two{display:grid;grid-template-columns:1.6fr 1fr;gap:16px;margin-top:14px}
-@media(max-width:980px){.two{grid-template-columns:1fr}.kpis{grid-template-columns:repeat(2,1fr)}.desc{grid-template-columns:1fr 1fr}}
+@media(max-width:767px){.two{grid-template-columns:1fr}.kpis{grid-template-columns:repeat(2,1fr)}.desc{grid-template-columns:1fr 1fr}}
 @media(max-width:640px){.kpis{grid-template-columns:1fr 1fr}.form2{grid-template-columns:1fr}.desc{grid-template-columns:1fr}}
 footer.note{max-width:1180px;margin:10px auto 40px;text-align:center;font-size:11.5px;color:var(--t3);line-height:2;padding:0 18px}
 footer.note a{color:var(--rose-deep);text-decoration:none}
@@ -173,7 +173,7 @@ footer.note a{color:var(--rose-deep);text-decoration:none}
 table.t .op a:last-child{margin-right:0}
 /* iPad 页 */
 .ipadgrid{display:grid;grid-template-columns:1.7fr 1fr;gap:16px;margin-top:14px}
-@media(max-width:980px){.ipadgrid{grid-template-columns:1fr}}
+@media(max-width:767px){.ipadgrid{grid-template-columns:1fr}}
 .avrow{display:flex;align-items:center;gap:12px;padding:12px 14px;border-radius:16px;margin-bottom:10px;background:rgba(255,255,255,.5);border:1px solid rgba(255,255,255,.75);cursor:pointer}
 .avrow.cur{outline:2px solid rgba(232,93,143,.5);outline-offset:1px;background:#fff}
 .avrow .m{flex:1;min-width:0}
@@ -400,7 +400,7 @@ table.t td,table.t th{padding-left:12px;padding-right:12px}
 <!-- ════════ P3 · PC 建档表单页（四步向导） ════════ -->
 <div class="view" data-v="form">
   <div class="pgtag">页面模板：表单页-建档登记向导（规范 08 · 8.2.8 Form / 步骤条 / 五色初评 02.10）· 孕产妇建档 · 两癌建档同构</div>
-  <div class="wiz" style="max-width:900px;margin:0 auto">
+  <div class="wiz" style="max-width:767px;margin:0 auto">
     <div class="pcbar glass" style="margin:0 0 14px"><span class="logo"><i></i>妈咪好 · 建档登记</span><span style="color:var(--t3);font-size:12.5px">孕产妇健康档案 · 编号建档后自动生成</span><button class="btn gho" style="margin-left:auto">暂存草稿</button></div>
     <div class="steps" id="wizSteps">
       <span class="stp done" data-i="0"><span class="n"><svg class="i" viewBox="0 0 24 24"><path d="M5 13l5 5L20 7"/></svg></span>基本信息</span>

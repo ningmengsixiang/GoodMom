@@ -111,6 +111,23 @@ def colors():
     if ok: rec("OK", "color-css", "代码/Tokem 层无硬编码色（严格层）")
     return ok
 
+def breakpoint_reg():
+    """断点收敛检查（E 审查）：允许 640/767/1024/1366/1600/1920/2304 与 768-1023 平板；其余 WARN 列出。"""
+    allowed={640,767,768,1024,1280,1366,1440,1600,1920,2304}
+    stray=[]
+    for f in glob.glob("site/index.html")+glob.glob("site/docs.html")+glob.glob("preview/*.html"):
+        t=open(f,encoding="utf-8").read()
+        for m in re.finditer(r'@media[^{]*?(max-width|min-width)\s*:\s*(\d+)px', t):
+            v=int(m.group(2))
+            if v not in allowed:
+                stray.append((f,m.group(1),v))
+    seen=sorted({(f,s,v) for f,s,v in stray})
+    if seen:
+        rec("WARN","bp","非收敛断点 %s" % [(f,v) for f,s,v in seen][:8])
+    else:
+        rec("OK","bp","断点收敛于 767/1024/1366 体系")
+    return True
+
 def banned_colors():
     """历史近似色回归检测（G-P1-2）：代码层命中=FAIL，HTML 层=WARN。"""
     banned = {"#3F9C88"}  # 旧正向绿（已归一为 #2f8f76，禁止回归）
@@ -147,7 +164,7 @@ def spec_health():
 def main():
     hard = []
     hard.append(md_links()); hard.append(chapter_seq()); hard.append(icons())
-    hard.append(html_no_md()); hard.append(stale_words()); hard.append(colors()); hard.append(banned_colors()); hard.append(spec_health())
+    hard.append(html_no_md()); hard.append(stale_words()); hard.append(colors()); hard.append(banned_colors()); hard.append(breakpoint_reg()); hard.append(spec_health())
     passed = all(hard)
     report = ["# 规范审计报告（自动）", "",
               "- 命令：`python3 scripts/audit.py`", "- 时间：%(now)s" % {"now": __import__("datetime").datetime.now().strftime("%Y-%m-%d %H:%M")},

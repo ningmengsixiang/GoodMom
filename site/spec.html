@@ -1212,6 +1212,7 @@ xl 32–40px  大屏状态图标      stroke 1.8</pre>
     --lg-m-touch-critical:48px;
   }
 }</pre>
+<blockquote><b>断点收敛规则（E 审查落地，2026-09）</b>：页面媒体查询只允许四档——<code>≤767</code>（手机）／<code>768–1023</code>（平板可选档，见下）／<code>≥1024</code>（PC）／<code>≥1366</code>（大屏增强）。站点与预览页已按此收敛；出现其他档位时视为异常，<code>scripts/audit.py</code> 的 <code>bp</code> 检查会 WARN 列出。<br><br><b>10.2.1 平板档（768–1023）</b>：面向医护 iPad 横竖屏（10.1.1）。建议以「PC 布局 + 更紧密栅格」实现：<code>--lg-m-gutter-page:20px</code>、卡间隙 12、两栏折半；形态沿用 10.3（TabBar/NavBar），左侧栏保持禁用（10.1.1）。断点变量：<br>```css<br>@media (min-width:768px) and (max-width:1023px){<br>:root{ --lg-m-gutter-page:20px; }<br>}<br>```</blockquote>
 <h4>移动端字号（正文 ≥16 防 iOS 聚焦缩放）</h4>
 <table><thead><tr><th>Token</th><th>值</th><th>用途</th></tr></thead><tbody><tr><td><code>--lg-m-display</code></td><td>30/38/600</td><td>首屏大数字旁标题</td></tr><tr><td><code>--lg-m-title</code></td><td>20/28/600</td><td>NavBar 标题、卡标题</td></tr><tr><td><code>--lg-m-section</code></td><td>17/24/600</td><td>区块标题</td></tr><tr><td><code>--lg-m-body</code></td><td>16/24/400–500</td><td>正文（默认）</td></tr><tr><td><code>--lg-m-body-sm</code></td><td>14/20/400</td><td>次级信息</td></tr><tr><td><code>--lg-m-caption</code></td><td>12/16/400</td><td>说明、时间戳</td></tr><tr><td><code>--lg-m-num-xl</code></td><td>40/44/700</td><td>核心 KPI 数字</td></tr><tr><td><code>--lg-m-num-lg</code></td><td>28/32/600</td><td>卡片主数值</td></tr></tbody></table>
 <blockquote>键盘唤起时 iOS 会自动缩放聚焦输入框：输入字号与正文一致 <b>≥16px</b> 可规避（10.6.2）。</blockquote>

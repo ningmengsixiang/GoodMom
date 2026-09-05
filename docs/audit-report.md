@@ -1,7 +1,7 @@
 # 规范审计报告（自动）
 
 - 命令：`python3 scripts/audit.py`
-- 时间：2026-09-05 19:27
+- 时间：2026-09-05 19:29
 - 结论：✅ 通过
 
 - **OK** `md-links`：全部内链有效
@@ -18,4 +18,5 @@
 - **WARN** `color-html`：preview/manual.html 非白名单色 7 个（低风险别名）
 - **OK** `color-css`：代码/Tokem 层无硬编码色（严格层）
 - **OK** `color-banned`：无历史近似色回归
+- **OK** `bp`：断点收敛于 767/1024/1366 体系
 - **OK** `spec`：spec.html 章节=20 阅读器在
