@@ -89,10 +89,11 @@ def stale_words():
 
 ALLOWED = {h.upper() for h in """#343A46 #586273 #9AA2B0 #F4F0EC #E6D9D0 #D7C5BC #C94A77 #E85D8F #F77FA3 #FFA3BE #FFC4D6 #FFDEE8 #FFF0F4
 #FFC3A0 #FFDCC7 #FFF3EA #4FB59C #6FC9B4 #A9E3D4 #E2F6F0 #42C7A1 #96E6CF #F2B25C #FAE1B3 #EF6A7B #FAC9D0 #6D9EFF
-#9A78FF #8066F0 #B69AFF #7D8CFF #4CB98A #F2C14E #F0954A #EE5C70 #8F6AE0 #2f8f76 #4a76d0 #b9771c #d35466 #757e8e
+#9A78FF #8066F0 #B9A0FF #B69AFF #7D8CFF #4CB98A #F2C14E #F0954A #EE5C70 #8F6AE0 #2f8f76 #4a76d0 #b9771c #d35466 #757e8e
 #7a5ce0 #b98d1f #8a6d10 #FFA9C2 #FF9AB6 #FF8FAE #7FD8C2 #EFAF55 #F79AA8 #E25B72 #FFFFFF #FFF """.split()}
 COLOR_SOURCES = ["goodmom-ui/src/theme.css", "goodmom-ui/src/tokens/status.ts",
-                 "goodmom-ui/src/tokens/design.ts", "frontend-app/packages/gm-arco-ui/src/gm.css"]
+                 "goodmom-ui/src/tokens/design.ts", "frontend-app/packages/gm-arco-ui/src/gm.css",
+                 "frontend-app/packages/gm-arco-ui/src/tokens/status.ts"]
 def colors():
     pat = re.compile(r"#[0-9a-fA-F]{6}\b|#[0-9a-fA-F]{3}\b")
     ok = True

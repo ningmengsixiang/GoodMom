@@ -12,6 +12,8 @@
 GmButton（全谱）· GmStatusTag（六语义+五色）· GmTag · GmCard · GmAvatar · GmProgress · GmSteps · GmRiskPicker · GmClientCard
 （tokens：status / business（semanticOf 40+ 词条）/ design）
 
+> ⚠️ 范围口径：00 目录登记 94 项为**规范全量**；本库为**已封装子集（当前 9 个模块）**。未封装组件请先用 Arco 原生 + 本主题类（gm-*）实现，并按 00 登记制度补封装。
+
 ## 安装与使用（需可访问 npm）
 ```bash
 npm i @arco-design/web-react react react-dom   # peer

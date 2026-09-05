@@ -4,7 +4,7 @@
 export type GmSemantic = "positive" | "info" | "attention" | "risk" | "neutral" | "special";
 
 export const SEMANTIC_COLOR: Record<GmSemantic, string> = {
-  positive: "#3f9c88",  // 正常/正向（绿）
+  positive: "#2f8f76",  // 正常/正向（绿，对齐 @goodmom/ui status.ts）
   info: "#4a76d0",      // 信息/进行（蓝）
   attention: "#b9771c", // 注意/待办（琥珀）
   risk: "#d35466",      // 风险/异常（珊瑚）

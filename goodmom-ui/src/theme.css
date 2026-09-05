@@ -11,6 +11,13 @@
   border:none !important;
   box-shadow:0 6px 16px rgba(240,127,163,.35);
 }
+/* 03 · 3.2 / 07 · 7.3.1 按钮玻璃态四态（hover 浮起 / active 回弹 / disabled / loading） */
+.gm-btn{transition:transform .18s cubic-bezier(.2,.8,.3,1.1),box-shadow .2s ease,filter .2s ease}
+.gm-btn:not(.arco-btn-disabled):hover{transform:translateY(-1px);box-shadow:0 6px 14px rgba(90,70,70,.12)}
+.gm-btn.arco-btn-primary:not(.arco-btn-disabled):hover{box-shadow:0 8px 18px rgba(240,127,163,.32)}
+.gm-btn:not(.arco-btn-disabled):active{transform:translateY(0) scale(.96);transition-duration:.12s}
+.gm-btn.arco-btn-disabled{opacity:.55;cursor:not-allowed}
+.gm-btn.arco-btn-loading{opacity:.9;cursor:wait}
 .gm-btn.arco-btn-size-large{border-radius:26px} /* 02.4 大按钮 26 */
 .gm-btn.arco-btn-size-default{border-radius:22px} /* 02.4 中按钮 22 */
 .gm-btn.arco-btn-size-small{border-radius:18px} /* 02.4 小按钮 18 */
