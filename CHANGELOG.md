@@ -1,3 +1,10 @@
+## [V2.4] · A–H 审查整改（八维审计 Round 1–8）
+- 可访问性：GmRiskPicker 键盘/读屏可达（radiogroup + 方向键 + focus-visible）；gmIcon title 语义化；07.9 ARIA/读屏通则；scripts/a11y.py 静态走查并入 CI
+- 治理与工具：audit.py 增 color-banned 旧色回归与 bp 断点收敛检查；scripts/coverage.py 覆盖度量（规范 94 / 代码 12 / 图标 77）入库并接 CI；spec 刷新管线落库（gen-spec + refresh-spec 保阅读器）
+- 语义与品牌：六语义色以 alias 深色为唯一源（14.4.5 / 02.1.5 / theme --lg-sem-*）；对比度 WCAG 真口径 + 高对比主行动 --mmh-grad-action-hc / .gm-btn-hc；Logo v2 定案；禁 emoji 示例修正；触控基线统一
+- 组件：GmEmpty / GmSpin / GmSkeleton 新增；RiskPicker 五色主题变量化；按钮玻璃态四态；圆角对齐 02.4
+- 页面与文档：断点收敛 767/1024/1366 体系；10.2 平板档；计数 56→77；README 封装子集口径；决策记录 docs/审查决策记录.md
+
 ## [V2.3] · 网站整合与收尾
 - 主站 site 整合：用户旅程 / 网站目录 / 统一多列页脚；导航 GitHub 开源入口
 - 示例中心扩至 7 套页面（+PC 妇幼工作站 +孕妇档案详情页）
