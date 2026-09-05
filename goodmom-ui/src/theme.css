@@ -16,9 +16,9 @@
   --mmh-m5-m1:#4CB98A; --mmh-m5-m2:#F2C14E; --mmh-m5-m3:#F0954A; --mmh-m5-m4:#EE5C70; --mmh-m5-m5:#8F6AE0;
 }
 .gm-btn.arco-btn-primary{
-  background:linear-gradient(135deg,#FFA9C2,#F77FA3 45%,#E85D8F) !important;
+  background:var(--mmh-grad-action-hc,#B23A63) !important; /* D5/D6：文字承载主行动走深档 AA */
   border:none !important;
-  box-shadow:0 6px 16px rgba(240,127,163,.35);
+  box-shadow:0 6px 16px rgba(178,58,99,.3);
 }
 /* 03 · 3.2 / 07 · 7.3.1 按钮玻璃态四态（hover 浮起 / active 回弹 / disabled / loading） */
 .gm-btn{transition:transform .18s cubic-bezier(.2,.8,.3,1.1),box-shadow .2s ease,filter .2s ease}
