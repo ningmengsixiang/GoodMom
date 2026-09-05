@@ -1,7 +1,9 @@
 import React from "react";
 import { GmSemantic, SEMANTIC_COLOR } from "../tokens/status";
 
-/** GmTag —— 状态/分类标签（自包含样式，基于主题 token；对应 03 · 3.6 / 15.5） */
+/** GmTag —— 状态/分类标签（自包含样式，基于主题 token；对应 03 · 3.6 / 15.5）
+ * 说明（D3 裁决）：与 components/GmStatusTag 共享 SEMANTIC_COLOR 单一映射源；本组件无 Arco 依赖（轻量），
+ * GmStatusTag 为 Arco Tag 形态——不同引擎上下文，不合并。 */
 export interface GmTagProps {
   children: React.ReactNode;
   semantic?: GmSemantic;

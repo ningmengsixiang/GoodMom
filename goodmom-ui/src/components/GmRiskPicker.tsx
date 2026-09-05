@@ -10,6 +10,7 @@ const LABEL: Record<GmFive, string> = { m1: "绿 · 低风险", m2: "黄 · 一�
 const ORDER: GmFive[] = ["m1", "m2", "m3", "m4", "m5"];
 
 const GmRiskPicker = ({ value, onChange, disabled }: GmRiskPickerProps) => {
+  const cssColor = (k: GmFive) => "var(--mmh-m5-" + k + "," + FIVE_COLOR[k] + ")"; /* 主题可覆盖 */
   const select = (k: GmFive) => { if (!disabled && onChange) onChange(k); };
   const onKeyDown = (e: React.KeyboardEvent<HTMLDivElement>) => {
     if (disabled) return;
@@ -40,13 +41,13 @@ const GmRiskPicker = ({ value, onChange, disabled }: GmRiskPickerProps) => {
           role="radio"
           key={k}
           className={"gm-risk-it" + (value === k ? " on" : "")}
-          style={{ color: FIVE_COLOR[k], borderColor: FIVE_COLOR[k], cursor: disabled ? "not-allowed" : "pointer", opacity: disabled ? 0.5 : 1 }}
+          style={{ color: cssColor(k), borderColor: cssColor(k), cursor: disabled ? "not-allowed" : "pointer", opacity: disabled ? 0.5 : 1 }}
           aria-checked={value === k}
           tabIndex={disabled || value !== k ? -1 : 0}
           disabled={disabled}
           onClick={() => select(k)}
         >
-          <i style={{ background: FIVE_COLOR[k] }} />{LABEL[k]}
+          <i style={{ background: cssColor(k) }} />{LABEL[k]}
         </button>
       ))}
     </div>

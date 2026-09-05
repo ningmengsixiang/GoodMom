@@ -6,6 +6,8 @@ import { FIVE_COLOR, GmFive, GmSemantic, SEMANTIC_COLOR } from "../tokens/status
  * GmStatusTag —— 状态标签（六语义 + 孕产妇五色 + 业务字典）
  * 对应规范：14 · 4.4.5（六语义）、15.2（业务状态文案）、15.2.10 / 02.10（五色）
  * 视觉：色点 + 文字（颜色+文字双通道）；传 hex 由 Arco Tag color 支持自定义色。
+ * 说明（D3 裁决）：与 adapters/GmTag 共享 SEMANTIC_COLOR 单一映射源；本组件为 Arco Tag 形态（需 @arco-design/web-react），
+ * GmTag 为自包含轻量版（无 Arco 依赖），两者服务于不同引擎上下文，不合并。
  */
 export interface GmStatusTagProps {
   children: React.ReactNode;
