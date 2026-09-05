@@ -159,6 +159,9 @@ export const GM_ICON_GLYPH: Record<GmIconName, string> = {
   "lg-icon-wj-oral-scope": '<path d="M17.2 4.6c-1.6 0-2.6.8-3.5 1.8a3 3 0 0 1-3.4 0C9.4 5.4 8.4 4.6 6.8 4.6c-2.1 0-3.7 1.7-3.7 3.8 0 1.6.7 2.8 1.7 3.8 1.3 1.5 2.3 3.2 2.5 5.3.1 1.3.9 2.1 1.9 2.1.9 0 1.3-.6 1.6-1.6.5-1.2.9-2.5 1.9-2.5 1 0 1.5 1.2 2 2.4.3 1 .7 1.7 1.6 1.7 1 0 1.8-.8 1.9-2.1.2-2 1-3.7 2.3-5.1 1-1.1 1.7-2.4 1.7-3.9 0-2.1-1.6-3.9-3.7-3.9z" transform="translate(-1.4 4.6) scale(0.62)"/><circle cx="19" cy="5.4" r="3.5"/><path d="M16.5 7.9 13.4 11"/><circle cx="19" cy="5.4" r="1.1"/>',
 };
 
-export function gmIcon(name: GmIconName, size = 20): string {
-  return `<svg class="gm-i" width="${size}" height="${size}" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">${GM_ICON_GLYPH[name]}</svg>`;
+export function gmIcon(name: GmIconName, size = 20, title?: string): string {
+  const a11y = title
+    ? `role="img" aria-label="${title}"`
+    : `aria-hidden="true"`;
+  return `<svg class="gm-i" width="${size}" height="${size}" viewBox="0 0 24 24" ${a11y} fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">${GM_ICON_GLYPH[name]}</svg>`;
 }

@@ -16,3 +16,9 @@ Thumbs.db
 # 前端工程构建
 frontend-app/node_modules/
 frontend-app/packages/*/dist/
+
+# 编辑器 / 脚本临时文件（审查补漏）
+*.tmp
+*.tmpdir/
+PAGES.tmp
+fuyouaicansai/_probe_*.html

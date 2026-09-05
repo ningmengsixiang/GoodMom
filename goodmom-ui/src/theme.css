@@ -11,10 +11,10 @@
   border:none !important;
   box-shadow:0 6px 16px rgba(240,127,163,.35);
 }
-.gm-btn.arco-btn-size-large{border-radius:22px}
-.gm-btn.arco-btn-size-default{border-radius:18px}
-.gm-btn.arco-btn-size-small{border-radius:14px}
-.gm-btn.arco-btn-size-mini{border-radius:12px}
+.gm-btn.arco-btn-size-large{border-radius:26px} /* 02.4 大按钮 26 */
+.gm-btn.arco-btn-size-default{border-radius:22px} /* 02.4 中按钮 22 */
+.gm-btn.arco-btn-size-small{border-radius:18px} /* 02.4 小按钮 18 */
+.gm-btn.arco-btn-size-mini{border-radius:16px} /* 02.4 底线：交互组件 ≥16 */
 
 /* —— gm-arco-ui 组件辅助样式 —— */
 .gm-card{background:linear-gradient(160deg,rgba(255,255,255,.62),rgba(255,255,255,.3));
@@ -33,7 +33,7 @@
 .gm-client-ops{display:flex;gap:6px;flex-wrap:wrap}
 .gm-risk{display:flex;gap:8px;flex-wrap:wrap}
 .gm-risk-it{display:inline-flex;align-items:center;gap:6px;border-radius:999px;padding:5px 12px;font-size:12.5px;
-  background:rgba(255,255,255,.45);border:1px solid;user-select:none}
+  background:rgba(255,255,255,.45);border:1px solid;user-select:none;font-family:inherit;text-align:center;-webkit-appearance:none;appearance:none}
 .gm-risk-it i{width:8px;height:8px;border-radius:50%}
 .gm-risk-it.on{outline:2px solid currentColor;outline-offset:1px;font-weight:600}
 
@@ -60,8 +60,9 @@
 
 /* 合规补充：状态双通道色点 / 焦点环 / 步骤呼吸 */
 .gm-status-dot{display:inline-block;width:7px;height:7px;border-radius:50%;margin-right:6px;vertical-align:1px}
-.gm-tag,.gm-steps,.gm-status-dot,.gm-risk-it,:focus-within .gm-*:focus{outline:none}
+.gm-tag,.gm-steps,.gm-status-dot,:focus-within .gm-*:focus{outline:none}
 .gm-tag:focus-visible,.gm-steps .gm-step .gs-dot:focus-visible{outline:2px solid rgba(232,93,143,.6);outline-offset:2px}
+.gm-risk-it:focus-visible{outline:2px solid rgba(143,106,224,.7);outline-offset:2px} /* 键盘焦点可见 */
 .gm-step.process .gs-dot{animation:pulse 2.4s ease-in-out infinite}
 
 /* —— 暗黑模式最小示例（双模式机制，12.3.2）：在需要暗色的容器根设 data-theme="dark" —— */

@@ -48,3 +48,14 @@ jobs:
           cache-dependency-path: frontend-app/package.json
       - run: npm install
       - run: npm run gm:typecheck
+
+  open-pkg-typecheck:
+    name: 开源包 typecheck（@goodmom/ui + @goodmom/icons）
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+      - run: npm install
+      - run: npm run typecheck

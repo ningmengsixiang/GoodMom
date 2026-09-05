@@ -9,7 +9,7 @@
 - 与规范同步：命名 14 · 2；按钮全谱 03 · 3.2.4；状态 15.2
 
 ## 已含组件
-GmButton（全谱）· GmStatusTag（六语义+五色）· GmCard · GmAvatar · GmProgress · GmRiskPicker · GmClientCard
+GmButton（全谱）· GmStatusTag（六语义+五色）· GmTag · GmCard · GmAvatar · GmProgress · GmSteps · GmRiskPicker · GmClientCard
 （tokens：status / business（semanticOf 40+ 词条）/ design）
 
 ## 安装与使用（需可访问 npm）
