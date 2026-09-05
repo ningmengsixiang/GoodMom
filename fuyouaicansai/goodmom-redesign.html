@@ -248,7 +248,93 @@ textarea.inp{resize:vertical;min-height:76px;line-height:1.7}
 .btn .bx{display:none}
 @keyframes spin{to{transform:rotate(360deg)}}
 .dfoot button:disabled{opacity:.45;pointer-events:none}
-.waiting{opacity:.6}
+
+/* ============ 动效库 Motion Lab ============ */
+.fx-top{font-size:12px;color:var(--t3);margin:2px 0 14px;line-height:1.9;padding:10px 14px;border-radius:14px;background:rgba(255,255,255,.42);border:1px dashed rgba(58,52,84,.14)}
+.fx-head{display:flex;align-items:center;gap:10px;margin:18px 0 10px;font-size:12px;color:var(--t3);letter-spacing:.1em}
+.fx-head::after{content:"";flex:1;height:1px;background:linear-gradient(90deg,rgba(58,52,84,.14),transparent)}
+.fx-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:14px}
+.fx{display:flex;flex-direction:column}
+.fx-t{font-size:13.5px;font-weight:600}
+.fx-t code{font-size:11px;color:var(--purple-deep);font-weight:500;margin-left:4px}
+.fx-d{font-size:11.5px;color:var(--t3);margin-top:2px;line-height:1.7}
+.fx-st{flex:1;display:flex;align-items:center;justify-content:center;gap:10px;flex-wrap:wrap;min-height:112px;padding:12px 4px 6px;position:relative}
+.fx-st .inp{max-width:230px}
+.fx-ctr{display:flex;justify-content:flex-end;gap:6px;padding-top:8px;border-top:1px dashed rgba(58,52,84,.08)}
+.fx-ctr .btn{height:28px;padding:0 12px;font-size:11.5px;border-radius:10px}
+/* sheen */
+.fx-sheen{position:relative;overflow:hidden}
+.fx-sheen::after{content:"";position:absolute;top:0;bottom:0;left:0;width:55%;background:linear-gradient(105deg,transparent,rgba(255,255,255,.55),transparent);transform:translateX(-170%) skewX(-14deg)}
+.fx-sheen:hover::after{animation:fxSheen .8s ease-out .05s}
+@keyframes fxSheen{to{transform:translateX(330%) skewX(-14deg)}}
+/* ripple */
+.fx-rip{position:relative;overflow:hidden}
+.fx-rip .rip{position:absolute;border-radius:50%;background:radial-gradient(circle,rgba(255,255,255,.75),rgba(255,255,255,0) 72%);transform:scale(0);pointer-events:none;animation:fxRip .6s ease-out forwards}
+@keyframes fxRip{60%{opacity:1}to{transform:scale(1);opacity:0}}
+/* link arrow */
+.fx-link{display:inline-flex;align-items:center;gap:6px;font-size:13px;color:var(--rose-deep);font-weight:600}
+.fx-link svg{width:16px;height:16px;stroke:currentColor;fill:none;stroke-width:2;transition:transform .22s ease}
+.fx-link:hover svg{transform:translateX(3px)}
+/* number */
+.fx-num{font-size:30px;font-weight:800;color:var(--rose-deep);font-variant-numeric:tabular-nums;min-width:110px;text-align:right}
+/* bars */
+.fx-bars{display:flex;gap:8px;align-items:flex-end;height:96px;width:190px;padding:6px 8px;border-radius:14px;background:rgba(255,255,255,.4);border:1px solid rgba(255,255,255,.85)}
+.fx-bars i{flex:1;border-radius:8px 8px 3px 3px;background:linear-gradient(180deg,#FFB3CB,#E85D8F);height:0}
+.fx-bars i:nth-child(even){background:linear-gradient(180deg,#A9E3D4,#4FB59C)}
+/* draw */
+.fx-draw{width:210px;height:96px}
+.fx-draw path{stroke-linecap:round;stroke-linejoin:round}
+/* switch */
+.sw{width:48px;height:27px;border-radius:999px;background:rgba(58,52,84,.13);border:1px solid rgba(255,255,255,.95);position:relative;cursor:pointer;transition:background .25s ease,box-shadow .25s ease}
+.sw i{position:absolute;left:2.5px;top:2.5px;width:20px;height:20px;border-radius:50%;background:#fff;box-shadow:0 2px 6px rgba(58,52,84,.22);transition:transform .3s cubic-bezier(.34,1.56,.64,1)}
+.sw.on{background:var(--gp);box-shadow:0 0 0 3px rgba(143,106,224,.15)}
+.sw.on i{transform:translateX(21px)}
+/* checkbox pop */
+.fx-cb{display:inline-flex;align-items:center;gap:8px;font-size:13px;color:var(--t2);cursor:pointer;user-select:none}
+.fx-cb input{position:absolute;opacity:0;pointer-events:none}
+.fx-cb .cbox{width:20px;height:20px;border-radius:7px;border:1px solid rgba(58,52,84,.2);background:rgba(255,255,255,.75);display:inline-flex;align-items:center;justify-content:center;transition:border-color .18s ease,box-shadow .2s ease}
+.fx-cb .cbox i{width:12px;height:12px;border-radius:4px;background:var(--gp);transform:scale(0);transition:transform .22s cubic-bezier(.34,1.56,.64,1)}
+.fx-cb input:checked+.cbox{border-color:rgba(143,106,224,.55);box-shadow:0 0 0 3px rgba(143,106,224,.12)}
+.fx-cb input:checked+.cbox i{transform:scale(1)}
+/* segmented */
+.fx-sg{position:relative;display:flex;background:rgba(255,255,255,.6);border:1px solid rgba(255,255,255,.9);border-radius:15px;padding:3px;width:300px;max-width:100%;box-shadow:inset 0 1px 2px rgba(58,52,84,.05)}
+.fx-sg .sg-thumb{position:absolute;top:3px;bottom:3px;left:3px;width:calc((100% - 6px)/3);border-radius:12px;background:var(--g);box-shadow:0 4px 12px rgba(240,127,163,.35);transition:left .28s cubic-bezier(.22,1,.36,1)}
+.fx-sg .sg-o{position:relative;flex:1;border:none;background:none;font-family:inherit;font-size:12.5px;color:var(--t2);padding:8px 4px;cursor:pointer;transition:color .2s ease;white-space:nowrap}
+.fx-sg .sg-o.on{color:#fff;font-weight:600}
+/* error shake */
+.inp.err{border-color:rgba(214,84,102,.75)!important;animation:fxShake .32s ease}
+@keyframes fxShake{0%,100%{transform:translateX(0)}20%,60%{transform:translateX(-4px)}40%,80%{transform:translateX(4px)}}
+/* breathe */
+.fx-dot{width:10px;height:10px;border-radius:50%;background:#2f8f76;animation:fxBreathe 2.4s ease-in-out infinite}
+@keyframes fxBreathe{0%,100%{transform:scale(1);box-shadow:0 0 0 0 rgba(47,143,118,.35)}50%{transform:scale(1.3);box-shadow:0 0 0 9px rgba(47,143,118,0)}}
+.fx-pulse-ring{width:14px;height:14px;border-radius:50%;background:rgba(239,106,123,.25);position:relative}
+.fx-pulse-ring::after{content:"";position:absolute;inset:-4px;border-radius:50%;border:2px solid rgba(239,106,123,.5);animation:fxRing 1.8s ease-out infinite}
+@keyframes fxRing{0%{transform:scale(.5);opacity:1}100%{transform:scale(1.4);opacity:0}}
+/* skeleton */
+.sk{display:flex;flex-direction:column;gap:8px;width:230px}
+.sk i{display:block;height:11px;border-radius:7px;background:linear-gradient(90deg,rgba(58,52,84,.07) 25%,rgba(255,255,255,.8) 50%,rgba(58,52,84,.07) 75%);background-size:200% 100%;animation:fxSk 1.15s linear infinite}
+.sk .sk-a{width:40px;height:40px;border-radius:50%;margin-bottom:2px}
+@keyframes fxSk{to{background-position:-200% 0}}
+.fx-reveal{animation:fxReveal .4s cubic-bezier(.22,1,.36,1) both}
+@keyframes fxReveal{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+/* stagger */
+.fx-stag{display:flex;flex-direction:column;gap:6px;width:230px}
+.fx-stag span{display:flex;align-items:center;gap:8px;padding:7px 12px;border-radius:12px;font-size:12px;color:var(--t2);background:rgba(255,255,255,.55);border:1px solid rgba(255,255,255,.9)}
+.fx-stag span i{width:7px;height:7px;border-radius:50%;background:var(--rose-d);flex:none}
+.fx-stag.go span{animation:fxUp .5s cubic-bezier(.22,1,.36,1) both}
+.fx-stag.go span:nth-child(2){animation-delay:70ms}.fx-stag.go span:nth-child(3){animation-delay:140ms}
+.fx-stag.go span:nth-child(4){animation-delay:210ms}.fx-stag.go span:nth-child(5){animation-delay:280ms}
+@keyframes fxUp{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:none}}
+/* hero float */
+.fx-hero{width:110px;height:68px;border-radius:18px;background:linear-gradient(150deg,rgba(255,169,194,.5),rgba(232,93,143,.35));border:1px solid rgba(255,255,255,.9);box-shadow:0 10px 22px rgba(90,70,70,.14);display:flex;align-items:center;justify-content:center;font-size:12px;color:#fff;font-weight:600}
+.fx-hero.float{animation:fxFloat 8s ease-in-out infinite alternate}
+@keyframes fxFloat{from{transform:translateY(0)}to{transform:translateY(-7px)}}
+/* typing 动画舞台 */
+.fx-msg{min-height:52px;display:flex;flex-direction:column;justify-content:center;font-size:12.5px;color:var(--t2);line-height:1.9;width:100%}
+.fx-ans{display:none}
+.fx-ans.show{display:block;animation:fxReveal .3s ease both}
+.dotty{margin:0}
+@media(max-width:720px){.fx-grid{grid-template-columns:1fr}}
 </style>
 </head>
 <body class="mode-sider">
@@ -264,6 +350,7 @@ textarea.inp{resize:vertical;min-height:76px;line-height:1.7}
   <button class="nv" data-v="archive"><svg viewBox="0 0 24 24"><circle cx="12" cy="8" r="3.4"/><path d="M5 20c.6-3.6 3.4-5.4 7-5.4s6.4 1.8 7 5.4"/></svg><span>全生命周期档案</span></button>
   <button class="nv" data-v="consult"><svg viewBox="0 0 24 24"><path d="M4 6.5h16v10H10.5L7 20v-3.5H4z"/><path d="M8.5 10.5h.01M12 10.5h.01M15.5 10.5h.01"/></svg><span>多智能体会诊</span><em class="bdg">2</em></button>
   <button class="nv" data-v="detail"><svg viewBox="0 0 24 24"><rect x="5" y="3.5" width="14" height="17" rx="2.5"/><path d="M8.5 8h7M8.5 12h7M8.5 16h4"/></svg><span>诊疗详情</span></button>
+  <button class="nv" data-v="motion"><svg viewBox="0 0 24 24"><path d="M12 3.5l1.9 5.1 5.1 1.9-5.1 1.9-1.9 5.1-1.9-5.1L5 10.5l5.1-1.9z"/><path d="M18.5 15l.8 2.2 2.2.8-2.2.8-.8 2.2-.8-2.2-2.2-.8 2.2-.8z"/></svg><span>动效库</span></button>
   <div class="gt" style="margin-top:6px">系统</div>
   <button class="nv" data-v="work" data-act="queue"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="2.2"/><path d="M12 3v3M12 18v3M3 12h3M18 12h3M5.6 5.6l2.1 2.1M16.3 16.3l2.1 2.1M18.4 5.6l-2.1 2.1M7.7 16.3l-2.1 2.1"/></svg><span>五色队列</span></button>
   <div class="foot">
@@ -280,7 +367,7 @@ textarea.inp{resize:vertical;min-height:76px;line-height:1.7}
     </div>
     <div class="tabs">
       <span class="tb on" data-v="work">专家工作台</span><span class="tb" data-v="archive">全生命周期档案</span>
-      <span class="tb" data-v="consult">多智能体会诊</span><span class="tb" data-v="detail">诊疗详情</span>
+      <span class="tb" data-v="consult">多智能体会诊</span><span class="tb" data-v="detail">诊疗详情</span><span class="tb" data-v="motion">动效库</span>
     </div>
     <div class="seg" id="seg">
       <span class="on" data-m="sider">侧栏</span><span data-m="top">顶栏</span>
@@ -487,6 +574,13 @@ textarea.inp{resize:vertical;min-height:76px;line-height:1.7}
         <div style="margin-top:10px"><button class="btn pri sm" data-act="issue">完成医嘱下发</button></div>
       </div>
     </div>
+  </div>
+
+  <!-- P5 动效库 -->
+  <div class="view" data-v="motion">
+    <h2>交互动效库 · Motion Lab</h2>
+    <div class="fx-top">时长 Token：fast 120ms · base 220ms · slow 400ms · entrance 800ms · draw 1000ms · breathe 2.4s ｜ 默认曲线 ease-out cubic-bezier(.22,1,.36,1)，仅动 transform / opacity（规范 07 · 7.2）。悬停或点击各卡片体验。</div>
+    <div id="fxgrid"></div>
   </div>
 </div>
 
@@ -797,8 +891,158 @@ function runWorkFx(){
 }
 qa('.view').forEach(function(v){new MutationObserver(function(){if(v.classList.contains('on')&&v.getAttribute('data-v')==='work')setTimeout(runWorkFx,90)}).observe(v,{attributes:true,attributeFilter:['class']})});
 setTimeout(runWorkFx,500);
+  window.GM={toast:toast,modal:modal,drawer:drawer};
 })();
 </script>
 
+<script>
+/* ============ 动效库生成器（规范 07 配方演示） ============ */
+(function(){
+'use strict';
+var GM=window.GM;if(!GM)return;
+var grid=document.getElementById('fxgrid');if(!grid)return;
+function esc(x){return String(x==null?'':x).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')}
+function easeOut(t){return 1-Math.pow(1-t,3)}
+function fxCard(it){
+  var card=document.createElement('div');card.className='fx card pad';
+  var t=document.createElement('div');t.className='fx-t';t.textContent=it.t;
+  if(it.code){var c=document.createElement('code');c.textContent=' '+it.code;t.appendChild(c)}
+  var d=document.createElement('div');d.className='fx-d';d.textContent=it.d||'';
+  var st=document.createElement('div');st.className='fx-st';st.innerHTML=it.h||'';
+  card.appendChild(t);card.appendChild(d);card.appendChild(st);
+  var pb=null;
+  if(it.play){
+    var ctr=document.createElement('div');ctr.className='fx-ctr';
+    pb=document.createElement('button');pb.type='button';pb.className='btn mint sm';pb.textContent=it.replay||'演示';
+    pb.addEventListener('click',function(){it.play(st)});
+    ctr.appendChild(pb);card.appendChild(ctr);
+  }
+  if(it.bind)it.bind(st,pb);
+  return card;
+}
+function group(title,list){
+  var h=document.createElement('div');h.className='fx-head';h.textContent=title;grid.appendChild(h);
+  var g=document.createElement('div');g.className='fx-grid';
+  list.forEach(function(it){g.appendChild(fxCard(it))});grid.appendChild(g);
+}
+
+group('反馈与按压',[
+ {t:'按压回弹',code:'M1 · 120ms',d:'active 按回平面 + scale(.96)，120ms 内完成，像“有回弹的玻璃”。',h:'<button class="btn pri" type="button">按住我</button>'},
+ {t:'Sheen 高光扫过',code:'M1 · 0.8s',d:'hover 触发一次白色高光从左扫到右（只动 transform）。',h:'<button class="btn pri fx-sheen" type="button">悬停我</button>'},
+ {t:'Ripple 涟漪',code:'M1 · 0.6s',d:'点击处向外扩散一圈涟漪后淡出。',h:'<button class="btn mint fx-rip" type="button">点出涟漪</button>',bind:function(st){
+   var b=st.querySelector('.fx-rip');
+   b.addEventListener('click',function(e){
+     var r=b.getBoundingClientRect(),d=Math.max(r.width,r.height)*2.2;
+     var s=document.createElement('span');s.className='rip';
+     s.style.cssText='left:'+(e.clientX-r.left-d/2)+'px;top:'+(e.clientY-r.top-d/2)+'px;width:'+d+'px;height:'+d+'px';
+     b.appendChild(s);setTimeout(function(){if(s.parentNode)s.parentNode.removeChild(s)},650);
+   });
+ }},
+ {t:'Loading 忙碌',code:'0.9s/圈',d:'按钮进入忙碌：图标位旋转圈 1.4s，完成后 Toast 反馈。',h:'<button class="btn pri" id="fx-demo-spin" type="button">执行 1.4s 任务</button>',bind:function(st){
+   var b=st.querySelector('#fx-demo-spin');
+   b.addEventListener('click',function(){
+     if(b.classList.contains('busy'))return;
+     b.insertAdjacentHTML('afterbegin','<span class="bx"></span>');b.classList.add('busy');b.disabled=true;
+     setTimeout(function(){b.classList.remove('busy');var x=b.querySelector('.bx');if(x)x.parentNode.removeChild(x);b.disabled=false;GM.toast('任务已完成 · 用时 1.4s');},1400);
+   });
+ }},
+ {t:'图标引导位移',code:'M1 · 220ms',d:'hover 箭头右移 3px，提示“继续”类操作方向。',h:'<span class="fx-link">继续会诊<svg viewBox="0 0 24 24"><path d="M4 12h15M13 5l7 7-7 7"/></svg></span>'}
+]);
+
+group('浮层与系统反馈',[
+ {t:'Toast 四种语义',code:'滑入 320ms',d:'同类 Toast 仅保留一条：滑入→驻留 2.4s→淡出上滑。',h:'<button class="btn mint sm" type="button" data-g="good">成功</button><button class="btn line sm" type="button" data-g="info">提示</button><button class="btn line sm" type="button" data-g="warn">警告</button><button class="btn line sm" type="button" data-g="err">失败</button>',bind:function(st){
+   var map={good:['操作成功','good'],info:['已同步最新数据','info'],warn:['注意：风险等级待复核','warn'],err:['下发失败，请重试','err']};
+   st.querySelectorAll('button').forEach(function(b){b.addEventListener('click',function(){var m=map[b.getAttribute('data-g')];GM.toast(m[0],m[1])})});
+ }},
+ {t:'Modal 弹层',code:'320ms',d:'遮罩 250ms 淡入，面板 scale(.98→1)+下移 12px→0，ease-out。',h:'<button class="btn pri sm" type="button">打开示例弹层</button>',bind:function(st){
+   st.querySelector('button').addEventListener('click',function(){
+     GM.modal({title:'动效示例 · Modal',body:'<div class="hint" style="margin-top:0">遮罩淡入 250ms；面板 scale .98→1 + 下移 12px→0，320ms ease-out。按 ESC 或点遮罩关闭。</div>',foot:[{label:'关闭',cls:'line',close:1}]});
+   });
+ }},
+ {t:'Drawer 侧抽屉',code:'320ms 滑入',d:'面板自右侧 40px→0 滑入（状态层用右侧抽屉承载）。',h:'<button class="btn mint sm" type="button">打开示例抽屉</button>',bind:function(st){
+   st.querySelector('button').addEventListener('click',function(){
+     GM.drawer({title:'动效示例 · Drawer',body:'<div class="hint" style="margin-top:0">右侧滑入 320ms ease-out；适合随访录入等次级任务。</div>',foot:[{label:'关闭',cls:'line',close:1}]});
+   });
+ }}
+]);
+
+group('数据与图表',[
+ {t:'数字滚动',code:'draw 1000ms',d:'KPI 数字按 easeOutCubic 滚到目标值（仅数字文本）。',h:'<span class="fx-num" id="fx-n1" data-val="8642">0</span><span style="font-size:12px;color:var(--t3)">本周随访人次</span>',
+  bind:function(st,pb){var el=st.querySelector('#fx-n1');if(pb)el.addEventListener('click',function(){pb.click()})},
+  play:function(st){var el=st.querySelector('#fx-n1'),target=parseInt(el.getAttribute('data-val'),10),t0=null;el.textContent='0';
+    function step(ts){if(!t0)t0=ts;var p=Math.min(1,(ts-t0)/1000);el.textContent=Math.round(target*easeOut(p));if(p<1)requestAnimationFrame(step)}
+    requestAnimationFrame(step);},
+  replay:'重播滚动'},
+ {t:'柱状成长',code:'draw 900ms',d:'柱从 0 长到目标高度，逐根 90ms 错峰。',h:'<div class="fx-bars"><i data-h="58"></i><i data-h="82"></i><i data-h="45"></i><i data-h="96"></i><i data-h="71"></i></div>',
+  bind:function(st){var bs=[].slice.call(st.querySelectorAll('.fx-bars i'));
+    function set(v){bs.forEach(function(b,i){b.style.transition='height .55s cubic-bezier(.22,1,.36,1) '+i*90+'ms';b.style.height=v[i]+'%'})}
+    bs.forEach(function(b){b.style.transition='none';b.style.height='0%'});void(bs[0]&&bs[0].offsetWidth);set(bs.map(function(b){return parseInt(b.getAttribute('data-h'),10)}));},
+  play:function(st){var bs=[].slice.call(st.querySelectorAll('.fx-bars i'));bs.forEach(function(b){b.style.transition='none';b.style.height='0%'});void(bs[0]&&bs[0].offsetWidth);
+    bs.forEach(function(b,i){b.style.transition='height .55s cubic-bezier(.22,1,.36,1) '+i*90+'ms';b.style.height=b.getAttribute('data-h')+'%'})},
+  replay:'重播成长'},
+ {t:'曲线描线',code:'draw 1100ms',d:'数据曲线按路径长度 stroke-dashoffset 绘制（仅 SVG 描边）。',h:'<svg class="fx-draw" viewBox="0 0 210 96"><path id="fx-d1" d="M6,80 L38,66 L70,70 L102,42 L134,48 L166,24 L198,30" fill="none" stroke="#F77FA3" stroke-width="3"/></svg>',
+  bind:function(st,pb){var p=st.querySelector('#fx-d1'),len=p.getTotalLength();p.style.strokeDasharray=len;p.style.strokeDashoffset=len;p.dataset.len=len;
+    if(pb)p.addEventListener('click',function(){pb.click()})},
+  play:function(st){var p=st.querySelector('#fx-d1'),len=parseFloat(p.dataset.len)||p.getTotalLength();
+    p.getAnimations().forEach(function(a){a.cancel()});p.style.strokeDashoffset=len;
+    p.animate([{strokeDashoffset:len},{strokeDashoffset:0}],{duration:1100,easing:'cubic-bezier(.22,1,.36,1)'});},
+  replay:'重播描线'}
+]);
+
+group('控件质感',[
+ {t:'开关 Spring',code:'M2 · 300ms',d:'滑块 0↔21px 用 spring 曲线（唯一允许“活泼”的控件）。',h:'<div class="sw" id="fx-sw" role="switch" aria-checked="false" tabindex="0"><i></i></div><span id="fx-swl" style="font-size:12px;color:var(--t3)">已关闭</span>',bind:function(st){
+   var sw=st.querySelector('#fx-sw'),lab=st.querySelector('#fx-swl');
+   function set(on){sw.classList.toggle('on',on);sw.setAttribute('aria-checked',on);lab.textContent=on?'已开启 · 红级随访提醒':'已关闭'}
+   sw.addEventListener('click',function(){set(!sw.classList.contains('on'))});
+   sw.addEventListener('keydown',function(e){if(e.key===' '||e.key==='Enter'){e.preventDefault();set(!sw.classList.contains('on'))}});
+ }},
+ {t:'勾选 Pop',code:'M2 · 220ms spring',d:'内部紫块 scale .4→1 弹出，外框淡出紫色柔光。',h:'<label class="fx-cb"><input type="checkbox"><span class="cbox"><i></i></span>同意并加入高危队列</label>'},
+ {t:'分段滑块',code:'M2 · 280ms',d:'滑块平移 + 变宽到目标项，禁止瞬移。',h:'<div class="fx-sg"><i class="sg-thumb"></i><button class="sg-o on" type="button">工作台</button><button class="sg-o" type="button">档案</button><button class="sg-o" type="button">会诊</button></div>',bind:function(st){
+   var sg=st.querySelector('.fx-sg'),thumb=sg.querySelector('.sg-thumb'),os=[].slice.call(sg.querySelectorAll('.sg-o'));
+   function place(i){var w=sg.clientWidth,p=3;thumb.style.left=(p+i*(w-p*2)/3)+'px';os.forEach(function(o,k){o.classList.toggle('on',k===i)})}
+   place(0);
+   os.forEach(function(o,i){o.addEventListener('click',function(){place(i)})});
+ }},
+ {t:'输入框 Focus/校验',code:'M1 · 200ms',d:'focus 4px 紫柔光淡入；校验错误边框转红 + 抖动一次。',h:'<input class="inp" id="fx-in" placeholder="点击聚焦查看 focus ring">',bind:function(st){
+   var inp=st.querySelector('#fx-in');inp.addEventListener('click',function(){inp.focus()});
+   var row=document.createElement('div');row.className='fx-ctr';row.style.cssText='border:none;padding-top:8px;width:100%;justify-content:center';
+   var b1=document.createElement('button');b1.type='button';b1.className='btn line sm';b1.textContent='聚焦';
+   var b2=document.createElement('button');b2.type='button';b2.className='btn line sm';b2.textContent='模拟校验错误';
+   b1.addEventListener('click',function(){inp.focus()});
+   b2.addEventListener('click',function(){inp.classList.remove('err');void inp.offsetWidth;inp.classList.add('err');GM.toast('“患者姓名”为必填项','warn');setTimeout(function(){inp.classList.remove('err')},500)});
+   row.appendChild(b1);row.appendChild(b2);st.appendChild(row);
+ }}
+]);
+
+group('状态与等待',[
+ {t:'状态点呼吸',code:'M4 · 2.4s 循环',d:'实时状态唯一允许无限循环：绿点呼吸 + 红脉冲环。',h:'<span class="fx-dot"></span><span style="font-size:12px;color:var(--t2)">在线 · 实时同步</span>&nbsp;&nbsp;<span class="fx-pulse-ring"></span>'},
+ {t:'AI 打字回复',code:'打字点循环',d:'智能体回复前三点打字，收到后气泡入场。',h:'<div class="fx-msg" id="fx-msg"></div>',
+  bind:function(st,pb){st.dataset.seq='0';pb&&pb.click();},
+  play:function(st){var box=st.querySelector('#fx-msg');box.innerHTML='';var seq=parseInt(st.dataset.seq||'0',10);st.dataset.seq=seq+1;
+    var d=document.createElement('span');d.className='bubble ai dotty';d.style.cssText='display:inline-flex;width:auto';d.innerHTML='<i></i><i></i><i></i>';box.appendChild(d);
+    var wait=seq%2===0?900:1400,ans=seq%2===0?
+      ['已将 3 条建议按优先级排序，红级 1 条待处理。','好的，先处理红级那条。']:
+      ['已生成今日随访清单（6 项），随时可下发。',null];
+    setTimeout(function(){if(!d.parentNode)return;box.innerHTML='';
+      var a=document.createElement('div');a.className='bubble ai';a.textContent=ans[0];box.appendChild(a);
+      if(ans[1]){var b=document.createElement('div');b.className='bubble doc';b.style.cssText='margin-top:6px';b.textContent=ans[1];box.appendChild(b)}
+    },wait);
+  },replay:'再播一段'},
+ {t:'骨架屏 Skeleton',code:'1.15s shimmer',d:'内容加载前用骨架占位，数据就绪后内容淡入。',h:'<div id="fx-skel"><div class="sk"><i class="sk-a"></i><i style="width:92%"></i><i style="width:70%"></i><i style="width:84%"></i></div><div id="fx-real" style="display:none;width:230px"><div style="font-size:13px;font-weight:600">张敏 · 孕 28 周</div><div style="font-size:11.5px;color:var(--t3)">GDM · 血糖 4.8–6.1 波动</div><div style="margin-top:6px"><span class="tag g">数据已就绪</span></div></div></div>',
+  bind:function(st,pb){pb&&pb.click();},
+  play:function(st){var sk=st.querySelector('#fx-skel'),skel=sk.querySelector('.sk'),real=st.querySelector('#fx-real');
+    skel.style.display='flex';real.style.display='none';
+    setTimeout(function(){skel.style.display='none';real.style.display='block';real.classList.remove('fx-reveal');void real.offsetWidth;real.classList.add('fx-reveal')},1100);},
+  replay:'模拟加载'},
+ {t:'列表入场错峰',code:'60ms×n',d:'多行按 60–90ms 错峰上浮入场。',h:'<div class="fx-stag" id="fx-stag"><span><i></i>高危儿 · 安安</span><span><i></i>GDM · 张敏</span><span><i></i>复诊 · 07-08</span><span><i></i>涂氟 · 赵甜甜</span><span><i></i>疫苗 · 18 月龄</span></div>',
+  bind:function(st,pb){pb&&pb.click();},
+  play:function(st){var sg=st.querySelector('#fx-stag');sg.classList.remove('go');void sg.offsetWidth;sg.classList.add('go');},
+  replay:'重播入场'},
+ {t:'Hero 悬浮',code:'8s ease-in-out',d:'Hero 区 2–3 件悬浮件常驻 ±7px 缓慢浮动。',h:'<div class="fx-hero" id="fx-hero">本周重点关注</div>',
+  play:function(st){var h=st.querySelector('#fx-hero');h.classList.toggle('float')},
+  replay:'开 / 关悬浮'}
+]);
+})();
+</script>
 </body>
 </html>
