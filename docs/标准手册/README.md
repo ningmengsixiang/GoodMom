@@ -23,14 +23,14 @@
 | 14 | [Part 14 · 表单规范](Part 14 · 表单规范.md) | ✅ 现行 |
 | 15 | [Part 15 · 数据表格规范](Part 15 · 数据表格规范.md) | ✅ 现行 |
 | 16 | [Part 16 · Dashboard 规范](Part 16 · Dashboard 规范.md) | ✅ 现行 |
-| 17 | Part 17 · 导航规范 | ⏳ |
-| 18 | Part 18 · 弹窗/反馈规范 | ⏳ |
-| 19 | Part 19 · Empty/Error/Loading 规范 | ⏳ |
-| 20 | Part 20 · PC 端规范 | ⏳ |
-| 21 | Part 21 · iPad 端规范 | ⏳ |
-| 22 | Part 22 · Mobile 端规范 | ⏳ |
-| 23 | Part 23 · Accessibility 规范 | ⏳ |
-| 24 | Part 24 · 行业设计系统 | ⏳ |
+| 17 | [Part 17 · 导航规范](Part 17 · 导航规范.md) | ✅ 现行 |
+| 18 | [Part 18 · 弹窗/反馈规范](Part 18 · 弹窗反馈规范.md) | ✅ 现行 |
+| 19 | [Part 19 · Empty/Error/Loading 规范](Part 19 · EmptyErrorLoading 规范.md) | ✅ 现行 |
+| 20 | [Part 20 · PC 端规范](Part 20 · PC 端规范.md) | ✅ 现行 |
+| 21 | [Part 21 · iPad 端规范](Part 21 · iPad 端规范.md) | ✅ 现行 |
+| 22 | [Part 22 · Mobile 端规范](Part 22 · Mobile 端规范.md) | ✅ 现行 |
+| 23 | [Part 23 · Accessibility 规范](Part 23 · Accessibility 规范.md) | ✅ 现行 |
+| 24 | [Part 24 · 行业设计系统](Part 24 · 行业设计系统.md) | ✅ 现行 |
 | 25 | Part 25 · Figma 组件库标准 | ⏳ |
 | 26 | Part 26 · Design Token 代码标准 | ⏳ |
 | 27 | Part 27 · Design-to-Code 标准 | ⏳ |
