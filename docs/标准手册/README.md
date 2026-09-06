@@ -31,19 +31,19 @@
 | 22 | [Part 22 · Mobile 端规范](Part 22 · Mobile 端规范.md) | ✅ 现行 |
 | 23 | [Part 23 · Accessibility 规范](Part 23 · Accessibility 规范.md) | ✅ 现行 |
 | 24 | [Part 24 · 行业设计系统](Part 24 · 行业设计系统.md) | ✅ 现行 |
-| 25 | Part 25 · Figma 组件库标准 | ⏳ |
-| 26 | Part 26 · Design Token 代码标准 | ⏳ |
-| 27 | Part 27 · Design-to-Code 标准 | ⏳ |
-| 28 | Part 28 · AI UI 生成标准 | ⏳ |
-| 29 | Part 29 · Design QA 标准 | ⏳ |
-| 30 | Part 30 · Design Governance | ⏳ |
-| 31 | Part 31 · 版本管理 | ⏳ |
-| 32 | Part 32 · 项目落地 SOP | ⏳ |
-| 33 | Part 33 · 设计师工作规范 | ⏳ |
-| 34 | Part 34 · 产品经理使用规范 | ⏳ |
-| 35 | Part 35 · 前端工程师使用规范 | ⏳ |
-| 36 | Part 36 · AI Agent 使用规范 | ⏳ |
-| 37 | Part 37 · 项目交付验收规范 | ⏳ |
-| 38 | Part 38 · 设计系统资产库 | ⏳ |
+| 25 | [Part 25 · Figma 组件库标准](Part 25 · Figma 组件库标准.md) | ✅ 现行 |
+| 26 | [Part 26 · Design Token 代码标准](Part 26 · Design Token 代码标准.md) | ✅ 现行 |
+| 27 | [Part 27 · Design-to-Code 标准](Part 27 · Design-to-Code 标准.md) | ✅ 现行 |
+| 28 | [Part 28 · AI UI 生成标准](Part 28 · AI UI 生成标准.md) | ✅ 现行 |
+| 29 | [Part 29 · Design QA 标准](Part 29 · Design QA 标准.md) | ✅ 现行 |
+| 30 | [Part 30 · Design Governance](Part 30 · Design Governance.md) | ✅ 现行 |
+| 31 | [Part 31 · 版本管理](Part 31 · 版本管理.md) | ✅ 现行 |
+| 32 | [Part 32 · 项目落地 SOP](Part 32 · 项目落地SOP.md) | ✅ 现行 |
+| 33 | [Part 33 · 设计师工作规范](Part 33 · 设计师工作规范.md) | ✅ 现行 |
+| 34 | [Part 34 · 产品经理使用规范](Part 34 · 产品经理使用规范.md) | ✅ 现行 |
+| 35 | [Part 35 · 前端工程师使用规范](Part 35 · 前端工程师使用规范.md) | ✅ 现行 |
+| 36 | [Part 36 · AI Agent 使用规范](Part 36 · AI Agent 使用规范.md) | ✅ 现行 |
+| 37 | [Part 37 · 项目交付验收规范](Part 37 · 项目交付验收规范.md) | ✅ 现行 |
+| 38 | [Part 38 · 设计系统资产库](Part 38 · 设计系统资产库.md) | ✅ 现行 |
 
 > 编制计划：每批 3–6 份；单份状态随提交回填「✅ 现行」。
