@@ -282,78 +282,105 @@
 - **合规边界**：面向医疗软件的可用性/法规（如 IEC 62366、器械软件准入）需在立项评审单独评估；本系统提供语言与视觉克制基线、不替代准入评估与临床验证（Part 36/37 亦须守此边界）。
 
 ## Part 25 · Figma 组件库标准
-- 页面结构镜像代码：`Primitive / Alias / Components / States / 表单 / 导航 / 反馈 / 移动`。
-- 组件命名 = 14 章官方名（kebab/语义）；Style/Variable 命名 = 02 token 名（`--lg-* / --mmh-*`）。
-- 变量三层导入：primitive → alias → component；颜色引用变量而非裸色。
-- Auto Layout 4px 网格；组件属性=props 白名单（克制）；每组件附“状态预览板”与 Do/Don't 页（与 03 对齐）。
-- 与代码同步机制：Figma token 导出 JSON → 人工 review → 落 `tokens/*.ts` + theme.css，再由 audit 校验（Part 27）。
+- **页面结构（镜像代码分层）**：01 Primitive（色板 ramp/字号/圆角/间距刻度）→ 02 Alias（语义/文本/品牌位）→ 03 Components（按 03/10/11 族）→ 04 States（每组件状态板）→ 05 Forms → 06 Nav → 07 Feedback → 08 Mobile → 09 Charts（12.3.3 色序）。
+- **命名同步纪律**：图层/样式/变量命名 = 14 章官方名（组件 kebab/中文禁别名）+ 02 token 名（`--lg-* / --mmh-*`）；Figma 名称与代码 token 一一对应，禁止图里一套、代码一套（Part 27 双轨禁令）。
+- **Variables 三层**：primitive → alias → component 逐层引用；颜色/圆角/间距/字号全部变量化，组件内不写裸值。
+- **组件规范**：Auto Layout 4px 网格；属性 = props 白名单（克制、与代码 props 对齐）；每组件带主态 + 状态预览板 + Do/Don't 页（镜像 03）；组件描述链接编号规范章节。
+- **协同流程**：Figma Token → 导出 JSON → 人工 review（与决策记录比对）→ 落 `tokens/*.ts` + theme.css → `refresh-spec.py` + audit 校验；任一方向变更同步另一侧。
+- **验收点**：抽查组件 → 与代码渲染像素级关键项（颜色/圆角/间距）无裸值偏差；状态齐全；命名可 grep 到代码同名。
 
 ## Part 26 · Design Token 代码标准
-- 唯一代码源文件：`goodmom-ui/src/tokens/{design,business,status}.ts` + `theme.css`；命名映射见 business.ts（40+ 词条 semanticOf）。
-- 色值六进制仅存 token 层；`audit.py`：代码层 ALLOWED（严格 FAIL）、页面层 ALLOWED∪PAGE_ALIAS、`color-banned` 旧色回归检测。
-- spec 生成 = `scripts/gen-spec.py` + `refresh-spec.py`（保留阅读器）；任何 md/token 变更后执行 refresh 并回归。
+- **代码唯一源**：`goodmom-ui/src/tokens/{design,business,status}.ts` + `theme.css`（:root）；命名 = `--lg-*`/`--mmh-*` + scope-kebab；业务词条 semanticOf 见 business.ts（40+）。
+- **硬规则**：① 色值六进制只允许出现在 token 层（组件内 0 魔法色，audit color-css 严格层 FAIL 拦截）；② alias 深色为状态文字唯一源（`--lg-sem-*`）；③ 白字实底用 `--mmh-solid-*`；④ 文字承载行动用 `--mmh-grad-action-hc`（D5/D6）。
+- **页面层**：site/preview 静态页色落 ALLOWED ∪ PAGE_ALIAS（D4）；代码层仅 ALLOWED；旧色回归由 color-banned 拦截（`#3F9C88`）。
+- **生成与同步**：`scripts/gen-spec.py` + `refresh-spec.py`（保留阅读器）重生成 site/spec.html；图标 `build-icons.py`；`coverage.py` 统计封装计数。
+- **工程**：根 `npm run typecheck`（@goodmom/ui + @goodmom/icons）、`npm run build`；CI 含 open-pkg-typecheck。
+- **变更流程**：查 02/14 无同名 → token 层新增 → 组件引用 var → audit + typecheck → spec 重生成 → CHANGELOG 记录。
 
 ## Part 27 · Design-to-Code 标准
-- 还原偏差验收：间距/字号/圆角/阴影只能取 token 刻度；偏差判定走 18 章逐项自查 + audit。
-- 规范-代码映射：00 目录（规范全量 94）↔ 代码封装（12）↔ docs/coverage-report.md 自动统计。
-- 页面不重复定义品牌 `:root`；使用预置 `--mmh-*`/`--lg-*`；HTML 无 `.md` 链接、统一菜单与 logo。
+- **映射纪律**：图面颜色/字号/间距/圆角/阴影只能出自 token；还原以 token 值为准（不允许类型化 token 偏差），视觉微调（±≤2px 类）由设计评审裁定并在决策记录留档。
+- **规范-代码登记**：00 目录=规范全量（94）↔ 代码封装=12（coverage.py 自动统计）↔ docs/coverage-report.md；新增封装双向登记。
+- **页面壳映射**：17.1.1 栅格/17.3.1 组合顺序 → 页面 class 结构；站内不重复定义品牌 :root，统一导航与 logo（`../logo.png`）；HTML 无 `.md` 链接（audit html-md）。
+- **双轨禁令**：Figma、代码、spec 三方必须同源同步；页面出现第三方风格/裸色视为回归（audit 色彩 + stale）。
+- **验收工具**：`audit.py`（含章节/图标/色彩/断点/spec）、`coverage.py`、CI 三 job；规范变更必须跑 `refresh-spec.py`。
 
 ## Part 28 · AI UI 生成标准
-- 生成规范提示词见 `../05-AI生成Prompt库.md`（219 行配方）；AI 产物必须过本手册 Part 29/37 验收。
-- AI 生成页面前置约束：Token 化色值、禁 emoji、禁 md 链接、统一导航、呼吸感留白、玻璃层级 L1–L4。
-- 医疗语境禁 AI 自行发明剂量/风险口径——只允许复述 15 章词表与既有临床文案。
+- **生成输入**：先给出上下文（产品域 15 词库 + 目标端 + 参考规范章节），禁止只给一句“做个页面”即产出终稿。
+- **输出合规清单（硬性）**：Token 化色值（无裸色）；禁 emoji；图标走 lg-icon/GmIcon；无 `.md` 链接、统一导航 logo；玻璃层级 L1–L4；留白 4px 刻度；断点 767/1024/1366；语义词引用 14/15 表。
+- **医学安全**：AI 不得发明剂量/分期/风险口径——只允许复述 15 章词表与既有临床文案；生成结果需医疗口径复核人签名。
+- **质量与流程**：生成 → 对照 `../05-AI生成Prompt库.md` 与 Part 29/37 清单自检 → refresh/audit 回归 → 人工过稿（设计 + 领域）→ 交付。
+- **AI 审查角色规范**（36 章一致）：结论带文件:行号证据；不臆测；冲突先对照 02/14/12 + 决策记录给出裁决建议；“需设计负责人”项不得代判完成。
 
 ## Part 29 · Design QA 标准
-- 分层走查：视觉（间距/层级/玻璃档）→ 组件状态 → 交互节奏 → 可访问性 → 响应式 → 品牌词 → 合规（医疗克制）。
-- 自动 QA 套件（脚本根目录 `scripts/`）：audit.py（13 项）、coverage.py、a11y.py、a11y-dom.py、refresh-spec.py。
-- 回归入口：`python3 scripts/audit.py && python3 scripts/a11y.py --ci && python3 scripts/coverage.py --ci`。
+- **分层走查顺序**：视觉（Token/间距/层级）→ 组件状态齐全 → 交互节奏（07）→ 可访问性（23）→ 响应式（06/21/22）→ 品牌词（14/15）→ 医疗克制（24）→ 合规边界。
+- **自动套件（scripts/）**：`audit.py`（13 项，含 md 链/章节/图标/html-md/stale/色彩 ALLOWED·PAGE_ALIAS/color-banned/bp/spec）、`coverage.py`、`a11y.py`、`a11y-dom.py`、`refresh-spec.py`。
+- **回归入口**：`python3 scripts/audit.py && python3 scripts/a11y.py --ci && python3 scripts/coverage.py --ci`。
+- **分级与闭环**：发现 → 定级（P0 阻断/P1 明显/P2 优化）→ 修复 → 回归 → 决策记录留档（若涉及多源冲突或品牌视觉）；设计级（白字/渐变/层级取舍）由设计负责人人眼过稿，不得以工具数值代判（D7b）。
+- **证据要求**：每项结论给 `文件:行号`；无法取样/未覆盖处标注待确认。
 
 ## Part 30 · Design Governance
-- 登记制度：新组件 → 00 加行 → 14 补术语/状态 → 09 图标流程 → 10/11 或 08.2 落端规范（00 第 3 节）。
-- 命名/术语唯一源 14 章（含禁用别名与旧称迁移表）；新增名词先登记。
-- 决策记录制：`docs/审查决策记录.md`（D1–D7b）保存多来源冲突裁决、实测数据与保留项，作为审计与评审依据。
-- 审计工具纪律：audit 白名单即治理边界；页面别名收口 PAGE_ALIAS（D4）。
+- **登记制度（00 第 3 节）**：新组件 → 00 加行 → 14 补术语/状态 → 09 图标流程 → 10/11 或 08.2 落端规范 → 代码封装回填（Part 27）。
+- **命名/术语唯一源**：14 章（含禁用别名与旧称迁移表）；新增名词先登记，禁止先造后补。
+- **决策记录制**：`docs/审查决策记录.md`（D1–D7b）记录多来源冲突裁决、实测数值、保留项；作为评审与 AI 审查依据，随版本留档。
+- **审计即治理**：ALLOWED（代码）/PAGE_ALIAS（页面）即色板治理边界；color-banned 拦历史回归；bp 管断点；coverage 管封装量——治理不靠口头约定，靠可执行检查。
+- **角色与评审**：设计/工程/PM/AI 贡献统一走“登记 → 实现 → 回归 → 过稿”闭环；未过设计负责人的视觉取舍不得宣称已完成（Part 36/37）。
 
 ## Part 31 · 版本管理
-- 版本载体：`CHANGELOG.md`（V2.x 条目）+ `README.md` 版本记录 + root `package.json`（workspaces 独立版本）。
-- 规则：破坏性/系统性变更升中版本（V2.3→V2.4 审查整改轮）；补丁与文档同步记录。
-- spec.html 与 docs 快照随版本重生成；决策记录随版本留档。
+- **版本载体**：root `package.json`（主版本 V2.x，与系统文档同步）+ workspaces 独立包版本（@goodmom/ui 0.x 等）+ `CHANGELOG.md` + `README.md` 版本记录表。
+- **分级规则**：破坏性/系统性变更 → 中版本（如 V2.3→V2.4 审查整改轮）；局部补丁与文档同步 → 小步提交但 CHANGELOG 记录；决策记录随版本留档。
+- **同步矩阵**：改版本时需同步——README 交付统计/版本记录、CHANGELOG 条目、spec.html（refresh）、docs 报告日期；不一致会误导（历史口径问题已修复：README/pkg/spec 同号）。
+- **发布步骤（收尾）**：全量回归（Part 37）→ 更新 CHANGELOG/README → 提交推送 → CI 三 job 绿 → 在决策记录标注版本与轮次。
 
 ## Part 32 · 项目落地 SOP
-- 六步（06 章）：需求对齐 → 术语/词表登记 → 组件组合选型（17.3）→ Token/资产落地 → 页面验收（16.6 合规表）→ 交付回归（37）。
-- 双端落点矩阵：PC 用侧栏/桌面组件，iPad 用 8:4，Mobile 用 TabBar/移动组件（10.3/17.1）。
+- **六步流程（06 章）**：① 需求对齐（端/用户/词表）→ ② 术语与状态登记（14/15）→ ③ 组件组合选型（00/17.3）→ ④ Token/资产落地（02/09/13）→ ⑤ 页面实现与合规自查（16.6 + Part 29）→ ⑥ 交付回归（Part 37）。
+- **入口检查**：任何新页面/功能上线前跑「16.6 组件合规表 + 17 章验收」；站点页并入前执行 audit html-md/统一导航/logo 检查。
+- **端映射**：PC=侧栏/桌面组件（Part 17/20）；iPad=8:4（Part 21）；Mobile=TabBar/移动组件（Part 22）；跨端复用一个域模型、不同形态。
+- **变更节奏**：小步提交 + 每批回归；涉及 Token/词表/色彩 → 加跑 refresh-spec + audit。
 
 ## Part 33 · 设计师工作规范
-- 交付前自查清单：Token 引用、AA 对比度、状态齐全、断点三档、禁 emoji、命名入 14 表。
-- 交稿物：设计稿（Figma 变量化）+ 状态说明 + 关键数值标注（token 名而非裸值）。
-- 变更纪律：设计变更须同步 md 规范 + spec（refresh）+ CHANGELOG，勿只改图。
+- **交付物**：Figma 变量化画稿 + 状态说明 + token 标注（写 token 名不写裸值）+ 异常/边界用例。
+- **自检清单（交付前）**：Token 引用无裸色；AA 对比度（Part 23）；组件状态齐全（Part 12）；三端断点预览（Part 20–22）；禁 emoji、命名入 14 表；插画/图标过风格与登记（Part 08/09）。
+- **协作纪律**：设计变更须同步 md 规范 + spec（refresh）+ CHANGELOG，禁止只改图不改规范；领域词与医疗口径以 15 章为准。
+- **签字权**：白字/渐变/层级等品牌视觉取舍得设计负责人拍板，工具数值只作证据不代判（D7b/Part 29）。
 
 ## Part 34 · 产品经理使用规范
-- 使用 15 章词库拟文案/PRD（状态词与医疗口径唯一源）；需求先查 00 是否已存在组件再提新 UI。
-- 涉及风险分级（红/橙/黄/蓝/绿）必须引 02.10/15.2.10 口径；提示语按 12.5 语气规范。
-- 版本需求与 CHANGELOG 对应；验收引用 Part 37 清单。
+- **词库对齐**：PRD/交互稿文案使用 15 章状态词条与 14 术语；新增业务状态先登记再写稿。
+- **组件查重**：提新 UI 前查 00 目录是否已有组件/领域组件（94 全量目录 + 12 封装子集见 docs/coverage-report.md）；已有则复用，避免各自实现。
+- **领域口径**：涉及妊娠风险分级（五色）引用 02.10/15.2.10；随访/儿保/疫苗计划等流程用 13 章组件语言描述。
+- **验收引用**：交付验收直接引 Part 37 清单；需求版本与 CHANGELOG 对应。
 
 ## Part 35 · 前端工程师使用规范
-- 引入 `@arco-design/web-react` CSS 后加载 `@goodmom/ui/theme.css`；`tokens/*` 提供语义映射；组件使用见 goodmom-ui README。
-- 类型/构建：`npm run typecheck`（根，覆盖 @goodmom/ui+icons）、`npm run build`；CI 含 docs-links / gm-ui-typecheck / open-pkg-typecheck。
-- 页面接入顺序：先 tokens 后组件后页面壳（17.1.1→class 映射）；魔改需回填封装并跑 audit。
+- **接入顺序**：`@arco-design/web-react/dist/css/arco.css` → `@goodmom/ui/theme.css` → 组件/tokens；样式覆盖只改主题层，不在页面写品牌 :root。
+- **可用 API**：Gm* 组件（12 模块，见 goodmom-ui README）、tokens（design/business/status）、gmIcon/GmIcon（title 语义化）、i18n。
+- **工程**：`npm run typecheck`（根：@goodmom/ui+icons）、`npm run build`；CI = docs-links / gm-ui-typecheck / open-pkg-typecheck；本地改动后跑 `scripts/audit.py` 与 `a11y.py --ci`。
+- **页面集成**：先 token 后组件后页面壳（17.1→class）；新封装组件回填 index.ts/README/00/coverage；禁止魔法色与页面级裸断点。
 
 ## Part 36 · AI Agent 使用规范
-- 生成/审查前必读：本手册 + 关联分篇 + 决策记录；结论必须带 `文件:行号` 证据，不臆测。
-- 禁止行为：改色/新增术语/引入 emoji 或第三方图标而不登记；越权把“需设计负责人”项当完成项。
-- 标准操作：md/token 改动后跑 `refresh-spec.py` + `audit.py`；TSX 改动本地无网时标注“待 CI typecheck”。
-- 多来源冲突处理：对照 02/14/12 与决策记录后给出裁决建议，未经确认不动权威值。
+- **前置阅读**：本手册 + 相关分篇 + `docs/审查决策记录.md`；上下文不足先盘点仓库（read/grep 带行号），禁止凭记忆臆造。
+- **取证纪律**：所有结论给 `文件:行号` 证据；找不到写“未发现/待确认”；只描述会话证据能支撑的内容。
+- **产出闭环**：md/token/规范改动 → `refresh-spec.py` + `audit.py` 回归；TSX/代码改动离线无法 tsc 时标注“待 CI typecheck”；页面/工具改动后跑 a11y/coverage 按需。
+- **冲突协议**：多来源冲突（如语义色文档 vs 代码）→ 对照 02/14/12 与决策记录给出裁决建议与影响面，未获确认不动权威值；“需设计负责人”项不得自行宣称完成（Part 29/33）。
 
 ## Part 37 · 项目交付验收规范
-- 硬性闸门（全部 PASS 才可交付）：`audit.py`（md 链/章节/图标/HTML 无 md/色彩/旧色/断点/spec 阅读器）、`a11y.py`、`coverage.py` 数值对齐、CI 三个 job 绿。
-- 文档闸门：spec 章节=20 且阅读器在；CHANGELOG/README 版本同步；决策记录回填。
-- 人工闸门：白字/渐变等设计级项经设计负责人过稿（登记于报告），不允许自动判定代过。
+- **硬性闸门（全部通过才可交付）**
+  - `python3 scripts/audit.py`：md 链/章节 00–18/icons 77/html 无 md/stale/色彩（ALLOWED·PAGE_ALIAS）/color-banned/bp/spec 章节 20+阅读器
+  - `python3 scripts/a11y.py --ci`：outline 兜底/禁 span+onClick
+  - `python3 scripts/coverage.py --ci`：docs 19/组件 94/12/图标 77 数值对齐
+  - CI：docs-links、gm-ui-typecheck、open-pkg-typecheck 三 job 绿
+- **文档闸门**：CHANGELOG/README 版本同步；spec.html 由 refresh 重生成；决策记录回填（D-条目与保留项）。
+- **人工闸门**：品牌视觉（白字/渐变/层级）与医疗口径由设计/领域负责人过稿；`docs/a11y-dom-report.md` 残留清单逐条裁决或排期。
+- **交付物清单**：规范 md + site/preview HTML + goodmom-ui/icons + scripts 工具 + docs 报告 + CHANGELOG。
 
 ## Part 38 · 设计系统资产库
-- 资产清单：19 编号规范（根 `[0-9][0-9]-*.md`）、94 组件目录、12 代码组件、77 图标（icons/lg-icons.svg）、7 HTML 展示页（site 3 + preview 4）、12 模块 goodmom-ui、logo 资产（logo.png + brand/*）、docs 报告（audit-report/coverage-report/a11y-dom-report/审查决策记录）。
-- 覆盖度量：`scripts/coverage.py` → docs/coverage-report.md + coverage.json；同步命令清单见各 Part 与 README。
-- 再生成入口：spec = `python3 scripts/refresh-spec.py`；图标 = `scripts/build-icons.py`；审计/覆盖/可达见 Part 29。
-
----
-
-> 手册维护提示：新增分篇或工具时，同步更新 Part 00 映射表与 Part 29/37 闸门描述；任何数值型标准改动必须在 docs/审查决策记录.md 留档实测依据。
+- **资产清单（2026-09 V2.4）**
+  | 资产 | 数量/位置 |
+  | --- | --- |
+  | 编号规范文档 | 19 份（根 `[0-9][0-9]-*.md`） |
+  | 组件目录（规范全量） | 94（00-组件总目录.md） |
+  | 代码组件（封装） | 12（goodmom-ui/src，components 9 + adapters… 以 coverage 为准） |
+  | 自绘图标 | 77（icons/lg-icons.svg ↔ registry ↔ 09） |
+  | HTML 展示 | site 3 + preview 4 + fuyouaicansai 交互稿 |
+  | Logo/品牌 | logo.png + brand/{logo-mark,logo-tile,logo}.svg（v2 定案） |
+  | 报告 | docs/{audit-report,coverage-report,a11y-dom-report,审查决策记录}.md |
+- **同步命令**：spec=`python3 scripts/refresh-spec.py`；图标=`python3 scripts/build-icons.py`；度量=`python3 scripts/coverage.py`；审计/可达=`audit.py / a11y.py / a11y-dom.py`。
+- **维护规则**：资产增减后同步 Part 00 映射与本表；数值型标准改动在决策记录留实测依据。
