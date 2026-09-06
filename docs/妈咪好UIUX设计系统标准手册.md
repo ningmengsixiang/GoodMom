@@ -54,49 +54,98 @@
 ---
 
 ## Part 01 · 设计系统总则
-- **使命**：妇幼儿童全生命周期（备孕—孕期—产后—儿童 0–6 岁）业务一致体验；医疗克制 + 温暖可信（来源 `../01-设计总览与设计DNA.md`）。
-- **四大 DNA**：液态玻璃材质、蜜桃粉品牌 + 淡紫柔光、圆形家族、呼吸感留白。
-- **双源纪律**：规范文档为设计源，`theme.css/tokens/*` 为代码源，任一改动必须双侧同步并更新 spec（`scripts/refresh-spec.py`）。
-- **新增登记制**：任何新组件/命名/术语须先查 00 目录与 14 术语表登记，禁止“先造后补”。
-- 审查闭环：每轮改动以 `scripts/audit.py` 全量回归（见 Part 37）。
+- **目标**：妇幼儿童全生命周期（备孕—孕期—产后—0–6 岁儿童）跨端一致体验；用「医疗克制 + 温暖可信」的语言与视觉服务妈妈、家长与医护两端（`../01-设计总览与设计DNA.md`）。
+- **四大 DNA（01 章）**
+  1. 液态玻璃材质（半透明白 + backdrop-blur + 白描边 + 顶部高光 + 柔影；L1–L4 层级见 02.5）
+  2. 蜜桃粉品牌 + 淡紫柔光（`--mmh-grad-primary` / `--mmh-m5-*` 语义见 12.3）
+  3. 圆形家族（交互组件圆角 ≥16、容器 18–40、chip 999）
+  4. 呼吸感留白（页面 48–72px 呼吸带，4px 基准）
+- **非目标（Do Not）**：不做炫技/纯装饰视觉；不做未经临床验证的医学主张；不做与引擎（Arco/Semi）语义冲突的自造组件（先查 08 覆盖矩阵）。
+- **双层源纪律**：设计源=编号规范（00–18）；代码源=goodmom-ui（tokens/*、theme.css、components/*）。任一变更双侧同步，随后 `python3 scripts/refresh-spec.py` 重生成 site/spec.html。
+- **登记纪律**：新组件/术语/图标先登记（00 目录 → 14 术语表 → 09 图标流程 → 10/11 或 08.2 端规范），禁止“先造后补”。
+- **验收点**：新增/修改后执行 `python3 scripts/audit.py`（13 项全绿）、`coverage.py --ci`、`a11y.py --ci`；评审结论落 `docs/审查决策记录.md`。
+- 关联工具与文件锚点：README.md（角色→文档矩阵）、00-组件总目录.md、docs/audit-report.md。
 
 ## Part 02 · 品牌视觉系统
-- 品牌名唯一写法：**妈咪好 GoodMom**（禁止 Good Mom / Goodmom 异拼）。
-- Logo：正式 v2 = `brand/logo-mark.svg`（孕妈剪影 + 爱心 + GOODMOM），全局图标位使用 `../logo.png`；v1 几何版退役（见 `../12-妈咪好品牌与设计语言.md` 12.8 与决策记录 D-series）。
-- 品牌色：蜜桃粉主 + 淡紫柔光；亮渐变 `--mmh-grad-primary` 用于装饰，**文字承载行动走 `--mmh-grad-action-hc`**（AA，D5/D6）。
-- 界面禁 emoji：图标一律 `lg-icon-*`；文风安心鼓励、不说教、专业不恐慌（12.5）。
+- **品牌名唯一写法**：中文「妈咪好」+ 英文「GoodMom」＝**妈咪好 GoodMom**；禁止 Good Mom / Goodmom / 妈咪好goodmom 等异拼（14 章禁别名 + docs/audit-report stale 检查会拦）。
+- **Logo（v2 定案，2026-09）**：正式稿 `brand/logo-mark.svg` / `logo.svg`（孕妈剪影 + 爱心 + GOODMOM）；站点全局图标位用根目录 `../logo.png`；v1 几何版退役仅留档（12.8 与决策记录）。
+  - 尺寸/位置：页面级 ≥24px 高；与文字间距 ≥ logo 高的 0.5×；favicon 用 logo.png（site/preview 已统一）。
+  - 禁止：改色/旋转/拉伸变形/叠在花纹上/加投影；深色底上需加白底圆角容器（品牌版式另审）。
+- **品牌 Token（12.3 语义重映射）**：玫瑰梯度 `--mmh-grad-primary`（装饰）与 `--mmh-grad-action-hc`（文字承载 CTA，AA，D5/D6）双轨；桃/杏辅助 `--mmh-mint/peach`；淡紫柔光氛围（图表/技术焦点）。
+- **品牌语言（12.5 Tone of Voice）**
+  - 称呼：妈妈/家长（不用“亲”）；医护端：医生/医护老师。
+  - 语气：安心、鼓励、不说教；异常提醒不制造恐慌（“建议尽快预约复查”优于“很危险”）。
+  - 禁忌词：胖/黑历史类；幼龄化叠字滥用；**界面禁 emoji**（图标一律 `lg-icon-*`）。
+- **验收点**：页面标题与正文统一「妈咪好 GoodMom」；favicon/logo 引用一致；无第三方图标/过期资产；`audit.py` stale 与 html-md 通过。
 
 ## Part 03 · Design Token
-- 三层：primitive（基础色板/字号/圆角刻度）→ alias（语义/文本）→ component（组件配方）。
-- 分层纪律：色值六进制只允许出现在 token 层与受控工具文件；组件内禁用魔法色（本轮已收敛 GmProgress/GmAvatar，`goodmom-ui/src/tokens/design.ts`）。
-- 语义 alias 深色为状态文字/色点唯一源：`--lg-sem-positive #2f8f76 / info #4a76d0 / attention #b9771c / risk #d35466 / neutral #757e8e / special #7a5ce0`（决策 D1）。
-- 白字实底档 `--mmh-solid-*`：positive #1e6b52 / attention #9a5a0e / danger #b04052 / info #385cb3 / special #6242b8（D5）。
-- 代码层新增必须过 `audit.py` 的 ALLOWED 严格校验；页面新增色过 ALLOWED/PAGE_ALIAS（D4）。
+- **三层模型（02 章 + tokens 代码）**
+  | 层 | 含义 | 例 | 代码落点 |
+  | --- | --- | --- | --- |
+  | primitive | 基础刻度（色板 ramp/字号/圆角/间距刻度） | rose-500 `#F77FA3` | tokens/design.ts |
+  | alias | 语义别名（文本/状态/品牌位） | `--lg-sem-positive` `#2f8f76` | theme.css :root + status.ts |
+  | component | 组件配方 | 按钮渐变/玻璃档/焦点环 | theme.css `gm-*` 规则 |
+- **命名规范**：`--lg-*`（引擎通用）/`--mmh-*`（妈咪好品牌）+ `{scope}-{语义kebab}`；组件类名 `gm-*`；业务映射 `semanticOf`（business.ts 40+ 词条）。
+- **唯一代码源**：`goodmom-ui/src/tokens/{design,business,status}.ts` + `theme.css`；六进制只允许出现在 token 层与受控生成物（组件内魔法色已收敛：GmProgress/GmAvatar 引 DesignTokens）。
+- **文本三档**：primary `#343A46` / secondary `#4F5B6E`（AA 收敛，D7）/ tertiary `#9AA2B0`（仅大字号，见 Part 04）。
+- **禁用/废弃管理**：弃用 token 保留 1 个版本并标记；旧色回归由 `audit.py` color-banned（`#3F9C88` 等）拦截；页面新色须落在 ALLOWED ∪ PAGE_ALIAS（D4）。
+- **主题/变体**：默认妈咪好主题 + `data-theme="dark"` 最小段（theme.css）与「冷静模式」（12.3.2：医护工作台低饱和主行动，只改 Token 不改结构）。
+- **验收点**：代码层 audit color-css OK（严格）；新增 token 前查 02/14 是否已存在；变更后 `refresh-spec.py` + `npm run typecheck`（CI open-pkg-typecheck）。
 
 ## Part 04 · 色彩系统
-- 语义色：六语义（Part 03）+ 孕产妇五色（绿/黄/橙/红/紫 `--mmh-m5-m1..m5`，仅用于妊娠风险语境）。
-- 文本三档 AA 实测口径（WCAG 2.2）：主 `#343A46`（≥7:1）、次级 `#4F5B6E`（白 6.88/暖 4.98）、三级 `#9AA2B0` 只用于 ≥24px/≥18.66px 粗体大号（D7/D7b）。
-- 背景暖底 alias 收口为 PAGE_ALIAS 审计档（site/spec/preview 样式），代码层不受污染。
-- 对比度底线：正文 ≥4.5:1；大字 ≥3:1；色不单独传义（配文字/图标）。
+- **六语义（alias 深色，14 · 4.4.5 权威）**
+  | 语义 | 值 | 覆盖状态 |
+  | --- | --- | --- |
+  | positive 正常/正向 | `--lg-sem-positive` `#2f8f76` | 正常/完成/通过/未见异常/阴性 |
+  | info 信息/进行 | `--lg-sem-info` `#4a76d0` | 已建档/筛查中/进行中 |
+  | attention 注意/待办 | `--lg-sem-attention` `#b9771c` | 待复查/待随访/待审核/即将到期 |
+  | risk 风险/异常 | `--lg-sem-risk` `#d35466` | 异常/阳性/失访/逾期 |
+  | neutral 中性/未动 | `--lg-sem-neutral` `#757e8e` | 未开始/草稿/已归档 |
+  | special 特殊/协作 | `--lg-sem-special` `#7a5ce0` | 转诊/会诊/重点管理 |
+  > 用法：alias 作色点/色块/图形/大标签；**作为小字正文请用主/次级文本色**，具体页面是否达 AA 以 `a11y-dom.py` 报告为准（勿臆测全量达标）。
+- **白字实底档（D5）**：`--mmh-solid-positive #1e6b52 / attention #9a5a0e / danger #b04052 / info #385cb3 / special #6242b8`（白字 4.7–7.0:1）；状态 chip 不得叠加顶部白高光层（实测会把白字拉到 2.5–2.9:1）。
+- **孕产妇五色**（`--mmh-m5-m1..m5` = #4CB98A/#F2C14E/#F0954A/#EE5C70/#8F6AE0）：仅妊娠风险分级语境（02.10/15.2.10），与六语义并行不冲突。
+- **文本 AA 实测口径（D7/D7b）**：主 `#343A46`（≥7:1）；次级 `#4F5B6E`（白 6.88 / 暖 4.98）；三级 `#9AA2B0` 只用于 ≥24px 常规/≥18.66px 加粗，小字场景禁止。
+- **背景/别名**：页面暖底与引擎展示色归 PAGE_ALIAS 审计档（D4），代码层不受污染；渐变职责：亮渐变=装饰，文字承载=深档（D6）。
+- **Do/Don't**：✔ 状态+文字双通道；✔ 数据图表遵循 12.3.3 色序；✘ 纯红/纯荧光（02.1.5 禁）；✘ 颜色单独传义；✘ 页面自定义品牌 :root 裸色。
 
 ## Part 05 · Typography
-- 字体栈：`Inter / PingFang SC / MiSans / Noto Sans SC`；数字一律 `tabular-nums`。
-- 医疗数值口径严谨：剂量/区间用专业单位；说明文案大白话。
-- 白字仅允许在 ≥4.5:1 深档或大字号展示场景；不做“≥13px/600 即合规”式豁免。
+- **字体栈**：`Inter / PingFang SC / MiSans / Noto Sans SC`（中英混排回退链）；代码/数字加 `font-variant-numeric: tabular-nums`。
+- **字号档（建议值，02.2/10.6）**：正文 14–15px；卡片标题 15–17px；页面标题 20px；KPI 数字 26–40px；移动端输入 ≥16px（防 iOS 聚焦缩放）；说明 11.5–12px 仅辅助且遵循 AA 口径。
+- **字重/行高**：常规 400、强调 500/600、标题/数字 700；正文行高 1.7（中文宜 1.6–1.8）；大段正文 ≤70 字/行。
+- **强调规则**：标题可用品牌深玫 `--mmh-rose-700`（现收敛为 #B23A63，D7）；正文主文字用 primary；小字辅助一律次级以上（tertiary 仅大字号）。
+- **Do/Don't**：✔ 数字与单位对齐、剂量区间严谨；✘ 全大写中文/拼音正文；✘ 低于 11px 正文；✘ 用颜色传达语义却不配文字。
+- 关联：02 · 2.2、10.6.2（移动表单字）、13 章（医疗口径）、docs/a11y-dom-report.md（渲染级实测）。
 
 ## Part 06 · Grid & Layout
-- 三端栅格：PC 12 列；iPad 8:4（左列表右详情）；Mobile 单列（`../17-页面布局与组件组合规范.md` 17.1）。
-- 页面壳/组合顺序（17.3）：头像 → 标签/状态 → 数值 → 操作；留白 48–72 呼吸带。
-- 断点收敛：≤767 / 768–1023（平板） / ≥1024 / ≥1366（大屏增强）；页面偏离会触发 audit `bp` 检查。
+- **端与断点（收敛口径，audit `bp` 检查执行）**
+  | 档 | 视口 | 栅格/形态 |
+  | --- | --- | --- |
+  | 手机 | ≤767 | 单列卡片流；TabBar+NavBar |
+  | 平板（iPad） | 768–1023 | 8:4 左列表右详情 或 自适应卡片流 |
+  | PC | ≥1024 | 12 列（17.1.1） |
+  | 大屏增强 | ≥1366 | 内容区放宽（1300→1820 分级，见 fuyouaicansai 实现） |
+  | 侧栏可用 | ≥1281 | 左侧玻璃侧栏；≤1280 回顶栏页签 |
+- **页面壳（17 章）**：`.wrap` 居中限宽 → 玻璃顶栏/侧栏 → 内容区；层叠面板 ≤3（17.3.3）。
+- **组合顺序（17.3.1）**：头像/标识 → 标题 → 标签/状态 → 数值 → 操作 → 说明；对齐用 17.2 内联布局基线（.btn/.av/.tg/.op inline-flex 等）。
+- **Do/Don't**：✔ 弹性可换行、禁用固定像素列宽；✔ 每页一个主行动；✘ 移动端左侧栏/贴地表格行内分页；✘ 自定义页面 :root 断点（须用 767/1024/1366 体系）。
+- 验收：`audit.py` bp OK；页面栅格与 17.1 映射表可对照。
 
 ## Part 07 · Spacing
-- 4px 基准网格；语义间距走 `../02-Token规范.md` 2.3（页面留白/卡间隙/卡内边距分端）。
-- 组合内 gap 与 pad 只能取刻度值；禁止零散魔法间距。
+- **基准**：4px 网格（02 · 2.3）；间距只允许取刻度（4/8/12/16/20/24/32/40/48/56/64…），禁止零散魔法值。
+- **语义间距（移动端增量，10.2）**：`--lg-m-gutter-page:16px`（页面留白）、`--lg-m-gap-card:12px`、`--lg-m-pad-card:16px`、`--lg-m-pad-panel:18px`；桌面玻璃面板参考 L1–L4 内边距 token。
+- **呼吸感**：页面级留白 48–72px（预览页已应用）；大屏卡片内部按 12 列网格布局。
+- **组合间距规则**：卡片内 16/18px pad；两卡 gap 12–16px；区块间 24–32px；标题下 6–12px。
+- **Do/Don't**：✔ 兄弟元素间距 > 父子内边距一致读；✘ 用 margin 模拟视觉层级不清的分隔（优先 divider/间距 token）；✘ 负间距堆叠（浮层除外走 z 体系）。
+- 关联：02 · 2.3 刻度表、17.1 栅栏（gap 24）。
 
 ## Part 08 · Iconography
-- 自绘线性 24×24 / 1.7px 圆头 / `lg-icon-{语义kebab}`，共 77 枚，sprite=registry=文档三方同步（`scripts/build-icons.py` 再生成）。
-- 装饰位 `aria-hidden`；传义图标 `role="img"`+`aria-label`（`gmIcon(name,size,title?)`）。
-- 新增图标先走 09.6 流程再提交；页面不混第三方图标。
+- **体系**：自绘线性图标 24×24 viewBox、1.7px 圆头、`lg-icon-{语义kebab}` 命名；共 **77 枚**（icons/lg-icons.svg），10 大类含母婴保健 B 类（baby/mom/milk/vaccine/vital/clinic…）。
+- **同步机制**：sprite（icons/lg-icons.svg）＝registry（goodmom-icons/src/registry.ts）＝09 文档，三方由 `scripts/build-icons.py` 再生成；audit `icons` 检查唯一与命名。
+- **使用规范**：尺寸档 16/18/20/24（09 · 9.4 移动 22–24）；颜色默认 `currentColor` 继承；与文字并排时 icon 底部视觉对齐（inline-flex）。
+- **可访问性**：装饰位 `aria-hidden="true"`；独立传义图标 `role="img"`+`aria-label`（`gmIcon(name,size,title?)`、React `GmIcon` 同规则）；禁止给无意义图标加 label。
+- **Do/Don't**：✔ 语义图标+文字双保险；✘ 第三方/emoji 混入（audit stale 不拦 emoji，靠 09/12 规则与人工）；✘ 直接改 sprite 不跑 build-icons；✘ 自造语义重复图标（先查 09 语义表）。
+- 新增流程：09.6 登记 → 画 24 网格 → build-icons.py → registry 同步 → 页面引用。
 
 ## Part 09 · Illustration
 - 风格：柔和圆角扁平/2.5D；暖杏粉底；人物=孕妈/宝宝/医护；禁止惊悚医学细节、卡通贴纸感。
