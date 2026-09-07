@@ -1,6 +1,6 @@
 # 覆盖度量（自动）
 
-- 生成：`python3 scripts/coverage.py` · 2026-09-05
+- 生成：`python3 scripts/coverage.py` · 2026-09-07
 
 | 指标 | 数值 |
 | --- | --- |
