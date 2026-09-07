@@ -335,6 +335,12 @@ textarea.inp{resize:vertical;min-height:76px;line-height:1.7}
 .fx-ans.show{display:block;animation:fxReveal .3s ease both}
 .dotty{margin:0}
 @media(max-width:720px){.fx-grid{grid-template-columns:1fr}}
+
+/* 按钮 文字+图标 组合（03 · 3.2.5）：几何居中 + 固定 gap + 图标不挤压 */
+.btn {display:inline-flex!important;align-items:center;justify-content:center;white-space:nowrap;vertical-align:middle;gap:8px}
+.btn svg {flex:none!important;display:block!important;width:16px!important;height:16px!important;fill:none;stroke:currentColor;stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round}
+.btn.sm svg,.small svg {width:14px!important;height:14px!important}
+.btn.lg svg,.btn-lg svg,.b1.lg svg,.large svg {width:18px!important;height:18px!important}
 </style>
 </head>
 <body class="mode-sider">

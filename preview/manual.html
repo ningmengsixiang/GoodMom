@@ -53,6 +53,12 @@ th{color:#B23A63;font-weight:600}
 .topm .ngdrop a{display:block;padding:8px 12px;border-radius:10px;font-size:12.5px;color:#4F5B6E;text-decoration:none}
 .topm .ngdrop a:hover{background:rgba(247,127,163,.1);color:#B23A63}
 
+
+/* 按钮 文字+图标 组合（03 · 3.2.5）：几何居中 + 固定 gap + 图标不挤压 */
+.btn {display:inline-flex!important;align-items:center;justify-content:center;white-space:nowrap;vertical-align:middle;gap:8px}
+.btn svg {flex:none!important;display:block!important;width:16px!important;height:16px!important;fill:none;stroke:currentColor;stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round}
+.btn.sm svg,.small svg {width:14px!important;height:14px!important}
+.btn.lg svg,.btn-lg svg,.b1.lg svg,.large svg {width:18px!important;height:18px!important}
 </style>
 </head>
 <body>

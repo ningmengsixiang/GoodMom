@@ -246,6 +246,12 @@ svg.i{width:22px;height:22px;stroke:currentColor;fill:none;stroke-width:1.7;
 .mbb-secondary,.mbb-success{background:#1e6b52!important;color:#fff!important}
 .mbb-warning{background:#9a5a0e!important;color:#fff!important}
 .mbb-danger{background:#b04052!important;color:#fff!important}
+
+/* 按钮 文字+图标 组合（03 · 3.2.5）：几何居中 + 固定 gap + 图标不挤压 */
+.cta,.mbb {display:inline-flex!important;align-items:center;justify-content:center;white-space:nowrap;vertical-align:middle;gap:8px}
+.cta svg,.mbb svg {flex:none!important;display:block!important;width:16px!important;height:16px!important;fill:none;stroke:currentColor;stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round}
+.cta.sm svg,.mbb.sm svg,.small svg {width:14px!important;height:14px!important}
+.cta.lg svg,.mbb.lg svg,.btn-lg svg,.b1.lg svg,.large svg {width:18px!important;height:18px!important}
 </style>
 </head>
 <body>

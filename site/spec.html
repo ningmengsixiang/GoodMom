@@ -503,7 +503,25 @@ L  large 48 高 / 15px / 圆角 24     主行动、大屏</pre>
 <p><b>形状与复合形态</b></p>
 <table><thead><tr><th>形态</th><th>说明</th><th>Arco 对应</th></tr></thead><tbody><tr><td>圆角胶囊 Round</td><td>任意类型 <code>border-radius:999px</code></td><td><code>shape="round"</code></td></tr><tr><td>圆形 Circle</td><td>仅图标钮：宽=高，<code>border-radius:50%</code></td><td><code>shape="circle"</code></td></tr><tr><td>按钮组 Button.Group</td><td>兄弟钮左右相连，首左末右保留外圆角，中间直角共享边</td><td><code>Button.Group</code></td></tr><tr><td>长按钮 Long</td><td>容器全宽、内容居中</td><td><code>long</code></td></tr><tr><td>图标图标 Icon-only / 图标+文字</td><td>图标位 16–20，左图标+文字 / 纯图标</td><td><code>icon</code></td></tr><tr><td>加载 Loading</td><td>图标位 18px 细环 0.9s/圈，期间禁点</td><td><code>loading</code></td></tr><tr><td>链接按钮 Link</td><td>同 Text 类型，<code>&lt;a&gt;</code> 语义 + <code>lg-icon-external-link</code> 可选</td><td><code>component="a"</code></td></tr><tr><td>禁用 Disabled</td><td>opacity .4，去辉光与彩色</td><td><code>disabled</code></td></tr></tbody></table>
 <p><b>绘制与动效要求</b></p>
-<ul><li>全部沿用 [07](#ch-07)：hover 浮起 4px + 扫光，press <code>scale(.96)</code> 120ms；danger 类不做浮起辉光之外的装饰，保证语义只靠颜色+文案。</li><li>白字只允许出现在玫瑰/深薄荷/珊瑚深端渐变上（≥13px/600）。</li><li>妈咪好数据色序/品牌 Token 见 [12 · 12.3](#ch-12)、[02 · 2.9](#ch-02)。</li><li>移动端按钮：尺寸档同四档并放大一档使用，支持全宽 Long（见 [10 · 10.4](#ch-10)）；按压反馈 <code>scale(.97) 120ms</code>（07）。</li></ul>
+<ul><li>全部沿用 [07](#ch-07)：hover 浮起 4px + 扫光，press <code>scale(.96)</code> 120ms；danger 类不做浮起辉光之外的装饰，保证语义只靠颜色+文案。</li><li>白字对比度按 WCAG 2.2 AA 口径（见 [02 · 2.1](#ch-02) 无障碍底线、[06 · 6.5](#ch-06)、决策记录 D2/D5）：小字号白字只落在 ≥4.5:1 的深实底（<code>--mmh-solid-*</code> 或 <code>--mmh-grad-action-hc</code>）上；品牌亮渐变仅承载 ≥24px 常规/≥18.66px 加粗展示字，不再以小号白字承载信息。</li><li>妈咪好数据色序/品牌 Token 见 [12 · 12.3](#ch-12)、[02 · 2.9](#ch-02)。</li><li>移动端按钮：尺寸档同四档并放大一档使用，支持全宽 Long（见 [10 · 10.4](#ch-10)）；按压反馈 <code>scale(.97) 120ms</code>（07）。</li></ul>
+<h4>3.2.5 文字 + 图标组合规范（Icon-in-Button）</h4>
+<blockquote>目的：统一按钮内「图标 + 中文文字」的排版，杜绝基线错位、图标挤压、间距随意三类问题。此规范适用于所有按钮形态（含链接按钮与混合按钮组），示例页已按本小节统一（<code>.btn / .bx / .b1 / .mbb / .cta / .demoBtn / .btn-primary…</code>）。</blockquote>
+<p><b>1) 容器与对齐（必读）</b></p>
+<pre>.btn{display:inline-flex;align-items:center;justify-content:center; /* 容器几何居中，不按文本基线 */
+     white-space:nowrap;vertical-align:middle}
+.btn svg{flex:none;display:block;stroke:currentColor;stroke-width:1.7;
+     fill:none;stroke-linecap:round;stroke-linejoin:round}
+.btn.loading svg,.btn .spinner{animation:spin .9s linear infinite}</pre>
+<p><b>2) 图标尺寸与间距档（与 3.2.2 图标位一致）</b></p>
+<table><thead><tr><th>档</th><th>文字字号</th><th>图标</th><th>图标↔文字 gap</th><th>前置/后置规则</th></tr></thead><tbody><tr><td>L（48 高）</td><td>15/600</td><td>18</td><td>8</td><td>前置行动词；后置方向/更多</td></tr><tr><td>M（40 高）默认</td><td>14/600</td><td>16</td><td>8</td><td>同上</td></tr><tr><td>S（32 高）</td><td>13/600</td><td>14</td><td>6</td><td>同上</td></tr><tr><td>XS（28 高 图标钮/行内）</td><td>—</td><td>图标≈16 纯图标</td><td>0</td><td>仅图标（须 aria-label）</td></tr></tbody></table>
+<p><b>3) 位置语义</b></p>
+<ul><li>前置图标（左）：表达动作/对象（新建＋/搜索/刷新/保存/导出/上传/接种等 <code>lg-icon-*</code>）。</li><li>后置图标（右）：表达方向/更多（<code>lg-icon-arrow-right</code> / <code>chevron-right</code> / 文本箭头 ›），hover 时箭头右移 2px（07.3.1）。</li><li>一句话两个图标以上的按钮需评审；Text/Ghost 优先纯文字，图标仅按需。</li></ul>
+<p><b>4) 光学对齐与细节</b></p>
+<ul><li>图标与汉字按“光学中心”垂直居中：汉字盒高于同字号西文，图标建议与汉字视觉中心对齐；S 档若视觉偏上可 <code>transform:translateY(-.5px)</code>（视觉检收为准）。</li><li>图标用 <code>flex:none</code> 防挤压/缩放变形；统一 <code>display:block</code> 消行内基线空隙。</li><li>loading 时图标位替换 18px spinner，文字保留（同 3.2.3）；disabled 整钮淡化，图标跟随不单独变。</li><li>长按钮内容居中；空间不足时省略文字（title 提示），禁止图标文字换行断开。</li></ul>
+<p><b>5) 可访问性</b></p>
+<ul><li>按钮有文字时，装饰图标必须 <code>aria-hidden="true"</code>（或 class 约定隐藏）；纯图标按钮必须 <code>aria-label</code>/<code>title</code>/可视文本三选一。</li><li>图标不承载颜色语义；危险等语义仍由文字 + 语义色双通道表达。</li></ul>
+<p><b>6) Do / Don't</b></p>
+<ul><li>✔ 左图标+文字用固定 gap（6–8）；✔ 箭头类 hover 位移 2px；✔ 图标 stroke 继承 <code>currentColor</code>。</li><li>✘ 图标贴字（gap 0）；✘ 用 emoji 当图标；✘ 图标被 flex 拉伸变形；✘ 文字按钮为对齐而塞图标。</li></ul>
 <hr>
 <h3>3.3 卡片与面板 Card / Panel</h3>
 <h4>3.3.1 玻璃面板（L1，页面大容器）</h4>

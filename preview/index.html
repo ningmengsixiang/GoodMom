@@ -897,6 +897,12 @@ section.block:first-of-type{margin-top:8px}
 /* AA 高对比行动（D5/审查收口）：文字承载面切深档，装饰渐变/开关/进度条保持品牌亮渐变 */
 .btn-primary,.bx-primary,.bgroup .bx.on,.mchip.on,.phone .tabmini i.on,.step.done .sd{background:var(--mmh-grad-action-hc,#B23A63)!important;color:#fff!important}
 .bx-secondary{background:#1e6b52!important;color:#fff!important}
+
+/* 按钮 文字+图标 组合（03 · 3.2.5）：几何居中 + 固定 gap + 图标不挤压 */
+.btn,.bx,.direct,.op {display:inline-flex!important;align-items:center;justify-content:center;white-space:nowrap;vertical-align:middle;gap:8px}
+.btn svg,.bx svg,.direct svg,.op svg {flex:none!important;display:block!important;width:16px!important;height:16px!important;fill:none;stroke:currentColor;stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round}
+.btn.sm svg,.bx.sm svg,.direct.sm svg,.op.sm svg,.small svg {width:14px!important;height:14px!important}
+.btn.lg svg,.bx.lg svg,.direct.lg svg,.op.lg svg,.btn-lg svg,.b1.lg svg,.large svg {width:18px!important;height:18px!important}
 </style>
 </head>
 <body>

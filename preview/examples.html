@@ -247,6 +247,12 @@ table.t td,table.t th{padding-left:12px;padding-right:12px}
 .kpi .l{display:inline-flex;align-items:center;gap:6px}
 .mobottom .b1{display:inline-flex;align-items:center;justify-content:center;gap:6px}
 
+
+/* 按钮 文字+图标 组合（03 · 3.2.5）：几何居中 + 固定 gap + 图标不挤压 */
+.btn,.b1 {display:inline-flex!important;align-items:center;justify-content:center;white-space:nowrap;vertical-align:middle;gap:8px}
+.btn svg,.b1 svg {flex:none!important;display:block!important;width:16px!important;height:16px!important;fill:none;stroke:currentColor;stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round}
+.btn.sm svg,.b1.sm svg,.small svg {width:14px!important;height:14px!important}
+.btn.lg svg,.b1.lg svg,.btn-lg svg,.b1.lg svg,.large svg {width:18px!important;height:18px!important}
 </style>
 </head>
 <body>
