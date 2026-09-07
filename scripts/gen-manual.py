@@ -87,7 +87,7 @@ CSS='''
 .top .navr{margin-left:auto;display:flex;gap:8px;flex-wrap:wrap}
 .top a{font-size:12.5px;font-weight:600;text-decoration:none;padding:7px 13px;border-radius:999px;background:linear-gradient(135deg,#B23A63,#9E3054);color:#fff}
 aside{position:sticky;top:80px;max-height:calc(100vh - 100px);overflow:auto;padding:14px;border-radius:20px;background:rgba(255,255,255,.55);border:1px solid rgba(255,255,255,.85)}
-aside b{display:block;font-size:12px;color:#586273;margin-bottom:8px}
+aside b{display:block;font-size:12px;color:#4F5B6E;margin-bottom:8px}
 aside a{display:block;font-size:12px;color:#343A46;text-decoration:none;padding:4px 8px;border-radius:8px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 aside a:hover{background:rgba(232,93,143,.1);color:#B23A63}
 main{min-width:0}
@@ -95,7 +95,7 @@ main{min-width:0}
 .chap>h2{margin:0 0 10px;font-size:19px;color:#B23A63}
 .chap h3{font-size:15px;color:#343A46;margin:14px 0 6px}
 .chap p,.chap li{font-size:13.5px;color:#343A46}
-.chap blockquote{border-left:4px solid #E85D8F;margin:10px 0;padding:6px 12px;color:#586273;background:rgba(247,127,163,.06);border-radius:0 10px 10px 0;font-size:12.5px}
+.chap blockquote{border-left:4px solid #E85D8F;margin:10px 0;padding:6px 12px;color:#4F5B6E;background:rgba(247,127,163,.06);border-radius:0 10px 10px 0;font-size:12.5px}
 .chap table{width:100%;border-collapse:collapse;margin:10px 0;font-size:12.5px}
 .chap th,.chap td{text-align:left;padding:7px 9px;border-bottom:1px solid rgba(58,52,84,.08);vertical-align:top}
 .chap th{color:#4F5B6E;font-weight:600;background:rgba(255,255,255,.5)}

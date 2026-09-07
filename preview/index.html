@@ -903,6 +903,10 @@ section.block:first-of-type{margin-top:8px}
 .btn svg,.bx svg,.direct svg,.op svg {flex:none!important;display:block!important;width:16px!important;height:16px!important;fill:none;stroke:currentColor;stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round}
 .btn.sm svg,.bx.sm svg,.direct.sm svg,.op.sm svg,.small svg {width:14px!important;height:14px!important}
 .btn.lg svg,.bx.lg svg,.direct.lg svg,.op.lg svg,.btn-lg svg,.b1.lg svg,.large svg {width:18px!important;height:18px!important}
+
+:root{--mmh-grad-action-hc:linear-gradient(135deg,#B23A63 0%,#9E3054 100%)}
+/* 按钮类型色 规范化（03 · 3.2.4 + D5/D6）：白字行动一律深档 */
+.mbtn,.direct.primary,.direct.primary:hover{background:var(--mmh-grad-action-hc,#B23A63)!important;color:#fff!important;border:none!important}
 </style>
 </head>
 <body>

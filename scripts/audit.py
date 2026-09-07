@@ -149,7 +149,9 @@ def banned_colors():
         hit = sorted({m.group(0).upper() for m in pat.finditer(open(f, encoding="utf-8").read())} & banned)
         if hit: bad_src.append((f, hit))
     for f in glob.glob("site/*.html") + glob.glob("preview/*.html"):
-        hit = sorted({m.group(0).upper() for m in pat.finditer(open(f, encoding="utf-8").read())} & banned)
+        t = open(f, encoding="utf-8").read()
+        css = " ".join(re.findall(r"<style[^>]*>(.*?)</style>", t, re.S)) + " " + " ".join(re.findall(r'style="([^"]*)"', t))
+        hit = sorted({m.group(0).upper() for m in pat.finditer(css)} & banned)
         if hit: bad_html.append((f, hit))
     ok = True
     if bad_src:
