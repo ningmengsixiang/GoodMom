@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>已合并至唯一首页 · 妈咪好 GoodMom</title>
+<link rel="icon" type="image/svg+xml" href="../brand/logo-mark.svg">
+<meta name="robots" content="noindex">
+<!-- 合并说明：本页原为独立入口页，V2.7 起全部内容并入 site/index.html 的「交互范式」模块。
+     保留本文件仅为兼容旧链接（Gitea/GitHub Pages 收藏、README/CHANGELOG 引用、已发出的地址）。
+     锚点会透传：例如 spec.html#ch-02 → index.html#site-spec--ch-02 -->
+<script>
+(function () {
+  var mod = "preview-patterns";
+  var hash = (location.hash || "").replace(/^#/, "");
+  var target = "../site/index.html" + "#" + mod;
+  if (hash) {
+    // 规范各章锚点在模块内带前缀；其余锚点也统一加模块前缀
+    if (mod === "site-spec" && hash.indexOf("ch-") === 0) target += "--" + hash;
+    else if (hash.indexOf(mod + "--") === 0) target = "../site/index.html" + "#" + hash;
+    else target += "--" + hash;
+  }
+  location.replace(target);
+})();
+</script>
+<style>
+  :root { --rose:#B23A63; --t:#343A46; --t2:#4F5B6E; }
+  body { margin:0; min-height:100vh; display:flex; align-items:center; justify-content:center;
+    font-family:"Inter","PingFang SC","MiSans","Noto Sans SC",sans-serif; color:var(--t);
+    background:linear-gradient(165deg,#FDF2EE,#F6E2DB 55%,#EAD3CA); text-align:center; padding:24px; }
+  .card { max-width:520px; padding:28px 30px; border-radius:22px;
+    background:linear-gradient(160deg,rgba(255,255,255,.72),rgba(255,255,255,.38));
+    border:1px solid rgba(255,255,255,.8); box-shadow:0 12px 30px rgba(90,70,70,.12); }
+  b { display:block; font-size:17px; color:var(--rose); margin-bottom:8px; }
+  p { margin:0 0 16px; font-size:13.5px; color:var(--t2); line-height:1.8; }
+  a { display:inline-block; text-decoration:none; font-weight:600; font-size:14px; padding:11px 22px;
+    border-radius:999px; color:#343A46; background:linear-gradient(135deg,#FFC4D6 0%,#F77FA3 100%);
+    box-shadow:0 8px 20px rgba(240,127,163,.3); }
+  a:focus-visible { outline:2px solid rgba(232,93,143,.6); outline-offset:2px; }
+</style>
+</head>
+<body>
+  <div class="card">
+    <b>页面已合并</b>
+    <p>「交互范式」已并入唯一首页的单一入口，正在为你跳转…<br>若未自动跳转，请点击下方按钮。</p>
+    <a href="../site/index.html#preview-patterns" data-mod="preview-patterns">前往首页 · 交互范式</a>
+  </div>
+</body>
+</html>

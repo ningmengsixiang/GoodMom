@@ -1,0 +1,327 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>妈咪好 GoodMom · 开源设计系统</title>
+<link rel="icon" type="image/png" href="../logo.png">
+<meta name="theme-color" content="#F77FA3">
+<meta name="description" content="妈咪好 GoodMom · 妇幼儿童全生命周期开源设计系统：文档 18 · 组件 94 · 图标 77 · 示例 5 · npm 包 2">
+<style>
+:root{
+  --t:#343A46;--t2:#4F5B6E;--t3:#4F5B6E;--rose:#F77FA3;--rose-d:#E85D8F;--rose-deep:#B23A63;
+  --mint:#6FC9B4;--mint-d:#4FB59C;--info:#6D9EFF;--warn:#F2B25C;--danger:#EF6A7B;--purple:#9A78FF;
+  --font:"Inter","SF Pro Display",-apple-system,"PingFang SC","MiSans","Noto Sans SC","Helvetica Neue",sans-serif;
+  --mono:ui-monospace,Menlo,Consolas,monospace;
+  --ease:cubic-bezier(.22,1,.36,1)
+}
+*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+body{font-family:var(--font);color:var(--t);line-height:1.7;
+  background:
+   radial-gradient(1100px 640px at 88% -8%,rgba(247,127,163,.22),transparent 65%),
+   radial-gradient(980px 600px at -6% 26%,rgba(182,154,255,.16),transparent 65%),
+   radial-gradient(900px 620px at 52% 116%,rgba(255,214,226,.2),transparent 65%),
+   linear-gradient(165deg,#FDF2EE,#F6E2DB 52%,#EAD3CA);min-height:100vh;-webkit-font-smoothing:antialiased}
+.wrap{max-width:1100px;margin:0 auto;padding:28px 20px 90px}
+.num{font-variant-numeric:tabular-nums}
+.glass{border-radius:22px;background:linear-gradient(160deg,rgba(255,255,255,.6),rgba(255,255,255,.26));
+  border:1px solid rgba(255,255,255,.8);box-shadow:inset 0 1px 0 rgba(255,255,255,.85),0 12px 30px rgba(90,70,70,.10);
+  -webkit-backdrop-filter:blur(20px);backdrop-filter:blur(20px)}
+nav{position:sticky;top:14px;z-index:50;max-width:1100px;margin:0 auto 18px;padding:10px 16px;border-radius:999px;
+  display:flex;gap:4px;align-items:center;flex-wrap:wrap;
+  background:linear-gradient(160deg,rgba(255,255,255,.72),rgba(255,255,255,.45));
+  border:1px solid rgba(255,255,255,.85);box-shadow:0 8px 22px rgba(90,70,70,.08)}
+nav b{color:var(--rose-deep);display:flex;align-items:center;gap:8px;font-size:14px;margin-right:8px}
+nav b i{width:16px;height:16px;border-radius:50%;background:linear-gradient(135deg,#FFA9C2,#E85D8F);display:inline-block}
+nav a{font-size:12.5px;color:var(--t2);text-decoration:none;padding:6px 12px;border-radius:999px;font-weight:500}
+nav a:hover{background:#fff;color:var(--rose-deep)}
+nav .out{margin-left:auto;background:linear-gradient(135deg,#FFA9C2,#E85D8F);color:#fff;font-weight:600}
+.hero{text-align:center;padding:44px 24px 34px;border-radius:28px;position:relative;overflow:hidden}
+.hero .k{display:inline-flex;align-items:center;gap:8px;font-size:12px;font-weight:600;letter-spacing:.08em;color:var(--rose-deep);
+  background:rgba(247,127,163,.12);border:1px solid rgba(247,127,163,.3);padding:6px 14px;border-radius:999px}
+.hero h1{font-size:clamp(30px,4.6vw,52px);letter-spacing:-.03em;margin:16px 0 8px}
+.hero h1 em{font-style:normal;background:linear-gradient(120deg,#FFD0D8,#F77FA3 45%,#B69AFF);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent}
+.hero p.lead{color:var(--t2);font-size:15px;max-width:767px;margin:0 auto}
+.stat{display:flex;justify-content:center;gap:10px;flex-wrap:wrap;margin:22px 0 6px}
+.stat span{border-radius:16px;padding:10px 18px;background:rgba(255,255,255,.55);border:1px solid rgba(255,255,255,.8);min-width:92px}
+.stat b{display:block;font-size:22px;color:var(--rose-d);font-variant-numeric:tabular-nums}
+.stat i{font-style:normal;font-size:11px;color:var(--t3)}
+.cta{display:flex;gap:10px;justify-content:center;flex-wrap:wrap;margin-top:22px}
+.btn{display:inline-flex;align-items:center;gap:8px;text-decoration:none;font-weight:600;font-size:14px;
+  padding:12px 22px;border-radius:999px;transition:.2s;border:1px solid transparent}
+.btn.pri{background:linear-gradient(135deg,#FFA9C2,#E85D8F);color:#fff;box-shadow:0 10px 24px rgba(240,127,163,.35)}
+.btn.line{background:#fff;color:var(--rose-deep);border-color:rgba(232,93,143,.35)}
+.btn:hover{transform:translateY(-2px)}
+h2{font-size:24px;letter-spacing:-.01em;margin:38px 0 4px;display:flex;align-items:center;gap:10px}
+h2::before{content:"";width:10px;height:10px;border-radius:50%;background:linear-gradient(135deg,#FFA9C2,#E85D8F);flex:none}
+.sub{color:var(--t3);font-size:13px;margin:0 0 18px 20px}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:14px}
+.card{border-radius:18px;padding:18px;background:linear-gradient(160deg,rgba(255,255,255,.62),rgba(255,255,255,.3));
+  border:1px solid rgba(255,255,255,.8);box-shadow:0 8px 18px rgba(90,70,70,.07)}
+.card h3{font-size:15px;margin-bottom:6px;display:flex;gap:8px;align-items:center}
+.card h3 i{width:8px;height:8px;border-radius:50%;background:var(--rose-d);flex:none}
+.card p{font-size:12.5px;color:var(--t2)}
+.card .go{display:block;margin-top:10px;font-size:12px;font-weight:600;color:var(--rose-deep);text-decoration:none}
+code,pre{font-family:var(--mono)}
+pre{background:#fff7f4;border:1px solid #f0d4cf;border-radius:14px;padding:14px 18px;font-size:12.5px;overflow:auto;line-height:1.8}
+.sem{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px}
+.sem .s{border-radius:14px;padding:10px 12px;background:#fff;border:1px solid #f0d4cf}
+.sem .s i{width:10px;height:10px;border-radius:50%;display:inline-block;margin-right:6px}
+.sem b{font-size:12.5px}.sem span{display:block;color:var(--t3);font-size:11px;margin-top:2px}
+.tree{line-height:2}
+.five{display:flex;gap:8px;flex-wrap:wrap}
+.five span{display:inline-flex;gap:6px;align-items:center;font-size:12px;border-radius:999px;padding:4px 12px;background:#fff;border:1px solid #f0d4cf}
+.five i{width:8px;height:8px;border-radius:50%}
+.gov{display:flex;gap:8px;flex-wrap:wrap}
+.gov a{font-size:12px;color:var(--rose-deep);text-decoration:none;background:#fff;border:1px solid #f0d4cf;padding:6px 14px;border-radius:999px}
+footer{margin-top:44px;text-align:center;color:var(--t3);font-size:12px;line-height:2.1}
+footer a{color:var(--rose-deep);text-decoration:none}
+@media(max-width:767px){.hero h1{font-size:30px}nav .out{margin-left:0}}
+
+/* —— 规范一致性（遵循 02/07/14）：焦点环 · press · 减少动态 —— */
+:focus-visible{outline:2px solid rgba(232,93,143,.6);outline-offset:2px}
+.btn:active,.card:active,a:active{transform:scale(.97)}
+html{scroll-behavior:smooth}
+h2[id],nav~.wrap h2{scroll-margin-top:96px}
+::selection{background:rgba(247,127,163,.3)}
+@media(prefers-reduced-motion:reduce){*,*::before,*::after{animation:none!important;transition:none!important}}
+
+
+/* 呼吸感 */
+.wrap{max-width:1180px;padding-top:40px;padding-bottom:130px}
+nav{margin-bottom:30px;padding:12px 20px}
+.hero{padding:60px 30px 46px}
+.hero .lead{font-size:16px}
+h2{margin-top:70px;font-size:26px}
+.sub{margin-bottom:26px;line-height:2}
+.grid{gap:22px}
+.card{padding:24px 22px;line-height:1.85}
+.card p{font-size:13px}
+pre{line-height:2;padding:18px 22px}
+.sem{gap:14px}
+.stat{gap:12px;margin-top:30px}
+.stat span{padding:14px 20px}
+.gov{gap:12px}
+footer{margin-top:70px;line-height:2.4}
+
+
+/* 菜单悬停下拉 */
+nav .ng{position:relative;display:inline-flex}
+nav .ngt{font-family:inherit;font-size:12.5px;color:var(--t2);background:none;border:none;padding:6px 12px;border-radius:999px;cursor:pointer}
+nav .ngt::after{content:"▾";margin-left:4px;font-size:10px;opacity:.6}
+nav .ngdrop{position:absolute;top:calc(100% + 12px);left:0;min-width:190px;z-index:80;padding:6px;border-radius:16px;background:#fff;border:1px solid rgba(232,93,143,.22);box-shadow:0 16px 40px rgba(90,70,70,.14);
+  opacity:0;pointer-events:none;transform:translateY(6px);transition:.2s var(--ease, ease-out)}
+nav .ng:hover .ngdrop,nav .ng:focus-within .ngdrop{opacity:1;pointer-events:auto;transform:none}
+nav .ngdrop a{display:block;padding:8px 12px;border-radius:10px}
+nav .ngdrop a:hover{background:rgba(247,127,163,.1)}
+
+nav .ng::after{content:"";position:absolute;left:-6px;right:-6px;top:100%;height:14px}
+nav .ngdrop a:active{background:rgba(247,127,163,.16)}
+
+
+/* 板块编号与视觉包装 */
+.secnum{display:inline-flex;align-items:center;justify-content:center;width:34px;height:34px;border-radius:12px;flex:none;
+  font-size:13px;font-weight:700;color:#fff;background:linear-gradient(135deg,#FFA9C2,#E85D8F);box-shadow:0 8px 18px rgba(240,127,163,.28)}
+h2{display:flex;align-items:center;gap:12px;flex-wrap:wrap}
+h2 small{font-weight:600;letter-spacing:.18em;color:#B23A63;font-size:10px}
+.secpad{background:linear-gradient(160deg,rgba(255,255,255,.55),rgba(255,255,255,.18));border:1px solid rgba(255,255,255,.7);
+  border-radius:26px;padding:24px 24px 16px;box-shadow:inset 0 1px 0 rgba(255,255,255,.85),0 12px 30px rgba(90,70,70,.08);
+  -webkit-backdrop-filter:blur(14px);backdrop-filter:blur(14px)}
+.card{transition:transform .25s cubic-bezier(.22,1,.36,1),box-shadow .25s;position:relative;overflow:hidden}
+.card:hover{transform:translateY(-4px);box-shadow:0 18px 40px rgba(90,70,70,.14)}
+.card::before{content:"";position:absolute;left:0;right:0;top:0;height:3px;background:linear-gradient(90deg,#FFA9C2,#E85D8F,#B69AFF);opacity:0;transition:.3s}
+.card:hover::before{opacity:1}
+.hero{position:relative;overflow:hidden}
+.hero::after,.hero::before{content:"";position:absolute;border-radius:50%;pointer-events:none}
+.hero::after{width:340px;height:340px;right:-120px;top:-140px;background:radial-gradient(circle,rgba(182,154,255,.18),transparent 70%)}
+.hero::before{width:260px;height:260px;left:-90px;bottom:-120px;background:radial-gradient(circle,rgba(255,199,214,.28),transparent 70%)}
+.hero>*{position:relative;z-index:1}
+
+
+/* 用户旅程与目录 */
+.journey{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:16px}
+.jc{border-radius:20px;padding:20px;background:linear-gradient(160deg,rgba(255,255,255,.66),rgba(255,255,255,.3));
+  border:1px solid rgba(255,255,255,.85);box-shadow:0 10px 24px rgba(90,70,70,.08);transition:.25s}
+.jc:hover{transform:translateY(-4px);box-shadow:0 18px 40px rgba(90,70,70,.14)}
+.jc .who{display:inline-flex;align-items:center;gap:6px;font-size:11px;font-weight:700;letter-spacing:.1em;color:#B23A63;
+  background:rgba(247,127,163,.12);border:1px solid rgba(247,127,163,.25);padding:4px 12px;border-radius:999px}
+.jc h3{font-size:16px;margin:10px 0 8px}
+.jc ol{margin:0;padding-left:18px;color:var(--t2);font-size:13px;line-height:2}
+.jc ol a{font-weight:600}
+.steps-c{display:flex;gap:8px;flex-wrap:wrap;align-items:center;color:var(--t3);font-size:12.5px}
+.steps-c b{color:var(--t)}
+.tree2{columns:2;column-gap:36px;font-size:13px;line-height:2.3}
+.tree2 .gr{break-inside:avoid;margin-bottom:12px}
+.tree2 .gr b{color:var(--rose-deep);display:block;font-size:13.5px;margin-bottom:4px}
+.tree2 .gr a{display:block;color:var(--t2);text-decoration:none}
+.tree2 .gr a:hover{color:#B23A63}
+.fcols{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:18px;text-align:left}
+.fcols b{color:var(--rose-deep);display:block;font-size:13px;margin-bottom:8px}
+.fcols a{display:block;font-size:12px;color:var(--t2);text-decoration:none;line-height:2.1}
+.fcols a:hover{color:#B23A63}
+
+
+/* GitHub 入口 & 图标点缀 */
+nav .git{display:inline-flex;align-items:center;gap:6px;padding:7px 14px;border-radius:999px;text-decoration:none;
+  font-size:12.5px;font-weight:600;color:var(--rose-deep);background:#fff;border:1px solid rgba(232,93,143,.3)}
+nav .git svg{width:15px;height:15px;fill:currentColor}
+nav .git:hover{background:linear-gradient(135deg,#FFA9C2,#E85D8F);color:#fff;border-color:transparent}
+.gx{position:absolute;right:16px;top:16px;width:56px;height:56px;opacity:.14;color:#B23A63;pointer-events:none}
+.gx svg{width:100%;height:100%}
+.card,.jc{position:relative;overflow:hidden}
+.journey,.grid{row-gap:18px}
+.jc h3,.card h3{padding-right:0}
+
+
+:root{--mmh-grad-action-hc:linear-gradient(135deg,#B23A63 0%,#9E3054 100%)}
+/* AA 高对比行动（D5/审查收口）：文字承载主行动切深档，装饰渐变不动 */
+.btn.pri,.nav .out,.nav .git:hover{background:var(--mmh-grad-action-hc,#B23A63)!important;color:#fff!important}
+
+/* 按钮 文字+图标 组合（03 · 3.2.5）：几何居中 + 固定 gap + 图标不挤压 */
+.btn,.nav .out,.nav .git,.go {display:inline-flex!important;align-items:center;justify-content:center;white-space:nowrap;vertical-align:middle;gap:8px}
+.btn svg,.nav .out svg,.nav .git svg,.go svg {flex:none!important;display:block!important;width:16px!important;height:16px!important;fill:none;stroke:currentColor;stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round}
+.btn.sm svg,.nav .out.sm svg,.nav .git.sm svg,.go.sm svg,.small svg {width:14px!important;height:14px!important}
+.btn.lg svg,.nav .out.lg svg,.nav .git.lg svg,.go.lg svg,.btn-lg svg,.b1.lg svg,.large svg {width:18px!important;height:18px!important}
+</style>
+</head>
+<body>
+<nav>
+  <b><img src="../logo.png" width="24" height="24" style="border-radius:50%;object-fit:cover" alt="Logo">妈咪好 GoodMom</b>
+  <a href="#start">开始</a><a href="#about">概览</a><a href="#sitemap">目录</a><a href="docs.html">文档中心</a><a href="#ability">能力</a><a href="#standards">标准</a><a href="#vision">视觉</a><a href="#code">快速上手</a><a href="#opensrc">开源</a>
+  <span class="ng"><button class="ngt">设计系统</button><span class="ngdrop"><a href="#ds">本站在线演示</a><a href="../preview/index.html">设计系统首页 ›</a><a href="../preview/examples.html">示例中心</a><a href="../preview/mobile.html">移动端</a><a href="../preview/manual.html">总览手册</a><a href="manual.html">标准手册 38 部分（HTML）</a></span></span><a class="git" href="https://github.com/ningmengsixiang/GoodMom" target="_blank" rel="noopener" title="GitHub 开源仓库"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 .5C5.6.5.5 5.6.5 12c0 5.1 3.3 9.4 7.9 10.9.6.1.8-.2.8-.6v-2c-3.2.7-3.9-1.5-3.9-1.5-.5-1.3-1.3-1.7-1.3-1.7-1-.7.1-.7.1-.7 1.2.1 1.8 1.2 1.8 1.2 1 1.8 2.7 1.3 3.4 1 .1-.8.4-1.3.7-1.6-2.6-.3-5.3-1.3-5.3-5.7 0-1.3.4-2.3 1.2-3.1-.1-.3-.5-1.5.1-3.1 0 0 1-.3 3.2 1.2a11 11 0 0 1 5.8 0c2.2-1.5 3.2-1.2 3.2-1.2.6 1.6.2 2.8.1 3.1.7.8 1.2 1.8 1.2 3.1 0 4.4-2.7 5.4-5.3 5.7.4.4.8 1.1.8 2.2v3.2c0 .4.2.7.8.6a11.5 11.5 0 0 0 7.9-10.9C23.5 5.6 18.4.5 12 .5z"/></svg>开源</a>
+  <a class="out" href="../preview/index.html">全屏打开 ›</a>
+</nav>
+<div class="wrap">
+
+  <div class="hero glass">
+    <img src="../logo.png" alt="妈咪好" style="width:84px;height:84px;border-radius:24px;object-fit:cover;box-shadow:0 14px 30px rgba(240,127,163,.3);margin-bottom:4px">
+    <h1>妈咪好 <em>GoodMom</em> 开源设计系统</h1>
+    <p class="lead">高级液态玻璃 · 柔光蜜桃。覆盖孕期 / 婴幼儿与儿童保健 / 机构管理端 / 医护工作台的「文档 — 设计资产 — 组件库」一体化开源体系。</p>
+    <div class="stat">
+      <span><b>19</b><i>份规范文档</i></span>
+      <span><b>94</b><i>项组件</i></span>
+      <span><b>77</b><i>枚自绘图标</i></span>
+      <span><b>38</b><i>份标准正文</i></span>
+      <span><b>12</b><i>个代码组件</i></span>
+    </div>
+    <div class="cta">
+      <a class="btn pri" href="../preview/index.html">体验设计系统首页</a>
+      <a class="btn line" href="../preview/examples.html">示例中心 · 7 页</a>
+      <a class="btn line" href="spec.html#ch-readme">阅读文档</a>
+    </div>
+  </div>
+
+  <h2 id="start"><span class="secnum">0</span><span>从一个角色开始</span><small>USER JOURNEY · 选择你的身份</small></h2>
+<p class="sub">不按文档编号，按“你是谁、想干什么”给路径 —— 三步走：选角色 → 打开对应入口 → 落地复用。</p>
+<div class="journey">
+  <div class="jc"><span class="who">设计师</span><h3>想定义妇幼产品视觉</h3><span class="gx" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="3.6"/><path d="M5 20c1.3-3.4 4-5 7-5s5.7 1.6 7 5"/></svg></span><ol><li>读 <a href="spec.html#ch-01">Design DNA（01）</a> → <a href="spec.html#ch-02">Token（02）</a></li><li>查 <a href="spec.html#ch-00">组件总目录（00）</a></li><li>去 <a href="#ds">设计系统首页</a> 看全量样式</li></ol></div>
+  <div class="jc"><span class="who">前端 / 封装</span><h3>要直接“拿来用”</h3><span class="gx" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l8 4.2v9.6L12 21l-8-4.2V7.2z"/><path d="M4 7.2l8 4.2 8-4.2M12 11.4V21"/></svg></span><ol><li>看 <a href="#code">快速上手</a> 的 npm 用法</li><li>组件遵循 <a href="spec.html#ch-14">命名（14）</a></li><li>取代码：<a href="https://github.com/ningmengsixiang/GoodMom">GitHub</a></li></ol></div>
+  <div class="jc"><span class="who">产品 / 内容</span><h3>要业务词与状态口径</h3><span class="gx" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="4"/><circle cx="9" cy="12" r="1.6"/><path d="M9 12h6"/></svg></span><ol><li>词库/状态：<a href="spec.html#ch-15">15</a> · 妇幼组件：<a href="spec.html#ch-13">13</a></li><li>看 <a href="../preview/examples.html">示例中心</a> 里的真实页面</li></ol></div>
+  <div class="jc"><span class="who">AI 创作者</span><h3>要生成视觉稿</h3><span class="gx" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="m12 3 2.5 5.4 5.9.8-4.3 4.2 1 5.9-5.1-2.7-5.1 2.7 1-5.9L3.6 9.2l5.9-.8z"/></svg></span><ol><li>复制 <a href="spec.html#ch-05">Prompt 库（05）</a></li><li>或进入 <a href="#ds">全量首页</a> 取图标/Tag 参照</li></ol></div>
+</div>
+<h2 id="about"><span class="secnum">01</span><span>这是什么</span><small>ABOUT · 定位与架构</small></h2>
+  <p class="sub">定位 · 覆盖 · 架构</p>
+  <div class="grid">
+    <div class="card"><h3><i></i>四大板块</h3><p>孕期 · 婴幼儿/儿童保健 · 机构管理端 · 医护工作台；承载两癌筛查、随访、转诊、结案等模块复用语言。</p></div>
+    <div class="card"><h3><i></i>可视化基因</h3><p>Liquid Glass 引擎 + 蜜桃粉品牌主色 + 六语义状态色 + 五色妊娠风险分级。</p></div>
+    <div class="card"><h3><i></i>多端体系</h3><p>PC（空间操作系统）· iPad（医护移动办公）· Mobile（拇指卡片流）三端同源规范。</p></div>
+  </div>
+  <pre class="tree">妈咪好 GoodMom
+├─ 品牌与业务  12 品牌 · 13 妇幼领域 · 14 命名术语 · 15 业务词库/状态 · 16 审计
+├─ 视觉引擎   01 DNA · 02 Token · 03 组件 · 04 数据可视化 · 07 动效 · 09 图标
+├─ 多端      10 移动端规范 · 11 移动端全量库
+├─ 落地      05 AI Prompt · 06 流程验收
+└─ 开源       @goodmom/ui · @goodmom/icons · preview 3 套 · site</pre>
+
+  <h2 id="ability"><span class="secnum">02</span><span>能力清单</span><small>CAPABILITY · 规范到代码的链路</small></h2>
+  <div class="secpad" style="margin-top:-4px"><p class="sub">从规范到代码的完整链路</p>
+  <div class="grid">
+    <div class="card"><h3><i></i>设计规范（00–16）</h3><span class="gx" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H7a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V7z"/><path d="M14 2v5h5"/><path d="M9 13h6M9 17h4"/></svg></span><p>Token、组件全谱、数据可视化、命名术语、业务状态大典、一致性审计——18 份文档互相引用。</p><a class="go" href="spec.html#ch-00">组件总目录 ›</a></div>
+    <div class="card"><h3><i></i>组件与图标</h3><span class="gx" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="4" width="7" height="7" rx="2"/><rect x="13" y="4" width="7" height="7" rx="2"/><rect x="4" y="13" width="7" height="7" rx="2"/><rect x="13" y="13" width="7" height="7" rx="2"/></svg></span><p>Gm* 组件（按钮全谱/状态标签/卡片/服务对象卡/五色选择…）+ 77 枚自绘线性图标。</p><a class="go" href="../preview/index.html#icons">浏览图标 ›</a></div>
+    <div class="card"><h3><i></i>数据可视化</h3><span class="gx" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M3.5 20.5h17"/><path d="M7 20.5v-6M12 20.5V8M17 20.5v-10"/></svg></span><p>KPI/趋势/比较/构成/雷达/拓扑/流程/进度 8 大模块，妇幼指标示例与语义色绑定。</p><a class="go" href="../preview/index.html#chart">打开图库 ›</a></div>
+    <div class="card"><h3><i></i>示例中心</h3><span class="gx" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="16" rx="3"/><path d="M3 10h18M10 10v10"/></svg></span><p>列表页 · 档案详情 · 建档向导 · 移动随访 · iPad 接诊——七套完整页面（含工作站/孕妇档案）可顺序浏览。</p><a class="go" href="../preview/examples.html">进入示例 ›</a></div>
+    <div class="card"><h3><i></i>前端封装</h3><span class="gx" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M8 8l-4 4 4 4M16 8l4 4-4 4"/><path d="M13 5l-2 14"/></svg></span><p>@goodmom/ui（Arco 基底 + GoodMom 主题与语义封装，12 模块，含 GmEmpty/GmSpin/GmSkeleton/RiskPicker…）与 @goodmom/icons 图标子包，发布型 monorepo。</p><a class="go" href="#code">快速上手 ›</a></div>
+    <div class="card"><h3><i></i>总览手册</h3><span class="gx" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M4 5a2 2 0 0 1 2-2h14v18H6a2 2 0 0 0-2 2z"/><path d="M4 5v16"/></svg></span><p>定位/架构/DNA/状态/文档地图一页纸，浏览器即可另存 PDF 对外分发。</p><a class="go" href="../preview/manual.html">查看手册 ›</a></div>
+  </div></div>
+
+  <h2 id="vision"><span class="secnum">03</span><span>视觉与状态</span><small>VISION · 六语义与五色</small></h2>
+  <div class="secpad" style="margin-top:-4px"><p class="sub">Design DNA · 六语义 · 孕产妇五色</p>
+  <div class="sem">
+    <div class="s"><i style="background:#2f8f76"></i><b>正向 · 正常</b><span>mint-500 · 已完成/通过</span></div>
+    <div class="s"><i style="background:#4a76d0"></i><b>信息 · 进行</b><span>info-500 · 建档/服务中</span></div>
+    <div class="s"><i style="background:#b9771c"></i><b>注意 · 待办</b><span>warning-500 · 待复查/随访</span></div>
+    <div class="s"><i style="background:#d35466"></i><b>风险 · 异常</b><span>danger-500 · 高危/阳性</span></div>
+    <div class="s"><i style="background:#757e8e"></i><b>中性 · 未动</b><span>text-tertiary · 草稿/已结案</span></div>
+    <div class="s"><i style="background:#7a5ce0"></i><b>特殊 · 协作</b><span>purple-500 · 转诊/重点管理</span></div>
+  </div>
+  <div class="five" style="margin-top:14px">
+    <span><i style="background:#4CB98A"></i>绿 · 低风险</span><span><i style="background:#F2C14E"></i>黄 · 一般风险</span>
+    <span><i style="background:#F0954A"></i>橙 · 较高风险</span><span><i style="background:#EE5C70"></i>红 · 高风险</span>
+    <span><i style="background:#8F6AE0"></i>紫 · 合并传染病</span>
+  </div>
+
+  </div>
+<h2 id="code"><span class="secnum">04</span><span>快速上手（开源）</span><small>GET STARTED · npm 包</small></h2>
+  <div class="secpad" style="margin-top:-4px"><p class="sub">monorepo · 两个可发布 npm 包 · 需可访问 npm 的环境</p>
+  <pre>npm install                       # 安装 goodmom-ui / goodmom-icons 依赖
+npm run typecheck                 # 类型检查
+npm run build                     # 构建 dist
+
+# 使用（React）
+import "@arco-design/web-react/dist/css/arco.css";
+import { GmButton, GmStatusTag, GmRiskPicker } from "@goodmom/ui";
+import { GmIcon } from "@goodmom/icons";
+
+&lt;GmButton type="primary" size="large" long&gt;保存并提交&lt;/GmButton&gt;
+&lt;GmStatusTag semantic="attention"&gt;待随访&lt;/GmStatusTag&gt;
+&lt;GmIcon name="lg-icon-vaccine" size={22} /&gt;</pre>
+
+  </div>
+<h2 id="opensrc"><span class="secnum">05</span><span>开源治理</span><small>OPEN SOURCE · 治理与许可</small></h2>
+  <div class="secpad" style="margin-top:-4px"><p class="sub">许可 · 行为准则 · 安全 · 贡献 · 变更</p>
+  <div class="gov">
+    <a href="../LICENSE">LICENSE（MIT）</a><a href="https://github.com/ningmengsixiang/GoodMom">行为准则</a>
+    <a href="https://github.com/ningmengsixiang/GoodMom">安全政策</a><a href="https://github.com/ningmengsixiang/GoodMom">贡献指南</a>
+    <a href="https://github.com/ningmengsixiang/GoodMom">变更日志</a><a href="../goodmom-ui/LICENSE">@goodmom/ui LICENSE</a>
+  </div>
+
+  <h2 id="standards"><span class="secnum">06</span><span>标准手册与审查治理</span><small>STANDARDS & QA · V2.4</small></h2>
+  <div class="secpad" style="margin-top:-4px"><p class="sub">38 部分标准正文（docs/标准手册）· 可执行审计闭环 · 决策记录留档　<a href="manual.html" style="color:#B23A63;font-weight:600">在线阅读标准手册（HTML 版）›</a></p>
+  <div class="grid">
+    <div class="card"><h3><i></i>标准正文 01–13</h3><p>总则 / 品牌 / Token / 色彩 / Typography / 栅格 / 间距 / 图标 / 插画 / Motion / 基础组件 / 组件状态 / UX 交互——每份均含编号条款（应/宜/可）与验收表。</p><a class="go" href="https://github.com/ningmengsixiang/GoodMom/tree/main/docs/标准手册" target="_blank" rel="noopener">打开标准目录 ›</a></div>
+    <div class="card"><h3><i></i>标准正文 14–26</h3><p>表单 / 表格 / Dashboard / 导航 / 弹窗反馈 / Empty·Error·Loading / PC / iPad / Mobile / Accessibility / 行业 / Figma / Token 代码标准。</p><a class="go" href="https://github.com/ningmengsixiang/GoodMom/tree/main/docs/标准手册" target="_blank" rel="noopener">打开标准目录 ›</a></div>
+    <div class="card"><h3><i></i>标准正文 27–38</h3><p>Design-to-Code / AI 生成 / Design QA / Governance / 版本 / SOP / 设计师·PM·前端·AI Agent 规范 / 交付验收 / 资产库。</p><a class="go" href="https://github.com/ningmengsixiang/GoodMom/tree/main/docs/标准手册" target="_blank" rel="noopener">打开标准目录 ›</a></div>
+    <div class="card"><h3><i></i>审查与度量</h3><p>决策记录 D1–D7b（docs/审查决策记录.md）· 审计 13 项 PASS · 覆盖度量（94/12/77）· 渲染级对比度报告（a11y-dom-report）。</p><a class="go" href="https://github.com/ningmengsixiang/GoodMom/tree/main/docs" target="_blank" rel="noopener">打开报告目录 ›</a></div>
+  </div></div>
+
+  <h2 id="ds"><span class="secnum">07</span><span>完整设计系统</span><small>DEMO · 在线全量演示</small></h2>
+  <p class="sub">落地页之下即完整设计系统首页：组件 / 样式 / 状态 / 图标库 / 微交互 / 示例入口</p>
+  <div class="glass" style="padding:10px;overflow:hidden">
+    <iframe src="../preview/index.html" title="妈咪好 GoodMom 设计系统首页（全量）" style="width:100%;height:1200px;border:none;border-radius:16px;background:#fff" loading="lazy"></iframe>
+  </div>
+  <p class="sub" style="margin:10px 0 0 2px">窄屏建议新窗口打开：<a href="../preview/index.html">preview/index.html ›</a>；其余子页：<a href="../preview/examples.html">示例中心</a> · <a href="../preview/mobile.html">移动端</a> · <a href="../preview/manual.html">手册</a></p>
+
+  </div>
+<h2 id="sitemap"><span class="secnum">N</span><span>网站目录</span><small>SITEMAP · 清晰直达每一页</small></h2>
+<p class="sub">一个视觉语言 · 一套组件体系 · 多端落地 · 文档与代码同源</p>
+<div class="secpad"><div class="tree2">
+  <div class="gr"><b>入口</b><a href="docs.html">文档中心（左侧目录树）</a><a href="#start">从一个角色开始</a><a href="#about">关于本系统</a><a href="#ability">能力清单</a><a href="#vision">视觉与状态</a></div>
+  <div class="gr"><b>设计系统演示</b><a href="../preview/index.html">全量首页（组件/样式/状态/图标/微交互）</a><a href="../preview/examples.html">示例中心（7 套完整页面）</a><a href="../preview/mobile.html">移动端预览</a><a href="../preview/manual.html">总览手册（可导出 PDF）</a></div>
+  <div class="gr"><b>开源代码</b><a href="https://github.com/ningmengsixiang/GoodMom">@goodmom/ui 组件库</a><a href="https://github.com/ningmengsixiang/GoodMom">@goodmom/icons 图标子包</a><a href="../frontend-app/">frontend-app 应用骨架</a><a href="https://github.com/ningmengsixiang/GoodMom">GitHub 仓库</a></div>
+  <div class="gr"><b>标准与治理</b><a href="#standards">标准手册 38 部分（区块）</a><a href="manual.html">标准手册 HTML 阅读版</a><a href="https://github.com/ningmengsixiang/GoodMom/tree/main/docs/标准手册" target="_blank" rel="noopener">docs/标准手册 目录</a><a href="#opensrc">决策记录与审计报告（docs/）</a></div>
+  <div class="gr"><b>规范文档（00–18）</b><a href="spec.html#ch-00">00 组件总目录（94）</a><a href="spec.html#ch-01">01 Design DNA</a><a href="spec.html#ch-02">02 Token</a><a href="spec.html#ch-03">03 组件</a><a href="spec.html#ch-12">12 品牌</a><a href="spec.html#ch-13">13 妇幼领域</a><a href="spec.html#ch-14">14 命名</a><a href="spec.html#ch-15">15 业务词库</a><a href="spec.html#ch-readme">README 全索引</a></div>
+</div></div>
+
+<footer>
+  <div style="display:flex;align-items:center;gap:10px;justify-content:center;margin-bottom:16px"><img src="../logo.png" alt="妈咪好" style="width:46px;height:46px;border-radius:14px;object-fit:cover;box-shadow:0 8px 18px rgba(240,127,163,.25)"></div>
+  <div class="fcols">
+    <div><b>妈咪好 GoodMom</b><a href="#start">从一个角色开始</a><a href="#about">关于</a><a href="#sitemap">网站目录</a></div>
+    <div><b>演示</b><a href="../preview/index.html">设计系统首页</a><a href="../preview/examples.html">示例中心</a><a href="../preview/mobile.html">移动端</a><a href="../preview/manual.html">总览手册</a></div>
+    <div><b>开源</b><a href="https://github.com/ningmengsixiang/GoodMom">GitHub 仓库</a><a href="https://github.com/ningmengsixiang/GoodMom">@goodmom/ui</a><a href="https://github.com/ningmengsixiang/GoodMom">@goodmom/icons</a></div>
+    <div><b>治理</b><a href="../LICENSE">LICENSE</a><a href="https://github.com/ningmengsixiang/GoodMom">行为准则</a><a href="https://github.com/ningmengsixiang/GoodMom">安全</a><a href="https://github.com/ningmengsixiang/GoodMom">贡献</a><a href="https://github.com/ningmengsixiang/GoodMom">变更日志</a><a href="manual.html">标准手册 HTML 版</a><a href="#standards">标准手册区块</a><a href="https://github.com/ningmengsixiang/GoodMom/tree/main/docs" target="_blank" rel="noopener">决策与报告</a></div>
+  </div>
+  <div style="margin-top:20px">妈咪好 GoodMom · 妇幼儿童全生命周期设计系统 · MIT License · 参考：Arco Design（MIT）</div>
+</footer>
+</div>
+</body>
+</html>
