@@ -85,7 +85,7 @@ CSS='''
 .top img{width:26px;height:26px;border-radius:50%;object-fit:cover}
 .top b{color:#B23A63;font-size:14px}
 .top .navr{margin-left:auto;display:flex;gap:8px;flex-wrap:wrap}
-.top a{font-size:12.5px;font-weight:600;text-decoration:none;padding:7px 13px;border-radius:999px;background:linear-gradient(135deg,#B23A63,#9E3054);color:#fff}
+.top a{font-size:12.5px;font-weight:600;text-decoration:none;padding:7px 13px;border-radius:999px;background:linear-gradient(135deg,#FFC4D6,#F77FA3);color:#343A46}
 aside{position:sticky;top:80px;max-height:calc(100vh - 100px);overflow:auto;padding:14px;border-radius:20px;background:rgba(255,255,255,.55);border:1px solid rgba(255,255,255,.85)}
 aside b{display:block;font-size:12px;color:#4F5B6E;margin-bottom:8px}
 aside a{display:block;font-size:12px;color:#343A46;text-decoration:none;padding:4px 8px;border-radius:8px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
@@ -100,8 +100,8 @@ main{min-width:0}
 .chap th,.chap td{text-align:left;padding:7px 9px;border-bottom:1px solid rgba(58,52,84,.08);vertical-align:top}
 .chap th{color:#4F5B6E;font-weight:600;background:rgba(255,255,255,.5)}
 .chap code{background:rgba(232,93,143,.08);color:#B23A63;padding:1px 6px;border-radius:6px;font-size:12px}
-.chap hr{border:none;border-top:1px dashed #e6c6bd;margin:14px 0}
-@media(max-width:900px){.wrap{grid-template-columns:1fr}aside{position:static;max-height:none}}
+.chap hr{border:none;border-top:1px dashed #E6C6BD;margin:14px 0}
+@media(max-width:1024px){.wrap{grid-template-columns:1fr}aside{position:static;max-height:none}}
 '''
 nav=''
 for s in sections:
@@ -112,9 +112,16 @@ for s in sections:
 head='''<!DOCTYPE html><html lang="zh-CN"><head><meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>妈咪好 GoodMom · 设计系统标准手册（38 部分）</title>
-<link rel="icon" type="image/png" href="../logo.png"><style>%s</style></head><body>'''%CSS
-body='''<div class="wrap"><div class="top"><img src="../logo.png" alt="妈咪好"><b>设计系统标准手册 · 38 部分</b>
+<link rel="icon" type="image/svg+xml" href="../brand/logo-mark.svg"><style>%s</style></head><body>'''%CSS
+body='''<div class="wrap"><div class="top"><img src="../brand/logo-tile.svg" alt="妈咪好"><b>设计系统标准手册 · 38 部分</b>
 <div class="navr"><a href="index.html">返回官网首页</a><a href="docs.html">文档中心</a><a href="spec.html#ch-readme">全量规范</a></div></div>
 <aside><b>标准目录（%d 章）</b>%s</aside><main>%s</main></div>'''%(len(sections),nav,chaps)
-io.open(OUT,'w',encoding='utf-8').write(head+body+'</body></html>')
-print('manual.html written', len(sections), 'chapters, size', os.path.getsize(OUT))
+# ── V2.7 起：产出 build-site.py 消费的片段；旧 site/manual.html 为重定向页 ──
+FRAG=os.path.join(ROOT,"site","fragments","site-manual.html")
+os.makedirs(os.path.dirname(FRAG),exist_ok=True)
+frag=('<!--@css-->\n'+CSS.strip()+'\n\n<!--@body-->\n'
+      +'<div class="top"><b>设计系统标准手册 · 38 部分</b></div>\n'
+      +'<div class="wrap"><aside><b>标准目录（%d 章）</b>%s</aside><main>%s</main></div>\n'
+        %(len(sections),nav,chaps))
+io.open(FRAG,'w',encoding='utf-8').write(frag)
+print('site/fragments/site-manual.html written', len(sections), 'chapters, size', os.path.getsize(FRAG))

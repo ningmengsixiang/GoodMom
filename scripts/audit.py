@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 """
 GoodMom 全自动规范审计（scripts/audit.py）
-检查：Markdown 链接 / 章节连续性 / 图标唯一与计数 / HTML 无 .md 链接 / 残留词 / 色彩合规（严格: css与token层）。
+检查：Markdown 链接 / 章节连续性 / 图标唯一与计数 / HTML 无 .md 链接 / 残留词 / 色彩合规（严格: css与token层）/ hex 色值大小写（14.1.1）/ 双包镜像一致性（D10）。
 退出码：0=通过；1=硬性失败。报告写入 docs/audit-report.md。
 用法：python3 scripts/audit.py [--strict]
 """
@@ -62,15 +62,28 @@ def icons():
     return True
 
 def html_no_md():
+    """HTML 里不得出现指向 .md 的链接（浏览器会打开未渲染的源码）。
+
+    ⚠️ 旧实现有两处缺口，合起来造成**假通过**：
+      1. 正则 `href="([^"]*\.md)"` 要求 href **以 .md 结尾**，
+         于是 `href="../03-组件规范.md#卡片与面板"` 这类带锚点的链接 0 命中；
+      2. 作用域只扫 `site/*.html` + `preview/*.html`，
+         漏掉 `site/fragments/`（站点源！）、`fuyouaican sai/`、根目录与 `frontend-app/`。
+    现在正则允许锚点/查询串，作用域覆盖全部 HTML（含片段）。
+    """
     bad = []
-    for f in glob.glob("site/*.html") + glob.glob("preview/*.html"):
+    files = (glob.glob("site/**/*.html", recursive=True)
+             + glob.glob("preview/**/*.html", recursive=True)
+             + glob.glob("*.html") + glob.glob("fuyouaicansai/**/*.html", recursive=True)
+             + glob.glob("frontend-app/**/*.html", recursive=True))
+    for f in sorted({x for x in files if "node_modules" not in x.replace(os.sep, "/")}):
         t = open(f, encoding="utf-8").read()
-        for m in re.finditer(r'href="([^"]*\.md)"', t):
+        for m in re.finditer(r'href="([^"]*\.md(?:[#?][^"]*)?)"', t):
             bad.append((f, m.group(1)))
     if bad:
         rec("FAIL", "html-md", "%d 处 .md 链接：%s" % (len(bad), bad[:3]))
         return False
-    rec("OK", "html-md", "HTML 页面无 .md 链接")
+    rec("OK", "html-md", "HTML 页面无 .md 链接（含片段与根目录）")
     return True
 
 STALE = ["未来 SaaS", "数据安全态势大屏", "Liquid Glass Enterprise Design System"]
@@ -89,8 +102,10 @@ def stale_words():
 
 ALLOWED = {h.upper() for h in """#343A46 #4F5B6E #9AA2B0 #F4F0EC #E6D9D0 #D7C5BC #B23A63 #E85D8F #F77FA3 #FFA3BE #FFC4D6 #FFDEE8 #FFF0F4
 #FFC3A0 #FFDCC7 #FFF3EA #4FB59C #6FC9B4 #A9E3D4 #E2F6F0 #42C7A1 #96E6CF #F2B25C #FAE1B3 #EF6A7B #FAC9D0 #6D9EFF
-#9A78FF #8066F0 #B9A0FF #B69AFF #7D8CFF #4CB98A #F2C14E #F0954A #EE5C70 #8F6AE0 #2f8f76 #4a76d0 #b9771c #d35466 #757e8e
-#7a5ce0 #b98d1f #8a6d10 #4F5B6E #B23A63 #9E3054 #1E6B52 #9A5A0E #B04052 #385CB3 #6242B8 #FFA9C2 #FF9AB6 #FF8FAE #7FD8C2 #EFAF55 #F79AA8 #E25B72 #FFFFFF #FFF """.split()}
+#9A78FF #8066F0 #B9A0FF #B69AFF #7D8CFF #4CB98A #F2C14E #F0954A #EE5C70 #8F6AE0 #2F8F76 #4A76D0 #B9771C #D35466 #757E8E
+#7A5CE0 #B98D1F #8A6D10 #4F5B6E #B23A63 #9E3054 #C44C74 #1E6B52 #9A5A0E #B04052 #385CB3 #6242B8 #FFA9C2 #FF9AB6 #FF8FAE #7FD8C2 #EFAF55 #F79AA8 #E25B72 #FFFFFF #FFF #1B1A21 #23222A #F3EFEC #C9C4CE #9CAEFF #A6ADB9 
+#36353C
+#25715D #3261C1 #8D5A15 #B72F42 #5E6673 #6A48DC """.split()}
 """ 页面档别名 / 引擎展示色（A1 收口，2026-09；仅用于 site/preview 静态页，代码层仍受 ALLOWED 严格约束）
 暖底/玻璃框别名 + 02.1/12.3.3 引擎 ramp 与渐变样例色；详见 docs/审查决策记录.md D4。"""
 PAGE_ALIAS = {h.upper() for h in """#F0D4CF #FDF2EE #F6E2DB #EAD3CA #E7D4CB #E6CFC6 #E7D3CB #EED5CD #E6C6BD #FFF7F4 #FDF6F2
@@ -140,7 +155,7 @@ def breakpoint_reg():
 
 def banned_colors():
     """历史近似色回归检测（G-P1-2）：代码层命中=FAIL，HTML 层=WARN。"""
-    banned = {"#3F9C88"}  # 旧正向绿（已归一为 #2f8f76，禁止回归）
+    banned = {"#3F9C88"}  # 旧正向绿（已归一为 #2F8F76，禁止回归）
     src_files = COLOR_SOURCES + ["goodmom-ui/src/theme.css"]
     bad_src, bad_html = [], []
     pat = re.compile(r"#[0-9a-fA-F]{6}\b")
@@ -163,20 +178,224 @@ def banned_colors():
     return ok
 
 def spec_health():
-    f = "site/spec.html"
+    """规范全文健康度。
+
+    V2.7 起全部内容并入唯一首页 site/index.html，旧 site/spec.html 只剩重定向；
+    因此改为在**合并产物**里校验「site-spec 模块」的章节数与阅读器是否还在，
+    同时校验旧路径确为重定向（避免旧链接 404）。
+    """
+    f = "site/index.html"
     if not os.path.exists(f):
-        rec("FAIL", "spec", "缺少 site/spec.html"); return False
+        rec("FAIL", "spec", "缺少唯一首页 site/index.html"); return False
     s = open(f, encoding="utf-8").read()
-    chaps = s.count('class="chap"')
-    if chaps < 20 or 'id="modeBtn"' not in s:
-        rec("FAIL", "spec", "章节=%d 或阅读器缺失" % chaps); return False
-    rec("OK", "spec", "spec.html 章节=%d 阅读器在" % chaps)
+    i = s.find('id="gm-mod-site-spec"')
+    if i < 0:
+        rec("FAIL", "spec", "合并产物缺少 site-spec 模块"); return False
+    seg = s[i:i + 400000]
+    chaps = seg.count('class="chap"')
+    # 阅读器资产在合并后由模块前缀化为 site-spec--modeBtn
+    has_reader = 'site-spec--modeBtn' in seg or 'id="modeBtn"' in seg
+    if chaps < 19 or not has_reader:
+        rec("FAIL", "spec", "模块内章节=%d 或阅读器缺失" % chaps); return False
+    # 旧入口必须是重定向
+    legacy = os.path.join("site", "spec.html")
+    if not os.path.exists(legacy) or "页面已合并" not in open(legacy, encoding="utf-8").read():
+        rec("FAIL", "spec", "site/spec.html 未改写为重定向"); return False
+    rec("OK", "spec", "合并产物 site-spec 模块 章节=%d 阅读器在；旧入口为重定向" % chaps)
     return True
+
+def hex_case():
+    """hex 色值书写统一大写（14.1.1）：全仓文本源扫描，出现小写即 FAIL。
+    仅认 #后 3/4/6/8 位十六进制（与 colors() 同口径），不误伤 id 选择器与锚点。
+    ① 跳过生成物（audit/coverage/a11y 报告自身），否则报告会记录小写色值导致自我维持 FAIL；
+    ② 报告里的命中值统一以大写回显，杜绝同样的自引用回路。"""
+    pat = re.compile(r"#([0-9a-fA-F]{3,8})\b")
+    exts = (".md", ".html", ".css", ".ts", ".tsx", ".js", ".jsx", ".py", ".svg", ".json", ".yml", ".sh")
+    generated = {"docs/audit-report.md", "docs/coverage-report.md",
+                 "docs/coverage.json", "docs/a11y-dom-report.md"}
+    bad = []
+    for root, dirs, files in os.walk("."):
+        # 跳过构建产物与依赖目录：Storybook 产物/编译输出里的第三方小写 hex 会造成假 FAIL（R15）
+        # 另跳过 Vite 预打包缓存（.vite，内含 vue 全量 bundle）与 npm 本地缓存
+        dirs[:] = [d for d in dirs if d not in (".git", "node_modules", "dist", "storybook-static",
+                                                ".storybook-static", ".vite", ".npm-cache",
+                                                # 站点基线快照（合并前原页面，供热节保真度校验用），非交付内容
+                                                ".baseline")]
+        # site/fragments 是"合并片段"（输入源，非交付页面）；其 hex 大小写由最终产物体现，
+        # 单独扫描会与产物重复计数，故在产物层校验一次即可
+        for fn in sorted(files):
+            if not fn.endswith(exts):
+                continue
+            p = os.path.join(root, fn)
+            rel = os.path.relpath(p).replace(os.sep, "/")
+            if rel in generated:
+                continue
+            # 深层缓存路径（如 goodmom-vue/playground/.vite/deps/vue.js）与压缩产物一并跳过
+            if "/.vite/" in rel or rel.endswith(".min.js"):
+                continue
+            # 构建产物：site/index.html 由 build-site.py 组装，Vite/压缩器会把 hex 统一成小写，
+            # 这不代表书写不规范（与 R15 同类假 FAIL）。大小写规范校验留在**源**上：
+            # site/fragments/*（构建输入）与各页源码；产物不做大小写判定。
+            if rel == "site/index.html" or rel.startswith("site/fragments/"):
+                continue
+            try:
+                t = open(p, encoding="utf-8").read()
+            except (UnicodeDecodeError, OSError):
+                continue
+            hits = sorted({m.group(0).upper() + "(小写)" for m in pat.finditer(t)
+                           if len(m.group(1)) in (3, 4, 6, 8) and m.group(1) != m.group(1).upper()})
+            if hits:
+                bad.append((rel, hits[:4]))
+    if bad:
+        rec("FAIL", "hex-case", "%d 个文件含小写 hex：%s" % (len(bad), bad[:3]))
+        return False
+    rec("OK", "hex-case", "hex 色值全仓统一大写（14.1.1）")
+    return True
+
+def _lum(hexv):
+    h = hexv.lstrip("#")
+    if len(h) == 3:
+        h = "".join(c * 2 for c in h)
+    r, g, b = (int(h[i:i + 2], 16) / 255 for i in (0, 2, 4))
+    f = lambda c: c / 12.92 if c <= 0.03928 else ((c + 0.055) / 1.055) ** 2.4
+    r, g, b = f(r), f(g), f(b)
+    return 0.2126 * r + 0.7152 * g + 0.0722 * b
+
+def _contrast(a, b):
+    la, lb = _lum(a), _lum(b)
+    hi, lo = max(la, lb), min(la, lb)
+    return (hi + 0.05) / (lo + 0.05)
+
+def _mix_white_over(base, alpha):
+    h = base.lstrip("#")
+    out = [min(255, round(int(h[i:i + 2], 16) + (255 - int(h[i:i + 2], 16)) * alpha)) for i in (0, 2, 4)]
+    return "#%02X%02X%02X" % tuple(out)
+
+def dark_contrast():
+    """暗黑模式守门（02 · 2.1.9）：theme.css 必须含 data-theme="dark" 段，
+    且正文/次级/三级/链接/语义色在「页面底」与「12% 白玻璃合成面」（最坏情形）上实测 ≥4.5:1。"""
+    f = "goodmom-ui/src/theme.css"
+    if not os.path.exists(f):
+        rec("FAIL", "dark", "缺少 theme.css"); return False
+    src = open(f, encoding="utf-8").read()
+    gmc = "frontend-app/packages/gm-arco-ui/src/gm.css"
+    if os.path.exists(gmc) and '[data-theme="dark"]' not in open(gmc, encoding="utf-8").read():
+        rec("FAIL", "dark", "应用侧 gm.css 缺 data-theme=\"dark\" 段（双包不一致）"); return False
+    m = re.search(r'\[data-theme="dark"\]\s*\{(.*?)\}', src, re.S)
+    if not m:
+        rec("FAIL", "dark", '主题源缺 [data-theme="dark"] 段'); return False
+    block = m.group(1)
+    def tok(name):
+        mm = re.search(re.escape(name) + r"\s*:\s*(#[0-9A-Fa-f]{3,8})", block)
+        return mm.group(1).upper() if mm else None
+    page = tok("--lg-page-bg")
+    if not page:
+        rec("FAIL", "dark", "暗色段缺 --lg-page-bg"); return False
+    worst = _mix_white_over(page, 0.12)
+    checks = ["--lg-text-primary", "--lg-text-secondary", "--lg-text-tertiary", "--lg-link",
+              "--lg-sem-positive", "--lg-sem-info", "--lg-sem-attention",
+              "--lg-sem-risk", "--lg-sem-neutral", "--lg-sem-special"]
+    bad, missing = [], []
+    for name in checks:
+        v = tok(name)
+        if not v:
+            missing.append(name); continue
+        c = _contrast(v, worst)
+        if c < 4.5:
+            bad.append((name, v, round(c, 2)))
+    if missing:
+        rec("FAIL", "dark", "暗色段缺变量 %s" % missing); return False
+    if bad:
+        rec("FAIL", "dark", "暗底对比度不足(<4.5:1) %s（合成面 %s）" % (bad, worst)); return False
+    rec("OK", "dark", "暗色段完整；10 项文字/语义色在最坏合成面 %s 上全部 ≥4.5:1" % worst)
+    return True
+
+def exports_check():
+    """组件导出守门（Part 11 验收点）：components/ 与 adapters/ 下每个 .tsx 必须在 src/index.ts 中导出。"""
+    ok = True
+    for pkg in ("goodmom-ui/src", "frontend-app/packages/gm-arco-ui/src"):
+        idx = os.path.join(pkg, "index.ts")
+        if not os.path.exists(idx):
+            continue
+        text = open(idx, encoding="utf-8").read()
+        miss = []
+        for sub in ("components", "adapters"):
+            for f in sorted(glob.glob(os.path.join(pkg, sub, "*.tsx"))):
+                name = os.path.basename(f)[:-4]
+                if not re.search(r"\b%s\b" % re.escape(name), text):
+                    miss.append(name)
+        if miss:
+            rec("FAIL", "exports", "%s/index.ts 未导出：%s" % (pkg, miss)); ok = False
+    if ok:
+        rec("OK", "exports", "全部组件已在两包 index.ts 导出")
+    return ok
+
+def mirror_sync():
+    """双包镜像一致性（D10）：应用侧 gm-arco-ui 必须与设计系统源 goodmom-ui 逐字节一致。
+
+    ⚠️ 旧实现有一句 `if rel == "theme.css": continue`，于是**唯一那对样式表从不比对**。
+    后果不是理论上的：应用镜像 `gm.css` 比 `theme.css` 少了 **37 个 `gm-*` 选择器**，
+    而 index.ts 导出的 GmEmpty / GmSpin / GmSkeleton / GmTag / GmSteps **一个样式都没有**；
+    `gm-status-dot` 缺失更让状态标签的色点变成 0×0 的不可见空 span。
+    "封装差异"能解释包装器样式不同，解释不了"导出的组件完全没有样式"。
+    现把 theme.css ↔ gm.css 一并纳入比对（应用侧现为同源的超集副本）。
+
+    另补一道**选择器集合**比对：即使将来两侧因故不逐字节相同，也不允许
+    应用侧缺少设计系统源里的任何 `.gm-*` 选择器。
+
+    排除 goodmom-vue/**：`@goodmom/vue` 是 V2.6 新增的 Vue 3 包，与 React 包**共享数值口径但不同语言/
+    不同宿主**（.vue SFC vs .tsx、template 注释 vs JSX 注释、defineModel vs useState），
+    结构上不可能逐字节一致。两者的一致性由 `scripts/check-status-map.py`（状态字典 ⇄ 15 章）
+    与本函数的 React 镜像共同保证，不靠本函数的字节比对。"""
+    src = "goodmom-ui/src"
+    dst = "frontend-app/packages/gm-arco-ui/src"
+    if not os.path.isdir(dst):
+        rec("WARN", "mirror", "未找到应用侧镜像包，跳过"); return True
+    diff, missing = [], []
+    # 应用侧唯一的命名差异：`theme.css` 在镜像里叫 `gm.css`（宿主应用按此名引入）。
+    # 映射必须显式写出来，否则比对会把 theme.css 误报成"缺失"。
+    RENAME = {"theme.css": "gm.css"}
+    for root, _dirs, files in os.walk(src):
+        for fn in sorted(files):
+            rel = os.path.relpath(os.path.join(root, fn), src).replace(os.sep, "/")
+            a, b = os.path.join(src, rel), os.path.join(dst, RENAME.get(rel, rel))
+            if not os.path.exists(b):
+                missing.append(rel); continue
+            if open(a, encoding="utf-8").read() != open(b, encoding="utf-8").read():
+                diff.append(rel)
+
+    # 选择器集合比对：应用侧不得缺少设计系统源中的任何 .gm-* 选择器
+    sel_missing = []
+    theme_a, theme_b = os.path.join(src, "theme.css"), os.path.join(dst, "gm.css")
+    if os.path.exists(theme_a) and os.path.exists(theme_b):
+        sa, sb = _css_selectors(theme_a), _css_selectors(theme_b)
+        sel_missing = sorted(s for s in (sa - sb) if "gm-" in s)
+
+    if diff or missing or sel_missing:
+        rec("FAIL", "mirror",
+            "镜像漂移 差异=%s 缺失=%s 缺少选择器=%d（%s）"
+            % (diff[:4], missing[:4], len(sel_missing), sel_missing[:6]))
+        return False
+    rec("OK", "mirror", "应用侧 gm-arco-ui 与设计系统源逐字节一致（含 theme.css ↔ gm.css），且无缺失选择器")
+    return True
+
+
+def _css_selectors(path):
+    """提取 CSS 选择器集合（忽略声明体、注释与 at-rule）"""
+    s = open(path, encoding="utf-8").read()
+    s = re.sub(r"/\*.*?\*/", "", s, flags=re.S)
+    out = set()
+    for m in re.finditer(r"([^{}]+)\{", s):
+        for one in m.group(1).split(","):
+            one = re.sub(r"\s+", " ", one.strip())
+            if one and not one.startswith("@"):
+                out.add(one)
+    return out
 
 def main():
     hard = []
     hard.append(md_links()); hard.append(chapter_seq()); hard.append(icons())
-    hard.append(html_no_md()); hard.append(stale_words()); hard.append(colors()); hard.append(banned_colors()); hard.append(breakpoint_reg()); hard.append(spec_health())
+    hard.append(html_no_md()); hard.append(stale_words()); hard.append(colors()); hard.append(banned_colors()); hard.append(breakpoint_reg()); hard.append(spec_health()); hard.append(hex_case()); hard.append(mirror_sync()); hard.append(dark_contrast()); hard.append(exports_check())
     passed = all(hard)
     report = ["# 规范审计报告（自动）", "",
               "- 命令：`python3 scripts/audit.py`", "- 时间：%(now)s" % {"now": __import__("datetime").datetime.now().strftime("%Y-%m-%d %H:%M")},

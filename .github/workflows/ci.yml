@@ -5,38 +5,115 @@ on:
     branches: [main]
   pull_request:
 
+env:
+  # vite@8 / @vitejs/plugin-vue@6 要求 ^20.19.0 || >=22.12.0。
+  # 只写 `20` 会"碰巧"通过（浮动到最新的 20.x），故显式钉到满足条件的版本。
+  NODE_VERSION: "20.19"
+
 jobs:
-  docs-links:
-    name: 文档链接检查
+  # ══════════════════════════════════════════════════════════════════════
+  # 交付完整性（P0-1 / P0-2 / P0-3 / P0-6）
+  #
+  # 这是本仓库历史上最贵的一课：所有门禁都只在**工作树**上跑，
+  # 于是"本地全绿"与"仓库里什么都没有"可以同时成立（V2.5–V2.7 长期未入库）。
+  # 本 job 不需要网络，专门校验"交付物确实在版本库里"。
+  # ══════════════════════════════════════════════════════════════════════
+  delivery-integrity:
+    name: 交付完整性（已入库 / 引用完整 / 基线存在）
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - name: 校验 Markdown 内链
+
+      - name: 交付物必须已入库（无未提交 / 未跟踪文件）
         run: |
-          python3 - <<'PY'
-          import glob, os, re, sys
-          err = []
-          for f in glob.glob("*.md"):
-              text = open(f, encoding="utf-8").read()
-              for m in re.findall(r"\]\(([^)#]+?)(?:#[^)]*)?\)", text):
-                  p = m.split("#")[0]
-                  if p.endswith(".md") and not os.path.exists(p):
-                      err.append((f, p))
-          if err:
-              print("失效链接:", *err, sep="\n")
-              sys.exit(1)
-          print("Markdown 链接检查通过")
-          PY
-      - name: 残留词扫描（旧称/版本）
+          if [ -n "$(git status --porcelain --untracked-files=all)" ]; then
+            echo "::error::存在未提交或未跟踪的交付物，交付不完整："
+            git status --short | head -40
+            echo "（本地门禁全绿但仓库内容为空，是所有守门工具的共同盲区）"
+            exit 1
+          fi
+          echo "OK 工作树干净（$(git ls-files | wc -l) 个已入库文件）"
+
+      - name: ci.yml 引用的脚本必须已入库
         run: |
-          grep -RIn --include='*.md' -E '未来 SaaS|数据安全态势大屏|Liquid Glass Enterprise Design System' . || echo "无旧称残留"
-      - name: 全自动规范审计（链接/章节/图标/HTML 无 md/色彩/spec）
+          missing=0
+          for s in $(grep -oE "scripts/[A-Za-z0-9._-]+\.(py|mjs|cjs)" .github/workflows/ci.yml | sort -u); do
+            if ! git ls-files --error-unmatch "$s" >/dev/null 2>&1; then
+              echo "::error::CI 引用了未入库的脚本: $s"
+              missing=1
+            fi
+          done
+          [ "$missing" = "0" ] || exit 1
+          echo "OK ci.yml 引用的脚本均已入库"
+
+      - name: 站点保真度基线必须存在（P0-6）
+        run: |
+          # site-parity.mjs 是 CI 步骤，它需要的输入就不能同时被声明为"非交付内容"。
+          # 缺文件必须显式失败，而不是静默跳过比对。
+          n=$(git ls-files site/.baseline | wc -l)
+          if [ "$n" -lt 8 ]; then
+            echo "::error::site/.baseline 只有 $n 个已入库文件（应为 8），site-parity 将无从比对"
+            ls -la site/.baseline 2>/dev/null || echo "目录不存在"
+            exit 1
+          fi
+          echo "OK 站点基线已入库（$n 个）"
+
+  # ══════════════════════════════════════════════════════════════════════
+  # 规范与文档
+  # ══════════════════════════════════════════════════════════════════════
+  docs-links:
+    name: 文档链接 / 审计 / 覆盖 / 无障碍 / 状态字典 / 版本
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: 校验 Markdown 内链（递归全仓，含 docs/**）—— P2-1
+        run: python3 scripts/check-md-links.py
+
+      - name: 残留词扫描（旧称 / 旧定位）
+        run: |
+          # 旧写法以 `|| echo` 结尾 ⇒ 无论是否命中都退出 0，等于没有门禁。
+          if grep -RIn --include='*.md' -E '未来 SaaS|数据安全态势大屏|Liquid Glass Enterprise Design System' . ; then
+            echo "::error::发现旧称/旧定位残留（见上）"
+            exit 1
+          fi
+          echo "OK 无旧称残留"
+
+      - name: 全自动规范审计（链接/章节/图标/HTML/色彩/spec/镜像/导出）
         run: python3 scripts/audit.py
+
       - name: 覆盖度量（组件/资产）
         run: python3 scripts/coverage.py --ci
-      - name: 静态可访问性走查（A3）
+
+      - name: 静态可访问性走查
         run: python3 scripts/a11y.py --ci
 
+      - name: 业务状态字典一致性（15 章 ⇄ React/Vue 映射表）
+        run: python3 scripts/check-status-map.py --ci
+
+      - name: 版本一致性（唯一版本源）—— P1-8
+        run: python3 scripts/check-version.py --ci
+
+      - name: 双库样式解析值一致性（React/应用侧 ↔ Vue）—— P1-19
+        run: python3 scripts/check-style-parity.py --ci
+
+  # ══════════════════════════════════════════════════════════════════════
+  # 渲染级可访问性（P1-20 / P2-4）
+  # 旧版工具丢弃 alpha、读数夸大 2–3 倍、且从不入 CI、无阈值。
+  # ══════════════════════════════════════════════════════════════════════
+  a11y-dom:
+    name: 渲染级对比度（无头 Chrome 实测 + 阈值）
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: 安装 chromium
+        run: npx --yes playwright@latest install --with-deps chromium
+      - name: 逐文本节点实测对比度（超过基线即失败）
+        run: python3 scripts/a11y-dom.py
+
+  # ══════════════════════════════════════════════════════════════════════
+  # 封装层 / 开源包
+  # ══════════════════════════════════════════════════════════════════════
   gm-ui-typecheck:
     name: 封装层 typecheck
     runs-on: ubuntu-latest
@@ -47,19 +124,103 @@ jobs:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
         with:
-          node-version: 20
+          node-version: ${{ env.NODE_VERSION }}
           cache: npm
-          cache-dependency-path: frontend-app/package.json
-      - run: npm install
+          # 缓存键必须指向锁文件；指向 package.json 时依赖一变缓存即失效
+          cache-dependency-path: frontend-app/package-lock.json
+      - run: npm ci || npm install
       - run: npm run gm:typecheck
 
   open-pkg-typecheck:
-    name: 开源包 typecheck（@goodmom/ui + @goodmom/icons）
+    name: 开源包 typecheck + build（@goodmom/ui + @goodmom/icons + @goodmom/vue）
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
         with:
-          node-version: 20
-      - run: npm install
+          node-version: ${{ env.NODE_VERSION }}
+          cache: npm
+          cache-dependency-path: package-lock.json
+      - run: npm ci || npm install
       - run: npm run typecheck
+      # 旧版 CI 从不构建 @goodmom/ui，构建期才会暴露的错误全部漏网
+      - run: npm run build
+
+  # ══════════════════════════════════════════════════════════════════════
+  # 站点唯一首页
+  # ══════════════════════════════════════════════════════════════════════
+  site-build:
+    name: 站点唯一首页（新鲜度 + 构建一致性 + 锚点 + 保真度 + 冒烟）
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: npm
+          cache-dependency-path: package-lock.json
+      - run: npm ci || npm install
+      - run: npx --yes playwright install --with-deps chromium
+
+      - name: 站点片段新鲜度（重跑生成器后必须无 diff）—— P1-9
+        run: |
+          # `build-site.py --check` 只证明"产物 == 片段"，
+          # 从不证明"片段 == 源文件"，于是内嵌规范快照可以静默过期。
+          python3 scripts/gen-spec.py
+          python3 scripts/gen-manual.py
+          if ! git diff --exit-code -- site/fragments/; then
+            echo "::error::站点片段已过期（与生成器输出不一致），请提交重新生成后的片段"
+            exit 1
+          fi
+          echo "OK 站点片段与生成器输出一致"
+
+      - name: 产物与构建结果一致（site/index.html 是产物，禁止手改）
+        run: python3 scripts/build-site.py --check
+
+      - name: 旧页面必须为重定向
+        run: python3 scripts/redirect-legacy.py --check
+
+      - name: 锚点完整性（畸形 href / 悬空锚点）—— P0-4
+        run: python3 scripts/check-anchors.py
+
+      - name: 保真度 + 冒烟（起服务 / 跑脚本 / 关服务必须在同一个 run 块内）
+        env:
+          SITE_URL: http://127.0.0.1:5288/site/index.html
+        run: |
+          set -euo pipefail
+          # GitHub Actions 每个 run: 是独立 shell，且会清理上一步派生的后台进程。
+          # 旧版把服务起在"保真度"步骤、在"冒烟"步骤里用，一旦不存活就以
+          # ERR_CONNECTION_REFUSED 失败，报错信息与真实原因（站点回归）毫无关系。
+          nohup python3 -m http.server 5288 --bind 127.0.0.1 >/tmp/site-http.log 2>&1 &
+          SRV=$!
+          trap 'kill $SRV 2>/dev/null || true' EXIT
+          # 就绪门控：轮询到 HTTP 200 再继续，不用 sleep 猜
+          for i in $(seq 1 30); do
+            if curl -fsS -o /dev/null "$SITE_URL"; then break; fi
+            if [ "$i" = "30" ]; then echo "::error::静态服务未就绪"; cat /tmp/site-http.log; exit 1; fi
+            sleep 1
+          done
+          node scripts/site-parity.mjs
+          node scripts/site-smoke.mjs
+
+  vue-pkg-build:
+    name: Vue 组件库构建（@goodmom/vue）
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: npm
+          cache-dependency-path: package-lock.json
+      - run: npm ci || npm install
+      - run: npm run build:vue
+      - name: 产物完整性（ESM/CJS/样式/类型声明）
+        run: |
+          set -e
+          for f in dist/index.js dist/index.cjs dist/style.css dist/index.d.ts; do
+            test -s "goodmom-vue/$f" || { echo "缺少产物: $f"; exit 1; }
+            echo "OK $f  $(wc -c < "goodmom-vue/$f") bytes"
+          done
+          grep -q -- '--mmh-grad-action-hc' goodmom-vue/dist/style.css || {
+            echo "样式产物缺少品牌 Token（base.css 未被打包）"; exit 1; }
