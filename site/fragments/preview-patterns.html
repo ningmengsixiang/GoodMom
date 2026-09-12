@@ -33,13 +33,13 @@
 .sec{margin-top:26px}
 .sec-head{display:flex;align-items:baseline;gap:10px;margin:0 2px 12px}
 .sec-head h2{font-size:17px}
-.sec-head span{font-size:12px;color:var(--t3)}
+.sec-head span{font-size:12px;color:var(--t2)}
 .glass{border-radius:20px;background:linear-gradient(160deg,rgba(255,255,255,.55),rgba(255,255,255,.24) 55%,rgba(255,255,255,.32));
   border:1px solid rgba(255,255,255,.7);box-shadow:inset 0 1px 0 rgba(255,255,255,.8),var(--sh);
-  -webkit-backdrop-filter:blur(24px);backdrop-filter:blur(24px);padding:18px}
+  -webkit-backdrop-filter:blur(32px);backdrop-filter:blur(32px);padding:18px}
 .row{display:flex;gap:14px;flex-wrap:wrap;align-items:center}
 .col{display:flex;flex-direction:column;gap:10px}
-.lbl{font-size:11px;color:var(--t3);margin-bottom:2px}
+.lbl{font-size:11px;color:var(--t2);margin-bottom:2px}
 /* ── 3.10 链接 ── */
 .lk{display:inline-flex;align-items:center;gap:4px;font-size:14px;line-height:22px;color:var(--link);text-decoration:none;background:none;
   border:none;font-family:inherit;cursor:pointer;transition:color .14s,opacity .14s}
@@ -49,7 +49,7 @@
 .lk.primary{color:var(--text);font-weight:600}.lk.primary:hover{color:var(--link)}
 .lk.muted{color:var(--t2)}.lk.muted:hover{color:var(--link)}
 .lk.danger{color:#B72F42}.lk.danger:hover{color:#B04052}
-.lk.dis{color:rgba(88,98,115,.4);cursor:not-allowed;pointer-events:none}
+.lk.dis{color:var(--lg-text-tertiary,#6E7686);cursor:not-allowed;pointer-events:none}  /* 禁用态：WCAG 1.4.3 豁免，但保证「看得出是文字」 */
 .lk:focus-visible{outline:var(--bw-3) solid var(--ring);outline-offset:var(--ring-off);border-radius:4px}
 .lk svg{width:12px;height:12px;stroke:currentColor;fill:none;stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round;flex:none}
 .sr{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap;border:0}
@@ -60,7 +60,9 @@
   text-align:left;cursor:pointer;transition:box-shadow .18s,border-color .18s}
 .cas-t:focus-visible{outline:var(--bw-3) solid var(--ring);outline-offset:var(--ring-off)}
 .cas-t .v{flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-.cas-t .ph{flex:1;color:var(--t3)}
+.cas-t .ph{flex:1;color:var(--t2)}
+/* 暗色档：控件底（rgba 白 12%）比玻璃更亮，占位符与箭头需再提一档 */
+[data-theme="dark"] .cas-t .ph,[data-theme="dark"] .cas-t .ar{color:#F3EFEC}
 .cas-t .ar{transition:transform .2s;color:var(--t2)}
 .cas.open .cas-t .ar{transform:rotate(180deg)}
 .cas-p{position:absolute;z-index:40;top:calc(100% + 8px);left:0;display:none;padding:6px;border-radius:20px;
@@ -71,15 +73,15 @@
 .cas-col{width:168px;max-height:240px;overflow:auto;padding:2px 0;border-right:var(--bw-hairline) solid var(--line)}
 .cas-col:last-child{border-right:none}
 .cas-o{display:flex;align-items:center;gap:8px;width:100%;height:34px;padding:0 10px;border:none;background:none;font-family:inherit;
-  font-size:13px;color:var(--text);cursor:pointer;text-align:left;border-radius:10px}
+  font-size:13px;color:var(--text);cursor:pointer;text-align:left;border-radius:18px}  /* 02 · 2.4 交互下限 16 */
 .cas-o:hover{background:rgba(255,255,255,.6)}
 .cas-o.sel{color:var(--link);font-weight:600;box-shadow:inset 2px 0 0 var(--link)}
 .cas-o:focus-visible{outline:var(--bw-3) solid var(--ring);outline-offset:-2px}
-.cas-e{width:168px;padding:14px 10px;font-size:12px;color:var(--t3);text-align:center}
+.cas-e{width:168px;padding:14px 10px;font-size:12px;color:var(--t2);text-align:center}   /* 12px 辅助文字 → 次级色 */
 .cas-mask{position:fixed;inset:0;z-index:70;background:rgba(0,0,0,.35)}
 .cas-sheet{position:fixed;left:0;right:0;bottom:0;z-index:71;padding:14px 14px calc(14px + env(safe-area-inset-bottom));
-  border-radius:24px 24px 0 0;background:var(--glass-popover);box-shadow:0 -12px 40px rgba(0,0,0,.28);
-  -webkit-backdrop-filter:blur(24px) saturate(1.2);backdrop-filter:blur(24px) saturate(1.2)}
+  border-radius:24px 24px 0 0;background:var(--glass-popover);box-shadow:0 -12px 40px rgba(38,36,46,.28);
+  -webkit-backdrop-filter:blur(40px) saturate(1.2);backdrop-filter:blur(40px) saturate(1.2)}
 .cas-sheet .cas-p{position:static;display:flex;box-shadow:none;background:none;border:none;backdrop-filter:none;-webkit-backdrop-filter:none}
 .cas-sheet .cas-col{width:auto;flex:1;min-width:112px}
 .cas-foot{display:flex;gap:12px;margin-top:12px}
@@ -89,27 +91,27 @@
 .cas-btn[disabled]{opacity:.5;cursor:not-allowed}
 .cas-btn:focus-visible{outline:var(--bw-3) solid var(--ring);outline-offset:2px}
 /* ── 10.11.1 响应式容器 ── */
-.rv-box{resize:horizontal;overflow:auto;max-width:100%;width:100%;border-radius:16px;padding:12px;
+.rv-box{resize:horizontal;overflow:auto;max-width:100%;width:100%;border-radius:18px;padding:12px;
   border:1px dashed rgba(178,58,99,.35);background:rgba(255,255,255,.28)}
-.rv-box::after{content:"↔ 拖动右下角改容器宽度（形态见上方实时读数）";font-size:11px;color:var(--t3)}
+.rv-box::after{content:"↔ 拖动右下角改容器宽度（形态见上方实时读数）";font-size:11px;color:var(--t2)}
 .rv-mode{font-size:11px;color:var(--rose-deep);font-weight:600;margin-bottom:8px}
 table.gm{width:100%;border-collapse:collapse;font-size:13px}
 table.gm th{text-align:left;font-size:12px;font-weight:600;color:var(--t2);padding:8px 10px;border-bottom:var(--bw-hairline) solid var(--line)}
 table.gm td{padding:10px;border-bottom:var(--bw-hairline) solid var(--line)}
 table.gm tr:hover td{background:rgba(255,255,255,.42)}
-.cd{display:flex;align-items:center;gap:12px;padding:12px;border-radius:16px;background:rgba(255,255,255,.5);
+.cd{display:flex;align-items:center;gap:12px;padding:12px;border-radius:18px;background:rgba(255,255,255,.5);
   border:var(--bw-1) solid rgba(255,255,255,.75);margin-bottom:8px}
 .cd .m{flex:1;min-width:0}
 .cd b{font-size:14px;display:block}
 .cd dl{display:flex;gap:10px;flex-wrap:wrap;margin-top:4px;font-size:12px;color:var(--t2)}
-.cd dt{color:var(--t3);margin-right:4px}
+.cd dt{color:var(--t2);margin-right:4px}   /* 02 · 2.1.1：三级色仅可用于 ≥24px 常规；此处为 12px 辅助文字，回次级色 */
 .cd dd{margin:0}
 .tg{display:inline-flex;align-items:center;gap:6px;padding:4px 12px;border-radius:999px;font-size:12px;font-weight:500;white-space:nowrap}
 .tg i{width:7px;height:7px;border-radius:50%;background:currentColor}
 .g{color:#25715D;background:rgba(79,181,156,.13)}.o{color:#8D5A15;background:rgba(242,178,92,.18)}
 .r{color:#B72F42;background:rgba(239,106,123,.13)}.n{color:#5E6673;background:rgba(88,98,115,.09)}
 /* ── 10.11.2 虚拟长列表 ── */
-.vl{border-radius:16px;overflow:hidden;background:var(--glass-card);border:var(--bw-1) solid rgba(255,255,255,.7)}
+.vl{border-radius:18px;overflow:hidden;background:var(--glass-card);border:var(--bw-1) solid rgba(255,255,255,.7)}
 .vl-sticky{position:sticky;top:0;z-index:2;padding:10px 14px;font-size:12px;font-weight:600;color:var(--t2);
   background:rgba(255,255,255,.72);-webkit-backdrop-filter:blur(16px);backdrop-filter:blur(16px);border-bottom:var(--bw-hairline) solid var(--line)}
 .vl-vp{position:relative;overflow:auto;-webkit-overflow-scrolling:touch;overscroll-behavior:contain}
@@ -123,8 +125,17 @@ table.gm tr:hover td{background:rgba(255,255,255,.42)}
   --glass-control:rgba(255,255,255,.12);--glass-popover:rgba(38,36,46,.92);--link:#FFC4D6;--link-h:#FFA9C2;
   --ring:rgba(255,196,214,.7);
   background:#1B1A21;color:var(--text);border:1px solid rgba(255,255,255,.14);border-radius:20px;padding:18px;
-  box-shadow:inset 0 1px 0 rgba(255,255,255,.16),0 18px 44px rgba(0,0,0,.5)}
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.16),0 18px 44px rgba(38,36,46,.55)}
 .dk h3{font-size:15px}.dk .lbl{color:#A6ADB9}
+/* 02 · 2.1.9 第 4 条：.dk 是**硬编码暗色演示块**，里面的状态色同样必须切暗色浅档，
+   否则深色 alias 落在暗底上（实测 .g 2.39:1 / .o 1.70:1 / .r 2.41:1 / .n 2.77:1）。
+   `.dk` 是 class 而非 [data-theme]，上面那条 data-theme 规则覆盖不到它。 */
+.dk .g{color:#8ADCC6;background:rgba(111,201,180,.14)}
+.dk .o{color:#F7D27A;background:rgba(242,193,78,.14)}
+.dk .r{color:#FBB4C0;background:rgba(247,154,168,.14)}
+.dk .n{color:#C3C9D3;background:rgba(166,173,185,.12)}
+.dk .metric b,.dk .rv-mode{color:#FF9AB6}
+.dk .lk.danger{color:#F79AA8}
 .dk .cas-t{background:var(--glass-control);border-color:rgba(255,255,255,.12);color:var(--text)}
 .dk .cas-p{background:var(--glass-popover);border-color:rgba(255,255,255,.14)}
 .dk .cas-o{color:var(--text)}.dk .cas-o:hover{background:rgba(255,255,255,.08)}
@@ -136,9 +147,9 @@ table.gm tr:hover td{background:rgba(255,255,255,.42)}
 .dk .sw{background:#23222A;border-color:rgba(255,255,255,.14)}
 /* ── 02.7.1 边框档 ── */
 .bws{display:flex;gap:14px;flex-wrap:wrap}
-.bw{flex:1;min-width:150px;padding:14px;border-radius:16px;background:rgba(255,255,255,.45);text-align:center}
-.bw .bx{height:44px;border-radius:12px;border-style:solid;border-color:var(--rose-deep);margin-bottom:8px}
-.bw code{font-size:12px;color:var(--text)}.bw small{display:block;color:var(--t3);font-size:11px;margin-top:4px}
+.bw{flex:1;min-width:150px;padding:14px;border-radius:18px;background:rgba(255,255,255,.45);text-align:center}
+.bw .bx{height:44px;border-radius:18px;border-style:solid;border-color:var(--rose-deep);margin-bottom:8px}
+.bw code{font-size:12px;color:var(--text)}.bw small{display:block;color:var(--t2);font-size:11px;margin-top:4px}
 .sw{display:inline-flex;align-items:center;gap:8px;font-size:12px;color:var(--t2);background:rgba(255,255,255,.5);
   border:1px solid rgba(255,255,255,.75);border-radius:999px;padding:6px 14px;cursor:pointer;font-family:inherit}
 .sw:focus-visible{outline:var(--bw-3) solid var(--ring);outline-offset:2px}
@@ -149,6 +160,13 @@ table.gm tr:hover td{background:rgba(255,255,255,.42)}
   .hub a{padding:6px 10px}
   .bw{min-width:0}
   .glass{padding:14px}
+  /* 10 · 10.4：≤767px 可点热区 ≥44×44。
+     实测修复前：链接型操作 22px、级联项 34px、吸顶表头 43px、开关 28px —— 全部不足。
+     视觉字号与行高不动，只补盒模型高度。 */
+  .lk{min-height:44px;display:inline-flex;align-items:center}
+  .cas-o,.cas-t{min-height:44px}
+  .vl-sticky{min-height:44px;display:flex;align-items:center}
+  .sw{min-height:44px;padding:8px 4px;display:inline-flex;align-items:center}
 }
 
 
@@ -159,10 +177,21 @@ html[data-theme="dark"] body{background:#1B1A21;color:#F3EFEC;
 [data-theme="dark"] .hub{background:linear-gradient(160deg,rgba(255,255,255,.09),rgba(255,255,255,.06));border-color:rgba(255,255,255,.14)}
 [data-theme="dark"] .glass{background:linear-gradient(160deg,rgba(255,255,255,.09),rgba(255,255,255,.06));border-color:rgba(255,255,255,.14);
   box-shadow:inset 0 1px 0 rgba(255,255,255,.16),0 18px 44px rgba(0,0,0,.5);color:#F3EFEC}
-[data-theme="dark"] .glass{--text:#F3EFEC;--t2:#C9C4CE;--t3:#A6ADB9;--line:rgba(255,255,255,.1);--link:#FFC4D6;--link-h:#FFA9C2;
+[data-theme="dark"] .glass{--text:#F3EFEC;--t2:#C9C4CE;--t3:#A6ADB9;--line:rgba(255,255,255,.1);--link:#FFC4D6;--link-h:#FFA9C2;--rose-deep:#FF9AB6;
   --glass-control:rgba(255,255,255,.12);--glass-popover:rgba(38,36,46,.92);--glass-card:rgba(255,255,255,.09);--ring:rgba(255,196,214,.7)}
 [data-theme="dark"] .hub a{color:#C9C4CE}[data-theme="dark"] .hub a:hover{background:rgba(255,255,255,.08)}
-[data-theme="dark"] .hero p,[data-theme="dark"] .metric,[data-theme="dark"] .lbl,[data-theme="dark"] .sec-head span{color:#A6ADB9}
+[data-theme="dark"] .hero p,[data-theme="dark"] .metric,[data-theme="dark"] .lbl,[data-theme="dark"] .sec-head span{color:#C9C4CE}
+/* 02 · 2.1.9：吸顶条（浮层语义）暗色改实底，否则浅色 popover 底 + 浅字实测 1.11:1 */
+[data-theme="dark"] .vl-sticky{background:rgba(38,36,46,.92);color:#F3EFEC}
+/* 02 · 2.1.9 第 4 条：状态色暗色「只换档不换相」—— alias 深色换浅档；
+   色块底同步换成暗底可辨的淡染，配色原则与 theme.css 暗色段一致 */
+[data-theme="dark"] .g{color:#8ADCC6;background:rgba(111,201,180,.14)}
+[data-theme="dark"] .o{color:#F7D27A;background:rgba(242,193,78,.14)}
+[data-theme="dark"] .r{color:#FBB4C0;background:rgba(247,154,168,.14)}
+[data-theme="dark"] .n{color:#C3C9D3;background:rgba(166,173,185,.12)}
+[data-theme="dark"] .lk.danger{color:#F79AA8}
+[data-theme="dark"] .lk.danger:hover{color:#FFC4D6}
+[data-theme="dark"] .cas-t .ph{color:#F3EFEC}
 [data-theme="dark"] .bw{background:rgba(255,255,255,.06)}[data-theme="dark"] .bw code{color:#F3EFEC}
 [data-theme="dark"] .rv-box{background:rgba(255,255,255,.06);border-color:rgba(255,196,214,.35)}
 [data-theme="dark"] .sw{background:rgba(255,255,255,.1);border-color:rgba(255,255,255,.14);color:#C9C4CE}
@@ -176,10 +205,21 @@ html[data-theme="dark"] body{background:#1B1A21;color:#F3EFEC;
 [data-theme="dark"] .hub{background:linear-gradient(160deg,rgba(255,255,255,.09),rgba(255,255,255,.06));border-color:rgba(255,255,255,.14)}
 [data-theme="dark"] .glass{background:linear-gradient(160deg,rgba(255,255,255,.09),rgba(255,255,255,.06));border-color:rgba(255,255,255,.14);
   box-shadow:inset 0 1px 0 rgba(255,255,255,.16),0 18px 44px rgba(0,0,0,.5);color:#F3EFEC}
-[data-theme="dark"] .glass{--text:#F3EFEC;--t2:#C9C4CE;--t3:#A6ADB9;--line:rgba(255,255,255,.1);--link:#FFC4D6;--link-h:#FFA9C2;
+[data-theme="dark"] .glass{--text:#F3EFEC;--t2:#C9C4CE;--t3:#A6ADB9;--line:rgba(255,255,255,.1);--link:#FFC4D6;--link-h:#FFA9C2;--rose-deep:#FF9AB6;
   --glass-control:rgba(255,255,255,.12);--glass-popover:rgba(38,36,46,.92);--glass-card:rgba(255,255,255,.09);--ring:rgba(255,196,214,.7)}
 [data-theme="dark"] .hub a{color:#C9C4CE}[data-theme="dark"] .hub a:hover{background:rgba(255,255,255,.08)}
-[data-theme="dark"] .hero p,[data-theme="dark"] .metric,[data-theme="dark"] .lbl,[data-theme="dark"] .sec-head span{color:#A6ADB9}
+[data-theme="dark"] .hero p,[data-theme="dark"] .metric,[data-theme="dark"] .lbl,[data-theme="dark"] .sec-head span{color:#C9C4CE}
+/* 02 · 2.1.9：吸顶条（浮层语义）暗色改实底，否则浅色 popover 底 + 浅字实测 1.11:1 */
+[data-theme="dark"] .vl-sticky{background:rgba(38,36,46,.92);color:#F3EFEC}
+/* 02 · 2.1.9 第 4 条：状态色暗色「只换档不换相」—— alias 深色换浅档；
+   色块底同步换成暗底可辨的淡染，配色原则与 theme.css 暗色段一致 */
+[data-theme="dark"] .g{color:#8ADCC6;background:rgba(111,201,180,.14)}
+[data-theme="dark"] .o{color:#F7D27A;background:rgba(242,193,78,.14)}
+[data-theme="dark"] .r{color:#FBB4C0;background:rgba(247,154,168,.14)}
+[data-theme="dark"] .n{color:#C3C9D3;background:rgba(166,173,185,.12)}
+[data-theme="dark"] .lk.danger{color:#F79AA8}
+[data-theme="dark"] .lk.danger:hover{color:#FFC4D6}
+[data-theme="dark"] .cas-t .ph{color:#F3EFEC}
 [data-theme="dark"] .bw{background:rgba(255,255,255,.06)}[data-theme="dark"] .bw code{color:#F3EFEC}
 [data-theme="dark"] .rv-box{background:rgba(255,255,255,.06);border-color:rgba(255,196,214,.35)}
 [data-theme="dark"] .sw{background:rgba(255,255,255,.1);border-color:rgba(255,255,255,.14);color:#C9C4CE}
@@ -301,7 +341,7 @@ html[data-theme="dark"] body{background:#1B1A21;color:#F3EFEC;
             <div class="row" style="gap:14px">
               <span style="color:var(--text)">主文字 15.10:1</span>
               <span style="color:var(--t2)">次级 10.09:1</span>
-              <span style="color:var(--t3)">三级 7.65:1</span>
+              <span style="color:var(--t2)">三级 7.65:1</span>
               <a class="lk" href="#link-demo"><span class="t">品牌链接 11.61:1</span></a>
             </div>
           </div>

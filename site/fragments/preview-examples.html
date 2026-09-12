@@ -4,6 +4,8 @@
   --text:#343A46;--t2:#4F5B6E;--t3:#4F5B6E;--line:rgba(58,52,84,.09);
   --rose:#F77FA3;--rose-d:#E85D8F;--rose-deep:#B23A63;--mint:#6FC9B4;--mint-d:#4FB59C;
   --info:#6D9EFF;--warn:#F2B25C;--danger:#EF6A7B;--purple:#9A78FF;
+  /* 文字专用深档 alias（02 · 2.1.5：-500 仅作填充/色块/图表强调，文字走深色 alias） */
+  --sem-info:#3261C1;--sem-warn:#8D5A15;--sem-danger:#B72F42;--sem-special:#6A48DC;--sem-positive:#25715D;
   --grad-p:linear-gradient(135deg,#FFA9C2,#F77FA3 45%,#E85D8F);
   --font:"Inter","SF Pro Display",-apple-system,"PingFang SC","MiSans","Noto Sans SC","Helvetica Neue",sans-serif;
   --ease:cubic-bezier(.22,1,.36,1);
@@ -16,7 +18,7 @@
 svg.i{width:16px;height:16px;stroke:currentColor;fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round;vertical-align:-3px;flex:none}
 .glass{border-radius:20px;background:linear-gradient(160deg,rgba(255,255,255,.55),rgba(255,255,255,.24) 55%,rgba(255,255,255,.32));
   border:1px solid rgba(255,255,255,.7);box-shadow:inset 0 1px 0 rgba(255,255,255,.8),var(--sh);
-  -webkit-backdrop-filter:blur(24px);backdrop-filter:blur(24px)}
+  -webkit-backdrop-filter:blur(32px);backdrop-filter:blur(32px)}
 .card{border-radius:18px;background:linear-gradient(160deg,rgba(255,255,255,.62),rgba(255,255,255,.3));
   border:1px solid rgba(255,255,255,.75);box-shadow:inset 0 1px 0 rgba(255,255,255,.8),0 8px 20px rgba(58,52,84,.06)}
 /* Hub 切换条 */
@@ -43,9 +45,9 @@ svg.i{width:16px;height:16px;stroke:currentColor;fill:none;stroke-width:1.8;stro
 .g{color:#25715D;background:rgba(79,181,156,.13)} .b{color:#3261C1;background:rgba(109,158,255,.13)}
 .o{color:#8D5A15;background:rgba(242,178,92,.18)} .r{color:#B72F42;background:rgba(239,106,123,.13)}
 .n{color:#5E6673;background:rgba(88,98,115,.09)} .p{color:#6A48DC;background:rgba(154,120,255,.14)}
-.y{color:#8A6D10;background:rgba(242,193,78,.22)}
+.y{color:#7A5F0D;background:rgba(242,193,78,.22)}
 /* 按钮 */
-.btn{display:inline-flex;align-items:center;gap:8px;border:none;cursor:pointer;border-radius:12px;font-family:var(--font);
+.btn{display:inline-flex;align-items:center;gap:8px;border:none;cursor:pointer;border-radius:18px;font-family:var(--font);
   font-size:13px;font-weight:600;padding:0 16px;height:36px;transition:transform .12s,box-shadow .2s;white-space:nowrap}
 .btn:active{transform:scale(.96)}
 .btn.pri{background:var(--mmh-grad-action-hc,#F77FA3);color:#343A46;box-shadow:0 6px 16px rgba(240,127,163,.35)}
@@ -61,7 +63,9 @@ svg.i{width:16px;height:16px;stroke:currentColor;fill:none;stroke-width:1.8;stro
 .pcbar .search{margin-left:auto;display:flex;align-items:center;gap:8px;background:rgba(255,255,255,.55);
   border:1px solid rgba(255,255,255,.8);border-radius:999px;padding:0 14px;height:38px;min-width:260px;color:var(--t3)}
 .pcbar .search input{border:none;outline:none;background:transparent;font-size:13px;color:var(--text);flex:1;font-family:var(--font)}
-.pcbar .u{width:36px;height:36px;border-radius:50%;background:linear-gradient(150deg,#B9A0FF,#8066F0);color:#FFF;
+/* 02 · 2.7.1：搜索框必须保留可见焦点环（原规则 outline:none 且无兜底） */
+.pcbar .search input:focus-visible{outline:2px solid rgba(232,93,143,.6);outline-offset:2px;border-radius:18px}
+.pcbar .u{width:36px;height:36px;border-radius:50%;background:linear-gradient(150deg,#D9CBFE,#EDE7FE);color:var(--mmh-solid-special,#6242B8);
   display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:600}
 .kpis{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin:14px 0}
 .kpi{padding:14px 16px}
@@ -73,9 +77,14 @@ table.t th{text-align:left;font-size:11.5px;color:var(--t3);font-weight:500;padd
 table.t td{padding:12px 14px;border-bottom:1px solid rgba(58,52,84,.06)}
 table.t tr{transition:background .2s}
 table.t tbody tr:hover{background:rgba(255,255,255,.5)}
-.av{width:32px;height:32px;border-radius:50%;display:inline-flex;align-items:center;justify-content:center;font-weight:600;color:#FFF;
-  background:linear-gradient(150deg,#FFA9C2,#E85D8F);font-size:12px}
-.av.mint{background:linear-gradient(150deg,#7FD8C2,#4FB59C)} .av.purp{background:linear-gradient(150deg,#B9A0FF,#8066F0)}
+/* 头像/标识：由「饱和渐变 + 白字」改为**浅色品牌染 + 对应深档文字**。
+   理由（算术）：#F77FA3/#4FB59C 这类饱和面上，白字 2.46–4.14、深字 2.3–3.4，
+   两个方向都过不了 AA；浅染 + 深字可达 4.6–8.9，且保留原来的轻盈观感。
+   本项取代决策记录 D6「头像保留白字」的例外（例外不再必要）。 */
+.av{width:32px;height:32px;border-radius:50%;display:inline-flex;align-items:center;justify-content:center;font-weight:600;color:var(--mmh-rose-700,#B23A63);
+  background:linear-gradient(150deg,#FFDEE8,#FFF0F4);font-size:12px}
+.av.mint{background:linear-gradient(150deg,#A5F1EE,#E0F8F6);color:var(--lg-sem-positive,#25715D)}
+.av.purp{background:linear-gradient(150deg,#D9CBFE,#EDE7FE);color:var(--mmh-solid-special,#6242B8)}
 .op a{color:var(--rose-deep);text-decoration:none;font-size:12.5px;margin-right:12px;font-weight:500}
 .op a:hover{opacity:.7}
 .desc{display:grid;grid-template-columns:repeat(3,1fr);gap:12px 22px;padding:14px}
@@ -87,16 +96,16 @@ table.t tbody tr:hover{background:rgba(255,255,255,.5)}
 .lc{flex:1;text-align:center;position:relative;font-size:10.5px;color:var(--t2)}
 .lc .d{width:22px;height:22px;border-radius:50%;margin:0 auto 4px;display:flex;align-items:center;justify-content:center;
   background:rgba(255,255,255,.85);border:1px solid rgba(255,255,255,.9);color:var(--t3);font-size:10px;font-weight:600}
-.lc.done .d{background:var(--grad-p);color:#FFF;border-color:transparent}
+.lc.done .d{background:var(--mmh-grad-action-hc,#F77FA3);color:#343A46;border-color:transparent}
 .lc.cur .d{background:#FFF;border:2px solid var(--rose-d);color:var(--rose-deep)}
 .lc::before{content:"";position:absolute;top:10px;left:calc(50% + 14px);width:calc(100% - 28px);height:2px;background:var(--line)}
 .lc.done::before{background:linear-gradient(90deg,#FFC4D6,#F77FA3)}
 .lc:first-child::before{display:none}
 /* 五健行 */
-.wjrow{display:flex;align-items:center;gap:12px;padding:10px 14px;border-radius:16px;margin-bottom:8px;
+.wjrow{display:flex;align-items:center;gap:12px;padding:10px 14px;border-radius:18px;margin-bottom:8px;
   background:rgba(255,255,255,.5);border:1px solid rgba(255,255,255,.75)}
-.wjrow .ic{width:40px;height:40px;border-radius:12px;display:flex;align-items:center;justify-content:center;flex:none;
-  background:linear-gradient(150deg,#FFDEE8,#FFF0F4);color:var(--rose-d)}
+.wjrow .ic{width:40px;height:40px;border-radius:18px;display:flex;align-items:center;justify-content:center;flex:none;
+  background:linear-gradient(150deg,#FFDEE8,#FFF0F4);color:var(--mmh-rose-700,#B23A63)}
 .wjrow .ic svg{width:22px;height:22px}
 .wjrow .m{flex:1;min-width:0}
 .wjrow .m b{font-size:13px;display:block}
@@ -112,17 +121,17 @@ table.t tbody tr:hover{background:rgba(255,255,255,.5)}
 .stp .ln{width:70px;height:1.5px;background:var(--line)}
 .form2{display:grid;grid-template-columns:1fr 1fr;gap:14px 22px;padding:16px}
 .fld label{font-size:12px;color:var(--t2);display:block;margin-bottom:6px}
-.fld input,.fld select{width:100%;height:40px;border-radius:12px;border:1px solid rgba(255,255,255,.8);
+.fld input,.fld select{width:100%;height:40px;border-radius:20px;border:1px solid rgba(255,255,255,.8);
   background:rgba(255,255,255,.55);padding:0 12px;font-size:14px;color:var(--text);outline:none;font-family:var(--font)}
 .fld input:focus{border-color:rgba(232,93,143,.5);box-shadow:0 0 0 3px rgba(232,93,143,.12)}
-.fld .err{font-size:11px;color:var(--danger);margin-top:5px}
+.fld .err{font-size:11px;color:var(--sem-danger);margin-top:5px}
 /* 移动 */
 .mwrap{max-width:420px;margin:0 auto;position:relative;min-height:calc(100vh - 60px)}
 .mnav{position:sticky;top:12px;z-index:20;display:flex;align-items:center;gap:8px;padding:6px 10px;border-radius:22px;margin-bottom:12px}
 .mnav .t{flex:1;text-align:center;font-size:15px;font-weight:600}
 .mnav .ic{width:40px;height:40px;border-radius:50%;display:flex;align-items:center;justify-content:center;color:var(--t2)}
 .mobottom{position:sticky;bottom:14px;display:flex;gap:8px;padding:8px;border-radius:22px}
-.mobottom .b1{flex:1;display:flex;align-items:center;justify-content:center;gap:6px;border:none;cursor:pointer;border-radius:14px;
+.mobottom .b1{flex:1;display:flex;align-items:center;justify-content:center;gap:6px;border:none;cursor:pointer;border-radius:18px;
   font-size:14px;font-weight:600;height:44px;font-family:var(--font)}
 .b1.pri{background:var(--mmh-grad-action-hc,#F77FA3);color:#343A46}
 .b1.mint{background:linear-gradient(135deg,#7FD8C2,#4FB59C);color:#FFF}
@@ -130,14 +139,31 @@ table.t tbody tr:hover{background:rgba(255,255,255,.5)}
 .b1.danger{background:linear-gradient(135deg,#F79AA8,#E25B72);color:#FFF}
 .lv{display:flex;flex-direction:column;gap:10px;margin-top:10px}
 .lvitem{display:flex;align-items:center;gap:12px;padding:14px;border-radius:18px}
-.lvitem .ic{width:42px;height:42px;border-radius:14px;flex:none;display:flex;align-items:center;justify-content:center;
-  background:rgba(255,255,255,.6);border:1px solid rgba(255,255,255,.85);color:var(--rose-d)}
+.lvitem .ic{width:42px;height:42px;border-radius:18px;flex:none;display:flex;align-items:center;justify-content:center;
+  background:rgba(255,255,255,.6);border:1px solid rgba(255,255,255,.85);color:var(--mmh-rose-700,#B23A63)}
 .lvitem .m{flex:1;min-width:0}
 .lvitem .m b{display:block;font-size:14.5px;font-weight:600}
 .lvitem .m span{font-size:11.5px;color:var(--t3)}
 .lvitem .arr{color:var(--t3)}
 .two{display:grid;grid-template-columns:1.6fr 1fr;gap:16px;margin-top:14px}
-@media(max-width:767px){.two{grid-template-columns:1fr}.kpis{grid-template-columns:repeat(2,1fr)}.desc{grid-template-columns:1fr 1fr}}
+/* 10 · 10.11.1 宽表：小屏在容器内横滚（实测修复前 375px 溢出 347px） */
+@media(max-width:767px){
+  .two{grid-template-columns:1fr}.kpis{grid-template-columns:repeat(2,1fr)}.desc{grid-template-columns:1fr 1fr}
+  table.t{display:block;max-width:100%;overflow-x:auto;-webkit-overflow-scrolling:touch}
+  /* 10 · 10.4：表格复选框视觉 22×22、热区 44×44；下拉项/操作链接热区 ≥44 */
+  input[type="checkbox"]{width:22px;height:22px;position:relative}
+  input[type="checkbox"]::before{content:"";position:absolute;inset:-11px}
+  .ngdrop a,.hub .ngt{min-height:44px;display:inline-flex;align-items:center}
+}
+/* 10 · 10.4：≤767px 热区 ≥44×44。复选框按 10 章「视觉 22×22、热区 44×44」实现：
+   视觉盒子不动，用 ::after 扩热区。 */
+@media(max-width:767px){
+  input[type="checkbox"],.pcbar .btn,.op a,.ngt,.pcbar .search input,.note button,p a,li a{position:relative}
+  input[type="checkbox"]::after,.pcbar .btn::after,.op a::after,.ngt::after,
+  .pcbar .search input::after,.note button::after,p a::after,li a::after{
+    content:"";position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);
+    width:100%;min-width:44px;height:100%;min-height:44px}
+}
 @media(max-width:640px){.kpis{grid-template-columns:1fr 1fr}.form2{grid-template-columns:1fr}.desc{grid-template-columns:1fr}}
 footer.note{max-width:1180px;margin:10px auto 40px;text-align:center;font-size:11.5px;color:var(--t3);line-height:2;padding:0 18px}
 footer.note a{color:var(--rose-deep);text-decoration:none}
@@ -155,7 +181,7 @@ footer.note a{color:var(--rose-deep);text-decoration:none}
 .tg.pill-sel{outline:2px solid currentColor;outline-offset:1px;font-weight:600}
 .mwrap{padding-bottom:120px}
 .lc{white-space:nowrap}
-.btn.lg{height:50px;padding:0 30px;font-size:15.5px;border-radius:16px}
+.btn.lg{height:50px;padding:0 30px;font-size:15.5px;border-radius:18px}
 .btnrow{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
 .btn:hover{filter:brightness(.97)}
 .desc .v{line-height:1.5}
@@ -165,12 +191,12 @@ table.t .op a:last-child{margin-right:0}
 /* iPad 页 */
 .ipadgrid{display:grid;grid-template-columns:1.7fr 1fr;gap:16px;margin-top:14px}
 @media(max-width:767px){.ipadgrid{grid-template-columns:1fr}}
-.avrow{display:flex;align-items:center;gap:12px;padding:12px 14px;border-radius:16px;margin-bottom:10px;background:rgba(255,255,255,.5);border:1px solid rgba(255,255,255,.75);cursor:pointer}
+.avrow{display:flex;align-items:center;gap:12px;padding:12px 14px;border-radius:18px;margin-bottom:10px;background:rgba(255,255,255,.5);border:1px solid rgba(255,255,255,.75);cursor:pointer}
 .avrow.cur{outline:2px solid rgba(232,93,143,.5);outline-offset:1px;background:#FFF}
 .avrow .m{flex:1;min-width:0}
 .avrow .m b{font-size:14px;display:block}
 .avrow .m span{font-size:11px;color:var(--t3)}
-textarea.note{width:100%;min-height:84px;border-radius:12px;border:1px solid rgba(255,255,255,.8);background:rgba(255,255,255,.55);padding:10px 12px;font-size:13.5px;color:var(--text);font-family:var(--font);outline:none;resize:vertical}
+textarea.note{width:100%;min-height:84px;border-radius:18px;border:1px solid rgba(255,255,255,.8);background:rgba(255,255,255,.55);padding:10px 12px;font-size:13.5px;color:var(--text);font-family:var(--font);outline:none;resize:vertical}
 
 
 /* ═══ 示例优化 v2：向导 / 多选 / 即时反馈 ═══ */
@@ -180,7 +206,7 @@ textarea.note{width:100%;min-height:84px;border-radius:12px;border:1px solid rgb
 .tg.multi.m-on{outline:2px solid currentColor;outline-offset:1px;font-weight:600}
 .fx{position:fixed;left:50%;bottom:26px;transform:translateX(-50%) translateY(16px);z-index:99;max-width:88%;
   padding:10px 20px;border-radius:999px;background:rgba(52,58,70,.84);color:#FFF;font-size:13px;font-weight:600;
-  -webkit-backdrop-filter:blur(12px);backdrop-filter:blur(12px);opacity:0;pointer-events:none;transition:.25s ease;text-align:center}
+  -webkit-backdrop-filter:blur(40px);backdrop-filter:blur(40px);opacity:0;pointer-events:none;transition:.25s ease;text-align:center}
 .fx.show{opacity:1;transform:translateX(-50%) translateY(0)}
 .wizfoot{display:flex;justify-content:space-between;align-items:center;margin-top:16px;gap:10px;flex-wrap:wrap}
 
@@ -197,7 +223,7 @@ table.t td,table.t th{padding-left:12px;padding-right:12px}
 .av{flex:none;line-height:1}
 .kpis .kpi{min-width:0}
 .kpis .kpi .l{white-space:nowrap}
-.lca .lc .d svg{width:11px;height:11px;stroke:#FFF;margin:0 auto}
+.lca .lc .d svg{width:11px;height:11px;stroke:#343A46;margin:0 auto}
 .stp .n svg{width:12px;height:12px;stroke:#FFF;display:inline-block;vertical-align:-2px}
 .view .desc{min-width:0}
 .view .desc .v{overflow-wrap:anywhere}
@@ -212,12 +238,12 @@ table.t td,table.t th{padding-left:12px;padding-right:12px}
 .hub .ngt{font-family:inherit;font-size:12.5px;font-weight:500;color:var(--t2);background:none;border:none;
   padding:7px 14px;border-radius:999px;cursor:pointer}
 .hub .ngt::after{content:"▾";margin-left:5px;font-size:10px;opacity:.6}
-.hub .ngdrop{position:absolute;top:calc(100% + 10px);right:0;min-width:200px;z-index:80;padding:6px;border-radius:16px;
+.hub .ngdrop{position:absolute;top:calc(100% + 10px);right:0;min-width:200px;z-index:80;padding:6px;border-radius:18px;
   background:#FFF;border:1px solid rgba(232,93,143,.22);box-shadow:0 16px 40px rgba(90,70,70,.14);
   opacity:0;pointer-events:none;transform:translateY(6px);transition:.2s ease}
 .hub .ng:hover .ngdrop,.hub .ng:focus-within .ngdrop{opacity:1;pointer-events:auto;transform:none}
 .hub .ng::after{content:"";position:absolute;left:-8px;right:-8px;top:100%;height:12px}
-.hub .ngdrop a{display:block;padding:9px 12px;border-radius:10px;font-size:13px;color:var(--t2);text-decoration:none}
+.hub .ngdrop a{display:block;padding:9px 12px;border-radius:18px;font-size:13px;color:var(--t2);text-decoration:none}
 .hub .ngdrop a:hover{background:rgba(247,127,163,.1);color:#B23A63}
 
 
@@ -269,16 +295,16 @@ table.t td,table.t th{padding-left:12px;padding-right:12px}
   <div class="pgtag">页面模板：机构端列表页（对应规范 03.7 表格 / 15.2 状态 / 15.4 PC）· 常用于两癌筛查 · 孕产妇管理 · 儿童保健队列</div>
   <div class="pcbar glass">
     <span class="logo"><i></i>妈咪好 · 机构管理端</span>
-    <div class="search"><svg class="i"><circle cx="10.5" cy="10.5" r="6.5"/><path d="M15.4 15.4 21 21"/></svg><input placeholder="搜索服务对象 / 身份证 / 档案号"></div>
+    <div class="search"><svg class="i"><circle cx="10.5" cy="10.5" r="6.5"/><path d="M15.4 15.4 21 21"/></svg><input placeholder="搜索服务对象 / 身份证 / 档案号" aria-label="搜索服务对象 / 身份证 / 档案号"></div>
     <button class="btn pri" style="height:38px">新增建档 <svg class="i"><path d="M12 5.5v13M5.5 12h13"/></svg></button>
     <span class="u">王</span>
   </div>
 
   <div class="kpis">
-    <div class="kpi card"><div class="l">管理对象总数</div><div class="v num" style="color:var(--rose-d)">12,849</div><div class="d">本月新增 320 · 今日 18</div></div>
-    <div class="kpi card"><div class="l">待筛查 / 待体检</div><div class="v num" style="color:var(--info)">1,026</div><div class="d">宫颈 612 · 乳腺 414</div></div>
-    <div class="kpi card"><div class="l">异常待管理</div><div class="v num" style="color:var(--warn)">86</div><div class="d">待复查 41 · 待随访 45</div></div>
-    <div class="kpi card"><div class="l">高危 / 重点对象</div><div class="v num" style="color:var(--danger)">23</div><div class="d">孕产妇橙红 12 · 高危儿 11</div></div>
+    <div class="kpi card"><div class="l">管理对象总数</div><div class="v num" style="color:var(--mmh-rose-700,#B23A63)">12,849</div><div class="d">本月新增 320 · 今日 18</div></div>
+    <div class="kpi card"><div class="l">待筛查 / 待体检</div><div class="v num" style="color:var(--sem-info)">1,026</div><div class="d">宫颈 612 · 乳腺 414</div></div>
+    <div class="kpi card"><div class="l">异常待管理</div><div class="v num" style="color:var(--sem-warn)">86</div><div class="d">待复查 41 · 待随访 45</div></div>
+    <div class="kpi card"><div class="l">高危 / 重点对象</div><div class="v num" style="color:var(--sem-danger)">23</div><div class="d">孕产妇橙红 12 · 高危儿 11</div></div>
   </div>
 
   <div class="card" style="padding:16px 18px">
@@ -287,14 +313,14 @@ table.t td,table.t th{padding-left:12px;padding-right:12px}
       <span style="font-size:11.5px;color:var(--t3);margin-left:auto">共 12,849 条 · 导出 / 打印 / 批量操作</span>
     </div>
     <table class="t">
-      <thead><tr><th style="width:34px"><input type="checkbox"></th><th>服务对象</th><th>档案类型</th><th>最近筛查 / 体检</th><th>风险与五色</th><th>结果</th><th>随访</th><th style="text-align:right">操作</th></tr></thead>
+      <thead><tr><th style="width:34px"><input type="checkbox" aria-label="全选本页服务对象"></th><th>服务对象</th><th>档案类型</th><th>最近筛查 / 体检</th><th>风险与五色</th><th>结果</th><th>随访</th><th style="text-align:right">操作</th></tr></thead>
       <tbody>
-        <tr><td><input type="checkbox"></td><td><span style="display:flex;align-items:center;gap:9px"><span class="av purp">李</span><b>李慧 · 女 36</b></span></td><td>妇女 · 两癌</td><td class="num">宫颈 TCT · 05-12</td><td><span class="tg r"><i></i>检查异常</span></td><td><span class="tg o">待复查</span></td><td><span class="tg o">待随访</span></td><td style="text-align:right"><span class="op"><a href="#">查看</a><a href="#">随访</a><a href="#">转诊</a></span></td></tr>
-        <tr><td><input type="checkbox"></td><td><span style="display:flex;align-items:center;gap:9px"><span class="av">张</span><b>张敏 · 孕 28 周</b></span></td><td>孕产妇</td><td class="num">产检 · 04-28</td><td><span class="tg y"><i></i>黄 · 一般风险</span></td><td><span class="tg g">正常</span></td><td><span class="tg b">已预约</span></td><td style="text-align:right"><span class="op"><a href="#">查看</a><a href="#">产检</a><a href="#">更多</a></span></td></tr>
-        <tr><td><input type="checkbox"></td><td><span style="display:flex;align-items:center;gap:9px"><span class="av">王</span><b>王雨桐 · 女 32</b></span></td><td>妇女 · 两癌</td><td class="num">乳腺 B 超 · 05-20</td><td><span class="tg o"><i></i>橙 · 较高风险</span></td><td><span class="tg r">可疑</span></td><td><span class="tg o">待随访</span></td><td style="text-align:right"><span class="op"><a href="#">查看</a><a href="#">随访</a><a href="#">转诊</a></span></td></tr>
-        <tr><td><input type="checkbox"></td><td><span style="display:flex;align-items:center;gap:9px"><span class="av mint">赵</span><b>赵甜甜 · 18 月龄</b></span></td><td>儿童 · 儿保</td><td class="num">儿保体检 · 05-06</td><td><span class="tg r"><i></i>生长低于 P3</span></td><td><span class="tg r">异常</span></td><td><span class="tg o">待随访</span></td><td style="text-align:right"><span class="op"><a href="#">查看</a><a href="#">随访</a><a href="#">更多</a></span></td></tr>
-        <tr><td><input type="checkbox"></td><td><span style="display:flex;align-items:center;gap:9px"><span class="av purp">陈</span><b>陈静 · 孕 12 周</b></span></td><td>孕产妇</td><td class="num">首次产检 · 06-02</td><td><span class="tg r"><i></i>红 · 高风险</span></td><td><span class="tg o">待复核</span></td><td><span class="tg b">随访中</span></td><td style="text-align:right"><span class="op"><a href="#">查看</a><a href="#">评估</a><a href="#">转诊</a></span></td></tr>
-        <tr><td><input type="checkbox"></td><td><span style="display:flex;align-items:center;gap:9px"><span class="av">刘</span><b>刘佳 · 女 28</b></span></td><td>妇女 · 两癌</td><td class="num">— 未筛查</td><td><span class="tg n"><i></i>待筛查</span></td><td><span class="tg n">未出结果</span></td><td><span class="tg n">未随访</span></td><td style="text-align:right"><span class="op"><a href="#">查看</a><a href="#">开始筛查</a></span></td></tr>
+        <tr><td><input type="checkbox" aria-label="选择该行服务对象"></td><td><span style="display:flex;align-items:center;gap:9px"><span class="av purp">李</span><b>李慧 · 女 36</b></span></td><td>妇女 · 两癌</td><td class="num">宫颈 TCT · 05-12</td><td><span class="tg r"><i></i>检查异常</span></td><td><span class="tg o">待复查</span></td><td><span class="tg o">待随访</span></td><td style="text-align:right"><span class="op"><a href="#">查看</a><a href="#">随访</a><a href="#">转诊</a></span></td></tr>
+        <tr><td><input type="checkbox" aria-label="选择该行服务对象"></td><td><span style="display:flex;align-items:center;gap:9px"><span class="av">张</span><b>张敏 · 孕 28 周</b></span></td><td>孕产妇</td><td class="num">产检 · 04-28</td><td><span class="tg y"><i></i>黄 · 一般风险</span></td><td><span class="tg g">正常</span></td><td><span class="tg b">已预约</span></td><td style="text-align:right"><span class="op"><a href="#">查看</a><a href="#">产检</a><a href="#">更多</a></span></td></tr>
+        <tr><td><input type="checkbox" aria-label="选择该行服务对象"></td><td><span style="display:flex;align-items:center;gap:9px"><span class="av">王</span><b>王雨桐 · 女 32</b></span></td><td>妇女 · 两癌</td><td class="num">乳腺 B 超 · 05-20</td><td><span class="tg o"><i></i>橙 · 较高风险</span></td><td><span class="tg r">可疑</span></td><td><span class="tg o">待随访</span></td><td style="text-align:right"><span class="op"><a href="#">查看</a><a href="#">随访</a><a href="#">转诊</a></span></td></tr>
+        <tr><td><input type="checkbox" aria-label="选择该行服务对象"></td><td><span style="display:flex;align-items:center;gap:9px"><span class="av mint">赵</span><b>赵甜甜 · 18 月龄</b></span></td><td>儿童 · 儿保</td><td class="num">儿保体检 · 05-06</td><td><span class="tg r"><i></i>生长低于 P3</span></td><td><span class="tg r">异常</span></td><td><span class="tg o">待随访</span></td><td style="text-align:right"><span class="op"><a href="#">查看</a><a href="#">随访</a><a href="#">更多</a></span></td></tr>
+        <tr><td><input type="checkbox" aria-label="选择该行服务对象"></td><td><span style="display:flex;align-items:center;gap:9px"><span class="av purp">陈</span><b>陈静 · 孕 12 周</b></span></td><td>孕产妇</td><td class="num">首次产检 · 06-02</td><td><span class="tg r"><i></i>红 · 高风险</span></td><td><span class="tg o">待复核</span></td><td><span class="tg b">随访中</span></td><td style="text-align:right"><span class="op"><a href="#">查看</a><a href="#">评估</a><a href="#">转诊</a></span></td></tr>
+        <tr><td><input type="checkbox" aria-label="选择该行服务对象"></td><td><span style="display:flex;align-items:center;gap:9px"><span class="av">刘</span><b>刘佳 · 女 28</b></span></td><td>妇女 · 两癌</td><td class="num">— 未筛查</td><td><span class="tg n"><i></i>待筛查</span></td><td><span class="tg n">未出结果</span></td><td><span class="tg n">未随访</span></td><td style="text-align:right"><span class="op"><a href="#">查看</a><a href="#">开始筛查</a></span></td></tr>
       </tbody>
     </table>
     <div style="display:flex;align-items:center;gap:8px;justify-content:flex-end;margin-top:14px;font-size:12px;color:var(--t3)">
@@ -356,11 +382,11 @@ table.t td,table.t th{padding-left:12px;padding-right:12px}
       <div class="card" style="padding:16px 18px;margin-top:14px">
         <div style="display:flex;align-items:center;margin-bottom:12px"><b style="font-size:15px">儿童健康保健清单（五健 + 口腔）</b><span style="font-size:11.5px;color:var(--t3);margin-left:auto">最近评估：05-06 · 王医生</span></div>
         <div class="wjrow"><span class="ic"><svg class="i" viewBox="0 0 24 24"><circle cx="8.6" cy="6.9" r="2.1"/><path d="M8.6 9.1v3.4M6.9 10.9l1.7.7M10.3 10.9l-1.7.7M8.6 12.5 7.5 15.2M8.6 12.5l1.1 2.7"/><path d="M16.6 5v12M15.2 7.3 16.6 5l1.4 2.3M15.2 14.7 16.6 17l1.4-2.3"/></svg></span><div class="m"><b>生长发育</b><span>身长 83cm P75 · 体重 11.2kg P62</span></div><span class="tg g"><i></i>正常</span></div>
-        <div class="wjrow"><span class="ic" style="color:var(--rose-d)"><svg class="i" viewBox="0 0 24 24"><circle cx="11.8" cy="14.6" r="5.4"/><path d="M11.8 9.5c.3-1.9 1.2-3.1 2.9-3.8"/><path d="M14.5 6.1c1.7-.7 3.1-.5 4 .4"/></svg></span><div class="m"><b>营养喂养</b><span>辅食结构良好 · 奶量充足</span></div><span class="tg g"><i></i>正常</span></div>
-        <div class="wjrow"><span class="ic" style="color:var(--rose-d)"><svg class="i" viewBox="0 0 24 24"><circle cx="12" cy="12.2" r="6.4"/><circle cx="9.8" cy="11" r=".9" fill="currentColor" stroke="none"/><circle cx="14.2" cy="11" r=".9" fill="currentColor" stroke="none"/><path d="M9.5 14.3c1.5 1.2 3.5 1.2 5 0"/></svg></span><div class="m"><b>心理行为发育</b><span>语言发育良好 · 社交回应佳</span></div><span class="tg g"><i></i>正常</span></div>
-        <div class="wjrow"><span class="ic" style="color:var(--rose-d)"><svg class="i" viewBox="0 0 24 24"><path d="M3.6 13.2s3-6.2 8.4-6.2 8.4 6.2 8.4 6.2-3 6.2-8.4 6.2S3.6 13.2 3.6 13.2z"/><circle cx="12" cy="13.2" r="3.1"/></svg></span><div class="m"><b>视力保健</b><span>屈光筛查 · 建议 3 月后复查</span></div><span class="tg o"><i></i>待复查</span></div>
-        <div class="wjrow"><span class="ic" style="color:var(--rose-d)"><svg class="i" viewBox="0 0 24 24"><path d="M4.4 12.8a7.6 7.6 0 0 1 15.2 0"/><rect x="2.2" y="11.8" width="4.2" height="6" rx="1.9"/><rect x="17.6" y="11.8" width="4.2" height="6" rx="1.9"/></svg></span><div class="m"><b>听力保健</b><span>听力筛查 · 双耳通过</span></div><span class="tg g"><i></i>正常</span></div>
-        <div class="wjrow"><span class="ic" style="color:var(--rose-d)"><svg class="i" viewBox="0 0 24 24"><path d="M17.2 4.6c-1.6 0-2.6.8-3.5 1.8a3 3 0 0 1-3.4 0C9.4 5.4 8.4 4.6 6.8 4.6c-2.1 0-3.7 1.7-3.7 3.8 0 1.6.7 2.8 1.7 3.8 1.3 1.5 2.3 3.2 2.5 5.3.1 1.3.9 2.1 1.9 2.1.9 0 1.3-.6 1.6-1.6.5-1.2.9-2.5 1.9-2.5 1 0 1.5 1.2 2 2.4.3 1 .7 1.7 1.6 1.7 1 0 1.8-.8 1.9-2.1.2-2 1-3.7 2.3-5.1 1-1.1 1.7-2.4 1.7-3.9 0-2.1-1.6-3.9-3.7-3.9z"/></svg></span><div class="m"><b>口腔保健</b><span>出牙 16 颗 · 建议涂氟</span></div><span class="tg o"><i></i>待检</span></div>
+        <div class="wjrow"><span class="ic" style="color:var(--mmh-rose-700,#B23A63)"><svg class="i" viewBox="0 0 24 24"><circle cx="11.8" cy="14.6" r="5.4"/><path d="M11.8 9.5c.3-1.9 1.2-3.1 2.9-3.8"/><path d="M14.5 6.1c1.7-.7 3.1-.5 4 .4"/></svg></span><div class="m"><b>营养喂养</b><span>辅食结构良好 · 奶量充足</span></div><span class="tg g"><i></i>正常</span></div>
+        <div class="wjrow"><span class="ic" style="color:var(--mmh-rose-700,#B23A63)"><svg class="i" viewBox="0 0 24 24"><circle cx="12" cy="12.2" r="6.4"/><circle cx="9.8" cy="11" r=".9" fill="currentColor" stroke="none"/><circle cx="14.2" cy="11" r=".9" fill="currentColor" stroke="none"/><path d="M9.5 14.3c1.5 1.2 3.5 1.2 5 0"/></svg></span><div class="m"><b>心理行为发育</b><span>语言发育良好 · 社交回应佳</span></div><span class="tg g"><i></i>正常</span></div>
+        <div class="wjrow"><span class="ic" style="color:var(--mmh-rose-700,#B23A63)"><svg class="i" viewBox="0 0 24 24"><path d="M3.6 13.2s3-6.2 8.4-6.2 8.4 6.2 8.4 6.2-3 6.2-8.4 6.2S3.6 13.2 3.6 13.2z"/><circle cx="12" cy="13.2" r="3.1"/></svg></span><div class="m"><b>视力保健</b><span>屈光筛查 · 建议 3 月后复查</span></div><span class="tg o"><i></i>待复查</span></div>
+        <div class="wjrow"><span class="ic" style="color:var(--mmh-rose-700,#B23A63)"><svg class="i" viewBox="0 0 24 24"><path d="M4.4 12.8a7.6 7.6 0 0 1 15.2 0"/><rect x="2.2" y="11.8" width="4.2" height="6" rx="1.9"/><rect x="17.6" y="11.8" width="4.2" height="6" rx="1.9"/></svg></span><div class="m"><b>听力保健</b><span>听力筛查 · 双耳通过</span></div><span class="tg g"><i></i>正常</span></div>
+        <div class="wjrow"><span class="ic" style="color:var(--mmh-rose-700,#B23A63)"><svg class="i" viewBox="0 0 24 24"><path d="M17.2 4.6c-1.6 0-2.6.8-3.5 1.8a3 3 0 0 1-3.4 0C9.4 5.4 8.4 4.6 6.8 4.6c-2.1 0-3.7 1.7-3.7 3.8 0 1.6.7 2.8 1.7 3.8 1.3 1.5 2.3 3.2 2.5 5.3.1 1.3.9 2.1 1.9 2.1.9 0 1.3-.6 1.6-1.6.5-1.2.9-2.5 1.9-2.5 1 0 1.5 1.2 2 2.4.3 1 .7 1.7 1.6 1.7 1 0 1.8-.8 1.9-2.1.2-2 1-3.7 2.3-5.1 1-1.1 1.7-2.4 1.7-3.9 0-2.1-1.6-3.9-3.7-3.9z"/></svg></span><div class="m"><b>口腔保健</b><span>出牙 16 颗 · 建议涂氟</span></div><span class="tg o"><i></i>待检</span></div>
       </div>
     </div>
 
@@ -523,11 +549,11 @@ table.t td,table.t th{padding-left:12px;padding-right:12px}
   <div class="pgtag">页面模板：PC 妇幼工作站 · 今日待办 · 风险队列 · 快捷工具（15.4 PC / 13 妇幼领域）</div>
   <div style="max-width:1180px;margin:0 auto">
     <div class="pcbar glass"><span class="logo"><i></i>妈咪好 · 妇幼工作站</span>
-      <div class="search"><svg class="i"><circle cx="10.5" cy="10.5" r="6.5"></circle><path d="M15.4 15.4 21 21"></path></svg><input placeholder="搜索服务对象 / 档案号"></div>
+      <div class="search"><svg class="i"><circle cx="10.5" cy="10.5" r="6.5"></circle><path d="M15.4 15.4 21 21"></path></svg><input placeholder="搜索服务对象 / 档案号" aria-label="搜索服务对象 / 档案号"></div>
       <span style="font-size:12px;color:var(--t3)">望京中心 · 2025-06-02</span><span class="u">王</span>
     </div>
     <div class="kpis">
-      <div class="kpi card"><div class="l">今日随访完成</div><div class="v num" style="color:var(--rose-d)">86 / 104</div><div class="d">83% · 剩余 6h</div></div>
+      <div class="kpi card"><div class="l">今日随访完成</div><div class="v num" style="color:var(--mmh-rose-700,#B23A63)">86 / 104</div><div class="d">83% · 剩余 6h</div></div>
       <div class="kpi card"><div class="l">高危对象（五色）</div><div class="v num" style="color:#B72F42">23</div><div class="d">红 6 · 橙 11 · 紫 6</div></div>
       <div class="kpi card"><div class="l">待办产检 / 体检</div><div class="v num" style="color:#8D5A15">41</div><div class="d">产检 24 · 儿保 17</div></div>
       <div class="kpi card"><div class="l">两癌待复查</div><div class="v num" style="color:#3261C1">18</div><div class="d">待复查 12 · 待转诊 6</div></div>
@@ -570,7 +596,7 @@ table.t td,table.t th{padding-left:12px;padding-right:12px}
           <b style="font-size:14px;display:block;margin-bottom:6px">质量概览</b>
           <div style="font-size:12.5px;color:var(--t2);line-height:2.2">
             <div>高危管理率 <b class="num" style="color:#B72F42">96%</b></div>
-            <div>产后访视率 <b class="num" style="color:var(--rose-d)">91%</b></div>
+            <div>产后访视率 <b class="num" style="color:var(--mmh-rose-700,#B23A63)">91%</b></div>
             <div>儿保随访闭环 <b class="num" style="color:#8D5A15">68%</b></div>
           </div>
         </div>

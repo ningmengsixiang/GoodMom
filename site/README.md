@@ -54,9 +54,34 @@ python3 scripts/redirect-legacy.py --check
 
 ```bash
 python3 -m http.server 5288 --bind 127.0.0.1 &   # 仓库根起静态服务
-node scripts/site-smoke.mjs      # 41 项：模块切换 / 样式隔离 / 交互 / 键盘 / 零错误
+node scripts/site-smoke.mjs      # 48 项：模块切换 / 样式隔离 / 交互 / 键盘 / 零错误
 node scripts/site-parity.mjs     # 15 项：各模块 vs 原页面（类名、id、主题变量）
+node scripts/page-qa.mjs --ci    # 逐页规范质检（P0–P2 必须为 0）
 ```
+
+### 逐页规范质检（`page-qa.mjs`）
+
+渲染级逐页质检：每页在 桌面 1440 / 移动 375 / 暗色 三档各测一遍，17 类规则逐条给出
+**规范锚点 + 选择器 + 实测值**，报告落在 `docs/page-qa-report.md`。
+
+| 维度 | 覆盖 |
+| --- | --- |
+| 结构语义 | 重复 id · 标题跳级 · 图片 alt · 可交互元素可访问名 · 表单标签 |
+| 对比度 | WCAG 2.2 AA（保留 alpha 做 source-over 合成；渐变承载面取色标上界以**确证**失败） |
+| 焦点 | 逐元素 `focus({focusVisible:true})`，比对 outline/box-shadow/border/background 是否变化 |
+| 触控 | ≤767px 热区 ≥44×44（识别 `::after` 扩热区的合规实现） |
+| 布局 | 桌面与移动横向溢出 |
+| Token 档位 | 圆角（02 · 2.4）· 边框（2.7.1）· 阴影（2.6 禁纯黑）· 模糊（2.7.2）· 字号（2.2.2）· 字重（2.2.4） |
+| 内容 | 界面 emoji（09 / IC-08-05）· 同页版本号（16.2）· 图标网格（09.2） |
+
+**与既有守门的分工**：`audit.py` 扫源码、`a11y.py` 是静态断言、`a11y-dom.py` 只测对比度 ——
+只有本工具是"渲染后按规范档位逐页量"。它自己也要站得住，故内置三条口径：
+禁用态按 WCAG 1.4.3 豁免、规范正文（`.md`/`.chap`）算文档内容而非界面、
+【02 · 2.4】只管短边 ≥32px 的组件与容器（行内 `code` 芯片不在管辖内）。
+
+> ⚠️ `site/fragments/site-spec.html` 与 `site-manual.html` 是**生成产物**：
+> 分别由 `scripts/gen-spec.py` / `scripts/gen-manual.py` 产出，直接改片段会被下次生成覆盖。
+> 要改这两块的内容或样式，请改生成器（或它们读的 Markdown 源）。
 
 `site-parity.mjs` 是合并类改动最重要的守门测试：它逐模块与原页面比对
 **全部元素类名与 id 的差集**（只登记"有意移除"项——各页自建顶栏与旧页面返回链接），

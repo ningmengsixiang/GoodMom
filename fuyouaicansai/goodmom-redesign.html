@@ -7,6 +7,8 @@
 <link rel="icon" type="image/svg+xml" href="../brand/logo-mark.svg">
 <style>
 :root{--t:#343A46;--t2:#4F5B6E;--t3:#4F5B6E;--rose-d:#E85D8F;--rose-deep:#B23A63;--mint:#6FC9B4;--info:#6D9EFF;--warn:#F2B25C;--danger:#EF6A7B;--purple:#9A78FF;--purple-deep:#8066F0;
+  /* 文字专用深档（02 · 2.1.5：-500 档仅作填充/色块/图表强调；文字走深色 alias） */
+  --sem-positive:#25715D;--sem-warn:#8D5A15;--sem-danger:#B72F42;--sem-special:#6A48DC;--sem-neutral:#5E6673;
 --g:linear-gradient(135deg,#FFC4D6,#F77FA3);--gp:linear-gradient(135deg,#C7A6FF,#8F6AE0)}
 *{box-sizing:border-box;margin:0;padding:0}
 body{font-family:"PingFang SC","Inter","MiSans","Noto Sans SC",sans-serif;color:var(--t);line-height:1.7;background:#E9D2C9;padding-left:0;transition:padding .25s ease;
@@ -21,27 +23,27 @@ body{font-family:"PingFang SC","Inter","MiSans","Noto Sans SC",sans-serif;color:
 @media(min-width:1920px){.wrap{max-width:1600px}}
 @media(min-width:2304px){.wrap{max-width:1820px}}
 /* ============ 侧栏模式（规范 03 · 3.4.1） ============ */
-.side{position:fixed;left:16px;top:16px;bottom:16px;width:252px;z-index:70;display:flex;flex-direction:column;gap:2px;padding:14px 12px;border-radius:24px;overflow-y:auto;
+.side{position:fixed;left:16px;top:16px;bottom:16px;width:252px;z-index:70;display:flex;flex-direction:column;gap:2px;padding:14px 12px;border-radius:22px;overflow-y:auto;
  background:linear-gradient(160deg,rgba(255,255,255,.62),rgba(255,255,255,.30) 60%,rgba(255,255,255,.42));border:1px solid rgba(255,255,255,.85);
- box-shadow:inset 0 1px 0 rgba(255,255,255,.9),0 16px 40px rgba(90,70,70,.12);-webkit-backdrop-filter:blur(22px);backdrop-filter:blur(22px);opacity:0;pointer-events:none;transition:opacity .15s ease,width .25s ease}
+ box-shadow:inset 0 1px 0 rgba(255,255,255,.9),0 16px 40px rgba(90,70,70,.12);-webkit-backdrop-filter:blur(20px);backdrop-filter:blur(20px);opacity:0;pointer-events:none;transition:opacity .15s ease,width .25s ease}
 .side .brand{display:flex;align-items:center;gap:10px;padding:6px 8px 14px;border-bottom:1px dashed rgba(58,52,84,.08);margin-bottom:10px}
-.side .brand img{height:34px;width:auto;max-width:150px;border-radius:8px;object-fit:contain;flex:none}
+.side .brand img{height:34px;width:auto;max-width:150px;border-radius:18px;object-fit:contain;flex:none}
 .side .brand b{font-size:14px;line-height:1.35;color:var(--rose-deep)}
 .side .brand .min{font-size:10px;color:var(--t3);font-weight:400}
 .side .gt{font-size:10.5px;color:var(--t3);letter-spacing:.1em;padding:8px 12px 4px}
 .nv{display:flex;align-items:center;gap:10px;width:100%;border:none;background:transparent;cursor:pointer;font-family:inherit;color:var(--t2);
- font-size:13.5px;font-weight:500;border-radius:16px;padding:9px 12px;text-align:left;transition:background .15s ease,color .15s}
+ font-size:13.5px;font-weight:500;border-radius:18px;padding:9px 12px;text-align:left;transition:background .15s ease,color .15s}
 .nv svg{width:17px;height:17px;flex:none;stroke:currentColor;fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
 .nv:hover{background:rgba(255,255,255,.6);color:var(--t)}
-.nv.on{background:var(--gp);color:#FFF;font-weight:600;box-shadow:0 8px 18px rgba(143,106,224,.35)}
+.nv.on{background:linear-gradient(135deg,#7A5CE0,#6242B8);color:#FFF;font-weight:600;box-shadow:0 8px 18px rgba(143,106,224,.35)}
 .nv .bdg{margin-left:auto;min-width:20px;height:20px;padding:0 7px;display:inline-flex;align-items:center;justify-content:center;border-radius:999px;
- font-size:11px;font-weight:600;color:var(--purple-deep);background:rgba(255,255,255,.9);border:1px solid rgba(143,106,224,.25)}
-.nv.on .bdg{color:#FFF;background:rgba(255,255,255,.25);border-color:rgba(255,255,255,.4)}
+ font-size:11px;font-weight:600;color:var(--sem-special);background:rgba(255,255,255,.9);border:1px solid rgba(143,106,224,.25)}
+.nv.on .bdg{color:#6242B8;background:#FFF;border-color:#FFF}
 .side .foot{margin-top:auto;padding-top:12px;border-top:1px dashed rgba(58,52,84,.08);display:flex;align-items:center;gap:10px}
 .side .foot .who{flex:1;min-width:0}
 .side .foot .who b{font-size:12.5px;display:block;line-height:1.3}
 .side .foot .who span{font-size:11px;color:var(--t3)}
-.iconb{width:30px;height:30px;flex:none;display:inline-flex;align-items:center;justify-content:center;border-radius:10px;border:none;cursor:pointer;background:rgba(255,255,255,.6);color:var(--t2);transition:background .15s}
+.iconb{width:30px;height:30px;flex:none;display:inline-flex;align-items:center;justify-content:center;border-radius:18px;border:none;cursor:pointer;background:rgba(255,255,255,.6);color:var(--t2);transition:background .15s}
 .iconb:hover{background:rgba(255,255,255,.9)}
 .iconb svg{width:15px;height:15px;stroke:currentColor;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
 body.collapsed .side{width:80px;padding:14px 10px}
@@ -60,7 +62,7 @@ body.mode-top .side{display:none}
 body.mode-top .wrap{margin-left:auto;margin-right:auto}
 /* 顶栏（含模式分段 + 页签） */
 .top{position:sticky;top:12px;z-index:60;display:flex;align-items:center;gap:10px;flex-wrap:wrap;padding:8px 14px;border-radius:999px;margin-bottom:14px}
-.top img{height:24px;width:auto;max-width:150px;border-radius:6px;object-fit:contain;flex:none}
+.top img{height:24px;width:auto;max-width:150px;border-radius:18px;object-fit:contain;flex:none}
 .top .tb-brand{display:flex;align-items:center;gap:10px;flex:none}
 .top .tb-brand b{color:var(--rose-deep);font-size:14px}
 .seg{margin-left:auto;display:inline-flex;gap:3px;padding:3px;border-radius:999px;background:rgba(255,255,255,.55);border:1px solid rgba(255,255,255,.8)}
@@ -79,12 +81,12 @@ h2{font-size:20px;margin:16px 0 6px}
 .g{color:#25715D;background:rgba(79,181,156,.13)}.b{color:#3261C1;background:rgba(109,158,255,.13)}
 .o{color:#8D5A15;background:rgba(242,178,92,.16)}.r{color:#B72F42;background:rgba(239,106,123,.13)}
 .n{color:#5E6673;background:rgba(88,98,115,.09)}.p{color:#6A48DC;background:rgba(154,120,255,.14)}
-.y{color:#8A6D10;background:rgba(242,193,78,.22)}
-.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;border:none;cursor:pointer;border-radius:14px;padding:0 18px;height:40px;font-family:inherit;font-size:13.5px;font-weight:600}
+.y{color:#7A5F0D;background:rgba(242,193,78,.22)}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;border:none;cursor:pointer;border-radius:18px;padding:0 18px;height:40px;font-family:inherit;font-size:13.5px;font-weight:600}
 .btn.pri{background:var(--g);color:#343A46;box-shadow:0 8px 18px rgba(240,127,163,.32)}
 .btn.mint{background:linear-gradient(135deg,#7FD8C2,#4FB59C);color:#FFF}
 .btn.line{background:#FFF;color:var(--rose-deep);border:1.5px solid rgba(232,93,143,.35)}
-.btn.sm{height:32px;padding:0 13px;font-size:12.5px;border-radius:12px}
+.btn.sm{height:32px;padding:0 13px;font-size:12.5px;border-radius:18px}
 .av{width:42px;height:42px;border-radius:50%;display:inline-flex;align-items:center;justify-content:center;color:#343A46;font-weight:700;background:var(--g);flex:none;font-size:16px}
 .av.mint{background:linear-gradient(150deg,#7FD8C2,#4FB59C)}.av.purp{background:linear-gradient(150deg,#B9A0FF,#8066F0)}
 .two{display:grid;grid-template-columns:1.7fr 1fr;gap:16px}
@@ -256,7 +258,7 @@ textarea.inp{resize:vertical;min-height:76px;line-height:1.7}
 .fx-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:14px}
 .fx{display:flex;flex-direction:column}
 .fx-t{font-size:13.5px;font-weight:600}
-.fx-t code{font-size:11px;color:var(--purple-deep);font-weight:500;margin-left:4px}
+.fx-t code{font-size:11px;color:var(--sem-special);font-weight:500;margin-left:4px}
 .fx-d{font-size:11.5px;color:var(--t3);margin-top:2px;line-height:1.7}
 .fx-st{flex:1;display:flex;align-items:center;justify-content:center;gap:10px;flex-wrap:wrap;min-height:112px;padding:12px 4px 6px;position:relative}
 .fx-st .inp{max-width:230px}
@@ -298,9 +300,9 @@ textarea.inp{resize:vertical;min-height:76px;line-height:1.7}
 .fx-cb input:checked+.cbox i{transform:scale(1)}
 /* segmented */
 .fx-sg{position:relative;display:flex;background:rgba(255,255,255,.6);border:1px solid rgba(255,255,255,.9);border-radius:15px;padding:3px;width:300px;max-width:100%;box-shadow:inset 0 1px 2px rgba(58,52,84,.05)}
-.fx-sg .sg-thumb{position:absolute;top:3px;bottom:3px;left:3px;width:calc((100% - 6px)/3);border-radius:12px;background:var(--g);box-shadow:0 4px 12px rgba(240,127,163,.35);transition:left .28s cubic-bezier(.22,1,.36,1)}
+.fx-sg .sg-thumb{position:absolute;top:3px;bottom:3px;left:3px;width:calc((100% - 6px)/3);border-radius:18px;background:var(--g);box-shadow:0 4px 12px rgba(240,127,163,.35);transition:left .28s cubic-bezier(.22,1,.36,1)}
 .fx-sg .sg-o{position:relative;flex:1;border:none;background:none;font-family:inherit;font-size:12.5px;color:var(--t2);padding:8px 4px;cursor:pointer;transition:color .2s ease;white-space:nowrap}
-.fx-sg .sg-o.on{color:#FFF;font-weight:600}
+.fx-sg .sg-o.on{color:#343A46;font-weight:600}
 /* error shake */
 .inp.err{border-color:rgba(214,84,102,.75)!important;animation:fxShake .32s ease}
 @keyframes fxShake{0%,100%{transform:translateX(0)}20%,60%{transform:translateX(-4px)}40%,80%{transform:translateX(4px)}}
@@ -319,14 +321,14 @@ textarea.inp{resize:vertical;min-height:76px;line-height:1.7}
 @keyframes fxReveal{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
 /* stagger */
 .fx-stag{display:flex;flex-direction:column;gap:6px;width:230px}
-.fx-stag span{display:flex;align-items:center;gap:8px;padding:7px 12px;border-radius:12px;font-size:12px;color:var(--t2);background:rgba(255,255,255,.55);border:1px solid rgba(255,255,255,.9)}
+.fx-stag span{display:flex;align-items:center;gap:8px;padding:7px 12px;border-radius:18px;font-size:12px;color:var(--t2);background:rgba(255,255,255,.55);border:1px solid rgba(255,255,255,.9)}
 .fx-stag span i{width:7px;height:7px;border-radius:50%;background:var(--rose-d);flex:none}
 .fx-stag.go span{animation:fxUp .5s cubic-bezier(.22,1,.36,1) both}
 .fx-stag.go span:nth-child(2){animation-delay:70ms}.fx-stag.go span:nth-child(3){animation-delay:140ms}
 .fx-stag.go span:nth-child(4){animation-delay:210ms}.fx-stag.go span:nth-child(5){animation-delay:280ms}
 @keyframes fxUp{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:none}}
 /* hero float */
-.fx-hero{width:110px;height:68px;border-radius:18px;background:linear-gradient(150deg,rgba(255,169,194,.5),rgba(232,93,143,.35));border:1px solid rgba(255,255,255,.9);box-shadow:0 10px 22px rgba(90,70,70,.14);display:flex;align-items:center;justify-content:center;font-size:12px;color:#FFF;font-weight:600}
+.fx-hero{width:110px;height:68px;border-radius:18px;background:linear-gradient(150deg,rgba(255,169,194,.5),rgba(232,93,143,.35));border:1px solid rgba(255,255,255,.9);box-shadow:0 10px 22px rgba(90,70,70,.14);display:flex;align-items:center;justify-content:center;font-size:12px;color:#343A46;font-weight:600}  /* D9：浅粉底配深字 */
 .fx-hero.float{animation:fxFloat 8s ease-in-out infinite alternate}
 @keyframes fxFloat{from{transform:translateY(0)}to{transform:translateY(-7px)}}
 /* typing 动画舞台 */
@@ -344,6 +346,13 @@ textarea.inp{resize:vertical;min-height:76px;line-height:1.7}
 
 /* 按钮类型色 规范化（03 · 3.2.4 + D5/D6） */
 .btn.mint{background:#1E6B52!important;color:#FFF!important;border:none!important}
+
+/* 10 · 10.4：≤767px 可点热区 ≥44×44（::after 扩展，视觉尺寸不变） */
+@media(max-width:767px){
+  .btn,.nv,.iconb,.sg-o,.fx-ctr .btn{position:relative}
+  .btn::after,.nv::after,.iconb::after,.sg-o::after{content:"";position:absolute;left:50%;top:50%;
+    transform:translate(-50%,-50%);width:100%;min-width:44px;height:100%;min-height:44px}
+}
 </style>
 </head>
 <body class="mode-sider">
@@ -395,7 +404,7 @@ textarea.inp{resize:vertical;min-height:76px;line-height:1.7}
     <div class="g4" style="margin-bottom:14px">
       <div class="card pad" data-act="s-todo"><span class="stitle">今日待处理</span><span class="snum num" style="color:var(--rose-d)">42</span><span class="snote">会诊 18 · 复核 24</span></div>
       <div class="card pad" data-act="s-queue"><span class="stitle">高危对象</span><span class="snum num" style="color:#B72F42">23</span><span class="snote">橙红紫 五色队列</span></div>
-      <div class="card pad" data-act="s-rate"><span class="stitle">AI 建议采纳率</span><span class="snum num" style="color:#4FB59C">86%</span><span class="snote">较上周 +3%</span></div>
+      <div class="card pad" data-act="s-rate"><span class="stitle">AI 建议采纳率</span><span class="snum num" style="color:var(--sem-positive)">86%</span><span class="snote">较上周 +3%</span></div>
       <div class="card pad" data-act="s-new"><span class="stitle">今日新建档</span><span class="snum num" style="color:#3261C1">18</span><span class="snote">孕产妇 9 · 儿童 9</span></div>
     </div>
     <div class="two">
@@ -523,10 +532,10 @@ textarea.inp{resize:vertical;min-height:76px;line-height:1.7}
       <div class="card pad"><b>会诊流程</b>
         <div class="flex" style="margin-top:6px">
           <span class="stepdot">✓</span><span style="font-size:11px">发起会诊</span>
-          <span style="color:#CCC">→</span><span class="stepdot">✓</span><span style="font-size:11px">AI 分诊</span>
-          <span style="color:#CCC">→</span><span class="stepdot" style="background:#FFF;border:2px solid var(--rose-d);color:var(--rose-deep)">3</span><span style="font-size:11px">多学科会诊</span>
-          <span style="color:#CCC">→</span><span class="stepdot" style="background:#FFF;border:1px dashed #CCC;color:var(--t3)">4</span><span style="font-size:11px">专家签发</span>
-          <span style="color:#CCC">→</span><span class="stepdot" style="background:#FFF;border:1px dashed #CCC;color:var(--t3)">5</span><span style="font-size:11px">下达随访</span>
+          <span style="color:var(--sem-neutral)">→</span><span class="stepdot">✓</span><span style="font-size:11px">AI 分诊</span>
+          <span style="color:var(--sem-neutral)">→</span><span class="stepdot" style="background:#FFF;border:2px solid var(--rose-d);color:var(--rose-deep)">3</span><span style="font-size:11px">多学科会诊</span>
+          <span style="color:var(--sem-neutral)">→</span><span class="stepdot" style="background:#FFF;border:1px dashed #CCC;color:var(--t3)">4</span><span style="font-size:11px">专家签发</span>
+          <span style="color:var(--sem-neutral)">→</span><span class="stepdot" style="background:#FFF;border:1px dashed #CCC;color:var(--t3)">5</span><span style="font-size:11px">下达随访</span>
         </div>
       </div>
       <div class="card pad"><b>历史会诊记录</b>

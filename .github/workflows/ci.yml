@@ -209,6 +209,14 @@ jobs:
           node scripts/site-parity.mjs
           node scripts/site-smoke.mjs
 
+      - name: 逐页规范质检（结构 / 对比度 / 焦点 / 触控 / 溢出 / Token 档位）
+        # 与既有守门的分工：a11y.py 是静态断言、a11y-dom.py 只测对比度；
+        # 本步是**渲染级逐页质检**（17 页 × 桌面/移动/暗色三档），
+        # 覆盖圆角/边框/阴影/模糊/字号/字重/热区/焦点环/横向溢出/emoji/版本，
+        # 每条 finding 都带规范锚点，输出 docs/page-qa-report.md。
+        # 阈值：除 P3「模块未实现暗色皮肤」外必须为 0。
+        run: node scripts/page-qa.mjs --ci
+
   vue-pkg-build:
     name: Vue 组件库构建（@goodmom/vue）
     runs-on: ubuntu-latest

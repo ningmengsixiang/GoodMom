@@ -6,6 +6,9 @@
   --purple:#B69AFF; --purple-d:#9A78FF; --cyan:#72DDE5;
   --rose-600:#E85D8F; --rose-500:#F77FA3; --rose-100:#FFF0F4; --mint-500:#6FC9B4;
   --success:#42C7A1; --warning:#F2B25C; --danger:#EF6A7B;
+  /* 文字专用深档 alias（02 · 2.1.5 / 14 · 4.4.5）；--success/-warning/-danger 是填充档 */
+  --sem-positive:#25715D; --sem-warn:#8D5A15; --sem-danger:#B72F42;
+  --solid-danger:#B04052; /* D5 白字实底档（白字 5.67:1） */
   --grad-p:linear-gradient(135deg,#FFA9C2,#F77FA3 45%,#E85D8F);
   --font:"Inter","SF Pro Display",-apple-system,BlinkMacSystemFont,"PingFang SC","MiSans","Noto Sans SC",sans-serif;
   --ease:cubic-bezier(.22,1,.36,1); --spring:cubic-bezier(.34,1.56,.64,1);
@@ -37,7 +40,7 @@ svg.i{width:22px;height:22px;stroke:currentColor;fill:none;stroke-width:1.7;
 /* ── 顶部 NavBar（玻璃条，滚动显现用 shadow 区分即可）── */
 .navbar{position:sticky;top:calc(env(safe-area-inset-top) + 8px);z-index:20;
   display:flex;align-items:center;gap:6px;margin:0 12px 14px;padding:6px;
-  border-radius:24px;
+  border-radius:22px;
   background:linear-gradient(160deg,rgba(255,255,255,.72),rgba(255,255,255,.42));
   -webkit-backdrop-filter:blur(32px) saturate(1.2);backdrop-filter:blur(32px) saturate(1.2);
   border:1px solid rgba(255,255,255,.8);
@@ -50,12 +53,12 @@ svg.i{width:22px;height:22px;stroke:currentColor;fill:none;stroke-width:1.7;
 .navbar .ops{display:flex;gap:2px}
 .navbar .ops .o{width:44px;height:44px;border-radius:50%;display:flex;align-items:center;justify-content:center;
   color:var(--text-2);transition:transform .12s ease}
-.navbar .ops .o:active{transform:scale(.9);color:var(--purple)}
+.navbar .ops .o:active{transform:scale(.9);color:var(--sem-special)}
 
 /* 玻璃卡（L2 移动档：blur 28） */
 .gcard{border-radius:20px;padding:16px;
   background:linear-gradient(160deg,rgba(255,255,255,.5),rgba(255,255,255,.2) 55%,rgba(255,255,255,.3));
-  -webkit-backdrop-filter:blur(28px) saturate(1.15);backdrop-filter:blur(28px) saturate(1.15);
+  -webkit-backdrop-filter:blur(32px) saturate(1.15);backdrop-filter:blur(32px) saturate(1.15);
   border:1px solid rgba(255,255,255,.6);
   box-shadow:inset 0 1px 0 rgba(255,255,255,.7),var(--shadow-card);
   transition:transform .16s var(--ease)}
@@ -63,10 +66,10 @@ svg.i{width:22px;height:22px;stroke:currentColor;fill:none;stroke-width:1.7;
 
 /* KPI 对排卡 */
 .kpis{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:14px}
-.kpi h4{font-size:13px;color:var(--text-2);font-weight:500;margin-bottom:8px;display:flex;align-items:center;gap:6px}
+.kpi h2{font-size:13px;color:var(--text-2);font-weight:500;margin-bottom:8px;display:flex;align-items:center;gap:6px}
 .kpi .v{font-size:34px;font-weight:700;line-height:1;letter-spacing:-.02em}
 .kpi .d{font-size:12px;margin-top:8px;color:var(--text-3);display:flex;align-items:center;gap:6px}
-.kpi .d b.up{color:var(--success);font-weight:600}
+.kpi .d b.up{color:var(--sem-positive);font-weight:600}
 .kpi .d b.down{color:var(--danger);font-weight:600}
 
 /* 区块 */
@@ -77,13 +80,13 @@ svg.i{width:22px;height:22px;stroke:currentColor;fill:none;stroke-width:1.7;
 /* 状态行列表 */
 .lst{display:flex;flex-direction:column;gap:10px;margin-bottom:14px}
 .rowitem{display:flex;align-items:center;gap:12px;padding:14px 14px;border-radius:18px}
-.rowitem .ic{width:40px;height:40px;border-radius:14px;flex:none;display:flex;align-items:center;justify-content:center;
+.rowitem .ic{width:40px;height:40px;border-radius:18px;flex:none;display:flex;align-items:center;justify-content:center;
   background:rgba(255,255,255,.55);border:1px solid rgba(255,255,255,.75);color:var(--text-2)}
 .rowitem .md{flex:1;min-width:0}
 .rowitem .md b{display:block;font-size:15px;font-weight:500;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .rowitem .md span{display:block;font-size:12px;color:var(--text-3);margin-top:2px}
 .rowitem .rv{font-size:15px;font-weight:600;color:var(--text-2)}
-.rowitem .rv.good{color:var(--success)}.rowitem .rv.bad{color:var(--danger)}
+.rowitem .rv.good{color:var(--sem-positive)}.rowitem .rv.bad{color:var(--sem-danger,#B72F42)}
 
 /* 开关（移动 48×28） */
 .switch{position:relative;width:48px;height:28px;border-radius:999px;flex:none;cursor:pointer;
@@ -108,7 +111,7 @@ svg.i{width:22px;height:22px;stroke:currentColor;fill:none;stroke-width:1.7;
 /* ── 底部 TabBar（玻璃悬浮条，移动 10.3.2）── */
 .tabbar{position:fixed;left:50%;bottom:calc(env(safe-area-inset-bottom) + 12px);
   transform:translateX(-50%);z-index:30;width:min(406px,calc(100% - 24px));
-  display:flex;padding:6px;border-radius:24px;
+  display:flex;padding:6px;border-radius:22px;
   background:linear-gradient(160deg,rgba(255,255,255,.78),rgba(255,255,255,.5));
   -webkit-backdrop-filter:blur(32px) saturate(1.25);backdrop-filter:blur(32px) saturate(1.25);
   border:1px solid rgba(255,255,255,.85);
@@ -122,7 +125,7 @@ svg.i{width:22px;height:22px;stroke:currentColor;fill:none;stroke-width:1.7;
 
 /* 底部主行动 */
 .cta{display:flex;align-items:center;justify-content:center;gap:8px;width:100%;height:50px;
-  border:none;border-radius:18px;font-family:var(--font);font-size:16px;font-weight:600;color:#FFF;
+  border:none;border-radius:18px;font-family:var(--font);font-size:16px;font-weight:600;color:#343A46;
   background:var(--mmh-grad-action-hc,#F77FA3);
   border:1px solid rgba(255,255,255,.6);
   box-shadow:inset 0 1px 0 rgba(255,255,255,.5),0 12px 26px rgba(240,127,163,.35);
@@ -142,10 +145,10 @@ svg.i{width:22px;height:22px;stroke:currentColor;fill:none;stroke-width:1.7;
 
 /* ── 11 章新增组件演示样式 ── */
 /* NoticeBar 公告条 */
-.notice{display:flex;align-items:center;gap:8px;padding:10px 14px;border-radius:16px;
+.notice{display:flex;align-items:center;gap:8px;padding:10px 14px;border-radius:18px;
   background:rgba(255,255,255,.42);border:1px solid rgba(255,255,255,.65);font-size:12px;color:var(--text-2)}
 .notice .nt{flex:1;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.notice svg{flex:none;color:var(--purple)}
+.notice svg{flex:none;color:var(--sem-special)}
 .notice .x{color:var(--text-3);flex:none;display:flex;padding:6px}
 /* SearchBar */
 .sbar{display:flex;align-items:center;gap:8px;padding:0 6px 0 14px;height:44px;border-radius:18px;
@@ -154,8 +157,18 @@ svg.i{width:22px;height:22px;stroke:currentColor;fill:none;stroke-width:1.7;
 .sbar svg{flex:none;color:var(--text-3)}
 .sbar input{flex:1;border:none;outline:none;background:transparent;font-family:var(--font);
   font-size:16px;color:var(--text);height:100%}
-.sbar input::placeholder{color:rgba(88,98,115,.55)}
-.sbar .go{flex:none;font-size:14px;font-weight:600;color:var(--purple);padding:8px 8px}
+.sbar input::placeholder{color:var(--lg-sem-neutral,#5E6673)}
+/* 02 · 2.7.1 焦点环：搜索框在原规则里被 outline:none 抹掉且无兜底 */
+.sbar input:focus-visible{outline:2px solid rgba(232,93,143,.6);outline-offset:2px;border-radius:18px}
+/* 10 · 10.4：≤767px 热区 ≥44×44（::after 扩展，视觉 20–28px 不变） */
+@media(max-width:767px){
+  .mbb,.switch,.up .del,.notice .x,.sbar input,.tab,.seg2 .s2,.chip{position:relative}
+  .mbb::after,.switch::after,.up .del::after,.notice .x::after,.sbar input::after,
+  .tab::after,.seg2 .s2::after,.chip::after{
+    content:"";position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);
+    width:100%;min-width:44px;height:100%;min-height:44px}
+}
+.sbar .go{flex:none;font-size:14px;font-weight:600;color:var(--sem-special);padding:8px 8px}
 /* chips 筛选 */
 .chips{display:flex;gap:8px;flex-wrap:wrap}
 .chip{padding:8px 16px;border-radius:999px;font-size:13px;color:var(--text-2);cursor:pointer;
@@ -164,24 +177,24 @@ svg.i{width:22px;height:22px;stroke:currentColor;fill:none;stroke-width:1.7;
 .chip:active{transform:scale(.96)}
 .chip.on{color:#343A46;background:var(--mmh-grad-action-hc,#F77FA3);border-color:transparent;box-shadow:0 6px 14px rgba(240,127,163,.35)}
 /* Segmented 移动版 */
-.seg2{display:flex;gap:4px;padding:4px;border-radius:16px;background:rgba(255,255,255,.4);
+.seg2{display:flex;gap:4px;padding:4px;border-radius:18px;background:rgba(255,255,255,.4);
   border:1px solid rgba(255,255,255,.65);overflow-x:auto;scrollbar-width:none}
 .seg2::-webkit-scrollbar{display:none}
 .seg2 .s2{flex:1;min-width:64px;text-align:center;padding:8px 10px;font-size:13px;color:var(--text-2);
-  border-radius:12px;cursor:pointer;white-space:nowrap;user-select:none;transition:color .2s ease,background .25s ease}
+  border-radius:18px;cursor:pointer;white-space:nowrap;user-select:none;transition:color .2s ease,background .25s ease}
 .seg2 .s2.on{background:var(--mmh-grad-action-hc,#F77FA3);color:#343A46;font-weight:600;box-shadow:0 4px 10px rgba(240,127,163,.3)}
 /* Upload 九宫格 */
 .upgrid{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}
-.up{position:relative;aspect-ratio:1;border-radius:16px;background:linear-gradient(160deg,rgba(255,255,255,.7),rgba(255,255,255,.4));
+.up{position:relative;aspect-ratio:1;border-radius:18px;background:linear-gradient(160deg,rgba(255,255,255,.7),rgba(255,255,255,.4));
   border:1px solid rgba(255,255,255,.8);box-shadow:var(--shadow-card);display:flex;align-items:center;justify-content:center;
   color:var(--text-2);overflow:hidden;cursor:pointer;transition:transform .14s var(--ease)}
 .up:active{transform:scale(.95)}
 .up .del{position:absolute;top:5px;right:5px;width:20px;height:20px;border-radius:50%;
-  background:rgba(239,106,123,.92);color:#FFF;display:flex;align-items:center;justify-content:center;font-size:12px}
-.up.add{border:1.5px dashed rgba(154,120,255,.55);background:rgba(255,255,255,.3);box-shadow:none;color:var(--purple)}
+  background:var(--solid-danger,#B04052);color:#FFF;display:flex;align-items:center;justify-content:center;font-size:12px}
+.up.add{border:1.5px dashed rgba(154,120,255,.55);background:rgba(255,255,255,.3);box-shadow:none;color:var(--sem-special)}
 .up .busy{position:absolute;inset:0;background:rgba(255,255,255,.6);display:flex;align-items:center;justify-content:center;
-  -webkit-backdrop-filter:blur(6px);backdrop-filter:blur(6px)}
-.up .ring{width:22px;height:22px;border-radius:50%;border:2px solid rgba(154,120,255,.25);border-top-color:var(--purple);
+  -webkit-backdrop-filter:blur(16px);backdrop-filter:blur(16px)}
+.up .ring{width:22px;height:22px;border-radius:50%;border:2px solid rgba(154,120,255,.25);border-top-color:var(--sem-special);
   animation:spin .9s linear infinite}
 @keyframes spin{to{transform:rotate(360deg)}}
 /* 底部玻璃 Toast */
@@ -200,7 +213,7 @@ svg.i{width:22px;height:22px;stroke:currentColor;fill:none;stroke-width:1.7;
 .msteps span{display:flex;align-items:center;gap:5px;font-size:12px;color:var(--text-3)}
 .msteps span b{width:18px;height:18px;border-radius:50%;display:inline-flex;align-items:center;justify-content:center;font-size:10px;font-weight:600}
 .msteps span.done b{background:var(--grad-p);color:#FFF}
-.msteps span.cur b{background:#FFF;border:2px solid var(--rose-500);color:var(--rose-600)}
+.msteps span.cur b{background:#FFF;border:2px solid var(--rose-500);color:var(--mmh-rose-700,#B23A63)}
 .msteps span.todo b{border:1px solid rgba(58,52,84,.2);color:var(--text-3)}
 
 
@@ -220,8 +233,8 @@ svg.i{width:22px;height:22px;stroke:currentColor;fill:none;stroke-width:1.7;
 .mbb-warning{background:linear-gradient(135deg,#F8CE8C,#EFAF55);color:#FFF}
 .mbb-danger{background:linear-gradient(135deg,#F79AA8,#E25B72);color:#FFF}
 .mbb-danger.mbb-outline{background:transparent;color:#E25B72;border:1.5px solid #E25B72}
-.mbb-xs{height:28px;font-size:12px;padding:0 14px;border-radius:12px}
-.mbb-sm{height:32px;font-size:13px;padding:0 16px;border-radius:14px}
+.mbb-xs{height:28px;font-size:12px;padding:0 14px;border-radius:18px}
+.mbb-sm{height:32px;font-size:13px;padding:0 16px;border-radius:18px}
 .mbb-lg{height:48px;font-size:16px;padding:0 26px;border-radius:22px}
 .mbb.round{border-radius:999px}
 .mbb.cr{border-radius:50%;width:44px;height:44px;padding:0}
@@ -263,13 +276,13 @@ svg.i{width:22px;height:22px;stroke:currentColor;fill:none;stroke-width:1.7;
     <!-- KPI 对排 -->
     <div class="kpis">
       <div class="gcard kpi">
-        <h4><svg class="i" style="width:15px;height:15px;color:var(--purple)" viewBox="0 0 24 24"><path d="M12 3.2 19 5.7v5.4c0 4.6-3 8.3-7 9.7-4-1.4-7-5.1-7-9.7V5.7z"/><path d="m9.2 11.9 2 2 3.6-3.9"/></svg>累计随访记录</h4>
-        <div class="v num" style="color:var(--rose-600)">12,849</div>
+        <h2><svg class="i" style="width:15px;height:15px;color:var(--sem-special)" viewBox="0 0 24 24"><path d="M12 3.2 19 5.7v5.4c0 4.6-3 8.3-7 9.7-4-1.4-7-5.1-7-9.7V5.7z"/><path d="m9.2 11.9 2 2 3.6-3.9"/></svg>累计随访记录</h2>
+        <div class="v num" style="color:var(--mmh-rose-700,#B23A63)">12,849</div>
         <div class="d"><b class="up">↑ 8.4%</b>较上月</div>
       </div>
       <div class="gcard kpi">
-        <h4><svg class="i" style="width:15px;height:15px;color:var(--success)" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="m8.2 12.4 2.6 2.6 5-5.6"/></svg>疫苗应种率</h4>
-        <div class="v num" style="color:var(--success)">96.2%</div>
+        <h2><svg class="i" style="width:15px;height:15px;color:var(--sem-positive)" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="m8.2 12.4 2.6 2.6 5-5.6"/></svg>疫苗应种率</h2>
+        <div class="v num" style="color:var(--sem-positive)">96.2%</div>
         <div class="d"><b class="up">↑ 1.4pt</b>本月应种率</div>
       </div>
     </div>
@@ -294,12 +307,12 @@ svg.i{width:22px;height:22px;stroke:currentColor;fill:none;stroke-width:1.7;
         <span class="rv bad">随访</span>
       </div>
       <div class="rowitem gcard">
-        <span class="ic" style="color:var(--warning)"><svg class="i" viewBox="0 0 24 24"><path d="M12 3.8 21.4 19.7a1.5 1.5 0 0 1-1.3 2.2H3.9a1.5 1.5 0 0 1-1.3-2.2z"/><path d="M12 10.2v4.6"/></svg></span>
+        <span class="ic" style="color:var(--sem-warn)"><svg class="i" viewBox="0 0 24 24"><path d="M12 3.8 21.4 19.7a1.5 1.5 0 0 1-1.3 2.2H3.9a1.5 1.5 0 0 1-1.3-2.2z"/><path d="M12 10.2v4.6"/></svg></span>
         <div class="md"><b>疫苗到期提醒</b><span>12 月龄 · 剩余 5 天</span></div>
-        <span class="rv" style="color:var(--warning)">预约</span>
+        <span class="rv" style="color:var(--sem-warn)">预约</span>
       </div>
       <div class="rowitem gcard">
-        <span class="ic" style="color:var(--purple)"><svg class="i" viewBox="0 0 24 24"><path d="M12 3.4l2.1 5.2 5.2 2.1-5.2 2.1-2.1 5.2-2.1-5.2-5.2-2.1 5.2-2.1z"/></svg></span>
+        <span class="ic" style="color:var(--sem-special)"><svg class="i" viewBox="0 0 24 24"><path d="M12 3.4l2.1 5.2 5.2 2.1-5.2 2.1-2.1 5.2-2.1-5.2-5.2-2.1 5.2-2.1z"/></svg></span>
         <div class="md"><b>AI 已生成随访建议</b><span>05:12 · 待家长确认</span></div>
         <span class="rv good">查看</span>
       </div>
@@ -308,7 +321,7 @@ svg.i{width:22px;height:22px;stroke:currentColor;fill:none;stroke-width:1.7;
     <!-- 开关设置卡 -->
     <div class="gcard" style="display:flex;flex-direction:column;gap:14px;margin-bottom:14px">
       <div style="display:flex;align-items:center;gap:12px">
-        <span class="ic" style="color:var(--purple)"><svg class="i" viewBox="0 0 24 24"><path d="M12 3.2 19 5.7v5.4c0 4.6-3 8.3-7 9.7-4-1.4-7-5.1-7-9.7V5.7z"/></svg></span>
+        <span class="ic" style="color:var(--sem-special)"><svg class="i" viewBox="0 0 24 24"><path d="M12 3.2 19 5.7v5.4c0 4.6-3 8.3-7 9.7-4-1.4-7-5.1-7-9.7V5.7z"/></svg></span>
         <div class="md"><b>产检提醒</b><span>按孕周自动提醒检查项</span></div>
         <span class="switch on" onclick="this.classList.toggle('on')"></span>
       </div>
@@ -377,8 +390,8 @@ svg.i{width:22px;height:22px;stroke:currentColor;fill:none;stroke-width:1.7;
           <svg data-v="5" viewBox="0 0 24 24"><path d="m12 3.6 2.5 5.4 5.9.8-4.3 4.2 1 5.9-5.1-2.7-5.1 2.7 1-5.9L3.6 9.8l5.9-.8z"/></svg>
         </div>
       </div>
-      <div><div style="display:flex;justify-content:space-between;font-size:14px;font-weight:500;margin-bottom:6px"><span>疫苗全程率</span><b class="num" style="color:var(--success)">96%</b></div><div class="meter"><i class="ok" style="width:0" data-w="96"></i></div></div>
-      <div><div style="display:flex;justify-content:space-between;font-size:14px;font-weight:500;margin-bottom:6px"><span>高危随访闭环</span><b class="num" style="color:var(--warning)">68%</b></div><div class="meter"><i class="warn" style="width:0" data-w="68"></i></div></div>
+      <div><div style="display:flex;justify-content:space-between;font-size:14px;font-weight:500;margin-bottom:6px"><span>疫苗全程率</span><b class="num" style="color:var(--sem-positive)">96%</b></div><div class="meter"><i class="ok" style="width:0" data-w="96"></i></div></div>
+      <div><div style="display:flex;justify-content:space-between;font-size:14px;font-weight:500;margin-bottom:6px"><span>高危随访闭环</span><b class="num" style="color:var(--sem-warn)">68%</b></div><div class="meter"><i class="warn" style="width:0" data-w="68"></i></div></div>
       <div>
         <div style="font-size:13px;font-weight:500;margin-bottom:8px">随访进度（Steps）</div>
         <div class="msteps">
@@ -394,9 +407,9 @@ svg.i{width:22px;height:22px;stroke:currentColor;fill:none;stroke-width:1.7;
     <div class="sec">随访完成趋势 <small>机构示例数据 · 蜜桃粉主序列</small></div>
     <div class="gcard">
       <div style="display:flex;align-items:baseline;gap:8px">
-        <b class="num" style="font-size:28px;font-weight:700;color:var(--rose-600)">64.2k</b>
+        <b class="num" style="font-size:28px;font-weight:700;color:var(--mmh-rose-700,#B23A63)">64.2k</b>
         <span style="font-size:12px;color:var(--text-2)">当前时段</span>
-        <b class="up num" style="font-size:12px;color:var(--success);margin-left:auto">↑ 12.6%</b>
+        <b class="up num" style="font-size:12px;color:var(--sem-positive);margin-left:auto">↑ 12.6%</b>
       </div>
       <svg class="spark" viewBox="0 0 380 64" preserveAspectRatio="none">
         <defs><linearGradient id="mg" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#9A78FF" stop-opacity=".30"/><stop offset="1" stop-color="#9A78FF" stop-opacity="0"/></linearGradient></defs>
@@ -413,7 +426,7 @@ svg.i{width:22px;height:22px;stroke:currentColor;fill:none;stroke-width:1.7;
     <div class="gcard" style="display:flex;flex-direction:column;gap:14px;margin-bottom:6px">
       <div><div style="display:flex;justify-content:space-between;font-size:14px;font-weight:500"><span>儿童建档率</span><b class="num" style="color:var(--text)">72%</b></div><div class="meter"><i style="width:0" data-w="72"></i></div></div>
       <div><div style="display:flex;justify-content:space-between;font-size:14px;font-weight:500"><span>疫苗全程率</span><b class="num" style="color:var(--text)">46%</b></div><div class="meter"><i style="width:0" data-w="46"></i></div></div>
-      <div><div style="display:flex;justify-content:space-between;font-size:14px;font-weight:500"><span>高危随访闭环</span><b class="num" style="color:var(--warning)">68%</b></div><div class="meter"><i class="warn" style="width:0" data-w="68"></i></div></div>
+      <div><div style="display:flex;justify-content:space-between;font-size:14px;font-weight:500"><span>高危随访闭环</span><b class="num" style="color:var(--sem-warn)">68%</b></div><div class="meter"><i class="warn" style="width:0" data-w="68"></i></div></div>
     </div>
 
     <button class="cta"><svg class="i" style="width:18px;height:18px;color:#FFF" viewBox="0 0 24 24"><path d="M12 5.5v13M5.5 12h13"/></svg>新建巡检任务</button>

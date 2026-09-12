@@ -128,6 +128,21 @@ def scope_selector(sel: str, scope: str) -> str | None:
     # `body.is-x` / `html[lang]` 等复合形式 → 作用域后代
     if re.match(r"^(?:html|body)[.:\[]", s):
         return scope + " " + s
+    # 页面级主题状态（`[data-theme="dark"] …`）：必须写成**复合**而不是后代。
+    #
+    # 这类选择器在原独立页里作用于 `<html>` / `<body>`（全页祖先）；合并后
+    # `rewrite_page_dark_css` 与 `rewrite_page_dark_js` 已把该属性改挂在**模块根自身**上。
+    # 若仍按后代处理成 `.gm-mod--x [data-theme="dark"] .glass`，就要求属性挂在模块
+    # **内部**的某个后代上 —— 永远不命中。
+    # 实测症状：暗色开关点了之后按钮文案会变、`data-theme` 也确实挂上了，
+    # 但页面纹丝不动（`--t3`、`.glass` 底纹、模块底全是浅色档）。
+    # 正确形式为 `.gm-mod--x[data-theme="dark"] .glass`：既命中原生节点，特异性也更高，
+    # 稳定压过同源的浅色档规则（不必依赖声明顺序）。
+    m_theme = re.match(r"""^(?::where\()?\[\s*data-theme\s*=\s*["'][^"']+["']\s*\]\)?""", s)
+    if m_theme:
+        head = m_theme.group(0)
+        rest = s[m_theme.end():].strip()
+        return scope + head + ((" " + rest) if rest else "")
     # 已带模块作用域的（幂等保护）
     if s.startswith(scope):
         return s

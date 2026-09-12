@@ -79,12 +79,12 @@ section.block{margin-top:26px}
 .topnav{position:sticky;top:16px;z-index:60;display:flex;gap:6px;align-items:center;
   padding:10px 14px;margin:0 auto 30px;max-width:1180px;border-radius:var(--lg-radius-chip);
   background:linear-gradient(160deg,rgba(255,255,255,.6),rgba(255,255,255,.3) 55%,rgba(255,255,255,.42));
-  -webkit-backdrop-filter:blur(24px) saturate(1.3);backdrop-filter:blur(24px) saturate(1.3);
+  -webkit-backdrop-filter:blur(48px) saturate(1.3);backdrop-filter:blur(48px) saturate(1.3);
   border:1px solid rgba(255,255,255,.7); box-shadow:var(--lg-glass-highlight),var(--lg-shadow-md);
   overflow-x:auto;white-space:nowrap}
 .topnav a{font-size:13px;font-weight:500;color:var(--lg-text-secondary);text-decoration:none;
   padding:6px 14px;border-radius:var(--lg-radius-chip);transition:.25s}
-.topnav a:hover{background:rgba(255,255,255,.55);color:var(--lg-purple-600)}
+.topnav a:hover{background:rgba(255,255,255,.55);color:var(--lg-sem-special)}
 .topnav .logo{font-weight:600;font-size:14px;color:var(--lg-text-primary);padding:6px 10px}
 .topnav .logo i{display:inline-block;width:14px;height:14px;border-radius:50%;margin-right:8px;
   background:var(--lg-grad-hero);vertical-align:-2px;box-shadow:0 0 0 3px rgba(255,255,255,.6)}
@@ -94,7 +94,7 @@ section.block{margin-top:26px}
   overflow:hidden}
 .hero-main{padding:52px 46px}
 .hero-main .kicker{display:inline-flex;align-items:center;gap:8px;font-size:12px;font-weight:600;
-  letter-spacing:.14em;color:var(--lg-purple-600);background:rgba(154,120,255,.10);
+  letter-spacing:.14em;color:var(--lg-sem-special);background:rgba(154,120,255,.10);
   border:1px solid rgba(154,120,255,.25);padding:5px 12px;border-radius:var(--lg-radius-chip)}
 .hero-main h1{font-size:clamp(26px,3.4vw,40px);font-weight:600;letter-spacing:-.02em;
   margin:18px 0 6px;line-height:1.18}
@@ -105,24 +105,24 @@ section.block{margin-top:26px}
 .dna-chips span{font-size:12px;font-weight:500;color:var(--lg-text-secondary);
   padding:5px 12px;border-radius:var(--lg-radius-chip);
   background:rgba(255,255,255,.42);border:1px solid rgba(255,255,255,.65)}
-.dna-chips span b{color:var(--lg-purple-600);font-weight:600}
+.dna-chips span b{color:var(--lg-sem-special);font-weight:600}
 .hero-stage{position:relative;min-height:340px}
 .hero-stage .amb{position:absolute;border-radius:50%;filter:blur(2px);opacity:.8}
 .hero-stage .a1{width:190px;height:190px;left:8%;top:14%;background:radial-gradient(circle at 30% 30%,rgba(154,120,255,.5),rgba(154,120,255,.06) 70%)}
 .hero-stage .a2{width:150px;height:150px;right:6%;top:44%;background:radial-gradient(circle at 30% 30%,rgba(114,221,229,.55),rgba(114,221,229,.05) 70%)}
 .hero-stage .a3{width:120px;height:120px;left:26%;bottom:2%;background:radial-gradient(circle at 30% 30%,rgba(245,184,198,.5),rgba(245,184,198,.05) 70%)}
-.demo-card{position:absolute;border-radius:24px;padding:14px 16px}
+.demo-card{position:absolute;border-radius:22px;padding:14px 16px}
 .demo-card.c1{left:12%;top:22%;width:210px}
 .demo-card.c1 .row{display:flex;justify-content:space-between;align-items:center;margin-bottom:10px}
 .demo-card.c1 .lab{font-size:12px;color:var(--lg-text-secondary)}
-.demo-card.c1 .val{font-size:30px;font-weight:600;color:var(--lg-purple-600);line-height:1}
+.demo-card.c1 .val{font-size:30px;font-weight:600;color:var(--lg-sem-special);line-height:1}
 .demo-card.c1 .spark{width:100%}
 .demo-card.c2{right:6%;top:8%;width:180px}
 .demo-card.c2 .ringwrap{display:flex;align-items:center;gap:12px}
 .demo-card.c3{bottom:6%;right:16%;display:flex;gap:8px;align-items:center}
-.demo-card.c3 .gbtn{padding:8px 16px;border-radius:14px;font-size:12px;font-weight:600;border:1px solid rgba(255,255,255,.55);
+.demo-card.c3 .gbtn{padding:8px 16px;border-radius:18px;font-size:12px;font-weight:600;border:1px solid rgba(255,255,255,.55);
   background:var(--mmh-grad-action-hc,#F77FA3);
-  color:#FFF;box-shadow:inset 0 1px 0 rgba(255,255,255,.45),0 8px 18px rgba(240,127,163,.35)}
+  color:#343A46;box-shadow:0 8px 18px rgba(240,127,163,.35)}   /* D9：品牌亮粉底必须配深字；白高光层会稀释对比度，去掉 */
 .demo-card.c3 .gbtn.gb2{background:linear-gradient(160deg,rgba(255,255,255,.5),transparent 55%),var(--lg-grad-cyan);
   color:var(--lg-deep-slate);box-shadow:inset 0 1px 0 rgba(255,255,255,.5),0 8px 18px rgba(114,221,229,.3)}
 
@@ -131,8 +131,53 @@ section.block{margin-top:26px}
 .g2{grid-template-columns:1fr 1fr}
 .g3{grid-template-columns:repeat(3,1fr)}
 .g4{grid-template-columns:repeat(4,1fr)}
+/* 17 · 页面壳：网格子项默认 min-width:auto，内容（宽表/长数字行）会把列撑破 ——
+   实测 375px 溢出 405px。补 min-width:0，并让 ≤640 真正降到单列。 */
+.grid>*{min-width:0}
 @media(max-width:767px){.g2,.g3,.g4{grid-template-columns:1fr 1fr}.hero{grid-template-columns:1fr}}
-@media(max-width:640px){.g3,.g4{grid-template-columns:1fr}}
+
+/* 10 · 10.4：≤767px 可点热区 ≥44×44。视觉尺寸与行高保持不变，
+   统一用 `::after` 把可点区域扩到 44×44（10 章明确认可的补足方式）。 */
+@media(max-width:767px){
+  .btn,.bx,.btnrow a,.btnrow button,.gbtn,.mbtn,.direct.primary,.sysbar a,.sbtn,
+  .op a,.ngdrop a,.hub a,.go-link,.excard .go,.chk,.switch,.field input,.seg-it,.tabmini i,.mchip,
+  .covline a,.stpm,.stpp,.uprow .del,.slrow input,footer a,.excard,.steps .sd,
+  .tab,#preview-index--exhome a,.panel span a,.panel a,.mrow2 a,.bxrow,.btnrow{position:relative}
+  /* 按钮行在 375px 不换行 → 溢出 4px */
+  .bxrow,.btnrow{flex-wrap:wrap}
+  .btn::after,.bx::after,.btnrow a::after,.btnrow button::after,.gbtn::after,.mbtn::after,
+  .direct.primary::after,.sysbar a::after,.sbtn::after,.op a::after,
+  .ngdrop a::after,.hub a::after,.go-link::after,.excard .go::after,
+  .chk::after,.switch::after,.field input::after,.seg-it::after,.tabmini i::after,.mchip::after,
+  .covline a::after,.stpm::after,.stpp::after,.uprow .del::after,.slrow input::after,
+  footer a::after,.excard::after,.steps .sd::after,
+  .tab::after,#preview-index--exhome a::after,.panel span a::after,.panel a::after,.mrow2 a::after{
+    content:"";position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);
+    width:100%;min-width:44px;height:100%;min-height:44px}
+  /* 11 · 11.2.18：正文行内链接热区 ≥44×44（原实测 18px 高），不改排版 */
+  .sub a,.md a,p a,li a{position:relative}
+  .sub a::after,.md a::after,p a::after,li a::after{
+    content:"";position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);
+    width:100%;min-width:44px;height:100%;min-height:44px}
+}
+@media(max-width:640px){
+  .g2,.g3,.g4{grid-template-columns:1fr}
+  /* 窄屏：气泡卡改**静态流式**（绝对定位无论贴哪边都可能越界，实测仍溢出 18px） */
+  .pcwrap{display:block;width:100%}
+  .pcbub{position:static;width:100%;bottom:auto;margin-top:8px;transform:none}
+  .pcwrap .pcbub::after{display:none}
+  .tnum-demo{gap:16px}
+  .mtable{display:block;max-width:100%;overflow-x:auto;-webkit-overflow-scrolling:touch}
+  .phone{max-width:100%}
+  /* 17 · 页面壳：.block 内的横排演示（玻璃顶部栏 / 分段控件）在 375px 把行撑到 497px */
+  .block,.block>*,.mrow2,.mnav,.mglass,.seg{min-width:0;max-width:100%}
+  .seg{flex-wrap:wrap}
+  .block p,.block span,.block div,.block li{overflow-wrap:anywhere}
+  /* 演示行在 375px 一律允许换行（原来是 nowrap 的横排，把 .block 顶到 497px） */
+  .block div,.block span{flex-wrap:wrap}
+  .block .seg{width:100%;justify-content:flex-start}
+  .wrap{padding-left:14px;padding-right:14px}   /* 375px 最后 4px 余量 */
+}
 .panel{border-radius:var(--lg-radius-card-lg);padding:26px}
 .panel h3{font-size:16px;font-weight:600;margin-bottom:16px;display:flex;align-items:center;gap:8px}
 .panel h3 i{width:8px;height:8px;border-radius:50%;background:var(--lg-grad-primary);display:inline-block}
@@ -140,13 +185,13 @@ section.block{margin-top:26px}
 
 /* color swatches */
 .sw-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(96px,1fr));gap:10px}
-.sw{overflow:hidden;border-radius:16px;border:1px solid rgba(255,255,255,.6);
+.sw{overflow:hidden;border-radius:18px;border:1px solid rgba(255,255,255,.6);
   box-shadow:0 6px 14px rgba(58,52,84,.05);background:rgba(255,255,255,.35)}
 .sw .chip{height:56px}
-.sw .meta{padding:6px 8px;background:rgba(255,255,255,.55);-webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px)}
+.sw .meta{padding:6px 8px;background:rgba(255,255,255,.55);-webkit-backdrop-filter:blur(16px);backdrop-filter:blur(16px)}
 .sw .meta b{display:block;font-size:11px;font-weight:600;color:var(--lg-text-primary);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .sw .meta span{font-size:10px;color:var(--lg-text-tertiary);font-family:ui-monospace,Menlo,monospace}
-.grad-bar{height:44px;border-radius:14px;margin-bottom:10px;border:1px solid rgba(255,255,255,.55);box-shadow:var(--lg-glass-highlight)}
+.grad-bar{height:44px;border-radius:18px;margin-bottom:10px;border:1px solid rgba(255,255,255,.55);box-shadow:var(--lg-glass-highlight)}
 .gradbar-label{display:flex;justify-content:space-between;font-size:11px;color:var(--lg-text-tertiary);margin:2px 2px 12px}
 
 /* typography */
@@ -163,9 +208,9 @@ section.block{margin-top:26px}
 .t-caption{font-size:12px;color:var(--lg-text-tertiary)}
 .tnum-demo{display:flex;gap:28px;flex-wrap:wrap;margin-top:6px}
 .tnum-demo .t{font-variant-numeric:tabular-nums;font-weight:600}
-.t1{font-size:56px;line-height:1.1;color:var(--lg-purple-600)}
-.t2{font-size:32px;color:var(--lg-cyan-600)}
-.t3{font-size:24px;color:var(--lg-blue-600)}
+.t1{font-size:56px;line-height:1.1;color:var(--lg-sem-special)}
+.t2{font-size:32px;color:var(--lg-sem-positive)}
+.t3{font-size:24px;color:var(--lg-sem-info)}
 
 /* glass layers */
 .stage{position:relative;border-radius:var(--lg-radius-card-lg);min-height:300px;overflow:hidden;
@@ -194,7 +239,7 @@ section.block{margin-top:26px}
   border:1px solid rgba(255,255,255,.9);box-shadow:var(--lg-glass-highlight),var(--lg-shadow-lg)}
 
 /* spacing scale */
-.sp-row{display:flex;align-items:center;gap:14px;padding:5px 0}
+.sp-row{display:flex;align-items:center;gap:14px;padding:5px 0;min-width:0}
 .sp-row .lab{width:120px;font-size:12px;color:var(--lg-text-tertiary);font-family:ui-monospace,Menlo,monospace;flex:none}
 .sp-row .bar{height:18px;border-radius:8px;background:linear-gradient(90deg,var(--lg-purple-500),var(--lg-cyan-500));
   box-shadow:0 4px 10px rgba(154,120,255,.25)}
@@ -208,10 +253,10 @@ section.block{margin-top:26px}
 
 /* shadows */
 .sh-row{display:flex;align-items:center;gap:16px;padding:8px 0}
-.sh-row .box{width:86px;height:46px;flex:none;border-radius:16px;
+.sh-row .box{width:86px;height:46px;flex:none;border-radius:18px;
   background:linear-gradient(160deg,rgba(255,255,255,.8),rgba(255,255,255,.5));border:1px solid rgba(255,255,255,.8)}
 .sh-row .lab{width:130px;font-size:12px;color:var(--lg-text-secondary);flex:none}
-.sh-row .val{font-size:11px;color:var(--lg-text-tertiary);font-family:ui-monospace,Menlo,monospace}
+.sh-row .val{font-size:11px;color:var(--lg-text-secondary);font-family:ui-monospace,Menlo,monospace;min-width:0;overflow-wrap:anywhere;word-break:break-word}
 
 /* buttons */
 .btnrow{display:flex;flex-wrap:wrap;gap:12px;align-items:center}
@@ -245,7 +290,7 @@ section.block{margin-top:26px}
 .field svg{width:16px;height:16px;stroke:var(--lg-text-tertiary);fill:none;stroke-width:1.8;stroke-linecap:round;flex:none}
 .field input{border:none;outline:none;background:transparent;flex:1;font-family:var(--lg-font-sans);
   font-size:14px;color:var(--lg-text-primary)}
-.field input::placeholder{color:rgba(88,98,115,.5)}
+.field input::placeholder{color:var(--lg-sem-neutral,#5E6673)}
 
 /* switch */
 .switch{display:inline-flex;align-items:center;gap:10px;font-size:13px;color:var(--lg-text-secondary);cursor:pointer}
@@ -285,18 +330,43 @@ section.block{margin-top:26px}
 .kpi{border-radius:var(--lg-radius-card);padding:20px;position:relative;overflow:hidden}
 .kpi .k-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:14px}
 .kpi .k-lab{font-size:13px;color:var(--lg-text-secondary)}
-.kpi .k-ico{width:32px;height:32px;border-radius:10px;display:flex;align-items:center;justify-content:center;
+.kpi .k-ico{width:32px;height:32px;border-radius:18px;display:flex;align-items:center;justify-content:center;
   background:rgba(255,255,255,.55);border:1px solid rgba(255,255,255,.75);box-shadow:var(--lg-shadow-xs)}
 .kpi .k-val{font-size:34px;font-weight:600;line-height:1.05;letter-spacing:-.01em}
 .kpi .k-delta{display:flex;align-items:center;gap:6px;margin-top:10px;font-size:12px}
-.kpi .k-delta .up{color:var(--lg-success-500);font-weight:600}
-.kpi .k-delta .down{color:var(--lg-danger-500);font-weight:600}
+.kpi .k-delta .up{color:var(--lg-sem-positive);font-weight:600}
+.kpi .k-delta .down{color:var(--lg-sem-risk);font-weight:600}
 .kpi .k-delta .src{color:var(--lg-text-tertiary)}
 .kpi .spark{position:absolute;right:14px;bottom:14px;opacity:.9}
 
 /* charts */
 .chart-cards{display:grid;grid-template-columns:2fr 1fr 1fr;gap:18px}
 @media(max-width:767px){.chart-cards{grid-template-columns:1fr 1fr}}
+
+/* 10 · 10.4：≤767px 可点热区 ≥44×44。视觉尺寸与行高保持不变，
+   统一用 `::after` 把可点区域扩到 44×44（10 章明确认可的补足方式）。 */
+@media(max-width:767px){
+  .btn,.bx,.btnrow a,.btnrow button,.gbtn,.mbtn,.direct.primary,.sysbar a,.sbtn,
+  .op a,.ngdrop a,.hub a,.go-link,.excard .go,.chk,.switch,.field input,.seg-it,.tabmini i,.mchip,
+  .covline a,.stpm,.stpp,.uprow .del,.slrow input,footer a,.excard,.steps .sd,
+  .tab,#preview-index--exhome a,.panel span a,.panel a,.mrow2 a,.bxrow,.btnrow{position:relative}
+  /* 按钮行在 375px 不换行 → 溢出 4px */
+  .bxrow,.btnrow{flex-wrap:wrap}
+  .btn::after,.bx::after,.btnrow a::after,.btnrow button::after,.gbtn::after,.mbtn::after,
+  .direct.primary::after,.sysbar a::after,.sbtn::after,.op a::after,
+  .ngdrop a::after,.hub a::after,.go-link::after,.excard .go::after,
+  .chk::after,.switch::after,.field input::after,.seg-it::after,.tabmini i::after,.mchip::after,
+  .covline a::after,.stpm::after,.stpp::after,.uprow .del::after,.slrow input::after,
+  footer a::after,.excard::after,.steps .sd::after,
+  .tab::after,#preview-index--exhome a::after,.panel span a::after,.panel a::after,.mrow2 a::after{
+    content:"";position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);
+    width:100%;min-width:44px;height:100%;min-height:44px}
+  /* 11 · 11.2.18：正文行内链接热区 ≥44×44（原实测 18px 高），不改排版 */
+  .sub a,.md a,p a,li a{position:relative}
+  .sub a::after,.md a::after,p a::after,li a::after{
+    content:"";position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);
+    width:100%;min-width:44px;height:100%;min-height:44px}
+}
 @media(max-width:640px){.chart-cards{grid-template-columns:1fr}}
 .cchart{min-height:170px;position:relative}
 .cc-title{font-size:13px;font-weight:600;margin-bottom:6px}
@@ -310,7 +380,7 @@ section.block{margin-top:26px}
 .t-node .core{width:64px;height:64px;border-radius:20px;display:flex;align-items:center;justify-content:center;
   background:linear-gradient(160deg,rgba(255,255,255,.75),rgba(255,255,255,.4));
   border:1px solid rgba(255,255,255,.85);box-shadow:var(--lg-shadow-md);font-size:24px}
-.t-node.center .core{background:linear-gradient(160deg,rgba(255,255,255,.5),transparent 55%),var(--lg-grad-primary);
+.t-node.center .core{background:var(--mmh-grad-action-hc,#F77FA3);color:#343A46;
   box-shadow:var(--lg-glow-purple-soft)}
 .t-node .nlab{font-size:11px;color:var(--lg-text-secondary)}
 .t-node .nst{font-size:10px;color:var(--lg-text-tertiary);display:flex;align-items:center;gap:4px}
@@ -319,19 +389,19 @@ section.block{margin-top:26px}
   background:#FFF;border:1.5px solid var(--lg-purple-500);animation:flow 1.6s linear infinite}
 @keyframes flow{from{left:-4px;opacity:0}15%{opacity:1}to{left:100%;opacity:0}}
 .t-link.cyan{background:rgba(114,221,229,.4)}
-.t-link.cyan::after{border-color:var(--lg-cyan-500);animation-delay:.5s}
+.t-link.cyan::after{border-color:var(--lg-sem-positive);animation-delay:.5s}
 
 /* copy css */
 .copybox{display:flex;justify-content:space-between;align-items:center;gap:14px;flex-wrap:wrap}
 .copybox .btn{margin-left:auto}
 .copied{position:fixed;left:50%;bottom:34px;transform:translateX(-50%) translateY(20px);opacity:0;pointer-events:none;
   transition:.35s;z-index:99;padding:10px 22px;border-radius:var(--lg-radius-chip);
-  background:var(--lg-grad-primary);color:#FFF;font-size:13px;font-weight:600;box-shadow:var(--lg-glow-purple-soft)}
+  background:var(--mmh-grad-action-hc,#F77FA3);color:#343A46;font-size:13px;font-weight:600;box-shadow:0 8px 20px rgba(240,127,163,.3)}
 .copied.show{opacity:1;transform:translateX(-50%) translateY(0)}
 
 /* footer */
 footer{margin-top:40px;text-align:center;font-size:12px;color:var(--lg-text-tertiary);line-height:2}
-footer a{color:var(--lg-purple-600);text-decoration:none;font-weight:500}
+footer a{color:var(--lg-sem-special);text-decoration:none;font-weight:500}
 .section-note{font-size:12px;color:var(--lg-text-tertiary);padding:2px 8px 0}
 
 /* ═══════════════ 07 · 交互动效与微交互 (Motion & Micro-interactions) ═══════════════ */
@@ -384,13 +454,13 @@ footer a{color:var(--lg-purple-600);text-decoration:none;font-weight:500}
 .seg-it{position:relative;z-index:2;padding:7px 18px;font-size:12px;font-weight:500;
   color:var(--lg-text-secondary);cursor:pointer;white-space:nowrap;text-align:center;
   transition:color .22s ease;font-family:var(--lg-font-sans);user-select:none}
-.seg-it.on{color:var(--lg-purple-600);font-weight:600}
+.seg-it.on{color:var(--lg-sem-special);font-weight:600}
 .seg .thumb{position:absolute;top:4px;height:calc(100% - 8px);border-radius:var(--lg-radius-chip);
   background:linear-gradient(160deg,rgba(255,255,255,.98),rgba(255,255,255,.72));
   box-shadow:var(--lg-shadow-sm),inset 0 1px 0 rgba(255,255,255,.95);
   transition:left .28s var(--lg-ease-out),width .28s var(--lg-ease-out)}
-.seg.solid .thumb{background:var(--lg-grad-primary);box-shadow:var(--lg-glow-purple-soft)}
-.seg.solid .seg-it.on{color:#FFF}
+.seg.solid .thumb{background:var(--mmh-grad-action-hc,#F77FA3);box-shadow:0 6px 14px rgba(240,127,163,.3)}
+.seg.solid .seg-it.on{color:#343A46}
 
 /* 页签：指示条缩放 */
 .tabs{display:flex;gap:4px;border-bottom:1px solid rgba(58,52,84,.08)}
@@ -399,7 +469,7 @@ footer a{color:var(--lg-purple-600);text-decoration:none;font-weight:500}
 .tab::after{content:"";position:absolute;left:15px;right:15px;bottom:-1px;height:2.5px;border-radius:2px;
   background:var(--lg-grad-primary);transform:scaleX(0);transform-origin:center;
   transition:transform .3s var(--lg-ease-out)}
-.tab.on{color:var(--lg-purple-600);font-weight:600}
+.tab.on{color:var(--lg-sem-special);font-weight:600}
 .tab.on::after{transform:scaleX(1)}
 
 /* Tooltip 气泡 */
@@ -411,7 +481,7 @@ footer a{color:var(--lg-purple-600);text-decoration:none;font-weight:500}
 .tip::after{content:attr(data-tip);position:absolute;top:calc(100% + 10px);left:50%;
   transform:translateX(-50%) translateY(-5px);
   background:linear-gradient(160deg,rgba(255,255,255,.96),rgba(255,255,255,.78));
-  color:var(--lg-deep-slate);font-size:11px;font-weight:500;padding:6px 11px;border-radius:10px;
+  color:var(--lg-deep-slate);font-size:11px;font-weight:500;padding:6px 11px;border-radius:18px;
   border:1px solid rgba(255,255,255,.95);box-shadow:var(--lg-shadow-md);
   opacity:0;pointer-events:none;white-space:nowrap;
   transition:opacity .2s var(--lg-ease-out),transform .2s var(--lg-ease-out);z-index:5}
@@ -447,24 +517,24 @@ footer a{color:var(--lg-purple-600);text-decoration:none;font-weight:500}
 
 /* ═══ 09 · LG 图标库画廊 ═══ */
 .ic-cat{margin-bottom:22px}
-.ic-cat h4{font-size:13px;font-weight:600;color:var(--lg-text-secondary);
+.ic-cat h3{font-size:13px;font-weight:600;color:var(--lg-text-secondary);
   margin:0 2px 10px;display:flex;align-items:center;gap:8px}
-.ic-cat h4 .n{font-size:10px;color:var(--lg-text-tertiary);font-weight:500;
+.ic-cat h3 .n{font-size:10px;color:var(--lg-text-tertiary);font-weight:500;
   background:rgba(255,255,255,.55);border:1px solid rgba(255,255,255,.7);
   padding:1px 8px;border-radius:999px}
 .ic-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(118px,1fr));gap:10px}
 .ig{display:flex;flex-direction:column;align-items:center;gap:8px;padding:14px 6px 10px;
-  border-radius:16px;cursor:pointer;background:rgba(255,255,255,.30);
+  border-radius:18px;cursor:pointer;background:rgba(255,255,255,.30);
   border:1px solid rgba(255,255,255,.55);box-shadow:var(--lg-shadow-xs);
   transition:transform var(--lg-t-base) var(--lg-ease-out),box-shadow var(--lg-t-base) var(--lg-ease-out),background .25s}
 .ig:hover{transform:translateY(-3px);background:rgba(255,255,255,.55);
   box-shadow:var(--lg-glass-highlight),var(--lg-shadow-md)}
 .ig svg{width:24px;height:24px;stroke:currentColor;fill:none;stroke-width:1.7;
   stroke-linecap:round;stroke-linejoin:round;display:block;color:var(--lg-deep-slate)}
-.ig:hover svg{color:var(--lg-purple-600)}
+.ig:hover svg{color:var(--lg-sem-special)}
 .ig .ig-id{font-size:10px;color:var(--lg-text-tertiary);font-family:ui-monospace,Menlo,monospace;line-height:1.4;text-align:center}
 .ig .ig-cn{font-size:11px;color:var(--lg-text-secondary)}
-.ig.sem svg{color:var(--lg-danger-500)}
+.ig.sem svg{color:var(--lg-sem-risk)}
 .ig-grid-legend{display:flex;gap:18px;flex-wrap:wrap;font-size:11px;color:var(--lg-text-tertiary);margin:2px 2px 14px}
 .ig-grid-legend i{display:inline-block;width:12px;height:12px;vertical-align:-2px;margin-right:5px;border-radius:3px}
 
@@ -512,10 +582,10 @@ footer a{color:var(--lg-purple-600);text-decoration:none;font-weight:500}
 .step:first-child::before{display:none}
 .step.done::before,.step.cur::before{background:linear-gradient(90deg,var(--mmh-rose-300,#FFC4D6),var(--mmh-rose-500,#F77FA3))}
 .step .sd{width:32px;height:32px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:600;z-index:1;background:rgba(255,255,255,.7);border:1px solid rgba(255,255,255,.9);color:var(--lg-text-secondary);box-shadow:var(--lg-shadow-sm)}
-.step.done .sd{background:var(--mmh-grad-primary,#F77FA3);color:#FFF;border-color:transparent}
-.step.cur .sd{background:#FFF;color:var(--mmh-rose-600,#E85D8F);border:2px solid var(--mmh-rose-500,#F77FA3);animation:pulse 2.4s ease-in-out infinite}
+.step.done .sd{background:var(--mmh-grad-action-hc,#F77FA3);color:#343A46;border-color:transparent}
+.step.cur .sd{background:#FFF;color:var(--mmh-rose-700,#B23A63);border:2px solid var(--mmh-rose-500,#F77FA3);animation:pulse 2.4s ease-in-out infinite}
 .step .st{font-size:11px;color:var(--lg-text-secondary)}
-.step.cur .st{color:var(--mmh-rose-600,#E85D8F);font-weight:600}
+.step.cur .st{color:var(--mmh-rose-700,#B23A63);font-weight:600}
 .ringrow{display:flex;gap:26px;align-items:center;flex-wrap:wrap}
 .ringbox{display:flex;flex-direction:column;align-items:center;gap:6px}
 .ringbox .rl{font-size:11px;color:var(--lg-text-tertiary)}
@@ -529,52 +599,52 @@ footer a{color:var(--lg-purple-600);text-decoration:none;font-weight:500}
 input[type=range].lgs{-webkit-appearance:none;appearance:none;flex:1;height:6px;border-radius:999px;outline:none;
   background:linear-gradient(90deg,var(--mmh-rose-400,#FFA3BE) var(--v,50%),rgba(58,52,84,.10) var(--v,50%))}
 input[type=range].lgs::-webkit-slider-thumb{-webkit-appearance:none;width:20px;height:20px;border-radius:50%;background:#FFF;border:2px solid var(--mmh-rose-500,#F77FA3);box-shadow:0 4px 10px rgba(240,127,163,.35);cursor:pointer}
-.slv{font-size:13px;font-weight:600;color:var(--mmh-rose-600,#E85D8F);min-width:56px;text-align:right;font-variant-numeric:tabular-nums}
-.stepbox{display:flex;align-items:center;border-radius:14px;overflow:hidden;border:1px solid rgba(255,255,255,.75);background:rgba(255,255,255,.45);box-shadow:var(--lg-shadow-xs)}
+.slv{font-size:13px;font-weight:600;color:var(--mmh-rose-700,#B23A63);min-width:56px;text-align:right;font-variant-numeric:tabular-nums}
+.stepbox{display:flex;align-items:center;border-radius:18px;overflow:hidden;border:1px solid rgba(255,255,255,.75);background:rgba(255,255,255,.45);box-shadow:var(--lg-shadow-xs)}
 .stepbox button{width:36px;height:34px;border:none;background:transparent;font-size:17px;color:var(--lg-text-secondary);cursor:pointer}
-.stepbox button:active{background:rgba(247,127,163,.12);color:var(--mmh-rose-600,#E85D8F)}
+.stepbox button:active{background:rgba(247,127,163,.12);color:var(--mmh-rose-700,#B23A63)}
 .stepbox .sn{min-width:56px;text-align:center;font-size:15px;font-weight:600;font-variant-numeric:tabular-nums}
 .rate{display:flex;gap:6px}
 .rate .rs{width:28px;height:28px;color:rgba(88,98,115,.28);cursor:pointer;transition:transform .2s var(--lg-ease-spring),color .2s}
 .rate .rs svg{width:100%;height:100%;fill:currentColor;stroke:currentColor;stroke-width:1.4}
 .rate .rs.on{color:var(--mmh-rose-500,#F77FA3)}
 .rate .rs:hover{transform:scale(1.12)}
-.uprow{display:flex;align-items:center;gap:12px;padding:10px 12px;border-radius:16px;background:rgba(255,255,255,.45);border:1px solid rgba(255,255,255,.7)}
-.uprow .fi{width:34px;height:34px;border-radius:10px;display:flex;align-items:center;justify-content:center;background:var(--mmh-rose-100,#FFF0F4);color:var(--mmh-rose-600,#E85D8F);flex:none}
+.uprow{display:flex;align-items:center;gap:12px;padding:10px 12px;border-radius:18px;background:rgba(255,255,255,.45);border:1px solid rgba(255,255,255,.7)}
+.uprow .fi{width:34px;height:34px;border-radius:18px;display:flex;align-items:center;justify-content:center;background:var(--mmh-rose-100,#FFF0F4);color:var(--mmh-rose-700,#B23A63);flex:none}
 .uprow .fn{width:150px;font-size:12px;font-weight:500;color:var(--lg-text-primary);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;flex:none}
 .uprow .prog{flex:1;margin:0}
 .uprow .del{width:26px;height:26px;border-radius:50%;border:none;background:transparent;color:var(--lg-text-tertiary);cursor:pointer;font-size:14px;flex:none}
-.uprow .del:hover{color:var(--lg-danger-500);background:rgba(239,106,123,.10)}
+.uprow .del:hover{color:var(--lg-sem-risk);background:rgba(239,106,123,.10)}
 .banner{display:flex;align-items:flex-start;gap:10px;padding:12px 14px;border-radius:18px;font-size:13px;margin:8px 0;background:rgba(255,255,255,.5);border:1px solid rgba(255,255,255,.75);box-shadow:var(--lg-shadow-xs)}
 .banner svg{width:17px;height:17px;flex:none;margin-top:1px}
 .banner .bt{flex:1}
 .banner .bt b{display:block;font-size:13px;font-weight:600;margin-bottom:2px}
-.banner.warn svg{color:var(--lg-warning-500)}
-.banner.danger svg{color:var(--lg-danger-500)}
-.banner.info svg{color:var(--lg-info-500)}
+.banner.warn svg{color:var(--lg-sem-attention)}
+.banner.danger svg{color:var(--lg-sem-risk)}
+.banner.info svg{color:var(--lg-sem-info)}
 .descrow{display:grid;grid-template-columns:repeat(3,1fr);gap:10px 18px;margin-top:8px}
 .descrow .it b{display:block;font-size:11px;color:var(--lg-text-tertiary);font-weight:500;margin-bottom:3px}
 .descrow .it span{font-size:14px;color:var(--lg-text-primary);font-weight:600;font-variant-numeric:tabular-nums}
-details.gfold{border-radius:16px;background:rgba(255,255,255,.4);border:1px solid rgba(255,255,255,.7);margin:8px 0;overflow:hidden}
+details.gfold{border-radius:18px;background:rgba(255,255,255,.4);border:1px solid rgba(255,255,255,.7);margin:8px 0;overflow:hidden}
 details.gfold summary{cursor:pointer;list-style:none;display:flex;align-items:center;gap:10px;padding:12px 14px;font-size:13px;font-weight:600}
 details.gfold summary::-webkit-details-marker{display:none}
 details.gfold summary .arr{margin-left:auto;transition:transform .25s var(--lg-ease-out);color:var(--lg-text-tertiary)}
 details.gfold[open] summary .arr{transform:rotate(180deg)}
 details.gfold .gfb{padding:0 14px 12px;font-size:12px;color:var(--lg-text-secondary);line-height:1.9}
 .mtable{width:100%;border-collapse:separate;border-spacing:0;font-size:13px}
-.mtable th{font-size:11px;color:var(--lg-text-tertiary);font-weight:500;text-align:left;padding:8px 12px;border-bottom:1px solid rgba(58,52,84,.08)}
+.mtable th{font-size:11px;color:var(--lg-text-secondary);font-weight:500;text-align:left;padding:8px 12px;border-bottom:1px solid rgba(58,52,84,.08)}
 .mtable td{padding:11px 12px;border-bottom:1px solid rgba(58,52,84,.06)}
 .mtable tbody tr{transition:background .2s}
 .mtable tbody tr:hover{background:rgba(255,255,255,.5)}
 .mtable .cell-av{display:flex;align-items:center;gap:9px}
-.mtable .mini-av{width:28px;height:28px;border-radius:50%;background:linear-gradient(150deg,var(--mmh-rose-200,#FFDEE8),var(--mmh-rose-100,#FFF0F4));border:1px solid rgba(255,255,255,.9);display:flex;align-items:center;justify-content:center;color:var(--mmh-rose-600,#E85D8F);font-size:12px;font-weight:600}
+.mtable .mini-av{width:28px;height:28px;border-radius:50%;background:linear-gradient(150deg,var(--mmh-rose-200,#FFDEE8),var(--mmh-rose-100,#FFF0F4));border:1px solid rgba(255,255,255,.9);display:flex;align-items:center;justify-content:center;color:var(--mmh-rose-700,#B23A63);font-size:12px;font-weight:600}
 .band-legend{display:flex;gap:16px;font-size:11px;color:var(--lg-text-secondary);margin-top:8px;flex-wrap:wrap}
 .band-legend i{display:inline-block;width:10px;height:10px;border-radius:3px;margin-right:5px;vertical-align:-1px}
 
 
 /* ═══ 移动端平铺（首页组件板块内）═══ */
 .phones{display:flex;gap:22px;justify-content:center;flex-wrap:wrap;padding:6px 2px 2px}
-.phone{position:relative;width:238px;height:508px;border-radius:36px;flex:none;padding:11px;
+.phone{position:relative;width:238px;height:508px;border-radius:40px;flex:none;padding:11px;
   background:linear-gradient(155deg,#3A3642,#191720);box-shadow:0 26px 54px rgba(58,52,84,.32),inset 0 1px 0 rgba(255,255,255,.12)}
 .phone .scr{position:relative;width:100%;height:100%;border-radius:26px;overflow:hidden;display:flex;flex-direction:column;
   background:radial-gradient(200px 140px at 90% -2%,rgba(247,127,163,.24),transparent 70%),
@@ -584,26 +654,26 @@ details.gfold .gfb{padding:0 14px 12px;font-size:12px;color:var(--lg-text-second
 .phone .body{flex:1;overflow:hidden;padding:30px 10px 8px;display:flex;flex-direction:column;gap:8px}
 .phone .tabmini{position:absolute;left:10px;right:10px;bottom:9px;height:46px;border-radius:18px;z-index:5;
   background:linear-gradient(160deg,rgba(255,255,255,.8),rgba(255,255,255,.5));
-  -webkit-backdrop-filter:blur(18px);backdrop-filter:blur(18px);border:1px solid rgba(255,255,255,.85);
+  -webkit-backdrop-filter:blur(20px);backdrop-filter:blur(20px);border:1px solid rgba(255,255,255,.85);
   box-shadow:inset 0 1px 0 rgba(255,255,255,.9),0 -4px 16px rgba(58,52,84,.08);
   display:flex;padding:4px}
 .phone .tabmini i{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;
-  border-radius:14px;color:rgba(88,98,115,.7);font-size:8px;font-style:normal}
+  border-radius:18px;color:var(--lg-text-secondary);font-size:11px;font-style:normal}
 .phone .tabmini i.on{background:var(--mmh-grad-action-hc,#F77FA3);color:#343A46;font-weight:600}
 .phone .tabmini i svg{width:15px;height:15px}
 .ph-cap{text-align:center;font-size:11px;color:var(--lg-text-tertiary);margin-top:8px;line-height:1.7}
 .ph-cap b{color:var(--lg-text-secondary);font-weight:600}
-.mglass{border-radius:14px;background:linear-gradient(160deg,rgba(255,255,255,.6),rgba(255,255,255,.26) 60%,rgba(255,255,255,.38));
+.mglass{border-radius:18px;background:linear-gradient(160deg,rgba(255,255,255,.6),rgba(255,255,255,.26) 60%,rgba(255,255,255,.38));
   border:1px solid rgba(255,255,255,.75);box-shadow:inset 0 1px 0 rgba(255,255,255,.85),0 6px 14px rgba(58,52,84,.07)}
-.mnav{display:flex;align-items:center;gap:5px;padding:5px 8px;border-radius:15px;font-size:11px;font-weight:600;color:var(--lg-text-primary)}
+.mnav{display:flex;align-items:center;gap:5px;padding:5px 8px;border-radius:18px;font-size:11px;font-weight:600;color:var(--lg-text-primary)}
 .mnav svg{width:14px;height:14px;flex:none;stroke:currentColor;fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
 .mnav .mt{flex:1;text-align:center;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .mkpi{padding:10px 11px;display:flex;flex-direction:column;gap:5px}
 .mkpi .l{font-size:9.5px;color:var(--lg-text-tertiary)}
-.mkpi .v{font-size:26px;font-weight:700;line-height:1;letter-spacing:-.02em;color:#E85D8F;font-variant-numeric:tabular-nums}
+.mkpi .v{font-size:26px;font-weight:700;line-height:1;letter-spacing:-.02em;color:var(--mmh-rose-700,#B23A63);font-variant-numeric:tabular-nums}
 .mchiprow{display:flex;gap:6px;flex-wrap:wrap}
 .mchip{font-size:9.5px;padding:4px 10px;border-radius:999px;color:var(--lg-text-2,var(--lg-text-secondary));background:rgba(255,255,255,.55);border:1px solid rgba(255,255,255,.75)}
-.mchip.on{background:linear-gradient(135deg,#FFA9C2,#E85D8F);color:#FFF;font-weight:600}
+.mchip.on{background:var(--mmh-grad-action-hc,#F77FA3);color:#343A46;font-weight:600}
 .mrow2{display:flex;align-items:center;gap:8px;padding:7px 9px;font-size:10px;color:var(--lg-text-secondary)}
 .mrow2 .md2{flex:1;min-width:0}
 .mrow2 .md2 b{display:block;font-size:10.5px;color:var(--lg-text-primary);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
@@ -613,19 +683,19 @@ details.gfold .gfb{padding:0 14px 12px;font-size:12px;color:var(--lg-text-second
 .mdot.warn{background:#F2B25C;box-shadow:0 0 0 2.5px rgba(242,178,92,.16)}
 .mdot.danger{background:#EF6A7B;box-shadow:0 0 0 2.5px rgba(239,106,123,.15)}
 .mbtn{font-size:10.5px;font-weight:600;color:#343A46;background:var(--mmh-grad-action-hc,#F77FA3);
-  border-radius:12px;padding:8px 0;text-align:center;border:1px solid rgba(255,255,255,.6);box-shadow:0 6px 14px rgba(240,127,163,.3)}
+  border-radius:18px;padding:8px 0;text-align:center;border:1px solid rgba(255,255,255,.6);box-shadow:0 6px 14px rgba(240,127,163,.3)}
 .mprog{height:6px;border-radius:999px;background:rgba(58,52,84,.09);overflow:hidden}
 .mprog i{display:block;height:100%;border-radius:999px;background:linear-gradient(90deg,#FFA3BE,#E85D8F)}
 /* 移动控件平铺清单 */
 .mcgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(168px,1fr));gap:10px}
-.mc{padding:11px 13px;border-radius:15px;cursor:default;
+.mc{padding:11px 13px;border-radius:18px;cursor:default;
   background:linear-gradient(160deg,rgba(255,255,255,.5),rgba(255,255,255,.24));border:1px solid rgba(255,255,255,.7);
   box-shadow:var(--lg-shadow-xs);transition:transform var(--lg-t-base) var(--lg-ease-out)}
 .mc:hover{transform:translateY(-2px)}
 .mc b{font-size:12.5px;color:var(--lg-text-primary);display:flex;align-items:center;gap:7px}
 .mc b .n{font-size:9px;color:#FFF;font-weight:600;background:var(--mmh-rose-500,#F77FA3);border-radius:999px;padding:1px 7px}
 .mc span{display:block;font-size:10.5px;color:var(--lg-text-tertiary);margin-top:4px;line-height:1.6}
-.go-link{font-size:12px;font-weight:600;color:var(--mmh-rose-600,#E85D8F);text-decoration:none;margin-left:auto}
+.go-link{font-size:12px;font-weight:600;color:var(--mmh-rose-700,#B23A63);text-decoration:none;margin-left:auto}
 .go-link:hover{opacity:.8}
 
 
@@ -636,9 +706,9 @@ details.gfold .gfb{padding:0 14px 12px;font-size:12px;color:var(--lg-text-second
   transition:transform var(--lg-t-base) var(--lg-ease-out),box-shadow var(--lg-t-base) var(--lg-ease-out),background .25s ease,color .2s ease}
 .bx:active{transform:scale(.96);transition-duration:var(--lg-t-fast)}
 .bx svg{width:16px;height:16px;stroke:currentColor;fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round;flex:none}
-.bx-mini{height:28px;font-size:12px;padding:0 13px;border-radius:14px}
-.bx-sm{height:32px;font-size:13px;padding:0 15px;border-radius:16px}
-.bx-lg{height:48px;font-size:15px;padding:0 24px;border-radius:24px}
+.bx-mini{height:28px;font-size:12px;padding:0 13px;border-radius:18px}  /* 02 · 2.4 交互下限 16 */
+.bx-sm{height:32px;font-size:13px;padding:0 15px;border-radius:18px}
+.bx-lg{height:48px;font-size:15px;padding:0 24px;border-radius:22px}
 .bx-default{background:linear-gradient(160deg,rgba(255,255,255,.66),rgba(255,255,255,.34));color:var(--lg-deep-slate);border-color:rgba(255,255,255,.78);box-shadow:inset 0 1px 0 rgba(255,255,255,.55),var(--lg-shadow-sm)}
 .bx-primary{background:var(--mmh-grad-action-hc,#F77FA3);color:#343A46;border-color:rgba(255,255,255,.6);box-shadow:inset 0 1px 0 rgba(255,255,255,.5),var(--lg-shadow-md)}
 .bx-secondary{background:linear-gradient(160deg,rgba(255,255,255,.5),transparent 55%),var(--mmh-grad-mint,#6FC9B4);color:#FFF;border-color:rgba(255,255,255,.65);box-shadow:inset 0 1px 0 rgba(255,255,255,.55),var(--lg-shadow-md)}
@@ -651,8 +721,8 @@ details.gfold .gfb{padding:0 14px 12px;font-size:12px;color:var(--lg-text-second
 .bx-solid.st-success{background:#1E6B52;color:#FFF;border-color:rgba(255,255,255,.55);box-shadow:inset 0 1px 0 rgba(255,255,255,.28)} /* AA：白字 6.4:1（D5） */
 .bx-solid.st-warning{background:#9A5A0E;color:#FFF;border-color:rgba(255,255,255,.55);box-shadow:inset 0 1px 0 rgba(255,255,255,.28)} /* AA：白字 5.46:1（D5） */
 .bx-solid.st-danger{background:#B04052;color:#FFF;border-color:rgba(255,255,255,.55);box-shadow:inset 0 1px 0 rgba(255,255,255,.28)} /* AA：白字 5.67:1（D5） */
-.bx-outline.st-danger{color:var(--lg-danger-500);border-color:var(--lg-danger-500)}
-.bx-text.st-danger{color:var(--lg-danger-500)}
+.bx-outline.st-danger{color:var(--lg-sem-risk);border-color:var(--lg-sem-risk)}
+.bx-text.st-danger{color:var(--lg-sem-risk)}
 .bx.round{border-radius:999px}
 .bx.cr{border-radius:50%;padding:0;width:40px;height:40px}
 .bx.cr svg{width:18px;height:18px}
@@ -671,19 +741,24 @@ details.gfold .gfb{padding:0 14px 12px;font-size:12px;color:var(--lg-text-second
 /* ═══ 交互补全（07 · 7.8）：焦点环 + 步骤控制器 ═══ */
 .bx:focus-visible,.btn:focus-visible,.chip:focus-visible,.tip:focus-visible,.tab:focus-visible,.seg-it:focus-visible,.mchip:focus-visible,.sbtn:focus-visible,.switch:focus-visible{
   outline:2px solid rgba(232,93,143,.55);outline-offset:2px}
+/* 02 · 2.7.1：输入类控件同样必须有可见焦点环。
+   上面这组只覆盖了按钮/标签类；input 被 `outline:none` 抹掉后完全没有焦点提示
+   （实测 focus({focusVisible:true}) 前后 outline/box-shadow/border/background 全无变化）。 */
+.field input:focus-visible,.slrow input:focus-visible,.lgs:focus-visible{
+  outline:2px solid rgba(232,93,143,.6);outline-offset:2px;border-radius:18px}
 .stepctl{display:flex;gap:10px;align-items:center;margin:2px 0 6px;flex-wrap:wrap}
 .stepctl .sbtn{font-size:11px;font-weight:600;padding:6px 14px;border-radius:999px;cursor:pointer;
   background:rgba(255,255,255,.62);border:1px solid rgba(255,255,255,.85);color:var(--lg-text-secondary);
   box-shadow:var(--lg-shadow-xs);transition:transform .15s var(--lg-ease-out),background .2s}
-.stepctl .sbtn:hover{background:#FFF;color:var(--mmh-rose-600,#E85D8F)}
+.stepctl .sbtn:hover{background:#FFF;color:var(--mmh-rose-700,#B23A63)}
 .stepctl .sbtn:active{transform:scale(.95)}
 .stepctl .hint{font-size:11px;color:var(--lg-text-tertiary)}
 
 
 /* ═══ 状态样式库（14/15）═══ */
 .semrow{display:grid;grid-template-columns:repeat(auto-fill,minmax(156px,1fr));gap:10px}
-.sem{border-radius:16px;padding:12px;border:1px solid rgba(255,255,255,.7);background:rgba(255,255,255,.4);box-shadow:var(--lg-shadow-xs)}
-.sem .c{height:34px;border-radius:10px;margin-bottom:8px;border:1px solid rgba(255,255,255,.6)}
+.sem{border-radius:18px;padding:12px;border:1px solid rgba(255,255,255,.7);background:rgba(255,255,255,.4);box-shadow:var(--lg-shadow-xs)}
+.sem .c{height:34px;border-radius:18px;margin-bottom:8px;border:1px solid rgba(255,255,255,.6)}
 .sem b{font-size:12.5px;display:flex;align-items:center;gap:6px}
 .sem b i{width:9px;height:9px;border-radius:50%;background:currentColor}
 .sem span{font-size:10px;color:var(--lg-text-tertiary);display:block;margin-top:3px;line-height:1.6}
@@ -701,14 +776,14 @@ details.gfold .gfb{padding:0 14px 12px;font-size:12px;color:var(--lg-text-second
 .c-r{color:#B72F42;background:rgba(239,106,123,.13);border-color:rgba(239,106,123,.3)}
 .c-n{color:#5E6673;background:rgba(88,98,115,.09);border-color:rgba(88,98,115,.18)}
 .c-p{color:#6A48DC;background:rgba(154,120,255,.14);border-color:rgba(154,120,255,.3)}
-.dmask{position:fixed;inset:0;z-index:90;background:rgba(255,255,255,.25);-webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px);
+.dmask{position:fixed;inset:0;z-index:90;background:rgba(255,255,255,.25);-webkit-backdrop-filter:blur(16px);backdrop-filter:blur(16px);
   display:none;align-items:center;justify-content:center;padding:16px}
 .dmask.show{display:flex}
-.dcard{width:min(400px,92vw);border-radius:24px;padding:22px;background:linear-gradient(160deg,rgba(255,255,255,.85),rgba(255,255,255,.6));
+.dcard{width:min(400px,92vw);border-radius:22px;padding:22px;background:linear-gradient(160deg,rgba(255,255,255,.85),rgba(255,255,255,.6));
   border:1px solid rgba(255,255,255,.95);box-shadow:var(--lg-shadow-xl);animation:popIn .26s var(--lg-ease-out)}
 @keyframes popIn{from{opacity:0;transform:scale(.96) translateY(6px)}to{opacity:1;transform:none}}
 .pcwrap{position:relative;display:inline-block}
-.pcbub{position:absolute;bottom:calc(100% + 10px);left:0;width:214px;border-radius:16px;padding:12px;z-index:30;
+.pcbub{position:absolute;bottom:calc(100% + 10px);left:0;width:214px;border-radius:18px;padding:12px;z-index:30;
   background:linear-gradient(160deg,rgba(255,255,255,.96),rgba(255,255,255,.8));border:1px solid rgba(255,255,255,.95);
   box-shadow:var(--lg-shadow-lg);opacity:0;pointer-events:none;transform:translateY(5px);
   transition:opacity .2s var(--lg-ease-out),transform .2s var(--lg-ease-out)}
@@ -717,33 +792,34 @@ details.gfold .gfb{padding:0 14px 12px;font-size:12px;color:var(--lg-text-second
 .crum{display:flex;gap:8px;align-items:center;font-size:12px;color:var(--lg-text-tertiary);flex-wrap:wrap}
 .crum b{color:var(--lg-text-primary);font-weight:600}
 .pg{display:flex;gap:6px;align-items:center;flex-wrap:wrap}
-.pgit{width:30px;height:30px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:12px;color:var(--lg-text-secondary);
+.pgit{width:30px;height:30px;border-radius:18px;display:flex;align-items:center;justify-content:center;font-size:12px;color:var(--lg-text-secondary);
   background:rgba(255,255,255,.5);border:1px solid rgba(255,255,255,.75);cursor:pointer;transition:.2s}
 .pgit:hover{background:#FFF}
-.pgit.on{background:var(--mmh-grad-primary,#F77FA3);color:#FFF;font-weight:600}
+.pgit.on{background:var(--mmh-grad-action-hc,#F77FA3);color:#343A46;font-weight:600}
 .pgit.gap{border:none;background:none;cursor:default}
 .avts{display:flex;gap:10px;align-items:center}
-.avt{border-radius:50%;display:flex;align-items:center;justify-content:center;color:#FFF;font-weight:600;
-  background:linear-gradient(150deg,#FFA9C2,#E85D8F);border:2px solid rgba(255,255,255,.9);box-shadow:var(--lg-shadow-sm)}
+/* 头像标识：饱和渐变 + 白字实测 2.49–4.14，深字同样不达标 → 浅染 + 深档文字（见 preview-examples 同名注释） */
+.avt{border-radius:50%;display:flex;align-items:center;justify-content:center;color:var(--mmh-rose-700,#B23A63);font-weight:600;
+  background:linear-gradient(150deg,#FFDEE8,#FFF0F4);border:2px solid rgba(255,255,255,.9);box-shadow:var(--lg-shadow-sm)}
 .avt.s{width:28px;height:28px;font-size:11px}.avt.m{width:38px;height:38px;font-size:14px}.avt.l{width:50px;height:50px;font-size:18px}
-.avt.mint{background:linear-gradient(150deg,#7FD8C2,#4FB59C)}
-.avt.purp{background:linear-gradient(150deg,#B9A0FF,#8066F0)}
+.avt.mint{background:linear-gradient(150deg,#A5F1EE,#E0F8F6);color:var(--lg-sem-positive,#25715D)}
+.avt.purp{background:linear-gradient(150deg,#D9CBFE,#EDE7FE);color:var(--mmh-solid-special,#6242B8)}
 .sel{display:inline-flex;align-items:center;gap:6px;padding:8px 16px;border-radius:999px;font-size:13px;cursor:pointer;user-select:none;
   background:rgba(255,255,255,.5);border:1px solid rgba(255,255,255,.75);color:var(--lg-text-secondary);transition:.2s}
 .sel:active{transform:scale(.96)}
-.sel.on{background:var(--mmh-grad-primary,#F77FA3);color:#FFF;font-weight:600;box-shadow:0 6px 14px rgba(240,127,163,.3)}
+.sel.on{background:var(--mmh-grad-action-hc,#F77FA3);color:#343A46;font-weight:600;box-shadow:0 6px 14px rgba(240,127,163,.3)}
 .sel.sel-m.on{background:linear-gradient(135deg,#B9A0FF,#8066F0);box-shadow:0 6px 14px rgba(128,102,240,.25)}
 
 
 /* ═══ 孕产妇五色管理（02 · 2.10）═══ */
 .m5row{display:grid;grid-template-columns:repeat(auto-fit,minmax(168px,1fr));gap:10px;margin-top:4px}
-.m5{border-radius:16px;padding:12px;background:rgba(255,255,255,.45);border:1px solid rgba(255,255,255,.7);box-shadow:var(--lg-shadow-xs)}
+.m5{border-radius:18px;padding:12px;background:rgba(255,255,255,.45);border:1px solid rgba(255,255,255,.7);box-shadow:var(--lg-shadow-xs)}
 .m5 .hd{display:flex;gap:8px;align-items:center;margin-bottom:6px}
 .m5 .hd i{width:13px;height:13px;border-radius:50%;flex:none}
 .m5 .hd b{font-size:12.5px}
 .m5 p{font-size:10.5px;color:var(--lg-text-tertiary);line-height:1.7;margin:0}
 .m5 .tk{font-size:9.5px;color:var(--lg-text-tertiary);font-family:ui-monospace,Menlo,monospace;display:block;margin-top:6px}
-.c-y{color:#8A6D10;background:rgba(242,193,78,.2);border-color:rgba(242,193,78,.35)}
+.c-y{color:#7A5F0D;background:rgba(242,193,78,.2);border-color:rgba(242,193,78,.35)}
 
 
 /* 儿童健康保健清单 */
@@ -751,8 +827,8 @@ details.gfold .gfb{padding:0 14px 12px;font-size:12px;color:var(--lg-text-second
   background:linear-gradient(160deg,rgba(255,255,255,.5),rgba(255,255,255,.26));border:1px solid rgba(255,255,255,.75);
   box-shadow:var(--lg-shadow-xs);transition:transform .18s var(--lg-ease-out),box-shadow .18s var(--lg-ease-out)}
 .hrow:hover{transform:translateY(-2px);box-shadow:var(--lg-shadow-md)}
-.hrow .fico{width:44px;height:44px;border-radius:14px;flex:none;display:flex;align-items:center;justify-content:center;
-  background:linear-gradient(150deg,var(--mmh-rose-200,#FFDEE8),var(--mmh-rose-100,#FFF0F4));border:1px solid rgba(255,255,255,.9);color:var(--mmh-rose-600,#E85D8F)}
+.hrow .fico{width:44px;height:44px;border-radius:18px;flex:none;display:flex;align-items:center;justify-content:center;
+  background:linear-gradient(150deg,var(--mmh-rose-200,#FFDEE8),var(--mmh-rose-100,#FFF0F4));border:1px solid rgba(255,255,255,.9);color:var(--mmh-rose-700,#B23A63)}
 .hrow .fico svg{width:23px;height:23px}
 .hrow .fkstate{transition:transform .15s var(--lg-ease-spring)}
 .hrow .fkstate:active{transform:scale(.9)}
@@ -766,7 +842,7 @@ details.gfold .gfb{padding:0 14px 12px;font-size:12px;color:var(--lg-text-second
 .stsem.on{border-color:currentColor;font-weight:600}
 .sttab{display:inline-flex;align-items:center;gap:6px;padding:6px 13px;border-radius:999px;font-size:12px;color:var(--lg-text-secondary);
   background:rgba(255,255,255,.5);border:1px solid rgba(255,255,255,.75);cursor:pointer;transition:.2s;user-select:none;white-space:nowrap}
-.sttab.on{background:var(--mmh-grad-primary,#F77FA3);color:#FFF;font-weight:600;box-shadow:0 6px 14px rgba(240,127,163,.3)}
+.sttab.on{background:var(--mmh-grad-action-hc,#F77FA3);color:#343A46;font-weight:600;box-shadow:0 6px 14px rgba(240,127,163,.3)}
 .stmods{margin-top:4px}
 .stmod{animation:fadeIn .3s ease}
 .stmod.off{display:none}
@@ -781,45 +857,45 @@ details.gfold .gfb{padding:0 14px 12px;font-size:12px;color:var(--lg-text-second
 .excard{padding:18px 18px 16px;display:flex;flex-direction:column;gap:8px;text-decoration:none;color:inherit;
   transition:transform .22s var(--lg-ease-out),box-shadow .22s var(--lg-ease-out)}
 .excard:hover{transform:translateY(-4px);box-shadow:var(--lg-glass-highlight),var(--lg-shadow-lg)}
-.excard .no{width:34px;height:34px;border-radius:12px;display:flex;align-items:center;justify-content:center;
-  font-weight:700;color:#FFF;background:var(--mmh-grad-primary,#F77FA3);font-size:15px;box-shadow:0 6px 14px rgba(240,127,163,.3)}
-.excard h4{font-size:15.5px;margin-top:2px}
+.excard .no{width:34px;height:34px;border-radius:18px;display:flex;align-items:center;justify-content:center;
+  font-weight:700;color:#343A46;background:var(--mmh-grad-action-hc,#F77FA3);font-size:15px;box-shadow:0 6px 14px rgba(240,127,163,.3)}
+.excard h3{font-size:15.5px;margin-top:2px}
 .excard p{font-size:12px;color:var(--lg-text-tertiary);line-height:1.8;flex:1}
-.excard .go{font-size:12px;font-weight:600;color:var(--mmh-rose-600,#E85D8F);display:flex;align-items:center;gap:6px}
+.excard .go{font-size:12px;font-weight:600;color:var(--mmh-rose-700,#B23A63);display:flex;align-items:center;gap:6px}
 .excard .go svg{width:14px;height:14px;stroke:currentColor;fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
 .excard .ends{display:flex;gap:6px;flex-wrap:wrap}
 .excard .ends i{font-style:normal;font-size:10px;padding:2px 9px;border-radius:999px;background:rgba(255,255,255,.6);border:1px solid rgba(255,255,255,.8);color:var(--lg-text-secondary)}
 
 
 /* ═══ 首页专业版：分组菜单 + 速览条 ═══ */
-.hero-logo{width:88px;height:88px;border-radius:24px;object-fit:cover;box-shadow:0 14px 30px rgba(240,127,163,.3);margin-bottom:8px}
+.hero-logo{width:88px;height:88px;border-radius:22px;object-fit:cover;box-shadow:0 14px 30px rgba(240,127,163,.3);margin-bottom:8px}
 .topnav{overflow:visible}
 .navgroups{display:flex;gap:4px;align-items:center;margin-left:6px;flex-wrap:wrap}
 .ng{position:relative}
 .ngt{font-family:var(--lg-font-sans);font-size:13px;font-weight:500;color:var(--lg-text-secondary);background:none;
   border:1px solid transparent;border-radius:999px;padding:7px 13px;cursor:pointer;transition:.2s}
-.ngt:hover{background:rgba(255,255,255,.6);color:var(--mmh-rose-600,#E85D8F)}
+.ngt:hover{background:rgba(255,255,255,.6);color:var(--mmh-rose-700,#B23A63)}
 .ngt::after{content:"▾";margin-left:5px;font-size:10px;opacity:.6}
-.ng.open .ngt{background:#FFF;color:var(--mmh-rose-600,#E85D8F);box-shadow:var(--lg-shadow-xs)}
-.ngdrop{position:absolute;top:calc(100% + 10px);left:0;min-width:176px;z-index:120;padding:6px;border-radius:16px;
+.ng.open .ngt{background:#FFF;color:var(--mmh-rose-700,#B23A63);box-shadow:var(--lg-shadow-xs)}
+.ngdrop{position:absolute;top:calc(100% + 10px);left:0;min-width:176px;z-index:120;padding:6px;border-radius:18px;
   background:linear-gradient(160deg,rgba(255,255,255,.96),rgba(255,255,255,.82));
   border:1px solid rgba(255,255,255,.95);box-shadow:var(--lg-shadow-lg);
   -webkit-backdrop-filter:blur(20px);backdrop-filter:blur(20px);
   opacity:0;pointer-events:none;transform:translateY(6px);transition:.22s var(--lg-ease-out)}
 .ng.open .ngdrop{opacity:1;pointer-events:auto;transform:none}
-.ngdrop a{display:block;padding:9px 13px;border-radius:11px;font-size:13px;color:var(--lg-text-secondary);text-decoration:none;white-space:nowrap}
-.ngdrop a:hover{background:var(--mmh-rose-100,#FFF0F4);color:var(--mmh-rose-600,#E85D8F)}
+.ngdrop a{display:block;padding:9px 13px;border-radius:18px;font-size:13px;color:var(--lg-text-secondary);text-decoration:none;white-space:nowrap}
+.ngdrop a:hover{background:var(--mmh-rose-100,#FFF0F4);color:var(--mmh-rose-700,#B23A63)}
 .direct{font-size:13px;font-weight:500;color:var(--lg-text-secondary);text-decoration:none;padding:7px 12px;border-radius:999px;white-space:nowrap}
 .direct:hover{background:rgba(255,255,255,.6)}
 .direct.primary{background:var(--mmh-grad-action-hc,#F77FA3);color:#343A46;font-weight:600;box-shadow:0 6px 14px rgba(240,127,163,.3)}
 .sysbar{display:flex;gap:14px;align-items:center;flex-wrap:wrap;margin:16px 0 4px;padding:12px 18px;border-radius:20px;
   background:linear-gradient(160deg,rgba(255,255,255,.5),rgba(255,255,255,.2));border:1px solid rgba(255,255,255,.7);
   box-shadow:inset 0 1px 0 rgba(255,255,255,.7),var(--lg-shadow-sm);
-  -webkit-backdrop-filter:blur(18px);backdrop-filter:blur(18px)}
+  -webkit-backdrop-filter:blur(20px);backdrop-filter:blur(20px)}
 .sysbar b{font-size:13px;color:var(--lg-text-primary);display:flex;align-items:center;gap:8px}
 .sysbar b i{width:9px;height:9px;border-radius:50%;background:var(--mmh-grad-primary,#F77FA3);display:inline-block}
 .sysbar .stat{display:flex;gap:16px;flex-wrap:wrap;color:var(--lg-text-secondary);font-size:12.5px}
-.sysbar .stat span b{font-size:15px;color:var(--mmh-rose-600,#E85D8F);font-variant-numeric:tabular-nums}
+.sysbar .stat span b{font-size:15px;color:var(--mmh-rose-700,#B23A63);font-variant-numeric:tabular-nums}
 .sysbar .go{margin-left:auto;display:flex;gap:8px}
 @media(max-width:1366px){.topnav{overflow-x:auto}}
 
@@ -827,7 +903,7 @@ details.gfold .gfb{padding:0 14px 12px;font-size:12px;color:var(--lg-text-second
 /* ═══ 组件库全览 v2：覆盖条 + 规范徽标 ═══ */
 .covline{display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin:0 2px 14px}
 .covline .cv{font-size:11px;color:var(--lg-text-secondary);background:rgba(255,255,255,.5);border:1px solid rgba(255,255,255,.75);padding:4px 11px;border-radius:999px}
-.covline a{font-size:11.5px;font-weight:600;color:var(--mmh-rose-600,#E85D8F);text-decoration:none;margin-left:2px}
+.covline a{font-size:11.5px;font-weight:600;color:var(--mmh-rose-700,#B23A63);text-decoration:none;margin-left:2px}
 .spec-chip{font-size:10px;font-weight:600;color:#6A48DC;background:rgba(154,120,255,.12);border:1px solid rgba(154,120,255,.25);padding:2px 9px;border-radius:999px;white-space:nowrap}
 .panel-h3{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-bottom:16px}
 
@@ -852,7 +928,7 @@ section.block:first-of-type{margin-top:8px}
 .mcgrid{gap:12px}
 .semrow,.m5row{gap:12px}
 .ic-cat{margin-bottom:26px}
-.ic-cat h4{margin-bottom:12px}
+.ic-cat h3{margin-bottom:12px}
 .tagc,.tpill{margin:3px 2px}
 /* 状态库与列表更疏朗 */
 .sthead2{margin:10px 2px 14px}
@@ -868,12 +944,12 @@ section.block:first-of-type{margin-top:8px}
 /* 图表模块与更多组件 */
 .cchart{min-height:200px}
 .cc-title,.cc-sub{margin-bottom:8px}
-@media(max-width:767px){.panel{padding:22px 18px}.grid{gap:18px}}
+@media(max-width:767px){.panel{padding:18px 14px}.grid{gap:18px}}  /* 375px 余量不足 8px，收一档内边距 */
 
 /* 悬停下拉（桌面） */
 .ng:hover .ngdrop{opacity:1;pointer-events:auto;transform:none}
-.ng:hover .ngt{background:#FFF;color:var(--mmh-rose-600,#E85D8F);box-shadow:var(--lg-shadow-xs)}
-.ng:hover .ngt::after{color:var(--mmh-rose-600,#E85D8F)}
+.ng:hover .ngt{background:#FFF;color:var(--mmh-rose-700,#B23A63);box-shadow:var(--lg-shadow-xs)}
+.ng:hover .ngt::after{color:var(--mmh-rose-700,#B23A63)}
 
 /* 悬停下拉：菜单 → 下拉之间的桥接区，鼠标可平滑下移 */
 .ng::after{content:"";position:absolute;left:0;right:0;top:100%;height:14px;z-index:5}
@@ -916,7 +992,7 @@ section.block:first-of-type{margin-top:8px}
     <div class="hero-stage">
       <div class="amb a1"></div><div class="amb a2"></div><div class="amb a3"></div>
       <div class="demo-card c1 glass-l2">
-        <div class="row"><span class="lab">累计随访人次</span><span class="badge" style="padding:2px 8px;font-size:10px;background:var(--mmh-rose-100);color:var(--mmh-rose-600);border:none;border-radius:999px">妇幼</span></div>
+        <div class="row"><span class="lab">累计随访人次</span><span class="badge" style="padding:2px 8px;font-size:10px;background:var(--mmh-rose-100);color:var(--mmh-rose-700);border:none;border-radius:999px">妇幼</span></div>
         <div class="val num" data-count="1284902">0</div>
         <svg class="spark" height="34" viewBox="0 0 180 34" preserveAspectRatio="none">
           <defs><linearGradient id="sp1" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#9A78FF" stop-opacity=".35"/><stop offset="1" stop-color="#9A78FF" stop-opacity="0"/></linearGradient></defs>
@@ -936,7 +1012,7 @@ section.block:first-of-type{margin-top:8px}
             <text x="40" y="37" text-anchor="middle" font-size="15" font-weight="600" fill="#343A46" class="num">86%</text>
             <text x="40" y="51" text-anchor="middle" font-size="8" fill="#4F5B6E">随访达标率</text>
           </svg>
-          <span style="font-size:11px;color:var(--lg-text-tertiary)">等级<br><b style="color:var(--lg-success-500);font-size:13px">优</b></span>
+          <span style="font-size:11px;color:var(--lg-text-tertiary)">等级<br><b style="color:var(--lg-sem-positive);font-size:13px">优</b></span>
         </div>
       </div>
       <div class="demo-card c3 glass-l3">
@@ -1177,7 +1253,7 @@ section.block:first-of-type{margin-top:8px}
         <h3><i></i>输入与选择 Form</h3>
         <div class="field" style="margin-bottom:12px">
           <svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></svg>
-          <input placeholder="搜索实例、策略、事件…">
+          <input placeholder="搜索实例、策略、事件…" aria-label="搜索实例、策略、事件">
         </div>
         <div style="display:flex;gap:20px;flex-wrap:wrap;align-items:center;margin:14px 0 4px">
           <span class="chk" onclick="this.classList.toggle('on')"><span class="box"></span>实时防护</span>
@@ -1210,8 +1286,8 @@ section.block:first-of-type{margin-top:8px}
         <span class="badge status"><span class="dot danger"></span>P3 以下 <span class="t">2 例</span></span>
         <span class="badge status"><span class="dot running"></span>AI 随访中</span>
         <span class="badge">成功 <span class="t">2023-…-完成</span></span>
-        <span class="badge" style="color:var(--lg-purple-600);font-weight:600">新</span>
-        <span class="badge" style="background:var(--lg-purple-100);border-color:rgba(154,120,255,.2);color:var(--lg-purple-600)">AI 分析</span>
+        <span class="badge" style="color:var(--lg-sem-special);font-weight:600">新</span>
+        <span class="badge" style="background:var(--lg-purple-100);border-color:rgba(154,120,255,.2);color:var(--lg-sem-special)">AI 分析</span>
         <span class="badge" style="background:var(--mmh-mint-100);border-color:rgba(111,201,180,.35);color:#25715D">儿保体检</span>
       </div>
     </div>
@@ -1219,18 +1295,18 @@ section.block:first-of-type{margin-top:8px}
     <div style="height:16px"></div>
     <div class="grid g3">
       <div class="kpi glass-l2">
-        <div class="k-head"><span class="k-lab">今日随访儿童</span><span class="k-ico" style="color:var(--lg-purple-600)"><svg class="ni" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3l7 3v5c0 4.4-3 8.2-7 10-4-1.8-7-5.6-7-10V6z"/><path d="M9 12l2 2 4-4"/></svg></span></div>
-        <div class="k-val num" style="color:var(--mmh-rose-600)" data-count="12849">0</div>
+        <div class="k-head"><span class="k-lab">今日随访儿童</span><span class="k-ico" style="color:var(--lg-sem-special)"><svg class="ni" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3l7 3v5c0 4.4-3 8.2-7 10-4-1.8-7-5.6-7-10V6z"/><path d="M9 12l2 2 4-4"/></svg></span></div>
+        <div class="k-val num" style="color:var(--mmh-rose-700)" data-count="12849">0</div>
         <div class="k-delta"><span class="up num">↑ 8.4%</span><span class="src">较上周 · 按儿保口径</span></div>
       </div>
       <div class="kpi glass-l2">
-        <div class="k-head"><span class="k-lab">疫苗接种完成</span><span class="k-ico" style="color:var(--lg-cyan-600)"><svg class="ni" viewBox="0 0 24 24" aria-hidden="true"><path d="M18 10h-1.26A8 8 0 1 0 9 20h9a5 5 0 0 0 0-10z"/></svg></span></div>
-        <div class="k-val num" style="color:var(--lg-cyan-600)" data-count="3847">0</div>
+        <div class="k-head"><span class="k-lab">疫苗接种完成</span><span class="k-ico" style="color:var(--lg-sem-positive)"><svg class="ni" viewBox="0 0 24 24" aria-hidden="true"><path d="M18 10h-1.26A8 8 0 1 0 9 20h9a5 5 0 0 0 0-10z"/></svg></span></div>
+        <div class="k-val num" style="color:var(--lg-sem-positive)" data-count="3847">0</div>
         <div class="k-delta"><span class="up num">↑ 1.4pt</span><span class="src">本月应种率</span></div>
       </div>
       <div class="kpi glass-l2">
-        <div class="k-head"><span class="k-lab">高危随访提醒</span><span class="k-ico" style="color:var(--lg-warning-500)"><svg class="ni" viewBox="0 0 24 24" aria-hidden="true"><path d="M18 8a6 6 0 0 0-12 0c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.7 21a2 2 0 0 1-3.4 0"/></svg></span></div>
-        <div class="k-val num" style="color:var(--lg-warning-500)" data-count="23">0</div>
+        <div class="k-head"><span class="k-lab">高危随访提醒</span><span class="k-ico" style="color:var(--lg-sem-attention)"><svg class="ni" viewBox="0 0 24 24" aria-hidden="true"><path d="M18 8a6 6 0 0 0-12 0c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.7 21a2 2 0 0 1-3.4 0"/></svg></span></div>
+        <div class="k-val num" style="color:var(--lg-sem-attention)" data-count="23">0</div>
         <div class="k-delta"><span class="down num">↓ 5</span><span class="src">其中 P3 以下 2 例</span></div>
         <svg class="spark" width="120" height="30" viewBox="0 0 120 30" preserveAspectRatio="none">
           <path class="fadefill" d="M0,22 L12,20 L24,24 L36,16 L48,18 L60,12 L72,15 L84,10 L96,13 L108,6 L120,9 L120,30 L0,30 Z" fill="rgba(242,178,92,.18)"/>
@@ -1249,8 +1325,8 @@ section.block:first-of-type{margin-top:8px}
             <span style="width:26px;height:26px;border-radius:9px;background:var(--lg-grad-hero);box-shadow:0 4px 10px rgba(154,120,255,.3)"></span>
             <b style="font-size:14px">妈咪好档案</b>
           </div>
-          <div style="font-size:13px;padding:9px 12px;border-radius:14px;background:var(--lg-grad-primary);color:#FFF;font-weight:600;box-shadow:var(--lg-glow-purple-soft);display:flex;gap:8px;align-items:center"><span style="display:inline-flex;align-items:center;gap:8px"><svg class="ni" viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="3" width="7" height="7" rx="2"/><rect x="14" y="3" width="7" height="7" rx="2"/><rect x="3" y="14" width="7" height="7" rx="2"/><rect x="14" y="14" width="7" height="7" rx="2"/></svg>孕期首页</span></div>
-          <div style="font-size:13px;color:var(--lg-text-secondary);padding:9px 12px;display:flex;gap:8px;align-items:center"><span style="display:inline-flex;align-items:center;gap:8px"><svg class="ni" viewBox="0 0 24 24" aria-hidden="true"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><path d="M8.6 13.5l6.8 4M15.4 6.5l-6.8 4"/></svg>产检计划</span> <span style="margin-left:auto;font-size:10px;background:rgba(154,120,255,.14);color:var(--lg-purple-600);border-radius:999px;padding:1px 8px;font-weight:600">8</span></div>
+          <div style="font-size:13px;padding:9px 12px;border-radius:18px;background:var(--mmh-grad-action-hc,#F77FA3);color:#343A46;font-weight:600;box-shadow:0 8px 20px rgba(240,127,163,.3);display:flex;gap:8px;align-items:center"><span style="display:inline-flex;align-items:center;gap:8px"><svg class="ni" viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="3" width="7" height="7" rx="2"/><rect x="14" y="3" width="7" height="7" rx="2"/><rect x="3" y="14" width="7" height="7" rx="2"/><rect x="14" y="14" width="7" height="7" rx="2"/></svg>孕期首页</span></div>
+          <div style="font-size:13px;color:var(--lg-text-secondary);padding:9px 12px;display:flex;gap:8px;align-items:center"><span style="display:inline-flex;align-items:center;gap:8px"><svg class="ni" viewBox="0 0 24 24" aria-hidden="true"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><path d="M8.6 13.5l6.8 4M15.4 6.5l-6.8 4"/></svg>产检计划</span> <span style="margin-left:auto;font-size:10px;background:rgba(154,120,255,.14);color:var(--lg-sem-special);border-radius:999px;padding:1px 8px;font-weight:600">8</span></div>
           <div style="font-size:13px;color:var(--lg-text-secondary);padding:9px 12px;display:flex;gap:8px;align-items:center"><span style="display:inline-flex;align-items:center;gap:8px"><svg class="ni" viewBox="0 0 24 24" aria-hidden="true"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg>胎动记录</span></div>
           <div style="font-size:13px;color:var(--lg-text-secondary);padding:9px 12px;display:flex;gap:8px;align-items:center"><span style="display:inline-flex;align-items:center;gap:8px"><svg class="ni" viewBox="0 0 24 24" aria-hidden="true"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6"/></svg>疫苗计划</span></div>
           <div style="font-size:11px;color:var(--lg-text-tertiary);padding:14px 12px 4px;letter-spacing:.1em">MAM</div>
@@ -1329,7 +1405,7 @@ section.block:first-of-type{margin-top:8px}
         <p class="mh">Slider · Stepper · Rate · Upload（均可操作）</p>
         <div class="slrow" style="margin:6px 0 16px">
           <span style="font-size:12px;color:var(--lg-text-secondary);width:70px;flex:none">随访阈值</span>
-          <input type="range" class="lgs" id="sl1" min="0" max="100" value="78" style="--v:78%">
+          <input type="range" class="lgs" id="sl1" min="0" max="100" value="78" style="--v:78%" aria-label="随访完成度（%）">
           <span class="slv num" id="sl1v">78%</span>
         </div>
         <div style="display:flex;gap:22px;flex-wrap:wrap;align-items:center;margin-bottom:16px">
@@ -1383,7 +1459,7 @@ section.block:first-of-type{margin-top:8px}
           <div class="it"><b>体重</b><span>11.2kg · P62</span></div>
           <div class="it"><b>头围</b><span>47cm · P58</span></div>
           <div class="it"><b>下次体检</b><span>21 月龄</span></div>
-          <div class="it"><b>随访状态</b><span style="color:var(--mmh-rose-600,#E85D8F)">计划中</span></div>
+          <div class="it"><b>随访状态</b><span style="color:var(--mmh-rose-700,#B23A63)">计划中</span></div>
         </div>
         <details class="gfold"><summary>2024-10 儿保随访记录<span class="arr">▾</span></summary><div class="gfb">身高体重头围均正常，喂养指导完成；下次重点关注语言发育与 21 月龄体检。</div></details>
         <details class="gfold"><summary>2024-07 疫苗：百白破 ②<span class="arr">▾</span></summary><div class="gfb">接种后留观 30 分钟无异常，下次疫苗接种为 12 月龄麻腮风。</div></details>
@@ -1396,8 +1472,8 @@ section.block:first-of-type{margin-top:8px}
           <thead><tr><th>宝宝</th><th>月龄</th><th>上次随访</th><th>风险</th><th></th></tr></thead>
           <tbody>
             <tr><td><span class="cell-av"><span class="mini-av">朵</span>朵朵</span></td><td class="num">18m</td><td class="num">已完成</td><td><span class="badge status"><span class="dot success"></span>正常</span></td><td><button class="btn btn-primary btn-sm">随访</button></td></tr>
-            <tr><td><span class="cell-av"><span class="mini-av" style="background:linear-gradient(150deg,#FAC9D0,#FDE9EE);color:var(--lg-danger-500)">安</span>安安</span></td><td class="num">36m</td><td class="num" style="color:var(--lg-danger-500)">逾期</td><td><span class="badge status"><span class="dot danger"></span>P3 以下</span></td><td><button class="btn btn-primary btn-sm">优先随访</button></td></tr>
-            <tr><td><span class="cell-av"><span class="mini-av" style="background:linear-gradient(150deg,#D9CBFE,#EDE7FE);color:#8066F0">乐</span>乐乐</span></td><td class="num">5m</td><td class="num">已预约</td><td><span class="badge status"><span class="dot running"></span>评估中</span></td><td><button class="btn btn-tertiary btn-sm">查看</button></td></tr>
+            <tr><td><span class="cell-av"><span class="mini-av" style="background:linear-gradient(150deg,#FDE9EE,#FFF0F4);color:var(--lg-sem-risk)">安</span>安安</span></td><td class="num">36m</td><td class="num" style="color:var(--lg-sem-risk)">逾期</td><td><span class="badge status"><span class="dot danger"></span>P3 以下</span></td><td><button class="btn btn-primary btn-sm">优先随访</button></td></tr>
+            <tr><td><span class="cell-av"><span class="mini-av" style="background:linear-gradient(150deg,#D9CBFE,#EDE7FE);color:var(--mmh-solid-special,#6242B8)">乐</span>乐乐</span></td><td class="num">5m</td><td class="num">已预约</td><td><span class="badge status"><span class="dot running"></span>评估中</span></td><td><button class="btn btn-tertiary btn-sm">查看</button></td></tr>
             <tr><td><span class="cell-av"><span class="mini-av" style="background:linear-gradient(150deg,#A9E3D4,#E2F6F0);color:#25715D">米</span>大米</span></td><td class="num">12m</td><td class="num">已完成</td><td><span class="badge status"><span class="dot warning"></span>关注</span></td><td><button class="btn btn-secondary btn-sm">计划随访</button></td></tr>
           </tbody>
         </table>
@@ -1411,7 +1487,7 @@ section.block:first-of-type{margin-top:8px}
         <h3 class="panel-h3"><i></i>生长曲线 · 百分位带（13 · 13.2 母题）<span class="spec-chip">13 · 13.2</span></h3>
         <p class="mh">参考带 P3–P97（薄荷淡带）· 宝宝实测曲线（蜜桃粉）· 数值聚焦</p>
         <div style="display:flex;align-items:baseline;gap:10px;flex-wrap:wrap">
-          <b class="num" style="font-size:24px;color:var(--mmh-rose-600,#E85D8F)">P62</b><span style="font-size:12px;color:var(--lg-text-secondary)">18 月龄 · 体重 11.2kg</span>
+          <b class="num" style="font-size:24px;color:var(--mmh-rose-700,#B23A63)">P62</b><span style="font-size:12px;color:var(--lg-text-secondary)">18 月龄 · 体重 11.2kg</span>
           <span class="badge" style="margin-left:auto;font-size:10px;padding:2px 9px;background:var(--mmh-mint-100,#E2F6F0);color:#25715D">达标</span>
         </div>
         <svg width="100%" height="150" viewBox="0 0 380 150" preserveAspectRatio="none">
@@ -1436,7 +1512,7 @@ section.block:first-of-type{margin-top:8px}
           <div style="display:flex;gap:12px;align-items:center;padding:9px 4px;border-bottom:1px solid rgba(58,52,84,.07)">
             <span class="dot success"></span><span class="badge" style="font-size:10px;padding:2px 9px">2 月龄</span><span style="font-size:13px;flex:1">脊灰 ① · 百白破 ①</span><span style="font-size:11px;color:var(--lg-text-tertiary)">已接种</span></div>
           <div style="display:flex;gap:12px;align-items:center;padding:9px 4px;border-bottom:1px solid rgba(58,52,84,.07)">
-            <span class="dot running"></span><span class="badge" style="font-size:10px;padding:2px 9px;color:var(--mmh-rose-600,#E85D8F);background:var(--mmh-rose-100,#FFF0F4)">12 月龄</span><span style="font-size:13px;flex:1">麻腮风</span><button class="btn btn-primary btn-sm">预约接种</button></div>
+            <span class="dot running"></span><span class="badge" style="font-size:10px;padding:2px 9px;color:var(--mmh-rose-700,#B23A63);background:var(--mmh-rose-100,#FFF0F4)">12 月龄</span><span style="font-size:13px;flex:1">麻腮风</span><button class="btn btn-primary btn-sm">预约接种</button></div>
           <div style="display:flex;gap:12px;align-items:center;padding:9px 4px">
             <span class="dot warning"></span><span class="badge" style="font-size:10px;padding:2px 9px">18 月龄</span><span style="font-size:13px;flex:1">百白破 ④ · 甲肝</span><span style="font-size:11px;color:var(--lg-text-tertiary)">剩余 26 天</span></div>
         </div>
@@ -1532,7 +1608,7 @@ section.block:first-of-type{margin-top:8px}
       <div class="hrow" data-states="正常|异常|待检"><span class="fico"><svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M3.6 13.2s3-6.2 8.4-6.2 8.4 6.2 8.4 6.2-3 6.2-8.4 6.2S3.6 13.2 3.6 13.2z"/><circle cx="12" cy="13.2" r="3.1"/><path d="M15.8 3.8h4.6M15.8 3.8V8.4M15.8 5.3h3.2M15.8 6.9h4.6"/></svg></span><span style="flex:1;min-width:0"><b style="display:block;font-size:13.5px">视力保健</b><span style="font-size:11px;color:var(--lg-text-tertiary)">眼保健 · 视力筛查</span></span><span class="tagc c-r fkstate" style="cursor:pointer" title="点击切换状态">异常</span></div>
       <div class="hrow" data-states="正常|异常|待检"><span class="fico"><svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M4.4 12.8a7.6 7.6 0 0 1 15.2 0"/><rect x="2.2" y="11.8" width="4.2" height="6" rx="1.9"/><rect x="17.6" y="11.8" width="4.2" height="6" rx="1.9"/><path d="M8.6 8.2a3.4 3.4 0 0 1 6.8 0"/></svg></span><span style="flex:1;min-width:0"><b style="display:block;font-size:13.5px">听力保健</b><span style="font-size:11px;color:var(--lg-text-tertiary)">听力筛查 · 耳保健</span></span><span class="tagc c-g fkstate" style="cursor:pointer" title="点击切换状态">正常</span></div>
       <div class="hrow" data-states="正常|异常|待检"><span class="fico"><svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M17.2 4.6c-1.6 0-2.6.8-3.5 1.8a3 3 0 0 1-3.4 0C9.4 5.4 8.4 4.6 6.8 4.6c-2.1 0-3.7 1.7-3.7 3.8 0 1.6.7 2.8 1.7 3.8 1.3 1.5 2.3 3.2 2.5 5.3.1 1.3.9 2.1 1.9 2.1.9 0 1.3-.6 1.6-1.6.5-1.2.9-2.5 1.9-2.5 1 0 1.5 1.2 2 2.4.3 1 .7 1.7 1.6 1.7 1 0 1.8-.8 1.9-2.1.2-2 1-3.7 2.3-5.1 1-1.1 1.7-2.4 1.7-3.9 0-2.1-1.6-3.9-3.7-3.9z"/></svg></span><span style="flex:1;min-width:0"><b style="display:block;font-size:13.5px">口腔保健</b><span style="font-size:11px;color:var(--lg-text-tertiary)">口腔检查 · 龋齿防治（涂氟）</span></span><span class="tagc c-n fkstate" style="cursor:pointer" title="点击切换状态">待检</span></div>
-        <p class="note">状态：🟢 正常=薄荷 · 🔴 异常=珊瑚 · ⚪ 待检=中性灰；颜色+文字双通道（14）。</p>
+        <p class="note">状态：<span class="dot success"></span>正常=薄荷 · <span class="dot danger"></span>异常=珊瑚 · <span class="dot neutral" style="background:var(--lg-sem-neutral)"></span>待检=中性灰；颜色+文字双通道（14）。</p>
       </div>
       <div class="panel glass-l2">
         <h3><i></i>清单规范（13 · 3.3.8 摘要）</h3>
@@ -1573,13 +1649,13 @@ section.block:first-of-type{margin-top:8px}
 </div></div><div class="phone"><div class="scr"><div class="notch"></div>
   <div class="body">
     <div class="mnav mglass"><svg viewBox="0 0 24 24"><path d="M20 12H5.5M11 6.5 5.5 12l5.5 5.5"/></svg><span class="mt">朵朵 · 18 月龄</span><svg viewBox="0 0 24 24"><path d="M9 6.6h11M9 12h11M9 17.4h11"/></svg></div>
-    <div class="mkpi mglass"><span class="l">体重生长曲线 · WHO 参考 · 当前百分位</span><span class="v" style="color:#E85D8F">P62</span>
+    <div class="mkpi mglass"><span class="l">体重生长曲线 · WHO 参考 · 当前百分位</span><span class="v" style="color:var(--mmh-rose-700,#B23A63)">P62</span>
       <svg width="100%" height="74" viewBox="0 0 200 74" preserveAspectRatio="none">
         <path d="M0,16 L40,13 L80,10 L120,8 L160,6 L200,5 L200,42 L160,43 L120,45 L80,48 L40,50 L0,52 Z" fill="rgba(169,227,212,.5)"/>
         <path d="M0,34 L40,30 L80,27 L120,24 L160,21 L200,19" fill="none" stroke="#F77FA3" stroke-width="2.4" stroke-linecap="round"/>
         <circle cx="120" cy="24" r="3.6" fill="#FFF" stroke="#F77FA3" stroke-width="2"/>
       </svg></div>
-    <div class="mrow2 mglass"><span class="mdot ok"></span><span class="md2"><b>疫苗：12 月龄麻腮风</b><span>已预约 · 周五 09:30</span></span><b style="color:#E85D8F;font-size:10px">预约</b></div>
+    <div class="mrow2 mglass"><span class="mdot ok"></span><span class="md2"><b>疫苗：12 月龄麻腮风</b><span>已预约 · 周五 09:30</span></span><b style="color:var(--mmh-rose-700,#B23A63);font-size:10px">预约</b></div>
     <div class="mrow2 mglass"><span class="mdot warn"></span><span class="md2"><b>提醒：21 月龄儿保体检</b><span>剩余 90 天 · 自动提醒中</span></span></div>
     <div class="mrow2 mglass"><span class="mdot ok"></span><span class="md2"><b>AI 随访建议</b><span>语言发育良好，加强亲子共读</span></span></div>
     <div class="mchiprow"><span class="mchip on">生长</span><span class="mchip">疫苗</span><span class="mchip">体检</span><span class="mchip">记录</span></div>
@@ -1588,12 +1664,12 @@ section.block:first-of-type{margin-top:8px}
 </div></div><div class="phone"><div class="scr"><div class="notch"></div>
   <div class="body">
     <div class="mnav mglass"><svg viewBox="0 0 24 24"><path d="M20 12H5.5M11 6.5 5.5 12l5.5 5.5"/></svg><span class="mt">医护 · 今日随访</span><svg viewBox="0 0 24 24"><circle cx="10.5" cy="10.5" r="6.5"/><path d="M15.4 15.4 21 21"/></svg></div>
-    <div class="mglass" style="display:flex;align-items:center;gap:6px;padding:7px 11px;font-size:10px;color:rgba(88,98,115,.6)"><svg style="width:13px;height:13px;stroke:currentColor;fill:none;stroke-width:1.8;stroke-linecap:round" viewBox="0 0 24 24"><circle cx="10.5" cy="10.5" r="6.5"/><path d="M15.4 15.4 21 21"/></svg>搜索宝宝 / 档案号</div>
-    <div class="mrow2 mglass"><span class="mdot danger"></span><span class="md2"><b>安安 · 36m · P3 以下</b><span>随访已逾期 3 天 · 需优先联系</span></span><b style="color:#EF6A7B;font-size:10px">优先</b></div>
-    <div class="mrow2 mglass"><span class="mdot ok"></span><span class="md2"><b>朵朵 · 18m · P62</b><span>今日 09:30 · 生长评估</span></span><b style="color:#E85D8F;font-size:10px">评估</b></div>
-    <div class="mrow2 mglass"><span class="mdot warn"></span><span class="md2"><b>大米 · 12m · 疫苗到期</b><span>麻腮风剩余 5 天 · 电话回访</span></span><b style="color:#F2B25C;font-size:10px">提醒</b></div>
-    <div class="mrow2 mglass"><span class="mdot ok"></span><span class="md2"><b>乐乐 · 5m · 已预约</b><span>明日 14:00 · 儿保体检</span></span><b style="color:var(--lg-text-tertiary);font-size:10px">查看</b></div>
-    <div class="mbtn" style="background:linear-gradient(135deg,#6FC9B4,#4FB59C)">开始今日随访（剩余 6 人）</div>
+    <div class="mglass" style="display:flex;align-items:center;gap:6px;padding:7px 11px;font-size:11px;color:var(--lg-text-secondary)"><svg style="width:13px;height:13px;stroke:currentColor;fill:none;stroke-width:1.8;stroke-linecap:round" viewBox="0 0 24 24"><circle cx="10.5" cy="10.5" r="6.5"/><path d="M15.4 15.4 21 21"/></svg>搜索宝宝 / 档案号</div>
+    <div class="mrow2 mglass"><span class="mdot danger"></span><span class="md2"><b>安安 · 36m · P3 以下</b><span>随访已逾期 3 天 · 需优先联系</span></span><b style="color:var(--lg-sem-risk,#B72F42);font-size:10px">优先</b></div>
+    <div class="mrow2 mglass"><span class="mdot ok"></span><span class="md2"><b>朵朵 · 18m · P62</b><span>今日 09:30 · 生长评估</span></span><b style="color:var(--mmh-rose-700,#B23A63);font-size:10px">评估</b></div>
+    <div class="mrow2 mglass"><span class="mdot warn"></span><span class="md2"><b>大米 · 12m · 疫苗到期</b><span>麻腮风剩余 5 天 · 电话回访</span></span><b style="color:var(--lg-sem-attention,#8D5A15);font-size:10px">提醒</b></div>
+    <div class="mrow2 mglass"><span class="mdot ok"></span><span class="md2"><b>乐乐 · 5m · 已预约</b><span>明日 14:00 · 儿保体检</span></span><b style="color:var(--lg-text-secondary);font-size:10px">查看</b></div>
+    <div class="mbtn" style="background:linear-gradient(135deg,#A9E3D4,#6FC9B4);color:#1B3D33">开始今日随访（剩余 6 人）</div>
   </div>
   <div class="tabmini"><i class="on"><svg viewBox="0 0 24 24"><path d="M12 3.2 19 5.7v5.4c0 4.6-3 8.3-7 9.7-4-1.4-7-5.1-7-9.7V5.7z"/></svg>队列</i><i><svg viewBox="0 0 24 24"><rect x="8.7" y="8.7" width="6.6" height="10.4" rx="2.6"/><path d="M10.3 8.7V6.5h3.4v2.2"/><path d="M9.6 6.5h4.8"/><path d="M9.6 12.5h4.8"/></svg>疫苗</i><i><svg viewBox="0 0 24 24"><path d="M9 6.6h11M9 12h11M9 17.4h11"/><circle cx="4.8" cy="6.6" r="1" fill="currentColor" stroke="none"/><circle cx="4.8" cy="12" r="1" fill="currentColor" stroke="none"/><circle cx="4.8" cy="17.4" r="1" fill="currentColor" stroke="none"/></svg>档案</i><i><svg viewBox="0 0 24 24"><circle cx="12" cy="8.2" r="3.7"/><path d="M5 20.4c1.3-3.6 4.1-5.3 7-5.3s5.7 1.7 7 5.3"/></svg>我的</i></div>
 </div></div></div>
@@ -1629,9 +1705,9 @@ section.block:first-of-type{margin-top:8px}
     <div class="grid g2">
       <div class="panel glass-l2 cchart">
         <h3 style="margin-bottom:2px">KPI · 指标卡</h3><span class="ph-cap" style="margin:0 0 6px;color:var(--lg-text-tertiary)">模块 1 · 数值聚焦 · 04 · 4.3.1</span><div style="display:flex;gap:12px;flex-wrap:wrap">
-<div class="kpi glass-l2" style="flex:1;min-width:130px"><div class="k-lab" style="font-size:12px">管理对象</div><div class="k-val num" style="font-size:26px;color:var(--mmh-rose-600,#E85D8F)">12,849</div><div class="k-delta" style="font-size:11px;margin-top:2px"><span class="up" style="color:var(--lg-success-500)">↑320 本月</span></div></div>
-<div class="kpi glass-l2" style="flex:1;min-width:130px"><div class="k-lab" style="font-size:12px">筛查完成率</div><div class="k-val num" style="font-size:26px;color:var(--mmh-mint-600,#4FB59C)">82%</div><div class="k-delta" style="font-size:11px;margin-top:2px"><span class="up" style="color:var(--lg-success-500)">达标</span></div></div>
-<div class="kpi glass-l2" style="flex:1;min-width:130px"><div class="k-lab" style="font-size:12px">高危随访闭环</div><div class="k-val num" style="font-size:26px;color:var(--lg-warning-500)">68%</div><div class="k-delta" style="font-size:11px;margin-top:2px"><span style="color:var(--lg-text-tertiary)">待跟进 23</span></div></div>
+<div class="kpi glass-l2" style="flex:1;min-width:130px"><div class="k-lab" style="font-size:12px">管理对象</div><div class="k-val num" style="font-size:26px;color:var(--mmh-rose-700,#B23A63)">12,849</div><div class="k-delta" style="font-size:11px;margin-top:2px"><span class="up" style="color:var(--lg-sem-positive)">↑320 本月</span></div></div>
+<div class="kpi glass-l2" style="flex:1;min-width:130px"><div class="k-lab" style="font-size:12px">筛查完成率</div><div class="k-val num" style="font-size:26px;color:var(--lg-sem-positive,#25715D)">82%</div><div class="k-delta" style="font-size:11px;margin-top:2px"><span class="up" style="color:var(--lg-sem-positive)">达标</span></div></div>
+<div class="kpi glass-l2" style="flex:1;min-width:130px"><div class="k-lab" style="font-size:12px">高危随访闭环</div><div class="k-val num" style="font-size:26px;color:var(--lg-sem-attention)">68%</div><div class="k-delta" style="font-size:11px;margin-top:2px"><span style="color:var(--lg-text-tertiary)">待跟进 23</span></div></div>
 </div><p class="note" style="margin-top:6px">大数字 tabular-nums + 单位/口径 caption 并列；状态语义色。</p>
       </div>
       <div class="panel glass-l2 cchart">
@@ -1644,9 +1720,9 @@ section.block:first-of-type{margin-top:8px}
       </div>
       <div class="panel glass-l2 cchart">
         <h3 style="margin-bottom:2px">比较 · 柱/条形</h3><span class="ph-cap" style="margin:0 0 6px;color:var(--lg-text-tertiary)">模块 3 · 顶部圆角 · 04 · 4.3.3</span><div style="display:flex;flex-direction:column;gap:7px">
-<div style="display:flex;justify-content:space-between;font-size:11px;margin-bottom:1px"><span style="color:var(--lg-text-secondary)">儿童保健随访</span><b class="num" style="color:var(--mmh-rose-600,#E85D8F)">412</b></div><div class="prog" style="margin:0"><div class="track"><div class="pf" style="width:82%;background:linear-gradient(90deg,#FFA3BE,#E85D8F)"></div></div></div>
-<div style="display:flex;justify-content:space-between;font-size:11px;margin-bottom:1px"><span style="color:var(--lg-text-secondary)">两癌筛查</span><b class="num" style="color:var(--mmh-peach-400,#FFC3A0)">356</b></div><div class="prog" style="margin:0"><div class="track"><div class="pf" style="width:71%;background:linear-gradient(90deg,#FFDCC7,#F6A97E)"></div></div></div>
-<div style="display:flex;justify-content:space-between;font-size:11px;margin-bottom:1px"><span style="color:var(--lg-text-secondary)">孕产妇管理</span><b class="num" style="color:var(--lg-purple-500)">288</b></div><div class="prog" style="margin:0"><div class="track"><div class="pf" style="width:58%;background:linear-gradient(90deg,#B9A0FF,#9A78FF)"></div></div></div>
+<div style="display:flex;justify-content:space-between;font-size:11px;margin-bottom:1px"><span style="color:var(--lg-text-secondary)">儿童保健随访</span><b class="num" style="color:var(--mmh-rose-700,#B23A63)">412</b></div><div class="prog" style="margin:0"><div class="track"><div class="pf" style="width:82%;background:linear-gradient(90deg,#FFA3BE,#E85D8F)"></div></div></div>
+<div style="display:flex;justify-content:space-between;font-size:11px;margin-bottom:1px"><span style="color:var(--lg-text-secondary)">两癌筛查</span><b class="num" style="color:var(--lg-sem-attention,#8D5A15)">356</b></div><div class="prog" style="margin:0"><div class="track"><div class="pf" style="width:71%;background:linear-gradient(90deg,#FFDCC7,#F6A97E)"></div></div></div>
+<div style="display:flex;justify-content:space-between;font-size:11px;margin-bottom:1px"><span style="color:var(--lg-text-secondary)">孕产妇管理</span><b class="num" style="color:var(--lg-sem-special)">288</b></div><div class="prog" style="margin:0"><div class="track"><div class="pf" style="width:58%;background:linear-gradient(90deg,#B9A0FF,#9A78FF)"></div></div></div>
 </div><p class="note" style="margin-top:6px">横向条便于读数；数值在条右；堆叠 ≤3。</p>
       </div>
       <div class="panel glass-l2 cchart">
@@ -1698,7 +1774,7 @@ section.block:first-of-type{margin-top:8px}
         <h3 style="margin-bottom:2px">关系 · 拓扑</h3><span class="ph-cap" style="margin:0 0 6px;color:var(--lg-text-tertiary)">模块 6 · 玻璃节点 · 活动线≤2 · 04 · 4.3.7</span><div style="display:flex;align-items:center;justify-content:center;gap:12px;padding:6px 0">
 <span class="t-node"><span class="core" style="font-size:13px">妈</span></span>
 <span class="t-link"></span>
-<span class="t-node center"><span class="core" style="color:#FFF;font-size:12px">宝</span></span>
+<span class="t-node center"><span class="core" style="font-size:12px">宝</span></span>
 <span class="t-link cyan"></span>
 <span class="t-node"><span class="core" style="font-size:12px">医</span></span>
 <span class="t-node"><span class="core" style="font-size:12px">档</span></span>
@@ -1719,7 +1795,7 @@ section.block:first-of-type{margin-top:8px}
     <div class="panel glass-l2" style="margin-top:16px">
       <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap"><b style="font-size:13px">模块使用纪律</b>
         <span class="tg g">数据最亮</span><span class="tg b">单图单卡（M）</span><span class="tg o">加载=骨架屏</span><span class="tg n">空态=三点呼吸</span><span class="tg r">禁止霓虹/伪3D</span>
-        <span style="margin-left:auto;font-size:12px"><a href="site/manual.html" style="color:var(--mmh-rose-600,#E85D8F);font-weight:600;text-decoration:none">总览手册 ›</a> · 完整规范 04 / 大屏蓝图与域指标 15.3.4</span></div>
+        <span style="margin-left:auto;font-size:12px"><a href="site/manual.html" style="color:var(--mmh-rose-700,#B23A63);font-weight:600;text-decoration:none">总览手册 ›</a> · 完整规范 04 / 大屏蓝图与域指标 15.3.4</span></div>
     </div>
   </section>
 
@@ -1728,7 +1804,7 @@ section.block:first-of-type{margin-top:8px}
     <div class="sec-head"><h2>图标库 LG Icon Library</h2><span class="en">妈咪好 GoodMom 线性图标 · 77 枚 / 10 类 · 24×24 · 1.7px 圆头 · 点击图标复制 SVG</span></div>
     <div class="panel glass-l2">
       <div class="ig-grid-legend"><span><i style="background:var(--mmh-rose-500,#F77FA3)"></i>B 母婴保健 + L 成长阶段 + H 儿童健康（生长发育/营养/心理/视力/听力/口腔/口腔镜）</span><span><i style="background:var(--lg-info-500)"></i>语义色沿用状态 Token</span><span><i style="background:linear-gradient(135deg,#F77FA3,#B69AFF)"></i>无 Emoji、无字体图标</span></div>
-        <div class="ic-cat"><h4>通用 General <span class="n">G · 8 枚</span></h4>
+        <div class="ic-cat"><h3>通用 General <span class="n">G · 8 枚</span></h3>
           <div class="ic-grid">
           <div class="ig" title="点击复制 lg-icon-search"><svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="10.5" cy="10.5" r="6.5"/><path d="M15.4 15.4 21 21"/></svg><span class="ig-id">lg-icon-search</span><span class="ig-cn">搜索</span></div>
           <div class="ig" title="点击复制 lg-icon-home"><svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M4.5 10.5 12 4.2l7.5 6.3"/><path d="M6.3 9.4v9.3a1.6 1.6 0 0 0 1.6 1.6h8.2a1.6 1.6 0 0 0 1.6-1.6V9.4"/><path d="M10 20.3v-4.6h4v4.6"/></svg><span class="ig-id">lg-icon-home</span><span class="ig-cn">首页</span></div>
@@ -1740,7 +1816,7 @@ section.block:first-of-type{margin-top:8px}
           <div class="ig" title="点击复制 lg-icon-settings"><svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M4 7h9.6M18.4 7h1.6"/><path d="M4 17h1.6M9.6 17H20"/><circle cx="16" cy="7" r="1.8"/><circle cx="7.2" cy="17" r="1.8"/></svg><span class="ig-id">lg-icon-settings</span><span class="ig-cn">设置</span></div>
           </div>
         </div>
-        <div class="ic-cat"><h4>方向与导航 Direction <span class="n">N · 7 枚</span></h4>
+        <div class="ic-cat"><h3>方向与导航 Direction <span class="n">N · 7 枚</span></h3>
           <div class="ic-grid">
           <div class="ig" title="点击复制 lg-icon-arrow-right"><svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12h14.5"/><path d="m13 6.5 5.5 5.5-5.5 5.5"/></svg><span class="ig-id">lg-icon-arrow-right</span><span class="ig-cn">右移</span></div>
           <div class="ig" title="点击复制 lg-icon-arrow-left"><svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M20 12H5.5"/><path d="m11 6.5-5.5 5.5L11 17.5"/></svg><span class="ig-id">lg-icon-arrow-left</span><span class="ig-cn">左移</span></div>
@@ -1751,7 +1827,7 @@ section.block:first-of-type{margin-top:8px}
           <div class="ig" title="点击复制 lg-icon-external-link"><svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M14 4.5h5.5V10"/><path d="M19.5 4.5 11 13"/><path d="M19.5 13.5V18a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V7a2 2 0 0 1 2-2h4.5"/></svg><span class="ig-id">lg-icon-external-link</span><span class="ig-cn">外链</span></div>
           </div>
         </div>
-        <div class="ic-cat"><h4>编辑与操作 Edit & Action <span class="n">E · 12 枚</span></h4>
+        <div class="ic-cat"><h3>编辑与操作 Edit & Action <span class="n">E · 12 枚</span></h3>
           <div class="ic-grid">
           <div class="ig" title="点击复制 lg-icon-plus"><svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5.5v13M5.5 12h13"/></svg><span class="ig-id">lg-icon-plus</span><span class="ig-cn">新增</span></div>
           <div class="ig" title="点击复制 lg-icon-minus"><svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M5.5 12h13"/></svg><span class="ig-id">lg-icon-minus</span><span class="ig-cn">减少</span></div>
@@ -1767,17 +1843,17 @@ section.block:first-of-type{margin-top:8px}
           <div class="ig" title="点击复制 lg-icon-send"><svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M21.5 2.5 10.5 13.5"/><path d="M21.5 2.5 14.5 21.5l-4-8-8-4z"/></svg><span class="ig-id">lg-icon-send</span><span class="ig-cn">发送</span></div>
           </div>
         </div>
-        <div class="ic-cat"><h4>状态与提示 Status & Feedback <span class="n">S · 6 枚</span></h4>
+        <div class="ic-cat"><h3>状态与提示 Status & Feedback <span class="n">S · 6 枚</span></h3>
           <div class="ic-grid">
-          <div class="ig" title="点击复制 lg-icon-info"><svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" style="color:var(--lg-info-500)"><circle cx="12" cy="12" r="9"/><path d="M12 10.8v4.8"/><circle cx="12" cy="7.6" r="1" fill="currentColor" stroke="none"/></svg><span class="ig-id">lg-icon-info</span><span class="ig-cn">信息</span></div>
-          <div class="ig" title="点击复制 lg-icon-warning"><svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" style="color:var(--lg-warning-500)"><path d="M12 3.8 21.4 19.7a1.5 1.5 0 0 1-1.3 2.2H3.9a1.5 1.5 0 0 1-1.3-2.2z"/><path d="M12 10.2v4.6"/><circle cx="12" cy="17.3" r=".95" fill="currentColor" stroke="none"/></svg><span class="ig-id">lg-icon-warning</span><span class="ig-cn">警告</span></div>
-          <div class="ig" title="点击复制 lg-icon-success"><svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" style="color:var(--lg-success-500)"><circle cx="12" cy="12" r="9"/><path d="m8.2 12.4 2.6 2.6 5-5.6"/></svg><span class="ig-id">lg-icon-success</span><span class="ig-cn">成功</span></div>
-          <div class="ig" title="点击复制 lg-icon-error"><svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" style="color:var(--lg-danger-500)"><circle cx="12" cy="12" r="9"/><path d="m9.4 9.4 5.2 5.2M14.6 9.4l-5.2 5.2"/></svg><span class="ig-id">lg-icon-error</span><span class="ig-cn">错误</span></div>
+          <div class="ig" title="点击复制 lg-icon-info"><svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" style="color:var(--lg-sem-info)"><circle cx="12" cy="12" r="9"/><path d="M12 10.8v4.8"/><circle cx="12" cy="7.6" r="1" fill="currentColor" stroke="none"/></svg><span class="ig-id">lg-icon-info</span><span class="ig-cn">信息</span></div>
+          <div class="ig" title="点击复制 lg-icon-warning"><svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" style="color:var(--lg-sem-attention)"><path d="M12 3.8 21.4 19.7a1.5 1.5 0 0 1-1.3 2.2H3.9a1.5 1.5 0 0 1-1.3-2.2z"/><path d="M12 10.2v4.6"/><circle cx="12" cy="17.3" r=".95" fill="currentColor" stroke="none"/></svg><span class="ig-id">lg-icon-warning</span><span class="ig-cn">警告</span></div>
+          <div class="ig" title="点击复制 lg-icon-success"><svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" style="color:var(--lg-sem-positive)"><circle cx="12" cy="12" r="9"/><path d="m8.2 12.4 2.6 2.6 5-5.6"/></svg><span class="ig-id">lg-icon-success</span><span class="ig-cn">成功</span></div>
+          <div class="ig" title="点击复制 lg-icon-error"><svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" style="color:var(--lg-sem-risk)"><circle cx="12" cy="12" r="9"/><path d="m9.4 9.4 5.2 5.2M14.6 9.4l-5.2 5.2"/></svg><span class="ig-id">lg-icon-error</span><span class="ig-cn">错误</span></div>
           <div class="ig" title="点击复制 lg-icon-help"><svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M9.7 9.3a2.4 2.4 0 0 1 4.7.8c0 1.7-2.4 2-2.4 3.5"/><circle cx="12" cy="17" r=".95" fill="currentColor" stroke="none"/></svg><span class="ig-id">lg-icon-help</span><span class="ig-cn">帮助</span></div>
           <div class="ig" title="点击复制 lg-icon-clock"><svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v5.2l3.4 2"/></svg><span class="ig-id">lg-icon-clock</span><span class="ig-cn">时间</span></div>
           </div>
         </div>
-        <div class="ic-cat"><h4>数据与对象 Data & Objects <span class="n">D · 10 枚</span></h4>
+        <div class="ic-cat"><h3>数据与对象 Data & Objects <span class="n">D · 10 枚</span></h3>
           <div class="ic-grid">
           <div class="ig" title="点击复制 lg-icon-database"><svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><ellipse cx="12" cy="5.4" rx="8.4" ry="3"/><path d="M20.4 5.4v13.2c0 1.7-3.8 3-8.4 3s-8.4-1.3-8.4-3V5.4"/><path d="M3.6 12c0 1.7 3.8 3 8.4 3s8.4-1.3 8.4-3"/></svg><span class="ig-id">lg-icon-database</span><span class="ig-cn">数据库</span></div>
           <div class="ig" title="点击复制 lg-icon-server"><svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="3.6" y="3.6" width="16.8" height="7" rx="2"/><rect x="3.6" y="13.4" width="16.8" height="7" rx="2"/><circle cx="7.4" cy="7.1" r=".95" fill="currentColor" stroke="none"/><circle cx="7.4" cy="16.9" r=".95" fill="currentColor" stroke="none"/></svg><span class="ig-id">lg-icon-server</span><span class="ig-cn">服务器</span></div>
@@ -1791,18 +1867,18 @@ section.block:first-of-type{margin-top:8px}
           <div class="ig" title="点击复制 lg-icon-globe"><svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="8.6"/><path d="M3.4 12h17.2"/><path d="M12 3.4c2.9 2.6 2.9 14.6 0 17.2"/><path d="M12 3.4c-2.9 2.6-2.9 14.6 0 17.2"/></svg><span class="ig-id">lg-icon-globe</span><span class="ig-cn">区域</span></div>
           </div>
         </div>
-        <div class="ic-cat"><h4>安全与 AI Security & AI <span class="n">A · 7 枚</span></h4>
+        <div class="ic-cat"><h3>安全与 AI Security & AI <span class="n">A · 7 枚</span></h3>
           <div class="ic-grid">
-          <div class="ig" title="点击复制 lg-icon-shield"><svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" style="color:var(--lg-purple-500)"><path d="M12 3.2 19 5.7v5.4c0 4.6-3 8.3-7 9.7-4-1.4-7-5.1-7-9.7V5.7z"/></svg><span class="ig-id">lg-icon-shield</span><span class="ig-cn">防护</span></div>
-          <div class="ig" title="点击复制 lg-icon-shield-check"><svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" style="color:var(--lg-success-500)"><path d="M12 3.2 19 5.7v5.4c0 4.6-3 8.3-7 9.7-4-1.4-7-5.1-7-9.7V5.7z"/><path d="m9.2 11.9 2 2 3.6-3.9"/></svg><span class="ig-id">lg-icon-shield-check</span><span class="ig-cn">防护已启用</span></div>
+          <div class="ig" title="点击复制 lg-icon-shield"><svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" style="color:var(--lg-sem-special)"><path d="M12 3.2 19 5.7v5.4c0 4.6-3 8.3-7 9.7-4-1.4-7-5.1-7-9.7V5.7z"/></svg><span class="ig-id">lg-icon-shield</span><span class="ig-cn">防护</span></div>
+          <div class="ig" title="点击复制 lg-icon-shield-check"><svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" style="color:var(--lg-sem-positive)"><path d="M12 3.2 19 5.7v5.4c0 4.6-3 8.3-7 9.7-4-1.4-7-5.1-7-9.7V5.7z"/><path d="m9.2 11.9 2 2 3.6-3.9"/></svg><span class="ig-id">lg-icon-shield-check</span><span class="ig-cn">防护已启用</span></div>
           <div class="ig" title="点击复制 lg-icon-lock"><svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="5.2" y="10.6" width="13.6" height="9.8" rx="2.2"/><path d="M8.2 10.6V7.8a3.8 3.8 0 0 1 7.6 0v2.8"/><circle cx="12" cy="15.2" r="1" fill="currentColor" stroke="none"/></svg><span class="ig-id">lg-icon-lock</span><span class="ig-cn">锁定</span></div>
-          <div class="ig" title="点击复制 lg-icon-key"><svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" style="color:var(--lg-warning-500)"><circle cx="8" cy="16" r="3.8"/><path d="M11 13 20.6 3.4"/><path d="m16.4 7.4 2.4 2.4"/></svg><span class="ig-id">lg-icon-key</span><span class="ig-cn">密钥</span></div>
+          <div class="ig" title="点击复制 lg-icon-key"><svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" style="color:var(--lg-sem-attention)"><circle cx="8" cy="16" r="3.8"/><path d="M11 13 20.6 3.4"/><path d="m16.4 7.4 2.4 2.4"/></svg><span class="ig-id">lg-icon-key</span><span class="ig-cn">密钥</span></div>
           <div class="ig" title="点击复制 lg-icon-eye"><svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M2.6 12S6.2 5.8 12 5.8 21.4 12 21.4 12 17.8 18.2 12 18.2 2.6 12 2.6 12z"/><circle cx="12" cy="12" r="3.1"/></svg><span class="ig-id">lg-icon-eye</span><span class="ig-cn">审计</span></div>
-          <div class="ig" title="点击复制 lg-icon-ai-spark"><svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" style="color:var(--lg-purple-500)"><path d="M12 3.4l2.1 5.2 5.2 2.1-5.2 2.1-2.1 5.2-2.1-5.2-5.2-2.1 5.2-2.1z"/><path d="M18.6 16.2l.9 2.1 2.1.9-2.1.9-.9 2.1-.9-2.1-2.1-.9 2.1-.9z"/></svg><span class="ig-id">lg-icon-ai-spark</span><span class="ig-cn">AI 智能</span></div>
-          <div class="ig" title="点击复制 lg-icon-ai-bot"><svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" style="color:var(--lg-purple-500)"><rect x="4.6" y="8.6" width="14.8" height="10.8" rx="4"/><path d="M9.2 8.6V5.8h5.6v2.8"/><circle cx="9.7" cy="13.8" r=".95" fill="currentColor" stroke="none"/><circle cx="14.3" cy="13.8" r=".95" fill="currentColor" stroke="none"/><path d="M9.6 16.8h4.8"/></svg><span class="ig-id">lg-icon-ai-bot</span><span class="ig-cn">智能体</span></div>
+          <div class="ig" title="点击复制 lg-icon-ai-spark"><svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" style="color:var(--lg-sem-special)"><path d="M12 3.4l2.1 5.2 5.2 2.1-5.2 2.1-2.1 5.2-2.1-5.2-5.2-2.1 5.2-2.1z"/><path d="M18.6 16.2l.9 2.1 2.1.9-2.1.9-.9 2.1-.9-2.1-2.1-.9 2.1-.9z"/></svg><span class="ig-id">lg-icon-ai-spark</span><span class="ig-cn">AI 智能</span></div>
+          <div class="ig" title="点击复制 lg-icon-ai-bot"><svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" style="color:var(--lg-sem-special)"><rect x="4.6" y="8.6" width="14.8" height="10.8" rx="4"/><path d="M9.2 8.6V5.8h5.6v2.8"/><circle cx="9.7" cy="13.8" r=".95" fill="currentColor" stroke="none"/><circle cx="14.3" cy="13.8" r=".95" fill="currentColor" stroke="none"/><path d="M9.6 16.8h4.8"/></svg><span class="ig-id">lg-icon-ai-bot</span><span class="ig-cn">智能体</span></div>
           </div>
         </div>
-        <div class="ic-cat"><h4>媒体与展示 Media & Display <span class="n">M · 6 枚</span></h4>
+        <div class="ic-cat"><h3>媒体与展示 Media & Display <span class="n">M · 6 枚</span></h3>
           <div class="ic-grid">
           <div class="ig" title="点击复制 lg-icon-image"><svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="3.8" y="5" width="16.4" height="14" rx="2.2"/><circle cx="9" cy="10" r="1.5"/><path d="m21 15.2-4.8-4.4-8.6 8"/></svg><span class="ig-id">lg-icon-image</span><span class="ig-cn">图片</span></div>
           <div class="ig" title="点击复制 lg-icon-play"><svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M9.4 6.4v11.2L18.6 12z"/></svg><span class="ig-id">lg-icon-play</span><span class="ig-cn">运行</span></div>
@@ -1812,17 +1888,17 @@ section.block:first-of-type{margin-top:8px}
           <div class="ig" title="点击复制 lg-icon-list"><svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M9 6.6h11M9 12h11M9 17.4h11"/><circle cx="4.8" cy="6.6" r="1" fill="currentColor" stroke="none"/><circle cx="4.8" cy="12" r="1" fill="currentColor" stroke="none"/><circle cx="4.8" cy="17.4" r="1" fill="currentColor" stroke="none"/></svg><span class="ig-id">lg-icon-list</span><span class="ig-cn">事件流</span></div>
           </div>
         </div>
-        <div class="ic-cat"><h4>母婴与保健 Maternal & Baby <span class="n">B · 6 枚</span></h4>
+        <div class="ic-cat"><h3>母婴与保健 Maternal & Baby <span class="n">B · 6 枚</span></h3>
           <div class="ic-grid">
           <div class="ig" title="点击复制 lg-icon-baby"><svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" style="color:var(--mmh-rose-500)"><circle cx="12" cy="13.2" r="6.9"/><circle cx="9.6" cy="12.2" r="1" fill="currentColor" stroke="none"/><circle cx="14.4" cy="12.2" r="1" fill="currentColor" stroke="none"/><path d="M9.7 15.8c1.4 1.1 3.2 1.1 4.6 0"/><path d="M8.9 8.2c-.6-1.4.3-2.4 1.8-2.7M15.1 8.2c.6-1.4-.3-2.4-1.8-2.7"/></svg><span class="ig-id">lg-icon-baby</span><span class="ig-cn">宝宝</span></div>
           <div class="ig" title="点击复制 lg-icon-mom"><svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" style="color:var(--mmh-rose-500)"><circle cx="9.4" cy="10.4" r="3.1"/><path d="M3.6 20.4c1.1-2.9 3.3-4.2 5.8-4.2 1.4 0 2.6.4 3.6 1.1"/><path d="m20.6 10.6 1 1.9 2.1.4-1.5 1.5.4 2.1-2-1-2 1 .4-2.1-1.5-1.5 2.1-.4z"/></svg><span class="ig-id">lg-icon-mom</span><span class="ig-cn">妈妈关怀</span></div>
           <div class="ig" title="点击复制 lg-icon-milk"><svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" style="color:var(--mmh-peach-400)"><path d="M12 3.4c3 4.3 5 6.9 5 9.6a5 5 0 0 1-10 0c0-2.7 2-5.3 5-9.6z"/><path d="M9.5 12.8c.6 1.6 4.4 1.6 5 0"/></svg><span class="ig-id">lg-icon-milk</span><span class="ig-cn">喂养/母乳</span></div>
           <div class="ig" title="点击复制 lg-icon-vaccine"><svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" style="color:var(--mmh-mint-500)"><rect x="8.7" y="8.7" width="6.6" height="10.4" rx="2.6"/><path d="M10.3 8.7V6.5h3.4v2.2"/><path d="M9.6 6.5h4.8"/><path d="M9.6 12.5h4.8M10.6 15.5h2.8"/></svg><span class="ig-id">lg-icon-vaccine</span><span class="ig-cn">疫苗</span></div>
-          <div class="ig" title="点击复制 lg-icon-vital"><svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" style="color:var(--mmh-rose-600)"><path d="M3.2 12.4h3.2l1.9-3.4 2.9 6.6 2.1-4.2 1.2 1h6.3"/><path d="M4 20.4h16"/></svg><span class="ig-id">lg-icon-vital</span><span class="ig-cn">胎心/健康</span></div>
+          <div class="ig" title="点击复制 lg-icon-vital"><svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" style="color:var(--mmh-rose-700)"><path d="M3.2 12.4h3.2l1.9-3.4 2.9 6.6 2.1-4.2 1.2 1h6.3"/><path d="M4 20.4h16"/></svg><span class="ig-id">lg-icon-vital</span><span class="ig-cn">胎心/健康</span></div>
           <div class="ig" title="点击复制 lg-icon-clinic"><svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" style="color:var(--mmh-mint-500)"><path d="M3.2 20.6h17.6"/><path d="M5.6 20.6V7.4a1.8 1.8 0 0 1 1.8-1.8h9.2a1.8 1.8 0 0 1 1.8 1.8v13.2"/><path d="M10.2 20.6v-4h3.6v4"/><path d="M9.4 11.4h5.2M12 8.8v5.2"/></svg><span class="ig-id">lg-icon-clinic</span><span class="ig-cn">儿保机构</span></div>
           </div>
         </div>
-        <div class="ic-cat"><h4>成长阶段 Growth Stages <span class="n">L · 8 枚</span></h4>
+        <div class="ic-cat"><h3>成长阶段 Growth Stages <span class="n">L · 8 枚</span></h3>
           <div class="ic-grid">
           <div class="ig" title="点击复制 lg-icon-preg-prep"><svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="6.3" r="2.6"/><circle cx="12" cy="13.4" r="2.9"/><path d="M18.9 3.2l.9 1.7 1.9.4-1.4 1.4.4 1.9-1.8-1-1.8 1 .4-1.9-1.4-1.4 1.9-.4z"/></svg><span class="ig-id">lg-icon-preg-prep</span><span class="ig-cn">备孕</span></div>
           <div class="ig" title="点击复制 lg-icon-preg-early"><svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="6.3" r="2.6"/><circle cx="12" cy="15.6" r="3.6"/><path d="M8.9 14.6h6.2"/></svg><span class="ig-id">lg-icon-preg-early</span><span class="ig-cn">孕早期</span></div>
@@ -1834,7 +1910,7 @@ section.block:first-of-type{margin-top:8px}
           <div class="ig" title="点击复制 lg-icon-child-preschool"><svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="5.2" r="2.4"/><rect x="10" y="8.6" width="4" height="5.6" rx="2"/><path d="M10.2 9.4 8.7 11.4M13.8 9.4l1.5 2"/><path d="M10.8 14.4v5M13.2 14.4v5"/><rect x="15.3" y="8" width="2.5" height="3.8" rx="1"/></svg><span class="ig-id">lg-icon-child-preschool</span><span class="ig-cn">学龄前 3–6 岁</span></div>
           </div>
         </div>
-        <div class="ic-cat"><h4>儿童五健 Child Five Health <span class="n">H · 7 枚</span></h4>
+        <div class="ic-cat"><h3>儿童五健 Child Five Health <span class="n">H · 7 枚</span></h3>
           <div class="ic-grid">
           <div class="ig" title="点击复制 lg-icon-wj-growth"><svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="8.6" cy="6.9" r="2.1"/><path d="M8.6 9.1v3.4"/><path d="M6.9 10.9l1.7.7M10.3 10.9l-1.7.7"/><path d="M8.6 12.5 7.5 15.2M8.6 12.5l1.1 2.7"/><path d="M16.6 5v12"/><path d="M15.2 7.3 16.6 5l1.4 2.3"/><path d="M15.2 14.7 16.6 17l1.4-2.3"/></svg><span class="ig-id">lg-icon-wj-growth</span><span class="ig-cn">生长发育</span></div>
           <div class="ig" title="点击复制 lg-icon-wj-nutrition"><svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="11.8" cy="14.6" r="5.4"/><path d="M11.8 9.5c.3-1.9 1.2-3.1 2.9-3.8"/><path d="M14.5 6.1c1.7-.7 3.1-.5 4 .4"/></svg><span class="ig-id">lg-icon-wj-nutrition</span><span class="ig-cn">营养喂养</span></div>
@@ -1865,10 +1941,10 @@ section.block:first-of-type{margin-top:8px}
         </div>
         <div style="height:16px"></div>
         <div style="display:flex;gap:10px;align-items:center">
-          <span class="tip" data-tip="实时防护已开启" style="color:var(--lg-purple-600)"><svg class="ni" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3l7 3v5c0 4.4-3 8.2-7 10-4-1.8-7-5.6-7-10V6z"/><path d="M9 12l2 2 4-4"/></svg></span>
-          <span class="tip" data-tip="AI 分析中…" style="color:var(--lg-purple-500)"><svg class="ni" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3l1.9 5.1L19 10l-5.1 1.9L12 17l-1.9-5.1L5 10l5.1-1.9z"/><path d="M19 15l.9 2.1L22 18l-2.1.9L19 21l-.9-2.1L16 18l2.1-.9z"/></svg></span>
-          <span class="tip" data-tip="3 条待处置告警" style="color:var(--lg-warning-500)"><svg class="ni" viewBox="0 0 24 24" aria-hidden="true"><path d="M18 8a6 6 0 0 0-12 0c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.7 21a2 2 0 0 1-3.4 0"/></svg></span>
-          <span class="tip" data-tip="云资产 128 个" style="color:var(--lg-cyan-600)"><svg class="ni" viewBox="0 0 24 24" aria-hidden="true"><path d="M18 10h-1.26A8 8 0 1 0 9 20h9a5 5 0 0 0 0-10z"/></svg></span>
+          <span class="tip" data-tip="实时防护已开启" style="color:var(--lg-sem-special)"><svg class="ni" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3l7 3v5c0 4.4-3 8.2-7 10-4-1.8-7-5.6-7-10V6z"/><path d="M9 12l2 2 4-4"/></svg></span>
+          <span class="tip" data-tip="AI 分析中…" style="color:var(--lg-sem-special)"><svg class="ni" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3l1.9 5.1L19 10l-5.1 1.9L12 17l-1.9-5.1L5 10l5.1-1.9z"/><path d="M19 15l.9 2.1L22 18l-2.1.9L19 21l-.9-2.1L16 18l2.1-.9z"/></svg></span>
+          <span class="tip" data-tip="3 条待处置告警" style="color:var(--lg-sem-attention)"><svg class="ni" viewBox="0 0 24 24" aria-hidden="true"><path d="M18 8a6 6 0 0 0-12 0c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.7 21a2 2 0 0 1-3.4 0"/></svg></span>
+          <span class="tip" data-tip="云资产 128 个" style="color:var(--lg-sem-positive)"><svg class="ni" viewBox="0 0 24 24" aria-hidden="true"><path d="M18 10h-1.26A8 8 0 1 0 9 20h9a5 5 0 0 0 0-10z"/></svg></span>
           <button class="btn btn-primary btn-md" style="margin-left:auto" id="toastBtn">触发 Toast
             <svg viewBox="0 0 24 24"><path d="M18 8a6 6 0 1 0-12 0c0 7-3 9-3 9h18s-3-2-3-9M13.7 21a2 2 0 0 1-3.4 0"/></svg></button>
         </div>
@@ -1908,7 +1984,7 @@ section.block:first-of-type{margin-top:8px}
       </div>
       <div class="panel glass-l2">
         <h3><i></i>Motion Tokens</h3>
-        <p class="mi-hint">时长与曲线已注入本页 CSS 变量，可直接复制到项目（详见 <b style="color:var(--lg-purple-600)">07-交互动效与微交互规范.md</b>）。</p>
+        <p class="mi-hint">时长与曲线已注入本页 CSS 变量，可直接复制到项目（详见 <b style="color:var(--lg-sem-special)">07-交互动效与微交互规范.md</b>）。</p>
         <div class="mtok-row"><span class="mtok"><b>--lg-t-fast</b> 120ms</span><span class="mtok"><b>--lg-t-base</b> 220ms</span><span class="mtok"><b>--lg-t-slow</b> 400ms</span><span class="mtok"><b>--lg-t-entrance</b> 800ms</span><span class="mtok"><b>--lg-t-draw</b> 1000ms</span></div>
         <div class="mtok-row"><span class="mtok"><b>--lg-ease-out</b> cubic-bezier(.22,1,.36,1)</span><span class="mtok"><b>--lg-ease-in-out</b> cubic-bezier(.65,0,.35,1)</span><span class="mtok"><b>--lg-ease-spring</b> cubic-bezier(.34,1.56,.64,1)</span></div>
         <div class="mtok-row"><span class="mtok"><b>--lg-t-breathe</b> 2.4s 循环上限</span><span class="mtok"><b>--lg-t-float</b> 8s Hero 浮动</span><span class="mtok"><b>红线</b> 只动 transform/opacity</span></div>
@@ -1921,12 +1997,12 @@ section.block:first-of-type{margin-top:8px}
   <section class="block" id="exhome">
     <div class="sec-head"><h2>示例页面 Examples</h2><span class="en">常用完整页面 · 1–6 全部集中到示例中心（列表/详情/表单/移动/工作站/孕妇档案）</span></div>
     <div class="exgrid">
-      <a class="excard glass-l2" href="preview/examples.html#list"><span style="display:flex;align-items:center;gap:10px"><span class="no">1</span><h4 style="margin:0">筛查队列列表页</h4></span><p>机构端两癌筛查/孕产妇/儿保队列：KPI + 状态筛选 + 玻璃表格 + 五色分级 + 分页</p><span class="ends"><i>P</i><i>C</i></span><span class="go">打开示例 <svg viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span></a>      <a class="excard glass-l2" href="preview/examples.html#detail"><span style="display:flex;align-items:center;gap:10px"><span class="no">2</span><h4 style="margin:0">儿童档案详情页</h4></span><p>生命周期轴 + 五健/口腔清单 + 生长曲线百分位带 + 疫苗随访</p><span class="ends"><i>P</i><i>C</i></span><span class="go">打开示例 <svg viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span></a>      <a class="excard glass-l2" href="preview/examples.html#form"><span style="display:flex;align-items:center;gap:10px"><span class="no">3</span><h4 style="margin:0">孕产妇建档表单页</h4></span><p>四步建档：孕产信息 + 五色风险初评 + 校验与暂存</p><span class="ends"><i>P</i><i>C</i></span><span class="go">打开示例 <svg viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span></a>      <a class="excard glass-l2" href="preview/examples.html#mobile"><span style="display:flex;align-items:center;gap:10px"><span class="no">4</span><h4 style="margin:0">移动随访工作页</h4></span><p>服务对象卡 + 待办流 + 底部操作栏（记录随访/开始复查/更多）</p><span class="ends"><i>M</i><i>o</i><i>b</i><i>i</i><i>l</i><i>e</i></span><span class="go">打开示例 <svg viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span></a>
-<a class="excard glass-l2" href="preview/examples.html#work"><span style="display:flex;align-items:center;gap:10px"><span class="no">5</span><h4 style="margin:0">PC 妇幼工作站</h4></span><p>今日待办·风险队列(五色)·快捷工具·质量概览——机构/医护工作台总览</p><span class="ends"><i>P</i><i>C</i></span><span class="go">打开示例 <svg viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span></a>
-<a class="excard glass-l2" href="preview/examples.html#preg"><span style="display:flex;align-items:center;gap:10px"><span class="no">6</span><h4 style="margin:0">孕妇档案详情页</h4></span><p>孕周轴·产检计划·检查结果·体重曲线·黄级随访——孕产妇档案全览</p><span class="ends"><i>P</i><i>C</i></span><span class="go">打开示例 <svg viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span></a>
+      <a class="excard glass-l2" href="preview/examples.html#list"><span style="display:flex;align-items:center;gap:10px"><span class="no">1</span><h3 style="margin:0">筛查队列列表页</h3></span><p>机构端两癌筛查/孕产妇/儿保队列：KPI + 状态筛选 + 玻璃表格 + 五色分级 + 分页</p><span class="ends"><i>P</i><i>C</i></span><span class="go">打开示例 <svg viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span></a>      <a class="excard glass-l2" href="preview/examples.html#detail"><span style="display:flex;align-items:center;gap:10px"><span class="no">2</span><h3 style="margin:0">儿童档案详情页</h3></span><p>生命周期轴 + 五健/口腔清单 + 生长曲线百分位带 + 疫苗随访</p><span class="ends"><i>P</i><i>C</i></span><span class="go">打开示例 <svg viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span></a>      <a class="excard glass-l2" href="preview/examples.html#form"><span style="display:flex;align-items:center;gap:10px"><span class="no">3</span><h3 style="margin:0">孕产妇建档表单页</h3></span><p>四步建档：孕产信息 + 五色风险初评 + 校验与暂存</p><span class="ends"><i>P</i><i>C</i></span><span class="go">打开示例 <svg viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span></a>      <a class="excard glass-l2" href="preview/examples.html#mobile"><span style="display:flex;align-items:center;gap:10px"><span class="no">4</span><h3 style="margin:0">移动随访工作页</h3></span><p>服务对象卡 + 待办流 + 底部操作栏（记录随访/开始复查/更多）</p><span class="ends"><i>M</i><i>o</i><i>b</i><i>i</i><i>l</i><i>e</i></span><span class="go">打开示例 <svg viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span></a>
+<a class="excard glass-l2" href="preview/examples.html#work"><span style="display:flex;align-items:center;gap:10px"><span class="no">5</span><h3 style="margin:0">PC 妇幼工作站</h3></span><p>今日待办·风险队列(五色)·快捷工具·质量概览——机构/医护工作台总览</p><span class="ends"><i>P</i><i>C</i></span><span class="go">打开示例 <svg viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span></a>
+<a class="excard glass-l2" href="preview/examples.html#preg"><span style="display:flex;align-items:center;gap:10px"><span class="no">6</span><h3 style="margin:0">孕妇档案详情页</h3></span><p>孕周轴·产检计划·检查结果·体重曲线·黄级随访——孕产妇档案全览</p><span class="ends"><i>P</i><i>C</i></span><span class="go">打开示例 <svg viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span></a>
     </div>
     <div style="margin-top:14px;display:flex;gap:10px;align-items:center;flex-wrap:wrap">
-      <a class="excard glass-l2" href="preview/patterns.html"><span style="display:flex;align-items:center;gap:10px"><span class="no">7</span><h4 style="margin:0">新增能力示例（V2.5）</h4></span><p>Link 链接全态 · Cascader 级联三形态 · 响应式适配容器（拖动容器宽度实测切换）· 1284 条虚拟长列表 · 暗黑模式 · 边框宽度档</p><span class="ends"><i>P</i><i>C</i><i>+</i><i>M</i></span><span class="go">打开示例 <svg viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span></a>
+      <a class="excard glass-l2" href="preview/patterns.html"><span style="display:flex;align-items:center;gap:10px"><span class="no">7</span><h3 style="margin:0">新增能力示例（V2.5）</h3></span><p>Link 链接全态 · Cascader 级联三形态 · 响应式适配容器（拖动容器宽度实测切换）· 1284 条虚拟长列表 · 暗黑模式 · 边框宽度档</p><span class="ends"><i>P</i><i>C</i><i>+</i><i>M</i></span><span class="go">打开示例 <svg viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span></a>
       <a class="btn btn-primary btn-md" href="preview/examples.html">打开示例中心（按顺序浏览 1→6）· <a href="preview/patterns.html" style="color:inherit;text-decoration:underline">新增能力示例（7）</a>
         <svg viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
       <span style="font-size:12px;color:var(--lg-text-tertiary)">页面模板口径见 11.3 / 13 / 15.4；状态与五色见 15.2 / 02.10；iPad 分层见 10.1.1。</span>
@@ -1947,7 +2023,7 @@ section.block:first-of-type{margin-top:8px}
   </section>
 
   <footer>
-    <img src="../brand/logo-tile.svg" alt="妈咪好" style="width:34px;height:34px;border-radius:10px;vertical-align:-8px;margin-right:8px"><b style="color:var(--lg-text-secondary)">妈咪好 GoodMom · Design DNA</b> —— 柔光蜜桃 · 液态玻璃 · 生长曲线 · 医疗克制 · 妈妈的温度<br>
+    <img src="../brand/logo-tile.svg" alt="妈咪好" style="width:34px;height:34px;border-radius:18px;vertical-align:-8px;margin-right:8px"><b style="color:var(--lg-text-secondary)">妈咪好 GoodMom · Design DNA</b> —— 柔光蜜桃 · 液态玻璃 · 生长曲线 · 医疗克制 · 妈妈的温度<br>
     规范详见《妈咪好 GoodMom 设计系统 V2.5》： ·
     <a href="site/spec.html#ch-01">DNA</a> · <a href="site/spec.html#ch-02">Token</a> ·
     <a href="site/spec.html#ch-03">组件</a> · <a href="site/spec.html#ch-04">数据可视化</a> ·
@@ -2306,7 +2382,7 @@ function MODROOT_preview_index(){return document.getElementById("gm-mod-preview-
     var mask=document.createElement('div');mask.className='dmask';mask.id='dlgMask';
     mask.innerHTML='<div class="dcard" role="dialog" aria-modal="true" aria-label="确认提交">'+
       '<div style="display:flex;align-items:flex-start;gap:10px;margin-bottom:14px">'+
-      '<span style="width:40px;height:40px;border-radius:14px;background:rgba(247,127,163,.14);color:#B23A63;display:flex;align-items:center;justify-content:center;flex:none">'+
+      '<span style="width:40px;height:40px;border-radius:18px;background:rgba(247,127,163,.14);color:#B23A63;display:flex;align-items:center;justify-content:center;flex:none">'+
       '<svg style="width:20px;height:20px;stroke:currentColor;fill:none;stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round" viewBox="0 0 24 24"><path d="M12 3.2 19 5.7v5.4c0 4.6-3 8.3-7 9.7-4-1.4-7-5.1-7-9.7V5.7z"/><path d="m9.2 11.9 2 2 3.6-3.9"/></svg></span>'+
       '<div style="flex:1"><div style="font-size:16px;font-weight:600">提交筛查结果</div>'+
       '<div style="font-size:12.5px;color:var(--lg-text-secondary);margin-top:4px;line-height:1.7">张女士 · 宫颈筛查（TCT）结果已录入，提交后进入“待复核”状态。</div></div></div>'+
@@ -2783,7 +2859,7 @@ function MODROOT_preview_index(){return document.getElementById("gm-mod-preview-
     var mask=document.createElement('div');mask.className='dmask';mask.id='dlgMask';
     mask.innerHTML='<div class="dcard" role="dialog" aria-modal="true" aria-label="确认提交">'+
       '<div style="display:flex;align-items:flex-start;gap:10px;margin-bottom:14px">'+
-      '<span style="width:40px;height:40px;border-radius:14px;background:rgba(247,127,163,.14);color:#B23A63;display:flex;align-items:center;justify-content:center;flex:none">'+
+      '<span style="width:40px;height:40px;border-radius:18px;background:rgba(247,127,163,.14);color:#B23A63;display:flex;align-items:center;justify-content:center;flex:none">'+
       '<svg style="width:20px;height:20px;stroke:currentColor;fill:none;stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round" viewBox="0 0 24 24"><path d="M12 3.2 19 5.7v5.4c0 4.6-3 8.3-7 9.7-4-1.4-7-5.1-7-9.7V5.7z"/><path d="m9.2 11.9 2 2 3.6-3.9"/></svg></span>'+
       '<div style="flex:1"><div style="font-size:16px;font-weight:600">提交筛查结果</div>'+
       '<div style="font-size:12.5px;color:var(--lg-text-secondary);margin-top:4px;line-height:1.7">张女士 · 宫颈筛查（TCT）结果已录入，提交后进入“待复核”状态。</div></div></div>'+

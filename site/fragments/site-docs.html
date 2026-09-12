@@ -13,16 +13,17 @@ a{color:var(--rose-deep);text-decoration:none}
 .top .r a{font-size:12.5px;padding:6px 12px;border-radius:999px;background:#fff;border:1px solid rgba(232,93,143,.3);font-weight:600}
 .layout{display:flex;gap:0;max-width:1280px;margin:0 auto;padding:18px 16px 70px}
 nav.tree{width:236px;flex:none;padding-right:14px}
-nav.tree details{border-radius:14px;margin-bottom:8px;overflow:hidden;background:var(--card-bg);border:1px solid var(--card-bd)}
+nav.tree details{border-radius:22px;margin-bottom:8px;overflow:hidden;background:var(--card-bg);border:1px solid var(--card-bd)}
 nav.tree summary{cursor:pointer;padding:10px 14px;font-weight:600;font-size:13.5px;color:var(--rose-deep);list-style:none}
 nav.tree summary::-webkit-details-marker{display:none}
 nav.tree .in{padding:4px 12px 10px;display:flex;flex-direction:column;gap:2px}
-nav.tree .in a{font-size:12.5px;color:var(--t2);padding:5px 8px;border-radius:9px}
+  /* 02 · 2.4：交互组件圆角下限 16px（原值低于下限） */
+nav.tree .in a{font-size:12.5px;color:var(--t2);padding:5px 8px;border-radius:18px}
 nav.tree .in a:hover{background:rgba(247,127,163,.12);color:var(--rose-deep)}
 main.doc{flex:1;min-width:0}
 .panel{border-radius:22px;padding:22px;margin-bottom:16px;background:var(--card-bg);border:1px solid var(--card-bd);box-shadow:var(--shadow)}
 .panel h2{font-size:20px;margin-bottom:8px;display:flex;align-items:center;gap:10px}
-.panel h2 .n{width:28px;height:28px;border-radius:10px;background:linear-gradient(135deg,#FFA9C2,#E85D8F);color:#fff;display:inline-flex;align-items:center;justify-content:center;font-size:13px}
+.panel h2 .n{width:28px;height:28px;border-radius:18px;background:linear-gradient(135deg,#FFA9C2,#E85D8F);color:#fff;display:inline-flex;align-items:center;justify-content:center;font-size:13px}
 .panel .sub{color:var(--t3);font-size:13px;margin-bottom:14px}
 table{width:100%;border-collapse:collapse;font-size:12.5px}
 th,td{border-bottom:1px solid rgba(232,93,143,.12);text-align:left;padding:8px 8px;vertical-align:top}
@@ -31,17 +32,26 @@ th{color:var(--rose-deep)}
 .chip.p{background:rgba(242,178,92,.2);color:#8D5A15}
 .demoBtn{border:none;border-radius:999px;padding:9px 18px;cursor:pointer;font-weight:600;background:linear-gradient(135deg,#FFA9C2,#E85D8F);color:#fff}
 code,pre{font-family:ui-monospace,Menlo,monospace}
-pre{background:#fff7f4;border:1px solid #f0d4cf;border-radius:12px;padding:12px;font-size:12px;overflow:auto;line-height:1.8}
+pre{background:#fff7f4;border:1px solid #f0d4cf;border-radius:18px;padding:12px;font-size:12px;overflow:auto;line-height:1.8}
 /* 暗色演示（页面内最小示例：切换 data-theme） */
 [data-theme="dark"]{--t:#F0E6E0;--t2:#C9BDB5;--t3:#9C8E86;--card-bg:rgba(40,34,40,.82);--card-bd:rgba(255,255,255,.12);
   --rose-deep:#FF9AB6;--rose-d:#FF8FAE;--bg:linear-gradient(165deg,#241d24,#3a2b33 55%,#55333d)}
 [data-theme="dark"] body{color-scheme:dark}
 [data-theme="dark"] pre{background:rgba(255,255,255,.06);border-color:rgba(255,255,255,.12)}
 [data-theme="dark"] .top{background:rgba(30,25,31,.8)}
-@media(max-width:767px){.layout{flex-direction:column}nav.tree{width:100%}}
+/* 10 · 10.4：≤767px 目录项/下拉项热区 ≥44×44（原实测 31px / 40px） */
+@media(max-width:767px){
+  .layout{flex-direction:column}nav.tree{width:100%}
+  nav.tree a,nav.tree summary,.ngdrop a,.top a{min-height:44px;display:flex;align-items:center}
+  #site-docs--darkToggle,.doc a,.panel a{position:relative}
+  #site-docs--darkToggle::after,.doc a::after,.panel a::after{
+    content:"";position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);
+    width:100%;min-width:44px;height:100%;min-height:44px}
+}
 
-:root{--mmh-grad-action-hc:linear-gradient(135deg,#B23A63 0%,#9E3054 100%)}
-/* AA 高对比行动（D5/审查收口） */
+:root{--mmh-grad-action-hc:linear-gradient(135deg,#FFC4D6 0%,#F77FA3 100%)}
+/* 主行动档（D9 裁决）：品牌粉上半段底 + 深字。
+   旧值 #B23A63→#9E3054 为 D5/D8 口径，与本行下方的深字组成深底深字，实测 2.00:1。 */
 .demoBtn,.panel h2 .n{background:var(--mmh-grad-action-hc,#F77FA3)!important;color:#343A46!important} /* D9 */
 
 /* 按钮 文字+图标 组合（03 · 3.2.5）：几何居中 + 固定 gap + 图标不挤压 */

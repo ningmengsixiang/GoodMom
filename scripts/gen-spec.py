@@ -133,23 +133,25 @@ css='''
 :root{--t:#343A46;--t2:#4F5B6E;--t3:#4F5B6E;--rose:#E85D8F;--rose-deep:#B23A63;--bg:linear-gradient(165deg,#FDF2EE,#F6E2DB 55%,#E7D3CB)}
 *{box-sizing:border-box}body{margin:0;font-family:"PingFang SC","Inter","MiSans","Noto Sans SC",sans-serif;color:var(--t);background:var(--bg)}
 a{color:var(--rose-deep)}
-.top{position:sticky;top:0;z-index:90;display:flex;flex-wrap:wrap;gap:4px;align-items:center;padding:10px 16px;background:rgba(255,255,255,.78);border-bottom:1px solid #F0D4CF;-webkit-backdrop-filter:blur(14px);backdrop-filter:blur(14px)}
+.top{position:sticky;top:0;z-index:90;display:flex;flex-wrap:wrap;gap:4px;align-items:center;padding:10px 16px;background:rgba(255,255,255,.78);border-bottom:1px solid #F0D4CF;-webkit-backdrop-filter:blur(16px);backdrop-filter:blur(16px)}
 .top img{width:26px;height:26px;border-radius:50%;object-fit:cover}
 .top b{color:var(--rose-deep);font-size:14px;margin-right:10px}
 .gp{position:relative;display:inline-flex}
 .gp>button{font-family:inherit;border:1px solid transparent;background:none;border-radius:999px;padding:7px 12px;cursor:pointer;font-size:13px;font-weight:500;color:var(--t2)}
 .gp>button::after{content:"▾";font-size:9px;margin-left:4px;opacity:.6}
 .gp:hover>button{background:#FFF;color:var(--rose-deep)}
-.drop{position:absolute;top:calc(100% + 10px);left:0;min-width:210px;z-index:100;padding:6px;border-radius:16px;background:#FFF;border:1px solid rgba(232,93,143,.2);box-shadow:0 16px 40px rgba(90,70,70,.15);opacity:0;pointer-events:none;transform:translateY(6px);transition:.2s}
+.drop{position:absolute;top:calc(100% + 10px);left:0;min-width:210px;z-index:100;padding:6px;border-radius:22px;background:#FFF;border:1px solid rgba(232,93,143,.2);box-shadow:0 16px 40px rgba(90,70,70,.15);opacity:0;pointer-events:none;transform:translateY(6px);transition:.2s}
 .gp:hover .drop{opacity:1;pointer-events:auto;transform:none}
 .gp::after{content:"";position:absolute;left:0;right:0;top:100%;height:12px}
-.drop a{display:block;padding:8px 12px;border-radius:10px;font-size:13px;color:var(--t2);text-decoration:none;white-space:nowrap}
+.drop a{display:block;padding:8px 12px;border-radius:18px;font-size:13px;color:var(--t2);text-decoration:none;white-space:nowrap}
 .drop a:hover{background:rgba(247,127,163,.1);color:#B23A63}
 .top .ext{margin-left:auto;font-size:12.5px;font-weight:600;text-decoration:none;padding:7px 14px;border-radius:999px;background:#FFF;border:1px solid rgba(232,93,143,.3);color:var(--rose-deep)}
-.top .ext2{margin-left:8px;background:linear-gradient(135deg,#FFA9C2,#E85D8F);color:#FFF;font-weight:600;text-decoration:none;font-size:12.5px;padding:7px 14px;border-radius:999px}
+.top .ext2{margin-left:8px;background:var(--mmh-grad-action-hc,linear-gradient(135deg,#FFC4D6 0%,#F77FA3 100%));color:#343A46;font-weight:600;text-decoration:none;font-size:12.5px;padding:7px 14px;border-radius:999px}
 .wrap{max-width:1080px;margin:0 auto;padding:20px 18px 80px}
 .chap{scroll-margin-top:70px;margin:0 0 34px;border-radius:22px;padding:22px 26px;background:linear-gradient(160deg,rgba(255,255,255,.72),rgba(255,255,255,.4));border:1px solid #F0D4CF;box-shadow:0 10px 26px rgba(90,70,70,.08)}
 .chap-hd{font-size:20px;font-weight:700;color:var(--rose-deep);padding-bottom:10px;border-bottom:1px solid #F0D4CF;margin-bottom:12px}
+/* 02 · 2.2.4 字重上限 700：<b> 在 700 的父级下按 bolder 计算为 900，故显式回落 */
+.chap-hd b{font-weight:700}
 .md h1{font-size:24px;margin:18px 0 8px;color:var(--rose-deep)}
 .md h2{font-size:19px;margin:20px 0 6px}
 .md h3{font-size:16px;margin:16px 0 6px}
@@ -158,12 +160,27 @@ a{color:var(--rose-deep)}
 .md table{width:100%;border-collapse:collapse;margin:10px 0;font-size:12.5px}
 .md th,.md td{border:1px solid #EED5CD;padding:7px 9px;text-align:left}
 .md th{background:rgba(247,127,163,.1);color:#A03F60}
-.md pre{background:#FFF7F4;border:1px solid #F0D4CF;border-radius:12px;padding:12px 14px;overflow:auto;font-size:12px;line-height:1.7}
+.md pre{background:#FFF7F4;border:1px solid #F0D4CF;border-radius:18px;padding:12px 14px;overflow:auto;font-size:12px;line-height:1.7}
 .md code{font-family:ui-monospace,Menlo,monospace;background:rgba(247,127,163,.08);padding:1px 5px;border-radius:6px;font-size:12px}
 .md pre code{background:none;padding:0}
-.md blockquote{border-left:4px solid var(--rose);margin:12px 0;padding:4px 14px;color:var(--t2);background:rgba(247,127,163,.06);border-radius:0 10px 10px 0}
+.md blockquote{border-left:2px solid var(--rose);margin:12px 0;padding:4px 14px;color:var(--t2);background:rgba(247,127,163,.06);border-radius:0 18px 18px 0}
 .md hr{border:none;border-top:1px dashed #E6C6BD;margin:16px 0}
-@media(max-width:767px){.chap{padding:16px}}
+/* ── 17 · 页面壳 / 10 · 10.11.1：正文护栏 ──
+   实测根因（逐页质检 scripts/page-qa.mjs）：引用块里的长 URL
+   （如 https://semi.design/zh-CN/basic/icon）不可断行，把整页顶宽 116px；
+   正文里的宽表同样越界。`overflow-wrap:anywhere` 允许在任意字符处断行。 */
+.md,.chap,.doc,main{min-width:0;max-width:100%}
+.md p,.md li,.md td,.md blockquote{overflow-wrap:anywhere;word-break:break-word}
+.md blockquote a,.md a{overflow-wrap:anywhere;word-break:break-word}
+.md table,.chap table{display:block;max-width:100%;overflow-x:auto;-webkit-overflow-scrolling:touch}
+@media(max-width:767px){
+  .chap{padding:16px}
+  /* 17 · 页面壳：顶栏下拉（绝对定位 min-width:210px）与正文宽表在 375px 越界 */
+  .drop{left:auto;right:0;min-width:0;max-width:calc(100vw - 32px)}
+  .md pre{max-width:100%;overflow-x:auto}
+  /* 10 · 10.4：可点热区 ≥44×44（原实测 34–38px） */
+  .top button,.top a,.drop a,.chapnav button{min-height:44px;display:inline-flex;align-items:center}
+}
 '''
 htmlout='''<!DOCTYPE html>
 <html lang="zh-CN">

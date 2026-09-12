@@ -74,7 +74,8 @@ TEMPLATE = """<!DOCTYPE html>
     border:1px solid rgba(255,255,255,.8); box-shadow:0 12px 30px rgba(90,70,70,.12); }}
   b {{ display:block; font-size:17px; color:var(--rose); margin-bottom:8px; }}
   p {{ margin:0 0 16px; font-size:13.5px; color:var(--t2); line-height:1.8; }}
-  a {{ display:inline-block; text-decoration:none; font-weight:600; font-size:14px; padding:11px 22px;
+  a {{ display:inline-flex; align-items:center; justify-content:center; min-height:44px;
+    text-decoration:none; font-weight:600; font-size:14px; padding:0 22px;
     border-radius:999px; color:#343A46; background:linear-gradient(135deg,#FFC4D6 0%,#F77FA3 100%);
     box-shadow:0 8px 20px rgba(240,127,163,.3); }}
   a:focus-visible {{ outline:2px solid rgba(232,93,143,.6); outline-offset:2px; }}

@@ -34,7 +34,7 @@ nav .out{margin-left:auto;background:linear-gradient(135deg,#FFA9C2,#E85D8F);col
 .hero h1 em{font-style:normal;background:linear-gradient(120deg,#FFD0D8,#F77FA3 45%,#B69AFF);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent}
 .hero p.lead{color:var(--t2);font-size:15px;max-width:767px;margin:0 auto}
 .stat{display:flex;justify-content:center;gap:10px;flex-wrap:wrap;margin:22px 0 6px}
-.stat span{border-radius:16px;padding:10px 18px;background:rgba(255,255,255,.55);border:1px solid rgba(255,255,255,.8);min-width:92px}
+.stat span{border-radius:18px;padding:10px 18px;background:rgba(255,255,255,.55);border:1px solid rgba(255,255,255,.8);min-width:92px}
 .stat b{display:block;font-size:22px;color:var(--rose-d);font-variant-numeric:tabular-nums}
 .stat i{font-style:normal;font-size:11px;color:var(--t3)}
 .cta{display:flex;gap:10px;justify-content:center;flex-wrap:wrap;margin-top:22px}
@@ -54,9 +54,9 @@ h2::before{content:"";width:10px;height:10px;border-radius:50%;background:linear
 .card p{font-size:12.5px;color:var(--t2)}
 .card .go{display:block;margin-top:10px;font-size:12px;font-weight:600;color:var(--rose-deep);text-decoration:none}
 code,pre{font-family:var(--mono)}
-pre{background:#fff7f4;border:1px solid #f0d4cf;border-radius:14px;padding:14px 18px;font-size:12.5px;overflow:auto;line-height:1.8}
+pre{background:#fff7f4;border:1px solid #f0d4cf;border-radius:18px;padding:14px 18px;font-size:12.5px;overflow:auto;line-height:1.8}
 .sem{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px}
-.sem .s{border-radius:14px;padding:10px 12px;background:#fff;border:1px solid #f0d4cf}
+.sem .s{border-radius:18px;padding:10px 12px;background:#fff;border:1px solid #f0d4cf}
 .sem .s i{width:10px;height:10px;border-radius:50%;display:inline-block;margin-right:6px}
 .sem b{font-size:12.5px}.sem span{display:block;color:var(--t3);font-size:11px;margin-top:2px}
 .tree{line-height:2}
@@ -100,10 +100,21 @@ footer{margin-top:70px;line-height:2.4}
 nav .ng{position:relative;display:inline-flex}
 nav .ngt{font-family:inherit;font-size:12.5px;color:var(--t2);background:none;border:none;padding:6px 12px;border-radius:999px;cursor:pointer}
 nav .ngt::after{content:"▾";margin-left:4px;font-size:10px;opacity:.6}
-nav .ngdrop{position:absolute;top:calc(100% + 12px);left:0;min-width:190px;z-index:80;padding:6px;border-radius:16px;background:#fff;border:1px solid rgba(232,93,143,.22);box-shadow:0 16px 40px rgba(90,70,70,.14);
+nav .ngdrop{position:absolute;top:calc(100% + 12px);left:0;min-width:190px;z-index:80;padding:6px;border-radius:22px;background:#fff;border:1px solid rgba(232,93,143,.22);box-shadow:0 16px 40px rgba(90,70,70,.14);
   opacity:0;pointer-events:none;transform:translateY(6px);transition:.2s var(--ease, ease-out)}
 nav .ng:hover .ngdrop,nav .ng:focus-within .ngdrop{opacity:1;pointer-events:auto;transform:none}
-nav .ngdrop a{display:block;padding:8px 12px;border-radius:10px}
+nav .ngdrop a{display:block;padding:8px 12px;border-radius:18px}
+/* 10 · 10.4：≤767px 热区 ≥44×44（页脚快捷链接实测仅 18px 高） */
+@media(max-width:767px){
+  .jc ol li a,.jc a{min-height:44px;min-width:44px;display:inline-flex;align-items:center;justify-content:center;padding:4px 8px}
+  nav .ngdrop a,.go,.btn{min-height:44px;display:inline-flex;align-items:center}
+  /* 开源治理 / 站点地图 / 正文行内链接（原实测 18–34px） */
+  .gov a,.tree2 a,.sub a,.secpad a{position:relative}
+  footer a,.fcols a,.jc a{position:relative}
+  .gov a::after,.tree2 a::after,.sub a::after,.secpad a::after,footer a::after,.fcols a::after,.jc a::after{
+    content:"";position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);
+    width:100%;min-width:44px;height:100%;min-height:44px}
+}
 nav .ngdrop a:hover{background:rgba(247,127,163,.1)}
 
 nav .ng::after{content:"";position:absolute;left:-6px;right:-6px;top:100%;height:14px}
@@ -111,13 +122,13 @@ nav .ngdrop a:active{background:rgba(247,127,163,.16)}
 
 
 /* 板块编号与视觉包装 */
-.secnum{display:inline-flex;align-items:center;justify-content:center;width:34px;height:34px;border-radius:12px;flex:none;
+.secnum{display:inline-flex;align-items:center;justify-content:center;width:34px;height:34px;border-radius:18px;flex:none;
   font-size:13px;font-weight:700;color:#343A46;background:var(--mmh-grad-action-hc,#F77FA3);box-shadow:0 8px 18px rgba(240,127,163,.28)} /* D9：亮粉底配深字 */
 h2{display:flex;align-items:center;gap:12px;flex-wrap:wrap}
 h2 small{font-weight:600;letter-spacing:.18em;color:#B23A63;font-size:10px}
 .secpad{background:linear-gradient(160deg,rgba(255,255,255,.55),rgba(255,255,255,.18));border:1px solid rgba(255,255,255,.7);
   border-radius:26px;padding:24px 24px 16px;box-shadow:inset 0 1px 0 rgba(255,255,255,.85),0 12px 30px rgba(90,70,70,.08);
-  -webkit-backdrop-filter:blur(14px);backdrop-filter:blur(14px)}
+  -webkit-backdrop-filter:blur(16px);backdrop-filter:blur(16px)}
 .card{transition:transform .25s cubic-bezier(.22,1,.36,1),box-shadow .25s;position:relative;overflow:hidden}
 .card:hover{transform:translateY(-4px);box-shadow:0 18px 40px rgba(90,70,70,.14)}
 .card::before{content:"";position:absolute;left:0;right:0;top:0;height:3px;background:linear-gradient(90deg,#FFA9C2,#E85D8F,#B69AFF);opacity:0;transition:.3s}
@@ -164,8 +175,10 @@ nav .git:hover{background:linear-gradient(135deg,#FFA9C2,#E85D8F);color:#fff;bor
 .jc h3,.card h3{padding-right:0}
 
 
-:root{--mmh-grad-action-hc:linear-gradient(135deg,#B23A63 0%,#9E3054 100%)}
-/* AA 高对比行动（D5/审查收口）：文字承载主行动切深档，装饰渐变不动 */
+:root{--mmh-grad-action-hc:linear-gradient(135deg,#FFC4D6 0%,#F77FA3 100%)}
+/* 主行动档（D9 裁决）：品牌粉上半段底 + 深字。
+   旧值 #B23A63→#9E3054 是 D5/D8 口径，与本行下方的深字组成「深底 + 深字」，
+   实测 2.00:1 —— 低于 AA。禁止「品牌亮粉底 + 白字」，同样禁止「深玫底 + 深字」。 */
 .btn.pri,.nav .out,.nav .git:hover{background:var(--mmh-grad-action-hc,#F77FA3)!important;color:#343A46!important} /* D9 */
 
 /* 按钮 文字+图标 组合（03 · 3.2.5）：几何居中 + 固定 gap + 图标不挤压 */
@@ -178,7 +191,7 @@ nav .git:hover{background:linear-gradient(135deg,#FFA9C2,#E85D8F);color:#fff;bor
 <div class="wrap">
 
   <div class="hero glass">
-    <img src="../brand/logo-tile.svg" alt="妈咪好" style="width:84px;height:84px;border-radius:24px;box-shadow:0 14px 30px rgba(240,127,163,.3);margin-bottom:4px">
+    <img src="../brand/logo-tile.svg" alt="妈咪好" style="width:84px;height:84px;border-radius:22px;box-shadow:0 14px 30px rgba(240,127,163,.3);margin-bottom:4px">
     <h1>妈咪好 <em>GoodMom</em> 开源设计系统</h1>
     <p class="lead">高级液态玻璃 · 柔光蜜桃。覆盖孕期 / 婴幼儿与儿童保健 / 机构管理端 / 医护工作台的「文档 — 设计资产 — 组件库」一体化开源体系。</p>
     <div class="stat">
@@ -281,7 +294,7 @@ import { GmIcon } from "@goodmom/icons";
   <h2 id="ds"><span class="secnum">07</span><span>完整设计系统</span><small>DEMO · 在线全量演示</small></h2>
   <p class="sub">落地页之下即完整设计系统首页：组件 / 样式 / 状态 / 图标库 / 微交互 / 示例入口</p>
   <div class="glass" style="padding:10px;overflow:hidden">
-    <iframe src="../preview/index.html" title="妈咪好 GoodMom 设计系统首页（全量）" style="width:100%;height:1200px;border:none;border-radius:16px;background:#fff" loading="lazy"></iframe>
+    <iframe src="../preview/index.html" title="妈咪好 GoodMom 设计系统首页（全量）" style="width:100%;height:1200px;border:none;border-radius:22px;background:#fff" loading="lazy"></iframe>
   </div>
   <p class="sub" style="margin:10px 0 0 2px">窄屏建议新窗口打开：<a href="../preview/index.html">preview/index.html ›</a>；其余子页：<a href="../preview/examples.html">示例中心</a> · <a href="../preview/mobile.html">移动端</a> · <a href="../preview/manual.html">手册</a></p>
 
@@ -297,7 +310,7 @@ import { GmIcon } from "@goodmom/icons";
 </div></div>
 
 <footer>
-  <div style="display:flex;align-items:center;gap:10px;justify-content:center;margin-bottom:16px"><img src="../brand/logo-tile.svg" alt="妈咪好" style="width:46px;height:46px;border-radius:14px;box-shadow:0 8px 18px rgba(240,127,163,.25)"></div>
+  <div style="display:flex;align-items:center;gap:10px;justify-content:center;margin-bottom:16px"><img src="../brand/logo-tile.svg" alt="妈咪好" style="width:46px;height:46px;border-radius:18px;box-shadow:0 8px 18px rgba(240,127,163,.25)"></div>
   <div class="fcols">
     <div><b>妈咪好 GoodMom</b><a href="#start">从一个角色开始</a><a href="#about">关于</a><a href="#sitemap">网站目录</a></div>
     <div><b>演示</b><a href="../preview/index.html">设计系统首页</a><a href="../preview/examples.html">示例中心</a><a href="../preview/mobile.html">移动端</a><a href="../preview/manual.html">总览手册</a></div>

@@ -10,7 +10,7 @@
 </p>
 
 <p align="center">
-  <img alt="版本" src="https://img.shields.io/badge/version-2.8-ff9ab6?style=flat-square">
+  <img alt="版本" src="https://img.shields.io/badge/version-2.9-ff9ab6?style=flat-square">
   <img alt="文档" src="https://img.shields.io/badge/规范文档-19-6fc9b4?style=flat-square">
   <img alt="组件" src="https://img.shields.io/badge/组件-98-9a78ff?style=flat-square">
   <img alt="图标" src="https://img.shields.io/badge/图标-77-ffc3a0?style=flat-square">
@@ -31,7 +31,7 @@
 
 适用：妈妈/家庭 App（孕期首页、生长曲线、疫苗计划、儿保体检）、机构运营端、医护随访工作台与数据大屏。品牌定义见 [12](12-妈咪好品牌与设计语言.md)，妇幼领域组件见 [13](13-妇幼领域组件规范.md)；01–11 为通用视觉引擎文档。
 
-**交付统计（V2.8）**：19 份规范文档 · 98 项组件（00 总目录）· 77 枚自绘图标（icons/lg-icons.svg）· 60 条状态文案（`docs/coverage-report.md`）· 4 套可交互预览（首页 / 移动端 / 示例中心 6 页 / 新增能力示例）· **2 个开源组件库（`@goodmom/ui` React + Arco 16 模块 · `@goodmom/vue` Vue 3 零基座 16 组件）** + 前端参考（frontend-app）· 1 套前端开发规范 skill
+**交付统计（V2.9）**：19 份规范文档 · 98 项组件（00 总目录）· 77 枚自绘图标（icons/lg-icons.svg）· 60 条状态文案（`docs/coverage-report.md`）· 4 套可交互预览（首页 / 移动端 / 示例中心 6 页 / 新增能力示例）· **2 个开源组件库（`@goodmom/ui` React + Arco 16 模块 · `@goodmom/vue` Vue 3 零基座 16 组件）** + 前端参考（frontend-app）· 1 套前端开发规范 skill
 
 **体系架构**
 

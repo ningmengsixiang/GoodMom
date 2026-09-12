@@ -2,23 +2,25 @@
 :root{--t:#343A46;--t2:#4F5B6E;--t3:#4F5B6E;--rose:#E85D8F;--rose-deep:#B23A63;--bg:linear-gradient(165deg,#FDF2EE,#F6E2DB 55%,#E7D3CB)}
 *{box-sizing:border-box}body{margin:0;font-family:"PingFang SC","Inter","MiSans","Noto Sans SC",sans-serif;color:var(--t);background:var(--bg)}
 a{color:var(--rose-deep)}
-.top{position:sticky;top:0;z-index:90;display:flex;flex-wrap:wrap;gap:4px;align-items:center;padding:10px 16px;background:rgba(255,255,255,.78);border-bottom:1px solid #F0D4CF;-webkit-backdrop-filter:blur(14px);backdrop-filter:blur(14px)}
+.top{position:sticky;top:0;z-index:90;display:flex;flex-wrap:wrap;gap:4px;align-items:center;padding:10px 16px;background:rgba(255,255,255,.78);border-bottom:1px solid #F0D4CF;-webkit-backdrop-filter:blur(16px);backdrop-filter:blur(16px)}
 .top img{width:26px;height:26px;border-radius:50%;object-fit:cover}
 .top b{color:var(--rose-deep);font-size:14px;margin-right:10px}
 .gp{position:relative;display:inline-flex}
 .gp>button{font-family:inherit;border:1px solid transparent;background:none;border-radius:999px;padding:7px 12px;cursor:pointer;font-size:13px;font-weight:500;color:var(--t2)}
 .gp>button::after{content:"▾";font-size:9px;margin-left:4px;opacity:.6}
 .gp:hover>button{background:#FFF;color:var(--rose-deep)}
-.drop{position:absolute;top:calc(100% + 10px);left:0;min-width:210px;z-index:100;padding:6px;border-radius:16px;background:#FFF;border:1px solid rgba(232,93,143,.2);box-shadow:0 16px 40px rgba(90,70,70,.15);opacity:0;pointer-events:none;transform:translateY(6px);transition:.2s}
+.drop{position:absolute;top:calc(100% + 10px);left:0;min-width:210px;z-index:100;padding:6px;border-radius:22px;background:#FFF;border:1px solid rgba(232,93,143,.2);box-shadow:0 16px 40px rgba(90,70,70,.15);opacity:0;pointer-events:none;transform:translateY(6px);transition:.2s}
 .gp:hover .drop{opacity:1;pointer-events:auto;transform:none}
 .gp::after{content:"";position:absolute;left:0;right:0;top:100%;height:12px}
-.drop a{display:block;padding:8px 12px;border-radius:10px;font-size:13px;color:var(--t2);text-decoration:none;white-space:nowrap}
+.drop a{display:block;padding:8px 12px;border-radius:18px;font-size:13px;color:var(--t2);text-decoration:none;white-space:nowrap}
 .drop a:hover{background:rgba(247,127,163,.1);color:#B23A63}
 .top .ext{margin-left:auto;font-size:12.5px;font-weight:600;text-decoration:none;padding:7px 14px;border-radius:999px;background:#FFF;border:1px solid rgba(232,93,143,.3);color:var(--rose-deep)}
-.top .ext2{margin-left:8px;background:linear-gradient(135deg,#FFA9C2,#E85D8F);color:#FFF;font-weight:600;text-decoration:none;font-size:12.5px;padding:7px 14px;border-radius:999px}
+.top .ext2{margin-left:8px;background:var(--mmh-grad-action-hc,linear-gradient(135deg,#FFC4D6 0%,#F77FA3 100%));color:#343A46;font-weight:600;text-decoration:none;font-size:12.5px;padding:7px 14px;border-radius:999px}
 .wrap{max-width:1080px;margin:0 auto;padding:20px 18px 80px}
 .chap{scroll-margin-top:70px;margin:0 0 34px;border-radius:22px;padding:22px 26px;background:linear-gradient(160deg,rgba(255,255,255,.72),rgba(255,255,255,.4));border:1px solid #F0D4CF;box-shadow:0 10px 26px rgba(90,70,70,.08)}
 .chap-hd{font-size:20px;font-weight:700;color:var(--rose-deep);padding-bottom:10px;border-bottom:1px solid #F0D4CF;margin-bottom:12px}
+/* 02 · 2.2.4 字重上限 700：<b> 在 700 的父级下按 bolder 计算为 900，故显式回落 */
+.chap-hd b{font-weight:700}
 .md h1{font-size:24px;margin:18px 0 8px;color:var(--rose-deep)}
 .md h2{font-size:19px;margin:20px 0 6px}
 .md h3{font-size:16px;margin:16px 0 6px}
@@ -27,23 +29,38 @@ a{color:var(--rose-deep)}
 .md table{width:100%;border-collapse:collapse;margin:10px 0;font-size:12.5px}
 .md th,.md td{border:1px solid #EED5CD;padding:7px 9px;text-align:left}
 .md th{background:rgba(247,127,163,.1);color:#A03F60}
-.md pre{background:#FFF7F4;border:1px solid #F0D4CF;border-radius:12px;padding:12px 14px;overflow:auto;font-size:12px;line-height:1.7}
+.md pre{background:#FFF7F4;border:1px solid #F0D4CF;border-radius:18px;padding:12px 14px;overflow:auto;font-size:12px;line-height:1.7}
 .md code{font-family:ui-monospace,Menlo,monospace;background:rgba(247,127,163,.08);padding:1px 5px;border-radius:6px;font-size:12px}
 .md pre code{background:none;padding:0}
-.md blockquote{border-left:4px solid var(--rose);margin:12px 0;padding:4px 14px;color:var(--t2);background:rgba(247,127,163,.06);border-radius:0 10px 10px 0}
+.md blockquote{border-left:2px solid var(--rose);margin:12px 0;padding:4px 14px;color:var(--t2);background:rgba(247,127,163,.06);border-radius:0 18px 18px 0}
 .md hr{border:none;border-top:1px dashed #E6C6BD;margin:16px 0}
-@media(max-width:767px){.chap{padding:16px}}
+/* ── 17 · 页面壳 / 10 · 10.11.1：正文护栏 ──
+   实测根因（逐页质检 scripts/page-qa.mjs）：引用块里的长 URL
+   （如 https://semi.design/zh-CN/basic/icon）不可断行，把整页顶宽 116px；
+   正文里的宽表同样越界。`overflow-wrap:anywhere` 允许在任意字符处断行。 */
+.md,.chap,.doc,main{min-width:0;max-width:100%}
+.md p,.md li,.md td,.md blockquote{overflow-wrap:anywhere;word-break:break-word}
+.md blockquote a,.md a{overflow-wrap:anywhere;word-break:break-word}
+.md table,.chap table{display:block;max-width:100%;overflow-x:auto;-webkit-overflow-scrolling:touch}
+@media(max-width:767px){
+  .chap{padding:16px}
+  /* 17 · 页面壳：顶栏下拉（绝对定位 min-width:210px）与正文宽表在 375px 越界 */
+  .drop{left:auto;right:0;min-width:0;max-width:calc(100vw - 32px)}
+  .md pre{max-width:100%;overflow-x:auto}
+  /* 10 · 10.4：可点热区 ≥44×44（原实测 34–38px） */
+  .top button,.top a,.drop a,.chapnav button{min-height:44px;display:inline-flex;align-items:center}
+}
 
 <!--@body-->
 <div class="top"><div class="gp"><button type="button">概览</button><div class="drop"><a href="#ch-readme">总览与使用</a></div></div><div class="gp"><button type="button">组件索引</button><div class="drop"><a href="#ch-00">00-组件总目录</a></div></div><div class="gp"><button type="button">设计指南</button><div class="drop"><a href="#ch-01">01-设计总览与设计DNA</a><a href="#ch-12">12-妈咪好品牌与设计语言</a><a href="#ch-14">14-命名与术语规范</a><a href="#ch-16">16-优化与一致性审计</a><a href="#ch-17">17-页面布局与组件组合规范</a></div></div><div class="gp"><button type="button">开发指南</button><div class="drop"><a href="#ch-02">02-Token规范</a><a href="#ch-03">03-组件规范</a><a href="#ch-04">04-数据可视化规范</a><a href="#ch-05">05-AI生成Prompt库</a><a href="#ch-06">06-制作流程与验收清单</a><a href="#ch-07">07-交互动效与微交互规范</a><a href="#ch-08">08-组件覆盖清单与Semi对齐</a><a href="#ch-09">09-图标库规范</a></div></div><div class="gp"><button type="button">多端</button><div class="drop"><a href="#ch-10">10-移动端组件规范</a><a href="#ch-11">11-移动端组件全量库</a></div></div><div class="gp"><button type="button">妇幼业务</button><div class="drop"><a href="#ch-13">13-妇幼领域组件规范</a><a href="#ch-15">15-妇幼业务词库与状态大典</a></div></div><a class="ext" href="index.html">主站</a><a class="ext2" href="../preview/examples.html">示例中心</a><button class="readtoggle" id="modeBtn" type="button">阅读模式</button></div>
 <div class="wrap"><div class="chapnav"><button id="prevCh" type="button">‹ 上一章</button><button id="allCh" type="button">回到全部（列表）</button><button id="nextCh" type="button">下一章 ›</button></div><section class="chap" id="ch-readme"><div class="chap-hd"><b>总览 · README</b></div><div class="md"><p>&lt;p align="center"&gt; &lt;img src="brand/logo-tile.svg" width="96" alt="妈咪好 GoodMom"&gt; &lt;/p&gt;</p>
 <h2>妈咪好 GoodMom · 妇幼儿童全生命周期设计系统</h2>
 <p>&lt;p align="center"&gt; &lt;b&gt;高级液态玻璃 · 柔光蜜桃 · 温暖可信 · 医疗克制&lt;/b&gt;&lt;br&gt; 妇幼儿童全生命周期健康管理平台专属设计系统 —— 孕期 · 婴幼儿/儿童保健 · 机构管理端 · 医护工作台 &lt;/p&gt;</p>
-<p>&lt;p align="center"&gt; &lt;img alt="版本" src="https://img.shields.io/badge/version-2.8-ff9ab6?style=flat-square"&gt; &lt;img alt="文档" src="https://img.shields.io/badge/规范文档-19-6fc9b4?style=flat-square"&gt; &lt;img alt="组件" src="https://img.shields.io/badge/组件-98-9a78ff?style=flat-square"&gt; &lt;img alt="图标" src="https://img.shields.io/badge/图标-77-ffc3a0?style=flat-square"&gt; &lt;img alt="示例" src="https://img.shields.io/badge/示例页面-6-e85d8f?style=flat-square"&gt; &lt;img alt="许可证" src="https://img.shields.io/badge/License-MIT-8066f0?style=flat-square"&gt; &lt;/p&gt;</p>
+<p>&lt;p align="center"&gt; &lt;img alt="版本" src="https://img.shields.io/badge/version-2.9-ff9ab6?style=flat-square"&gt; &lt;img alt="文档" src="https://img.shields.io/badge/规范文档-19-6fc9b4?style=flat-square"&gt; &lt;img alt="组件" src="https://img.shields.io/badge/组件-98-9a78ff?style=flat-square"&gt; &lt;img alt="图标" src="https://img.shields.io/badge/图标-77-ffc3a0?style=flat-square"&gt; &lt;img alt="示例" src="https://img.shields.io/badge/示例页面-6-e85d8f?style=flat-square"&gt; &lt;img alt="许可证" src="https://img.shields.io/badge/License-MIT-8066f0?style=flat-square"&gt; &lt;/p&gt;</p>
 <p>&lt;p align="center"&gt; &lt;a href="site/index.html#site-spec"&gt;📖 规范全文&lt;/a&gt; · &lt;a href="site/index.html"&gt;🏠 唯一首页&lt;/a&gt; · &lt;a href="site/index.html#site-docs"&gt;🗂 文档索引&lt;/a&gt; · &lt;a href="site/index.html#preview-examples"&gt;🖥 组件与状态&lt;/a&gt; · &lt;a href="https://github.com/ningmengsixiang/GoodMom"&gt;GitHub ↗&lt;/a&gt; &lt;/p&gt;</p>
 <hr>
 <p>适用：妈妈/家庭 App（孕期首页、生长曲线、疫苗计划、儿保体检）、机构运营端、医护随访工作台与数据大屏。品牌定义见 [12](#ch-12)，妇幼领域组件见 [13](#ch-13)；01–11 为通用视觉引擎文档。</p>
-<p><b>交付统计（V2.8）</b>：19 份规范文档 · 98 项组件（00 总目录）· 77 枚自绘图标（icons/lg-icons.svg）· 60 条状态文案（<code>docs/coverage-report.md</code>）· 4 套可交互预览（首页 / 移动端 / 示例中心 6 页 / 新增能力示例）· <b>2 个开源组件库（<code>@goodmom/ui</code> React + Arco 16 模块 · <code>@goodmom/vue</code> Vue 3 零基座 16 组件）</b> + 前端参考（frontend-app）· 1 套前端开发规范 skill</p>
+<p><b>交付统计（V2.9）</b>：19 份规范文档 · 98 项组件（00 总目录）· 77 枚自绘图标（icons/lg-icons.svg）· 60 条状态文案（<code>docs/coverage-report.md</code>）· 4 套可交互预览（首页 / 移动端 / 示例中心 6 页 / 新增能力示例）· <b>2 个开源组件库（<code>@goodmom/ui</code> React + Arco 16 模块 · <code>@goodmom/vue</code> Vue 3 零基座 16 组件）</b> + 前端参考（frontend-app）· 1 套前端开发规范 skill</p>
 <p><b>体系架构</b></p>
 <pre>妈咪好 GoodMom · 妇幼儿童全生命周期设计系统
 ├── 品牌与业务层  12 品牌 · 13 妇幼领域组件 · 14 命名术语 · 15 业务词库/状态大典 · 16 一致性审计
@@ -1921,7 +1938,7 @@ with amber badges, premium medical dashboard, clean minimal, 16:9
 <blockquote>全系统一致性体检与命名/版本/词库对齐的<b>权威记录</b>。每次结构性改动后跑一遍下表更新本文件，保证团队与代码库同源。</blockquote>
 <hr>
 <h3>16.1 当前基线（校验快照）</h3>
-<table><thead><tr><th>项</th><th>值</th><th>验证点</th></tr></thead><tbody><tr><td>产品品牌</td><td>妈咪好 GoodMom（V2.8）</td><td>视觉引擎沿用 LG/Liquid Glass（01–07）</td></tr><tr><td>文档数量</td><td>md 19 份 + 预览 4（首页/移动/示例中心/新增能力）+ 工程骨架 1</td><td>README 目录表为唯一登记</td></tr><tr><td>组件总目录</td><td><b>98 项</b>（PC + 移动 + 妇幼 ⑧；V2.5 新增 Link/ResponsiveView/VirtualList + Cascader 解禁与 Transfer 拆分）</td><td>[00](#ch-00)</td></tr><tr><td>图标库</td><td>77 枚 / 10 类（含 B/L/H；H=五健+口腔+医护镜）</td><td>[09](#ch-09) + <code>icons/lg-icons.svg</code></td></tr><tr><td>状态标签</td><td>15.2 登记 <b>60 条</b>（<code>scripts/coverage.py</code> 自动计数；旧文写的「通用 25 + 业务 9 套 + 五色 5（约 90）」自述算式只有 39，且与自己写的 90 都不符）</td><td>[15 · 15.2](#ch-15)</td></tr><tr><td>状态色彩</td><td>六语义唯一（🟢🔵🟠🔴⚪🟣）＋五色专项</td><td>[14 · 4.4.5](#ch-14) / 15.5 / 02.10</td></tr><tr><td>预览</td><td>首页全组件/样式/状态 + 移动端 + 示例中心 6 页 + 新增能力示例（链接/级联/响应式容器/虚拟列表/暗黑/边框档）+ 首页示例入口卡 ×5</td><td><code>preview/</code></td></tr><tr><td>前端封装</td><td><code>frontend-app/packages/gm-arco-ui</code>（Arco React 基底，与 <code>goodmom-ui</code> 逐字节镜像）· <b>代码组件 16 模块</b></td><td>npm 可联网后构建；<code>tsc --noEmit</code> 本地 0 错误</td></tr><tr><td>暗黑模式</td><td>✅ 已规范（02 · 2.1.9 夜间暖石板 + <code>[data-theme="dark"]</code> + <code>audit.py dark_contrast</code> 守门）</td><td>18 · A2 已闭环</td></tr><tr><td>边框宽度</td><td>✅ 成档（02 · 2.7.1：hairline/0.5/1/1.5/2px + 焦点环）</td><td>禁 3px 以上常规描边</td></tr></tbody></table>
+<table><thead><tr><th>项</th><th>值</th><th>验证点</th></tr></thead><tbody><tr><td>产品品牌</td><td>妈咪好 GoodMom（V2.9）</td><td>视觉引擎沿用 LG/Liquid Glass（01–07）</td></tr><tr><td>文档数量</td><td>md 19 份 + 预览 4（首页/移动/示例中心/新增能力）+ 工程骨架 1</td><td>README 目录表为唯一登记</td></tr><tr><td>组件总目录</td><td><b>98 项</b>（PC + 移动 + 妇幼 ⑧；V2.5 新增 Link/ResponsiveView/VirtualList + Cascader 解禁与 Transfer 拆分）</td><td>[00](#ch-00)</td></tr><tr><td>图标库</td><td>77 枚 / 10 类（含 B/L/H；H=五健+口腔+医护镜）</td><td>[09](#ch-09) + <code>icons/lg-icons.svg</code></td></tr><tr><td>状态标签</td><td>15.2 登记 <b>60 条</b>（<code>scripts/coverage.py</code> 自动计数；旧文写的「通用 25 + 业务 9 套 + 五色 5（约 90）」自述算式只有 39，且与自己写的 90 都不符）</td><td>[15 · 15.2](#ch-15)</td></tr><tr><td>状态色彩</td><td>六语义唯一（🟢🔵🟠🔴⚪🟣）＋五色专项</td><td>[14 · 4.4.5](#ch-14) / 15.5 / 02.10</td></tr><tr><td>预览</td><td>首页全组件/样式/状态 + 移动端 + 示例中心 6 页 + 新增能力示例（链接/级联/响应式容器/虚拟列表/暗黑/边框档）+ 首页示例入口卡 ×5</td><td><code>preview/</code></td></tr><tr><td>前端封装</td><td><code>frontend-app/packages/gm-arco-ui</code>（Arco React 基底，与 <code>goodmom-ui</code> 逐字节镜像）· <b>代码组件 16 模块</b></td><td>npm 可联网后构建；<code>tsc --noEmit</code> 本地 0 错误</td></tr><tr><td>暗黑模式</td><td>✅ 已规范（02 · 2.1.9 夜间暖石板 + <code>[data-theme="dark"]</code> + <code>audit.py dark_contrast</code> 守门）</td><td>18 · A2 已闭环</td></tr><tr><td>逐页质检</td><td>✅ <code>node scripts/page-qa.mjs --ci</code>：17 页 × 桌面/移动/暗色三档 × 17 类规则，<b>P0–P2 = 0</b>（P3 登记 6 项：模块暗色皮肤缺口）</td><td><code>docs/page-qa-report.md</code>；口径见 D14</td></tr><tr><td>边框宽度</td><td>✅ 成档（02 · 2.7.1：hairline/0.5/1/1.5/2px + 焦点环）</td><td>禁 3px 以上常规描边</td></tr></tbody></table>
 <h3>16.2 命名与版本纪律</h3>
 <ol><li><b>系统名</b>：正式名「妈咪好 GoodMom · 妇幼儿童全生命周期设计系统」；简称 GoodMom DS / 妈咪好 DS。</li><li><b>引擎名</b>：LG / Liquid Glass 仅指视觉引擎（01–07、09、10–11 的技术描述），不替代产品名。</li><li><b>版本号</b>：README「版本记录」是唯一版本史（V1.0 引擎 → V2.0 品牌化 → V2.1 优化）。章节标题不再带“V1.0”字样。</li><li><b>计数</b>：图标数、组件行数、状态数发生变更时，必须同步：09 / README 目录 / 首页图库标题 / 16.1 基线。</li></ol>
 <h3>16.3 词库与颜色一致性</h3>
@@ -2007,7 +2024,7 @@ button{display:inline-flex;align-items:center;justify-content:center;gap:8px}</p
 <blockquote>依据全仓规范（01–17 + 12 品牌/14 命名/15 状态/17 布局组合）对视觉体系自查。<br>状态：✅ 合规 · ⚠ 建议优化 · ❌ 待整改（已列行动项）。基线：编号规范文档 19 份 · 组件 98 · 图标 77 · 状态 60 条 · 示例 6 页（含 V2.5 新增能力示例）。</blockquote>
 <hr>
 <h3>18.1 自查方法与自动化结果</h3>
-<table><thead><tr><th>检查项</th><th>命令/方式</th><th>结果</th></tr></thead><tbody><tr><td>文档链接</td><td>扫全部 md 内链</td><td>✅ 无失效</td></tr><tr><td>图标计数/命名</td><td><code>icons/lg-icons.svg</code> symbols</td><td>✅ 77 · 均 <code>lg-icon-</code></td></tr><tr><td>色彩合规</td><td>页面硬编码色 vs 品牌/引擎 Token 白名单</td><td>✅ 代码层 0；页面少量品牌渐变亮端/手机壳别名（低风险）</td></tr><tr><td>命名/词库</td><td>14/15 词表 vs 页面文案抽查</td><td>✅ 版本化同步中</td></tr><tr><td>编号文档</td><td><code>[0-9][0-9]-*.md</code></td><td>✅ 19 份（含本报告）</td></tr><tr><td>暗色对比度</td><td><code>scripts/audit.py dark_contrast</code>（暗色段 10 项最坏合成面实测）</td><td>✅ 全部 ≥4.5:1（最低三级字 5.37:1）</td></tr><tr><td>组件导出</td><td><code>scripts/audit.py exports_check</code></td><td>✅ 两包 16 组件全部导出</td></tr><tr><td>双包镜像</td><td><code>scripts/audit.py mirror</code></td><td>✅ 逐字节一致（<code>theme.css</code> 除外）</td></tr></tbody></table>
+<table><thead><tr><th>检查项</th><th>命令/方式</th><th>结果</th></tr></thead><tbody><tr><td>文档链接</td><td>扫全部 md 内链</td><td>✅ 无失效</td></tr><tr><td>图标计数/命名</td><td><code>icons/lg-icons.svg</code> symbols</td><td>✅ 77 · 均 <code>lg-icon-</code></td></tr><tr><td>色彩合规</td><td>页面硬编码色 vs 品牌/引擎 Token 白名单</td><td>✅ 代码层 0；页面少量品牌渐变亮端/手机壳别名（低风险）</td></tr><tr><td>命名/词库</td><td>14/15 词表 vs 页面文案抽查</td><td>✅ 版本化同步中</td></tr><tr><td>编号文档</td><td><code>[0-9][0-9]-*.md</code></td><td>✅ 19 份（含本报告）</td></tr><tr><td>暗色对比度</td><td><code>scripts/audit.py dark_contrast</code>（暗色段 10 项最坏合成面实测）</td><td>✅ 全部 ≥4.5:1（最低三级字 5.37:1）</td></tr><tr><td>组件导出</td><td><code>scripts/audit.py exports_check</code></td><td>✅ 两包 16 组件全部导出</td></tr><tr><td>双包镜像</td><td><code>scripts/audit.py mirror</code></td><td>✅ 逐字节一致（<code>theme.css</code> 除外）</td></tr><tr><td>逐页规范质检（渲染级）</td><td><code>node scripts/page-qa.mjs --ci</code>（17 页 × 桌面/移动/暗色 × 17 类规则）</td><td>✅ <b>P0–P2 = 0</b>（480 → 6，余 6 项为 P3 模块暗色皮肤缺口，见 <code>docs/page-qa-report.md</code>）</td></tr><tr><td>暗色开关（真实点击）</td><td><code>page-qa.mjs</code> 指纹判定 + <code>scripts/build-site.py</code> 作用域修复</td><td>✅ 修复前<b>完全失效</b>（D14 P0）；现点击后模块底 <code>#1B1A21</code>、文字 <code>#F3EFEC</code></td></tr></tbody></table>
 <hr>
 <h3>18.2 逐项自查（Token → 页面）</h3>
 <h4>18.2.1 Token 与颜色</h4>
@@ -2028,7 +2045,7 @@ button{display:inline-flex;align-items:center;justify-content:center;gap:8px}</p
 <h3>18.3 整改行动清单（按优先级）</h3>
 <pre>A1 页面暖色/手机壳等别名色 → 抽取 token（--mmh-bg-*、--gm-frame）
 A2 ✅ 已闭环（V2.5）：暗黑模式全量映射（02 · 2.1.9）+ theme.css/gm.css 暗色段 + tokens/design.ts dark + audit dark_contrast 守门
-A6 渲染级对比度实测（a11y-dom.py）在受限环境（无头 Chrome 无法完成渲染/探针超时）无法执行 —— 工具已改为显式 ERR + 不静默通过；数值口径暂以离线实测（D11 表）与 `dark_contrast` 为准，恢复正常环境后重跑
+A6 ✅ 已闭环（V2.9）：`a11y-dom.py` v2 保留 alpha 做 source-over 合成、渐变取色标上界确证失败，已入 CI 并设阈值；D14 逐页整改后按前景色归类的确证失败已大幅下降，基线已同步收紧
 A3 Gm 组件键盘/焦点自动化走查 ✅ 已实施（`scripts/a11y.py` 静态断言已入 CI）；axe 运行时级走查保留为长期项
 A4 spec.html 阅读器增加“关键词高亮”与进度记录
 A5 每个新页面并入前执行 16.6 组件合规表 + 17 章验收</pre>
