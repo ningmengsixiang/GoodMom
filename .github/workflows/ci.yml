@@ -26,9 +26,15 @@ jobs:
 
       - name: 交付物必须已入库（无未提交 / 未跟踪文件）
         run: |
-          if [ -n "$(git status --porcelain --untracked-files=all)" ]; then
+          # 排除两份**带生成时间戳**的自动报告：它们每次运行都会变（内容相同、仅时间不同），
+          # 因此永远不可能让工作树干净；而"过期可自证"正是加时间戳的目的，不能去掉。
+          # a11y-dom-report.md 由本工作流的 a11y-dom job 重新生成，audit-report.md 同理。
+          # 其余任何未提交/未跟踪文件都必须让这一步失败 —— 那才是 P0-1 要防的情况。
+          DIRTY="$(git status --porcelain --untracked-files=all \
+            -- . ':(exclude)docs/a11y-dom-report.md' ':(exclude)docs/audit-report.md')"
+          if [ -n "$DIRTY" ]; then
             echo "::error::存在未提交或未跟踪的交付物，交付不完整："
-            git status --short | head -40
+            echo "$DIRTY" | head -40
             echo "（本地门禁全绿但仓库内容为空，是所有守门工具的共同盲区）"
             exit 1
           fi
