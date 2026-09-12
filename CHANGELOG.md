@@ -48,6 +48,21 @@
 - **顺带修掉既有断裂**：`preview/manual.html` 的 logo 指向已不存在的 `../logo.png`（打印版长期裂图），
   改为 `../brand/logo.png`。
 
+### 修正（同轮补记）
+- **正式 logo 回归用户提供资产**（撤销 V2.8 的错误裁决）：用户确认"目前用的 logo 是错的"。
+  取证：逐像素比对证明 `brand/logo.png` 与原始 `logo.png`（2032×2032）是同一张图（平均通道差 3.57），
+  而页面此前在用的 `logo-mark.svg` / `logo.svg` / `logo-tile.svg` 与它**画面完全不同**（46.3 / 69.5）——
+  三个 SVG 是工具自绘稿，V2.8 轮次以"原图 3.28MB 太大"为由换掉了用户的 logo，且该轮自述"未对 logo.png 做视觉判断"。
+- **现在的口径**：正式 logo = `brand/logo.png`（真源 2032×2032，全分辨率留档）；
+  页面内品牌图 `brand/logo-512.png`（260KB）、favicon `brand/logo-192.png`（48KB）；三个自绘 SVG 退役留档。
+  全站 28 处引用已切换，零断链。
+- **规范同步**：12 · §12.4/12.8、标准手册总纲、Part 02（BR-02-02/03 + 沿革）、Part 38、README、02-Token、12.8 标题
+  中"正式稿 = SVG"的错误表述全部纠正。
+- **`audit.py logo-guard` 升级**：页面引用只能是正式派生档（引用退役 SVG 或 3.28MB 真源即 FAIL）、
+  **真源尺寸必须 2032×2032**（再被"优化"就 FAIL）、正式档与退役档都必须存在、渲染圆角白名单 10 处。
+  负向测试已逐一验证（改回 SVG → FAIL；压缩真源 → FAIL；改圆角 → FAIL；还原 → PASS）。
+- 修复 `preview/manual.html` favicon 指向已不存在的 `../logo.png`（打印版长期裂图）。
+
 ### 已知未结项（**不静默转绿**）
 - 6 个模块无暗色皮肤（token 层支持，属皮肤缺口，`page-qa.mjs` 记为 P3）。
 - 「偏离 4px 网格」4 万+ 处、「字号不在层级」1.1 万处按**聚合口径**登记（`docs/page-qa-report.md` 0b 节给分布）。

@@ -11,7 +11,7 @@
 | Part | 章节 | 主要来源（`../NN-*.md` 即根目录编号规范） | 落地物 / 工具 | 状态 |
 | --- | --- | --- | --- | --- |
 | 01 | 设计系统总则 | 01、README | site/spec.html | ✅ 覆盖 |
-| 02 | 品牌视觉系统 | 12、brand/ | logo-mark.svg、logo.svg、logo-tile.svg | ✅ 覆盖 |
+| 02 | 品牌视觉系统 | 12、brand/ | logo.png（真源）+ logo-512/192.png（派生） | ✅ 覆盖 |
 | 03 | Design Token | 02、tokens/* | theme.css、tokens/{design,business,status}.ts | ✅ 覆盖 |
 | 04 | 色彩系统 | 02.1、12.3、14.4.5、D1/D5/D7 | `--lg-sem-*`、`--mmh-m5-*`、`--mmh-solid-*` | ✅ 覆盖 |
 | 05 | Typography | 02.2、07 | 字体栈 token、tabular-nums | ✅ 覆盖 |
@@ -68,9 +68,9 @@
 
 ## Part 02 · 品牌视觉系统
 - **品牌名唯一写法**：中文「妈咪好」+ 英文「GoodMom」＝**妈咪好 GoodMom**；禁止 Good Mom / Goodmom / 妈咪好goodmom 等异拼（14 章禁别名 + docs/audit-report stale 检查会拦）。
-- **Logo（v2 定案，2026-09）**：正式稿 `brand/logo-mark.svg` / `logo.svg` / `logo-tile.svg`（孕妈剪影 + 爱心 + GOODMOM）；站点与文档的图标位**统一引用矢量资产**（favicon 用 `brand/logo-mark.svg`，页面内品牌图用 `brand/logo-tile.svg`）；v1 几何版退役仅留档（12.8 与决策记录）。
+- **Logo（2026-09 确权）**：**正式 logo = `brand/logo.png`（你提供的原图，2032×2032，唯一真源）**；页面内引用派生档 `brand/logo-512.png`，favicon 用 `brand/logo-192.png`。工具自绘的 `logo-mark.svg` / `logo.svg` / `logo-tile.svg`（含 v1 几何版与「孕妈剪影 + 爱心」版）**均非正式 logo，已退役**、仅留档（12.8 与决策记录）。
   - 尺寸/位置：页面级 ≥24px 高；与文字间距 ≥ logo 高的 0.5×。
-  - **口径收敛**：BR-02-02（用 SVG）与旧 BR-02-03（用根目录 PNG）互相矛盾，现只保留前者；`logo.png` 已压缩并移入 `brand/`，仅供需要位图的第三方场景（如分享卡片），不再作为站点资源。
+  - **口径收敛**：此前以“原图 3.28MB”为由改判为矢量口径、并让页面改用**工具自绘 SVG** —— 那等于替用户换掉品牌 logo，**该裁决已撤销**。现口径：真源 `logo.png` 全分辨率留档，页面走 512/192 派生档控制体积。
   - 禁止：改色/旋转/拉伸变形/叠在花纹上/加投影；深色底上需加白底圆角容器（品牌版式另审）。
 - **品牌 Token（12.3 语义重映射）**：玫瑰梯度 `--mmh-grad-primary`（装饰）与 `--mmh-grad-action-hc`（CTA：品牌粉 Rose-300→Rose-500 + 深字 #343A46，AA，D9）双轨；桃/杏辅助 `--mmh-mint/peach`；淡紫柔光氛围（图表/技术焦点）。
 - **品牌语言（12.5 Tone of Voice）**
@@ -301,7 +301,7 @@
 ## Part 27 · Design-to-Code 标准
 - **映射纪律**：图面颜色/字号/间距/圆角/阴影只能出自 token；还原以 token 值为准（不允许类型化 token 偏差），视觉微调（±≤2px 类）由设计评审裁定并在决策记录留档。
 - **规范-代码登记**：00 目录=规范全量（98）↔ 代码封装=16（coverage.py 自动统计）↔ docs/coverage-report.md；新增封装双向登记。
-- **页面壳映射**：17.1.1 栅格/17.3.1 组合顺序 → 页面 class 结构；站内不重复定义品牌 :root，统一导航与 logo（`../brand/logo-tile.svg`，favicon 用 `../brand/logo-mark.svg`）；HTML 无 `.md` 链接（audit html-md）。
+- **页面壳映射**：17.1.1 栅格/17.3.1 组合顺序 → 页面 class 结构；站内不重复定义品牌 :root，统一导航与 logo（`../brand/logo-512.png`，favicon 用 `../brand/logo-192.png`）；HTML 无 `.md` 链接（audit html-md）。
 - **双轨禁令**：Figma、代码、spec 三方必须同源同步；页面出现第三方风格/裸色视为回归（audit 色彩 + stale）。
 - **验收工具**：`audit.py`（含章节/图标/色彩/断点/spec）、`coverage.py`、CI 三 job；规范变更必须跑 `refresh-spec.py`。
 
@@ -381,7 +381,7 @@
   | 代码组件（封装） | 16（goodmom-ui/src，以 coverage 为准） |
   | 自绘图标 | 77（icons/lg-icons.svg ↔ registry ↔ 09） |
   | HTML 展示 | site 3 + preview 5 + fuyouaicansai 交互稿 |
-  | Logo/品牌 | `brand/{logo-mark,logo-tile,logo}.svg`（矢量，v2 定案）+ `brand/logo.png`（压缩位图，仅供第三方位图场景） |
+  | Logo/品牌 | `brand/logo.png`（**正式 logo 真源**，2032×2032）+ `brand/logo-512.png` / `brand/logo-192.png`（派生档）；`brand/*.svg` 三个自绘稿已退役、仅留档 |
   | 报告 | docs/{audit-report,coverage-report,a11y-dom-report,审查决策记录}.md |
 - **同步命令**：spec=`python3 scripts/refresh-spec.py`；图标=`python3 scripts/build-icons.py`；度量=`python3 scripts/coverage.py`；审计/可达=`audit.py / a11y.py / a11y-dom.py`。
 - **维护规则**：资产增减后同步 Part 00 映射与本表；数值型标准改动在决策记录留实测依据。

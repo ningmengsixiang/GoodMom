@@ -394,31 +394,29 @@ def _css_selectors(path):
 
 
 # ══════════════════════════════════════════════════════════════════════════
-# logo 守卫（用户硬性要求：站点一律沿用**当前这个 logo**，任何轮次不得改动）
+# logo 守卫（用户硬性要求：站点一律沿用**用户提供的这个 logo**，任何轮次不得改动）
 #
-# 背景：V2.9 逐页质检时，"圆角一律回档到 02 · 2.4 档位"的批量修改把 7 处 **logo 图片的
-# 圆角**一起改了。logo 的圆角属于品牌资产的一部分，不属于 2.4「组件与容器圆角」的管辖
-# 对象 —— 对 logo 做圆角回档，等于替用户改品牌视觉。故把 logo 的**引用路径**与
-# **渲染圆角**都钉成白名单，任何改动在此显式失败，逼出一次人工确认。
+# 两次真实事故，都由本检查兜住：
+#  1) V2.9 逐页质检时，"圆角一律回档到 02 · 2.4 档位"的批量修改把 7 处 logo 图片的**渲染圆角**
+#     一起改了（logo 文件本身没动，但观感上就是改了 logo）。
+#  2) 更早的 V2.8 轮次以"原图 3.28MB 太大"为由，把用户的 logo 从 2032×2032 压成 192×192，
+#     并让页面改用**工具自绘的 SVG** —— 等于替用户换掉了品牌 logo。该裁决已撤销。
 #
-# ⚠️ 这两张表是"用户的品牌决定"，不是"规范推导出的值"。要动请先和用户确认。
+# 故本检查同时守三件事：
+#  ① 页面引用的 logo 必须解析到真实资产，且**只能是正式 logo 的派生档**（禁止任何 logo-*.svg）；
+#  ② logo 的渲染圆角必须等于白名单值；
+#  ③ 真源 logo.png 必须保持全分辨率（2032×2032）—— 不允许再被"优化"掉。
+#
+# ⚠️ 下面这些是"用户的品牌决定"，不是"规范推导出的值"。要动请先和用户确认。
 # ══════════════════════════════════════════════════════════════════════════
 
-# 1) logo 图片引用必须解析到真实存在的资产。
-#    片段（site/fragments/*）会被内联进 site/index.html，所以它的相对基准是 site/，不是片段自身目录。
-LOGO_REF_FILES = [
-    "site/index.html", "site/spec.html", "site/manual.html", "site/docs.html",
-    "preview/index.html", "preview/examples.html", "preview/mobile.html",
-    "preview/patterns.html", "preview/manual.html",
-    "fuyouaicansai/goodmom-redesign.html",
-    "site/fragments/site-index.html", "site/fragments/preview-index.html",
-    "site/fragments/preview-mobile.html", "site/fragments/preview-examples.html",
-    "site/fragments/preview-patterns.html", "site/fragments/site-docs.html",
-    "site/fragments/site-spec.html", "site/fragments/site-manual.html",
-]
+# 1) 正式 logo 资产与派生档（真源 + 两个派生，均由 logo.png 导出）
+LOGO_SOURCE = ("brand/logo.png", 2032, 2032)      # 真源：全分辨率，不得压缩
+LOGO_PAGES = "brand/logo-512.png"                  # 页面内品牌图
+LOGO_ICON = "brand/logo-192.png"                   # favicon / 小图标
+LOGO_RETIRED = ("brand/logo-mark.svg", "brand/logo.svg", "brand/logo-tile.svg")   # 退役：页面不得引用
 
-# 2) logo 渲染圆角白名单：{文件: {说明: 原值}}。
-#    值取自用户当前 logo 的现状（V2.9 改动前），**不得随组件圆角档调整**。
+# 2) logo 渲染圆角白名单：{文件: {说明: 原值}}，不得随组件圆角档调整
 LOGO_RADII = {
     "site/index.html": {"首页 Hero 主 logo（84px）": "24px",
                         "首页导航 logo（46px）": "14px",
@@ -436,9 +434,30 @@ LOGO_CSS_SELECTORS = {
     "fuyouaicansai/goodmom-redesign.html": [r"\.side\s+\.brand\s+img", r"\.top\s+img"],
 }
 
+# 3) 需要检查 logo 引用的文件（片段以 site/ 为相对基准，因为它会被内联进 site/index.html）
+LOGO_REF_FILES = [
+    "site/index.html", "site/spec.html", "site/manual.html", "site/docs.html",
+    "preview/index.html", "preview/examples.html", "preview/mobile.html",
+    "preview/patterns.html", "preview/manual.html",
+    "fuyouaicansai/goodmom-redesign.html", "frontend-app/index.html",
+    "site/fragments/site-index.html", "site/fragments/preview-index.html",
+    "site/fragments/preview-mobile.html", "site/fragments/preview-examples.html",
+    "site/fragments/preview-patterns.html", "site/fragments/site-docs.html",
+    "site/fragments/site-spec.html", "site/fragments/site-manual.html",
+]
+
+
+def _png_size(path):
+    """读 PNG 的 IHDR 拿宽高（不依赖任何图像库）。"""
+    import struct
+    d = open(path, "rb").read(33)
+    if d[:8] != b"\x89PNG\r\n\x1a\n":
+        return None
+    return struct.unpack(">II", d[16:24])
+
 
 def _logo_radius_candidates(path):
-    """返回该文件里"logo 图片的圆角"实测值列表（内联样式 + logo/brand 选择器 + 显式列出的通用选择器）。"""
+    """该文件里"logo 图片的圆角"实测值（内联样式 + logo/brand 选择器 + 显式列出的通用选择器）。"""
     import io
     src = io.open(path, encoding="utf-8").read()
     out = []
@@ -449,8 +468,7 @@ def _logo_radius_candidates(path):
         r = re.search(r"border-radius:\s*([0-9.]+px)", tag)
         if r:
             out.append(r.group(1))
-    sels = [r"\.(?:hero-logo|logo|brand)[^{]*"] + LOGO_CSS_SELECTORS.get(path, [])
-    for sel in sels:
+    for sel in [r"\.(?:hero-logo|logo|brand)[^{]*"] + LOGO_CSS_SELECTORS.get(path, []):
         for m in re.finditer(sel + r"\{[^}]*border-radius:\s*([0-9.]+px)", src):
             out.append(m.group(1))
     return out
@@ -460,25 +478,50 @@ def logo_guard():
     import io
     bad = []
 
-    # ① 引用完整性：logo 指向的文件必须存在
-    broken = 0
+    # ① 正式资产齐备 + 真源保持全分辨率
+    #    退役 SVG 也要求**存在**（留档备查）—— 本轮曾出现三个 SVG 在无显式删除命令的情况下
+    #    从工作树消失（git status 显示 D），靠 git checkout 才恢复。故把"存在"也纳入守门。
+    for path in (LOGO_SOURCE[0], LOGO_PAGES, LOGO_ICON) + LOGO_RETIRED:
+        if not os.path.exists(path):
+            bad.append("logo 资产缺失：%s（正式档不可缺；退役档也必须留档，不得删除）" % path)
+    if os.path.exists(LOGO_SOURCE[0]):
+        size = _png_size(LOGO_SOURCE[0])
+        want = (LOGO_SOURCE[1], LOGO_SOURCE[2])
+        if size != want:
+            bad.append("%s 尺寸为 %s，应为 %s —— 真源不得被压缩/缩放（页面请引用派生档）"
+                       % (LOGO_SOURCE[0], size, want))
+
+    # ② 页面引用：必须可解析、且只能是正式派生档（不得引用退役 SVG 或真源）
+    refs, offenders = 0, 0
     for f in LOGO_REF_FILES:
         if not os.path.exists(f):
             continue
         base = os.path.dirname(f)
-        if "/fragments/" in f:                      # 片段以站点目录为相对基准
-            base = os.path.dirname(base)
+        if "/fragments/" in f:
+            base = os.path.dirname(base)          # 片段以站点目录为相对基准
         src = io.open(f, encoding="utf-8").read()
-        for m in re.finditer(r'<img[^>]*src="([^"]*logo[^"]*)"', src, re.I):
+        # 只认**真实标签**：规范正文里常有被转义的示例（`&lt;img src="…"&gt;`），
+        # 那不是引用，报了就是误报（且会诱导去改文档里的示例）。
+        for m in re.finditer(r'<(?:img|link)\b[^>]*?(?:src|href)="([^"]*logo[^"]*\.(?:png|svg))"', src, re.I):
             rel = m.group(1)
+            refs += 1
             target = os.path.normpath(os.path.join(base, rel))
             if not os.path.exists(target):
                 bad.append("%s 引用 %s（解析为 %s）不存在" % (f, rel, target))
-                broken += 1
-    if not broken:
-        rec("OK", "logo-ref", "全部 logo 图片引用均可解析到真实资产（brand/），无断链")
+                offenders += 1
+            if rel.endswith(".svg"):
+                bad.append("%s 引用了已退役的自绘 SVG logo（%s）—— 必须改用 %s / %s"
+                           % (f, rel, LOGO_PAGES, LOGO_ICON))
+                offenders += 1
+            if rel.endswith("brand/logo.png"):
+                bad.append("%s 直接引用了 3.28MB 真源 logo.png —— 页面请改用派生档 %s / %s"
+                           % (f, LOGO_PAGES, LOGO_ICON))
+                offenders += 1
+    if not offenders:
+        rec("OK", "logo-ref", "logo 引用 %d 处全部指向正式 logo 的派生档（%s / %s），零断链、无退役 SVG"
+            % (refs, LOGO_PAGES, LOGO_ICON))
 
-    # ② 渲染圆角白名单
+    # ③ 渲染圆角白名单
     checked = 0
     for f, expect in LOGO_RADII.items():
         if not os.path.exists(f):
@@ -492,9 +535,10 @@ def logo_guard():
 
     if bad:
         for b in bad:
-            rec("FAIL", "logo-guard", b + " —— logo 是品牌资产，不得改动；确需调整请先与用户确认并同步本白名单")
+            rec("FAIL", "logo-guard", b + " —— logo 是用户品牌资产，不得改动；确需调整请先与用户确认并同步本白名单")
         return False
-    rec("OK", "logo-guard", "logo 渲染圆角 %d 处与白名单一致、引用零断链（logo 强制定为当前版本）" % checked)
+    rec("OK", "logo-guard", "正式 logo 真源 %d×%d（未压缩）+ 派生档 %d / %d；渲染圆角 %d 处与白名单一致"
+        % (LOGO_SOURCE[1], LOGO_SOURCE[2], 512, 192, checked))
     return True
 
 

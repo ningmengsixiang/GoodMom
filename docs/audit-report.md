@@ -1,7 +1,7 @@
 # 规范审计报告（自动）
 
 - 命令：`python3 scripts/audit.py`
-- 时间：2026-09-12 11:47
+- 时间：2026-09-12 12:01
 - 结论：✅ 通过
 
 - **OK** `md-links`：全部内链有效
@@ -18,5 +18,5 @@
 - **OK** `mirror`：应用侧 gm-arco-ui 与设计系统源逐字节一致（含 theme.css ↔ gm.css），且无缺失选择器
 - **OK** `dark`：暗色段完整；10 项文字/语义色在最坏合成面 #36353C 上全部 ≥4.5:1
 - **OK** `exports`：全部组件已在两包 index.ts 导出
-- **OK** `logo-ref`：全部 logo 图片引用均可解析到真实资产（brand/），无断链
-- **OK** `logo-guard`：logo 渲染圆角 10 处与白名单一致、引用零断链（logo 强制定为当前版本）
+- **OK** `logo-ref`：logo 引用 28 处全部指向正式 logo 的派生档（brand/logo-512.png / brand/logo-192.png），零断链、无退役 SVG
+- **OK** `logo-guard`：正式 logo 真源 2032×2032（未压缩）+ 派生档 512 / 192；渲染圆角 10 处与白名单一致

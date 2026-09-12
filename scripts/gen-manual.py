@@ -128,8 +128,8 @@ for s in sections:
 head='''<!DOCTYPE html><html lang="zh-CN"><head><meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>妈咪好 GoodMom · 设计系统标准手册（38 部分）</title>
-<link rel="icon" type="image/svg+xml" href="../brand/logo-mark.svg"><style>%s</style></head><body>'''%CSS
-body='''<div class="wrap"><div class="top"><img src="../brand/logo-tile.svg" alt="妈咪好"><b>设计系统标准手册 · 38 部分</b>
+<link rel="icon" type="image/png" href="../brand/logo-192.png"><style>%s</style></head><body>'''%CSS
+body='''<div class="wrap"><div class="top"><img src="../brand/logo-512.png" alt="妈咪好"><b>设计系统标准手册 · 38 部分</b>
 <div class="navr"><a href="index.html">返回官网首页</a><a href="docs.html">文档中心</a><a href="spec.html#ch-readme">全量规范</a></div></div>
 <aside><b>标准目录（%d 章）</b>%s</aside><main>%s</main></div>'''%(len(sections),nav,chaps)
 # ── V2.7 起：产出 build-site.py 消费的片段；旧 site/manual.html 为重定向页 ──

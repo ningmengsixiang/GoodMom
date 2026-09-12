@@ -10,8 +10,8 @@
 
 ## 2 规范性条款
 - BR-02-01 应：品牌名唯一写法为「妈咪好 GoodMom」；禁止 Good Mom/Goodmom/妈咪好goodmom 等异拼（14 章禁别名；audit stale 检查执行）。
-- BR-02-02 应：Logo 使用正式 v2 稿 `brand/logo-mark.svg`／`logo.svg`（孕妈剪影＋爱心＋GOODMOM）；v1 几何版退役仅留档（12.8）。
-- BR-02-03 应：站点/文档图标位统一引用**矢量**品牌资产——favicon 用 `brand/logo-mark.svg`，页面内品牌图用 `brand/logo-tile.svg`。
+- BR-02-02 应：Logo 使用**你提供的正式 logo `brand/logo.png`（2032×2032，唯一真源）**；页面内引用派生档 `brand/logo-512.png`，favicon 用 `brand/logo-192.png`。工具自绘的 `logo-mark.svg`／`logo.svg`／`logo-tile.svg` 与非正式稿 v1 几何版一律退役、仅留档（12.8）。
+- BR-02-03 应：站点/文档图标位**统一引用正式 logo 的派生档**——页面内品牌图 `brand/logo-512.png`，favicon `brand/logo-192.png`；禁止引用任何 `brand/logo-*.svg`（`audit.py logo-guard` 守门）。
   （原条款要求"统一引用根目录 `../logo.png`"，与 BR-02-02 直接矛盾，且 3.28MB 位图被用作 favicon 与 46px 图标，
    使首页首屏达约 4.2MB。现只保留矢量口径；`logo.png` 压缩后移入 `brand/`，不再作为站点资源。）
 - BR-02-04 应：页面级 logo 高度 ≥24px；与邻近文字间距 ≥logo 高度 0.5×。
@@ -21,8 +21,8 @@
 - BR-02-08 不应：混入第三方/竞品元素或过期品牌资产；页面标题/正文品牌词与 BR-02-01 一致。
 
 ## 3 映射与验收
-- 资产：brand/*.svg、logo.png；文档：12-妈咪好品牌与设计语言.md。
+- 资产：`brand/logo.png`（真源）+ `logo-512.png` / `logo-192.png`（派生）；`brand/*.svg` 已退役、仅留档。文档：12-妈咪好品牌与设计语言.md。
 - 检查：页面 grep 品牌词一致性；audit html-md/stale；logo 引用抽查；emoji 计数为 0。
 
 ## 4 变更记录
-- V1.0：Logo v2 定案（2026-09，见决策记录）；文字承载深档规则固化。
+- V1.0：自绘 Logo v2 定案（2026-09）→ **已于 V2.9 撤销**：正式 logo 回归用户提供的 `brand/logo.png`；文字承载深档规则固化。

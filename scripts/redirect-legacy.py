@@ -117,9 +117,9 @@ def main() -> int:
         path = os.path.join(ROOT, rel)
         # 相对路径按实际所在目录计算（都在仓库根的一级子目录里）
         if rel.startswith("site/"):
-            target_index, icon = "index.html", "../brand/logo-mark.svg"
+            target_index, icon = "index.html", "../brand/logo-192.png"
         else:                      # preview/*
-            target_index, icon = "../site/index.html", "../brand/logo-mark.svg"
+            target_index, icon = "../site/index.html", "../brand/logo-192.png"
         want = build_page(rel, mod, MODULE_TITLES[mod], icon, target_index)
 
         if args.check:

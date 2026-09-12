@@ -629,7 +629,7 @@ SHELL = """<!DOCTYPE html>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>妈咪好 GoodMom · 开源设计系统（单一入口）</title>
-<link rel="icon" type="image/svg+xml" href="../brand/logo-mark.svg">
+<link rel="icon" type="image/png" href="../brand/logo-192.png">
 <meta name="theme-color" content="#F77FA3">
 <meta name="description" content="妈咪好 GoodMom · 妇幼儿童全生命周期开源设计系统：规范 19 份 · 组件 98 项 · 图标 77 枚 · 组件库 2 个（@goodmom/ui · @goodmom/vue）· 本站为唯一入口">
 <style>
@@ -707,7 +707,7 @@ body{margin:0;font-family:var(--sh-font);color:var(--sh-t);line-height:1.7;-webk
 <header class="sh-top">
   <div class="sh-top-in">
     <a class="sh-brand" href="#gm-main" data-mod="site-index">
-      <img src="../brand/logo-tile.svg" alt="">
+      <img src="../brand/logo-512.png" alt="">
       <span>妈咪好 GoodMom<small>妇幼儿童全生命周期开源设计系统</small></span>
     </a>
     <nav class="sh-tabs" id="shTabs" role="tablist" aria-label="站点主导航">__TABS__</nav>

@@ -542,7 +542,7 @@ CSS：
 }
 ```
 
-> 暗色落地要点：`data-theme="dark"` 加在 `<html>` 或 **局部容器** 上；暗色下玻璃依赖的光斑透明度维持 16–22% 但半径 ×1.2；纯图/插画（`logo.png` 类位图）在暗底上需加 `filter: brightness(.94)` 压白，矢量 Logo 走 `brand/logo-mark.svg` 的 `currentColor` 版本。
+> 暗色落地要点：`data-theme="dark"` 加在 `<html>` 或 **局部容器** 上；暗色下玻璃依赖的光斑透明度维持 16–22% 但半径 ×1.2；纯图/插画（`logo.png` 类位图）在暗底上需加 `filter: brightness(.94)` 压白；正式 logo 为位图，暗底上优先垫白色/玻璃底或加压白滤镜。
 
 > 落地时注意：`backdrop-filter` 需加 `-webkit-` 前缀（Safari）；玻璃效果依赖背景中存在彩色光斑，若页面纯色背景，可在容器下加一层 `--lg-glow-*` 径向渐变节点。
 

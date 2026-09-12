@@ -187,11 +187,11 @@ htmlout='''<!DOCTYPE html>
 <head>
 <meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1">
 <title>妈咪好 GoodMom · 设计规范大全（HTML 主页）</title>
-<link rel="icon" type="image/svg+xml" href="../brand/logo-mark.svg">
+<link rel="icon" type="image/png" href="../brand/logo-192.png">
 <style>%s</style>
 </head>
 <body>
-<div class="top"><img src="../brand/logo-tile.svg" alt="妈咪好"><b>妈咪好 GoodMom · 规范大全</b>%s</div>
+<div class="top"><img src="../brand/logo-512.png" alt="妈咪好"><b>妈咪好 GoodMom · 规范大全</b>%s</div>
 <div class="wrap">%s</div>
 </body>
 </html>'''%(css,menu,'\n'.join(sections))

@@ -1,3 +1,7 @@
+<!-- ⛔ 已退役（非正式 logo）：本文件是工具自绘稿，不是用户的品牌 logo。
+     正式 logo = brand/logo.png（用户提供，2032×2032 真源）；
+     页面请引用派生档 brand/logo-512.png（品牌图）/ brand/logo-192.png（favicon）。
+     本文件仅留档备查，页面与文档不得引用；audit.py 的 logo-guard 会拦截。 -->
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" width="200" height="200" role="img" aria-label="妈咪好 GoodMom Logo">
   <defs>
     <linearGradient id="gmBody" x1="0" y1="0" x2="1" y2="1">

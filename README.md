@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="brand/logo-tile.svg" width="96" alt="妈咪好 GoodMom">
+  <img src="brand/logo-512.png" width="96" alt="妈咪好 GoodMom">
 </p>
 
 # 妈咪好 GoodMom · 妇幼儿童全生命周期设计系统
@@ -122,7 +122,7 @@
 
 | [`preview/manual.html`](preview/manual.html) | **总览手册（打印版，保留为独立页）**：定位/架构/DNA/状态/文档地图，浏览器可另存 PDF | 全员（对外介绍用） |
 
-| [`brand/`](brand/) | **品牌图形资产**：Logo v2 正式稿（logo-mark / logo / tile 三种 SVG + 压缩后的 logo.png 位图，规范见 12 · 12.8） | 品牌使用 |
+| [`brand/`](brand/) | **品牌图形资产**：正式 logo `logo.png`（真源 2032×2032）+ 派生 `logo-512.png` / `logo-192.png`（规范见 12 · 12.8）；三个自绘 SVG 已退役 | 品牌使用 |
 
 ---
 
