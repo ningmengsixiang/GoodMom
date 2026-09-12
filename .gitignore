@@ -22,3 +22,31 @@ frontend-app/packages/*/dist/
 *.tmpdir/
 PAGES.tmp
 fuyouaicansai/_probe_*.html
+
+# 工具产物：探针页与冒烟截图（P2-2）
+# 注：a11y-dom.py 现已改写系统临时目录、site-smoke.mjs 已不再截图，
+# 这里做兜底 —— 一旦残留，既不得污染工作树，也不得被 audit.py 的 hex-case 扫到。
+**/_a11y_probe.html
+site/.smoke-*.png
+smoke-*.png
+
+*storybook.log
+storybook-static
+
+# npm 本地缓存（沙箱内 npm 默认缓存不可写）
+.npm-cache/
+
+# Vue 验收台构建缓存
+playground/.vite/
+.goodmom-vue-cache/
+goodmom-vue/playground/smoke-*.png
+
+# 站点基线快照（合并前原页面）
+# ⚠️ 已改为**交付内容**（P0-6）：site-parity.mjs 是 CI 步骤，它需要的输入
+# 就不能同时被声明为"非交付内容"——二者不能并存。基线缺失会让保真度校验
+# 无从比对，因此把 8 个基线页面纳入版本库，并由 CI 显式断言其存在。
+
+# 打印版 PDF（**可再生产物**）：由 scripts/print-manual.sh 从 VERSION 参数化生成
+# （4 秒，无头 Chrome 打印 preview/manual.html）。仓库不存这个数 MB 的二进制，
+# 需要时本地生成即可 —— 旧版曾把 V2.2 的 PDF 冻在 docs/ 里，落后 5 个版本。
+docs/GoodMom-Design-System-V*-Overview.pdf
