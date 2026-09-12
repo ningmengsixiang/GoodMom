@@ -1564,22 +1564,8 @@ section.block:first-of-type{margin-top:8px}
     <div class="grid g2">
       <div class="panel glass-l2">
         <h3 class="panel-h3"><i></i>生长曲线 · 百分位带（13 · 13.2 母题）<span class="spec-chip">13 · 13.2</span></h3>
-        <p class="mh">参考带 P3–P97（薄荷淡带）· 宝宝实测曲线（蜜桃粉）· 数值聚焦</p>
-        <div style="display:flex;align-items:baseline;gap:10px;flex-wrap:wrap">
-          <b class="num" style="font-size:24px;color:var(--mmh-rose-700,#B23A63)">P62</b><span style="font-size:12px;color:var(--lg-text-secondary)">18 月龄 · 体重 11.2kg</span>
-          <span class="badge" style="margin-left:auto;font-size:10px;padding:2px 9px;background:var(--mmh-mint-100,#E2F6F0);color:#25715D">达标</span>
-        </div>
-        <svg width="100%" height="150" viewBox="0 0 380 150" preserveAspectRatio="none">
-          <defs><linearGradient id="band1" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#A9E3D4" stop-opacity=".55"/><stop offset="1" stop-color="#A9E3D4" stop-opacity=".16"/></linearGradient></defs>
-          <line x1="0" y1="20" x2="380" y2="20" stroke="rgba(58,52,84,.05)"/>
-          <line x1="0" y1="78" x2="380" y2="78" stroke="rgba(58,52,84,.05)"/>
-          <path d="M0,26 L60,22 L130,17 L200,13 L270,10 L340,7 L380,6 L380,62 L340,64 L270,67 L200,70 L130,74 L60,78 L0,82 Z" fill="url(#band1)"/>
-          <path d="M0,26 L60,22 L130,17 L200,13 L270,10 L340,7 L380,6" fill="none" stroke="#6FC9B4" stroke-width="1.4" stroke-dasharray="4 5" opacity=".8"/>
-          <path d="M0,82 L60,78 L130,74 L200,70 L270,67 L340,64 L380,62" fill="none" stroke="#6FC9B4" stroke-width="1.4" stroke-dasharray="4 5" opacity=".8"/>
-          <path d="M0,56 L60,50 L130,46 L200,42 L270,36 L340,30 L380,26" fill="none" stroke="#F77FA3" stroke-width="2.6" stroke-linecap="round"/>
-          <circle cx="270" cy="36" r="4.5" fill="#FFF" stroke="#F77FA3" stroke-width="2.4"/>
-        </svg>
-        <div class="band-legend"><span><i style="background:rgba(169,227,212,.6)"></i>P3–P97 参考带</span><span><i style="background:#F77FA3"></i>宝宝实测</span><span><i style="background:rgba(255,255,255,.9);border:1px solid rgba(58,52,84,.2)"></i>P3/P97 警戒线</span></div>
+        <p class="mh">参考带 P3–P97（薄荷淡带 + 细白描边上界）· 实测曲线（Rose-500 2.5px）· 悬停单点 / 拖拽框选 / 一键开关警戒线</p>
+        <div id="growthChart"></div>
       </div>
 
       <div class="panel glass-l2">
@@ -1729,11 +1715,7 @@ section.block:first-of-type{margin-top:8px}
   <div class="body">
     <div class="mnav mglass"><svg viewBox="0 0 24 24"><path d="M20 12H5.5M11 6.5 5.5 12l5.5 5.5"/></svg><span class="mt">朵朵 · 18 月龄</span><svg viewBox="0 0 24 24"><path d="M9 6.6h11M9 12h11M9 17.4h11"/></svg></div>
     <div class="mkpi mglass"><span class="l">体重生长曲线 · WHO 参考 · 当前百分位</span><span class="v" style="color:var(--mmh-rose-700,#B23A63)">P62</span>
-      <svg width="100%" height="74" viewBox="0 0 200 74" preserveAspectRatio="none">
-        <path d="M0,16 L40,13 L80,10 L120,8 L160,6 L200,5 L200,42 L160,43 L120,45 L80,48 L40,50 L0,52 Z" fill="rgba(169,227,212,.5)"/>
-        <path d="M0,34 L40,30 L80,27 L120,24 L160,21 L200,19" fill="none" stroke="#F77FA3" stroke-width="2.4" stroke-linecap="round"/>
-        <circle cx="120" cy="24" r="3.6" fill="#FFF" stroke="#F77FA3" stroke-width="2"/>
-      </svg></div>
+      <div id="growthChartMini"></div></div>
     <div class="mrow2 mglass"><span class="mdot ok"></span><span class="md2"><b>疫苗：12 月龄麻腮风</b><span>已预约 · 周五 09:30</span></span><b style="color:var(--mmh-rose-700,#B23A63);font-size:10px">预约</b></div>
     <div class="mrow2 mglass"><span class="mdot warn"></span><span class="md2"><b>提醒：21 月龄儿保体检</b><span>剩余 90 天 · 自动提醒中</span></span></div>
     <div class="mrow2 mglass"><span class="mdot ok"></span><span class="md2"><b>AI 随访建议</b><span>语言发育良好，加强亲子共读</span></span></div>
@@ -2641,4 +2623,45 @@ section.block:first-of-type{margin-top:8px}
     });
   });
   render(SETS.good,NAME.good);
+})();
+
+/* ═══ 13 · 13.2 生长曲线 · 百分位带 —— 图形与交互在外壳（window.gmGrowth）═══
+   数据源必须在图上标注（13 · 13.12「参考带/百分位不可用错标准 … 文档标注数据源版本」）。
+   本页给的是**示意数据**，取值口径对齐 WHO 2006 · 0–24 月龄体重标准表量级。 */
+(function(){
+  var d = {
+    title:'体重生长曲线', tone:'mint', seriesName:'宝宝实测',
+    source:'WHO 2006 · 0–24 月龄', bandLabel:'P3–P97 · 示意数据',
+    xName:'月龄', xUnit:'月', yName:'体重', yUnit:'kg',
+    x:[0,3,6,9,12,15,18,21,24], xTicks:[0,6,12,18,24],
+    yTicks:[6,8,10,12,14],
+    p3: [2.5,4.6,6.1,7.1,7.7,8.3,8.8,9.2,9.7],
+    p50:[3.3,6.4,7.9,8.9,9.6,10.3,10.9,11.5,12.2],
+    p97:[4.3,7.1,9.2,10.5,11.5,12.4,13.2,13.9,14.6],
+    actual:[3.4,6.2,7.9,8.9,9.7,10.5,11.5,12.0,9.4],
+    focus:18,
+    /* 末点（24 月龄 9.4kg）刻意落在 P3（9.7）以下 —— 13 · 13.2 要求演示
+       「P3 以下 / P97 以上 → 数据点转琥珀/红 + 玻璃气泡建议文案」，全在带内的数据演示不到这条。
+       本面板是**规范演示**（spec-chip 13 · 13.2），不是真实档案；档案页那条曲线全在带内。 */
+    advisories:[{x:24,tone:'attention',text:'24 月龄 · 体重 9.4kg 低于 P3（9.7kg）：建议 2 周内复测并评估喂养与内分泌（示意）'}]
+  };
+  /* ⚠️ 必须等 DOMContentLoaded：模块脚本在文档里位于**外壳脚本之前**，
+     外壳的 window.gmGrowth 此刻还没定义 —— 直接调用会被守卫静默吞掉（实测图不出现）。 */
+  function boot(){
+    var el = document.getElementById('growthChart');
+    if(el && window.gmGrowth) window.gmGrowth(el, d);
+  }
+  if(document.readyState === 'loading') document.addEventListener('DOMContentLoaded', boot); else boot();
+})();
+
+/* 13 · 13.2 的 M 家长端形态：同一渲染器的 mini 变体（只留参考带 / 主曲线 / 端点，点按看单点） */
+(function(){
+  var d = {
+    title:'体重生长曲线', seriesName:'宝宝实测', source:'WHO 2006 · 0–24 月龄', mini:true,
+    xName:'月龄', xUnit:'月', yName:'体重', yUnit:'kg', x:[0,6,12,18,24],
+    p3: [2.5,6.1,7.7,8.8,9.7], p50:[3.3,7.9,9.6,10.9,12.2], p97:[4.3,9.2,11.5,13.2,14.6],
+    actual:[3.4,7.9,9.7,11.5,12.4], focus:18
+  };
+  function boot(){ var el = document.getElementById('growthChartMini'); if(el && window.gmGrowth) window.gmGrowth(el, d); }
+  if(document.readyState === 'loading') document.addEventListener('DOMContentLoaded', boot); else boot();
 })();

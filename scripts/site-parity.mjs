@@ -58,10 +58,14 @@ const INTENTIONAL = new Set([
   //   op → ops（TB-15-01 引用的基线名，17.2.3 已正式定义）
   // 这一组是"改名"，不是"删功能"：对应元素仍在，只是换了统一的类名。
   "mtable", "gm", "desc", "gfold", "arr", "gfb", "op",
+  // V2.9 生长曲线（D20）：手画的静态 SVG 换成外壳的 window.gmGrowth 渲染 ——
+  //   band-legend → gm-growth__legend（图例由渲染器统一输出）
+  //   渐变 id band1 → 渲染器不再用 defs 渐变（参考带改纯色 alpha .12，规范 .10–.14）
+  "band-legend", "band1",
 ]);
 
 /** 有意移除的 **id**（同上一类，节点整体不再常驻 DOM） */
-const INTENTIONAL_IDS = new Set(["copied", "mtoast"]);
+const INTENTIONAL_IDS = new Set(["copied", "mtoast", "band1"]);
 
 const browser = await chromium.launch();
 const page = await browser.newPage({ viewport: { width: 1440, height: 1000 } });

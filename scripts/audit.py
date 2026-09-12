@@ -1076,6 +1076,159 @@ def data_present():
     return True
 
 
+# ══════════════════════════════════════════════════════════════════════════
+# 生长曲线 · 百分位带守门（13 · 13.2 母题 / 04 · 4.2–4.3.2）
+#
+# 为什么必须有：这是**系统母题**（12 章第五条品牌母题），实测却有 3 处各画一遍的静态 SVG，
+# 且三处都把参考带画成 alpha .5（规范 .10–.14，**四倍浓**）、主曲线 2.4–2.6px（规范 2.5）、
+# 警戒线用薄荷色 1.3px（规范：1.5px 三级色虚线）、网格线 .05（规范 --lg-divider）、
+# 没有坐标轴 / Tooltip / 任何交互（13.2 的三条交互一条都没有）。
+# 这类"手画 SVG"最容易悄悄漂移 —— 没有选择器、没有令牌、没人比对，只能逐值钉住。
+# 渲染级实测在 scripts/page-qa.mjs（band 透明度、线宽、动画名等）。
+# ══════════════════════════════════════════════════════════════════════════
+
+def growth_chart():
+    import io as _io, glob as _glob
+    bad = []
+    SHELL = "scripts/build-site.py"
+    DEMO = "fuyouaicansai/goodmom-redesign.html"
+    if not os.path.exists(SHELL):
+        rec("FAIL", "growth-chart", "%s 不存在" % SHELL); return False
+    sh = _io.open(SHELL, encoding="utf-8").read()
+
+    def block(text, sel):
+        sel = sel[:-1] if sel.endswith("{") else sel
+        m = re.search(re.escape(sel) + r"\s*\{([^}]*)\}", text)
+        return m.group(1) if m else None
+
+    # ① 参考带透明度必须落在 13.2 的 .10–.14（这是最常被画浓的一条：实测三处都是 .5）
+    def band_alpha(text, sel, src):
+        b = block(text, sel)
+        if b is None:
+            bad.append("%s：缺少 %s（13 · 13.2 参考带）" % (src, sel)); return
+        m = re.search(r"rgba\(\s*\d+\s*,\s*\d+\s*,\s*\d+\s*,\s*(\.\d+|\.\d+|\.\d+)\)", b)
+        if not m:
+            bad.append("%s：%s 的填充必须写成 rgba(...)（13 · 13.2 要求 alpha .10–.14）" % (src, sel)); return
+        a = float(m.group(1))
+        if not (0.10 - 1e-9 <= a <= 0.14 + 1e-9):
+            bad.append("%s：%s 参考带 alpha=%.2f 不在 .10–.14 —— 参考带是背景，"
+                       "画浓就盖过主曲线，违背 04 · 4.1「数据最亮」（实测旧实现是 .5，四倍浓）"
+                       % (src, sel, a))
+
+    band_alpha(sh, ".gm-growth__band{", SHELL)
+    band_alpha(_io.open(DEMO, encoding="utf-8").read() if os.path.exists(DEMO) else "", ".gx-band{", DEMO)
+
+    # ② 外壳配方逐项
+    checks = [
+        (".gm-growth__line{", "stroke:#F77FA3", "主曲线必须是品牌主色 Rose-500 #F77FA3（13.2）"),
+        (".gm-growth__line{", "stroke-width:2.5", "主曲线必须 2.5px（13.2 / 04 · 4.3.2）"),
+        (".gm-growth__band-top{", "rgba(255,255,255,.9)", "参考带上界必须细白描边（13.2）"),
+        (".gm-growth__band-top{", "stroke-width:1", "参考带上界描边 1px（13.2「细白描边」）"),
+        (".gm-growth__warn{", "var(--gm-guide", "警戒线必须是三级色导引件（13.2「虚线 1.5px 三级色」）"),
+        (".gm-growth__warn{", "stroke-width:1.5", "警戒线必须 1.5px（13.2；04 · 4.3.2 的 2px 是通用基线虚线）"),
+        (".gm-growth__warn{", "stroke-dasharray", "警戒线必须是虚线（13.2）"),
+        (".gm-growth__grid{", "var(--lg-divider", "网格线必须 --lg-divider（04 · 4.2）"),
+        (".gm-growth__grid{", "stroke-width:1", "网格线 1px（04 · 4.2）"),
+        (".gm-growth__dot{", "fill:#FFF", "端点必须是白芯（13.2 / 04 · 4.3.2）"),
+        (".gm-growth__dot{", "stroke:#F77FA3", "端点必须粉描边（13.2）"),
+        (".gm-growth__dot{", "stroke-width:2", "端点描边 2px（04 · 4.3.2）"),
+        (".gm-growth__tick{", "font-size:12px", "轴刻度必须 caption 12px（04 · 4.2）"),
+        (".gm-growth__tick{", "tabular-nums", "轴刻度数字必须等宽（04 · 4.2 / 17 · 17.2.2）"),
+        (".gm-growth__plot{", "6s", "入场必须 0.6s（04 · 4.2「入场 0.6s ease-out」）"),
+        (".gm-growth__tip{", "rgba(255,255,255,.75)", "Tooltip 必须是白玻璃泡 rgba(255,255,255,.75)（04 · 4.2）"),
+        (".gm-growth__tip{", "blur(20px)", "Tooltip 必须 blur 20（04 · 4.2）"),
+        (".gm-growth__tip{", "border-radius:16px", "Tooltip 圆角 16（04 · 4.2）"),
+    ]
+    for sel, needle, why in checks:
+        b = block(sh, sel)
+        if b is None:
+            bad.append("%s：缺少 %s —— %s" % (SHELL, sel, why))
+        elif needle not in b:
+            bad.append("%s：%s 里没有 `%s` —— %s" % (SHELL, sel, needle, why))
+
+    # ③ 导引件令牌必须两端都有（浅/暗各一档）
+    m = re.search(r"--gm-guide:\s*(#[0-9A-Fa-f]{6})", sh)
+    if not m:
+        bad.append("%s：缺少 --gm-guide 浅色档 —— 网格/刻度/警戒线必须走这个令牌，"
+                   "不能借 --lg-text-tertiary（页面会把它当正文色用，个别页面甚至"
+                   "别名成次级色 → 导引件与正文一样重，违背 04 · 4.1「数据最亮」）" % SHELL)
+    elif m.group(1).upper() != "#9AA2B0":
+        # 光要求"是 # 开头的颜色"不够：负向测试实测把导引件改成次级色 #4F5B6E 也能过 ——
+        # 那样虚线就跟正文一样重，"数据最亮"失效。故钉住具体档位。
+        bad.append("%s：--gm-guide 浅色档 = %s ≠ #9AA2B0（02 · 2.1.1 三级色；"
+                   "导引件必须比正文轻一档）" % (SHELL, m.group(1)))
+    m2 = re.search(r'\[data-theme="dark"\]\{--gm-guide:\s*(#[0-9A-Fa-f]{6})', sh)
+    if not m2:
+        bad.append("%s：--gm-guide 缺暗色档（02 · 2.1.9）" % SHELL)
+    elif m2.group(1).upper() != "#A6ADB9":
+        bad.append("%s：--gm-guide 暗色档 = %s ≠ #A6ADB9（02 · 2.1.9 三级色暗档）" % (SHELL, m2.group(1)))
+
+    # ④ 渲染器：无障碍与交互件
+    for needle, why in [
+        ("window.gmGrowth", "外壳必须提供 window.gmGrowth（唯一实现）"),
+        ('role="img"', "图形必须 role=img（读屏无法读 SVG 路径）"),
+        ("aria-label", "图形必须有 aria-label 概述（含数据源与聚焦读数）"),
+        ("gm-sr-only", "必须生成视觉隐藏数据表（读屏逐点读取的唯一途径）"),
+        ("d.p50", "百分位读数必须中位数锚定（P3–P50–P97 分段）—— 带内单一线性内插会把读数算偏 6–8 个分位"),
+        ("aria-pressed", "P3/P97 开关必须报展开态（13.2「一键 P3/P97 红线开关」）"),
+        ("gm-growth__note", "P3 以下 / P97 以上必须给玻璃气泡建议（13.2）"),
+    ]:
+        if needle not in sh:
+            bad.append("%s：缺少 %s —— %s" % (SHELL, needle, why))
+
+    # ⑤ 页面侧：不得再手画一份，且调用必须给数据源与 P50
+    for f in sorted(_glob.glob("site/fragments/*.html")):
+        t = _io.open(f, encoding="utf-8").read()
+        code = re.sub(r"/\*.*?\*/", "", t, flags=re.S)
+        code = re.sub(r"<!--.*?-->", "", code, flags=re.S)
+        # 旧的"画浓了"的参考带 = 手画 SVG 的指纹
+        if re.search(r"rgba\(\s*169\s*,\s*227\s*,\s*212\s*,\s*\.?5", code):
+            bad.append("%s：又出现了 alpha .5 的参考带 —— 那是页面自己手画生长曲线的指纹；"
+                       "应挂 #growthChart 交给外壳的 window.gmGrowth（13 · 13.2 参考带是 .10–.14）" % f)
+        if ".gm-growth__band{" in code or ".gm-growth__line{" in code:
+            bad.append("%s：又在本页定义生长曲线样式 —— 母题配方只在**外壳**一份" % f)
+        if "growthChart" in code:
+            for need, why in ((r"source:\s*'[^']+'", "必须标注数据源版本（13 · 13.12「文档标注数据源版本」）"),
+                              ("p50:", "必须给 P50（中位数锚定的百分位读数需要）"),
+                              ("window.gmGrowth", "必须调用外壳实现")):
+                if not re.search(need if need.startswith("source") else re.escape(need) + r"[^\n]{0,40}", code):
+                    bad.append("%s：生长曲线缺少 %s —— %s" % (f, need, why))
+
+    # ⑥ 独立演示页：同源静态版的数值必须与外壳逐项相等
+    if os.path.exists(DEMO):
+        d = _io.open(DEMO, encoding="utf-8").read()
+        for sel, needle, why in [
+            (".gx-band{", "rgba(169,227,212,.12)", "参考带透明度必须与外壳同值（.12）"),
+            (".gx-band-top{", "stroke-width:1", "参考带上界细白描边"),
+            (".gx-warn{", "stroke-width:1.5", "警戒线 1.5px"),
+            (".gx-warn{", "stroke-dasharray", "警戒线虚线"),
+            (".gx-line{", "stroke:#F77FA3", "主曲线 Rose-500"),
+            (".gx-line{", "stroke-width:2.5", "主曲线 2.5px"),
+            (".gx-dot{", "fill:#FFF", "端点白芯"),
+            (".gx-dot{", "stroke:#F77FA3", "端点粉描边"),
+            (".gx-grid{", "stroke-width:1", "网格线 1px"),
+            (".gx-tick{", "font-size:12px", "轴刻度 12px"),
+            (".gx-tick{", "tabular-nums", "轴刻度等宽数字"),
+        ]:
+            b = block(d, sel)
+            if b is None:
+                bad.append("%s：缺少同源配方 %s（独立页拿不到站点外壳，必须自带一份，%s）" % (DEMO, sel, why))
+            elif needle not in b:
+                bad.append("%s：%s 里没有 `%s` —— 与外壳配方漂移（%s）" % (DEMO, sel, needle, why))
+        if 'role="img"' not in d or "aria-label" not in d:
+            bad.append("%s：静态版生长曲线必须 role=img + aria-label（读屏读不到路径）" % DEMO)
+
+    if bad:
+        for b in bad:
+            rec("FAIL", "growth-chart", b)
+        return False
+    rec("OK", "growth-chart", "生长曲线·百分位带符合 13 · 13.2 与 04 · 4.2–4.3.2："
+        "参考带 alpha .12（.10–.14）+ 细白描边上界 · 主曲线 Rose-500 2.5px + 端点白芯粉描边 · "
+        "P3/P97 虚线 1.5px 三级色（可一键开关）· 网格 --lg-divider 1px · 刻度 caption 12px 等宽 · "
+        "入场 0.6s · 白玻璃 Tooltip · role=img + 隐藏数据表 + 中位数锚定的百分位读数")
+    return True
+
+
 # 门禁登记表：名字 → 函数。集中登记是为了支持 `--only <名>`（负向测试要能
 # 精确地"只跑这一条"，否则注入缺陷后先被其它门禁拦下，反而证明不了目标门禁有效）。
 GATES = [
@@ -1085,8 +1238,9 @@ GATES = [
     ("hex-case", hex_case), ("mirror", mirror_sync), ("dark", dark_contrast),
     ("exports", exports_check), ("logo-guard", logo_guard), ("loading-spec", loading_spec),
     ("css-syntax", css_syntax), ("feedback-spec", feedback_spec),
-    ("undefined-token", undefined_tokens), ("data-present", data_present),
+    ("undefined-token", undefined_tokens), ("data-present", data_present), ("growth-chart", growth_chart),
 ]
+
 
 
 

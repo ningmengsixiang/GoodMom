@@ -407,15 +407,7 @@ textarea.note{width:100%;min-height:84px;border-radius:18px;border:1px solid rgb
 
     <div>
       <div class="card" style="padding:16px 18px">
-        <div style="display:flex;align-items:baseline;gap:10px"><b style="font-size:15px">体重生长曲线</b><span style="font-size:11.5px;color:var(--t3)">WHO · P3–P97 · 示例</span><span class="tg g" style="margin-left:auto">P62 · 正常</span></div>
-        <svg width="100%" height="150" viewBox="0 0 380 150" preserveAspectRatio="none" style="margin-top:10px">
-          <path d="M0,26 L60,22 L130,17 L200,13 L270,10 L340,7 L380,6 L380,62 L340,64 L270,67 L200,70 L130,74 L60,78 L0,82 Z" fill="rgba(169,227,212,.5)"/>
-          <path d="M0,26 L60,22 L130,17 L200,13 L270,10 L340,7 L380,6" fill="none" stroke="#6FC9B4" stroke-width="1.3" stroke-dasharray="4 5"/>
-          <path d="M0,82 L60,78 L130,74 L200,70 L270,67 L340,64 L380,62" fill="none" stroke="#6FC9B4" stroke-width="1.3" stroke-dasharray="4 5"/>
-          <path d="M0,56 L60,50 L130,46 L200,42 L270,36 L340,30 L380,26" fill="none" stroke="#F77FA3" stroke-width="2.6" stroke-linecap="round"/>
-          <circle cx="270" cy="36" r="4.5" fill="#FFF" stroke="#F77FA3" stroke-width="2.4"/>
-        </svg>
-        <div style="display:flex;gap:14px;font-size:11px;color:var(--t3);margin-top:6px"><span><i style="display:inline-block;width:10px;height:10px;background:rgba(169,227,212,.7);border-radius:2px;margin-right:4px"></i>P3–P97</span><span><i style="display:inline-block;width:10px;height:10px;background:#F77FA3;border-radius:2px;margin-right:4px"></i>实测</span></div>
+        <div id="growthChart"></div>
       </div>
       <div class="card" style="padding:16px 18px;margin-top:14px">
         <div style="display:flex;align-items:center;margin-bottom:10px"><b style="font-size:15px">疫苗计划</b><span class="tg o" style="margin-left:auto">麻腮风 · 剩 5 天</span></div>
@@ -836,4 +828,29 @@ textarea.note{width:100%;min-height:84px;border-radius:18px;border:1px solid rgb
   [].slice.call(document.querySelectorAll('.tg.multi')).forEach(function(t){
     t.addEventListener('click',function(){t.classList.toggle('m-on');});
   });
+})();
+
+/* ═══ 13 · 13.2 生长曲线 · 百分位带 —— 图形与交互在外壳（window.gmGrowth）═══
+   数据源必须在图上标注（13 · 13.12「参考带/百分位不可用错标准 … 文档标注数据源版本」）。
+   本页给的是**示意数据**，取值口径对齐 WHO 2006 · 0–24 月龄体重标准表量级。 */
+(function(){
+  var d = {
+    title:'体重生长曲线', tone:'mint', seriesName:'宝宝实测',
+    source:'WHO 2006 · 0–24 月龄', bandLabel:'P3–P97 · 示意数据',
+    xName:'月龄', xUnit:'月', yName:'体重', yUnit:'kg',
+    x:[0,3,6,9,12,15,18,21,24], xTicks:[0,6,12,18,24],
+    yTicks:[6,8,10,12,14],
+    p3: [2.5,4.6,6.1,7.1,7.7,8.3,8.8,9.2,9.7],
+    p50:[3.3,6.4,7.9,8.9,9.6,10.3,10.9,11.5,12.2],
+    p97:[4.3,7.1,9.2,10.5,11.5,12.4,13.2,13.9,14.6],
+    actual:[3.4,6.2,7.9,8.9,9.7,10.5,11.5,12.0,12.4],
+    focus:18
+  };
+  /* ⚠️ 必须等 DOMContentLoaded：模块脚本在文档里位于**外壳脚本之前**，
+     外壳的 window.gmGrowth 此刻还没定义 —— 直接调用会被守卫静默吞掉（实测图不出现）。 */
+  function boot(){
+    var el = document.getElementById('growthChart');
+    if(el && window.gmGrowth) window.gmGrowth(el, d);
+  }
+  if(document.readyState === 'loading') document.addEventListener('DOMContentLoaded', boot); else boot();
 })();

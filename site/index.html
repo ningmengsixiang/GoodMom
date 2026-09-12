@@ -23,7 +23,13 @@
      实测：节点存在于 20px 处、样式全部生效，但**视觉完全不可见**（无任何静态检查能发现）。
      故由外壳统一给出避让值，模块侧只读 --gm-toast-top（缺省 20px，供未套外壳的独立页）。 */
   --gm-toast-top:76px;
+  /* 13 · 13.2 图表**导引件**（网格 / 坐标 / 警戒虚线）的专用令牌。
+     为什么不直接用 --lg-text-tertiary：页面把它当"次级文字"用（多处 11–12px 正文），
+     个别页面甚至把 tertiary 别名成了次级色 —— 拿它画警戒线会让虚线跟文字一样重，
+     违背 04 · 4.1「数据最亮：网格/坐标/背景一律退后」。故由外壳独立给出，两端一致。 */
+  --gm-guide:#9AA2B0;
 }
+[data-theme="dark"]{--gm-guide:#A6ADB9}
 *{box-sizing:border-box}
 html{-webkit-text-size-adjust:100%}
 body{margin:0;font-family:var(--sh-font);color:var(--sh-t);line-height:1.7;-webkit-font-smoothing:antialiased;
@@ -121,6 +127,94 @@ body{margin:0;font-family:var(--sh-font);color:var(--sh-t);line-height:1.7;-webk
      描述列表完全没有 8.2.13 要求的「省略 + Tooltip 全文」；折叠只有一个 0s 过渡的 details。
    模块侧只加 class 取用（.gm-tbl / .gm-desc / .gm-fold），不再各写一份。
    ══════════════════════════════════════════════════════════════════════════ */
+
+/* ══════════════════════════════════════════════════════════════════════════
+   13 · 13.2 生长曲线（百分位带）/ 04 · 4.2–4.3.2 —— 母题唯一实现
+   为什么放外壳：这是**系统母题**（12 章把「生长曲线」列为第五条品牌母题），
+   实测却有 3 处各画一遍的静态 SVG，且三处都把参考带画成了 alpha .5（规范 .10–.14），
+   主曲线 2.4–2.6px（规范 2.5）、警戒线用薄荷色 1.3px（规范：1.5px 三级色虚线）、
+   网格线 .05（规范 --lg-divider .08）、没有坐标轴 / Tooltip / 交互。
+   现收敛为一份：`.gm-growth` + `window.gmGrowth(el, data)`。
+   ══════════════════════════════════════════════════════════════════════════ */
+.gm-growth{position:relative;width:100%}
+.gm-growth__head{display:flex;align-items:baseline;gap:10px;flex-wrap:wrap;margin-bottom:8px}
+.gm-growth__head b{font-size:15px;color:var(--lg-text-primary,#343A46)}
+.gm-growth__src{font-size:12px;line-height:16px;color:var(--lg-text-secondary,#4F5B6E)}
+.gm-growth__val{margin-left:auto;font-size:14px;line-height:20px;font-weight:600;
+  color:var(--lg-text-primary,#343A46);font-variant-numeric:tabular-nums}
+.gm-growth__val i{font-style:normal;font-weight:400;font-size:12px;color:var(--lg-text-secondary,#4F5B6E)}
+.gm-growth__tools{display:flex;gap:8px;align-items:center;margin-left:auto}
+/* 一键 P3/P97 红线开关（13.2「一键 P3/P97 红线开关」） */
+.gm-growth__toggle{display:inline-flex;align-items:center;gap:6px;height:26px;padding:0 10px;
+  font:inherit;font-size:12px;font-weight:500;color:var(--lg-text-secondary,#4F5B6E);cursor:pointer;
+  border-radius:16px;background:var(--lg-glass-control,rgba(255,255,255,.35));
+  border:1px solid var(--lg-divider,rgba(58,52,84,.10))}
+/* D9 二元规则：品牌亮粉底 → **深字 #343A46**（白字在亮粉上仅 2.9:1）。
+   这里不能借 --lg-text-on-accent：个别页面把它定义成 #FFFFFF，实测白字压亮粉 2.46:1。 */
+.gm-growth__toggle[aria-pressed="true"]{background:var(--mmh-grad-action-hc,#F77FA3);
+  color:#343A46;border-color:transparent;font-weight:600}
+.gm-growth__toggle:focus-visible{outline:var(--lg-ring-width,2px) solid var(--lg-ring-color);outline-offset:2px}
+.gm-growth__svg{display:block;width:100%;height:auto;overflow:visible;touch-action:pan-y}
+/* M 家长端形态（13.2）：嵌在手机模型里的小尺寸版，只有带 + 线 + 端点 */
+.gm-growth--mini .gm-growth__stage{position:relative}
+.gm-growth__svg--mini{height:74px}
+/* 入场：04 · 4.2「入场 0.6s ease-out 淡入上浮」。reduce-motion 由 shell 的 0.01ms 全局规则接管。 */
+.gm-growth__plot{animation:gmGrowthRise .6s var(--lg-ease-out,cubic-bezier(.22,1,.36,1)) both}
+@keyframes gmGrowthRise{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+/* 图例：白玻璃 chip + 色点 8px + caption（04 · 4.2） */
+.gm-growth__legend{display:flex;gap:14px;flex-wrap:wrap;align-items:center;margin-top:8px;
+  font-size:12px;line-height:16px;color:var(--lg-text-secondary,#4F5B6E)}
+.gm-growth__legend span{display:inline-flex;align-items:center;gap:6px;
+  padding:3px 10px;border-radius:999px;background:var(--lg-glass-popover,rgba(255,255,255,.6));
+  border:1px solid var(--lg-divider,rgba(58,52,84,.10))}
+.gm-growth__legend i{width:8px;height:8px;border-radius:50%;flex:none}
+/* 图形元素 */
+.gm-growth__grid{stroke:var(--lg-divider,rgba(58,52,84,.08));stroke-width:1;shape-rendering:crispEdges}
+.gm-growth__axis{stroke:var(--lg-divider,rgba(58,52,84,.08));stroke-width:1;shape-rendering:crispEdges}
+.gm-growth__band{fill:rgba(169,227,212,.12)}          /* 参考带 alpha .10–.14（13.2） */
+.gm-growth[data-tone="rose"] .gm-growth__band{fill:rgba(255,208,216,.12)}
+.gm-growth__band-top{fill:none;stroke:rgba(255,255,255,.9);stroke-width:1}   /* 细白描边上界 */
+.gm-growth__p50{fill:none;stroke:rgba(255,255,255,.9);stroke-width:1;stroke-dasharray:3 3}   /* P50 中线 */
+.gm-growth__warn{fill:none;stroke:var(--gm-guide,#9AA2B0);stroke-width:1.5;stroke-dasharray:4 4}
+.gm-growth[data-warn-alert="1"] .gm-growth__warn{stroke:var(--lg-sem-attention,#8D5A15)}
+.gm-growth__line{fill:none;stroke:#F77FA3;stroke-width:2.5;stroke-linecap:round;stroke-linejoin:round}
+.gm-growth__dot{fill:#FFF;stroke:#F77FA3;stroke-width:2}   /* 端点白芯 + 2px 粉描边（04 · 4.3.2） */
+.gm-growth__pt{fill:#F77FA3;stroke:#FFF;stroke-width:1.5;cursor:pointer}
+.gm-growth__pt[data-tone="attention"]{fill:var(--lg-sem-attention,#8D5A15)}
+.gm-growth__pt[data-tone="risk"]{fill:var(--lg-sem-risk,#B72F42)}
+.gm-growth__pt.is-on{stroke-width:2.5}
+.gm-growth__tick{font-size:12px;fill:var(--lg-text-secondary,#4F5B6E);font-variant-numeric:tabular-nums}
+.gm-growth__axname{font-size:12px;fill:var(--lg-text-secondary,#4F5B6E)}
+.gm-growth__sel{fill:rgba(247,127,163,.14);stroke:rgba(247,127,163,.5);stroke-width:1;stroke-dasharray:3 3}
+/* Tooltip：白玻璃泡 rgba(255,255,255,.75) + blur 20 + 圆角 16 + 柔影 md（04 · 4.2） */
+.gm-growth__tip{position:absolute;z-index:3;pointer-events:none;opacity:0;transform:translate(-50%,-100%);
+  padding:8px 12px;border-radius:16px;white-space:nowrap;
+  background:rgba(255,255,255,.75);-webkit-backdrop-filter:blur(20px);backdrop-filter:blur(20px);
+  border:1px solid var(--lg-divider,rgba(58,52,84,.10));box-shadow:var(--lg-shadow-md,0 8px 24px rgba(58,52,84,.08));
+  transition:opacity 140ms ease}
+.gm-growth__tip.is-on{opacity:1}
+.gm-growth__tip b{display:block;font-size:12px;font-weight:500;color:var(--lg-text-secondary,#4F5B6E)}
+.gm-growth__tip span{display:block;font-size:14px;line-height:20px;font-weight:600;color:#B23A63;
+  font-variant-numeric:tabular-nums}
+/* 异常点玻璃气泡建议（13.2「P3 以下 / P97 以上 → 数据点转琥珀/红 + 玻璃气泡建议文案」） */
+.gm-growth__note{display:flex;gap:8px;align-items:flex-start;margin-top:8px;padding:9px 12px;
+  border-radius:18px;font-size:12px;line-height:18px;   /* 02 · 2.4 圆角档：18（16 不在档） */
+  background:rgba(255,255,255,.75);-webkit-backdrop-filter:blur(20px);backdrop-filter:blur(20px);
+  border:1px solid var(--lg-divider,rgba(58,52,84,.10))}
+.gm-growth__note[data-tone="attention"]{color:var(--lg-sem-attention,#8D5A15)}
+.gm-growth__note[data-tone="risk"]{color:var(--lg-sem-risk,#B72F42)}
+.gm-growth__note i{width:8px;height:8px;border-radius:50%;flex:none;margin-top:5px;background:currentColor}
+/* 12px 辅助文字一律次级色：02 · 2.1.1 只允许三级色用于 ≥24px 常规，
+   三级色 #9AA2B0 在 12px 上约 2.6:1（page-qa 实测 2.57:1）—— 与 04 · 4.2
+   「刻度标签 caption 12px 三级色」冲突时以 02 · 2.1.1 从严（同 TB-15-01 对表头的裁决口径）。
+   --gm-guide 只留给**非文字**导引件（网格线、警戒虚线）。 */
+.gm-growth__hint{margin-top:6px;font-size:12px;line-height:16px;color:var(--lg-text-secondary,#4F5B6E)}
+/* 10 · 10.4：≤767px 热区 ≥44×44。开关视觉高度只有 26，用 ::after 扩热区（10 章认可的做法）。 */
+@media (max-width:767px){
+  .gm-growth__toggle{position:relative}
+  .gm-growth__toggle::after{content:"";position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);
+    width:100%;min-width:44px;height:100%;min-height:44px}
+}
 
 /* ── 玻璃表格（03 · 3.7 + TB-15-01/02）──────────────────────────────────
    表头 body-sm 600 + 次级色；行高 44–52；hairline 分隔；hover 淡白底。
@@ -2149,22 +2243,8 @@ import { GmIcon } from "@goodmom/icons";
     <div class="grid g2">
       <div class="panel glass-l2">
         <h3 class="panel-h3"><i></i>生长曲线 · 百分位带（13 · 13.2 母题）<span class="spec-chip">13 · 13.2</span></h3>
-        <p class="mh">参考带 P3–P97（薄荷淡带）· 宝宝实测曲线（蜜桃粉）· 数值聚焦</p>
-        <div style="display:flex;align-items:baseline;gap:10px;flex-wrap:wrap">
-          <b class="num" style="font-size:24px;color:var(--mmh-rose-700,#B23A63)">P62</b><span style="font-size:12px;color:var(--lg-text-secondary)">18 月龄 · 体重 11.2kg</span>
-          <span class="badge" style="margin-left:auto;font-size:10px;padding:2px 9px;background:var(--mmh-mint-100,#E2F6F0);color:#25715D">达标</span>
-        </div>
-        <svg width="100%" height="150" viewBox="0 0 380 150" preserveAspectRatio="none">
-          <defs><linearGradient id="preview-index--band1" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#A9E3D4" stop-opacity=".55"/><stop offset="1" stop-color="#A9E3D4" stop-opacity=".16"/></linearGradient></defs>
-          <line x1="0" y1="20" x2="380" y2="20" stroke="rgba(58,52,84,.05)"/>
-          <line x1="0" y1="78" x2="380" y2="78" stroke="rgba(58,52,84,.05)"/>
-          <path d="M0,26 L60,22 L130,17 L200,13 L270,10 L340,7 L380,6 L380,62 L340,64 L270,67 L200,70 L130,74 L60,78 L0,82 Z" fill="url(#band1)"/>
-          <path d="M0,26 L60,22 L130,17 L200,13 L270,10 L340,7 L380,6" fill="none" stroke="#6FC9B4" stroke-width="1.4" stroke-dasharray="4 5" opacity=".8"/>
-          <path d="M0,82 L60,78 L130,74 L200,70 L270,67 L340,64 L380,62" fill="none" stroke="#6FC9B4" stroke-width="1.4" stroke-dasharray="4 5" opacity=".8"/>
-          <path d="M0,56 L60,50 L130,46 L200,42 L270,36 L340,30 L380,26" fill="none" stroke="#F77FA3" stroke-width="2.6" stroke-linecap="round"/>
-          <circle cx="270" cy="36" r="4.5" fill="#FFF" stroke="#F77FA3" stroke-width="2.4"/>
-        </svg>
-        <div class="band-legend"><span><i style="background:rgba(169,227,212,.6)"></i>P3–P97 参考带</span><span><i style="background:#F77FA3"></i>宝宝实测</span><span><i style="background:rgba(255,255,255,.9);border:1px solid rgba(58,52,84,.2)"></i>P3/P97 警戒线</span></div>
+        <p class="mh">参考带 P3–P97（薄荷淡带 + 细白描边上界）· 实测曲线（Rose-500 2.5px）· 悬停单点 / 拖拽框选 / 一键开关警戒线</p>
+        <div id="preview-index--growthChart"></div>
       </div>
 
       <div class="panel glass-l2">
@@ -2314,11 +2394,7 @@ import { GmIcon } from "@goodmom/icons";
   <div class="body">
     <div class="mnav mglass"><svg viewBox="0 0 24 24"><path d="M20 12H5.5M11 6.5 5.5 12l5.5 5.5"/></svg><span class="mt">朵朵 · 18 月龄</span><svg viewBox="0 0 24 24"><path d="M9 6.6h11M9 12h11M9 17.4h11"/></svg></div>
     <div class="mkpi mglass"><span class="l">体重生长曲线 · WHO 参考 · 当前百分位</span><span class="v" style="color:var(--mmh-rose-700,#B23A63)">P62</span>
-      <svg width="100%" height="74" viewBox="0 0 200 74" preserveAspectRatio="none">
-        <path d="M0,16 L40,13 L80,10 L120,8 L160,6 L200,5 L200,42 L160,43 L120,45 L80,48 L40,50 L0,52 Z" fill="rgba(169,227,212,.5)"/>
-        <path d="M0,34 L40,30 L80,27 L120,24 L160,21 L200,19" fill="none" stroke="#F77FA3" stroke-width="2.4" stroke-linecap="round"/>
-        <circle cx="120" cy="24" r="3.6" fill="#FFF" stroke="#F77FA3" stroke-width="2"/>
-      </svg></div>
+      <div id="preview-index--growthChartMini"></div></div>
     <div class="mrow2 mglass"><span class="mdot ok"></span><span class="md2"><b>疫苗：12 月龄麻腮风</b><span>已预约 · 周五 09:30</span></span><b style="color:var(--mmh-rose-700,#B23A63);font-size:10px">预约</b></div>
     <div class="mrow2 mglass"><span class="mdot warn"></span><span class="md2"><b>提醒：21 月龄儿保体检</b><span>剩余 90 天 · 自动提醒中</span></span></div>
     <div class="mrow2 mglass"><span class="mdot ok"></span><span class="md2"><b>AI 随访建议</b><span>语言发育良好，加强亲子共读</span></span></div>
@@ -3231,6 +3307,47 @@ function MODROOT_preview_index(){return document.getElementById("gm-mod-preview-
   render(SETS.good,NAME.good);
 })();
 
+/* ═══ 13 · 13.2 生长曲线 · 百分位带 —— 图形与交互在外壳（window.gmGrowth）═══
+   数据源必须在图上标注（13 · 13.12「参考带/百分位不可用错标准 … 文档标注数据源版本」）。
+   本页给的是**示意数据**，取值口径对齐 WHO 2006 · 0–24 月龄体重标准表量级。 */
+(function(){
+  var d = {
+    title:'体重生长曲线', tone:'mint', seriesName:'宝宝实测',
+    source:'WHO 2006 · 0–24 月龄', bandLabel:'P3–P97 · 示意数据',
+    xName:'月龄', xUnit:'月', yName:'体重', yUnit:'kg',
+    x:[0,3,6,9,12,15,18,21,24], xTicks:[0,6,12,18,24],
+    yTicks:[6,8,10,12,14],
+    p3: [2.5,4.6,6.1,7.1,7.7,8.3,8.8,9.2,9.7],
+    p50:[3.3,6.4,7.9,8.9,9.6,10.3,10.9,11.5,12.2],
+    p97:[4.3,7.1,9.2,10.5,11.5,12.4,13.2,13.9,14.6],
+    actual:[3.4,6.2,7.9,8.9,9.7,10.5,11.5,12.0,9.4],
+    focus:18,
+    /* 末点（24 月龄 9.4kg）刻意落在 P3（9.7）以下 —— 13 · 13.2 要求演示
+       「P3 以下 / P97 以上 → 数据点转琥珀/红 + 玻璃气泡建议文案」，全在带内的数据演示不到这条。
+       本面板是**规范演示**（spec-chip 13 · 13.2），不是真实档案；档案页那条曲线全在带内。 */
+    advisories:[{x:24,tone:'attention',text:'24 月龄 · 体重 9.4kg 低于 P3（9.7kg）：建议 2 周内复测并评估喂养与内分泌（示意）'}]
+  };
+  /* ⚠️ 必须等 DOMContentLoaded：模块脚本在文档里位于**外壳脚本之前**，
+     外壳的 window.gmGrowth 此刻还没定义 —— 直接调用会被守卫静默吞掉（实测图不出现）。 */
+  function boot(){
+    var el = document.getElementById('preview-index--growthChart');
+    if(el && window.gmGrowth) window.gmGrowth(el, d);
+  }
+  if(document.readyState === 'loading') document.addEventListener('DOMContentLoaded', boot); else boot();
+})();
+
+/* 13 · 13.2 的 M 家长端形态：同一渲染器的 mini 变体（只留参考带 / 主曲线 / 端点，点按看单点） */
+(function(){
+  var d = {
+    title:'体重生长曲线', seriesName:'宝宝实测', source:'WHO 2006 · 0–24 月龄', mini:true,
+    xName:'月龄', xUnit:'月', yName:'体重', yUnit:'kg', x:[0,6,12,18,24],
+    p3: [2.5,6.1,7.7,8.8,9.7], p50:[3.3,7.9,9.6,10.9,12.2], p97:[4.3,9.2,11.5,13.2,14.6],
+    actual:[3.4,7.9,9.7,11.5,12.4], focus:18
+  };
+  function boot(){ var el = document.getElementById('preview-index--growthChartMini'); if(el && window.gmGrowth) window.gmGrowth(el, d); }
+  if(document.readyState === 'loading') document.addEventListener('DOMContentLoaded', boot); else boot();
+})();
+
 </script>
 </section>
 <section class="gm-mod gm-mod--preview-examples" id="gm-mod-preview-examples" role="tabpanel" aria-label="组件与状态" data-title="组件与状态">
@@ -3639,15 +3756,7 @@ background:rgba(255,255,255,.5);border:1px solid var(--lg-divider,rgba(58,52,84,
 
     <div>
       <div class="card" style="padding:16px 18px">
-        <div style="display:flex;align-items:baseline;gap:10px"><b style="font-size:15px">体重生长曲线</b><span style="font-size:11.5px;color:var(--t3)">WHO · P3–P97 · 示例</span><span class="tg g" style="margin-left:auto">P62 · 正常</span></div>
-        <svg width="100%" height="150" viewBox="0 0 380 150" preserveAspectRatio="none" style="margin-top:10px">
-          <path d="M0,26 L60,22 L130,17 L200,13 L270,10 L340,7 L380,6 L380,62 L340,64 L270,67 L200,70 L130,74 L60,78 L0,82 Z" fill="rgba(169,227,212,.5)"/>
-          <path d="M0,26 L60,22 L130,17 L200,13 L270,10 L340,7 L380,6" fill="none" stroke="#6FC9B4" stroke-width="1.3" stroke-dasharray="4 5"/>
-          <path d="M0,82 L60,78 L130,74 L200,70 L270,67 L340,64 L380,62" fill="none" stroke="#6FC9B4" stroke-width="1.3" stroke-dasharray="4 5"/>
-          <path d="M0,56 L60,50 L130,46 L200,42 L270,36 L340,30 L380,26" fill="none" stroke="#F77FA3" stroke-width="2.6" stroke-linecap="round"/>
-          <circle cx="270" cy="36" r="4.5" fill="#FFF" stroke="#F77FA3" stroke-width="2.4"/>
-        </svg>
-        <div style="display:flex;gap:14px;font-size:11px;color:var(--t3);margin-top:6px"><span><i style="display:inline-block;width:10px;height:10px;background:rgba(169,227,212,.7);border-radius:2px;margin-right:4px"></i>P3–P97</span><span><i style="display:inline-block;width:10px;height:10px;background:#F77FA3;border-radius:2px;margin-right:4px"></i>实测</span></div>
+        <div id="preview-examples--growthChart"></div>
       </div>
       <div class="card" style="padding:16px 18px;margin-top:14px">
         <div style="display:flex;align-items:center;margin-bottom:10px"><b style="font-size:15px">疫苗计划</b><span class="tg o" style="margin-left:auto">麻腮风 · 剩 5 天</span></div>
@@ -4071,6 +4180,31 @@ function MODROOT_preview_examples(){return document.getElementById("gm-mod-previ
   [].slice.call(document.querySelectorAll('#gm-mod-preview-examples .tg.multi')).forEach(function(t){
     t.addEventListener('click',function(){t.classList.toggle('m-on');});
   });
+})();
+
+/* ═══ 13 · 13.2 生长曲线 · 百分位带 —— 图形与交互在外壳（window.gmGrowth）═══
+   数据源必须在图上标注（13 · 13.12「参考带/百分位不可用错标准 … 文档标注数据源版本」）。
+   本页给的是**示意数据**，取值口径对齐 WHO 2006 · 0–24 月龄体重标准表量级。 */
+(function(){
+  var d = {
+    title:'体重生长曲线', tone:'mint', seriesName:'宝宝实测',
+    source:'WHO 2006 · 0–24 月龄', bandLabel:'P3–P97 · 示意数据',
+    xName:'月龄', xUnit:'月', yName:'体重', yUnit:'kg',
+    x:[0,3,6,9,12,15,18,21,24], xTicks:[0,6,12,18,24],
+    yTicks:[6,8,10,12,14],
+    p3: [2.5,4.6,6.1,7.1,7.7,8.3,8.8,9.2,9.7],
+    p50:[3.3,6.4,7.9,8.9,9.6,10.3,10.9,11.5,12.2],
+    p97:[4.3,7.1,9.2,10.5,11.5,12.4,13.2,13.9,14.6],
+    actual:[3.4,6.2,7.9,8.9,9.7,10.5,11.5,12.0,12.4],
+    focus:18
+  };
+  /* ⚠️ 必须等 DOMContentLoaded：模块脚本在文档里位于**外壳脚本之前**，
+     外壳的 window.gmGrowth 此刻还没定义 —— 直接调用会被守卫静默吞掉（实测图不出现）。 */
+  function boot(){
+    var el = document.getElementById('preview-examples--growthChart');
+    if(el && window.gmGrowth) window.gmGrowth(el, d);
+  }
+  if(document.readyState === 'loading') document.addEventListener('DOMContentLoaded', boot); else boot();
 })();
 
 </script>
@@ -5435,7 +5569,7 @@ bash scripts/print-manual.sh</pre>
 <h4>⑦ 行业与工程</h4>
 <table><thead><tr><th>#</th><th>组件</th><th>端</th><th>PC 规范</th><th>移动规范/形态</th><th>备注</th></tr></thead><tbody><tr><td>79</td><td>告警处置 / 事件流行业卡</td><td>双</td><td>04.3.9、08.2.x</td><td>10.5.3、11.1 F</td><td>状态色语义</td></tr><tr><td>80</td><td>玻璃表格（行业列表）</td><td>PC</td><td>03.7</td><td>10.5.3 卡片化</td><td>—</td></tr><tr><td>81</td><td>AI 对话 / AI 组件</td><td>观察</td><td>08.1 AI 行</td><td>10.1 观察项</td><td>按需定制</td></tr><tr><td>82</td><td>工程能力（国际化/主题/无障碍）</td><td>双</td><td>08.1 其他</td><td>10.8/11.4</td><td>与视觉解耦</td></tr><tr><td>83</td><td>响应式适配容器 ResponsiveView</td><td>双</td><td>[08 · 8.2.20](#ch-08)</td><td>[10 · 10.11.1](#ch-10)</td><td>按容器宽度切 表格/减列/卡片流</td></tr><tr><td>84</td><td>高性能长列表 VirtualList</td><td>双</td><td>[08 · 8.2.21](#ch-08)</td><td>[10 · 10.11.2](#ch-10)</td><td>&gt;50 项或 &gt;200 行窗口化</td></tr></tbody></table>
 <h4>⑧ 妇幼领域 Maternal &amp; Child（妈咪好 GoodMom）</h4>
-<table><thead><tr><th>#</th><th>组件</th><th>端</th><th>PC 规范</th><th>移动规范/形态</th><th>基于引擎组件</th><th>备注</th></tr></thead><tbody><tr><td>85</td><td>孕周首页卡</td><td>M</td><td>—</td><td>13.3.1</td><td>孕期 App 首页母组件</td><td>孕周/预产期/进度带</td></tr><tr><td>86</td><td>产检计划/提醒卡</td><td>M</td><td>—</td><td>13.3.2</td><td>TimeLine+NoticeBar</td><td>按周状态</td></tr><tr><td>87</td><td>胎动/体重/宫高记录</td><td>M</td><td>—</td><td>13.3.7</td><td>表单+单图卡</td><td>记录流</td></tr><tr><td>88</td><td>分娩准备/产后待处理</td><td>M</td><td>—</td><td>13.3.7</td><td>Checklist+Steps 竖版</td><td>—</td></tr><tr><td>89</td><td>宝宝首页头像卡(月龄)</td><td>M</td><td>—</td><td>13.1 #5</td><td>Card+Avatar+KPI</td><td>—</td></tr><tr><td>90</td><td>生长曲线卡(百分位带)</td><td>双</td><td>13.2</td><td>13.2</td><td>面积图+参考带</td><td>母题组件</td></tr><tr><td>91</td><td>疫苗计划卡</td><td>双</td><td>13.3.3</td><td>13.3.3</td><td>Timeline+Tag</td><td>覆盖双端</td></tr><tr><td>92</td><td>儿保体检卡(月龄节点)</td><td>双</td><td>13.3.4</td><td>13.3.4</td><td>Timeline+Descriptions</td><td>—</td></tr><tr><td>93</td><td>喂养/睡眠/尿布记录</td><td>M</td><td>—</td><td>13.3.7</td><td>表单+图标行</td><td>快捷记录</td></tr><tr><td>94</td><td>随访队列(医护)</td><td>PC</td><td>13.3.5</td><td>—</td><td>玻璃表格+高危chip</td><td>医护工作台</td></tr><tr><td>95</td><td>高危/异常提醒条</td><td>双</td><td>13.3.6</td><td>13.3.6</td><td>Banner / NoticeBar</td><td>三通道语义</td></tr><tr><td>96</td><td>全生命周期轴</td><td>双</td><td>13.4</td><td>13.4</td><td>专用横/竖轴</td><td>阶段色母题</td></tr><tr><td>97</td><td>机构统计看板(儿保率/疫苗率)</td><td>PC</td><td>13.1 #13</td><td>—</td><td>04 大屏+KPI</td><td>机构管理端</td></tr><tr><td>98</td><td>档案时间线(历次随访聚合)</td><td>PC</td><td>13.1 #14</td><td>13.1 #14</td><td>Timeline 竖版</td><td>双端档案</td></tr></tbody></table>
+<table><thead><tr><th>#</th><th>组件</th><th>端</th><th>PC 规范</th><th>移动规范/形态</th><th>基于引擎组件</th><th>备注</th></tr></thead><tbody><tr><td>85</td><td>孕周首页卡</td><td>M</td><td>—</td><td>13.3.1</td><td>孕期 App 首页母组件</td><td>孕周/预产期/进度带</td></tr><tr><td>86</td><td>产检计划/提醒卡</td><td>M</td><td>—</td><td>13.3.2</td><td>TimeLine+NoticeBar</td><td>按周状态</td></tr><tr><td>87</td><td>胎动/体重/宫高记录</td><td>M</td><td>—</td><td>13.3.7</td><td>表单+单图卡</td><td>记录流</td></tr><tr><td>88</td><td>分娩准备/产后待处理</td><td>M</td><td>—</td><td>13.3.7</td><td>Checklist+Steps 竖版</td><td>—</td></tr><tr><td>89</td><td>宝宝首页头像卡(月龄)</td><td>M</td><td>—</td><td>13.1 #5</td><td>Card+Avatar+KPI</td><td>—</td></tr><tr><td>90</td><td>生长曲线卡(百分位带)</td><td>双</td><td>13.2</td><td>13.2</td><td>面积图+参考带</td><td>✅ 母题已落地（V2.9）：外壳 <code>window.gmGrowth()</code> 唯一实现（带 .12 / 主曲线 2.5px / 警戒线 1.5px 三级色虚线 / 悬停·框选·开关 + role=img + 隐藏数据表）；库组件待补</td></tr><tr><td>91</td><td>疫苗计划卡</td><td>双</td><td>13.3.3</td><td>13.3.3</td><td>Timeline+Tag</td><td>覆盖双端</td></tr><tr><td>92</td><td>儿保体检卡(月龄节点)</td><td>双</td><td>13.3.4</td><td>13.3.4</td><td>Timeline+Descriptions</td><td>—</td></tr><tr><td>93</td><td>喂养/睡眠/尿布记录</td><td>M</td><td>—</td><td>13.3.7</td><td>表单+图标行</td><td>快捷记录</td></tr><tr><td>94</td><td>随访队列(医护)</td><td>PC</td><td>13.3.5</td><td>—</td><td>玻璃表格+高危chip</td><td>医护工作台</td></tr><tr><td>95</td><td>高危/异常提醒条</td><td>双</td><td>13.3.6</td><td>13.3.6</td><td>Banner / NoticeBar</td><td>三通道语义</td></tr><tr><td>96</td><td>全生命周期轴</td><td>双</td><td>13.4</td><td>13.4</td><td>专用横/竖轴</td><td>阶段色母题</td></tr><tr><td>97</td><td>机构统计看板(儿保率/疫苗率)</td><td>PC</td><td>13.1 #13</td><td>—</td><td>04 大屏+KPI</td><td>机构管理端</td></tr><tr><td>98</td><td>档案时间线(历次随访聚合)</td><td>PC</td><td>13.1 #14</td><td>13.1 #14</td><td>Timeline 竖版</td><td>双端档案</td></tr></tbody></table>
 <hr>
 <h3>平铺后的使用规则</h3>
 <ol><li><b>一行一组件</b>：本表是全系统唯一组件索引（98 项，含妇幼领域 ⑧）。设计/评审先查行 → 再读对应章节；避免"同一个东西两套名字"。</li><li><b>端标记是承诺</b>：写「双」就必须双端都有形态（见列）；「PC/M」为该端禁用或暂缓时用 ⏸ 标注并留理由。</li><li><b>登记制度</b>：任何端新增组件 → 先查命名与术语（[14](#ch-14)）→ 图标（09.6）→ 端规范（10/11 或 08.2）→ 本表加行 → 14 补术语/状态登记。</li><li><b>命名统一</b>：表中「组件」列即中文标准名，EN 与代码命名见对应章节与 <code>lg-icon-*</code>（09）。</li><li><b>对应关系</b>：</li></ol>
@@ -6162,7 +6296,8 @@ Legend：   白玻璃 chip，色点 8px，caption 文字
 面积：  紫500 → transparent 的垂直渐变，起点 opacity 0.18
 次序列：青色 500 / 蓝色 500，宽度 2px；数据超过 3 序列改多面板或下钻
 高亮：  重点时刻加玻璃 point 卡片
-虚线：  预测/基线用 2px 虚线 三级色</pre>
+虚线：  预测/基线用 2px 虚线 三级色
+        （专条优先：13 · 13.2 生长曲线的 P3/P97 警戒线为 **1.5px**，从专条）</pre>
 <h4>4.3.3 柱状 / 条形图</h4>
 <ul><li>柱：圆角 6–8px（顶部圆角），紫渐变底（Liquid Purple）或同色 100→500 渐变。</li><li>对比序列用青/蓝，最多 2 序列；禁止堆叠超过 3 层。</li><li>横向条形：行高 20–24，圆角 10，数值标注在条右 13px 600 字重。</li><li>负值/告警条用对应状态色。</li></ul>
 <h4>4.3.4 环形图（Donut）</h4>
@@ -7108,6 +7243,16 @@ Tooltip：玻璃气泡显示 “月龄 18 月 · 体重 11.2kg · P62”</pre>
 <h4>交互（双端）</h4>
 <pre>PC 医护：鼠标悬停显示单点明细；拖拽选中区间可“框选异常区间”；一键 P3/P97 红线开关
 M 家长：长按显示单点；滑动沿曲线回看；异常点在图中做玻璃气泡并给“已随访”标记</pre>
+<h4>落地实现（V2.9）</h4>
+<p>母题统一由外壳的 <b><code>window.gmGrowth(el, data)</code></b> 渲染（站点唯一实现；独立演示页保留同源静态一份， 由 <code>audit.py growth-chart</code> 逐项比对数值）。页面只给数据： <code>{xName, xUnit, yName, yUnit, source, x[], p3[], p50[], p97[], actual[], focus, advisories[]}</code>； <code>mini:true</code> 出 M 家长端形态（只留参考带 / 主曲线 / 端点，点按取最近单点）。</p>
+<p><b>本节视觉规则的实测落地值</b>（旧实现三处各画一遍，全部偏离）：</p>
+<table><thead><tr><th>规则</th><th>规范值</th><th>旧实现实测</th><th>现取值</th></tr></thead><tbody><tr><td>参考带填充</td><td>alpha <b>.10–.14</b></td><td><code>.5</code>（<b>四倍浓</b>，两处）+ 渐变 <code>.55→.16</code></td><td><code>rgba(169,227,212,.12)</code></td></tr><tr><td>参考带上界</td><td><b>细白描边</b></td><td>薄荷色 1.3–1.4px 虚线（把警戒线的画法用在了带上界）</td><td><code>rgba(255,255,255,.9)</code> 1px</td></tr><tr><td>主曲线</td><td>Rose-500 <code>#F77FA3</code> <b>2.5px</b></td><td><code>2.4</code> / <code>2.6</code></td><td><code>#F77FA3</code> 2.5px + round</td></tr><tr><td>端点</td><td>白芯 + 粉描边</td><td>白芯 ✓（r=4.5，视觉 9px）</td><td>白芯 <code>r=3</code>（6px，04 · 4.3.2）+ 2px 粉描边</td></tr><tr><td>警戒线 P3/P97</td><td>虚线 <b>1.5px 三级色</b></td><td>薄荷色 1.3px 虚线（颜色与线宽都不对）</td><td>1.5px 虚线 + <code>--gm-guide</code>（= 三级色档）</td></tr><tr><td>网格线</td><td><code>--lg-divider</code> 1px</td><td><code>rgba(58,52,84,.05)</code></td><td><code>--lg-divider</code> 1px，去两端刻度</td></tr><tr><td>轴刻度</td><td>caption 12px + 等宽</td><td>无坐标轴</td><td>12px / <code>tabular-nums</code></td></tr><tr><td>Tooltip</td><td>白玻璃泡 .75 + blur 20 + 圆角 16</td><td>无</td><td>同值；标题 12px 次级、数值 600 主色</td></tr><tr><td>入场</td><td>0.6s ease-out</td><td>无</td><td><code>gmGrowthRise .6s</code></td></tr><tr><td>交互</td><td>悬停单点 / 拖拽框选 / P3–P97 开关</td><td><b>一条都没有</b></td><td>三条全部实现（触摸=长按取最近单点）</td></tr><tr><td>无障碍</td><td>图形对 AT 不可见</td><td>无</td><td><code>role="img"</code> + <code>aria-label</code> 概述 + 视觉隐藏数据表</td></tr></tbody></table>
+<p><b>两处口径裁决</b>（都取"从严"一侧，理由写明）：</p>
+<ol><li><b>轴刻度文字色</b>：04 · 4.2 写「刻度标签 caption 12px <b>三级色</b>」，但 02 · 2.1.1 规定三级色只可用于</li></ol>
+<p>≥24px 常规 —— 三级色 <code>#9AA2B0</code> 在 12px 上实测 <b>2.57:1</b>（page-qa 当场抓到）。 与 TB-15-01 对表头的裁决同口径：<b>以 02 · 2.1.1 为准，12px 文字回次级色</b>。 <code>--gm-guide</code>（三级色档）只用于<b>非文字</b>导引件（网格线、警戒虚线）。</p>
+<ol><li><b>警戒线线宽</b>：04 · 4.3.2 的通用基线虚线是「2px 虚线 三级色」，13.2 的警戒线是「1.5px」。</li><li>2 是<b>母题专条</b>，从其 1.5px。</li></ol>
+<p><b>百分位读数的算法</b>：用 <b>P3–P50–P97 分段线性</b>映射，而不是在 P3–P97 上做单一线性内插 —— 分位数在带内并不均匀，单一线性会把中位数附近的读数算偏 <b>6–8 个分位</b>（同一组数据实测 P54 vs P62）。 带外按同斜率外推并夹到 1/99；带外点转琥珀/红并给玻璃气泡建议。</p>
+<p>守门：<code>audit.py growth-chart</code>（静态数值 + 禁止页面手画 + 禁止借正文色当导引件 + 独立页数值同源） + <code>page-qa.mjs</code> 的 <code>growth-band</code> / <code>growth-line</code> / <code>growth-warn</code> / <code>growth-dot</code> / <code>growth-tick</code> / <code>growth-enter</code> / <code>growth-aria</code>（渲染级实测）。</p>
 <hr>
 <h3>13.3 领域组件细则（要点）</h3>
 <h4>13.3.1 孕周首页卡（M · 孕期主入口）</h4>
@@ -7856,6 +8001,243 @@ function MODROOT_site_docs(){return document.getElementById("gm-mod-site-docs")|
     /* 键盘：Enter/Space 由原生 summary 触发 click，无需另处理 */
   });
 })();
+
+/* ══════════════════════════════════════════════════════════════════════════
+   13 · 13.2 生长曲线（百分位带）—— window.gmGrowth(el, data)
+   全站唯一实现：页面只给数据（X 轴节点 / P3 / P97 / 实测值 / 数据源版本），
+   图形与交互都在这里，避免"每页各画一遍静态 SVG"（实测三处各画一遍，
+   参考带 alpha 全是 .5，规范是 .10–.14）。
+   数据形状：
+     { xName:'月龄', xUnit:'月', yName:'体重', yUnit:'kg', source:'WHO 2006 · 0–5 岁',
+       x:[0,3,6,…], p3:[…], p97:[…], actual:[…],
+       focus:18,                       // 聚焦点（X 值），与 actual 同节点
+       advisories:[{x:18,tone:'attention',text:'…'}] }
+   交互（13.2）：
+     · 悬停 / 触摸单点 → 白玻璃泡 tooltip「月龄 18 月 · 体重 11.2kg · P62」
+     · 一键 P3/P97 红线开关（aria-pressed）
+     · 拖拽框选区间 → 玻璃气泡给区间读数（PC「框选异常区间」；移动端滑动即回看）
+   无障碍：容器 role="img" + aria-label（含最新读数）；另生成一份视觉隐藏的数据表，
+   供读屏逐点读取 —— 图形本身对 AT 不可见。
+   ══════════════════════════════════════════════════════════════════════════ */
+window.gmGrowth = function(el, d){
+  if(!el || !d) return null;
+  var mini = !!d.mini;   /* mini = M 家长端形态（13.2）：只留参考带 / 主曲线 / 端点，无坐标轴与图例 */
+  var W = mini ? 200 : 380, H = mini ? 74 : 168;
+  var M = mini ? {t:4, r:4, b:4, l:4} : {t:10, r:12, b:26, l:34};
+  var iw = W - M.l - M.r, ih = H - M.t - M.b;
+
+  /* ── 比例尺 ── */
+  var xmin = d.x[0], xmax = d.x[d.x.length-1];
+  var ymin = Math.min.apply(null, d.p3), ymax = Math.max.apply(null, d.p97);
+  var pad = (ymax - ymin) * 0.18;
+  ymin -= pad; ymax += pad;
+  var X = function(v){ return M.l + (v - xmin) / (xmax - xmin) * iw; };
+  var Y = function(v){ return M.t + (1 - (v - ymin) / (ymax - ymin)) * ih; };
+
+  /* ── 百分位读数 ──────────────────────────────────────────────────────────
+     用 **中位数锚定** 的分段线性映射：[P3, P50] → [3, 50]、[P50, P97] → [50, 97]。
+     为什么不能直接在 P3–P97 上做单一线性内插：分位数在带内**不均匀**（P50 不等于带中点），
+     单一线性会把中位数附近的读数算偏（实测同一组数据偏 6–8 个分位）。
+     带外按同斜率外推并夹到 1/99（13 · 13.2「P3 以下 / P97 以上」另走琥珀/红点与玻璃气泡）。 */
+  function pctl(x, v){
+    var i = d.x.indexOf(x); if(i < 0) return null;
+    var lo = d.p3[i], mid = d.p50[i], hi = d.p97[i];
+    if(!(lo < mid && mid < hi)) return null;
+    var p = v <= mid ? 3 + (v - lo) / (mid - lo) * 47
+                     : 50 + (v - mid) / (hi - mid) * 47;
+    return Math.max(1, Math.min(99, Math.round(p)));
+  }
+  function toneOf(x, v){
+    var i = d.x.indexOf(x); if(i < 0) return '';
+    if(v < d.p3[i]) return 'attention';
+    if(v > d.p97[i]) return 'risk';
+    return '';
+  }
+
+  /* ── 折线 / 面积路径 ── */
+  function line(vals){
+    return vals.map(function(v, i){ return (i ? 'L' : 'M') + X(d.x[i]).toFixed(1) + ',' + Y(v).toFixed(1); }).join(' ');
+  }
+  function band(){
+    var up = d.p97.map(function(v, i){ return (i ? 'L' : 'M') + X(d.x[i]).toFixed(1) + ',' + Y(v).toFixed(1); }).join(' ');
+    var dn = d.p3.map(function(v, i){ return d.x[i] === xmax ? 'L' : 'L'; });
+    var back = d.x.map(function(x, i){ return 'L' + X(d.x[d.x.length-1-i]).toFixed(1) + ',' + Y(d.p3[d.p3.length-1-i]).toFixed(1); }).join(' ');
+    return up + ' ' + back + ' Z';
+  }
+
+  var yTicks = (d.yTicks || []).filter(function(v){ return v > ymin && v < ymax; });
+  var g = 'gmGrowth' + Math.random().toString(36).slice(2, 8);
+
+  var parts = [];
+  if(!mini) parts.push('<div class="gm-growth__head">');
+  parts.push('<b>' + (d.title || '生长曲线') + '</b>');
+  parts.push('<span class="gm-growth__src">' + (d.source || '') + (d.bandLabel ? ' · ' + d.bandLabel : '') + '</span>');
+  var fi = d.x.indexOf(d.focus);
+  var fv = fi >= 0 ? d.actual[fi] : null;
+  var fp = fi >= 0 ? pctl(d.focus, fv) : null;
+  parts.push('<span class="gm-growth__val">' + (fp ? 'P' + fp : '—') +
+    ' <i>' + d.focus + ' ' + d.xName + ' · ' + d.yName + ' ' + fv + d.yUnit + '</i></span>');
+  parts.push('<span class="gm-growth__tools"><button type="button" class="gm-growth__toggle" aria-pressed="true">P3 / P97</button></span>');
+  parts.push('</div>');
+
+  parts.push('<div class="gm-growth__stage"><svg class="gm-growth__svg' + (mini ? ' gm-growth__svg--mini' : '') + '" viewBox="0 0 ' + W + ' ' + H + '" role="img" aria-label="' +
+    (d.title || '生长曲线') + '：' + (d.source || '') + '，' + d.xName + ' ' + d.focus + ' 时 ' + d.yName + ' ' + fv + d.yUnit + '，约 P' + fp + '">');
+  parts.push('<g class="gm-growth__plot">');
+  /* 网格线：--lg-divider 1px，去两端刻度（04 · 4.2）；mini 不画坐标 */
+  (mini ? [] : yTicks).forEach(function(v){
+    parts.push('<line class="gm-growth__grid" x1="' + X(xmin) + '" y1="' + Y(v).toFixed(1) + '" x2="' + X(xmax) + '" y2="' + Y(v).toFixed(1) + '"/>');
+    parts.push('<text class="gm-growth__tick" x="' + (M.l - 6) + '" y="' + (Y(v) + 4).toFixed(1) + '" text-anchor="end">' + v + '</text>');
+  });
+  /* 参考带 P3–P97：淡薄荷 alpha .12 + 细白描边上界（13.2） */
+  parts.push('<path class="gm-growth__band" d="' + band() + '"/>');
+  parts.push('<path class="gm-growth__band-top" d="' + line(d.p97) + '"/>');
+  /* 警戒线 P3 / P97：虚线 1.5px 三级色（可一键开关） */
+  parts.push('<g class="gm-growth__warns"><path class="gm-growth__warn" d="' + line(d.p3) + '"/><path class="gm-growth__warn" d="' + line(d.p97) + '"/></g>');
+  /* 主曲线 2.5px Rose-500 + 端点白芯粉描边圆点 */
+  parts.push('<path class="gm-growth__line" d="' + line(d.actual) + '"/>');
+  /* P50 参考线：中位数锚定的读数需要它，且 13.2 的参考带本就有中线语义（细白 1px 虚线） */
+  parts.push('<path class="gm-growth__p50" d="' + line(d.p50) + '"/>');
+  parts.push('<circle class="gm-growth__dot gm-growth__dot--focus" cx="' + X(d.focus).toFixed(1) + '" cy="' + Y(fv).toFixed(1) + '" r="3"/>');
+  /* 数据点：带内品牌粉，带外转琥珀/红（13.2） */
+  d.x.forEach(function(x, i){
+    var tone = toneOf(x, d.actual[i]);
+    var on = x === d.focus ? ' is-on' : '';
+    parts.push('<circle class="gm-growth__pt' + on + '" data-i="' + i + '"' + (tone ? ' data-tone="' + tone + '"' : '') +
+      ' cx="' + X(x).toFixed(1) + '" cy="' + Y(d.actual[i]).toFixed(1) + '" r="4"/>');
+  });
+  /* X 轴刻度 */
+  (mini ? [] : (d.xTicks || d.x)).forEach(function(x){
+    if(d.x.indexOf(x) < 0) return;
+    parts.push('<text class="gm-growth__tick" x="' + X(x).toFixed(1) + '" y="' + (H - 8) + '" text-anchor="middle">' + x + '</text>');
+  });
+  parts.push('<text class="gm-growth__axname" x="' + (M.l + iw) + '" y="' + (H - 8) + '" text-anchor="end">' + d.xName + '</text>');
+  if(!mini) parts.push('<rect class="gm-growth__sel" x="0" y="0" width="0" height="0" rx="6" style="display:none"/>');
+  parts.push('</g>');
+  parts.push('</svg>');
+  if(!mini) parts.push('<div class="gm-growth__tip" aria-hidden="true"></div>');
+  parts.push('</div>');
+  /* 图例：白玻璃 chip + 色点 8px（04 · 4.2） */
+  if(!mini) parts.push('<div class="gm-growth__legend">' +
+    '<span><i style="background:rgba(169,227,212,.85)"></i>P3–P97 参考带</span>' +
+    '<span><i style="background:#F77FA3"></i>' + (d.seriesName || '实测') + '</span>' +
+    '<span><i style="background:var(--lg-text-tertiary,#9AA2B0)"></i>P3 / P97 警戒线</span></div>');
+  (d.advisories || []).forEach(function(a){
+    parts.push('<div class="gm-growth__note" data-tone="' + (a.tone || 'attention') + '"><i></i><span>' + a.text + '</span></div>');
+  });
+  if(!mini){
+    parts.push('<div class="gm-growth__hint">' + (d.hint || '悬停查看单点明细 · 拖拽框选区间 · 开关 P3/P97 警戒线') + '</div>');
+    /* 读屏用数据表（图形对 AT 不可见） */
+  }
+  if(!mini) parts.push('<table class="gm-sr-only"><caption>' + (d.title || '') + ' ' + (d.source || '') + '</caption><thead><tr><th scope="col">' + d.xName + '</th><th scope="col">' + d.yName + '</th><th scope="col">P3</th><th scope="col">P97</th><th scope="col">百分位</th></tr></thead><tbody>');
+  d.x.forEach(function(x, i){
+    parts.push('<tr><td>' + x + '</td><td>' + d.actual[i] + d.yUnit + '</td><td>' + d.p3[i] + '</td><td>' + d.p97[i] + '</td><td>P' + pctl(x, d.actual[i]) + '</td></tr>');
+  });
+  if(!mini) parts.push('</tbody></table>');
+
+  el.className = 'gm-growth' + (mini ? ' gm-growth--mini' : '') + (d.tone === 'rose' ? '" data-tone="rose' : '');
+  el.innerHTML = parts.join('');
+
+  /* ── 交互 ── */
+  var svg = el.querySelector('.gm-growth__svg');
+  var tip = el.querySelector('.gm-growth__tip');
+  var sel = el.querySelector('.gm-growth__sel');
+  var toggle = el.querySelector('.gm-growth__toggle');
+  if(mini){
+    /* mini 只做「长按/点按看单点」（13.2 的 M 家长端）：有 tooltip 才绑定，否则仅渲染 */
+    if(tip){ svg.addEventListener('pointerdown', function(e){ show(nearest(e), e); }); }
+    return { show: show, hide: hide };
+  }
+  var warns = el.querySelector('.gm-growth__warns');
+  var pts = [].slice.call(el.querySelectorAll('.gm-growth__pt'));
+
+  function show(i, ev){
+    var x = d.x[i], v = d.actual[i], p = pctl(x, v);
+    tip.innerHTML = '<b>' + d.xName + ' ' + x + ' ' + (d.xUnit || '') + '</b><span>' +
+      d.yName + ' ' + v + d.yUnit + ' · P' + p + '</span>';
+    var box = svg.getBoundingClientRect();
+    var px = box.left - (el.getBoundingClientRect().left) + X(x) / W * box.width;
+    var py = box.top - (el.getBoundingClientRect().top) + Y(v) / H * box.height;
+    tip.style.left = Math.max(38, Math.min(el.clientWidth - 38, px)) + 'px';
+    tip.style.top = Math.max(4, py - 10) + 'px';
+    tip.classList.add('is-on');
+    pts.forEach(function(n, k){ n.classList.toggle('is-on', k === i); });
+    void ev;
+  }
+  function hide(){ if(tip) tip.classList.remove('is-on'); pts.forEach(function(n){ n.classList.remove('is-on'); }); }
+  /* 取 X 最近的节点（mini 没有逐点热区时的兜底） */
+  function nearest(e){
+    var box = svg.getBoundingClientRect();
+    var x = (e.clientX - box.left) / box.width * W;
+    var best = 0, bd = 1e9;
+    d.x.forEach(function(v, i){ var dd = Math.abs(X(v) - x); if(dd < bd){ bd = dd; best = i; } });
+    return best;
+  }
+
+  pts.forEach(function(n, i){
+    n.addEventListener('pointerenter', function(e){ show(i, e); });
+    n.addEventListener('pointerdown', function(e){ e.preventDefault(); show(i, e); });   /* 移动端长按 */
+  });
+  /* ⚠️ 只在**鼠标**离开时收起 tooltip：触摸结束后浏览器也会补一个 pointerleave，
+     于是"长按看单点"会一闪即隐（实测 tap 后 is-on 立刻变 false）。触摸改由下一次
+     点按别的点覆盖，或点空白处收起。 */
+  svg.addEventListener('pointerleave', function(e){ if(e.pointerType === 'mouse') hide(); });
+  svg.addEventListener('pointercancel', function(){ hide(); });
+
+  /* 拖拽框选区间：PC「框选异常区间」；移动端滑动即回看 */
+  var dragging = false, sx = 0;
+  svg.addEventListener('pointerdown', function(e){
+    var box = svg.getBoundingClientRect();
+    var x = (e.clientX - box.left) / box.width * W;
+    /* 触摸：13.2 的 M 端是「长按显示单点 / 滑动沿曲线回看」——触摸不进入框选，
+       而是直接取最近节点显示 tooltip（这样有效热区是整块绘图区，而不是 8px 的点）。 */
+    if(e.pointerType !== 'mouse'){ show(nearest(e), e); return; }
+    if(x < M.l - 4 || x > W - M.r + 4) return;
+    dragging = true; sx = x; sel.style.display = '';
+    sel.setAttribute('x', x.toFixed(1)); sel.setAttribute('width', '0');
+    sel.setAttribute('y', M.t); sel.setAttribute('height', ih);
+  });
+  svg.addEventListener('pointermove', function(e){
+    var box = svg.getBoundingClientRect();
+    var x = (e.clientX - box.left) / box.width * W;
+    if(dragging){
+      var a = Math.min(sx, x), b = Math.max(sx, x);
+      sel.setAttribute('x', a.toFixed(1)); sel.setAttribute('width', (b - a).toFixed(1));
+    }
+  });
+  function endDrag(){
+    if(!dragging) return;
+    dragging = false;
+    var a = parseFloat(sel.getAttribute('x')), b = a + parseFloat(sel.getAttribute('width'));
+    var xa = xmin + (a - M.l) / iw * (xmax - xmin), xb = xmin + (b - M.l) / iw * (xmax - xmin);
+    var hit = d.x.map(function(x, i){ return {x:x, i:i}; }).filter(function(o){ return o.x >= xa - 1e-6 && o.x <= xb + 1e-6; });
+    var bad = hit.filter(function(o){ return toneOf(o.x, d.actual[o.i]); });
+    var note = el.querySelector('.gm-growth__note--range');
+    if(!note){
+      note = document.createElement('div');
+      note.className = 'gm-growth__note gm-growth__note--range';
+      note.setAttribute('role', 'status');   /* 框选结果需要被读屏播报 */
+      el.insertBefore(note, el.querySelector('.gm-growth__hint'));
+    }
+    if(hit.length < 2){ sel.style.display = 'none'; if(note) note.remove(); return; }
+    note.setAttribute('data-tone', bad.length ? 'risk' : 'positive');
+    note.innerHTML = '<i></i><span>已框选 ' + Math.round(xa) + '–' + Math.round(xb) + ' ' + d.xName +
+      ' · ' + hit.length + ' 个点' + (bad.length ? '，其中 ' + bad.length + ' 个超出 P3–P97' : '，全部落在 P3–P97 内') + '</span>';
+  }
+  svg.addEventListener('pointerup', endDrag);
+  svg.addEventListener('pointercancel', endDrag);
+  window.addEventListener('pointerup', endDrag);
+  svg.addEventListener('pointerleave', endDrag);
+
+  /* 一键 P3/P97 红线开关 */
+  toggle.addEventListener('click', function(){
+    var on = toggle.getAttribute('aria-pressed') === 'true';
+    toggle.setAttribute('aria-pressed', on ? 'false' : 'true');
+    warns.style.display = on ? 'none' : '';
+    el.setAttribute('data-warn-alert', on ? '' : '1');
+  });
+
+  return { show: show, hide: hide };
+};
 
 window.gmToast = (function(){
   var DWELL = 2400, LEAVE = 240;   /* MD-18-01：驻留 2.4s · 淡出上滑 240ms */

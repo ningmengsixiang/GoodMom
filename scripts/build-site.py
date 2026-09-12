@@ -679,7 +679,13 @@ SHELL = """<!DOCTYPE html>
      实测：节点存在于 20px 处、样式全部生效，但**视觉完全不可见**（无任何静态检查能发现）。
      故由外壳统一给出避让值，模块侧只读 --gm-toast-top（缺省 20px，供未套外壳的独立页）。 */
   --gm-toast-top:76px;
+  /* 13 · 13.2 图表**导引件**（网格 / 坐标 / 警戒虚线）的专用令牌。
+     为什么不直接用 --lg-text-tertiary：页面把它当"次级文字"用（多处 11–12px 正文），
+     个别页面甚至把 tertiary 别名成了次级色 —— 拿它画警戒线会让虚线跟文字一样重，
+     违背 04 · 4.1「数据最亮：网格/坐标/背景一律退后」。故由外壳独立给出，两端一致。 */
+  --gm-guide:#9AA2B0;
 }
+[data-theme="dark"]{--gm-guide:#A6ADB9}
 *{box-sizing:border-box}
 html{-webkit-text-size-adjust:100%}
 body{margin:0;font-family:var(--sh-font);color:var(--sh-t);line-height:1.7;-webkit-font-smoothing:antialiased;
@@ -777,6 +783,94 @@ body{margin:0;font-family:var(--sh-font);color:var(--sh-t);line-height:1.7;-webk
      描述列表完全没有 8.2.13 要求的「省略 + Tooltip 全文」；折叠只有一个 0s 过渡的 details。
    模块侧只加 class 取用（.gm-tbl / .gm-desc / .gm-fold），不再各写一份。
    ══════════════════════════════════════════════════════════════════════════ */
+
+/* ══════════════════════════════════════════════════════════════════════════
+   13 · 13.2 生长曲线（百分位带）/ 04 · 4.2–4.3.2 —— 母题唯一实现
+   为什么放外壳：这是**系统母题**（12 章把「生长曲线」列为第五条品牌母题），
+   实测却有 3 处各画一遍的静态 SVG，且三处都把参考带画成了 alpha .5（规范 .10–.14），
+   主曲线 2.4–2.6px（规范 2.5）、警戒线用薄荷色 1.3px（规范：1.5px 三级色虚线）、
+   网格线 .05（规范 --lg-divider .08）、没有坐标轴 / Tooltip / 交互。
+   现收敛为一份：`.gm-growth` + `window.gmGrowth(el, data)`。
+   ══════════════════════════════════════════════════════════════════════════ */
+.gm-growth{position:relative;width:100%}
+.gm-growth__head{display:flex;align-items:baseline;gap:10px;flex-wrap:wrap;margin-bottom:8px}
+.gm-growth__head b{font-size:15px;color:var(--lg-text-primary,#343A46)}
+.gm-growth__src{font-size:12px;line-height:16px;color:var(--lg-text-secondary,#4F5B6E)}
+.gm-growth__val{margin-left:auto;font-size:14px;line-height:20px;font-weight:600;
+  color:var(--lg-text-primary,#343A46);font-variant-numeric:tabular-nums}
+.gm-growth__val i{font-style:normal;font-weight:400;font-size:12px;color:var(--lg-text-secondary,#4F5B6E)}
+.gm-growth__tools{display:flex;gap:8px;align-items:center;margin-left:auto}
+/* 一键 P3/P97 红线开关（13.2「一键 P3/P97 红线开关」） */
+.gm-growth__toggle{display:inline-flex;align-items:center;gap:6px;height:26px;padding:0 10px;
+  font:inherit;font-size:12px;font-weight:500;color:var(--lg-text-secondary,#4F5B6E);cursor:pointer;
+  border-radius:16px;background:var(--lg-glass-control,rgba(255,255,255,.35));
+  border:1px solid var(--lg-divider,rgba(58,52,84,.10))}
+/* D9 二元规则：品牌亮粉底 → **深字 #343A46**（白字在亮粉上仅 2.9:1）。
+   这里不能借 --lg-text-on-accent：个别页面把它定义成 #FFFFFF，实测白字压亮粉 2.46:1。 */
+.gm-growth__toggle[aria-pressed="true"]{background:var(--mmh-grad-action-hc,#F77FA3);
+  color:#343A46;border-color:transparent;font-weight:600}
+.gm-growth__toggle:focus-visible{outline:var(--lg-ring-width,2px) solid var(--lg-ring-color);outline-offset:2px}
+.gm-growth__svg{display:block;width:100%;height:auto;overflow:visible;touch-action:pan-y}
+/* M 家长端形态（13.2）：嵌在手机模型里的小尺寸版，只有带 + 线 + 端点 */
+.gm-growth--mini .gm-growth__stage{position:relative}
+.gm-growth__svg--mini{height:74px}
+/* 入场：04 · 4.2「入场 0.6s ease-out 淡入上浮」。reduce-motion 由 shell 的 0.01ms 全局规则接管。 */
+.gm-growth__plot{animation:gmGrowthRise .6s var(--lg-ease-out,cubic-bezier(.22,1,.36,1)) both}
+@keyframes gmGrowthRise{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+/* 图例：白玻璃 chip + 色点 8px + caption（04 · 4.2） */
+.gm-growth__legend{display:flex;gap:14px;flex-wrap:wrap;align-items:center;margin-top:8px;
+  font-size:12px;line-height:16px;color:var(--lg-text-secondary,#4F5B6E)}
+.gm-growth__legend span{display:inline-flex;align-items:center;gap:6px;
+  padding:3px 10px;border-radius:999px;background:var(--lg-glass-popover,rgba(255,255,255,.6));
+  border:1px solid var(--lg-divider,rgba(58,52,84,.10))}
+.gm-growth__legend i{width:8px;height:8px;border-radius:50%;flex:none}
+/* 图形元素 */
+.gm-growth__grid{stroke:var(--lg-divider,rgba(58,52,84,.08));stroke-width:1;shape-rendering:crispEdges}
+.gm-growth__axis{stroke:var(--lg-divider,rgba(58,52,84,.08));stroke-width:1;shape-rendering:crispEdges}
+.gm-growth__band{fill:rgba(169,227,212,.12)}          /* 参考带 alpha .10–.14（13.2） */
+.gm-growth[data-tone="rose"] .gm-growth__band{fill:rgba(255,208,216,.12)}
+.gm-growth__band-top{fill:none;stroke:rgba(255,255,255,.9);stroke-width:1}   /* 细白描边上界 */
+.gm-growth__p50{fill:none;stroke:rgba(255,255,255,.9);stroke-width:1;stroke-dasharray:3 3}   /* P50 中线 */
+.gm-growth__warn{fill:none;stroke:var(--gm-guide,#9AA2B0);stroke-width:1.5;stroke-dasharray:4 4}
+.gm-growth[data-warn-alert="1"] .gm-growth__warn{stroke:var(--lg-sem-attention,#8D5A15)}
+.gm-growth__line{fill:none;stroke:#F77FA3;stroke-width:2.5;stroke-linecap:round;stroke-linejoin:round}
+.gm-growth__dot{fill:#FFF;stroke:#F77FA3;stroke-width:2}   /* 端点白芯 + 2px 粉描边（04 · 4.3.2） */
+.gm-growth__pt{fill:#F77FA3;stroke:#FFF;stroke-width:1.5;cursor:pointer}
+.gm-growth__pt[data-tone="attention"]{fill:var(--lg-sem-attention,#8D5A15)}
+.gm-growth__pt[data-tone="risk"]{fill:var(--lg-sem-risk,#B72F42)}
+.gm-growth__pt.is-on{stroke-width:2.5}
+.gm-growth__tick{font-size:12px;fill:var(--lg-text-secondary,#4F5B6E);font-variant-numeric:tabular-nums}
+.gm-growth__axname{font-size:12px;fill:var(--lg-text-secondary,#4F5B6E)}
+.gm-growth__sel{fill:rgba(247,127,163,.14);stroke:rgba(247,127,163,.5);stroke-width:1;stroke-dasharray:3 3}
+/* Tooltip：白玻璃泡 rgba(255,255,255,.75) + blur 20 + 圆角 16 + 柔影 md（04 · 4.2） */
+.gm-growth__tip{position:absolute;z-index:3;pointer-events:none;opacity:0;transform:translate(-50%,-100%);
+  padding:8px 12px;border-radius:16px;white-space:nowrap;
+  background:rgba(255,255,255,.75);-webkit-backdrop-filter:blur(20px);backdrop-filter:blur(20px);
+  border:1px solid var(--lg-divider,rgba(58,52,84,.10));box-shadow:var(--lg-shadow-md,0 8px 24px rgba(58,52,84,.08));
+  transition:opacity 140ms ease}
+.gm-growth__tip.is-on{opacity:1}
+.gm-growth__tip b{display:block;font-size:12px;font-weight:500;color:var(--lg-text-secondary,#4F5B6E)}
+.gm-growth__tip span{display:block;font-size:14px;line-height:20px;font-weight:600;color:#B23A63;
+  font-variant-numeric:tabular-nums}
+/* 异常点玻璃气泡建议（13.2「P3 以下 / P97 以上 → 数据点转琥珀/红 + 玻璃气泡建议文案」） */
+.gm-growth__note{display:flex;gap:8px;align-items:flex-start;margin-top:8px;padding:9px 12px;
+  border-radius:18px;font-size:12px;line-height:18px;   /* 02 · 2.4 圆角档：18（16 不在档） */
+  background:rgba(255,255,255,.75);-webkit-backdrop-filter:blur(20px);backdrop-filter:blur(20px);
+  border:1px solid var(--lg-divider,rgba(58,52,84,.10))}
+.gm-growth__note[data-tone="attention"]{color:var(--lg-sem-attention,#8D5A15)}
+.gm-growth__note[data-tone="risk"]{color:var(--lg-sem-risk,#B72F42)}
+.gm-growth__note i{width:8px;height:8px;border-radius:50%;flex:none;margin-top:5px;background:currentColor}
+/* 12px 辅助文字一律次级色：02 · 2.1.1 只允许三级色用于 ≥24px 常规，
+   三级色 #9AA2B0 在 12px 上约 2.6:1（page-qa 实测 2.57:1）—— 与 04 · 4.2
+   「刻度标签 caption 12px 三级色」冲突时以 02 · 2.1.1 从严（同 TB-15-01 对表头的裁决口径）。
+   --gm-guide 只留给**非文字**导引件（网格线、警戒虚线）。 */
+.gm-growth__hint{margin-top:6px;font-size:12px;line-height:16px;color:var(--lg-text-secondary,#4F5B6E)}
+/* 10 · 10.4：≤767px 热区 ≥44×44。开关视觉高度只有 26，用 ::after 扩热区（10 章认可的做法）。 */
+@media (max-width:767px){
+  .gm-growth__toggle{position:relative}
+  .gm-growth__toggle::after{content:"";position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);
+    width:100%;min-width:44px;height:100%;min-height:44px}
+}
 
 /* ── 玻璃表格（03 · 3.7 + TB-15-01/02）──────────────────────────────────
    表头 body-sm 600 + 次级色；行高 44–52；hairline 分隔；hover 淡白底。
@@ -1105,6 +1199,243 @@ __MODULES__
     /* 键盘：Enter/Space 由原生 summary 触发 click，无需另处理 */
   });
 })();
+
+/* ══════════════════════════════════════════════════════════════════════════
+   13 · 13.2 生长曲线（百分位带）—— window.gmGrowth(el, data)
+   全站唯一实现：页面只给数据（X 轴节点 / P3 / P97 / 实测值 / 数据源版本），
+   图形与交互都在这里，避免"每页各画一遍静态 SVG"（实测三处各画一遍，
+   参考带 alpha 全是 .5，规范是 .10–.14）。
+   数据形状：
+     { xName:'月龄', xUnit:'月', yName:'体重', yUnit:'kg', source:'WHO 2006 · 0–5 岁',
+       x:[0,3,6,…], p3:[…], p97:[…], actual:[…],
+       focus:18,                       // 聚焦点（X 值），与 actual 同节点
+       advisories:[{x:18,tone:'attention',text:'…'}] }
+   交互（13.2）：
+     · 悬停 / 触摸单点 → 白玻璃泡 tooltip「月龄 18 月 · 体重 11.2kg · P62」
+     · 一键 P3/P97 红线开关（aria-pressed）
+     · 拖拽框选区间 → 玻璃气泡给区间读数（PC「框选异常区间」；移动端滑动即回看）
+   无障碍：容器 role="img" + aria-label（含最新读数）；另生成一份视觉隐藏的数据表，
+   供读屏逐点读取 —— 图形本身对 AT 不可见。
+   ══════════════════════════════════════════════════════════════════════════ */
+window.gmGrowth = function(el, d){
+  if(!el || !d) return null;
+  var mini = !!d.mini;   /* mini = M 家长端形态（13.2）：只留参考带 / 主曲线 / 端点，无坐标轴与图例 */
+  var W = mini ? 200 : 380, H = mini ? 74 : 168;
+  var M = mini ? {t:4, r:4, b:4, l:4} : {t:10, r:12, b:26, l:34};
+  var iw = W - M.l - M.r, ih = H - M.t - M.b;
+
+  /* ── 比例尺 ── */
+  var xmin = d.x[0], xmax = d.x[d.x.length-1];
+  var ymin = Math.min.apply(null, d.p3), ymax = Math.max.apply(null, d.p97);
+  var pad = (ymax - ymin) * 0.18;
+  ymin -= pad; ymax += pad;
+  var X = function(v){ return M.l + (v - xmin) / (xmax - xmin) * iw; };
+  var Y = function(v){ return M.t + (1 - (v - ymin) / (ymax - ymin)) * ih; };
+
+  /* ── 百分位读数 ──────────────────────────────────────────────────────────
+     用 **中位数锚定** 的分段线性映射：[P3, P50] → [3, 50]、[P50, P97] → [50, 97]。
+     为什么不能直接在 P3–P97 上做单一线性内插：分位数在带内**不均匀**（P50 不等于带中点），
+     单一线性会把中位数附近的读数算偏（实测同一组数据偏 6–8 个分位）。
+     带外按同斜率外推并夹到 1/99（13 · 13.2「P3 以下 / P97 以上」另走琥珀/红点与玻璃气泡）。 */
+  function pctl(x, v){
+    var i = d.x.indexOf(x); if(i < 0) return null;
+    var lo = d.p3[i], mid = d.p50[i], hi = d.p97[i];
+    if(!(lo < mid && mid < hi)) return null;
+    var p = v <= mid ? 3 + (v - lo) / (mid - lo) * 47
+                     : 50 + (v - mid) / (hi - mid) * 47;
+    return Math.max(1, Math.min(99, Math.round(p)));
+  }
+  function toneOf(x, v){
+    var i = d.x.indexOf(x); if(i < 0) return '';
+    if(v < d.p3[i]) return 'attention';
+    if(v > d.p97[i]) return 'risk';
+    return '';
+  }
+
+  /* ── 折线 / 面积路径 ── */
+  function line(vals){
+    return vals.map(function(v, i){ return (i ? 'L' : 'M') + X(d.x[i]).toFixed(1) + ',' + Y(v).toFixed(1); }).join(' ');
+  }
+  function band(){
+    var up = d.p97.map(function(v, i){ return (i ? 'L' : 'M') + X(d.x[i]).toFixed(1) + ',' + Y(v).toFixed(1); }).join(' ');
+    var dn = d.p3.map(function(v, i){ return d.x[i] === xmax ? 'L' : 'L'; });
+    var back = d.x.map(function(x, i){ return 'L' + X(d.x[d.x.length-1-i]).toFixed(1) + ',' + Y(d.p3[d.p3.length-1-i]).toFixed(1); }).join(' ');
+    return up + ' ' + back + ' Z';
+  }
+
+  var yTicks = (d.yTicks || []).filter(function(v){ return v > ymin && v < ymax; });
+  var g = 'gmGrowth' + Math.random().toString(36).slice(2, 8);
+
+  var parts = [];
+  if(!mini) parts.push('<div class="gm-growth__head">');
+  parts.push('<b>' + (d.title || '生长曲线') + '</b>');
+  parts.push('<span class="gm-growth__src">' + (d.source || '') + (d.bandLabel ? ' · ' + d.bandLabel : '') + '</span>');
+  var fi = d.x.indexOf(d.focus);
+  var fv = fi >= 0 ? d.actual[fi] : null;
+  var fp = fi >= 0 ? pctl(d.focus, fv) : null;
+  parts.push('<span class="gm-growth__val">' + (fp ? 'P' + fp : '—') +
+    ' <i>' + d.focus + ' ' + d.xName + ' · ' + d.yName + ' ' + fv + d.yUnit + '</i></span>');
+  parts.push('<span class="gm-growth__tools"><button type="button" class="gm-growth__toggle" aria-pressed="true">P3 / P97</button></span>');
+  parts.push('</div>');
+
+  parts.push('<div class="gm-growth__stage"><svg class="gm-growth__svg' + (mini ? ' gm-growth__svg--mini' : '') + '" viewBox="0 0 ' + W + ' ' + H + '" role="img" aria-label="' +
+    (d.title || '生长曲线') + '：' + (d.source || '') + '，' + d.xName + ' ' + d.focus + ' 时 ' + d.yName + ' ' + fv + d.yUnit + '，约 P' + fp + '">');
+  parts.push('<g class="gm-growth__plot">');
+  /* 网格线：--lg-divider 1px，去两端刻度（04 · 4.2）；mini 不画坐标 */
+  (mini ? [] : yTicks).forEach(function(v){
+    parts.push('<line class="gm-growth__grid" x1="' + X(xmin) + '" y1="' + Y(v).toFixed(1) + '" x2="' + X(xmax) + '" y2="' + Y(v).toFixed(1) + '"/>');
+    parts.push('<text class="gm-growth__tick" x="' + (M.l - 6) + '" y="' + (Y(v) + 4).toFixed(1) + '" text-anchor="end">' + v + '</text>');
+  });
+  /* 参考带 P3–P97：淡薄荷 alpha .12 + 细白描边上界（13.2） */
+  parts.push('<path class="gm-growth__band" d="' + band() + '"/>');
+  parts.push('<path class="gm-growth__band-top" d="' + line(d.p97) + '"/>');
+  /* 警戒线 P3 / P97：虚线 1.5px 三级色（可一键开关） */
+  parts.push('<g class="gm-growth__warns"><path class="gm-growth__warn" d="' + line(d.p3) + '"/><path class="gm-growth__warn" d="' + line(d.p97) + '"/></g>');
+  /* 主曲线 2.5px Rose-500 + 端点白芯粉描边圆点 */
+  parts.push('<path class="gm-growth__line" d="' + line(d.actual) + '"/>');
+  /* P50 参考线：中位数锚定的读数需要它，且 13.2 的参考带本就有中线语义（细白 1px 虚线） */
+  parts.push('<path class="gm-growth__p50" d="' + line(d.p50) + '"/>');
+  parts.push('<circle class="gm-growth__dot gm-growth__dot--focus" cx="' + X(d.focus).toFixed(1) + '" cy="' + Y(fv).toFixed(1) + '" r="3"/>');
+  /* 数据点：带内品牌粉，带外转琥珀/红（13.2） */
+  d.x.forEach(function(x, i){
+    var tone = toneOf(x, d.actual[i]);
+    var on = x === d.focus ? ' is-on' : '';
+    parts.push('<circle class="gm-growth__pt' + on + '" data-i="' + i + '"' + (tone ? ' data-tone="' + tone + '"' : '') +
+      ' cx="' + X(x).toFixed(1) + '" cy="' + Y(d.actual[i]).toFixed(1) + '" r="4"/>');
+  });
+  /* X 轴刻度 */
+  (mini ? [] : (d.xTicks || d.x)).forEach(function(x){
+    if(d.x.indexOf(x) < 0) return;
+    parts.push('<text class="gm-growth__tick" x="' + X(x).toFixed(1) + '" y="' + (H - 8) + '" text-anchor="middle">' + x + '</text>');
+  });
+  parts.push('<text class="gm-growth__axname" x="' + (M.l + iw) + '" y="' + (H - 8) + '" text-anchor="end">' + d.xName + '</text>');
+  if(!mini) parts.push('<rect class="gm-growth__sel" x="0" y="0" width="0" height="0" rx="6" style="display:none"/>');
+  parts.push('</g>');
+  parts.push('</svg>');
+  if(!mini) parts.push('<div class="gm-growth__tip" aria-hidden="true"></div>');
+  parts.push('</div>');
+  /* 图例：白玻璃 chip + 色点 8px（04 · 4.2） */
+  if(!mini) parts.push('<div class="gm-growth__legend">' +
+    '<span><i style="background:rgba(169,227,212,.85)"></i>P3–P97 参考带</span>' +
+    '<span><i style="background:#F77FA3"></i>' + (d.seriesName || '实测') + '</span>' +
+    '<span><i style="background:var(--lg-text-tertiary,#9AA2B0)"></i>P3 / P97 警戒线</span></div>');
+  (d.advisories || []).forEach(function(a){
+    parts.push('<div class="gm-growth__note" data-tone="' + (a.tone || 'attention') + '"><i></i><span>' + a.text + '</span></div>');
+  });
+  if(!mini){
+    parts.push('<div class="gm-growth__hint">' + (d.hint || '悬停查看单点明细 · 拖拽框选区间 · 开关 P3/P97 警戒线') + '</div>');
+    /* 读屏用数据表（图形对 AT 不可见） */
+  }
+  if(!mini) parts.push('<table class="gm-sr-only"><caption>' + (d.title || '') + ' ' + (d.source || '') + '</caption><thead><tr><th scope="col">' + d.xName + '</th><th scope="col">' + d.yName + '</th><th scope="col">P3</th><th scope="col">P97</th><th scope="col">百分位</th></tr></thead><tbody>');
+  d.x.forEach(function(x, i){
+    parts.push('<tr><td>' + x + '</td><td>' + d.actual[i] + d.yUnit + '</td><td>' + d.p3[i] + '</td><td>' + d.p97[i] + '</td><td>P' + pctl(x, d.actual[i]) + '</td></tr>');
+  });
+  if(!mini) parts.push('</tbody></table>');
+
+  el.className = 'gm-growth' + (mini ? ' gm-growth--mini' : '') + (d.tone === 'rose' ? '" data-tone="rose' : '');
+  el.innerHTML = parts.join('');
+
+  /* ── 交互 ── */
+  var svg = el.querySelector('.gm-growth__svg');
+  var tip = el.querySelector('.gm-growth__tip');
+  var sel = el.querySelector('.gm-growth__sel');
+  var toggle = el.querySelector('.gm-growth__toggle');
+  if(mini){
+    /* mini 只做「长按/点按看单点」（13.2 的 M 家长端）：有 tooltip 才绑定，否则仅渲染 */
+    if(tip){ svg.addEventListener('pointerdown', function(e){ show(nearest(e), e); }); }
+    return { show: show, hide: hide };
+  }
+  var warns = el.querySelector('.gm-growth__warns');
+  var pts = [].slice.call(el.querySelectorAll('.gm-growth__pt'));
+
+  function show(i, ev){
+    var x = d.x[i], v = d.actual[i], p = pctl(x, v);
+    tip.innerHTML = '<b>' + d.xName + ' ' + x + ' ' + (d.xUnit || '') + '</b><span>' +
+      d.yName + ' ' + v + d.yUnit + ' · P' + p + '</span>';
+    var box = svg.getBoundingClientRect();
+    var px = box.left - (el.getBoundingClientRect().left) + X(x) / W * box.width;
+    var py = box.top - (el.getBoundingClientRect().top) + Y(v) / H * box.height;
+    tip.style.left = Math.max(38, Math.min(el.clientWidth - 38, px)) + 'px';
+    tip.style.top = Math.max(4, py - 10) + 'px';
+    tip.classList.add('is-on');
+    pts.forEach(function(n, k){ n.classList.toggle('is-on', k === i); });
+    void ev;
+  }
+  function hide(){ if(tip) tip.classList.remove('is-on'); pts.forEach(function(n){ n.classList.remove('is-on'); }); }
+  /* 取 X 最近的节点（mini 没有逐点热区时的兜底） */
+  function nearest(e){
+    var box = svg.getBoundingClientRect();
+    var x = (e.clientX - box.left) / box.width * W;
+    var best = 0, bd = 1e9;
+    d.x.forEach(function(v, i){ var dd = Math.abs(X(v) - x); if(dd < bd){ bd = dd; best = i; } });
+    return best;
+  }
+
+  pts.forEach(function(n, i){
+    n.addEventListener('pointerenter', function(e){ show(i, e); });
+    n.addEventListener('pointerdown', function(e){ e.preventDefault(); show(i, e); });   /* 移动端长按 */
+  });
+  /* ⚠️ 只在**鼠标**离开时收起 tooltip：触摸结束后浏览器也会补一个 pointerleave，
+     于是"长按看单点"会一闪即隐（实测 tap 后 is-on 立刻变 false）。触摸改由下一次
+     点按别的点覆盖，或点空白处收起。 */
+  svg.addEventListener('pointerleave', function(e){ if(e.pointerType === 'mouse') hide(); });
+  svg.addEventListener('pointercancel', function(){ hide(); });
+
+  /* 拖拽框选区间：PC「框选异常区间」；移动端滑动即回看 */
+  var dragging = false, sx = 0;
+  svg.addEventListener('pointerdown', function(e){
+    var box = svg.getBoundingClientRect();
+    var x = (e.clientX - box.left) / box.width * W;
+    /* 触摸：13.2 的 M 端是「长按显示单点 / 滑动沿曲线回看」——触摸不进入框选，
+       而是直接取最近节点显示 tooltip（这样有效热区是整块绘图区，而不是 8px 的点）。 */
+    if(e.pointerType !== 'mouse'){ show(nearest(e), e); return; }
+    if(x < M.l - 4 || x > W - M.r + 4) return;
+    dragging = true; sx = x; sel.style.display = '';
+    sel.setAttribute('x', x.toFixed(1)); sel.setAttribute('width', '0');
+    sel.setAttribute('y', M.t); sel.setAttribute('height', ih);
+  });
+  svg.addEventListener('pointermove', function(e){
+    var box = svg.getBoundingClientRect();
+    var x = (e.clientX - box.left) / box.width * W;
+    if(dragging){
+      var a = Math.min(sx, x), b = Math.max(sx, x);
+      sel.setAttribute('x', a.toFixed(1)); sel.setAttribute('width', (b - a).toFixed(1));
+    }
+  });
+  function endDrag(){
+    if(!dragging) return;
+    dragging = false;
+    var a = parseFloat(sel.getAttribute('x')), b = a + parseFloat(sel.getAttribute('width'));
+    var xa = xmin + (a - M.l) / iw * (xmax - xmin), xb = xmin + (b - M.l) / iw * (xmax - xmin);
+    var hit = d.x.map(function(x, i){ return {x:x, i:i}; }).filter(function(o){ return o.x >= xa - 1e-6 && o.x <= xb + 1e-6; });
+    var bad = hit.filter(function(o){ return toneOf(o.x, d.actual[o.i]); });
+    var note = el.querySelector('.gm-growth__note--range');
+    if(!note){
+      note = document.createElement('div');
+      note.className = 'gm-growth__note gm-growth__note--range';
+      note.setAttribute('role', 'status');   /* 框选结果需要被读屏播报 */
+      el.insertBefore(note, el.querySelector('.gm-growth__hint'));
+    }
+    if(hit.length < 2){ sel.style.display = 'none'; if(note) note.remove(); return; }
+    note.setAttribute('data-tone', bad.length ? 'risk' : 'positive');
+    note.innerHTML = '<i></i><span>已框选 ' + Math.round(xa) + '–' + Math.round(xb) + ' ' + d.xName +
+      ' · ' + hit.length + ' 个点' + (bad.length ? '，其中 ' + bad.length + ' 个超出 P3–P97' : '，全部落在 P3–P97 内') + '</span>';
+  }
+  svg.addEventListener('pointerup', endDrag);
+  svg.addEventListener('pointercancel', endDrag);
+  window.addEventListener('pointerup', endDrag);
+  svg.addEventListener('pointerleave', endDrag);
+
+  /* 一键 P3/P97 红线开关 */
+  toggle.addEventListener('click', function(){
+    var on = toggle.getAttribute('aria-pressed') === 'true';
+    toggle.setAttribute('aria-pressed', on ? 'false' : 'true');
+    warns.style.display = on ? 'none' : '';
+    el.setAttribute('data-warn-alert', on ? '' : '1');
+  });
+
+  return { show: show, hide: hide };
+};
 
 window.gmToast = (function(){
   var DWELL = 2400, LEAVE = 240;   /* MD-18-01：驻留 2.4s · 淡出上滑 240ms */

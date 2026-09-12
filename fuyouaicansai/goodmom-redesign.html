@@ -573,10 +573,31 @@ textarea.inp{resize:vertical;min-height:76px;line-height:1.7}
       </div>
       <div class="card pad">
         <b>体重生长曲线（WHO P3–P97）</b>
-        <svg width="100%" height="150" viewBox="0 0 300 150" preserveAspectRatio="none" style="margin-top:8px">
-          <path d="M0,34 L60,30 L130,25 L200,21 L260,17 L300,15 L300,92 L260,95 L200,98 L130,102 L60,107 L0,111 Z" fill="rgba(169,227,212,.5)"/>
-          <path d="M0,72 L60,66 L130,61 L200,56 L260,50 L300,45" fill="none" stroke="#F77FA3" stroke-width="2.4"/>
+        <!-- 13 · 13.2：参考带 alpha .12（规范 .10–.14）、上界细白描边、主曲线 2.5px Rose-500、
+             端点 6px 白芯 + 2px 粉描边、P3/P97 虚线 1.5px 三级色、网格线 --lg-divider 1px。
+             独立页拿不到站点外壳的 window.gmGrowth，故此处为**静态同源**绘制；
+             数值与外壳配方逐项相等由 audit.py growth-chart 守门。 -->
+        <svg class="gx-svg" viewBox="0 0 380 168" role="img" aria-label="体重生长曲线：WHO 2006 · 0–24 月龄，18 月龄体重 11.2kg，约 P62">
+          <g class="gx-plot">
+            <line class="gx-grid" x1="34" y1="40" x2="368" y2="40"/><text class="gx-tick" x="28" y="44" text-anchor="end">14</text>
+            <line class="gx-grid" x1="34" y1="70" x2="368" y2="70"/><text class="gx-tick" x="28" y="74" text-anchor="end">12</text>
+            <line class="gx-grid" x1="34" y1="100" x2="368" y2="100"/><text class="gx-tick" x="28" y="104" text-anchor="end">10</text>
+            <line class="gx-grid" x1="34" y1="130" x2="368" y2="130"/><text class="gx-tick" x="28" y="134" text-anchor="end">8</text>
+            <path class="gx-band" d="M34,36 L75,28 L117,21 L158,15 L200,11 L241,7 L283,4 L324,2 L368,0 L368,52 L324,54 L283,57 L241,60 L200,64 L158,68 L117,73 L75,79 L34,86 Z"/>
+            <path class="gx-band-top" d="M34,36 L75,28 L117,21 L158,15 L200,11 L241,7 L283,4 L324,2 L368,0"/>
+            <path class="gx-warn" d="M34,86 L75,79 L117,73 L158,68 L200,64 L241,60 L283,57 L324,54 L368,52"/>
+            <path class="gx-warn" d="M34,36 L75,28 L117,21 L158,15 L200,11 L241,7 L283,4 L324,2 L368,0"/>
+            <path class="gx-line" d="M34,62 L75,52 L117,43 L158,36 L200,31 L241,24 L283,18 L324,15 L368,11"/>
+            <circle class="gx-dot" cx="283" cy="18" r="3"/>
+            <text class="gx-tick" x="34" y="160" text-anchor="middle">0</text>
+            <text class="gx-tick" x="117" y="160" text-anchor="middle">6</text>
+            <text class="gx-tick" x="200" y="160" text-anchor="middle">12</text>
+            <text class="gx-tick" x="283" y="160" text-anchor="middle">18</text>
+            <text class="gx-tick" x="368" y="160" text-anchor="end">24</text>
+            <text class="gx-axname" x="368" y="160" text-anchor="end" dx="-18">月龄</text>
+          </g>
         </svg>
+        <div class="gx-legend"><span><i style="background:rgba(169,227,212,.85)"></i>P3–P97 参考带</span><span><i style="background:#F77FA3"></i>宝宝实测</span><span><i style="background:var(--lg-text-tertiary,#9AA2B0)"></i>P3 / P97 警戒线</span></div>
         <div style="font-size:11px;color:var(--t3)">当前 P62 · 处于正常带；右侧未来 24–36 月节点待更新</div>
         <div style="margin-top:10px"><button class="btn mint sm" data-act="advice">智能随访建议</button></div>
       </div>
@@ -750,6 +771,26 @@ var q=function(s,c){return (c||document).querySelector(s)};
 var qa=function(s,c){return [].slice.call((c||document).querySelectorAll(s))};
 function esc(s){return String(s==null?'':s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')}
 function txt(el){return el?el.textContent.replace(/\s+/g,' ').trim():''}
+
+/* ═══ 13 · 13.2 生长曲线 · 百分位带（与站点外壳 window.gmGrowth 同源的静态版）═══
+   参考带 alpha .12（13.2 规定 .10–.14）· 上界细白描边 · 主曲线 2.5px Rose-500 ·
+   端点 6px 白芯 + 2px 粉描边 · P3/P97 虚线 1.5px 三级色 · 网格线 --lg-divider 1px。 */
+.gx-svg{display:block;width:100%;height:auto;margin-top:8px;overflow:visible}
+.gx-plot{animation:gxRise .6s cubic-bezier(.22,1,.36,1) both}
+@keyframes gxRise{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+.gx-grid{stroke:rgba(58,52,84,.08);stroke-width:1;shape-rendering:crispEdges}
+.gx-band{fill:rgba(169,227,212,.12)}
+.gx-band-top{fill:none;stroke:rgba(255,255,255,.9);stroke-width:1}
+.gx-warn{fill:none;stroke:var(--lg-text-tertiary,#9AA2B0);stroke-width:1.5;stroke-dasharray:4 4}
+.gx-line{fill:none;stroke:#F77FA3;stroke-width:2.5;stroke-linecap:round;stroke-linejoin:round}
+.gx-dot{fill:#FFF;stroke:#F77FA3;stroke-width:2}
+.gx-tick{font-size:12px;fill:var(--lg-text-tertiary,#9AA2B0);font-variant-numeric:tabular-nums}
+.gx-axname{font-size:12px;fill:var(--lg-text-secondary,#4F5B6E)}
+.gx-legend{display:flex;gap:14px;flex-wrap:wrap;align-items:center;margin-top:8px;
+  font-size:12px;line-height:16px;color:var(--lg-text-secondary,#4F5B6E)}
+.gx-legend span{display:inline-flex;align-items:center;gap:6px;padding:3px 10px;border-radius:999px;
+  background:rgba(255,255,255,.6);border:1px solid rgba(58,52,84,.10)}
+.gx-legend i{width:8px;height:8px;border-radius:50%;flex:none}
 
 /* ---------- Toast ---------- */
 var toastT=null,toastT2=null;

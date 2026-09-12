@@ -598,6 +598,79 @@ const PROBE = (spec) => {
     }
   }
 
+
+  // ── 6c. 生长曲线 · 百分位带（13 · 13.2 母题 / 04 · 4.2–4.3.2）──────────────
+  // 这一族是**手画 SVG**：没有选择器、没有令牌，任何一处数值都只能量。实测三处旧实现
+  // 把参考带画成 alpha .5（规范 .10–.14，四倍浓）、主曲线 2.4–2.6px、警戒线用薄荷色 1.3px。
+  // 注意：本工具为测量稳定会注入 `*{animation-duration:0s!important}`，
+  // 所以"入场 0.6s"只能看 animation-name，不能看 duration（同一坑在折叠检查里也踩过）。
+  {
+    const alphaOf = (c) => { const m = String(c).match(/rgba?\(([^)]+)\)/); if (!m) return null;
+      const p = m[1].split(',').map((x) => parseFloat(x)); return p.length >= 4 ? p[3] : 1; };
+    for (const g of root.querySelectorAll('.gm-growth')) {
+      const svg = g.querySelector('.gm-growth__svg');
+      if (!svg || !visible(svg)) continue;
+      const label = pathOf(g);
+      const band = g.querySelector('.gm-growth__band');
+      if (!band) push('growth-band', 'P2', '13 · 13.2', label, '缺少 P3–P97 参考带');
+      else {
+        const a = alphaOf(getComputedStyle(band).fill);
+        if (a === null || a < 0.10 - 1e-6 || a > 0.14 + 1e-6) {
+          push('growth-band', 'P2', '13 · 13.2', label,
+            `参考带 alpha=${a} 不在 .10–.14（参考带是背景，画浓就盖过主曲线，违背 04 · 4.1「数据最亮」）`);
+        }
+      }
+      if (!g.querySelector('.gm-growth__band-top')) {
+        push('growth-band', 'P2', '13 · 13.2', label, '参考带缺「细白描边上界」');
+      }
+      const line = g.querySelector('.gm-growth__line');
+      if (!line) push('growth-line', 'P2', '13 · 13.2', label, '缺少实测主曲线');
+      else {
+        const cs2 = getComputedStyle(line);
+        if (cs2.stroke !== 'rgb(247, 127, 163)') {
+          push('growth-line', 'P2', '13 · 13.2', label, `主曲线 ${cs2.stroke} ≠ Rose-500 #F77FA3`);
+        }
+        if (parseFloat(cs2.strokeWidth) !== 2.5) {
+          push('growth-line', 'P2', '13 · 13.2', label, `主曲线 ${cs2.strokeWidth} ≠ 2.5px`);
+        }
+      }
+      const warn = g.querySelector('.gm-growth__warn');
+      if (!warn) push('growth-warn', 'P3', '13 · 13.2', label, '缺少 P3/P97 警戒线');
+      else {
+        const w = getComputedStyle(warn);
+        if (parseFloat(w.strokeWidth) !== 1.5) push('growth-warn', 'P2', '13 · 13.2', label, `警戒线 ${w.strokeWidth} ≠ 1.5px`);
+        if (!w.strokeDasharray || w.strokeDasharray === 'none') push('growth-warn', 'P2', '13 · 13.2', label, '警戒线不是虚线');
+      }
+      const dot = g.querySelector('.gm-growth__dot');
+      if (!dot) push('growth-dot', 'P2', '13 · 13.2', label, '缺少端点白芯圆点');
+      else {
+        const dcs = getComputedStyle(dot);
+        if (dcs.fill !== 'rgb(255, 255, 255)') push('growth-dot', 'P2', '13 · 13.2', label, `端点不是白芯（fill=${dcs.fill}）`);
+        if (dcs.stroke !== 'rgb(247, 127, 163)') push('growth-dot', 'P2', '13 · 13.2', label, `端点不是粉描边（stroke=${dcs.stroke}）`);
+      }
+      const tick = g.querySelector('.gm-growth__tick');
+      if (tick) {
+        const tcs = getComputedStyle(tick);
+        if (parseFloat(tcs.fontSize) !== 12) push('growth-tick', 'P3', '04 · 4.2', label, `轴刻度 ${tcs.fontSize} ≠ 12px`);
+        if (tcs.fontVariantNumeric.indexOf('tabular-nums') < 0) push('growth-tick', 'P3', '04 · 4.2', label, '轴刻度未启用 tabular-nums');
+      }
+      const plot = g.querySelector('.gm-growth__plot');
+      if (plot && getComputedStyle(plot).animationName === 'none') {
+        push('growth-enter', 'P3', '04 · 4.2', label, '缺入场动效（04 · 4.2「入场 0.6s ease-out」）');
+      }
+      // 无障碍：图形对 AT 不可见 → 必须有 role + 可访问名 + 隐藏数据表（整幅图只有 mini 变体可省数据表）
+      if (svg.getAttribute('role') !== 'img') push('growth-aria', 'P2', 'Part 23', label, 'SVG 缺 role="img"');
+      const al = svg.getAttribute('aria-label') || '';
+      if (al.length < 8) push('growth-aria', 'P2', 'Part 23', label, 'SVG 缺 aria-label（读屏读不到路径，必须给概述）');
+      if (!g.classList.contains('gm-growth--mini') && !g.querySelector('table.gm-sr-only')) {
+        push('growth-aria', 'P2', 'Part 23', label, '缺视觉隐藏数据表（读屏逐点读取的唯一途径）');
+      }
+      if (g.querySelector('.gm-growth__toggle') && g.querySelector('.gm-growth__toggle').getAttribute('aria-pressed') === null) {
+        push('growth-aria', 'P2', '13 · 13.2', label, 'P3/P97 开关未报 aria-pressed');
+      }
+    }
+  }
+
   // ── 7. 版本与计数（16 · 16.2 / 14.1.1）──────────────────────────────────
   {
     // 版本号只查**界面载体**（顶栏/页脚/徽章）。规范正文里的版本沿革（V1.0→V2.8）
