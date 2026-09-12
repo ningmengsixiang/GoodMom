@@ -1,6 +1,6 @@
 # @goodmom/ui · 妈咪好 GoodMom 视觉设计规范开源组件库
 
-妈咪好 GoodMom 妇幼儿童全生命周期设计系统的 **开源组件代码层**：以 [Arco Design (React)](https://github.com/arco-design/arco-design)（MIT）为工程基底，源码仅作 API 参考，运行期依赖 npm 包 `@arco-design/web-react`，按 GoodMom 设计系统（00–16 号规范文档）进行主题与语义封装。
+妈咪好 GoodMom 妇幼儿童全生命周期设计系统的 **开源组件代码层**：以 [Arco Design (React)](https://github.com/arco-design/arco-design)（MIT）为工程基底，源码仅作 API 参考，运行期依赖 npm 包 `@arco-design/web-react`，按 GoodMom 设计系统（00–18 号规范文档）进行主题与语义封装。
 
 ## 特性
 - **主题开箱即用**：`src/theme.css` 将 Arco 主色变量覆盖为 GoodMom 蜜桃粉（--mmh-rose-*）+ 六语义状态色（02.9/12.3）
@@ -9,10 +9,10 @@
 - 与规范同步：命名 14 · 2；按钮全谱 03 · 3.2.4；状态 15.2
 
 ## 已含组件
-GmButton（全谱）· GmStatusTag（六语义+五色）· GmTag · GmCard · GmAvatar · GmProgress · GmSteps · GmRiskPicker · GmClientCard · GmEmpty · GmSpin · GmSkeleton
+GmButton（全谱）· GmStatusTag（六语义+五色）· GmTag · GmCard · GmAvatar · GmProgress · GmSteps · GmRiskPicker · GmClientCard · GmEmpty · GmSpin · GmSkeleton · GmLink（链接/文字按钮，外链与禁用语义）· GmCascader（级联选择，popup/inline/picker 三形态）· GmResponsiveView（响应式容器，按容器宽度在表格/紧凑/卡片间切换）· GmVirtualList（虚拟长列表，固定行高窗口渲染）
 （tokens：status / business（semanticOf 40+ 词条）/ design）
 
-> ⚠️ 范围口径：00 目录登记 94 项为**规范全量**；本库为**已封装子集（当前 9 个模块）**。未封装组件请先用 Arco 原生 + 本主题类（gm-*）实现，并按 00 登记制度补封装。
+> ⚠️ 范围口径：00 目录登记 94 项为**规范全量**；本库为**已封装子集（当前 16 个模块）**。未封装组件请先用 Arco 原生 + 本主题类（gm-*）实现，并按 00 登记制度补封装。
 
 ## 安装与使用（需可访问 npm）
 ```bash
@@ -34,8 +34,8 @@ import { GmButton, GmStatusTag, GmRiskPicker } from "@goodmom/ui";
 ## 与规范文档配套
 | 规范 | 说明 | 本库落点 |
 | --- | --- | --- |
-| 00–16 号文档 | 视觉 DNA / Token / 组件 / 数据可视化 / 命名 / 词库 | 与本目录同级（README 为入口） |
-| preview/ | 首页全组件演示 · 示例中心 7 页 · 移动端 | 浏览器直接打开 |
+| 00–18 号文档 | 视觉 DNA / Token / 组件 / 数据可视化 / 命名 / 词库 | 与本目录同级（README 为入口） |
+| preview/ | 首页全组件演示 · 示例中心 7 页 · 移动端 · 新增能力示例（V2.5：链接/级联/响应式容器/虚拟列表/暗黑/边框档） | 浏览器直接打开 |
 | icons/lg-icons.svg | 77 枚自绘图标 | 引入后 `npm run build` 前可直接 `<symbol>` 引用 |
 
 ## 贡献

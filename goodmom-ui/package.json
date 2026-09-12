@@ -1,6 +1,6 @@
 {
   "name": "@goodmom/ui",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "description": "妈咪好 GoodMom 视觉设计规范开源组件库（Arco Design 基底 + GoodMom 设计系统封装）",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",

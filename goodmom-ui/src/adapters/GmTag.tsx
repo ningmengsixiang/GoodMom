@@ -1,27 +1,42 @@
 import React from "react";
-import { GmSemantic, SEMANTIC_COLOR } from "../tokens/status";
+import { GmFive, FIVE_COLOR, FIVE_VAR, GmSemantic, SEMANTIC_VAR } from "../tokens/status";
 
 /** GmTag —— 状态/分类标签（自包含样式，基于主题 token；对应 03 · 3.6 / 15.5）
- * 说明（D3 裁决）：与 components/GmStatusTag 共享 SEMANTIC_COLOR 单一映射源；本组件无 Arco 依赖（轻量），
- * GmStatusTag 为 Arco Tag 形态——不同引擎上下文，不合并。 */
+ *
+ * 说明（D3 裁决）：与 components/GmStatusTag 共享同一映射源（tokens/status.ts）；
+ * 本组件无 Arco 依赖（轻量）；两组件现为**同一视觉契约**。
+ *
+ * P1-2：取色一律走 CSS 变量（`var(--lg-sem-x)`），而不是 tokens 里的静态浅色 hex，
+ * 否则暗色模式下颜色不会切换（"变量对、组件错"）。
+ * P1-12：与 Vue 版 `<GmTag>` 保持同一 props 面（含 `five`）。
+ */
 export interface GmTagProps {
   children: React.ReactNode;
   semantic?: GmSemantic;
-  color?: string;      // 显式 hex 优先
+  /** 孕产妇五色之一（02.10） */
+  five?: GmFive;
+  color?: string;      // 显式 hex / CSS 变量表达式优先
   dot?: boolean;
   size?: "small" | "default";
 }
-function tint(hex: string, alpha: number): string {
-  const h = hex.replace("#", "");
-  const n = h.length === 3 ? h.split("").map((c) => c + c).join("") : h;
-  const num = parseInt(n, 16);
-  return `rgba(${(num >> 16) & 255},${(num >> 8) & 255},${num & 255},${alpha})`;
-}
-const GmTag = ({ children, semantic, color, dot = true, size = "small" }: GmTagProps) => {
-  const c = color || (semantic ? SEMANTIC_COLOR[semantic] : "#757e8e");
+
+const GmTag = ({ children, semantic, five, color, dot = true, size = "small" }: GmTagProps) => {
+  const base = color
+    ? color
+    : five
+      ? `var(${FIVE_VAR[five]},${FIVE_COLOR[five]})`
+      : `var(${SEMANTIC_VAR[semantic || "neutral"]})`;
   return (
-    <span className={"gm-tag" + (size === "default" ? " lg" : "")} style={{ color: c, background: tint(c, 0.13), borderColor: tint(c, 0.32) }}>
-      {dot && <i style={{ background: c }} />}
+    <span
+      className={"gm-tag" + (size === "default" ? " lg" : "")}
+      style={{
+        color: base,
+        background: `color-mix(in srgb, ${base} 13%, transparent)`,
+        borderColor: `color-mix(in srgb, ${base} 32%, transparent)`,
+      }}
+      data-semantic={color || five ? undefined : (semantic || "neutral")}
+    >
+      {dot && <i style={{ background: base }} aria-hidden="true" />}
       {children}
     </span>
   );

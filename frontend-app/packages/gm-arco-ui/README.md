@@ -22,6 +22,10 @@
 | `src/components/GmProgress.tsx` | 线性/环形进度（品牌渐变或薄荷正向） | 08 · 8.2.5 |
 | `src/components/GmRiskPicker.tsx` | 妊娠风险五色单选（受控） | 02.10 / 15.2.10 |
 | `src/components/GmClientCard.tsx` | 服务对象卡（头像 + 组合标签 + 摘要 + 操作） | 15.6.1 / 13 |
+| `src/components/GmLink.tsx` | 链接 / 文字按钮（有 href 用 `<a>`，无则 `<button>`；外链 target/rel + 图标 + 读屏后缀；禁用降级为非交互 span） | 03 · 3.10 |
+| `src/components/GmCascader.tsx` | 级联选择（popup/inline/picker 三形态，受控与非受控；列级 roving tabindex 键盘导航，Escape 归还焦点） | 03 · 3.5.5 / 10 · 10.11.3 |
+| `src/components/GmResponsiveView.tsx` | 响应式容器（ResizeObserver 按容器宽度在表格/紧凑/卡片间切换，同一时刻只渲染一个分支） | 10 · 10.11.1 |
+| `src/components/GmVirtualList.tsx` | 虚拟长列表（固定行高窗口 + overscan，translateY 偏移，PageDown/Home/End 键盘与触底回调） | 10 · 10.11.2 |
 | `src/gm.css` | 主题覆盖（Arco 主色变量 → GoodMom 蜜桃粉） | 02.9 / 12.3 |
 
 ## 使用（示例）

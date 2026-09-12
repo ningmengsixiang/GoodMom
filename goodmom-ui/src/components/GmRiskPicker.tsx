@@ -1,5 +1,5 @@
 import React from "react";
-import { FIVE_COLOR, GmFive } from "../tokens/status";
+import { FIVE_COLOR, FIVE_VAR, GmFive } from "../tokens/status";
 
 /** GmRiskPicker —— 妊娠风险五色单选（对应 02.10 / 15.2.10）
  *  可访问性（D 审查 P0-2）：radiogroup 语义 + 键盘方向键/Home/End 切换，焦点可见 */
@@ -10,7 +10,9 @@ const LABEL: Record<GmFive, string> = { m1: "绿 · 低风险", m2: "黄 · 一�
 const ORDER: GmFive[] = ["m1", "m2", "m3", "m4", "m5"];
 
 const GmRiskPicker = ({ value, onChange, disabled }: GmRiskPickerProps) => {
-  const cssColor = (k: GmFive) => "var(--mmh-m5-" + k + "," + FIVE_COLOR[k] + ")"; /* 主题可覆盖 */
+  /* P1-12：原实现手拼 "var(--mmh-m5-" + k + ",…)"，因为 React 侧没有 FIVE_VAR 常量
+     （Vue 有、React 无 —— 两个库的 Token 引用能力不对等）。现统一走 FIVE_VAR。 */
+  const cssColor = (k: GmFive) => `var(${FIVE_VAR[k]},${FIVE_COLOR[k]})`; /* 业务侧可覆盖 */
   const select = (k: GmFive) => { if (!disabled && onChange) onChange(k); };
   const onKeyDown = (e: React.KeyboardEvent<HTMLDivElement>) => {
     if (disabled) return;
@@ -43,7 +45,10 @@ const GmRiskPicker = ({ value, onChange, disabled }: GmRiskPickerProps) => {
           className={"gm-risk-it" + (value === k ? " on" : "")}
           style={{ color: cssColor(k), borderColor: cssColor(k), cursor: disabled ? "not-allowed" : "pointer", opacity: disabled ? 0.5 : 1 }}
           aria-checked={value === k}
-          tabIndex={disabled || value !== k ? -1 : 0}
+          /* P1-11：roving tabindex 必须在"无选中"时也有一个可聚焦项，
+             否则 Tab 完全进不来（旧实现 value 为 undefined 时全部 -1）。
+             Story 全部传了受控 value，所以这个漏洞一直没被测出来。 */
+          tabIndex={disabled ? -1 : value === undefined ? (k === ORDER[0] ? 0 : -1) : value === k ? 0 : -1}
           disabled={disabled}
           onClick={() => select(k)}
         >
