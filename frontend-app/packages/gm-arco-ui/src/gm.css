@@ -47,18 +47,64 @@
   /* 02.10 孕产妇五色 var 别名（统一用 m1..m5；规范侧 g/y/o/r/p 已废弃，见 02 · 2.10） */
   --mmh-m5-m1:#4CB98A; --mmh-m5-m2:#F2C14E; --mmh-m5-m3:#F0954A; --mmh-m5-m4:#EE5C70; --mmh-m5-m5:#8F6AE0;
 }
+/* ══════════════════════════════════════════════════════════════════════════
+   03 · 3.2.4 按钮统一配方（V2.9 视觉优化）
+   用户反馈：① 主按钮"描边和分层有错行、发脏"；② 白底按钮"描边很廉价"。
+   根因两条，都是**把玻璃边光用在了不透明/浅色实体按钮上**：
+     · 主按钮（D9 后是不透明的品牌粉渐变）仍套着 02 · 2.5 给**半透明玻璃面**用的
+       白色描边(55–65%) + 白色内高光 —— 白边落在浅粉上"亮端看不见、暗端看得见"，
+       边缘一圈深浅不均（视觉上的描边错行），再叠一层 inset 白高光就成了双线发糊（发脏）。
+     · 白底按钮的边用了 `--lg-border-white-75`（白 75%）—— 白边落在白/浅底上等于**没有边**，
+       形状糊掉，于是"廉价"。同一元素再叠 `--lg-shadow-sm`（偏弱）也没有浮起感。
+   修法：不透明实底**不套玻璃白边/白内高光**，边缘清晰度交由同族色接触影承担；
+   浅底按钮的边改用 02 · 2.7.1 同源的暖中性 hairline（`--lg-divider`，暗色档自动翻白）。
+   ══════════════════════════════════════════════════════════════════════════ */
+
+/* 主按钮（品牌粉主行动）：D9 二分口径之二「品牌粉底 + 深字」 */
 .gm-btn.arco-btn-primary{
   background:var(--mmh-grad-action-hc,#F77FA3) !important;
   color:var(--lg-text-on-accent) !important; /* D9：亮粉底必须配深字；Arco primary 默认白字会跌破 AA */
-  border:none !important;
-  box-shadow:0 6px 16px rgba(178,58,99,.3);
+  /* 透明描边而非 border:none —— 与带 1px 描边的兄弟类型盒模型完全对齐（视觉零差异） */
+  border:var(--lg-border-1) solid transparent !important;
+  box-shadow:0 1px 2px rgba(178,58,99,.22),0 8px 20px rgba(240,127,163,.30);
 }
+
+/* 白底按钮（Default / Secondary 中性白玻璃）—— React 侧此前**完全没有定义**，
+   落到 Arco 默认样式（灰边白底）上，与 Vue 的 white-75 白边一样廉价。 */
+.gm-btn.arco-btn-default,.gm-btn.arco-btn-secondary{
+  background:linear-gradient(160deg,rgba(255,255,255,.94),rgba(255,255,255,.78)) !important;
+  color:var(--lg-text-primary) !important;
+  border:var(--lg-border-1) solid var(--lg-divider) !important;
+  box-shadow:0 1px 2px rgba(58,52,84,.06),0 4px 12px rgba(58,52,84,.08) !important;
+  -webkit-backdrop-filter:blur(16px) saturate(1.2);backdrop-filter:blur(16px) saturate(1.2);
+}
+.gm-btn.arco-btn-default:not(.arco-btn-disabled):hover,
+.gm-btn.arco-btn-secondary:not(.arco-btn-disabled):hover{
+  border-color:rgba(58,52,84,.16) !important;
+  box-shadow:0 2px 4px rgba(58,52,84,.07),0 8px 18px rgba(58,52,84,.10) !important;
+}
+
+/* 描边按钮（03 · 3.2.4：透明底 + 1.5px 玫瑰描边 + 玫瑰字）
+   原为纯 #F77FA3 实描边且无阴影 → 饱和硬边、贴纸感；改用带 alpha 的玫瑰 + 极淡玫影。 */
+.gm-btn.arco-btn-outline{
+  background:transparent !important;
+  color:var(--mmh-rose-700,#B23A63) !important;
+  border:var(--lg-border-2) solid rgba(232,93,143,.45) !important;
+  box-shadow:0 1px 2px rgba(178,58,99,.06);
+}
+.gm-btn.arco-btn-outline:not(.arco-btn-disabled):hover{
+  border-color:rgba(232,93,143,.75) !important;background:rgba(247,127,163,.07) !important}
+.gm-btn.arco-btn-dashed{
+  background:transparent !important;color:var(--mmh-rose-700,#B23A63) !important;
+  border:var(--lg-border-2) dashed rgba(232,93,143,.45) !important;box-shadow:none}
+.gm-btn.arco-btn-text{background:transparent !important;color:var(--mmh-rose-700,#B23A63) !important;border:none !important;box-shadow:none}
 /* 03 · 3.2 / 07 · 7.3.1 按钮玻璃态四态（hover 浮起 / active 回弹 / disabled / loading） */
 .gm-btn{transition:transform var(--lg-t-base) var(--lg-ease-spring),
   box-shadow var(--lg-t-base) ease, filter var(--lg-t-base) ease,
   background-color var(--lg-t-base) ease, color var(--lg-t-base) ease}
-.gm-btn:not(.arco-btn-disabled):hover{transform:translateY(-1px);box-shadow:0 6px 14px rgba(90,70,70,.12)}
-.gm-btn.arco-btn-primary:not(.arco-btn-disabled):hover{box-shadow:0 8px 18px rgba(240,127,163,.32)}
+/* 通用 hover 只给非实底按钮加中性浮起；实底（primary/secondary/outline）各自有配方，别覆盖 */
+.gm-btn.arco-btn-tertiary:not(.arco-btn-disabled):hover,.gm-btn:not([class*="arco-btn-"]):not(.arco-btn-disabled):hover{transform:translateY(-1px);box-shadow:0 6px 14px rgba(90,70,70,.12)}
+.gm-btn.arco-btn-primary:not(.arco-btn-disabled):hover{box-shadow:0 2px 4px rgba(178,58,99,.24),0 12px 26px rgba(240,127,163,.38);transform:translateY(-1px)}
 .gm-btn:not(.arco-btn-disabled):active{transform:translateY(0) scale(.96);transition-duration:var(--lg-t-fast)}
 .gm-btn.arco-btn-disabled{opacity:.55;cursor:not-allowed}
 .gm-btn.arco-btn-loading{opacity:.9;cursor:wait}
@@ -116,7 +162,7 @@
 .gm-steps.sm .gs-dot{width:24px;height:24px;font-size:10px}
 @keyframes pulse{0%,100%{opacity:1}50%{opacity:.6}}
 
-.gm-btn-hc.arco-btn-primary,.arco-btn-primary.gm-btn-hc{background:var(--mmh-grad-action-hc)!important;color:var(--lg-text-on-accent)!important;border:none!important;box-shadow:0 6px 16px rgba(240,127,163,.28)}
+.gm-btn-hc.arco-btn-primary,.arco-btn-primary.gm-btn-hc{background:var(--mmh-grad-action-hc)!important;color:var(--lg-text-on-accent)!important;border:none!important;box-shadow:0 1px 2px rgba(178,58,99,.22),0 8px 20px rgba(240,127,163,.30)}
 
 /* —— GmEmpty / GmSpin / GmSkeleton（08 · 8.2.12/15/13） —— */
 .gm-empty{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;padding:28px 16px;text-align:center}

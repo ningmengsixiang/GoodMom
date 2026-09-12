@@ -124,11 +124,13 @@ svg.i{width:22px;height:22px;stroke:currentColor;fill:none;stroke-width:1.7;
 .tab.on svg{transform:scale(1.04)}
 
 /* 底部主行动 */
+/* 移动端主 CTA —— 03 · 3.2.4 主按钮配方（与全站主按钮完全一致）
+   ⚠️ 原规则里 `border` 与 `box-shadow` **各声明了两次**，后写的「白边 + 白内高光」胜出，
+      把前面的配方静默吃掉 —— 这是"描边与分层错行"的又一实例，本次一并去重。 */
 .cta{display:flex;align-items:center;justify-content:center;gap:8px;width:100%;height:50px;
   border:none;border-radius:18px;font-family:var(--font);font-size:16px;font-weight:600;color:#343A46;
   background:var(--mmh-grad-action-hc,#F77FA3);
-  border:1px solid rgba(255,255,255,.6);
-  box-shadow:inset 0 1px 0 rgba(255,255,255,.5),0 12px 26px rgba(240,127,163,.35);
+  box-shadow:0 1px 2px rgba(178,58,99,.22),0 8px 20px rgba(240,127,163,.30);
   transition:transform .12s ease;cursor:pointer;margin:6px 0 4px}
 .cta:active{transform:scale(.97)}
 
@@ -152,7 +154,7 @@ svg.i{width:22px;height:22px;stroke:currentColor;fill:none;stroke-width:1.7;
 .notice .x{color:var(--text-3);flex:none;display:flex;padding:6px}
 /* SearchBar */
 .sbar{display:flex;align-items:center;gap:8px;padding:0 6px 0 14px;height:44px;border-radius:18px;
-  background:rgba(255,255,255,.4);border:1px solid rgba(255,255,255,.75);
+  background:rgba(255,255,255,.4);border:1px solid var(--lg-divider,rgba(58,52,84,.10));
   box-shadow:inset 0 1px 2px rgba(58,52,84,.05)}
 .sbar svg{flex:none;color:var(--text-3)}
 .sbar input{flex:1;border:none;outline:none;background:transparent;font-family:var(--font);
@@ -172,7 +174,7 @@ svg.i{width:22px;height:22px;stroke:currentColor;fill:none;stroke-width:1.7;
 /* chips 筛选 */
 .chips{display:flex;gap:8px;flex-wrap:wrap}
 .chip{padding:8px 16px;border-radius:999px;font-size:13px;color:var(--text-2);cursor:pointer;
-  background:rgba(255,255,255,.4);border:1px solid rgba(255,255,255,.65);
+  background:rgba(255,255,255,.4);border:1px solid var(--lg-divider,rgba(58,52,84,.10));
   transition:color .2s ease,background .25s ease,box-shadow .25s ease;user-select:none}
 .chip:active{transform:scale(.96)}
 .chip.on{color:#343A46;background:var(--mmh-grad-action-hc,#F77FA3);border-color:transparent;box-shadow:0 6px 14px rgba(240,127,163,.35)}
@@ -223,16 +225,24 @@ svg.i{width:22px;height:22px;stroke:currentColor;fill:none;stroke-width:1.7;
   cursor:pointer;white-space:nowrap;transition:transform .12s ease}
 .mbb:active{transform:scale(.96)}
 .mbb svg{width:17px;height:17px;stroke:currentColor;fill:none;stroke-width:1.9;stroke-linecap:round;stroke-linejoin:round}
-.mbb-primary{background:linear-gradient(160deg,rgba(255,255,255,.4),transparent 48%),var(--grad-p);color:#FFF;border-color:rgba(255,255,255,.65);box-shadow:0 8px 18px rgba(240,127,163,.32)}
-.mbb-default{background:linear-gradient(160deg,rgba(255,255,255,.7),rgba(255,255,255,.4));color:var(--text);border-color:rgba(255,255,255,.8)}
-.mbb-secondary{background:linear-gradient(135deg,#7FD8C2,#4FB59C);color:#FFF;border-color:rgba(255,255,255,.6)}
-.mbb-outline{background:transparent;color:#B23A63;border:1.5px solid #F77FA3}
-.mbb-dashed{background:transparent;color:#B23A63;border:1.5px dashed #F77FA3}
+/* ── 03 · 3.2.4 按钮统一配方（V2.9）──
+   ① 主按钮不套玻璃白描边/白内高光：那两层是 02 · 2.5 给**半透明玻璃面**的边光，
+      落在 D9 后的浅粉实底上会「亮端看不见、暗端看得见」→ 描边错行；再叠 inset 白高光成双线发糊（脏）。
+      边缘清晰度改由同族玫色「接触影 + 辉光」承担（02 · 2.6 色相统一）。
+   ② 白底按钮的边不再用白色（白边在白/浅底上等于没有边 → 廉价），改用 02 · 2.7.1 同源的
+      暖中性 hairline `--lg-divider`（暗色档自动翻白）+ 02 · 2.6 双层柔影。 */
+.mbb-primary{background:var(--mmh-grad-action-hc,#F77FA3);color:#343A46;border:1px solid transparent;box-shadow:0 1px 2px rgba(178,58,99,.22),0 8px 20px rgba(240,127,163,.30)}
+.mbb-primary:hover{box-shadow:0 2px 4px rgba(178,58,99,.24),0 12px 26px rgba(240,127,163,.38)}
+.mbb-default{background:linear-gradient(160deg,rgba(255,255,255,.94),rgba(255,255,255,.78));color:var(--lg-text-primary,#343A46);border:1px solid var(--lg-divider,rgba(58,52,84,.10));box-shadow:0 1px 2px rgba(58,52,84,.06),0 4px 12px rgba(58,52,84,.08);-webkit-backdrop-filter:blur(16px) saturate(1.2);backdrop-filter:blur(16px) saturate(1.2)}
+.mbb-default:hover{border-color:rgba(58,52,84,.16);box-shadow:0 2px 4px rgba(58,52,84,.07),0 8px 18px rgba(58,52,84,.10)}
+.mbb-secondary{background:linear-gradient(135deg,#2F8F76,#1E6B52);color:#FFF;border:1px solid transparent;box-shadow:0 1px 2px rgba(30,107,82,.22),0 8px 20px rgba(47,143,118,.28)}
+.mbb-outline{background:transparent;color:#B23A63;border:1.5px solid rgba(232,93,143,.45);box-shadow:0 1px 2px rgba(178,58,99,.06)}
+.mbb-dashed{background:transparent;color:#B23A63;border:1.5px dashed rgba(232,93,143,.45)}
 .mbb-text{background:none;color:#B23A63;padding:0 8px}
-.mbb-success{background:linear-gradient(135deg,#7FD8C2,#4FB59C);color:#FFF}
-.mbb-warning{background:linear-gradient(135deg,#F8CE8C,#EFAF55);color:#FFF}
-.mbb-danger{background:linear-gradient(135deg,#F79AA8,#E25B72);color:#FFF}
-.mbb-danger.mbb-outline{background:transparent;color:#E25B72;border:1.5px solid #E25B72}
+.mbb-success{background:linear-gradient(135deg,#2F8F76,#1E6B52);color:#FFF;box-shadow:0 1px 2px rgba(30,107,82,.22),0 8px 20px rgba(47,143,118,.28)}
+.mbb-warning{background:linear-gradient(135deg,#B9771C,#9A5A0E);color:#FFF;box-shadow:0 1px 2px rgba(154,90,14,.22),0 8px 20px rgba(185,119,28,.26)}
+.mbb-danger{background:linear-gradient(135deg,#C25064,#B04052);color:#FFF;box-shadow:0 1px 2px rgba(176,64,82,.24),0 8px 20px rgba(208,90,110,.28)}
+.mbb-danger.mbb-outline{background:transparent;color:#B72F42;border:1.5px solid rgba(183,47,66,.45);box-shadow:0 1px 2px rgba(183,47,66,.08)}
 .mbb-xs{height:28px;font-size:12px;padding:0 14px;border-radius:18px}
 .mbb-sm{height:32px;font-size:13px;padding:0 16px;border-radius:18px}
 .mbb-lg{height:48px;font-size:16px;padding:0 26px;border-radius:22px}
@@ -254,7 +264,7 @@ svg.i{width:22px;height:22px;stroke:currentColor;fill:none;stroke-width:1.7;
 .cta svg,.mbb svg{flex:none!important;display:block!important;width:16px!important;height:16px!important;fill:none;stroke:currentColor;stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round}
 .cta.sm svg,.mbb.sm svg,.small svg{width:14px!important;height:14px!important}
 .cta.lg svg,.mbb.lg svg,.btn-lg svg,.b1.lg svg,.large svg{width:18px!important;height:18px!important}:root{--mmh-grad-action-hc:linear-gradient(135deg,#FFC4D6 0%,#F77FA3 100%)}
-.chip.on{background:var(--mmh-grad-action-hc,#F77FA3)!important;color:#343A46!important;border:none!important}
+.chip.on{background:var(--mmh-grad-action-hc,#F77FA3)!important;color:#343A46!important;border:1px solid transparent!important}
 
 <!--@body-->
 <div class="stage">

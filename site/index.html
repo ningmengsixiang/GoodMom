@@ -128,7 +128,7 @@ body{margin:0;font-family:var(--sh-font);color:var(--sh-t);line-height:1.7;-webk
 .gm-mod--site-index nav b i{width:16px;height:16px;border-radius:50%;background:linear-gradient(135deg,#FFA9C2,#E85D8F);display:inline-block}
 .gm-mod--site-index nav a{font-size:12.5px;color:var(--t2);text-decoration:none;padding:6px 12px;border-radius:999px;font-weight:500}
 .gm-mod--site-index nav a:hover{background:#fff;color:var(--rose-deep)}
-.gm-mod--site-index nav .out{margin-left:auto;background:linear-gradient(135deg,#FFA9C2,#E85D8F);color:#fff;font-weight:600}
+.gm-mod--site-index nav .out{margin-left:auto;background:var(--mmh-grad-action-hc,#F77FA3);color:#343A46;font-weight:600;border:1px solid transparent;box-shadow:0 1px 2px rgba(178,58,99,.22),0 8px 20px rgba(240,127,163,.30)}
 .gm-mod--site-index .hero{text-align:center;padding:44px 24px 34px;border-radius:28px;position:relative;overflow:hidden}
 .gm-mod--site-index .hero .k{display:inline-flex;align-items:center;gap:8px;font-size:12px;font-weight:600;letter-spacing:.08em;color:var(--rose-deep);
   background:rgba(247,127,163,.12);border:1px solid rgba(247,127,163,.3);padding:6px 14px;border-radius:999px}
@@ -142,8 +142,15 @@ body{margin:0;font-family:var(--sh-font);color:var(--sh-t);line-height:1.7;-webk
 .gm-mod--site-index .cta{display:flex;gap:10px;justify-content:center;flex-wrap:wrap;margin-top:22px}
 .gm-mod--site-index .btn{display:inline-flex;align-items:center;gap:8px;text-decoration:none;font-weight:600;font-size:14px;
   padding:12px 22px;border-radius:999px;transition:.2s;border:1px solid transparent}
-.gm-mod--site-index .btn.pri{background:var(--mmh-grad-action-hc,#F77FA3);color:#343A46;font-weight:600;box-shadow:0 10px 24px rgba(240,127,163,.35)} /* D9：亮粉底必须配深字 */
-.gm-mod--site-index .btn.line{background:#fff;color:var(--rose-deep);border-color:rgba(232,93,143,.35)}
+/* ── 03 · 3.2.4 按钮统一配方（V2.9）──
+   ① 主按钮不套玻璃白描边/白内高光：那两层是 02 · 2.5 给**半透明玻璃面**的边光，
+      落在 D9 后的浅粉实底上会「亮端看不见、暗端看得见」→ 描边错行；再叠 inset 白高光成双线发糊（脏）。
+      边缘清晰度改由同族玫色「接触影 + 辉光」承担（02 · 2.6 色相统一）。
+   ② 白底按钮的边不再用白色（白边在白/浅底上等于没有边 → 廉价），改用 02 · 2.7.1 同源的
+      暖中性 hairline `--lg-divider`（暗色档自动翻白）+ 02 · 2.6 双层柔影。 */
+.gm-mod--site-index .btn.pri{background:var(--mmh-grad-action-hc,#F77FA3);color:#343A46;border:1px solid transparent;box-shadow:0 1px 2px rgba(178,58,99,.22),0 8px 20px rgba(240,127,163,.30)}   /* D9：亮粉底必须配深字 */
+.gm-mod--site-index .btn.line{background:linear-gradient(160deg,rgba(255,255,255,.94),rgba(255,255,255,.78));color:var(--lg-text-primary,#343A46);border:1px solid var(--lg-divider,rgba(58,52,84,.10));box-shadow:0 1px 2px rgba(58,52,84,.06),0 4px 12px rgba(58,52,84,.08);-webkit-backdrop-filter:blur(16px) saturate(1.2);backdrop-filter:blur(16px) saturate(1.2)}
+.gm-mod--site-index .btn.line:hover{border-color:rgba(58,52,84,.16);box-shadow:0 2px 4px rgba(58,52,84,.07),0 8px 18px rgba(58,52,84,.10)}
 .gm-mod--site-index .btn:hover{transform:translateY(-2px)}
 .gm-mod--site-index h2{font-size:24px;letter-spacing:-.01em;margin:38px 0 4px;display:flex;align-items:center;gap:10px}
 .gm-mod--site-index h2::before{content:"";width:10px;height:10px;border-radius:50%;background:linear-gradient(135deg,#FFA9C2,#E85D8F);flex:none}
@@ -269,7 +276,7 @@ body{margin:0;font-family:var(--sh-font);color:var(--sh-t);line-height:1.7;-webk
 .gm-mod--site-index nav .git{display:inline-flex;align-items:center;gap:6px;padding:7px 14px;border-radius:999px;text-decoration:none;
   font-size:12.5px;font-weight:600;color:var(--rose-deep);background:#fff;border:1px solid rgba(232,93,143,.3)}
 .gm-mod--site-index nav .git svg{width:15px;height:15px;fill:currentColor}
-.gm-mod--site-index nav .git:hover{background:linear-gradient(135deg,#FFA9C2,#E85D8F);color:#fff;border-color:transparent}
+.gm-mod--site-index nav .git:hover{background:var(--mmh-grad-action-hc,#F77FA3);color:#343A46;border-color:transparent}
 .gm-mod--site-index .gx{position:absolute;right:16px;top:16px;width:56px;height:56px;opacity:.14;color:#B23A63;pointer-events:none}
 .gm-mod--site-index .gx svg{width:100%;height:100%}
 .gm-mod--site-index .card,.gm-mod--site-index .jc{position:relative;overflow:hidden}
@@ -281,7 +288,8 @@ body{margin:0;font-family:var(--sh-font);color:var(--sh-t);line-height:1.7;-webk
 /* 主行动档（D9 裁决）：品牌粉上半段底 + 深字。
    旧值 #B23A63→#9E3054 是 D5/D8 口径，与本行下方的深字组成「深底 + 深字」，
    实测 2.00:1 —— 低于 AA。禁止「品牌亮粉底 + 白字」，同样禁止「深玫底 + 深字」。 */
-.gm-mod--site-index .btn.pri,.gm-mod--site-index .nav .out,.gm-mod--site-index .nav .git:hover{background:var(--mmh-grad-action-hc,#F77FA3)!important;color:#343A46!important} /* D9 */
+.gm-mod--site-index .btn.pri,.gm-mod--site-index .nav .out,.gm-mod--site-index .nav .git:hover{background:var(--mmh-grad-action-hc,#F77FA3)!important;color:#343A46!important;
+  border:none!important;box-shadow:0 1px 2px rgba(178,58,99,.22),0 8px 20px rgba(240,127,163,.30)!important} /* D9 + V2.9 配方 */
 
 /* 按钮 文字+图标 组合（03 · 3.2.5）：几何居中 + 固定 gap + 图标不挤压 */
 .gm-mod--site-index .btn,.gm-mod--site-index .nav .out,.gm-mod--site-index .nav .git,.gm-mod--site-index .go{display:inline-flex!important;align-items:center;justify-content:center;white-space:nowrap;vertical-align:middle;gap:8px}
@@ -545,11 +553,10 @@ import { GmIcon } from "@goodmom/icons";
 .gm-mod--preview-index .demo-card.c2{right:6%;top:8%;width:180px}
 .gm-mod--preview-index .demo-card.c2 .ringwrap{display:flex;align-items:center;gap:12px}
 .gm-mod--preview-index .demo-card.c3{bottom:6%;right:16%;display:flex;gap:8px;align-items:center}
-.gm-mod--preview-index .demo-card.c3 .gbtn{padding:8px 16px;border-radius:18px;font-size:12px;font-weight:600;border:1px solid rgba(255,255,255,.55);
-  background:var(--mmh-grad-action-hc,#F77FA3);
-  color:#343A46;box-shadow:0 8px 18px rgba(240,127,163,.35)}   /* D9：品牌亮粉底必须配深字；白高光层会稀释对比度，去掉 */
-.gm-mod--preview-index .demo-card.c3 .gbtn.gb2{background:linear-gradient(160deg,rgba(255,255,255,.5),transparent 55%),var(--lg-grad-cyan);
-  color:var(--lg-deep-slate);box-shadow:inset 0 1px 0 rgba(255,255,255,.5),0 8px 18px rgba(114,221,229,.3)}
+.gm-mod--preview-index .demo-card.c3 .gbtn{padding:8px 16px;border-radius:18px;font-size:12px;font-weight:600;
+  background:var(--mmh-grad-action-hc,#F77FA3);color:#343A46;border:1px solid transparent;box-shadow:0 1px 2px rgba(178,58,99,.22),0 8px 20px rgba(240,127,163,.30)}   /* D9：品牌亮粉底必须配深字；白描边/白高光在浅粉上会造成边缘深浅不均，一并去掉 */
+.gm-mod--preview-index .demo-card.c3 .gbtn.gb2{background:linear-gradient(160deg,#E0F8F6,#A5F1EE);
+  color:#1B3D33;border:none;box-shadow:0 1px 2px rgba(27,61,51,.18),0 8px 20px rgba(114,221,229,.30)}
 
 /* generic grid + panels */
 .gm-mod--preview-index .grid{display:grid;gap:18px}
@@ -601,7 +608,7 @@ import { GmIcon } from "@goodmom/icons";
 
 /* color swatches */
 .gm-mod--preview-index .sw-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(96px,1fr));gap:10px}
-.gm-mod--preview-index .sw{overflow:hidden;border-radius:18px;border:1px solid rgba(255,255,255,.6);
+.gm-mod--preview-index .sw{overflow:hidden;border-radius:18px;border:1px solid var(--lg-divider,rgba(58,52,84,.10));
   box-shadow:0 6px 14px rgba(58,52,84,.05);background:rgba(255,255,255,.35)}
 .gm-mod--preview-index .sw .chip{height:56px}
 .gm-mod--preview-index .sw .meta{padding:6px 8px;background:rgba(255,255,255,.55);-webkit-backdrop-filter:blur(16px);backdrop-filter:blur(16px)}
@@ -682,16 +689,21 @@ import { GmIcon } from "@goodmom/icons";
 .gm-mod--preview-index .btn-lg{height:48px;padding:0 22px;font-size:15px;border-radius:var(--lg-radius-btn-lg)}
 .gm-mod--preview-index .btn-md{height:40px;padding:0 18px;font-size:14px}
 .gm-mod--preview-index .btn-sm{height:32px;padding:0 14px;font-size:13px;border-radius:var(--lg-radius-btn-sm)}
-.gm-mod--preview-index .btn-primary{background:linear-gradient(160deg,rgba(255,255,255,.38),transparent 46%),var(--lg-grad-primary);
-  color:#FFF;border-color:rgba(255,255,255,.55);box-shadow:inset 0 1px 0 rgba(255,255,255,.45),var(--lg-shadow-md)}
-.gm-mod--preview-index .btn-primary:hover{box-shadow:inset 0 1px 0 rgba(255,255,255,.55),var(--lg-glow-purple-soft);transform:translateY(-1px)}
-.gm-mod--preview-index .btn-secondary{background:linear-gradient(160deg,rgba(255,255,255,.5),transparent 50%),var(--lg-grad-cyan);
-  color:var(--lg-deep-slate);border-color:rgba(255,255,255,.6);box-shadow:inset 0 1px 0 rgba(255,255,255,.5),var(--lg-shadow-md)}
-.gm-mod--preview-index .btn-secondary:hover{box-shadow:inset 0 1px 0 rgba(255,255,255,.6),var(--lg-glow-cyan-soft);transform:translateY(-1px)}
-.gm-mod--preview-index .btn-tertiary{background:linear-gradient(160deg,rgba(255,255,255,.6),rgba(255,255,255,.32));
-  color:var(--lg-deep-slate);border-color:rgba(255,255,255,.7);
-  -webkit-backdrop-filter:blur(20px);backdrop-filter:blur(20px);box-shadow:inset 0 1px 0 rgba(255,255,255,.5),var(--lg-shadow-sm)}
-.gm-mod--preview-index .btn-tertiary:hover{background:rgba(255,255,255,.55)}
+/* ── 03 · 3.2.4 按钮统一配方（V2.9 视觉优化）──
+   用户反馈：主按钮「描边与分层错行、发脏」，白底按钮「描边廉价」。
+   ① 主按钮：不套玻璃白描边 + 白内高光（02 · 2.5 的边光是给**半透明玻璃面**的；
+      落在 D9 后的不透明浅粉上会亮端看不见/暗端看得见 → 描边错行，再叠 inset 白高光成双线发糊）。
+   ② 白底按钮：原来边是**白色**（白/浅底上等于没有边 → 轮廓糊、廉价）；
+      改用 02 · 2.7.1 同源暖中性 hairline `--lg-divider`（暗色档自动翻白）+ 02 · 2.6 双层柔影。
+   ③ 本页原有一组 !important 只覆写了 background/color，**留下了旧设计的 border 与 inset 高光**，
+      正是「同一个主按钮在各页长得不一样」的根因 —— 现改为整组配方覆写。 */
+.gm-mod--preview-index .btn-primary{background:var(--mmh-grad-action-hc,#F77FA3);color:#343A46;border:1px solid transparent;box-shadow:0 1px 2px rgba(178,58,99,.22),0 8px 20px rgba(240,127,163,.30)}
+.gm-mod--preview-index .btn-primary:hover{box-shadow:0 2px 4px rgba(178,58,99,.24),0 12px 26px rgba(240,127,163,.38);transform:translateY(-1px)}
+.gm-mod--preview-index .btn-secondary{background:linear-gradient(160deg,#E0F8F6,#A5F1EE);color:#1B3D33;border:none;
+  box-shadow:0 1px 2px rgba(27,61,51,.18),0 8px 20px rgba(114,221,229,.30)}
+.gm-mod--preview-index .btn-secondary:hover{box-shadow:0 2px 4px rgba(27,61,51,.20),0 12px 26px rgba(114,221,229,.38);transform:translateY(-1px)}
+.gm-mod--preview-index .btn-tertiary{background:linear-gradient(160deg,rgba(255,255,255,.94),rgba(255,255,255,.78));color:var(--lg-text-primary,#343A46);border:1px solid var(--lg-divider,rgba(58,52,84,.10));box-shadow:0 1px 2px rgba(58,52,84,.06),0 4px 12px rgba(58,52,84,.08);-webkit-backdrop-filter:blur(16px) saturate(1.2);backdrop-filter:blur(16px) saturate(1.2)}
+.gm-mod--preview-index .btn-tertiary:hover{border-color:rgba(58,52,84,.16);box-shadow:0 2px 4px rgba(58,52,84,.07),0 8px 18px rgba(58,52,84,.10)}
 .gm-mod--preview-index .btn-ghost{background:transparent;color:var(--lg-text-secondary)}
 .gm-mod--preview-index .btn-ghost:hover{background:rgba(240,127,163,.10);color:var(--rose-deep)}
 .gm-mod--preview-index .btn.disabled{opacity:.4;pointer-events:none}
@@ -1116,18 +1128,18 @@ import { GmIcon } from "@goodmom/icons";
 .gm-mod--preview-index .bx-mini{height:28px;font-size:12px;padding:0 13px;border-radius:18px}  /* 02 · 2.4 交互下限 16 */
 .gm-mod--preview-index .bx-sm{height:32px;font-size:13px;padding:0 15px;border-radius:18px}
 .gm-mod--preview-index .bx-lg{height:48px;font-size:15px;padding:0 24px;border-radius:22px}
-.gm-mod--preview-index .bx-default{background:linear-gradient(160deg,rgba(255,255,255,.66),rgba(255,255,255,.34));color:var(--lg-deep-slate);border-color:rgba(255,255,255,.78);box-shadow:inset 0 1px 0 rgba(255,255,255,.55),var(--lg-shadow-sm)}
-.gm-mod--preview-index .bx-primary{background:var(--mmh-grad-action-hc,#F77FA3);color:#343A46;border-color:rgba(255,255,255,.6);box-shadow:inset 0 1px 0 rgba(255,255,255,.5),var(--lg-shadow-md)}
-.gm-mod--preview-index .bx-secondary{background:linear-gradient(160deg,rgba(255,255,255,.5),transparent 55%),var(--mmh-grad-mint,#6FC9B4);color:#FFF;border-color:rgba(255,255,255,.65);box-shadow:inset 0 1px 0 rgba(255,255,255,.55),var(--lg-shadow-md)}
-.gm-mod--preview-index .bx-outline{background:transparent;color:var(--mmh-rose-700,#B23A63);border:1.5px solid var(--mmh-rose-500,#F77FA3)}
+.gm-mod--preview-index .bx-default{background:linear-gradient(160deg,rgba(255,255,255,.94),rgba(255,255,255,.78));color:var(--lg-text-primary,#343A46);border:1px solid var(--lg-divider,rgba(58,52,84,.10));box-shadow:0 1px 2px rgba(58,52,84,.06),0 4px 12px rgba(58,52,84,.08);-webkit-backdrop-filter:blur(16px) saturate(1.2);backdrop-filter:blur(16px) saturate(1.2)}
+.gm-mod--preview-index .bx-primary{background:var(--mmh-grad-action-hc,#F77FA3);color:#343A46;border:1px solid transparent;box-shadow:0 1px 2px rgba(178,58,99,.22),0 8px 20px rgba(240,127,163,.30)}
+.gm-mod--preview-index .bx-secondary{background:linear-gradient(160deg,#C25064,#B04052);color:#FFF;border:none;box-shadow:0 1px 2px rgba(176,64,82,.24),0 8px 20px rgba(208,90,110,.28)}
+.gm-mod--preview-index .bx-outline{background:transparent;color:var(--mmh-rose-700,#B23A63);border:1.5px solid rgba(232,93,143,.45);box-shadow:0 1px 2px rgba(178,58,99,.06)}
 .gm-mod--preview-index .bx-outline:hover{background:rgba(247,127,163,.08)}
-.gm-mod--preview-index .bx-dashed{background:transparent;color:var(--mmh-rose-700,#B23A63);border:1.5px dashed var(--mmh-rose-500,#F77FA3)}
+.gm-mod--preview-index .bx-dashed{background:transparent;color:var(--mmh-rose-700,#B23A63);border:1.5px dashed rgba(232,93,143,.45);box-shadow:none}
 .gm-mod--preview-index .bx-dashed:hover{background:rgba(247,127,163,.08)}
 .gm-mod--preview-index .bx-text{background:none;color:var(--mmh-rose-700,#B23A63);border-color:transparent;padding:0 10px;box-shadow:none}
 .gm-mod--preview-index .bx-text:hover{background:rgba(247,127,163,.08)}
-.gm-mod--preview-index .bx-solid.st-success{background:#1E6B52;color:#FFF;border-color:rgba(255,255,255,.55);box-shadow:inset 0 1px 0 rgba(255,255,255,.28)} /* AA：白字 6.4:1（D5） */
-.gm-mod--preview-index .bx-solid.st-warning{background:#9A5A0E;color:#FFF;border-color:rgba(255,255,255,.55);box-shadow:inset 0 1px 0 rgba(255,255,255,.28)} /* AA：白字 5.46:1（D5） */
-.gm-mod--preview-index .bx-solid.st-danger{background:#B04052;color:#FFF;border-color:rgba(255,255,255,.55);box-shadow:inset 0 1px 0 rgba(255,255,255,.28)} /* AA：白字 5.67:1（D5） */
+.gm-mod--preview-index .bx-solid.st-success{background:#1E6B52;color:#FFF;border:1px solid transparent;box-shadow:0 1px 2px rgba(30,107,82,.22),0 8px 20px rgba(47,143,118,.28)} /* AA：白字 6.4:1（D5） */
+.gm-mod--preview-index .bx-solid.st-warning{background:#9A5A0E;color:#FFF;border:1px solid transparent;box-shadow:0 1px 2px rgba(154,90,14,.22),0 8px 20px rgba(185,119,28,.26)} /* AA：白字 5.46:1（D5） */
+.gm-mod--preview-index .bx-solid.st-danger{background:#B04052;color:#FFF;border:1px solid transparent;box-shadow:0 1px 2px rgba(176,64,82,.24),0 8px 20px rgba(208,90,110,.28)} /* AA：白字 5.67:1（D5） */
 .gm-mod--preview-index .bx-outline.st-danger{color:var(--lg-sem-risk);border-color:var(--lg-sem-risk)}
 .gm-mod--preview-index .bx-text.st-danger{color:var(--lg-sem-risk)}
 .gm-mod--preview-index .bx.round{border-radius:999px}
@@ -1155,8 +1167,7 @@ import { GmIcon } from "@goodmom/icons";
   outline:2px solid rgba(232,93,143,.6);outline-offset:2px;border-radius:18px}
 .gm-mod--preview-index .stepctl{display:flex;gap:10px;align-items:center;margin:2px 0 6px;flex-wrap:wrap}
 .gm-mod--preview-index .stepctl .sbtn{font-size:11px;font-weight:600;padding:6px 14px;border-radius:999px;cursor:pointer;
-  background:rgba(255,255,255,.62);border:1px solid rgba(255,255,255,.85);color:var(--lg-text-secondary);
-  box-shadow:var(--lg-shadow-xs);transition:transform .15s var(--lg-ease-out),background .2s}
+  background:linear-gradient(160deg,rgba(255,255,255,.94),rgba(255,255,255,.78));color:var(--lg-text-primary,#343A46);border:1px solid var(--lg-divider,rgba(58,52,84,.10));box-shadow:0 1px 2px rgba(58,52,84,.06),0 4px 12px rgba(58,52,84,.08);color:var(--lg-text-secondary);transition:transform .15s var(--lg-ease-out),background .2s}
 .gm-mod--preview-index .stepctl .sbtn:hover{background:#FFF;color:var(--mmh-rose-700,#B23A63)}
 .gm-mod--preview-index .stepctl .sbtn:active{transform:scale(.95)}
 .gm-mod--preview-index .stepctl .hint{font-size:11px;color:var(--lg-text-tertiary)}
@@ -1362,8 +1373,15 @@ import { GmIcon } from "@goodmom/icons";
 .gm-mod--preview-index .ng::after{content:"";position:absolute;left:0;right:0;top:100%;height:14px;z-index:5}
 .gm-mod--preview-index .ngdrop a:active{background:var(--mmh-rose-100,#FFF0F4);color:var(--mmh-rose-deep,#B23A63)}.gm-mod--preview-index{--mmh-grad-action-hc:linear-gradient(135deg,#FFC4D6 0%,#F77FA3 100%)}
 /* AA 高对比行动（D5/审查收口）：文字承载面切深档，装饰渐变/开关/进度条保持品牌亮渐变 */
-.gm-mod--preview-index .btn-primary,.gm-mod--preview-index .bx-primary,.gm-mod--preview-index .bgroup .bx.on,.gm-mod--preview-index .mchip.on,.gm-mod--preview-index .phone .tabmini i.on,.gm-mod--preview-index .step.done .sd{background:var(--mmh-grad-action-hc,#F77FA3)!important;color:#343A46!important}
-.gm-mod--preview-index .bx-secondary{background:#1E6B52!important;color:#FFF!important}
+/* ⚠️ 这一组必须覆写**完整配方**（底色 + 文字 + 描边 + 阴影）。
+   旧版只写 background/color，于是 `.btn-primary`/`.bx-primary` 的
+   `border-color:rgba(255,255,255,.55~.6)` 与 `inset 0 1px 0 白高光` 全部留了下来 ——
+   浅粉实底 + 白描边 + 白内高光 = 边缘深浅不均、双线发糊，即用户说的「描边与分层错行」。 */
+.gm-mod--preview-index .btn-primary,.gm-mod--preview-index .bx-primary,.gm-mod--preview-index .bgroup .bx.on,.gm-mod--preview-index .mchip.on,.gm-mod--preview-index .phone .tabmini i.on,.gm-mod--preview-index .step.done .sd{
+  background:var(--mmh-grad-action-hc,#F77FA3)!important;color:#343A46!important;border:1px solid transparent!important;
+  box-shadow:0 1px 2px rgba(178,58,99,.22),0 8px 20px rgba(240,127,163,.30)!important}
+.gm-mod--preview-index .bx-secondary{background:linear-gradient(160deg,#C25064,#B04052)!important;color:#FFF!important;border:none!important;
+  box-shadow:0 1px 2px rgba(176,64,82,.24),0 8px 20px rgba(208,90,110,.28)!important}
 
 /* 按钮 文字+图标 组合（03 · 3.2.5）：几何居中 + 固定 gap + 图标不挤压 */
 .gm-mod--preview-index .btn,.gm-mod--preview-index .bx,.gm-mod--preview-index .direct,.gm-mod--preview-index .op{display:inline-flex!important;align-items:center;justify-content:center;white-space:nowrap;vertical-align:middle;gap:8px}
@@ -1371,7 +1389,7 @@ import { GmIcon } from "@goodmom/icons";
 .gm-mod--preview-index .btn.sm svg,.gm-mod--preview-index .bx.sm svg,.gm-mod--preview-index .direct.sm svg,.gm-mod--preview-index .op.sm svg,.gm-mod--preview-index .small svg{width:14px!important;height:14px!important}
 .gm-mod--preview-index .btn.lg svg,.gm-mod--preview-index .bx.lg svg,.gm-mod--preview-index .direct.lg svg,.gm-mod--preview-index .op.lg svg,.gm-mod--preview-index .btn-lg svg,.gm-mod--preview-index .b1.lg svg,.gm-mod--preview-index .large svg{width:18px!important;height:18px!important}.gm-mod--preview-index{--mmh-grad-action-hc:linear-gradient(135deg,#FFC4D6 0%,#F77FA3 100%)}
 /* 按钮类型色 规范化（03 · 3.2.4 + D5/D6）：白字行动一律深档 */
-.gm-mod--preview-index .mbtn,.gm-mod--preview-index .direct.primary,.gm-mod--preview-index .direct.primary:hover{background:var(--mmh-grad-action-hc,#F77FA3)!important;color:#343A46!important;border:none!important}</style>
+.gm-mod--preview-index .mbtn,.gm-mod--preview-index .direct.primary,.gm-mod--preview-index .direct.primary:hover{background:var(--mmh-grad-action-hc,#F77FA3)!important;color:#343A46!important;border:1px solid transparent!important}</style>
 <!-- floating top nav -->
 
 
@@ -2980,7 +2998,11 @@ function MODROOT_preview_index(){return document.getElementById("gm-mod-preview-
 .gm-mod--preview-examples .hub a{font-size:12px;color:var(--t2);text-decoration:none;padding:6px 14px;border-radius:999px}
 .gm-mod--preview-examples .hub a:hover{background:rgba(255,255,255,.7)}
 .gm-mod--preview-examples .chip{font-size:12.5px;font-weight:500;color:var(--t2);padding:8px 16px;border-radius:999px;cursor:pointer;
-  background:rgba(255,255,255,.5);border:1px solid rgba(255,255,255,.75);user-select:none;transition:.2s}
+  /* 03 · 3.2.4 / 02 · 2.7.1：**浅底交互控件**的边统一为暖中性 hairline。
+   白 75–85% 的白描边落在白/浅底上等于「没有边」，形状糊掉 → 观感廉价（与白底按钮同一缺陷）。
+   注意：`.glass`/`.card`/`.panel` 等**半透明玻璃面**的白边是 02 · 2.5 的受光边缘定义，
+   属有意为之，不在本次统一范围内。 */
+background:rgba(255,255,255,.5);border:1px solid var(--lg-divider,rgba(58,52,84,.10));user-select:none;transition:.2s}
 .gm-mod--preview-examples .chip.on{background:var(--mmh-grad-action-hc,#F77FA3);color:#343A46;font-weight:600;box-shadow:0 6px 16px rgba(240,127,163,.35)}
 .gm-mod--preview-examples .chip:active{transform:scale(.96)}
 .gm-mod--preview-examples .view{display:none;max-width:1180px;margin:0 auto 60px;padding:8px 18px}
@@ -2999,18 +3021,26 @@ function MODROOT_preview_index(){return document.getElementById("gm-mod-preview-
 .gm-mod--preview-examples .btn{display:inline-flex;align-items:center;gap:8px;border:none;cursor:pointer;border-radius:18px;font-family:var(--font);
   font-size:13px;font-weight:600;padding:0 16px;height:36px;transition:transform .12s,box-shadow .2s;white-space:nowrap}
 .gm-mod--preview-examples .btn:active{transform:scale(.96)}
-.gm-mod--preview-examples .btn.pri{background:var(--mmh-grad-action-hc,#F77FA3);color:#343A46;box-shadow:0 6px 16px rgba(240,127,163,.35)}
-.gm-mod--preview-examples .btn.mint{background:linear-gradient(135deg,#7FD8C2,#4FB59C);color:#FFF}
+/* ── 03 · 3.2.4 按钮统一配方（V2.9）──
+   ① 主按钮不套玻璃白描边/白内高光：那两层是 02 · 2.5 给**半透明玻璃面**的边光，
+      落在 D9 后的浅粉实底上会「亮端看不见、暗端看得见」→ 描边错行；再叠 inset 白高光成双线发糊（脏）。
+      边缘清晰度改由同族玫色「接触影 + 辉光」承担（02 · 2.6 色相统一）。
+   ② 白底按钮的边不再用白色（白边在白/浅底上等于没有边 → 廉价），改用 02 · 2.7.1 同源的
+      暖中性 hairline `--lg-divider`（暗色档自动翻白）+ 02 · 2.6 双层柔影。 */
+.gm-mod--preview-examples .btn.pri{background:var(--mmh-grad-action-hc,#F77FA3);color:#343A46;border:1px solid transparent;box-shadow:0 1px 2px rgba(178,58,99,.22),0 8px 20px rgba(240,127,163,.30)}
+.gm-mod--preview-examples .btn.pri:hover{box-shadow:0 2px 4px rgba(178,58,99,.24),0 12px 26px rgba(240,127,163,.38)}
+.gm-mod--preview-examples .btn.mint{background:linear-gradient(135deg,#C25064,#B04052);color:#FFF}  /* 见下行：实底统一走 D5 深档 */
 .gm-mod--preview-examples .btn.gho{background:transparent;color:var(--rose-deep)}
-.gm-mod--preview-examples .btn.line{background:transparent;border:1.5px solid var(--rose);color:var(--rose-deep)}
-.gm-mod--preview-examples .btn.danger{background:linear-gradient(135deg,#F79AA8,#E25B72);color:#FFF}
+.gm-mod--preview-examples .btn.line{background:transparent;color:var(--mmh-rose-700,#B23A63);border:1.5px solid rgba(232,93,143,.45);box-shadow:0 1px 2px rgba(178,58,99,.06)}
+.gm-mod--preview-examples .btn.line:hover{border-color:rgba(232,93,143,.75);background:rgba(247,127,163,.07)}
+.gm-mod--preview-examples .btn.danger{background:linear-gradient(135deg,#C25064,#B04052);color:#FFF}
 .gm-mod--preview-examples .btn.mini{height:30px;font-size:12px;padding:0 12px}
 /* PC 顶栏 */
 .gm-mod--preview-examples .pcbar{position:relative;max-width:1180px;margin:14px auto 0;padding:8px 12px;border-radius:999px;display:flex;align-items:center;gap:12px}
 .gm-mod--preview-examples .pcbar .logo{font-weight:700;color:var(--rose-deep);display:flex;align-items:center;gap:8px;font-size:15px}
 .gm-mod--preview-examples .pcbar .logo i{width:22px;height:22px;border-radius:8px;background:var(--grad-p);display:inline-block}
 .gm-mod--preview-examples .pcbar .search{margin-left:auto;display:flex;align-items:center;gap:8px;background:rgba(255,255,255,.55);
-  border:1px solid rgba(255,255,255,.8);border-radius:999px;padding:0 14px;height:38px;min-width:260px;color:var(--t3)}
+  border:1px solid var(--lg-divider,rgba(58,52,84,.10));border-radius:999px;padding:0 14px;height:38px;min-width:260px;color:var(--t3)}
 .gm-mod--preview-examples .pcbar .search input{border:none;outline:none;background:transparent;font-size:13px;color:var(--text);flex:1;font-family:var(--font)}
 /* 02 · 2.7.1：搜索框必须保留可见焦点环（原规则 outline:none 且无兜底） */
 .gm-mod--preview-examples .pcbar .search input:focus-visible{outline:2px solid rgba(232,93,143,.6);outline-offset:2px;border-radius:18px}
@@ -3083,9 +3113,9 @@ function MODROOT_preview_index(){return document.getElementById("gm-mod-preview-
 .gm-mod--preview-examples .mobottom .b1{flex:1;display:flex;align-items:center;justify-content:center;gap:6px;border:none;cursor:pointer;border-radius:18px;
   font-size:14px;font-weight:600;height:44px;font-family:var(--font)}
 .gm-mod--preview-examples .b1.pri{background:var(--mmh-grad-action-hc,#F77FA3);color:#343A46}
-.gm-mod--preview-examples .b1.mint{background:linear-gradient(135deg,#7FD8C2,#4FB59C);color:#FFF}
-.gm-mod--preview-examples .b1.ghost{background:rgba(255,255,255,.5);border:1px solid rgba(255,255,255,.8);color:var(--t2)}
-.gm-mod--preview-examples .b1.danger{background:linear-gradient(135deg,#F79AA8,#E25B72);color:#FFF}
+.gm-mod--preview-examples .b1.mint{background:linear-gradient(135deg,#2F8F76,#1E6B52);color:#FFF}
+.gm-mod--preview-examples .b1.ghost{background:rgba(255,255,255,.5);border:1px solid var(--lg-divider,rgba(58,52,84,.10));color:var(--t2)}
+.gm-mod--preview-examples .b1.danger{background:linear-gradient(135deg,#C25064,#B04052);color:#FFF}
 .gm-mod--preview-examples .lv{display:flex;flex-direction:column;gap:10px;margin-top:10px}
 .gm-mod--preview-examples .lvitem{display:flex;align-items:center;gap:12px;padding:14px;border-radius:18px}
 .gm-mod--preview-examples .lvitem .ic{width:42px;height:42px;border-radius:18px;flex:none;display:flex;align-items:center;justify-content:center;
@@ -3219,11 +3249,14 @@ function MODROOT_preview_index(){return document.getElementById("gm-mod-preview-
 .gm-mod--preview-examples .btn.sm svg,.gm-mod--preview-examples .b1.sm svg,.gm-mod--preview-examples .small svg{width:14px!important;height:14px!important}
 .gm-mod--preview-examples .btn.lg svg,.gm-mod--preview-examples .b1.lg svg,.gm-mod--preview-examples .btn-lg svg,.gm-mod--preview-examples .b1.lg svg,.gm-mod--preview-examples .large svg{width:18px!important;height:18px!important}.gm-mod--preview-examples{--mmh-grad-action-hc:linear-gradient(135deg,#FFC4D6 0%,#F77FA3 100%)}
 /* 按钮类型色 规范化（03 · 3.2.4 + D5/D6） */
-.gm-mod--preview-examples .btn.pri,.gm-mod--preview-examples .b1.pri{background:var(--mmh-grad-action-hc,#F77FA3)!important;color:#343A46!important;border:none!important}
-.gm-mod--preview-examples .btn.mint,.gm-mod--preview-examples .btn.success,.gm-mod--preview-examples .b1.mint,.gm-mod--preview-examples .b1.success{background:#1E6B52!important;color:#FFF!important;border:none!important}
-.gm-mod--preview-examples .btn.danger,.gm-mod--preview-examples .btn.risk,.gm-mod--preview-examples .b1.danger,.gm-mod--preview-examples .b1.risk{background:#B04052!important;color:#FFF!important;border:none!important}
-.gm-mod--preview-examples .btn.warning,.gm-mod--preview-examples .b1.warning{background:#9A5A0E!important;color:#FFF!important;border:none!important}.gm-mod--preview-examples{--mmh-grad-action-hc:linear-gradient(135deg,#FFC4D6 0%,#F77FA3 100%)}
-.gm-mod--preview-examples .chip.on{background:var(--mmh-grad-action-hc,#F77FA3)!important;color:#343A46!important;border:none!important}</style>
+.gm-mod--preview-examples .btn.pri,.gm-mod--preview-examples .b1.pri{background:var(--mmh-grad-action-hc,#F77FA3)!important;color:#343A46!important;border:1px solid transparent!important;
+  box-shadow:0 1px 2px rgba(178,58,99,.22),0 8px 20px rgba(240,127,163,.30)!important}
+.gm-mod--preview-examples .btn.mint,.gm-mod--preview-examples .btn.success,.gm-mod--preview-examples .b1.mint,.gm-mod--preview-examples .b1.success{background:#1E6B52!important;color:#FFF!important;border:1px solid transparent!important;
+  box-shadow:0 1px 2px rgba(30,107,82,.22),0 8px 20px rgba(47,143,118,.28)!important}
+.gm-mod--preview-examples .btn.danger,.gm-mod--preview-examples .btn.risk,.gm-mod--preview-examples .b1.danger,.gm-mod--preview-examples .b1.risk{background:#B04052!important;color:#FFF!important;border:1px solid transparent!important;
+  box-shadow:0 1px 2px rgba(176,64,82,.24),0 8px 20px rgba(208,90,110,.28)!important}
+.gm-mod--preview-examples .btn.warning,.gm-mod--preview-examples .b1.warning{background:#9A5A0E!important;color:#FFF!important;border:1px solid transparent!important}.gm-mod--preview-examples{--mmh-grad-action-hc:linear-gradient(135deg,#FFC4D6 0%,#F77FA3 100%)}
+.gm-mod--preview-examples .chip.on{background:var(--mmh-grad-action-hc,#F77FA3)!important;color:#343A46!important;border:1px solid transparent!important}</style>
 <div class="hub">
   <b><img src="../brand/logo-512.png" alt="妈咪好" style="width:22px;height:22px;border-radius:50%">妈咪好 · 示例中心</b><span class="ng" style="margin-left:auto"><button class="ngt" type="button">站点导航 ▾</button><span class="ngdrop"><a href="#gm-mod-site-index" data-mod="site-index"">主站 · 落地 ›</a>
       <a href="https://github.com/ningmengsixiang/GoodMom" target="_blank" rel="noopener">GitHub 开源仓库 ›</a><a href="#gm-mod-preview-mobile" data-mod="preview-mobile"">移动端预览</a><a href="#gm-mod-site-manual" data-mod="site-manual"">总览手册</a><a href="#preview-examples--list" data-mod="preview-examples"">回到本页顶部</a></span></span>
@@ -3901,11 +3934,13 @@ function MODROOT_preview_examples(){return document.getElementById("gm-mod-previ
 .gm-mod--preview-mobile .tab.on svg{transform:scale(1.04)}
 
 /* 底部主行动 */
+/* 移动端主 CTA —— 03 · 3.2.4 主按钮配方（与全站主按钮完全一致）
+   ⚠️ 原规则里 `border` 与 `box-shadow` **各声明了两次**，后写的「白边 + 白内高光」胜出，
+      把前面的配方静默吃掉 —— 这是"描边与分层错行"的又一实例，本次一并去重。 */
 .gm-mod--preview-mobile .cta{display:flex;align-items:center;justify-content:center;gap:8px;width:100%;height:50px;
   border:none;border-radius:18px;font-family:var(--font);font-size:16px;font-weight:600;color:#343A46;
   background:var(--mmh-grad-action-hc,#F77FA3);
-  border:1px solid rgba(255,255,255,.6);
-  box-shadow:inset 0 1px 0 rgba(255,255,255,.5),0 12px 26px rgba(240,127,163,.35);
+  box-shadow:0 1px 2px rgba(178,58,99,.22),0 8px 20px rgba(240,127,163,.30);
   transition:transform .12s ease;cursor:pointer;margin:6px 0 4px}
 .gm-mod--preview-mobile .cta:active{transform:scale(.97)}
 
@@ -3929,7 +3964,7 @@ function MODROOT_preview_examples(){return document.getElementById("gm-mod-previ
 .gm-mod--preview-mobile .notice .x{color:var(--text-3);flex:none;display:flex;padding:6px}
 /* SearchBar */
 .gm-mod--preview-mobile .sbar{display:flex;align-items:center;gap:8px;padding:0 6px 0 14px;height:44px;border-radius:18px;
-  background:rgba(255,255,255,.4);border:1px solid rgba(255,255,255,.75);
+  background:rgba(255,255,255,.4);border:1px solid var(--lg-divider,rgba(58,52,84,.10));
   box-shadow:inset 0 1px 2px rgba(58,52,84,.05)}
 .gm-mod--preview-mobile .sbar svg{flex:none;color:var(--text-3)}
 .gm-mod--preview-mobile .sbar input{flex:1;border:none;outline:none;background:transparent;font-family:var(--font);
@@ -3948,7 +3983,7 @@ function MODROOT_preview_examples(){return document.getElementById("gm-mod-previ
 /* chips 筛选 */
 .gm-mod--preview-mobile .chips{display:flex;gap:8px;flex-wrap:wrap}
 .gm-mod--preview-mobile .chip{padding:8px 16px;border-radius:999px;font-size:13px;color:var(--text-2);cursor:pointer;
-  background:rgba(255,255,255,.4);border:1px solid rgba(255,255,255,.65);
+  background:rgba(255,255,255,.4);border:1px solid var(--lg-divider,rgba(58,52,84,.10));
   transition:color .2s ease,background .25s ease,box-shadow .25s ease;user-select:none}
 .gm-mod--preview-mobile .chip:active{transform:scale(.96)}
 .gm-mod--preview-mobile .chip.on{color:#343A46;background:var(--mmh-grad-action-hc,#F77FA3);border-color:transparent;box-shadow:0 6px 14px rgba(240,127,163,.35)}
@@ -3999,16 +4034,24 @@ function MODROOT_preview_examples(){return document.getElementById("gm-mod-previ
   cursor:pointer;white-space:nowrap;transition:transform .12s ease}
 .gm-mod--preview-mobile .mbb:active{transform:scale(.96)}
 .gm-mod--preview-mobile .mbb svg{width:17px;height:17px;stroke:currentColor;fill:none;stroke-width:1.9;stroke-linecap:round;stroke-linejoin:round}
-.gm-mod--preview-mobile .mbb-primary{background:linear-gradient(160deg,rgba(255,255,255,.4),transparent 48%),var(--grad-p);color:#FFF;border-color:rgba(255,255,255,.65);box-shadow:0 8px 18px rgba(240,127,163,.32)}
-.gm-mod--preview-mobile .mbb-default{background:linear-gradient(160deg,rgba(255,255,255,.7),rgba(255,255,255,.4));color:var(--text);border-color:rgba(255,255,255,.8)}
-.gm-mod--preview-mobile .mbb-secondary{background:linear-gradient(135deg,#7FD8C2,#4FB59C);color:#FFF;border-color:rgba(255,255,255,.6)}
-.gm-mod--preview-mobile .mbb-outline{background:transparent;color:#B23A63;border:1.5px solid #F77FA3}
-.gm-mod--preview-mobile .mbb-dashed{background:transparent;color:#B23A63;border:1.5px dashed #F77FA3}
+/* ── 03 · 3.2.4 按钮统一配方（V2.9）──
+   ① 主按钮不套玻璃白描边/白内高光：那两层是 02 · 2.5 给**半透明玻璃面**的边光，
+      落在 D9 后的浅粉实底上会「亮端看不见、暗端看得见」→ 描边错行；再叠 inset 白高光成双线发糊（脏）。
+      边缘清晰度改由同族玫色「接触影 + 辉光」承担（02 · 2.6 色相统一）。
+   ② 白底按钮的边不再用白色（白边在白/浅底上等于没有边 → 廉价），改用 02 · 2.7.1 同源的
+      暖中性 hairline `--lg-divider`（暗色档自动翻白）+ 02 · 2.6 双层柔影。 */
+.gm-mod--preview-mobile .mbb-primary{background:var(--mmh-grad-action-hc,#F77FA3);color:#343A46;border:1px solid transparent;box-shadow:0 1px 2px rgba(178,58,99,.22),0 8px 20px rgba(240,127,163,.30)}
+.gm-mod--preview-mobile .mbb-primary:hover{box-shadow:0 2px 4px rgba(178,58,99,.24),0 12px 26px rgba(240,127,163,.38)}
+.gm-mod--preview-mobile .mbb-default{background:linear-gradient(160deg,rgba(255,255,255,.94),rgba(255,255,255,.78));color:var(--lg-text-primary,#343A46);border:1px solid var(--lg-divider,rgba(58,52,84,.10));box-shadow:0 1px 2px rgba(58,52,84,.06),0 4px 12px rgba(58,52,84,.08);-webkit-backdrop-filter:blur(16px) saturate(1.2);backdrop-filter:blur(16px) saturate(1.2)}
+.gm-mod--preview-mobile .mbb-default:hover{border-color:rgba(58,52,84,.16);box-shadow:0 2px 4px rgba(58,52,84,.07),0 8px 18px rgba(58,52,84,.10)}
+.gm-mod--preview-mobile .mbb-secondary{background:linear-gradient(135deg,#2F8F76,#1E6B52);color:#FFF;border:1px solid transparent;box-shadow:0 1px 2px rgba(30,107,82,.22),0 8px 20px rgba(47,143,118,.28)}
+.gm-mod--preview-mobile .mbb-outline{background:transparent;color:#B23A63;border:1.5px solid rgba(232,93,143,.45);box-shadow:0 1px 2px rgba(178,58,99,.06)}
+.gm-mod--preview-mobile .mbb-dashed{background:transparent;color:#B23A63;border:1.5px dashed rgba(232,93,143,.45)}
 .gm-mod--preview-mobile .mbb-text{background:none;color:#B23A63;padding:0 8px}
-.gm-mod--preview-mobile .mbb-success{background:linear-gradient(135deg,#7FD8C2,#4FB59C);color:#FFF}
-.gm-mod--preview-mobile .mbb-warning{background:linear-gradient(135deg,#F8CE8C,#EFAF55);color:#FFF}
-.gm-mod--preview-mobile .mbb-danger{background:linear-gradient(135deg,#F79AA8,#E25B72);color:#FFF}
-.gm-mod--preview-mobile .mbb-danger.mbb-outline{background:transparent;color:#E25B72;border:1.5px solid #E25B72}
+.gm-mod--preview-mobile .mbb-success{background:linear-gradient(135deg,#2F8F76,#1E6B52);color:#FFF;box-shadow:0 1px 2px rgba(30,107,82,.22),0 8px 20px rgba(47,143,118,.28)}
+.gm-mod--preview-mobile .mbb-warning{background:linear-gradient(135deg,#B9771C,#9A5A0E);color:#FFF;box-shadow:0 1px 2px rgba(154,90,14,.22),0 8px 20px rgba(185,119,28,.26)}
+.gm-mod--preview-mobile .mbb-danger{background:linear-gradient(135deg,#C25064,#B04052);color:#FFF;box-shadow:0 1px 2px rgba(176,64,82,.24),0 8px 20px rgba(208,90,110,.28)}
+.gm-mod--preview-mobile .mbb-danger.mbb-outline{background:transparent;color:#B72F42;border:1.5px solid rgba(183,47,66,.45);box-shadow:0 1px 2px rgba(183,47,66,.08)}
 .gm-mod--preview-mobile .mbb-xs{height:28px;font-size:12px;padding:0 14px;border-radius:18px}
 .gm-mod--preview-mobile .mbb-sm{height:32px;font-size:13px;padding:0 16px;border-radius:18px}
 .gm-mod--preview-mobile .mbb-lg{height:48px;font-size:16px;padding:0 26px;border-radius:22px}
@@ -4030,7 +4073,7 @@ function MODROOT_preview_examples(){return document.getElementById("gm-mod-previ
 .gm-mod--preview-mobile .cta svg,.gm-mod--preview-mobile .mbb svg{flex:none!important;display:block!important;width:16px!important;height:16px!important;fill:none;stroke:currentColor;stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round}
 .gm-mod--preview-mobile .cta.sm svg,.gm-mod--preview-mobile .mbb.sm svg,.gm-mod--preview-mobile .small svg{width:14px!important;height:14px!important}
 .gm-mod--preview-mobile .cta.lg svg,.gm-mod--preview-mobile .mbb.lg svg,.gm-mod--preview-mobile .btn-lg svg,.gm-mod--preview-mobile .b1.lg svg,.gm-mod--preview-mobile .large svg{width:18px!important;height:18px!important}.gm-mod--preview-mobile{--mmh-grad-action-hc:linear-gradient(135deg,#FFC4D6 0%,#F77FA3 100%)}
-.gm-mod--preview-mobile .chip.on{background:var(--mmh-grad-action-hc,#F77FA3)!important;color:#343A46!important;border:none!important}</style>
+.gm-mod--preview-mobile .chip.on{background:var(--mmh-grad-action-hc,#F77FA3)!important;color:#343A46!important;border:1px solid transparent!important}</style>
 <div class="stage">
 
   <!-- NavBar -->
@@ -4355,7 +4398,7 @@ function MODROOT_preview_mobile(){return document.getElementById("gm-mod-preview
 /* ── 3.5.5 / 10.11.3 级联 ── */
 .gm-mod--preview-patterns .cas{position:relative;display:inline-block;font-size:14px}
 .gm-mod--preview-patterns .cas-t{display:flex;align-items:center;gap:8px;width:100%;min-width:210px;height:40px;padding:0 14px;border-radius:20px;
-  border:var(--bw-1) solid rgba(255,255,255,.75);background:var(--glass-control);color:var(--text);font-family:inherit;font-size:14px;
+  border:var(--bw-1) solid var(--lg-divider,rgba(58,52,84,.10));background:var(--glass-control);color:var(--text);font-family:inherit;font-size:14px;
   text-align:left;cursor:pointer;transition:box-shadow .18s,border-color .18s}
 .gm-mod--preview-patterns .cas-t:focus-visible{outline:var(--bw-3) solid var(--ring);outline-offset:var(--ring-off)}
 .gm-mod--preview-patterns .cas-t .v{flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
@@ -4384,9 +4427,9 @@ function MODROOT_preview_mobile(){return document.getElementById("gm-mod-preview
 .gm-mod--preview-patterns .cas-sheet .cas-p{position:static;display:flex;box-shadow:none;background:none;border:none;backdrop-filter:none;-webkit-backdrop-filter:none}
 .gm-mod--preview-patterns .cas-sheet .cas-col{width:auto;flex:1;min-width:112px}
 .gm-mod--preview-patterns .cas-foot{display:flex;gap:12px;margin-top:12px}
-.gm-mod--preview-patterns .cas-btn{flex:1;height:46px;border-radius:22px;border:var(--bw-1) solid rgba(255,255,255,.75);background:rgba(255,255,255,.5);
+.gm-mod--preview-patterns .cas-btn{flex:1;height:46px;border-radius:22px;border:var(--bw-1) solid var(--lg-divider,rgba(58,52,84,.10));background:rgba(255,255,255,.5);
   font-family:inherit;font-size:15px;font-weight:600;color:var(--text);cursor:pointer}
-.gm-mod--preview-patterns .cas-btn.pri{background:var(--mmh-grad-action-hc);border:none;color:var(--text)}
+.gm-mod--preview-patterns .cas-btn.pri{background:var(--mmh-grad-action-hc);border:1px solid transparent;color:var(--text)}
 .gm-mod--preview-patterns .cas-btn[disabled]{opacity:.5;cursor:not-allowed}
 .gm-mod--preview-patterns .cas-btn:focus-visible{outline:var(--bw-3) solid var(--ring);outline-offset:2px}
 /* ── 10.11.1 响应式容器 ── */
@@ -4450,7 +4493,7 @@ function MODROOT_preview_mobile(){return document.getElementById("gm-mod-preview
 .gm-mod--preview-patterns .bw .bx{height:44px;border-radius:18px;border-style:solid;border-color:var(--rose-deep);margin-bottom:8px}
 .gm-mod--preview-patterns .bw code{font-size:12px;color:var(--text)}.gm-mod--preview-patterns .bw small{display:block;color:var(--t2);font-size:11px;margin-top:4px}
 .gm-mod--preview-patterns .sw{display:inline-flex;align-items:center;gap:8px;font-size:12px;color:var(--t2);background:rgba(255,255,255,.5);
-  border:1px solid rgba(255,255,255,.75);border-radius:999px;padding:6px 14px;cursor:pointer;font-family:inherit}
+  border:1px solid var(--lg-divider,rgba(58,52,84,.10));border-radius:999px;padding:6px 14px;cursor:pointer;font-family:inherit}
 .gm-mod--preview-patterns .sw:focus-visible{outline:var(--bw-3) solid var(--ring);outline-offset:2px}
 @media (max-width:767px){
   .gm-mod--preview-patterns .row{display:grid;grid-template-columns:1fr;gap:14px}      /* 移动端：并列演示改单列堆叠，触发条得满宽 */
@@ -5544,7 +5587,7 @@ loading: 图标位替换为 18px 白/紫色柔和 spinner（无旋转霓虹）</
 <h4>3.2.4 对齐 Arco Design · 按钮全谱（Button Spectrum）</h4>
 <blockquote>按 [Arco Design Button](https://arco.design/react/components/button) 的类型 / 状态 / 尺寸 / 复合形态体系，<br>映射为本系统的「玻璃按钮全谱」。类型与状态是正交的两维：类型决定底与描边，状态决定语义色。</blockquote>
 <p><b>类型（Type）—— LG ↔ Arco 对照</b></p>
-<table><thead><tr><th>LG 类型</th><th>Arco 对应</th><th>玻璃构成</th><th>用途</th></tr></thead><tbody><tr><td>Primary 主按钮（品牌粉主行动）</td><td><code>primary</code></td><td><code>--mmh-grad-action-hc</code>（Rose-300→Rose-500 = <code>#FFC4D6→#F77FA3</code>）+ <b>深字 <code>#343A46</code></b> + 辉光；文字区 4.89–7.67:1 ≥4.5（含 #E85D8F 深端的 <code>--mmh-grad-primary</code> 仅装饰/大字号，D9）</td><td>页面唯一主行动（CTA）</td></tr><tr><td>Default 默认按钮（中性白玻璃）</td><td><code>secondary</code>（未指定 type 的灰底感）</td><td><code>--lg-glass-control</code> 白玻璃 + 深字 + 内高光</td><td>通用操作（原 Tertiary 角色并入）</td></tr><tr><td>Secondary 次按钮（薄荷渐变）</td><td>正向次行动</td><td><code>--mmh-grad-mint</code> / 青渐变</td><td>正向操作（完成、预约、开始）</td></tr><tr><td>Outline 描边按钮</td><td><code>outline</code></td><td>透明底 + 1.5px 玫瑰描边 + 玫瑰字</td><td>次要并列行动、导出、加入</td></tr><tr><td>Dashed 虚线按钮</td><td><code>dashed</code></td><td>同上但 <code>border-style: dashed</code></td><td>添加入口、拖拽占位</td></tr><tr><td>Text 文字按钮</td><td><code>text</code></td><td>无底无框、玫瑰字，hover 淡洗色</td><td>行内/工具栏最低干扰操作</td></tr></tbody></table>
+<table><thead><tr><th>LG 类型</th><th>Arco 对应</th><th>玻璃构成</th><th>用途</th></tr></thead><tbody><tr><td>Primary 主按钮（品牌粉主行动）</td><td><code>primary</code></td><td><code>--mmh-grad-action-hc</code>（Rose-300→Rose-500 = <code>#FFC4D6→#F77FA3</code>）+ <b>深字 <code>#343A46</code></b> + 同族玫「接触影 + 辉光」双层；<b>不套玻璃白描边/白内高光</b>（见 3.2.4.1）；文字区 4.89–7.67:1 ≥4.5（含 #E85D8F 深端的 <code>--mmh-grad-primary</code> 仅装饰/大字号，D9）</td><td>页面唯一主行动（CTA）</td></tr><tr><td>Default 默认按钮（中性白玻璃）</td><td><code>secondary</code>（未指定 type 的灰底感）</td><td>半透明白玻璃 + 深字 + <b>暖中性 hairline 描边 <code>--lg-divider</code></b> + 双层柔影（<b>不用白描边</b>，见 3.2.4.1）</td><td>通用操作（原 Tertiary 角色并入）</td></tr><tr><td>Secondary 次按钮（薄荷渐变）</td><td>正向次行动</td><td><code>--mmh-grad-mint</code> / 青渐变</td><td>正向操作（完成、预约、开始）</td></tr><tr><td>Outline 描边按钮</td><td><code>outline</code></td><td>透明底 + 1.5px 玫瑰描边 <code>rgba(232,93,143,.45)</code> + 玫瑰字 + 极淡玫影</td><td>次要并列行动、导出、加入</td></tr><tr><td>Dashed 虚线按钮</td><td><code>dashed</code></td><td>同上但 <code>border-style: dashed</code></td><td>添加入口、拖拽占位</td></tr><tr><td>Text 文字按钮</td><td><code>text</code></td><td>无底无框、玫瑰字，hover 淡洗色</td><td>行内/工具栏最低干扰操作</td></tr></tbody></table>
 <p><b>状态（Status）—— 叠加语义色（覆盖在 Primary/Default 实底 或 Outline/Text 上）</b></p>
 <table><thead><tr><th>状态</th><th>实底（Solid）</th><th>描边/文字</th></tr></thead><tbody><tr><td>default（默认）</td><td>玫瑰渐变 <code>--mmh-grad-primary</code></td><td>玫瑰字/玫瑰描边</td></tr><tr><td>success（成功/正向）</td><td>薄荷渐变 <code>--mmh-mint-*</code></td><td>薄荷字（白字大按钮用深薄荷底）</td></tr><tr><td>warning（警告）</td><td>琥珀渐变 <code>--mmh</code> 用 <code>--lg-warning-500</code> 系</td><td>琥珀字</td></tr><tr><td>danger（危险）</td><td>珊瑚渐变 <code>--lg-danger-500</code> 系（近 <code>--mmh-rose-700</code>）</td><td>红字——删除/停用/高危确认</td></tr></tbody></table>
 <p><b>尺寸（Size）—— 4 档</b></p>
@@ -5554,6 +5597,29 @@ M  default 40 高 / 14px / 圆角 20   （默认）
 L  large 48 高 / 15px / 圆角 24     主行动、大屏</pre>
 <p><b>形状与复合形态</b></p>
 <table><thead><tr><th>形态</th><th>说明</th><th>Arco 对应</th></tr></thead><tbody><tr><td>圆角胶囊 Round</td><td>任意类型 <code>border-radius:999px</code></td><td><code>shape="round"</code></td></tr><tr><td>圆形 Circle</td><td>仅图标钮：宽=高，<code>border-radius:50%</code></td><td><code>shape="circle"</code></td></tr><tr><td>按钮组 Button.Group</td><td>兄弟钮左右相连，首左末右保留外圆角，中间直角共享边</td><td><code>Button.Group</code></td></tr><tr><td>长按钮 Long</td><td>容器全宽、内容居中</td><td><code>long</code></td></tr><tr><td>图标图标 Icon-only / 图标+文字</td><td>图标位 16–20，左图标+文字 / 纯图标</td><td><code>icon</code></td></tr><tr><td>加载 Loading</td><td>图标位 18px 细环 0.9s/圈，期间禁点</td><td><code>loading</code></td></tr><tr><td>链接按钮 Link</td><td>同 Text 类型，<code>&lt;a&gt;</code> 语义 + <code>lg-icon-external-link</code> 可选</td><td><code>component="a"</code></td></tr><tr><td>禁用 Disabled</td><td>opacity .4，去辉光与彩色</td><td><code>disabled</code></td></tr></tbody></table>
+<p><b>3.2.4.1 统一配方（V2.9 视觉优化，必读）</b></p>
+<blockquote>用户反馈：① 主按钮"描边和分层有错行、发脏"；② 白底按钮"描边非常廉价"。<br>两个根因都是<b>把玻璃边光用在了不该用的地方</b>，且<b>同一按钮在各页各写一套</b>（这才是"错行"）。</blockquote>
+<p><b>根因一 · 不透明实底套了玻璃边光。</b> 02 · 2.5 的「1px 白色描边 + 顶部白内高光」是给 <b>半透明玻璃面</b>的受光边缘；主按钮经 D9 改为<b>不透明</b>品牌粉渐变后仍然带着它们 —— 白边落在浅粉上「亮端看不见、暗端看得见」，一圈边缘深浅不均（描边错行）， 再叠一层 inset 白高光就成了双线，视觉发糊（发脏）。</p>
+<p><b>根因二 · 浅底控件的边用了白色。</b> 白 75–85% 的描边落在白/浅底上等于<b>没有边</b>， 形状糊掉 → 廉价。玻璃面板（<code>.glass</code>/<code>.card</code>）的白边因为<b>底下有彩色光斑</b>才成立； 实心白按钮底下没有，白边就失效了。</p>
+<p><b>三条统一配方（全站唯一口径，站点与两个组件库同源）</b></p>
+<pre>/* A 主按钮（品牌粉主行动）—— 不透明实底：不描边，靠同族色双层阴影立边 */
+background: var(--mmh-grad-action-hc);   color: var(--lg-text-on-accent);   border: none;
+box-shadow: 0 1px 2px rgba(178,58,99,.22),      /* 接触影：给边缘清晰度 */
+            0 8px 20px rgba(240,127,163,.30);   /* 品牌玫辉光：02 · 2.6 色相统一，禁混中性灰 */
+
+/* B 白底/浅底按钮（Default · Secondary · 白玻璃）—— 边必须是可辨识的暖中性 hairline */
+background: linear-gradient(160deg, rgba(255,255,255,.94), rgba(255,255,255,.78));
+color: var(--lg-text-primary);
+border: 1px solid var(--lg-divider);            /* = rgba(58,52,84,.10)，暗色档自动翻白 */
+box-shadow: 0 1px 2px rgba(58,52,84,.06), 0 4px 12px rgba(58,52,84,.08);
+backdrop-filter: blur(16px) saturate(1.2);      /* 玻璃感保留（02 · 2.5 L3） */
+
+/* C 描边按钮（Outline / Dashed）—— 1.5px 带 alpha 的玫瑰，禁纯色饱和硬边 */
+background: transparent;   color: var(--mmh-rose-700);   border: 1.5px solid rgba(232,93,143,.45);
+box-shadow: 0 1px 2px rgba(178,58,99,.06);</pre>
+<p><b>同档统一（同一缺陷类，一并收口）</b>：浅底交互控件——<code>chip</code>／级联选择器 <code>cas-t</code>／ 搜索框／勾选框 <code>chk</code>／开关轨道 <code>sw</code>——的边一律用 <code>--lg-divider</code>。 <b>不在本档范围内</b>：<code>.glass</code>／<code>.card</code>／<code>.panel</code> 等<b>半透明玻璃面</b>的白边是 02 · 2.5 的 材质定义（底下有光斑），保持不动。</p>
+<p><b>反面清单（写代码时逐条对照）</b></p>
+<table><thead><tr><th>✘ 不要</th><th>✔ 应该</th></tr></thead><tbody><tr><td>不透明实底 + 白色描边 + 白内高光</td><td>实底不描边，用同族色接触影 + 辉光</td></tr><tr><td>浅底按钮用 <code>rgba(255,255,255,.7+)</code> 描边</td><td>用 <code>--lg-divider</code> 暖中性 hairline</td></tr><tr><td>Outline 用纯 <code>#F77FA3</code> 1px 描边、零阴影</td><td>1.5px <code>rgba(232,93,143,.45)</code> + 极淡玫影</td></tr><tr><td>同一条规则里 <code>border</code> / <code>box-shadow</code> 声明两次（后者静默胜出）</td><td>一条规则一次，覆盖要显式</td></tr><tr><td>用 <code>!important</code> 只覆写 <code>background</code>/<code>color</code>，留下旧的描边与高光</td><td>覆写<b>整组配方</b>（底 + 字 + 描边 + 影）</td></tr><tr><td>同一个按钮在各页面各写一套数值</td><td>引用本节三条配方，全站一致</td></tr></tbody></table>
 <p><b>绘制与动效要求</b></p>
 <ul><li>全部沿用 [07](#ch-07)：hover 浮起 4px + 扫光，press <code>scale(.96)</code> 120ms；danger 类不做浮起辉光之外的装饰，保证语义只靠颜色+文案。</li><li>文字对比度按 WCAG 2.2 AA 口径（见 [02 · 2.1](#ch-02) 无障碍底线、[06 · 6.5](#ch-06)、决策记录 D2/D5/D9），两条路各自成立：① <b>深实底 + 白字</b>——小字号白字只落在 ≥4.5:1 的 <code>--mmh-solid-*</code>（4.7–7.0:1）上；② <b>品牌粉底 + 深字</b>——主行动 <code>--mmh-grad-action-hc</code>（Rose-300→Rose-500）配 <code>#343A46</code>，文字区 4.89–7.67:1。<b>禁止「品牌亮粉底 + 白字」组合</b>（实测 2.46–3.48:1）；<code>--mmh-grad-primary</code> 仅承载 ≥24px 常规/≥18.66px 加粗展示字。</li><li>妈咪好数据色序/品牌 Token 见 [12 · 12.3](#ch-12)、[02 · 2.9](#ch-02)。</li><li>移动端按钮：尺寸档同四档并放大一档使用，支持全宽 Long（见 [10 · 10.4](#ch-10)）；按压反馈 <code>scale(.97) 120ms</code>（07）。</li></ul>
 <h4>3.2.5 文字 + 图标组合规范（Icon-in-Button）</h4>

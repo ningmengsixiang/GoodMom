@@ -120,11 +120,10 @@ section.block{margin-top:26px}
 .demo-card.c2{right:6%;top:8%;width:180px}
 .demo-card.c2 .ringwrap{display:flex;align-items:center;gap:12px}
 .demo-card.c3{bottom:6%;right:16%;display:flex;gap:8px;align-items:center}
-.demo-card.c3 .gbtn{padding:8px 16px;border-radius:18px;font-size:12px;font-weight:600;border:1px solid rgba(255,255,255,.55);
-  background:var(--mmh-grad-action-hc,#F77FA3);
-  color:#343A46;box-shadow:0 8px 18px rgba(240,127,163,.35)}   /* D9：品牌亮粉底必须配深字；白高光层会稀释对比度，去掉 */
-.demo-card.c3 .gbtn.gb2{background:linear-gradient(160deg,rgba(255,255,255,.5),transparent 55%),var(--lg-grad-cyan);
-  color:var(--lg-deep-slate);box-shadow:inset 0 1px 0 rgba(255,255,255,.5),0 8px 18px rgba(114,221,229,.3)}
+.demo-card.c3 .gbtn{padding:8px 16px;border-radius:18px;font-size:12px;font-weight:600;
+  background:var(--mmh-grad-action-hc,#F77FA3);color:#343A46;border:1px solid transparent;box-shadow:0 1px 2px rgba(178,58,99,.22),0 8px 20px rgba(240,127,163,.30)}   /* D9：品牌亮粉底必须配深字；白描边/白高光在浅粉上会造成边缘深浅不均，一并去掉 */
+.demo-card.c3 .gbtn.gb2{background:linear-gradient(160deg,#E0F8F6,#A5F1EE);
+  color:#1B3D33;border:none;box-shadow:0 1px 2px rgba(27,61,51,.18),0 8px 20px rgba(114,221,229,.30)}
 
 /* generic grid + panels */
 .grid{display:grid;gap:18px}
@@ -185,7 +184,7 @@ section.block{margin-top:26px}
 
 /* color swatches */
 .sw-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(96px,1fr));gap:10px}
-.sw{overflow:hidden;border-radius:18px;border:1px solid rgba(255,255,255,.6);
+.sw{overflow:hidden;border-radius:18px;border:1px solid var(--lg-divider,rgba(58,52,84,.10));
   box-shadow:0 6px 14px rgba(58,52,84,.05);background:rgba(255,255,255,.35)}
 .sw .chip{height:56px}
 .sw .meta{padding:6px 8px;background:rgba(255,255,255,.55);-webkit-backdrop-filter:blur(16px);backdrop-filter:blur(16px)}
@@ -266,16 +265,21 @@ section.block{margin-top:26px}
 .btn-lg{height:48px;padding:0 22px;font-size:15px;border-radius:var(--lg-radius-btn-lg)}
 .btn-md{height:40px;padding:0 18px;font-size:14px}
 .btn-sm{height:32px;padding:0 14px;font-size:13px;border-radius:var(--lg-radius-btn-sm)}
-.btn-primary{background:linear-gradient(160deg,rgba(255,255,255,.38),transparent 46%),var(--lg-grad-primary);
-  color:#FFF;border-color:rgba(255,255,255,.55);box-shadow:inset 0 1px 0 rgba(255,255,255,.45),var(--lg-shadow-md)}
-.btn-primary:hover{box-shadow:inset 0 1px 0 rgba(255,255,255,.55),var(--lg-glow-purple-soft);transform:translateY(-1px)}
-.btn-secondary{background:linear-gradient(160deg,rgba(255,255,255,.5),transparent 50%),var(--lg-grad-cyan);
-  color:var(--lg-deep-slate);border-color:rgba(255,255,255,.6);box-shadow:inset 0 1px 0 rgba(255,255,255,.5),var(--lg-shadow-md)}
-.btn-secondary:hover{box-shadow:inset 0 1px 0 rgba(255,255,255,.6),var(--lg-glow-cyan-soft);transform:translateY(-1px)}
-.btn-tertiary{background:linear-gradient(160deg,rgba(255,255,255,.6),rgba(255,255,255,.32));
-  color:var(--lg-deep-slate);border-color:rgba(255,255,255,.7);
-  -webkit-backdrop-filter:blur(20px);backdrop-filter:blur(20px);box-shadow:inset 0 1px 0 rgba(255,255,255,.5),var(--lg-shadow-sm)}
-.btn-tertiary:hover{background:rgba(255,255,255,.55)}
+/* ── 03 · 3.2.4 按钮统一配方（V2.9 视觉优化）──
+   用户反馈：主按钮「描边与分层错行、发脏」，白底按钮「描边廉价」。
+   ① 主按钮：不套玻璃白描边 + 白内高光（02 · 2.5 的边光是给**半透明玻璃面**的；
+      落在 D9 后的不透明浅粉上会亮端看不见/暗端看得见 → 描边错行，再叠 inset 白高光成双线发糊）。
+   ② 白底按钮：原来边是**白色**（白/浅底上等于没有边 → 轮廓糊、廉价）；
+      改用 02 · 2.7.1 同源暖中性 hairline `--lg-divider`（暗色档自动翻白）+ 02 · 2.6 双层柔影。
+   ③ 本页原有一组 !important 只覆写了 background/color，**留下了旧设计的 border 与 inset 高光**，
+      正是「同一个主按钮在各页长得不一样」的根因 —— 现改为整组配方覆写。 */
+.btn-primary{background:var(--mmh-grad-action-hc,#F77FA3);color:#343A46;border:1px solid transparent;box-shadow:0 1px 2px rgba(178,58,99,.22),0 8px 20px rgba(240,127,163,.30)}
+.btn-primary:hover{box-shadow:0 2px 4px rgba(178,58,99,.24),0 12px 26px rgba(240,127,163,.38);transform:translateY(-1px)}
+.btn-secondary{background:linear-gradient(160deg,#E0F8F6,#A5F1EE);color:#1B3D33;border:none;
+  box-shadow:0 1px 2px rgba(27,61,51,.18),0 8px 20px rgba(114,221,229,.30)}
+.btn-secondary:hover{box-shadow:0 2px 4px rgba(27,61,51,.20),0 12px 26px rgba(114,221,229,.38);transform:translateY(-1px)}
+.btn-tertiary{background:linear-gradient(160deg,rgba(255,255,255,.94),rgba(255,255,255,.78));color:var(--lg-text-primary,#343A46);border:1px solid var(--lg-divider,rgba(58,52,84,.10));box-shadow:0 1px 2px rgba(58,52,84,.06),0 4px 12px rgba(58,52,84,.08);-webkit-backdrop-filter:blur(16px) saturate(1.2);backdrop-filter:blur(16px) saturate(1.2)}
+.btn-tertiary:hover{border-color:rgba(58,52,84,.16);box-shadow:0 2px 4px rgba(58,52,84,.07),0 8px 18px rgba(58,52,84,.10)}
 .btn-ghost{background:transparent;color:var(--lg-text-secondary)}
 .btn-ghost:hover{background:rgba(240,127,163,.10);color:var(--rose-deep)}
 .btn.disabled{opacity:.4;pointer-events:none}
@@ -709,18 +713,18 @@ details.gfold .gfb{padding:0 14px 12px;font-size:12px;color:var(--lg-text-second
 .bx-mini{height:28px;font-size:12px;padding:0 13px;border-radius:18px}  /* 02 · 2.4 交互下限 16 */
 .bx-sm{height:32px;font-size:13px;padding:0 15px;border-radius:18px}
 .bx-lg{height:48px;font-size:15px;padding:0 24px;border-radius:22px}
-.bx-default{background:linear-gradient(160deg,rgba(255,255,255,.66),rgba(255,255,255,.34));color:var(--lg-deep-slate);border-color:rgba(255,255,255,.78);box-shadow:inset 0 1px 0 rgba(255,255,255,.55),var(--lg-shadow-sm)}
-.bx-primary{background:var(--mmh-grad-action-hc,#F77FA3);color:#343A46;border-color:rgba(255,255,255,.6);box-shadow:inset 0 1px 0 rgba(255,255,255,.5),var(--lg-shadow-md)}
-.bx-secondary{background:linear-gradient(160deg,rgba(255,255,255,.5),transparent 55%),var(--mmh-grad-mint,#6FC9B4);color:#FFF;border-color:rgba(255,255,255,.65);box-shadow:inset 0 1px 0 rgba(255,255,255,.55),var(--lg-shadow-md)}
-.bx-outline{background:transparent;color:var(--mmh-rose-700,#B23A63);border:1.5px solid var(--mmh-rose-500,#F77FA3)}
+.bx-default{background:linear-gradient(160deg,rgba(255,255,255,.94),rgba(255,255,255,.78));color:var(--lg-text-primary,#343A46);border:1px solid var(--lg-divider,rgba(58,52,84,.10));box-shadow:0 1px 2px rgba(58,52,84,.06),0 4px 12px rgba(58,52,84,.08);-webkit-backdrop-filter:blur(16px) saturate(1.2);backdrop-filter:blur(16px) saturate(1.2)}
+.bx-primary{background:var(--mmh-grad-action-hc,#F77FA3);color:#343A46;border:1px solid transparent;box-shadow:0 1px 2px rgba(178,58,99,.22),0 8px 20px rgba(240,127,163,.30)}
+.bx-secondary{background:linear-gradient(160deg,#C25064,#B04052);color:#FFF;border:none;box-shadow:0 1px 2px rgba(176,64,82,.24),0 8px 20px rgba(208,90,110,.28)}
+.bx-outline{background:transparent;color:var(--mmh-rose-700,#B23A63);border:1.5px solid rgba(232,93,143,.45);box-shadow:0 1px 2px rgba(178,58,99,.06)}
 .bx-outline:hover{background:rgba(247,127,163,.08)}
-.bx-dashed{background:transparent;color:var(--mmh-rose-700,#B23A63);border:1.5px dashed var(--mmh-rose-500,#F77FA3)}
+.bx-dashed{background:transparent;color:var(--mmh-rose-700,#B23A63);border:1.5px dashed rgba(232,93,143,.45);box-shadow:none}
 .bx-dashed:hover{background:rgba(247,127,163,.08)}
 .bx-text{background:none;color:var(--mmh-rose-700,#B23A63);border-color:transparent;padding:0 10px;box-shadow:none}
 .bx-text:hover{background:rgba(247,127,163,.08)}
-.bx-solid.st-success{background:#1E6B52;color:#FFF;border-color:rgba(255,255,255,.55);box-shadow:inset 0 1px 0 rgba(255,255,255,.28)} /* AA：白字 6.4:1（D5） */
-.bx-solid.st-warning{background:#9A5A0E;color:#FFF;border-color:rgba(255,255,255,.55);box-shadow:inset 0 1px 0 rgba(255,255,255,.28)} /* AA：白字 5.46:1（D5） */
-.bx-solid.st-danger{background:#B04052;color:#FFF;border-color:rgba(255,255,255,.55);box-shadow:inset 0 1px 0 rgba(255,255,255,.28)} /* AA：白字 5.67:1（D5） */
+.bx-solid.st-success{background:#1E6B52;color:#FFF;border:1px solid transparent;box-shadow:0 1px 2px rgba(30,107,82,.22),0 8px 20px rgba(47,143,118,.28)} /* AA：白字 6.4:1（D5） */
+.bx-solid.st-warning{background:#9A5A0E;color:#FFF;border:1px solid transparent;box-shadow:0 1px 2px rgba(154,90,14,.22),0 8px 20px rgba(185,119,28,.26)} /* AA：白字 5.46:1（D5） */
+.bx-solid.st-danger{background:#B04052;color:#FFF;border:1px solid transparent;box-shadow:0 1px 2px rgba(176,64,82,.24),0 8px 20px rgba(208,90,110,.28)} /* AA：白字 5.67:1（D5） */
 .bx-outline.st-danger{color:var(--lg-sem-risk);border-color:var(--lg-sem-risk)}
 .bx-text.st-danger{color:var(--lg-sem-risk)}
 .bx.round{border-radius:999px}
@@ -748,8 +752,7 @@ details.gfold .gfb{padding:0 14px 12px;font-size:12px;color:var(--lg-text-second
   outline:2px solid rgba(232,93,143,.6);outline-offset:2px;border-radius:18px}
 .stepctl{display:flex;gap:10px;align-items:center;margin:2px 0 6px;flex-wrap:wrap}
 .stepctl .sbtn{font-size:11px;font-weight:600;padding:6px 14px;border-radius:999px;cursor:pointer;
-  background:rgba(255,255,255,.62);border:1px solid rgba(255,255,255,.85);color:var(--lg-text-secondary);
-  box-shadow:var(--lg-shadow-xs);transition:transform .15s var(--lg-ease-out),background .2s}
+  background:linear-gradient(160deg,rgba(255,255,255,.94),rgba(255,255,255,.78));color:var(--lg-text-primary,#343A46);border:1px solid var(--lg-divider,rgba(58,52,84,.10));box-shadow:0 1px 2px rgba(58,52,84,.06),0 4px 12px rgba(58,52,84,.08);color:var(--lg-text-secondary);transition:transform .15s var(--lg-ease-out),background .2s}
 .stepctl .sbtn:hover{background:#FFF;color:var(--mmh-rose-700,#B23A63)}
 .stepctl .sbtn:active{transform:scale(.95)}
 .stepctl .hint{font-size:11px;color:var(--lg-text-tertiary)}
@@ -955,8 +958,15 @@ section.block:first-of-type{margin-top:8px}
 .ng::after{content:"";position:absolute;left:0;right:0;top:100%;height:14px;z-index:5}
 .ngdrop a:active{background:var(--mmh-rose-100,#FFF0F4);color:var(--mmh-rose-deep,#B23A63)}:root{--mmh-grad-action-hc:linear-gradient(135deg,#FFC4D6 0%,#F77FA3 100%)}
 /* AA 高对比行动（D5/审查收口）：文字承载面切深档，装饰渐变/开关/进度条保持品牌亮渐变 */
-.btn-primary,.bx-primary,.bgroup .bx.on,.mchip.on,.phone .tabmini i.on,.step.done .sd{background:var(--mmh-grad-action-hc,#F77FA3)!important;color:#343A46!important}
-.bx-secondary{background:#1E6B52!important;color:#FFF!important}
+/* ⚠️ 这一组必须覆写**完整配方**（底色 + 文字 + 描边 + 阴影）。
+   旧版只写 background/color，于是 `.btn-primary`/`.bx-primary` 的
+   `border-color:rgba(255,255,255,.55~.6)` 与 `inset 0 1px 0 白高光` 全部留了下来 ——
+   浅粉实底 + 白描边 + 白内高光 = 边缘深浅不均、双线发糊，即用户说的「描边与分层错行」。 */
+.btn-primary,.bx-primary,.bgroup .bx.on,.mchip.on,.phone .tabmini i.on,.step.done .sd{
+  background:var(--mmh-grad-action-hc,#F77FA3)!important;color:#343A46!important;border:1px solid transparent!important;
+  box-shadow:0 1px 2px rgba(178,58,99,.22),0 8px 20px rgba(240,127,163,.30)!important}
+.bx-secondary{background:linear-gradient(160deg,#C25064,#B04052)!important;color:#FFF!important;border:none!important;
+  box-shadow:0 1px 2px rgba(176,64,82,.24),0 8px 20px rgba(208,90,110,.28)!important}
 
 /* 按钮 文字+图标 组合（03 · 3.2.5）：几何居中 + 固定 gap + 图标不挤压 */
 .btn,.bx,.direct,.op{display:inline-flex!important;align-items:center;justify-content:center;white-space:nowrap;vertical-align:middle;gap:8px}
@@ -964,7 +974,7 @@ section.block:first-of-type{margin-top:8px}
 .btn.sm svg,.bx.sm svg,.direct.sm svg,.op.sm svg,.small svg{width:14px!important;height:14px!important}
 .btn.lg svg,.bx.lg svg,.direct.lg svg,.op.lg svg,.btn-lg svg,.b1.lg svg,.large svg{width:18px!important;height:18px!important}:root{--mmh-grad-action-hc:linear-gradient(135deg,#FFC4D6 0%,#F77FA3 100%)}
 /* 按钮类型色 规范化（03 · 3.2.4 + D5/D6）：白字行动一律深档 */
-.mbtn,.direct.primary,.direct.primary:hover{background:var(--mmh-grad-action-hc,#F77FA3)!important;color:#343A46!important;border:none!important}
+.mbtn,.direct.primary,.direct.primary:hover{background:var(--mmh-grad-action-hc,#F77FA3)!important;color:#343A46!important;border:1px solid transparent!important}
 
 <!--@body-->
 <!-- floating top nav -->

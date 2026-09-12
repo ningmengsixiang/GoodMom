@@ -26,7 +26,7 @@ nav b{color:var(--rose-deep);display:flex;align-items:center;gap:8px;font-size:1
 nav b i{width:16px;height:16px;border-radius:50%;background:linear-gradient(135deg,#FFA9C2,#E85D8F);display:inline-block}
 nav a{font-size:12.5px;color:var(--t2);text-decoration:none;padding:6px 12px;border-radius:999px;font-weight:500}
 nav a:hover{background:#fff;color:var(--rose-deep)}
-nav .out{margin-left:auto;background:linear-gradient(135deg,#FFA9C2,#E85D8F);color:#fff;font-weight:600}
+nav .out{margin-left:auto;background:var(--mmh-grad-action-hc,#F77FA3);color:#343A46;font-weight:600;border:1px solid transparent;box-shadow:0 1px 2px rgba(178,58,99,.22),0 8px 20px rgba(240,127,163,.30)}
 .hero{text-align:center;padding:44px 24px 34px;border-radius:28px;position:relative;overflow:hidden}
 .hero .k{display:inline-flex;align-items:center;gap:8px;font-size:12px;font-weight:600;letter-spacing:.08em;color:var(--rose-deep);
   background:rgba(247,127,163,.12);border:1px solid rgba(247,127,163,.3);padding:6px 14px;border-radius:999px}
@@ -40,8 +40,15 @@ nav .out{margin-left:auto;background:linear-gradient(135deg,#FFA9C2,#E85D8F);col
 .cta{display:flex;gap:10px;justify-content:center;flex-wrap:wrap;margin-top:22px}
 .btn{display:inline-flex;align-items:center;gap:8px;text-decoration:none;font-weight:600;font-size:14px;
   padding:12px 22px;border-radius:999px;transition:.2s;border:1px solid transparent}
-.btn.pri{background:var(--mmh-grad-action-hc,#F77FA3);color:#343A46;font-weight:600;box-shadow:0 10px 24px rgba(240,127,163,.35)} /* D9：亮粉底必须配深字 */
-.btn.line{background:#fff;color:var(--rose-deep);border-color:rgba(232,93,143,.35)}
+/* ── 03 · 3.2.4 按钮统一配方（V2.9）──
+   ① 主按钮不套玻璃白描边/白内高光：那两层是 02 · 2.5 给**半透明玻璃面**的边光，
+      落在 D9 后的浅粉实底上会「亮端看不见、暗端看得见」→ 描边错行；再叠 inset 白高光成双线发糊（脏）。
+      边缘清晰度改由同族玫色「接触影 + 辉光」承担（02 · 2.6 色相统一）。
+   ② 白底按钮的边不再用白色（白边在白/浅底上等于没有边 → 廉价），改用 02 · 2.7.1 同源的
+      暖中性 hairline `--lg-divider`（暗色档自动翻白）+ 02 · 2.6 双层柔影。 */
+.btn.pri{background:var(--mmh-grad-action-hc,#F77FA3);color:#343A46;border:1px solid transparent;box-shadow:0 1px 2px rgba(178,58,99,.22),0 8px 20px rgba(240,127,163,.30)}   /* D9：亮粉底必须配深字 */
+.btn.line{background:linear-gradient(160deg,rgba(255,255,255,.94),rgba(255,255,255,.78));color:var(--lg-text-primary,#343A46);border:1px solid var(--lg-divider,rgba(58,52,84,.10));box-shadow:0 1px 2px rgba(58,52,84,.06),0 4px 12px rgba(58,52,84,.08);-webkit-backdrop-filter:blur(16px) saturate(1.2);backdrop-filter:blur(16px) saturate(1.2)}
+.btn.line:hover{border-color:rgba(58,52,84,.16);box-shadow:0 2px 4px rgba(58,52,84,.07),0 8px 18px rgba(58,52,84,.10)}
 .btn:hover{transform:translateY(-2px)}
 h2{font-size:24px;letter-spacing:-.01em;margin:38px 0 4px;display:flex;align-items:center;gap:10px}
 h2::before{content:"";width:10px;height:10px;border-radius:50%;background:linear-gradient(135deg,#FFA9C2,#E85D8F);flex:none}
@@ -167,7 +174,7 @@ h2 small{font-weight:600;letter-spacing:.18em;color:#B23A63;font-size:10px}
 nav .git{display:inline-flex;align-items:center;gap:6px;padding:7px 14px;border-radius:999px;text-decoration:none;
   font-size:12.5px;font-weight:600;color:var(--rose-deep);background:#fff;border:1px solid rgba(232,93,143,.3)}
 nav .git svg{width:15px;height:15px;fill:currentColor}
-nav .git:hover{background:linear-gradient(135deg,#FFA9C2,#E85D8F);color:#fff;border-color:transparent}
+nav .git:hover{background:var(--mmh-grad-action-hc,#F77FA3);color:#343A46;border-color:transparent}
 .gx{position:absolute;right:16px;top:16px;width:56px;height:56px;opacity:.14;color:#B23A63;pointer-events:none}
 .gx svg{width:100%;height:100%}
 .card,.jc{position:relative;overflow:hidden}
@@ -179,7 +186,8 @@ nav .git:hover{background:linear-gradient(135deg,#FFA9C2,#E85D8F);color:#fff;bor
 /* 主行动档（D9 裁决）：品牌粉上半段底 + 深字。
    旧值 #B23A63→#9E3054 是 D5/D8 口径，与本行下方的深字组成「深底 + 深字」，
    实测 2.00:1 —— 低于 AA。禁止「品牌亮粉底 + 白字」，同样禁止「深玫底 + 深字」。 */
-.btn.pri,.nav .out,.nav .git:hover{background:var(--mmh-grad-action-hc,#F77FA3)!important;color:#343A46!important} /* D9 */
+.btn.pri,.nav .out,.nav .git:hover{background:var(--mmh-grad-action-hc,#F77FA3)!important;color:#343A46!important;
+  border:none!important;box-shadow:0 1px 2px rgba(178,58,99,.22),0 8px 20px rgba(240,127,163,.30)!important} /* D9 + V2.9 配方 */
 
 /* 按钮 文字+图标 组合（03 · 3.2.5）：几何居中 + 固定 gap + 图标不挤压 */
 .btn,.nav .out,.nav .git,.go {display:inline-flex!important;align-items:center;justify-content:center;white-space:nowrap;vertical-align:middle;gap:8px}

@@ -34,14 +34,36 @@
 .gm-btn--circle{border-radius:999px;padding:0;aspect-ratio:1}
 .gm-btn--square{border-radius:10px}
 /* 类型 */
-.gm-btn--primary{background:var(--mmh-grad-action-hc);color:#343A46;box-shadow:0 6px 16px rgba(178,58,99,.3)}
-.gm-btn--secondary{background:var(--lg-glass-control);color:var(--lg-text-primary);
-  border:var(--lg-border-1) solid var(--lg-border-white-75);box-shadow:var(--lg-shadow-sm)}
-.gm-btn--outline{background:transparent;color:var(--lg-link);border:var(--lg-border-2) solid var(--lg-link)}
-.gm-btn--dashed{background:transparent;color:var(--lg-text-secondary);border:var(--lg-border-1) dashed var(--lg-text-tertiary)}
-.gm-btn--text{background:transparent;color:var(--lg-link);padding:0 8px;box-shadow:none}
-.gm-btn--default{background:var(--lg-surface);color:var(--lg-text-primary);
-  border:var(--lg-border-1) solid var(--lg-border-white-75);box-shadow:var(--lg-shadow-sm)}
+/* 03 · 3.2.4 主按钮：不透明品牌粉底**不套玻璃白边/白内高光**（那是 02 · 2.5 给半透明
+   玻璃面的边光，落在浅粉上会亮端看不见、暗端看得见 → 描边错行、双线发糊）。
+   边缘清晰度改由**同族玫色接触影 + 辉光**承担（02 · 2.6：阴影色相统一）。 */
+.gm-btn--primary{background:var(--mmh-grad-action-hc);color:#343A46;border:var(--lg-border-1) solid transparent;
+  box-shadow:0 1px 2px rgba(178,58,99,.22),0 8px 20px rgba(240,127,163,.30)}
+.gm-btn--primary:hover{box-shadow:0 2px 4px rgba(178,58,99,.24),0 12px 26px rgba(240,127,163,.38)}
+/* 03 · 3.2.4 Default / Secondary 中性白玻璃按钮
+   ⛔ 原边用 --lg-border-white-75（白 75%）：白边落在白/浅底上等于**没有边**，形状糊掉（"廉价"）。
+   ✔ 改用 02 · 2.7.1 同源的暖中性 hairline `--lg-divider`（暗色档自动翻白）+ 02 · 2.6 双层柔影，
+      边界可辨识、有浮起感；玻璃感由半透明白 + backdrop blur（02 · 2.5 L3）保留。 */
+.gm-btn--secondary{background:linear-gradient(160deg,rgba(255,255,255,.94),rgba(255,255,255,.78));
+  color:var(--lg-text-primary);border:var(--lg-border-1) solid var(--lg-divider);
+  box-shadow:0 1px 2px rgba(58,52,84,.06),0 4px 12px rgba(58,52,84,.08);
+  -webkit-backdrop-filter:blur(16px) saturate(1.2);backdrop-filter:blur(16px) saturate(1.2)}
+.gm-btn--secondary:hover{border-color:rgba(58,52,84,.16);
+  box-shadow:0 2px 4px rgba(58,52,84,.07),0 8px 18px rgba(58,52,84,.10)}
+/* 03 · 3.2.4 描边按钮：透明底 + 1.5px 玫瑰描边 + 玫瑰字。
+   原为纯 --lg-link 实描边且零阴影 → 饱和硬边、贴纸感；改用带 alpha 的玫瑰 + 极淡玫影。 */
+.gm-btn--outline{background:transparent;color:var(--mmh-rose-700,#B23A63);
+  border:var(--lg-border-2) solid rgba(232,93,143,.45);box-shadow:0 1px 2px rgba(178,58,99,.06)}
+.gm-btn--outline:hover{border-color:rgba(232,93,143,.75);background:rgba(247,127,163,.07)}
+.gm-btn--dashed{background:transparent;color:var(--mmh-rose-700,#B23A63);
+  border:var(--lg-border-2) dashed rgba(232,93,143,.45);box-shadow:none}
+.gm-btn--dashed:hover{border-color:rgba(232,93,143,.75);background:rgba(247,127,163,.07)}
+.gm-btn--text{background:transparent;color:var(--mmh-rose-700,#B23A63);padding:0 8px;box-shadow:none;border:none}
+.gm-btn--default{background:linear-gradient(160deg,rgba(255,255,255,.94),rgba(255,255,255,.78));
+  color:var(--lg-text-primary);border:var(--lg-border-1) solid var(--lg-divider);
+  box-shadow:0 1px 2px rgba(58,52,84,.06),0 4px 12px rgba(58,52,84,.08)}
+.gm-btn--default:hover{border-color:rgba(58,52,84,.16);
+  box-shadow:0 2px 4px rgba(58,52,84,.07),0 8px 18px rgba(58,52,84,.10)}
 /* 状态色：实底一律走 D5 深档（小字号白字 AA 达标） */
 .gm-btn--success{background:var(--mmh-solid-positive);color:#FFF;box-shadow:0 6px 16px rgba(30,107,82,.26)}
 .gm-btn--warning{background:var(--mmh-solid-attention);color:#FFF;box-shadow:0 6px 16px rgba(154,90,14,.26)}

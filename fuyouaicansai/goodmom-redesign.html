@@ -83,16 +83,20 @@ h2{font-size:20px;margin:16px 0 6px}
 .n{color:#5E6673;background:rgba(88,98,115,.09)}.p{color:#6A48DC;background:rgba(154,120,255,.14)}
 .y{color:#7A5F0D;background:rgba(242,193,78,.22)}
 .btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;border:none;cursor:pointer;border-radius:18px;padding:0 18px;height:40px;font-family:inherit;font-size:13.5px;font-weight:600}
-.btn.pri{background:var(--g);color:#343A46;box-shadow:0 8px 18px rgba(240,127,163,.32)}
-.btn.mint{background:linear-gradient(135deg,#7FD8C2,#4FB59C);color:#FFF}
-.btn.line{background:#FFF;color:var(--rose-deep);border:1.5px solid rgba(232,93,143,.35)}
+/* 03 · 3.2.4 按钮统一配方（V2.9）：实底不套玻璃白边/白内高光；
+   浅底按钮的边改用暖中性 hairline `--lg-divider` + 双层柔影（详见 theme.css 同段注释）。 */
+.btn.pri{background:var(--mmh-grad-action-hc,#F77FA3);color:#343A46;border:1px solid transparent;box-shadow:0 1px 2px rgba(178,58,99,.22),0 8px 20px rgba(240,127,163,.30)}
+.btn.pri:hover{box-shadow:0 2px 4px rgba(178,58,99,.24),0 12px 26px rgba(240,127,163,.38)}
+.btn.mint{background:linear-gradient(135deg,#2F8F76,#1E6B52);color:#FFF;border:1px solid transparent;box-shadow:0 1px 2px rgba(30,107,82,.22),0 8px 20px rgba(47,143,118,.28)}
+.btn.line{background:linear-gradient(160deg,rgba(255,255,255,.94),rgba(255,255,255,.78));color:var(--lg-text-primary,#343A46);border:1px solid var(--lg-divider,rgba(58,52,84,.10));box-shadow:0 1px 2px rgba(58,52,84,.06),0 4px 12px rgba(58,52,84,.08);-webkit-backdrop-filter:blur(16px) saturate(1.2);backdrop-filter:blur(16px) saturate(1.2)}
+.btn.line:hover{border-color:rgba(58,52,84,.16);box-shadow:0 2px 4px rgba(58,52,84,.07),0 8px 18px rgba(58,52,84,.10)}
 .btn.sm{height:32px;padding:0 13px;font-size:12.5px;border-radius:18px}
 .av{width:42px;height:42px;border-radius:50%;display:inline-flex;align-items:center;justify-content:center;color:#343A46;font-weight:700;background:var(--g);flex:none;font-size:16px}
 .av.mint{background:linear-gradient(150deg,#7FD8C2,#4FB59C)}.av.purp{background:linear-gradient(150deg,#B9A0FF,#8066F0)}
 .two{display:grid;grid-template-columns:1.7fr 1fr;gap:16px}
 .g4{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}
 .g2auto{display:grid;grid-template-columns:repeat(auto-fit,minmax(185px,1fr));gap:10px}
-.chk{display:flex;gap:8px;align-items:center;background:rgba(255,255,255,.5);border:1px solid rgba(255,255,255,.8);border-radius:14px;padding:10px 12px}
+.chk{display:flex;gap:8px;align-items:center;background:rgba(255,255,255,.5);border:1px solid var(--lg-divider,rgba(58,52,84,.10));border-radius:14px;padding:10px 12px}  /* 03 · 3.2.4：浅底控件的边用暖中性 hairline（白边在白底上等于没有边） */
 .chk b{font-size:13px}
 .chk .tag{margin-left:auto}
 /* 周内随访完成率 */
@@ -345,7 +349,7 @@ textarea.inp{resize:vertical;min-height:76px;line-height:1.7}
 .btn.lg svg,.btn-lg svg,.b1.lg svg,.large svg {width:18px!important;height:18px!important}
 
 /* 按钮类型色 规范化（03 · 3.2.4 + D5/D6） */
-.btn.mint{background:#1E6B52!important;color:#FFF!important;border:none!important}
+.btn.mint{background:#1E6B52!important;color:#FFF!important;border:1px solid transparent!important}
 
 /* 10 · 10.4：≤767px 可点热区 ≥44×44（::after 扩展，视觉尺寸不变） */
 @media(max-width:767px){

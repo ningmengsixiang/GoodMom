@@ -607,7 +607,7 @@ loading: 图标位替换为 18px 白/紫色柔和 spinner（无旋转霓虹）</
 <h4>3.2.4 对齐 Arco Design · 按钮全谱（Button Spectrum）</h4>
 <blockquote>按 [Arco Design Button](https://arco.design/react/components/button) 的类型 / 状态 / 尺寸 / 复合形态体系，<br>映射为本系统的「玻璃按钮全谱」。类型与状态是正交的两维：类型决定底与描边，状态决定语义色。</blockquote>
 <p><b>类型（Type）—— LG ↔ Arco 对照</b></p>
-<table><thead><tr><th>LG 类型</th><th>Arco 对应</th><th>玻璃构成</th><th>用途</th></tr></thead><tbody><tr><td>Primary 主按钮（品牌粉主行动）</td><td><code>primary</code></td><td><code>--mmh-grad-action-hc</code>（Rose-300→Rose-500 = <code>#FFC4D6→#F77FA3</code>）+ <b>深字 <code>#343A46</code></b> + 辉光；文字区 4.89–7.67:1 ≥4.5（含 #E85D8F 深端的 <code>--mmh-grad-primary</code> 仅装饰/大字号，D9）</td><td>页面唯一主行动（CTA）</td></tr><tr><td>Default 默认按钮（中性白玻璃）</td><td><code>secondary</code>（未指定 type 的灰底感）</td><td><code>--lg-glass-control</code> 白玻璃 + 深字 + 内高光</td><td>通用操作（原 Tertiary 角色并入）</td></tr><tr><td>Secondary 次按钮（薄荷渐变）</td><td>正向次行动</td><td><code>--mmh-grad-mint</code> / 青渐变</td><td>正向操作（完成、预约、开始）</td></tr><tr><td>Outline 描边按钮</td><td><code>outline</code></td><td>透明底 + 1.5px 玫瑰描边 + 玫瑰字</td><td>次要并列行动、导出、加入</td></tr><tr><td>Dashed 虚线按钮</td><td><code>dashed</code></td><td>同上但 <code>border-style: dashed</code></td><td>添加入口、拖拽占位</td></tr><tr><td>Text 文字按钮</td><td><code>text</code></td><td>无底无框、玫瑰字，hover 淡洗色</td><td>行内/工具栏最低干扰操作</td></tr></tbody></table>
+<table><thead><tr><th>LG 类型</th><th>Arco 对应</th><th>玻璃构成</th><th>用途</th></tr></thead><tbody><tr><td>Primary 主按钮（品牌粉主行动）</td><td><code>primary</code></td><td><code>--mmh-grad-action-hc</code>（Rose-300→Rose-500 = <code>#FFC4D6→#F77FA3</code>）+ <b>深字 <code>#343A46</code></b> + 同族玫「接触影 + 辉光」双层；<b>不套玻璃白描边/白内高光</b>（见 3.2.4.1）；文字区 4.89–7.67:1 ≥4.5（含 #E85D8F 深端的 <code>--mmh-grad-primary</code> 仅装饰/大字号，D9）</td><td>页面唯一主行动（CTA）</td></tr><tr><td>Default 默认按钮（中性白玻璃）</td><td><code>secondary</code>（未指定 type 的灰底感）</td><td>半透明白玻璃 + 深字 + <b>暖中性 hairline 描边 <code>--lg-divider</code></b> + 双层柔影（<b>不用白描边</b>，见 3.2.4.1）</td><td>通用操作（原 Tertiary 角色并入）</td></tr><tr><td>Secondary 次按钮（薄荷渐变）</td><td>正向次行动</td><td><code>--mmh-grad-mint</code> / 青渐变</td><td>正向操作（完成、预约、开始）</td></tr><tr><td>Outline 描边按钮</td><td><code>outline</code></td><td>透明底 + 1.5px 玫瑰描边 <code>rgba(232,93,143,.45)</code> + 玫瑰字 + 极淡玫影</td><td>次要并列行动、导出、加入</td></tr><tr><td>Dashed 虚线按钮</td><td><code>dashed</code></td><td>同上但 <code>border-style: dashed</code></td><td>添加入口、拖拽占位</td></tr><tr><td>Text 文字按钮</td><td><code>text</code></td><td>无底无框、玫瑰字，hover 淡洗色</td><td>行内/工具栏最低干扰操作</td></tr></tbody></table>
 <p><b>状态（Status）—— 叠加语义色（覆盖在 Primary/Default 实底 或 Outline/Text 上）</b></p>
 <table><thead><tr><th>状态</th><th>实底（Solid）</th><th>描边/文字</th></tr></thead><tbody><tr><td>default（默认）</td><td>玫瑰渐变 <code>--mmh-grad-primary</code></td><td>玫瑰字/玫瑰描边</td></tr><tr><td>success（成功/正向）</td><td>薄荷渐变 <code>--mmh-mint-*</code></td><td>薄荷字（白字大按钮用深薄荷底）</td></tr><tr><td>warning（警告）</td><td>琥珀渐变 <code>--mmh</code> 用 <code>--lg-warning-500</code> 系</td><td>琥珀字</td></tr><tr><td>danger（危险）</td><td>珊瑚渐变 <code>--lg-danger-500</code> 系（近 <code>--mmh-rose-700</code>）</td><td>红字——删除/停用/高危确认</td></tr></tbody></table>
 <p><b>尺寸（Size）—— 4 档</b></p>
@@ -617,6 +617,29 @@ M  default 40 高 / 14px / 圆角 20   （默认）
 L  large 48 高 / 15px / 圆角 24     主行动、大屏</pre>
 <p><b>形状与复合形态</b></p>
 <table><thead><tr><th>形态</th><th>说明</th><th>Arco 对应</th></tr></thead><tbody><tr><td>圆角胶囊 Round</td><td>任意类型 <code>border-radius:999px</code></td><td><code>shape="round"</code></td></tr><tr><td>圆形 Circle</td><td>仅图标钮：宽=高，<code>border-radius:50%</code></td><td><code>shape="circle"</code></td></tr><tr><td>按钮组 Button.Group</td><td>兄弟钮左右相连，首左末右保留外圆角，中间直角共享边</td><td><code>Button.Group</code></td></tr><tr><td>长按钮 Long</td><td>容器全宽、内容居中</td><td><code>long</code></td></tr><tr><td>图标图标 Icon-only / 图标+文字</td><td>图标位 16–20，左图标+文字 / 纯图标</td><td><code>icon</code></td></tr><tr><td>加载 Loading</td><td>图标位 18px 细环 0.9s/圈，期间禁点</td><td><code>loading</code></td></tr><tr><td>链接按钮 Link</td><td>同 Text 类型，<code>&lt;a&gt;</code> 语义 + <code>lg-icon-external-link</code> 可选</td><td><code>component="a"</code></td></tr><tr><td>禁用 Disabled</td><td>opacity .4，去辉光与彩色</td><td><code>disabled</code></td></tr></tbody></table>
+<p><b>3.2.4.1 统一配方（V2.9 视觉优化，必读）</b></p>
+<blockquote>用户反馈：① 主按钮"描边和分层有错行、发脏"；② 白底按钮"描边非常廉价"。<br>两个根因都是<b>把玻璃边光用在了不该用的地方</b>，且<b>同一按钮在各页各写一套</b>（这才是"错行"）。</blockquote>
+<p><b>根因一 · 不透明实底套了玻璃边光。</b> 02 · 2.5 的「1px 白色描边 + 顶部白内高光」是给 <b>半透明玻璃面</b>的受光边缘；主按钮经 D9 改为<b>不透明</b>品牌粉渐变后仍然带着它们 —— 白边落在浅粉上「亮端看不见、暗端看得见」，一圈边缘深浅不均（描边错行）， 再叠一层 inset 白高光就成了双线，视觉发糊（发脏）。</p>
+<p><b>根因二 · 浅底控件的边用了白色。</b> 白 75–85% 的描边落在白/浅底上等于<b>没有边</b>， 形状糊掉 → 廉价。玻璃面板（<code>.glass</code>/<code>.card</code>）的白边因为<b>底下有彩色光斑</b>才成立； 实心白按钮底下没有，白边就失效了。</p>
+<p><b>三条统一配方（全站唯一口径，站点与两个组件库同源）</b></p>
+<pre>/* A 主按钮（品牌粉主行动）—— 不透明实底：不描边，靠同族色双层阴影立边 */
+background: var(--mmh-grad-action-hc);   color: var(--lg-text-on-accent);   border: none;
+box-shadow: 0 1px 2px rgba(178,58,99,.22),      /* 接触影：给边缘清晰度 */
+            0 8px 20px rgba(240,127,163,.30);   /* 品牌玫辉光：02 · 2.6 色相统一，禁混中性灰 */
+
+/* B 白底/浅底按钮（Default · Secondary · 白玻璃）—— 边必须是可辨识的暖中性 hairline */
+background: linear-gradient(160deg, rgba(255,255,255,.94), rgba(255,255,255,.78));
+color: var(--lg-text-primary);
+border: 1px solid var(--lg-divider);            /* = rgba(58,52,84,.10)，暗色档自动翻白 */
+box-shadow: 0 1px 2px rgba(58,52,84,.06), 0 4px 12px rgba(58,52,84,.08);
+backdrop-filter: blur(16px) saturate(1.2);      /* 玻璃感保留（02 · 2.5 L3） */
+
+/* C 描边按钮（Outline / Dashed）—— 1.5px 带 alpha 的玫瑰，禁纯色饱和硬边 */
+background: transparent;   color: var(--mmh-rose-700);   border: 1.5px solid rgba(232,93,143,.45);
+box-shadow: 0 1px 2px rgba(178,58,99,.06);</pre>
+<p><b>同档统一（同一缺陷类，一并收口）</b>：浅底交互控件——<code>chip</code>／级联选择器 <code>cas-t</code>／ 搜索框／勾选框 <code>chk</code>／开关轨道 <code>sw</code>——的边一律用 <code>--lg-divider</code>。 <b>不在本档范围内</b>：<code>.glass</code>／<code>.card</code>／<code>.panel</code> 等<b>半透明玻璃面</b>的白边是 02 · 2.5 的 材质定义（底下有光斑），保持不动。</p>
+<p><b>反面清单（写代码时逐条对照）</b></p>
+<table><thead><tr><th>✘ 不要</th><th>✔ 应该</th></tr></thead><tbody><tr><td>不透明实底 + 白色描边 + 白内高光</td><td>实底不描边，用同族色接触影 + 辉光</td></tr><tr><td>浅底按钮用 <code>rgba(255,255,255,.7+)</code> 描边</td><td>用 <code>--lg-divider</code> 暖中性 hairline</td></tr><tr><td>Outline 用纯 <code>#F77FA3</code> 1px 描边、零阴影</td><td>1.5px <code>rgba(232,93,143,.45)</code> + 极淡玫影</td></tr><tr><td>同一条规则里 <code>border</code> / <code>box-shadow</code> 声明两次（后者静默胜出）</td><td>一条规则一次，覆盖要显式</td></tr><tr><td>用 <code>!important</code> 只覆写 <code>background</code>/<code>color</code>，留下旧的描边与高光</td><td>覆写<b>整组配方</b>（底 + 字 + 描边 + 影）</td></tr><tr><td>同一个按钮在各页面各写一套数值</td><td>引用本节三条配方，全站一致</td></tr></tbody></table>
 <p><b>绘制与动效要求</b></p>
 <ul><li>全部沿用 [07](#ch-07)：hover 浮起 4px + 扫光，press <code>scale(.96)</code> 120ms；danger 类不做浮起辉光之外的装饰，保证语义只靠颜色+文案。</li><li>文字对比度按 WCAG 2.2 AA 口径（见 [02 · 2.1](#ch-02) 无障碍底线、[06 · 6.5](#ch-06)、决策记录 D2/D5/D9），两条路各自成立：① <b>深实底 + 白字</b>——小字号白字只落在 ≥4.5:1 的 <code>--mmh-solid-*</code>（4.7–7.0:1）上；② <b>品牌粉底 + 深字</b>——主行动 <code>--mmh-grad-action-hc</code>（Rose-300→Rose-500）配 <code>#343A46</code>，文字区 4.89–7.67:1。<b>禁止「品牌亮粉底 + 白字」组合</b>（实测 2.46–3.48:1）；<code>--mmh-grad-primary</code> 仅承载 ≥24px 常规/≥18.66px 加粗展示字。</li><li>妈咪好数据色序/品牌 Token 见 [12 · 12.3](#ch-12)、[02 · 2.9](#ch-02)。</li><li>移动端按钮：尺寸档同四档并放大一档使用，支持全宽 Long（见 [10 · 10.4](#ch-10)）；按压反馈 <code>scale(.97) 120ms</code>（07）。</li></ul>
 <h4>3.2.5 文字 + 图标组合规范（Icon-in-Button）</h4>
