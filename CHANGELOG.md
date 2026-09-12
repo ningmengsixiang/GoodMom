@@ -39,6 +39,15 @@
   · `check-version.py` · `check-style-parity.py` · `build-site.py --check` · `redirect-legacy.py --check`
   · `site-parity.mjs` 15/15 · `site-smoke.mjs` 48/48 · `page-qa.mjs --ci`（新门禁已接 CI）。
 
+### 修正（同轮补记）
+- **logo 恢复原样**：本轮的"圆角一律回档"批量修改误把 **7 处 logo 图片的渲染圆角**一起改了
+  （logo 资产文件本身零改动）。已全部恢复原值，并按用户要求把 logo 定为**强制沿用当前版本**。
+- **新增 `audit.py logo-guard` 门禁**：① logo 引用必须解析到真实资产；② logo 渲染圆角对表校验（10 处），
+  任何改动显式 FAIL。负向测试已验证（注入 24px→22px 漂移 → 立即 FAIL 并指名）。
+- `scripts/page-qa.mjs` 把 logo **永久排除**在圆角规则之外（原 finding 正是诱导误改圆角的源头）。
+- **顺带修掉既有断裂**：`preview/manual.html` 的 logo 指向已不存在的 `../logo.png`（打印版长期裂图），
+  改为 `../brand/logo.png`。
+
 ### 已知未结项（**不静默转绿**）
 - 6 个模块无暗色皮肤（token 层支持，属皮肤缺口，`page-qa.mjs` 记为 P3）。
 - 「偏离 4px 网格」4 万+ 处、「字号不在层级」1.1 万处按**聚合口径**登记（`docs/page-qa-report.md` 0b 节给分布）。

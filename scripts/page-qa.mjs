@@ -368,7 +368,14 @@ const PROBE = (spec) => {
       // 装饰形状（光斑/辉光/进度条/色点）不属 2.4「组件与容器圆角」管辖范围，
       // 拿 token 档位去量它们只会产生噪声 —— 显式排除，避免把规则刷成不可用。
       const rect = el.getBoundingClientRect();
-      const decorative = /(amb|glow|blob|orb|spot)/i.test(typeof el.className === 'string' ? el.className : '') ||
+      // ⚠️ logo 一律排除，且**永不**纳入圆角整改范围。
+      // 品牌 logo 的圆角是品牌资产的一部分（用户明确要求"强制沿用当前 logo"），
+      // 不属于 02 · 2.4「组件与容器圆角档」的管辖对象；对 logo 做圆角回档 = 改用户品牌视觉。
+      const isBrand = /logo|brand/i.test(typeof el.className === 'string' ? el.className : '') ||
+        /logo|brand/i.test(el.getAttribute('class') || '') ||
+        /logo|brand/i.test(el.getAttribute('src') || '');
+      const decorative = isBrand ||
+        /(amb|glow|blob|orb|spot)/i.test(typeof el.className === 'string' ? el.className : '') ||
         rect.height <= 12 || rect.width <= 12 || cs.borderRadius.includes('%') ||
         cs.display.startsWith('inline');   // 行内盒子（code/kbd 芯片）是文字级装饰，非 2.4 管辖的组件与容器
       if (interactive && maxR > 0 && maxR < spec.radiusInteractiveMin) {

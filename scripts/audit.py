@@ -392,10 +392,116 @@ def _css_selectors(path):
                 out.add(one)
     return out
 
+
+# ══════════════════════════════════════════════════════════════════════════
+# logo 守卫（用户硬性要求：站点一律沿用**当前这个 logo**，任何轮次不得改动）
+#
+# 背景：V2.9 逐页质检时，"圆角一律回档到 02 · 2.4 档位"的批量修改把 7 处 **logo 图片的
+# 圆角**一起改了。logo 的圆角属于品牌资产的一部分，不属于 2.4「组件与容器圆角」的管辖
+# 对象 —— 对 logo 做圆角回档，等于替用户改品牌视觉。故把 logo 的**引用路径**与
+# **渲染圆角**都钉成白名单，任何改动在此显式失败，逼出一次人工确认。
+#
+# ⚠️ 这两张表是"用户的品牌决定"，不是"规范推导出的值"。要动请先和用户确认。
+# ══════════════════════════════════════════════════════════════════════════
+
+# 1) logo 图片引用必须解析到真实存在的资产。
+#    片段（site/fragments/*）会被内联进 site/index.html，所以它的相对基准是 site/，不是片段自身目录。
+LOGO_REF_FILES = [
+    "site/index.html", "site/spec.html", "site/manual.html", "site/docs.html",
+    "preview/index.html", "preview/examples.html", "preview/mobile.html",
+    "preview/patterns.html", "preview/manual.html",
+    "fuyouaicansai/goodmom-redesign.html",
+    "site/fragments/site-index.html", "site/fragments/preview-index.html",
+    "site/fragments/preview-mobile.html", "site/fragments/preview-examples.html",
+    "site/fragments/preview-patterns.html", "site/fragments/site-docs.html",
+    "site/fragments/site-spec.html", "site/fragments/site-manual.html",
+]
+
+# 2) logo 渲染圆角白名单：{文件: {说明: 原值}}。
+#    值取自用户当前 logo 的现状（V2.9 改动前），**不得随组件圆角档调整**。
+LOGO_RADII = {
+    "site/index.html": {"首页 Hero 主 logo（84px）": "24px",
+                        "首页导航 logo（46px）": "14px",
+                        "视觉规范行内 logo（34px）": "10px"},
+    "site/fragments/site-index.html": {"首页 Hero 主 logo（84px）": "24px",
+                                       "首页导航 logo（46px）": "14px"},
+    "site/fragments/preview-index.html": {"视觉规范行内 logo（34px）": "10px",
+                                          "视觉规范 Hero logo（88px）": "24px"},
+    "fuyouaicansai/goodmom-redesign.html": {"侧栏品牌 logo": "8px", "顶栏 logo": "6px"},
+    "preview/manual.html": {"打印版手册页头 logo": "13px"},
+}
+
+# CSS 里 logo 可能由通用选择器着色（不带 logo/brand 字样），逐文件显式列出
+LOGO_CSS_SELECTORS = {
+    "fuyouaicansai/goodmom-redesign.html": [r"\.side\s+\.brand\s+img", r"\.top\s+img"],
+}
+
+
+def _logo_radius_candidates(path):
+    """返回该文件里"logo 图片的圆角"实测值列表（内联样式 + logo/brand 选择器 + 显式列出的通用选择器）。"""
+    import io
+    src = io.open(path, encoding="utf-8").read()
+    out = []
+    for m in re.finditer(r"<img[^>]*>", src, re.I):
+        tag = m.group(0)
+        if not re.search(r"logo|brand", tag, re.I):
+            continue
+        r = re.search(r"border-radius:\s*([0-9.]+px)", tag)
+        if r:
+            out.append(r.group(1))
+    sels = [r"\.(?:hero-logo|logo|brand)[^{]*"] + LOGO_CSS_SELECTORS.get(path, [])
+    for sel in sels:
+        for m in re.finditer(sel + r"\{[^}]*border-radius:\s*([0-9.]+px)", src):
+            out.append(m.group(1))
+    return out
+
+
+def logo_guard():
+    import io
+    bad = []
+
+    # ① 引用完整性：logo 指向的文件必须存在
+    broken = 0
+    for f in LOGO_REF_FILES:
+        if not os.path.exists(f):
+            continue
+        base = os.path.dirname(f)
+        if "/fragments/" in f:                      # 片段以站点目录为相对基准
+            base = os.path.dirname(base)
+        src = io.open(f, encoding="utf-8").read()
+        for m in re.finditer(r'<img[^>]*src="([^"]*logo[^"]*)"', src, re.I):
+            rel = m.group(1)
+            target = os.path.normpath(os.path.join(base, rel))
+            if not os.path.exists(target):
+                bad.append("%s 引用 %s（解析为 %s）不存在" % (f, rel, target))
+                broken += 1
+    if not broken:
+        rec("OK", "logo-ref", "全部 logo 图片引用均可解析到真实资产（brand/），无断链")
+
+    # ② 渲染圆角白名单
+    checked = 0
+    for f, expect in LOGO_RADII.items():
+        if not os.path.exists(f):
+            bad.append("%s 不存在（logo 圆角白名单无法校验）" % f)
+            continue
+        got = _logo_radius_candidates(f)
+        for label, want in expect.items():
+            checked += 1
+            if want not in got:
+                bad.append("%s 的「%s」圆角应为 %s，实测命中 %s" % (f, label, want, sorted(set(got)) or "无"))
+
+    if bad:
+        for b in bad:
+            rec("FAIL", "logo-guard", b + " —— logo 是品牌资产，不得改动；确需调整请先与用户确认并同步本白名单")
+        return False
+    rec("OK", "logo-guard", "logo 渲染圆角 %d 处与白名单一致、引用零断链（logo 强制定为当前版本）" % checked)
+    return True
+
+
 def main():
     hard = []
     hard.append(md_links()); hard.append(chapter_seq()); hard.append(icons())
-    hard.append(html_no_md()); hard.append(stale_words()); hard.append(colors()); hard.append(banned_colors()); hard.append(breakpoint_reg()); hard.append(spec_health()); hard.append(hex_case()); hard.append(mirror_sync()); hard.append(dark_contrast()); hard.append(exports_check())
+    hard.append(html_no_md()); hard.append(stale_words()); hard.append(colors()); hard.append(banned_colors()); hard.append(breakpoint_reg()); hard.append(spec_health()); hard.append(hex_case()); hard.append(mirror_sync()); hard.append(dark_contrast()); hard.append(exports_check()); hard.append(logo_guard())
     passed = all(hard)
     report = ["# 规范审计报告（自动）", "",
               "- 命令：`python3 scripts/audit.py`", "- 时间：%(now)s" % {"now": __import__("datetime").datetime.now().strftime("%Y-%m-%d %H:%M")},
