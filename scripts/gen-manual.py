@@ -85,7 +85,7 @@ CSS='''
 .top img{width:26px;height:26px;border-radius:50%;object-fit:cover}
 .top b{color:#B23A63;font-size:14px}
 .top .navr{margin-left:auto;display:flex;gap:8px;flex-wrap:wrap}
-.top a{font-size:12.5px;font-weight:600;text-decoration:none;padding:7px 13px;border-radius:999px;background:linear-gradient(135deg,#FFC4D6,#F77FA3);color:#343A46}
+.top a{font-size:12.5px;font-weight:600;text-decoration:none;padding:7px 13px;border-radius:999px;background:var(--mmh-grad-action-hc,linear-gradient(135deg,#FFC4D6 0%,#F77FA3 100%));color:#343A46;border:var(--lg-border-1,1px) solid transparent;box-shadow:0 1px 2px rgba(178,58,99,.22),0 8px 20px rgba(240,127,163,.30)}   /* 03 · 3.2.4 主按钮配方 */
 aside{position:sticky;top:80px;max-height:calc(100vh - 100px);overflow:auto;padding:14px;border-radius:20px;background:rgba(255,255,255,.55);border:1px solid rgba(255,255,255,.85)}
 aside b{display:block;font-size:12px;color:#4F5B6E;margin-bottom:8px}
 aside a{display:block;font-size:12px;color:#343A46;text-decoration:none;padding:4px 8px;border-radius:18px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}

@@ -91,6 +91,39 @@
 .gm-btn--icon-only.gm-btn--sz-small{width:32px}
 .gm-btn--icon-only.gm-btn--sz-mini{width:26px}
 
+
+/* ── 03 · 3.2.7 按钮组 Button.Group ────────────────────────────────────────
+   兄弟按钮相连：首左 / 末右保留外圆角，中间直角共享边；
+   相邻边只留一条（用 -1px 负外边距吃掉重复描边）；hover / focus / 选中态抬
+   z-index，保证被压住的那条边与焦点环完整可见（否则焦点环会被相邻按钮裁掉）。 */
+.gm-btn-group{display:inline-flex;align-items:stretch}
+.gm-btn-group>.gm-btn{border-radius:0}
+.gm-btn-group>.gm-btn:not(:first-child){margin-left:calc(-1 * var(--lg-border-1))}
+.gm-btn-group>.gm-btn:first-child{border-radius:22px 0 0 22px}
+.gm-btn-group>.gm-btn:last-child{border-radius:0 22px 22px 0}
+.gm-btn-group>.gm-btn:only-child{border-radius:22px}
+.gm-btn-group>.gm-btn:hover,
+.gm-btn-group>.gm-btn:focus-visible,
+.gm-btn-group>.gm-btn[aria-pressed="true"]{position:relative;z-index:2}
+/* 胶囊组：两端全圆角（与 03 · 3.2.4 shape=round 同源） */
+.gm-btn-group--round>.gm-btn:first-child{border-radius:999px 0 0 999px}
+.gm-btn-group--round>.gm-btn:last-child{border-radius:0 999px 999px 0}
+.gm-btn-group--round>.gm-btn:only-child{border-radius:999px}
+/* 分段控件 segmented：组内**有且只有一个**选中项，语义用 role=group + aria-pressed */
+.gm-btn-group--segmented{gap:2px;padding:2px;border-radius:24px;
+  background:var(--lg-glass-control);border:var(--lg-border-1) solid var(--lg-divider)}
+.gm-btn-group--segmented>.gm-btn{margin-left:0;border-radius:22px;box-shadow:none}
+.gm-btn-group--segmented>.gm-btn[aria-pressed="true"]{
+  background:var(--mmh-grad-action-hc);color:var(--lg-text-on-accent)}
+.gm-btn-group--segmented>.gm-btn:not([aria-pressed="true"]){
+  background:transparent;color:var(--lg-text-secondary)}
+
+/* ── 10 · 10.4 移动端触控高度 ──────────────────────────────────────────────
+   移动端把小档按钮抬到 ≥44 触控高度（与 `.gm-risk-it` 同一口径）；桌面保持紧凑。 */
+@media (max-width:767px){
+  .gm-btn--sz-mini,.gm-btn--sz-small{min-height:44px}
+}
+
 /* ─────────────────────────────────────────────────────────────────────────
    03 · 3.6 GmTag / GmStatusTag 标签
    双通道：色点 + 文字；淡底 0.13 / 描边 0.32 由组件内联 tint() 计算

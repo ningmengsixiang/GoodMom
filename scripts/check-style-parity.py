@@ -140,6 +140,38 @@ def decls(path: str, tokens: dict) -> dict:
     return out
 
 
+# 允许"只在单侧存在"的 `.gm-*` 选择器（白名单必须写明理由，否则又会变成静默漂移的藏身处）。
+# 键是选择器前缀。
+ONE_SIDED_ALLOW = {
+    # React/应用侧独有：Arco 互操作层 + 站点/基础层提供的通用类
+    ".gm-btn.arco-btn": "Arco 互操作层：仅服务于历史代码里直接用 Arco Button 的写法",
+    ".arco-btn-primary.gm-btn-hc": "同上（D9 高对比主行动档的历史选择器）",
+    ".gm-sr-only": "屏幕阅读器工具类，Vue 侧定义在 base.css 而非 components.css",
+    ".gm-tag:focus": "React/应用侧独有的默认描边压制（Vue 侧由 base.css 统一处理）",
+    ".gm-steps .gm-step .gs-dot:focus-visible": "选择器写法差异，语义等价于 Vue 的 .gm-step .gs-dot:focus-visible",
+    '[data-theme="dark"] .gm-cascader__btn': "暗色覆盖：Vue 侧写在 SFC/其他段，语义等价",
+    '[data-theme="dark"] .gm-cascader__opt.is-active': "同上",
+    '[data-theme="dark"] .gm-rv__empty': "同上",
+    '[data-theme="dark"] .gm-vlist__sticky': "同上",
+    # Vue 独有：React 侧同名组件由 Arco 承担渲染（已登记为待办，不是"没看见"）
+    ".gm-progress": "React 的 GmProgress 基于 Arco Progress 渲染（无 .gm-progress DOM）；"
+                    "双库进度条契约未统一，已登记为待办 —— 白名单不是"通过"，是"已知差异"",
+}
+
+
+def one_sided(da: dict, db: dict, label_a: str, label_b: str) -> list:
+    """返回只在单侧出现的 `.gm-*` 选择器（未在白名单内）"""
+    ok = lambda sel: any(sel.startswith(p) for p in ONE_SIDED_ALLOW)
+    out = []
+    for sel in sorted(set(da) - set(db)):
+        if "gm-" in sel and not ok(sel):
+            out.append((sel, label_a))
+    for sel in sorted(set(db) - set(da)):
+        if "gm-" in sel and not ok(sel):
+            out.append((sel, label_b))
+    return out
+
+
 def main() -> int:
     problems = []
     for la, pa, lb, pb in PAIRS:
@@ -154,16 +186,24 @@ def main() -> int:
             for prop in sorted(set(da[sel]) & set(db[sel])):
                 if da[sel][prop] != db[sel][prop]:
                     diffs.append((sel, prop, da[sel][prop], db[sel][prop]))
+        solo = one_sided(da, db, la, lb)
         print("── %s  ↔  %s" % (la, lb))
-        print("   共同选择器 %d 个，共同声明比对完成；解析值差异 %d 处" % (len(shared), len(diffs)))
+        print("   共同选择器 %d 个；解析值差异 %d 处；单侧独有 .gm-* 选择器 %d 个"
+              % (len(shared), len(diffs), len(solo)))
         for sel, prop, va, vb in diffs:
             print("     DIFF %-34s %-16s %s   |   %s" % (sel, prop, va, vb))
             problems.append((la, lb, sel, prop, va, vb))
+        for sel, side in solo:
+            print("     ONLY %-48s 仅存在于 %s" % (sel, side))
+            problems.append((la, lb, sel, "(单侧独有)", side, ""))
 
     print()
     if problems:
-        print("FAIL 双库样式解析值漂移 %d 处 —— 二者必须对齐，"
-              "或把『有意不同』登记到 docs/审查决策记录.md 并在本脚本加豁免。" % len(problems))
+        print("FAIL 双库样式不一致 %d 处 —— 二者必须对齐，或把『有意不同』登记到"
+              " docs/审查决策记录.md 并加入本脚本的 ONE_SIDED_ALLOW（白名单必须写明理由）。"
+              % len(problems))
+        print("     注：只比"共同选择器"会漏掉整类漂移 —— 按钮曾长期分居两套类名"
+              "（React .arco-btn-* / Vue .gm-btn--*），交集为空所以永远比不到。")
         return 1
     print("OK 双库同名选择器的解析值完全一致")
     return 0

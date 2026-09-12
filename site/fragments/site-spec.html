@@ -15,7 +15,7 @@ a{color:var(--rose-deep)}
 .drop a{display:block;padding:8px 12px;border-radius:18px;font-size:13px;color:var(--t2);text-decoration:none;white-space:nowrap}
 .drop a:hover{background:rgba(247,127,163,.1);color:#B23A63}
 .top .ext{margin-left:auto;font-size:12.5px;font-weight:600;text-decoration:none;padding:7px 14px;border-radius:999px;background:#FFF;border:1px solid rgba(232,93,143,.3);color:var(--rose-deep)}
-.top .ext2{margin-left:8px;background:var(--mmh-grad-action-hc,linear-gradient(135deg,#FFC4D6 0%,#F77FA3 100%));color:#343A46;font-weight:600;text-decoration:none;font-size:12.5px;padding:7px 14px;border-radius:999px}
+.top .ext2{margin-left:8px;background:var(--mmh-grad-action-hc,linear-gradient(135deg,#FFC4D6 0%,#F77FA3 100%));color:#343A46;font-weight:600;text-decoration:none;font-size:12.5px;padding:7px 14px;border-radius:999px;border:var(--lg-border-1,1px) solid transparent;box-shadow:0 1px 2px rgba(178,58,99,.22),0 8px 20px rgba(240,127,163,.30)}   /* 03 · 3.2.4 主按钮配方 */
 .wrap{max-width:1080px;margin:0 auto;padding:20px 18px 80px}
 .chap{scroll-margin-top:70px;margin:0 0 34px;border-radius:22px;padding:22px 26px;background:linear-gradient(160deg,rgba(255,255,255,.72),rgba(255,255,255,.4));border:1px solid #F0D4CF;box-shadow:0 10px 26px rgba(90,70,70,.08)}
 .chap-hd{font-size:20px;font-weight:700;color:var(--rose-deep);padding-bottom:10px;border-bottom:1px solid #F0D4CF;margin-bottom:12px}
@@ -638,6 +638,12 @@ backdrop-filter: blur(16px) saturate(1.2);      /* 玻璃感保留（02 · 2.5 L
 background: transparent;   color: var(--mmh-rose-700);   border: 1.5px solid rgba(232,93,143,.45);
 box-shadow: 0 1px 2px rgba(178,58,99,.06);</pre>
 <p><b>同档统一（同一缺陷类，一并收口）</b>：浅底交互控件——<code>chip</code>／级联选择器 <code>cas-t</code>／ 搜索框／勾选框 <code>chk</code>／开关轨道 <code>sw</code>——的边一律用 <code>--lg-divider</code>。 <b>不在本档范围内</b>：<code>.glass</code>／<code>.card</code>／<code>.panel</code> 等<b>半透明玻璃面</b>的白边是 02 · 2.5 的 材质定义（底下有光斑），保持不动。</p>
+<p><b>全站同步范围（V2.9 实测口径）</b></p>
+<blockquote>判据可机械复现：把每个页面渲染后，取所有<b>背景为品牌粉渐变</b>的元素，<br>其 <code>box-shadow</code> 必须以 <code>rgba(178,58,99,.22) 0 1px 2px</code> 开头（hover 态为<br><code>rgba(178,58,99,.24) 0 2px 4px</code>），且不得存在白色描边。</blockquote>
+<table><thead><tr><th>纳入同步</th><th>具体对象</th></tr></thead><tbody><tr><td>按钮</td><td>主按钮 / 白底按钮 / 描边按钮 / 语义实底按钮（PC + 移动 + 打印版 + 重定向页）</td></tr><tr><td>选中态控件</td><td>状态筛选、分页当前页、单选卡选中、分段控件选中、页签/底栏选中、勾选框、开关</td></tr><tr><td>小徽标与标签</td><td>章节序号、示例卡序号、复制提示条、品牌标签、拓扑中心节点</td></tr><tr><td>浅底控件边</td><td>chip / 级联选择器 / 搜索框 / 勾选框 / 开关轨道</td></tr><tr><td>两个组件库</td><td><code>goodmom-ui/src/theme.css</code> · <code>goodmom-vue/src/styles/components.css</code>（<code>gm.css</code> 逐字节镜像）</td></tr></tbody></table>
+<p><b>明确不在同步范围</b>（有意保留的差异）：</p>
+<table><thead><tr><th>对象</th><th>原因</th></tr></thead><tbody><tr><td><code>.glass</code> / <code>.card</code> / <code>.panel</code> 等半透明玻璃面的白边</td><td>02 · 2.5 的材质定义：底下有彩色光斑，白边才成立</td></tr><tr><td><code>.hero-logo</code> 的品牌图辉光</td><td>环境光，非控件</td></tr><tr><td>滑块拇指（<code>input[type=range]</code> / 分段滑块 <code>.thumb</code>）</td><td>运动态元素，辉光随动效层级变化</td></tr><tr><td>头像 / 聊天气泡</td><td>平铺无阴影是刻意的轻量表达（已确认无白描边缺陷）</td></tr></tbody></table>
+<blockquote>实测结果：全站（8 模块 + 7 重定向页 + 打印手册 + 演示稿）品牌粉底元素 <b>67 个</b>，<br>其中 63 个为统一配方、4 个为刻意平铺（<code>none</code>）；<b>未达标 0、白描边 0</b>。</blockquote>
 <p><b>反面清单（写代码时逐条对照）</b></p>
 <table><thead><tr><th>✘ 不要</th><th>✔ 应该</th></tr></thead><tbody><tr><td>不透明实底 + 白色描边 + 白内高光</td><td>实底不描边，用同族色接触影 + 辉光</td></tr><tr><td>浅底按钮用 <code>rgba(255,255,255,.7+)</code> 描边</td><td>用 <code>--lg-divider</code> 暖中性 hairline</td></tr><tr><td>Outline 用纯 <code>#F77FA3</code> 1px 描边、零阴影</td><td>1.5px <code>rgba(232,93,143,.45)</code> + 极淡玫影</td></tr><tr><td>同一条规则里 <code>border</code> / <code>box-shadow</code> 声明两次（后者静默胜出）</td><td>一条规则一次，覆盖要显式</td></tr><tr><td>用 <code>!important</code> 只覆写 <code>background</code>/<code>color</code>，留下旧的描边与高光</td><td>覆写<b>整组配方</b>（底 + 字 + 描边 + 影）</td></tr><tr><td>同一个按钮在各页面各写一套数值</td><td>引用本节三条配方，全站一致</td></tr></tbody></table>
 <p><b>绘制与动效要求</b></p>
@@ -1433,7 +1439,7 @@ xl 32–40px  大屏状态图标      stroke 1.8</pre>
   border:1px solid rgba(255,255,255,.75);box-shadow:var(--lg-glass-highlight),var(--lg-shadow-lg);}
 .tab-item{flex:1;height:56px;display:flex;flex-direction:column;gap:2px;align-items:center;justify-content:center;
   border-radius:18px;color:var(--lg-text-tertiary);font-size:10px;transition:.26s var(--lg-ease-out)}
-.tab-item.on{background:var(--mmh-grad-action-hc,#F77FA3);color:#343A46;box-shadow:0 10px 22px rgba(240,127,163,.4);transform:translateY(-4px)}</pre>
+.tab-item.on{background:var(--mmh-grad-action-hc,#F77FA3);color:#343A46;box-shadow:0 1px 2px rgba(178,58,99,.22),0 8px 20px rgba(240,127,163,.30);transform:translateY(-4px)}   /* V2.9：辉光统一为 03 · 3.2.4.1 配方 */</pre>
 <h4>10.3.3 布局规则</h4>
 <pre>- 单列为主；双列仅用于等值卡片对（如两个 KPI），列表一律单列。
 - 页边距 16px；卡间隙 12px；卡内边距 16px。

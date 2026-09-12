@@ -60,62 +60,160 @@
    浅底按钮的边改用 02 · 2.7.1 同源的暖中性 hairline（`--lg-divider`，暗色档自动翻白）。
    ══════════════════════════════════════════════════════════════════════════ */
 
-/* 主按钮（品牌粉主行动）：D9 二分口径之二「品牌粉底 + 深字」 */
+/* ══ 03 · 3.2 按钮：共享契约 ════════════════════════════════════════════════
+   本段与 `@goodmom/vue/src/styles/components.css` 的同名选择器**逐字节一致**，
+   由 `scripts/check-style-parity.py` 守门。
+
+   为什么必须合并：此前 React / 应用侧用 `.gm-btn.arco-btn-*`、Vue 用
+   `.gm-btn--*`，两套选择器**没有任何交集** —— 于是"双库解析值比对"从来没比过
+   按钮一眼，视觉漂移可以无限积累而门禁全绿。现两侧输出同一组类名、共用同一份
+   CSS，14 章规定的规范形态 `.gm-btn--primary` 在两个包里都真正生效。 */
+
+.gm-btn{
+  display:inline-flex;align-items:center;justify-content:center;gap:8px;
+  height:40px;padding:0 20px;border-radius:22px;border:none;
+  font-family:var(--lg-font);font-size:14px;font-weight:600;line-height:1;
+  cursor:pointer;white-space:nowrap;user-select:none;
+  transition:transform var(--lg-t-base) var(--lg-ease-spring),
+             box-shadow var(--lg-t-base) ease, filter var(--lg-t-base) ease,
+             background-color var(--lg-t-base) ease, color var(--lg-t-base) ease;
+}
+.gm-btn:focus-visible{outline:var(--lg-ring-width) solid var(--lg-ring-color);outline-offset:var(--lg-ring-offset)}
+/* 尺寸（02 · 2.4 圆角档；mini 取底线 16）
+   ⚠️ 尺寸类必须叫 --sz-*，不能叫 --default/--small：那会与「类型」类同名同特异性
+   （.gm-btn--default 既是"中性类型"又是"中号尺寸"），后写的规则会静默吃掉类型底色。
+   实测踩过：type=primary 的按钮被尺寸规则覆盖成 --lg-surface 灰底。 */
+.gm-btn--sz-large{height:48px;padding:0 26px;border-radius:26px;font-size:16px}
+.gm-btn--sz-default{height:40px;padding:0 20px;border-radius:22px;font-size:14px}
+.gm-btn--sz-small{height:32px;padding:0 16px;border-radius:18px;font-size:13px}
+.gm-btn--sz-mini{height:26px;padding:0 12px;border-radius:16px;font-size:12px}
+.gm-btn--long{width:100%}
+.gm-btn--circle{border-radius:999px;padding:0;aspect-ratio:1}
+.gm-btn--square{border-radius:10px}
+/* 类型 */
+/* 03 · 3.2.4 主按钮：不透明品牌粉底**不套玻璃白边/白内高光**（那是 02 · 2.5 给半透明
+   玻璃面的边光，落在浅粉上会亮端看不见、暗端看得见 → 描边错行、双线发糊）。
+   边缘清晰度改由**同族玫色接触影 + 辉光**承担（02 · 2.6：阴影色相统一）。 */
+.gm-btn--primary{background:var(--mmh-grad-action-hc);color:#343A46;border:var(--lg-border-1) solid transparent;
+  box-shadow:0 1px 2px rgba(178,58,99,.22),0 8px 20px rgba(240,127,163,.30)}
+.gm-btn--primary:hover{box-shadow:0 2px 4px rgba(178,58,99,.24),0 12px 26px rgba(240,127,163,.38)}
+/* 03 · 3.2.4 Default / Secondary 中性白玻璃按钮
+   ⛔ 原边用 --lg-border-white-75（白 75%）：白边落在白/浅底上等于**没有边**，形状糊掉（"廉价"）。
+   ✔ 改用 02 · 2.7.1 同源的暖中性 hairline `--lg-divider`（暗色档自动翻白）+ 02 · 2.6 双层柔影，
+      边界可辨识、有浮起感；玻璃感由半透明白 + backdrop blur（02 · 2.5 L3）保留。 */
+.gm-btn--secondary{background:linear-gradient(160deg,rgba(255,255,255,.94),rgba(255,255,255,.78));
+  color:var(--lg-text-primary);border:var(--lg-border-1) solid var(--lg-divider);
+  box-shadow:0 1px 2px rgba(58,52,84,.06),0 4px 12px rgba(58,52,84,.08);
+  -webkit-backdrop-filter:blur(16px) saturate(1.2);backdrop-filter:blur(16px) saturate(1.2)}
+.gm-btn--secondary:hover{border-color:rgba(58,52,84,.16);
+  box-shadow:0 2px 4px rgba(58,52,84,.07),0 8px 18px rgba(58,52,84,.10)}
+/* 03 · 3.2.4 描边按钮：透明底 + 1.5px 玫瑰描边 + 玫瑰字。
+   原为纯 --lg-link 实描边且零阴影 → 饱和硬边、贴纸感；改用带 alpha 的玫瑰 + 极淡玫影。 */
+.gm-btn--outline{background:transparent;color:var(--mmh-rose-700,#B23A63);
+  border:var(--lg-border-2) solid rgba(232,93,143,.45);box-shadow:0 1px 2px rgba(178,58,99,.06)}
+.gm-btn--outline:hover{border-color:rgba(232,93,143,.75);background:rgba(247,127,163,.07)}
+.gm-btn--dashed{background:transparent;color:var(--mmh-rose-700,#B23A63);
+  border:var(--lg-border-2) dashed rgba(232,93,143,.45);box-shadow:none}
+.gm-btn--dashed:hover{border-color:rgba(232,93,143,.75);background:rgba(247,127,163,.07)}
+.gm-btn--text{background:transparent;color:var(--mmh-rose-700,#B23A63);padding:0 8px;box-shadow:none;border:none}
+.gm-btn--default{background:linear-gradient(160deg,rgba(255,255,255,.94),rgba(255,255,255,.78));
+  color:var(--lg-text-primary);border:var(--lg-border-1) solid var(--lg-divider);
+  box-shadow:0 1px 2px rgba(58,52,84,.06),0 4px 12px rgba(58,52,84,.08)}
+.gm-btn--default:hover{border-color:rgba(58,52,84,.16);
+  box-shadow:0 2px 4px rgba(58,52,84,.07),0 8px 18px rgba(58,52,84,.10)}
+/* 状态色：实底一律走 D5 深档（小字号白字 AA 达标） */
+.gm-btn--success{background:var(--mmh-solid-positive);color:#FFF;box-shadow:0 6px 16px rgba(30,107,82,.26)}
+.gm-btn--warning{background:var(--mmh-solid-attention);color:#FFF;box-shadow:0 6px 16px rgba(154,90,14,.26)}
+.gm-btn--danger{background:var(--mmh-solid-danger);color:#FFF;box-shadow:0 6px 16px rgba(176,64,82,.26)}
+/* 状态色 × outline/text：描边与文字用语义 alias（浅底可读） */
+.gm-btn--outline.gm-btn--success,.gm-btn--text.gm-btn--success{background:transparent;color:var(--lg-sem-positive);box-shadow:none}
+.gm-btn--outline.gm-btn--warning,.gm-btn--text.gm-btn--warning{background:transparent;color:var(--lg-sem-attention);box-shadow:none}
+.gm-btn--outline.gm-btn--danger,.gm-btn--text.gm-btn--danger{background:transparent;color:var(--lg-sem-risk);box-shadow:none}
+.gm-btn--outline.gm-btn--success{border-color:var(--lg-sem-positive)}
+.gm-btn--outline.gm-btn--warning{border-color:var(--lg-sem-attention)}
+.gm-btn--outline.gm-btn--danger{border-color:var(--lg-sem-risk)}
+/* 07 · 7.3.1 四态：hover 浮起 / active 回弹 / disabled / loading */
+.gm-btn:not(.gm-btn--disabled):not(.gm-btn--loading):hover{transform:translateY(-1px);box-shadow:0 6px 14px rgba(90,70,70,.12)}
+.gm-btn--primary:not(.gm-btn--disabled):not(.gm-btn--loading):hover{box-shadow:0 8px 18px rgba(240,127,163,.32)}
+.gm-btn:not(.gm-btn--disabled):not(.gm-btn--loading):active{transform:translateY(0) scale(.96);transition-duration:.12s}
+.gm-btn--disabled{opacity:.55;cursor:not-allowed}
+.gm-btn--loading{opacity:.9;cursor:wait}
+/* loading 指示器：继承 currentColor，深浅底通吃 */
+.gm-btn__spinner{width:14px;height:14px;flex:none;border-radius:50%;display:inline-block;
+  border:2px solid rgba(128,128,128,.35);border-top-color:currentColor;animation:gmSpin .8s linear infinite}
+.gm-btn__icon{display:inline-flex;align-items:center;flex:none}
+/* 03 · 3.2.5 文字 + 图标组合：容器几何居中，图标 flex:none 防挤压 */
+.gm-btn--icon-only{padding:0;width:40px}
+.gm-btn--icon-only.gm-btn--sz-large{width:48px}
+.gm-btn--icon-only.gm-btn--sz-small{width:32px}
+.gm-btn--icon-only.gm-btn--sz-mini{width:26px}
+
+/* ── 03 · 3.2.7 按钮组 Button.Group ────────────────────────────────────────
+   兄弟按钮相连：首左 / 末右保留外圆角，中间直角共享边；
+   相邻边只留一条（用 -1px 负外边距吃掉重复描边）；hover / focus / 选中态抬
+   z-index，保证被压住的那条边与焦点环完整可见（否则焦点环会被相邻按钮裁掉）。 */
+.gm-btn-group{display:inline-flex;align-items:stretch}
+.gm-btn-group>.gm-btn{border-radius:0}
+.gm-btn-group>.gm-btn:not(:first-child){margin-left:calc(-1 * var(--lg-border-1))}
+.gm-btn-group>.gm-btn:first-child{border-radius:22px 0 0 22px}
+.gm-btn-group>.gm-btn:last-child{border-radius:0 22px 22px 0}
+.gm-btn-group>.gm-btn:only-child{border-radius:22px}
+.gm-btn-group>.gm-btn:hover,
+.gm-btn-group>.gm-btn:focus-visible,
+.gm-btn-group>.gm-btn[aria-pressed="true"]{position:relative;z-index:2}
+/* 胶囊组：两端全圆角（与 03 · 3.2.4 shape=round 同源） */
+.gm-btn-group--round>.gm-btn:first-child{border-radius:999px 0 0 999px}
+.gm-btn-group--round>.gm-btn:last-child{border-radius:0 999px 999px 0}
+.gm-btn-group--round>.gm-btn:only-child{border-radius:999px}
+/* 分段控件 segmented：组内**有且只有一个**选中项，语义用 role=group + aria-pressed */
+.gm-btn-group--segmented{gap:2px;padding:2px;border-radius:24px;
+  background:var(--lg-glass-control);border:var(--lg-border-1) solid var(--lg-divider)}
+.gm-btn-group--segmented>.gm-btn{margin-left:0;border-radius:22px;box-shadow:none}
+.gm-btn-group--segmented>.gm-btn[aria-pressed="true"]{
+  background:var(--mmh-grad-action-hc);color:var(--lg-text-on-accent)}
+.gm-btn-group--segmented>.gm-btn:not([aria-pressed="true"]){
+  background:transparent;color:var(--lg-text-secondary)}
+
+/* ── 10 · 10.4 移动端触控高度 ──────────────────────────────────────────────
+   移动端把小档按钮抬到 ≥44 触控高度（与 `.gm-risk-it` 同一口径）；桌面保持紧凑。 */
+@media (max-width:767px){
+  .gm-btn--sz-mini,.gm-btn--sz-small{min-height:44px}
+}
+
+
+/* ══ Arco 互操作层 ══════════════════════════════════════════════════════════
+   GmButton 现在直接输出上面的 `.gm-btn--*` 类（与 @goodmom/vue 同一契约、
+   同一份 CSS），下面几条只为**历史代码里直接用 Arco Button 并带 gm-btn 类**
+   的写法兜底。它们不在双库契约比对范围内（选择器只存在于本文件）。 */
 .gm-btn.arco-btn-primary{
   background:var(--mmh-grad-action-hc,#F77FA3) !important;
-  color:var(--lg-text-on-accent) !important; /* D9：亮粉底必须配深字；Arco primary 默认白字会跌破 AA */
-  /* 透明描边而非 border:none —— 与带 1px 描边的兄弟类型盒模型完全对齐（视觉零差异） */
+  color:var(--lg-text-on-accent) !important;
   border:var(--lg-border-1) solid transparent !important;
   box-shadow:0 1px 2px rgba(178,58,99,.22),0 8px 20px rgba(240,127,163,.30);
 }
-
-/* 白底按钮（Default / Secondary 中性白玻璃）—— React 侧此前**完全没有定义**，
-   落到 Arco 默认样式（灰边白底）上，与 Vue 的 white-75 白边一样廉价。 */
 .gm-btn.arco-btn-default,.gm-btn.arco-btn-secondary{
   background:linear-gradient(160deg,rgba(255,255,255,.94),rgba(255,255,255,.78)) !important;
   color:var(--lg-text-primary) !important;
   border:var(--lg-border-1) solid var(--lg-divider) !important;
   box-shadow:0 1px 2px rgba(58,52,84,.06),0 4px 12px rgba(58,52,84,.08) !important;
-  -webkit-backdrop-filter:blur(16px) saturate(1.2);backdrop-filter:blur(16px) saturate(1.2);
 }
-.gm-btn.arco-btn-default:not(.arco-btn-disabled):hover,
-.gm-btn.arco-btn-secondary:not(.arco-btn-disabled):hover{
-  border-color:rgba(58,52,84,.16) !important;
-  box-shadow:0 2px 4px rgba(58,52,84,.07),0 8px 18px rgba(58,52,84,.10) !important;
-}
-
-/* 描边按钮（03 · 3.2.4：透明底 + 1.5px 玫瑰描边 + 玫瑰字）
-   原为纯 #F77FA3 实描边且无阴影 → 饱和硬边、贴纸感；改用带 alpha 的玫瑰 + 极淡玫影。 */
 .gm-btn.arco-btn-outline{
-  background:transparent !important;
-  color:var(--mmh-rose-700,#B23A63) !important;
-  border:var(--lg-border-2) solid rgba(232,93,143,.45) !important;
-  box-shadow:0 1px 2px rgba(178,58,99,.06);
+  background:transparent !important;color:var(--mmh-rose-700,#B23A63) !important;
+  border:var(--lg-border-2) solid rgba(232,93,143,.45) !important;box-shadow:0 1px 2px rgba(178,58,99,.06);
 }
-.gm-btn.arco-btn-outline:not(.arco-btn-disabled):hover{
-  border-color:rgba(232,93,143,.75) !important;background:rgba(247,127,163,.07) !important}
 .gm-btn.arco-btn-dashed{
   background:transparent !important;color:var(--mmh-rose-700,#B23A63) !important;
-  border:var(--lg-border-2) dashed rgba(232,93,143,.45) !important;box-shadow:none}
-.gm-btn.arco-btn-text{background:transparent !important;color:var(--mmh-rose-700,#B23A63) !important;border:none !important;box-shadow:none}
-/* 03 · 3.2 / 07 · 7.3.1 按钮玻璃态四态（hover 浮起 / active 回弹 / disabled / loading） */
-.gm-btn{transition:transform var(--lg-t-base) var(--lg-ease-spring),
-  box-shadow var(--lg-t-base) ease, filter var(--lg-t-base) ease,
-  background-color var(--lg-t-base) ease, color var(--lg-t-base) ease}
-/* 通用 hover 只给非实底按钮加中性浮起；实底（primary/secondary/outline）各自有配方，别覆盖 */
-.gm-btn.arco-btn-tertiary:not(.arco-btn-disabled):hover,.gm-btn:not([class*="arco-btn-"]):not(.arco-btn-disabled):hover{transform:translateY(-1px);box-shadow:0 6px 14px rgba(90,70,70,.12)}
-.gm-btn.arco-btn-primary:not(.arco-btn-disabled):hover{box-shadow:0 2px 4px rgba(178,58,99,.24),0 12px 26px rgba(240,127,163,.38);transform:translateY(-1px)}
-.gm-btn:not(.arco-btn-disabled):active{transform:translateY(0) scale(.96);transition-duration:var(--lg-t-fast)}
+  border:var(--lg-border-2) dashed rgba(232,93,143,.45) !important;box-shadow:none;
+}
+.gm-btn.arco-btn-text{
+  background:transparent !important;color:var(--mmh-rose-700,#B23A63) !important;
+  border:none !important;box-shadow:none;
+}
+/* Arco 自带的尺寸/圆角/四态一律让位给 .gm-btn--* */
+.gm-btn.arco-btn-size-large,.gm-btn.arco-btn-size-default,
+.gm-btn.arco-btn-size-small,.gm-btn.arco-btn-size-mini{border-radius:inherit;height:auto;padding:inherit}
 .gm-btn.arco-btn-disabled{opacity:.55;cursor:not-allowed}
 .gm-btn.arco-btn-loading{opacity:.9;cursor:wait}
-/* 02 · 2.4 圆角四档（底线：交互组件 ≥16px，永不出现更小值） */
-.gm-btn.arco-btn-size-large{border-radius:26px}
-.gm-btn.arco-btn-size-default{border-radius:22px}
-.gm-btn.arco-btn-size-small{border-radius:18px}
-.gm-btn.arco-btn-size-mini{border-radius:16px}
-/* P2-3：`:focus` 曾被 `[class*="gm-"]` 宽规则压制，而恢复焦点环的 `:focus-visible`
-   只覆盖了 7 个选择器 —— 按钮与关闭按钮落在缺口里，键盘用户看不到焦点。 */
-.gm-btn:focus-visible{outline:var(--lg-ring-width) solid var(--lg-ring-color);outline-offset:var(--lg-ring-offset)}
 
 /* —— gm-arco-ui 组件辅助样式 —— */
 .gm-card{background:linear-gradient(160deg,rgba(255,255,255,.62),rgba(255,255,255,.3));
@@ -140,6 +238,23 @@
 .gm-risk-it i{width:8px;height:8px;border-radius:50%}
 .gm-risk-it{min-height:32px}
 .gm-risk-it.on{outline:var(--lg-ring-width) solid currentColor;outline-offset:1px;font-weight:600}
+
+.gm-status-tag{display:inline-flex;align-items:center;padding:3px 10px;border-radius:999px;font-size:12px;font-weight:500;
+  line-height:1.5;border:1px solid;white-space:nowrap}
+.gm-status-tag--default{font-size:12px;padding:3px 10px}
+.gm-status-tag--large{font-size:13px;padding:5px 12px}
+.gm-status-tag__close{margin-left:4px;border:none;background:none;color:inherit;opacity:.7;cursor:pointer;
+  font-size:12px;line-height:1;padding:2px;border-radius:999px}
+.gm-status-tag__close:hover{opacity:1}
+.gm-status-tag__close:focus-visible{outline:var(--lg-ring-width) solid var(--lg-ring-color);outline-offset:1px}
+[data-theme="dark"] .gm-card{background:linear-gradient(160deg,rgba(255,255,255,.10),rgba(255,255,255,.05))}
+.gm-risk-it[aria-disabled="true"],.gm-risk-it:disabled{cursor:not-allowed;opacity:.5}
+.gm-steps.sm .gs-dot{width:24px;height:24px;font-size:10px}
+.gm-steps.sm .gs-main b{font-size:12px}
+.gm-steps.sm .gs-main span{font-size:10px}
+.gm-steps:not(.sm){flex-direction:column;gap:2px}
+.gm-steps:not(.sm) .gm-step{flex:none;width:100%}
+.gm-steps:not(.sm) .gm-step::before{top:auto;left:15px;bottom:50%;width:2px;height:100%;transform:translateY(50%)}
 
 /* —— GmTag / GmSteps（自包含适配组件） —— */
 .gm-tag{display:inline-flex;align-items:center;gap:6px;padding:4px 12px;border-radius:999px;font-size:12px;font-weight:500;
