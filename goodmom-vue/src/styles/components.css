@@ -1,0 +1,305 @@
+/* ══════════════════════════════════════════════════════════════════════════
+   @goodmom/vue · components.css —— 组件视觉层（零基座，无任何第三方 UI 依赖）
+   对应规范：03 组件规范 / 07 交互动效 / 08 组件覆盖 / 10 移动端 / 13 妇幼领域
+   由各 SFC 的 <style scoped> 覆盖不到的部分集中声明：需要跨组件或需要伪类/伪元素/
+   媒体查询的样式放这里；组件私有样式优先写在 SFC 内。
+   ══════════════════════════════════════════════════════════════════════════ */
+
+/* ─────────────────────────────────────────────────────────────────────────
+   03 · 3.2 GmButton 按钮
+   类型：primary(主行动) | secondary(次行动实底) | outline | dashed | text | default
+   状态：default | success | warning | danger
+   D9 裁决：primary 用 --mmh-grad-action-hc（品牌粉上半段），文字**必须**深字
+   #343A46；直接白字在 Rose-500 上仅 2.9:1，属违规（见 03 · 3.2.4）。
+   ───────────────────────────────────────────────────────────────────────── */
+.gm-btn{
+  display:inline-flex;align-items:center;justify-content:center;gap:8px;
+  height:40px;padding:0 20px;border-radius:22px;border:none;
+  font-family:var(--lg-font);font-size:14px;font-weight:600;line-height:1;
+  cursor:pointer;white-space:nowrap;user-select:none;
+  transition:transform var(--lg-t-base) var(--lg-ease-spring),
+             box-shadow var(--lg-t-base) ease, filter var(--lg-t-base) ease,
+             background-color var(--lg-t-base) ease, color var(--lg-t-base) ease;
+}
+.gm-btn:focus-visible{outline:var(--lg-ring-width) solid var(--lg-ring-color);outline-offset:var(--lg-ring-offset)}
+/* 尺寸（02 · 2.4 圆角档；mini 取底线 16）
+   ⚠️ 尺寸类必须叫 --sz-*，不能叫 --default/--small：那会与「类型」类同名同特异性
+   （.gm-btn--default 既是"中性类型"又是"中号尺寸"），后写的规则会静默吃掉类型底色。
+   实测踩过：type=primary 的按钮被尺寸规则覆盖成 --lg-surface 灰底。 */
+.gm-btn--sz-large{height:48px;padding:0 26px;border-radius:26px;font-size:16px}
+.gm-btn--sz-default{height:40px;padding:0 20px;border-radius:22px;font-size:14px}
+.gm-btn--sz-small{height:32px;padding:0 16px;border-radius:18px;font-size:13px}
+.gm-btn--sz-mini{height:26px;padding:0 12px;border-radius:16px;font-size:12px}
+.gm-btn--long{width:100%}
+.gm-btn--circle{border-radius:999px;padding:0;aspect-ratio:1}
+.gm-btn--square{border-radius:10px}
+/* 类型 */
+.gm-btn--primary{background:var(--mmh-grad-action-hc);color:#343A46;box-shadow:0 6px 16px rgba(178,58,99,.3)}
+.gm-btn--secondary{background:var(--lg-glass-control);color:var(--lg-text-primary);
+  border:var(--lg-border-1) solid var(--lg-border-white-75);box-shadow:var(--lg-shadow-sm)}
+.gm-btn--outline{background:transparent;color:var(--lg-link);border:var(--lg-border-2) solid var(--lg-link)}
+.gm-btn--dashed{background:transparent;color:var(--lg-text-secondary);border:var(--lg-border-1) dashed var(--lg-text-tertiary)}
+.gm-btn--text{background:transparent;color:var(--lg-link);padding:0 8px;box-shadow:none}
+.gm-btn--default{background:var(--lg-surface);color:var(--lg-text-primary);
+  border:var(--lg-border-1) solid var(--lg-border-white-75);box-shadow:var(--lg-shadow-sm)}
+/* 状态色：实底一律走 D5 深档（小字号白字 AA 达标） */
+.gm-btn--success{background:var(--mmh-solid-positive);color:#FFF;box-shadow:0 6px 16px rgba(30,107,82,.26)}
+.gm-btn--warning{background:var(--mmh-solid-attention);color:#FFF;box-shadow:0 6px 16px rgba(154,90,14,.26)}
+.gm-btn--danger{background:var(--mmh-solid-danger);color:#FFF;box-shadow:0 6px 16px rgba(176,64,82,.26)}
+/* 状态色 × outline/text：描边与文字用语义 alias（浅底可读） */
+.gm-btn--outline.gm-btn--success,.gm-btn--text.gm-btn--success{background:transparent;color:var(--lg-sem-positive);box-shadow:none}
+.gm-btn--outline.gm-btn--warning,.gm-btn--text.gm-btn--warning{background:transparent;color:var(--lg-sem-attention);box-shadow:none}
+.gm-btn--outline.gm-btn--danger,.gm-btn--text.gm-btn--danger{background:transparent;color:var(--lg-sem-risk);box-shadow:none}
+.gm-btn--outline.gm-btn--success{border-color:var(--lg-sem-positive)}
+.gm-btn--outline.gm-btn--warning{border-color:var(--lg-sem-attention)}
+.gm-btn--outline.gm-btn--danger{border-color:var(--lg-sem-risk)}
+/* 07 · 7.3.1 四态：hover 浮起 / active 回弹 / disabled / loading */
+.gm-btn:not(.gm-btn--disabled):not(.gm-btn--loading):hover{transform:translateY(-1px);box-shadow:0 6px 14px rgba(90,70,70,.12)}
+.gm-btn--primary:not(.gm-btn--disabled):not(.gm-btn--loading):hover{box-shadow:0 8px 18px rgba(240,127,163,.32)}
+.gm-btn:not(.gm-btn--disabled):not(.gm-btn--loading):active{transform:translateY(0) scale(.96);transition-duration:.12s}
+.gm-btn--disabled{opacity:.55;cursor:not-allowed}
+.gm-btn--loading{opacity:.9;cursor:wait}
+/* loading 指示器：继承 currentColor，深浅底通吃 */
+.gm-btn__spinner{width:14px;height:14px;flex:none;border-radius:50%;display:inline-block;
+  border:2px solid rgba(128,128,128,.35);border-top-color:currentColor;animation:gmSpin .8s linear infinite}
+.gm-btn__icon{display:inline-flex;align-items:center;flex:none}
+/* 03 · 3.2.5 文字 + 图标组合：容器几何居中，图标 flex:none 防挤压 */
+.gm-btn--icon-only{padding:0;width:40px}
+.gm-btn--icon-only.gm-btn--sz-large{width:48px}
+.gm-btn--icon-only.gm-btn--sz-small{width:32px}
+.gm-btn--icon-only.gm-btn--sz-mini{width:26px}
+
+/* ─────────────────────────────────────────────────────────────────────────
+   03 · 3.6 GmTag / GmStatusTag 标签
+   双通道：色点 + 文字；淡底 0.13 / 描边 0.32 由组件内联 tint() 计算
+   ───────────────────────────────────────────────────────────────────────── */
+.gm-tag{display:inline-flex;align-items:center;gap:6px;padding:4px 12px;border-radius:999px;font-size:12px;font-weight:500;
+  border:1px solid;line-height:1.4;white-space:nowrap}
+.gm-tag.lg{font-size:13px;padding:5px 14px}
+.gm-tag i{width:7px;height:7px;border-radius:50%;flex:none}
+.gm-tag:focus-visible{outline:var(--lg-ring-width) solid var(--lg-ring-color);outline-offset:var(--lg-ring-offset)}
+.gm-status-dot{display:inline-block;width:7px;height:7px;border-radius:50%;margin-right:6px;vertical-align:1px;flex:none}
+.gm-status-tag{display:inline-flex;align-items:center;padding:3px 10px;border-radius:999px;font-size:12px;font-weight:500;
+  line-height:1.5;border:1px solid;white-space:nowrap}
+.gm-status-tag--default{font-size:12px;padding:3px 10px}
+.gm-status-tag--large{font-size:13px;padding:5px 12px}
+.gm-status-tag__close{margin-left:4px;border:none;background:none;color:inherit;opacity:.7;cursor:pointer;
+  font-size:12px;line-height:1;padding:2px;border-radius:999px}
+.gm-status-tag__close:hover{opacity:1}
+.gm-status-tag__close:focus-visible{outline:var(--lg-ring-width) solid var(--lg-ring-color);outline-offset:1px}
+
+/* ─────────────────────────────────────────────────────────────────────────
+   03 · 3.3 GmCard 玻璃卡片 / 3.4.2 GmAvatar 头像
+   ───────────────────────────────────────────────────────────────────────── */
+.gm-card{background:linear-gradient(160deg,rgba(255,255,255,.62),rgba(255,255,255,.3));
+  border:1px solid var(--lg-border-white-70);box-shadow:var(--lg-shadow-md);padding:16px}
+[data-theme="dark"] .gm-card{background:linear-gradient(160deg,rgba(255,255,255,.10),rgba(255,255,255,.05))}
+.gm-card-head{display:flex;justify-content:space-between;align-items:center;gap:12px;margin-bottom:12px}
+.gm-card-head b{font-size:15px;color:var(--lg-text-primary);font-weight:600}
+.gm-card-head span{font-size:12px;color:var(--lg-text-tertiary)}
+.gm-avatar{display:inline-flex;align-items:center;justify-content:center;color:#FFF;font-weight:600;
+  border-radius:50%;border:2px solid rgba(255,255,255,.9);box-shadow:var(--lg-shadow-sm);flex:none;line-height:1}
+
+/* ─────────────────────────────────────────────────────────────────────────
+   15.6.1 / 13 GmClientCard 服务对象卡
+   ───────────────────────────────────────────────────────────────────────── */
+.gm-client{display:flex;align-items:center;gap:12px;padding:14px;border-radius:16px;background:var(--lg-glass-card);
+  border:1px solid var(--lg-border-white-75)}
+.gm-client-main{flex:1;min-width:0}
+.gm-client-name{display:flex;align-items:center;gap:6px;flex-wrap:wrap}
+.gm-client-name b{font-size:14px;color:var(--lg-text-primary)}
+.gm-client-sub{font-size:12px;color:var(--lg-text-tertiary);margin-top:3px}
+.gm-client-ops{display:flex;gap:6px;flex-wrap:wrap}
+@media (max-width:767px){
+  /* 10 · 10.6：移动端操作区换行到卡片底部，保证热区 ≥44 */
+  .gm-client{flex-wrap:wrap}
+  .gm-client-ops{width:100%;justify-content:flex-end}
+}
+
+/* ─────────────────────────────────────────────────────────────────────────
+   02.10 / 15.2.10 GmRiskPicker 妊娠风险五色单选
+   ───────────────────────────────────────────────────────────────────────── */
+.gm-risk{display:flex;gap:8px;flex-wrap:wrap}
+.gm-risk-it{display:inline-flex;align-items:center;gap:6px;border-radius:999px;padding:5px 12px;font-size:12.5px;
+  background:var(--lg-glass-control);border:var(--lg-border-1) solid;user-select:none;font-family:var(--lg-font);text-align:center;
+  -webkit-appearance:none;appearance:none;cursor:pointer;min-height:32px}
+.gm-risk-it i{width:8px;height:8px;border-radius:50%;flex:none}
+.gm-risk-it.on{outline:2px solid currentColor;outline-offset:1px;font-weight:600}
+.gm-risk-it[aria-disabled="true"],.gm-risk-it:disabled{cursor:not-allowed;opacity:.5}
+.gm-risk-it:focus-visible{outline:2px solid rgba(143,106,224,.7);outline-offset:2px}
+@media (max-width:767px){ .gm-risk-it{flex:1 1 auto;justify-content:center;min-height:44px} }
+
+/* ─────────────────────────────────────────────────────────────────────────
+   08 · 8.2.2 GmSteps 步骤条（自包含，替代原 Arco Steps）
+   ───────────────────────────────────────────────────────────────────────── */
+.gm-steps{display:flex;gap:0;align-items:flex-start}
+.gm-step{flex:1;display:flex;gap:8px;position:relative;padding-top:4px}
+.gm-step::before{content:"";position:absolute;top:17px;left:-50%;width:100%;height:2px;background:var(--lg-divider)}
+.gm-step:first-child::before{display:none}
+.gm-step .gs-dot{width:32px;height:32px;border-radius:50%;flex:none;display:flex;align-items:center;justify-content:center;
+  font-size:12px;font-weight:600;background:var(--lg-glass-control);border:var(--lg-border-1) solid var(--lg-divider-hairline);
+  color:var(--lg-text-secondary);z-index:1}
+.gm-step .gs-dot svg{width:13px;height:13px;stroke:#FFF;fill:none;stroke-width:2.6;stroke-linecap:round;stroke-linejoin:round}
+.gm-step.finish::before{background:linear-gradient(90deg,#FFC4D6,#F77FA3)}
+.gm-step.finish .gs-dot{background:var(--mmh-grad-rose);color:#FFF;border-color:transparent}
+.gm-step.process .gs-dot{border:2px solid var(--mmh-rose-600);color:var(--mmh-rose-700);animation:pulse 2.4s ease-in-out infinite}
+.gm-step.error .gs-dot{border:2px solid var(--mmh-danger);color:var(--lg-sem-risk)}
+.gm-step .gs-main b{display:block;font-size:13px;color:var(--lg-text-primary);line-height:1.4;font-weight:600}
+.gm-step .gs-main span{font-size:11px;color:var(--lg-text-tertiary)}
+.gm-steps.sm .gs-dot{width:24px;height:24px;font-size:10px}
+.gm-steps.sm .gs-main b{font-size:12px}
+.gm-steps.sm .gs-main span{font-size:10px}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.6}}
+@media (max-width:767px){
+  /* 10 · 10.4：移动端步骤条纵向排布，连接线转为竖线 */
+  .gm-steps:not(.sm){flex-direction:column;gap:2px}
+  .gm-steps:not(.sm) .gm-step{flex:none;width:100%}
+  .gm-steps:not(.sm) .gm-step::before{top:auto;left:15px;bottom:50%;width:2px;height:100%;transform:translateY(50%)}
+}
+
+/* ─────────────────────────────────────────────────────────────────────────
+   08 · 8.2.12 GmEmpty 空状态 / 8.2.15 GmSpin / 8.2.13 GmSkeleton
+   ───────────────────────────────────────────────────────────────────────── */
+.gm-empty{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;padding:28px 16px;text-align:center}
+.gm-empty .gm-empty-ic{width:52px;height:52px;border-radius:50%;display:flex;align-items:center;justify-content:center;
+  background:var(--lg-glass-control);border:1px dashed var(--lg-divider-hairline);color:var(--lg-link);
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.8)}
+.gm-empty .t{font-size:13px;color:var(--lg-text-secondary);font-weight:600}
+.gm-empty .d{font-size:11.5px;color:var(--lg-text-tertiary);line-height:1.7}
+.gm-spin{display:inline-flex;align-items:center;gap:8px;color:var(--lg-link);font-size:12px}
+.gm-spin i{flex:none;border-radius:50%;border:2px solid rgba(232,93,143,.22);border-top-color:var(--mmh-rose-600);
+  animation:gmSpin .8s linear infinite;display:inline-block}
+@keyframes gmSpin{to{transform:rotate(360deg)}}
+.gm-skeleton{display:flex;flex-direction:column;gap:9px;width:100%}
+.gm-skeleton i{display:block;height:12px;border-radius:7px;
+  background:linear-gradient(90deg,var(--lg-divider) 25%,rgba(255,255,255,.85) 50%,var(--lg-divider) 75%);
+  background-size:200% 100%;animation:gmSk 1.15s linear infinite}
+@keyframes gmSk{to{background-position:-200% 0}}
+
+/* ─────────────────────────────────────────────────────────────────────────
+   03 · 3.10 GmLink 链接 / 文字按钮
+   ───────────────────────────────────────────────────────────────────────── */
+.gm-link{display:inline-flex;align-items:center;gap:4px;font-size:14px;line-height:22px;font-family:var(--lg-font);
+  color:var(--lg-link);text-decoration:none;background:none;border:none;padding:0;cursor:pointer;
+  transition:color var(--lg-t-fast) ease,opacity var(--lg-t-fast) ease}
+.gm-link--sm{font-size:12px;line-height:18px}
+.gm-link--lg{font-size:16px;line-height:24px}
+.gm-link--u-always .gm-link__t{text-decoration:underline;text-underline-offset:2px}
+.gm-link--u-hover:hover .gm-link__t{text-decoration:underline;text-underline-offset:2px}
+.gm-link:hover{color:var(--lg-link-hover)}
+.gm-link:active{color:var(--lg-link-hover);opacity:.86}
+.gm-link--primary{color:var(--lg-text-primary);font-weight:600}
+.gm-link--primary:hover{color:var(--lg-link)}
+.gm-link--muted{color:var(--lg-text-secondary)}
+.gm-link--muted:hover{color:var(--lg-link)}
+.gm-link--danger{color:var(--lg-sem-risk)}
+.gm-link--danger:hover{color:#B04052}
+.gm-link.is-disabled,.gm-link[aria-disabled="true"]{color:var(--lg-text-disabled);cursor:not-allowed;pointer-events:none}
+.gm-link:focus-visible{outline:var(--lg-ring-width) solid var(--lg-ring-color);outline-offset:var(--lg-ring-offset);border-radius:4px}
+.gm-link__ic{width:16px;height:16px;display:inline-flex;flex:none;align-items:center;justify-content:center}
+.gm-link__ex{width:12px;height:12px;display:inline-flex;flex:none;align-items:center;justify-content:center}
+@media (max-width:767px){
+  .gm-link{position:relative}
+  .gm-link::after{content:"";position:absolute;top:-11px;bottom:-11px;left:-8px;right:-8px} /* 移动端热区补足 ≥44 */
+}
+
+/* ─────────────────────────────────────────────────────────────────────────
+   03 · 3.5.5 / 10.11.3 GmCascader 级联选择
+   ───────────────────────────────────────────────────────────────────────── */
+.gm-cascader{position:relative;display:inline-block;font-size:14px;max-width:100%}
+.gm-cascader--inline{display:block}
+.gm-cascader__trigger{display:flex;align-items:center;gap:8px;width:100%;min-width:200px;height:40px;padding:0 14px;
+  border-radius:var(--lg-radius-control);border:var(--lg-border-1) solid var(--lg-border-white-75);
+  background:var(--lg-glass-control);color:var(--lg-text-primary);font-family:var(--lg-font);font-size:14px;text-align:left;
+  cursor:pointer;transition:box-shadow var(--lg-t-base) ease,border-color var(--lg-t-base) ease}
+.gm-cascader__trigger:focus-visible{outline:var(--lg-ring-width) solid var(--lg-ring-color);outline-offset:var(--lg-ring-offset)}
+.gm-cascader__trigger[aria-expanded="true"]{border-color:var(--lg-link)}
+.gm-cascader__ph{color:var(--lg-text-tertiary)}
+.gm-cascader__val{flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.gm-cascader__clear{flex:none;border:none;background:none;color:var(--lg-text-tertiary);cursor:pointer;font-size:12px;
+  line-height:1;padding:4px;border-radius:999px}
+.gm-cascader__clear:hover{color:var(--lg-link)}
+.gm-cascader__arrow{flex:none;display:inline-flex;color:var(--lg-text-secondary);transition:transform var(--lg-t-base) ease}
+.gm-cascader.is-open .gm-cascader__arrow{transform:rotate(180deg)}
+.gm-cascader__panel{position:absolute;z-index:40;top:calc(100% + 8px);left:0;display:flex;padding:6px;
+  border-radius:var(--lg-radius-control);border:var(--lg-border-1) solid var(--lg-border-white-70);
+  background:var(--lg-glass-popover);backdrop-filter:blur(20px) saturate(1.2);-webkit-backdrop-filter:blur(20px) saturate(1.2);
+  box-shadow:var(--lg-shadow-md)}
+.gm-cascader--inline .gm-cascader__panel{position:static;box-shadow:none;margin-top:0}
+.gm-cascader__col{width:168px;max-height:240px;overflow:auto;padding:2px 0;
+  border-right:var(--lg-border-hairline) solid var(--lg-divider)}
+.gm-cascader__col:last-child{border-right:none}
+.gm-cascader__opt{display:flex;align-items:center;gap:8px;width:100%;height:34px;padding:0 10px;border:none;background:none;
+  font-family:var(--lg-font);font-size:13px;color:var(--lg-text-primary);cursor:pointer;text-align:left;border-radius:10px}
+.gm-cascader__opt.is-active{background:var(--lg-glass-popover)}
+.gm-cascader__opt.is-selected{color:var(--lg-link);font-weight:600;box-shadow:inset 2px 0 0 var(--lg-link)}
+.gm-cascader__opt.is-disabled{color:var(--lg-text-disabled);cursor:not-allowed}
+.gm-cascader__opt:focus-visible{outline:var(--lg-ring-width) solid var(--lg-ring-color);outline-offset:-2px}
+.gm-cascader__opt.is-selected::after{content:"";width:6px;height:10px;margin-left:auto;flex:none;
+  border-right:1.7px solid currentColor;border-bottom:1.7px solid currentColor;transform:rotate(45deg) translateY(-1px)}
+.gm-cascader__empty{width:168px;padding:14px 10px;font-size:12px;color:var(--lg-text-tertiary);text-align:center}
+.gm-cascader.is-disabled .gm-cascader__trigger{opacity:.5;cursor:not-allowed}
+.gm-cascader__clear{position:absolute;right:36px;top:50%;transform:translateY(-50%);opacity:0;transition:opacity var(--lg-t-fast) ease}
+.gm-cascader:hover .gm-cascader__clear,.gm-cascader:focus-within .gm-cascader__clear{opacity:1}
+/* 移动 / 底部多列 Picker 形态（10 · 10.11.3） */
+.gm-cascader--picker .gm-cascader__mask{position:fixed;inset:0;z-index:40;background:rgba(0,0,0,.35);animation:gmFade var(--lg-t-slow) ease}
+.gm-cascader--picker .gm-cascader__sheet{position:fixed;left:0;right:0;bottom:0;z-index:41;padding:14px 14px calc(14px + env(safe-area-inset-bottom));
+  border-radius:24px 24px 0 0;background:var(--lg-glass-popover);backdrop-filter:blur(24px) saturate(1.2);
+  -webkit-backdrop-filter:blur(24px) saturate(1.2);animation:gmUp var(--lg-t-slow) var(--lg-ease-out)}
+.gm-cascader--picker .gm-cascader__panel{position:static;box-shadow:none;background:none;border:none;backdrop-filter:none;
+  -webkit-backdrop-filter:none;max-height:268px;overflow:auto}
+.gm-cascader--picker .gm-cascader__col{width:auto;min-width:112px;flex:1;max-height:268px}
+.gm-cascader__foot{display:flex;gap:12px;margin-top:12px}
+.gm-cascader__btn{flex:1;height:46px;border-radius:22px;border:var(--lg-border-1) solid var(--lg-border-white-75);
+  background:var(--lg-glass-control);font-family:var(--lg-font);font-size:15px;font-weight:600;color:var(--lg-text-primary);cursor:pointer}
+.gm-cascader__btn.primary,.gm-cascader__btn.is-primary{background:var(--mmh-grad-action-hc);color:#343A46;border:none}
+.gm-cascader__btn:disabled{opacity:.5;cursor:not-allowed}
+.gm-cascader__btn:focus-visible{outline:var(--lg-ring-width) solid var(--lg-ring-color);outline-offset:2px}
+@keyframes gmFade{from{opacity:0}to{opacity:1}}
+@keyframes gmUp{from{transform:translateY(100%)}to{transform:translateY(0)}}
+
+/* ─────────────────────────────────────────────────────────────────────────
+   10 · 10.11.1 GmResponsiveView 响应式适配容器 / 10.11.2 GmVirtualList
+   ───────────────────────────────────────────────────────────────────────── */
+.gm-rv{display:block;min-width:0}
+.gm-rv__loading{display:flex;justify-content:center;padding:24px}
+.gm-rv__empty{display:block}
+.gm-rv__empty,.gm-rv__loading{color:var(--lg-text-secondary)}
+.gm-vlist{position:relative;overflow:hidden;border-radius:16px;background:var(--lg-glass-card);
+  border:var(--lg-border-1) solid var(--lg-border-white-70)}
+.gm-vlist__sticky{position:sticky;top:0;z-index:2;padding:10px 14px;font-size:12px;font-weight:600;color:var(--lg-text-secondary);
+  background:var(--lg-glass-popover);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);
+  border-bottom:var(--lg-border-hairline) solid var(--lg-divider)}
+.gm-vlist__viewport{position:relative;overflow:auto;-webkit-overflow-scrolling:touch;overscroll-behavior:contain}
+.gm-vlist__viewport:focus-visible{outline:var(--lg-ring-width) solid var(--lg-ring-color);outline-offset:-2px}
+.gm-vlist__inner{position:relative;will-change:transform}
+.gm-vlist__item{display:flex;align-items:center;gap:10px;box-sizing:border-box;padding:0 14px;font-size:14px;
+  color:var(--lg-text-primary);border-bottom:var(--lg-border-hairline) solid var(--lg-divider)}
+
+/* ─────────────────────────────────────────────────────────────────────────
+   08 · 8.2.5 GmProgress 进度条（自包含，替代原 Arco Progress）
+   ───────────────────────────────────────────────────────────────────────── */
+.gm-progress{display:flex;align-items:center;gap:10px;width:100%}
+.gm-progress__track{position:relative;flex:1;min-width:0;height:8px;border-radius:999px;background:var(--lg-divider);overflow:hidden}
+.gm-progress--sm .gm-progress__track{height:4px}
+.gm-progress--lg .gm-progress__track{height:12px}
+.gm-progress__fill{height:100%;border-radius:999px;background:var(--mmh-grad-primary);
+  transition:width var(--lg-t-slow) var(--lg-ease-out)}
+.gm-progress--positive .gm-progress__fill{background:var(--mmh-grad-mint)}
+.gm-progress--danger .gm-progress__fill{background:linear-gradient(90deg,#F79AA8,#B04052)}
+.gm-progress__text{flex:none;font-size:12px;color:var(--lg-text-secondary);font-variant-numeric:tabular-nums}
+.gm-progress--circle{display:inline-flex;flex-direction:column;gap:6px;width:auto}
+.gm-progress__ring{position:relative;display:inline-flex;align-items:center;justify-content:center}
+.gm-progress__ring svg{transform:rotate(-90deg);display:block}
+.gm-progress__ring circle{fill:none;stroke-linecap:round}
+.gm-progress__ring .gm-progress__ring-bg{stroke:var(--lg-divider)}
+.gm-progress__ring .gm-progress__ring-fill{stroke:var(--mmh-rose-500);transition:stroke-dashoffset var(--lg-t-slow) var(--lg-ease-out)}
+.gm-progress--positive .gm-progress__ring .gm-progress__ring-fill{stroke:var(--mmh-mint-600)}
+.gm-progress__ring-label{position:absolute;font-size:12px;font-weight:600;color:var(--lg-text-primary);font-variant-numeric:tabular-nums}
+
+/* 10 · 10.6.3：移动端级联/选择触发条走满宽输入行（对齐触发条 min-width 归零） */
+@media (max-width:767px){
+  .gm-cascader{display:block;width:100%}
+  .gm-cascader__trigger{min-width:0}
+  .gm-cascader__panel{left:0;right:0}
+}

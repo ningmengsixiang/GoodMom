@@ -1,0 +1,6 @@
+/* @goodmom/vue · 样式聚合入口
+   —— 顺序不可调换：base 先定义 Token/语义变量，components 再消费它们。
+   本文件由 src/index.ts 引入，构建时与全部 SFC 的 scoped 样式合并为 dist/style.css。
+   消费方只需一次 `import "@goodmom/vue/style.css"`。 */
+@import "./base.css";
+@import "./components.css";
