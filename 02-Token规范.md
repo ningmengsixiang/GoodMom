@@ -41,7 +41,7 @@ Figma:    LG / Color / Purple / 500
 | `--lg-text-tertiary` | `#9AA2B0`（建议值） | 辅助说明 / 时间戳 / 弱标签 |
 | `--lg-text-placeholder` | `rgba(88,98,115,0.5)` | 输入框占位符 |
 | `--lg-text-disabled` | `rgba(88,98,115,0.4)` | 禁用态文字 |
-| `--lg-text-on-accent` | `#FFFFFF` | 彩色强调底上的文字 |
+| `--lg-text-on-accent` | `#343A46` | 彩色强调底（主行动档亮粉）上的文字。**D9 裁定**：亮粉底必须配深字，白字实测仅 2.46–2.9:1 不达 AA。暗色档 `#1B1A21` |
 | `--lg-divider` | `rgba(58,52,84,0.10)` | 分隔线 / 表格行线 |
 
 > 无障碍底线（WCAG 2.2 AA，D2 裁决）：主文字对比度 ≥7:1（`#343A46` on `#E6D9D0` 实测 8.26:1）；次级 `#4F5B6E` 实测 4.46:1，仅可用于大字号/图形伴文，正文级一律用主文字；三级 `#9AA2B0` 仅用于 ≥24px 常规或 ≥18.66px 加粗的辅助展示且永不作可点击主标签——小字号辅助改回次级色。
@@ -138,6 +138,66 @@ Figma:    LG / Color / Purple / 500
 | `--lg-grad-hero` | `linear-gradient(120deg, #F5B8C6 0%, #9A78FF 50%, #72DDE5 100%)` | 品牌渐变流（签名氛围、图表主描边、Hero） |
 | `--lg-grad-slate` | `linear-gradient(180deg, rgba(255,255,255,0.85), rgba(244,240,236,0.6))` | 玻璃面自身明暗塑形 |
 | `--lg-grad-glass-highlight` | `linear-gradient(160deg, rgba(255,255,255,0.95) 0%, rgba(255,255,255,0) 50%)` | 叠加在玻璃面板顶部的白色高光 |
+
+### 2.1.9 暗黑模式（Dark Mode）色彩映射
+
+> 启用方式：在需要暗色的**任意容器根**加 `data-theme="dark"`（机制同 `theme.css`），变量在该子树内重定义——浅色主视觉与页面壳不受影响，支持局部暗色卡/暗色弹层。
+> 定位：暗色不是「反色」也不是「纯黑」，是**夜间暖石板（Night Slate）**——保留暖调牌性与玻璃体积感，只把照明换成「低照度冷侧光」。
+
+**三条硬口径**
+
+1. **禁纯黑 `#000000`、禁纯白 `#FFFFFF`**：底色走 `--lg-night-*`（`#1B1A21` / `#23222A`），文字走 `#F3EFEC`。纯黑会让玻璃下的光斑变成脏灰，纯白在暗底上产生光晕（halation）。
+2. **玻璃降白、加深底、提亮边**：白色叠加层由 14–60% 降到 6–16%；玻璃边缘光保留但只留顶部 1px（`inset 0 1px 0 rgba(255,255,255,.16)`），多层高光会让面板发灰。
+3. **只换档位、不换色相**：品牌与状态色沿用原色相，文字档改用浅档（浅底用 `-500`、暗底用 `-300`），禁止在暗色下新造色相或提高饱和度。
+
+**映射表 A · 底 / 文字 / 玻璃 / 阴影**
+
+| 语义 Token | 浅色（默认） | 暗色（`[data-theme="dark"]`） | 暗底实测对比度 |
+| --- | --- | --- | --- |
+| `--lg-page-bg` | `#E6D9D0` Warm Ivory | `#1B1A21` Night-900 | — （页面底） |
+| `--lg-surface` | `#F4F0EC` Warm White | `#23222A` Night-800 | — （次级面/实底浮层底） |
+| `--lg-text-primary` | `#343A46` | `#F3EFEC` | 15.10:1（面 13.77） |
+| `--lg-text-secondary` | `#4F5B6E` | `#C9C4CE` | 10.09:1（面 9.20） |
+| `--lg-text-tertiary` | `#9AA2B0` | `#A6ADB9` | 7.65:1（最浅玻璃合成面 ≥5.6） |
+| `--lg-text-placeholder` | `rgba(88,98,115,0.5)` | `rgba(255,255,255,0.42)` | 仅占位符，不接受为正文 |
+| `--lg-text-disabled` | `rgba(88,98,115,0.4)` | `rgba(255,255,255,0.34)` | — |
+| `--lg-divider` | `rgba(58,52,84,0.10)` | `rgba(255,255,255,0.10)` | 暗色分隔线用白，不用黑 |
+| `--lg-link` | `#B23A63` | `#FFC4D6` | 11.61:1（03 · 3.10） |
+| 主行动底（`--mmh-grad-action-hc`） | Rose-300→Rose-500 | **不变** | 品牌亮粉底在暗色下更突出 |
+| `--lg-text-on-accent` | `#343A46`（亮粉底深字） | `#1B1A21` | 7.00:1（Rose-500 端）～11.61:1（Rose-300 端） |
+| `--lg-glass-panel` | `rgba(255,255,255,0.14)` | `rgba(255,255,255,0.06)` | — |
+| `--lg-glass-card` | `rgba(255,255,255,0.22)` | `rgba(255,255,255,0.09)` | — |
+| `--lg-glass-control` | `rgba(255,255,255,0.35)` | `rgba(255,255,255,0.12)` | — |
+| `--lg-glass-popover` | `rgba(255,255,255,0.60)` | `rgba(38,36,46,0.92)`（实底为主，模糊为辅） | 暗色浮层优先可读性 |
+| `--lg-glass-highlight` | `inset 0 1px 0 rgba(255,255,255,0.6)` | `inset 0 1px 0 rgba(255,255,255,0.16)` | 仅顶部 1px |
+| `--lg-border-white-70`（玻璃边） | `rgba(255,255,255,0.70)` | `rgba(255,255,255,0.14)` | — |
+| `--lg-border-hairline` | `1px`（**长度**） | 同（宽度档不随主题变化） | 玻璃内部细分隔**宽度** |
+| `--lg-divider-hairline` | `rgba(58,52,84,.10)`（**颜色**） | `rgba(255,255,255,.10)` | 与上一项配对使用的分隔**颜色** |
+| `--lg-shadow-sm/md/lg/xl` | 蓝紫调 `rgba(58,52,84,.06–.16)` | `rgba(0,0,0,.35 / .42 / .50 / .58)` | 暗色阴影＝「加深 + 边缘光」 |
+| `--lg-glow-purple-soft` | `0 12px 32px rgba(154,120,255,0.28)` | `0 12px 32px rgba(154,120,255,0.22)` | 暗底辉光略降，避免糊成一片 |
+
+**映射表 B · 状态与语义色（暗色文字档）**
+
+| 用途 | 浅底用（默认） | 暗底用（dark） | 暗底实测 |
+| --- | --- | --- | --- |
+| 成功 `--lg-success-300` | `#96E6CF`（浅填充） | `#96E6CF` 作文/图标 | 11.93:1 |
+| 警告 `--lg-warning-300` | `#FAE1B3` | `#FAE1B3` | 13.55:1 |
+| 危险 `--lg-danger-300` | `#FAC9D0` | `#FAC9D0` | 11.78:1 |
+| 信息 `--lg-info-500` 亮档 | `#6D9EFF` | `#9CAEFF`（Blue-300） | 8.15:1 |
+| `--lg-sem-positive` | `#2F8F76` | `#6FC9B4` | 8.79:1 |
+| `--lg-sem-info` | `#4A76D0` | `#9CAEFF` | 8.15:1 |
+| `--lg-sem-attention` | `#B9771C` | `#F2C14E` | 10.29:1 |
+| `--lg-sem-risk` | `#D35466` | `#F79AA8` | 8.34:1 |
+| `--lg-sem-neutral` | `#757E8E` | `#A6ADB9` | 7.65:1 |
+| `--lg-sem-special` | `#7A5CE0` | `#B9A0FF` | 7.84:1 |
+
+**暗色下的三条落地纪律**
+
+- **环境光**：光斑透明度维持 16–22%，半径放大 1.2×（暗底吃光）；`--lg-glow-white` 降到 0.06，否则暗底白光发灰。
+- **数据可视化**：色序 1–8 顺序不变；折线/柱保持 `-500` 档（暗底足够亮），网格线用 `rgba(255,255,255,0.08)`，坐标文字用 `--lg-text-secondary`；面积图填充透明度由 0.28 提到 0.34。
+- **禁用与遮罩**：遮罩沿用 `--lg-opacity-overlay` 白色口径会「亮瞎」，暗色改为 `rgba(0,0,0,0.48)`；禁用态整体透明度由 0.4 提到 0.5（暗底本就低对比）。
+
+> 实测口径：上表对比度按 WCAG 2.2 相对亮度公式计算（`scripts/audit.py` 的 `dark_contrast` 守门，正文项 <4.5:1 即 FAIL）；最坏情形取「12% 白玻璃合成面」，正文/次级/三级全部 ≥4.5:1。
 
 ---
 
@@ -262,7 +322,8 @@ CSS：
 --lg-glass-tint-purple: rgba(154,120,255,0.05)  /* 可选折射染色：冷色面板使用 */
 --lg-glass-tint-cyan:   rgba(114,221,229,0.05)  /* 可选折射染色：暖/紫面板边缘 */
 --lg-border-white-45/55/70/85: 1px 白色描边（对应上表）
---lg-border-hairline: 1px solid rgba(58,52,84,0.08)  /* 玻璃内部细分隔线 */
+--lg-border-hairline: 1px;                    /* 宽度 */
+--lg-divider-hairline: rgba(58,52,84,.10);    /* 颜色：border 写法为 `border:var(--lg-border-hairline) solid var(--lg-divider-hairline)` */
 ```
 
 **组合公式（推荐实现）**
@@ -303,11 +364,40 @@ CSS：
 
 ## 2.7 其他 Token
 
+### 2.7.1 边框宽度档（Border Width & Focus Ring）
+
+边框宽度**只有 4 档 + 焦点环一套**，与圆角（2.4）、玻璃边（2.5）配套使用：
+
+| Token | 值 | 用途 |
+| --- | --- | --- |
+| `--lg-border-hairline` | `1px` | 分隔线**宽度**（配合 `--lg-divider-hairline` 颜色） |
+| `--lg-divider-hairline` | `rgba(58,52,84,.10)` | 分隔线**颜色**（暗色档 `rgba(255,255,255,.10)`） |
+| `--lg-border-half` | `0.5px` | 仅 DPR≥2 高分屏的密集细线（浏览器自动对齐物理像素） |
+| `--lg-border-1` | `1px` | **默认描边**：玻璃面板、卡片、输入框、芯片、按钮（描边型） |
+| `--lg-border-2` | `1.5px` | 强调描边：选中态、拖拽放置区、进度槽 |
+| `--lg-border-3` | `2px` | 强强调：焦点环内圈、选中指示条、分段滑块边 |
+| `--lg-ring-width` | `2px` | 焦点环宽度（值同 `--lg-border-3`） |
+| `--lg-ring-offset` | `2px` | 焦点环与控件之间的间隙 |
+| `--lg-ring-color` | `rgba(232,93,143,0.6)` | 焦点环（品牌粉 60%） |
+| `--lg-ring-color-dark` | `rgba(255,196,214,0.7)` | 暗色焦点环（2.1.9） |
+| `--lg-border-width` | `1px` | **兼容别名** = `--lg-border-1`（旧代码可用，新代码用档位名） |
+
+**边框纪律**
+
+1. **禁 3px 以上常规描边**：>2px 的边框不是「更强调」，是旧风格残留（对比度靠颜色与阴影拿，不靠加粗）。
+2. **加粗不许吃布局**：hover / 选中态把描边从 1px 变 1.5px 时，必须用 `box-shadow` 或 `outline` 实现，禁止直接改 `border-width`——否则 44×44 触控目标的实测尺寸会抖动 1px，也破坏玻璃面板的对齐基线。
+3. **焦点环统一写法**：`outline: var(--lg-ring-width) solid var(--lg-ring-color); outline-offset: var(--lg-ring-offset)`；禁止裸 `outline:none`（`scripts/a11y.py` 守门，必须伴 `:focus-visible` 兜底）。
+4. **行线一律 hairline**：表格行线 / 列表分隔用 `1px` + `--lg-divider`；暗色下改 `rgba(255,255,255,0.08)`。
+5. **暗色可见性**：1px 白 70% 的玻璃边在暗底上不可见，暗色统一降到 `rgba(255,255,255,0.14)`（见 2.1.9）。
+6. **图标描边独立**：图标 `stroke-width 1.7` 属 [09](09-图标库规范.md) 章，不受本档约束。
+7. **1.5px 档在高分屏才有意义**：浏览器会把 `border-width` 吸附到整设备像素——实测 DPR 1（普通显示器）下 `1.5px` 计算值即 `1px`，DPR 2（Retina）下才呈现 1.5 物理像素的细微加强。因此**强调态不得只靠加粗**，必须同时有颜色/描边色/阴影变化（`preview/patterns.html` 边框档对照为实测证据）。
+
+### 2.7.2 模糊 / 透明度 / 层级
+
 ```text
 --lg-blur-16/20/32/48/60 px        /* backdrop blur 档位 */
---lg-border-width: 1px             /* 默认描边宽；强调态 1.5–2px */
---lg-opacity-disabled: 0.4         /* 禁用态整体透明度 */
---lg-opacity-overlay: 0.18         /* 弹层遮罩（白色而非黑色） */
+--lg-opacity-disabled: 0.4         /* 禁用态整体透明度（暗色 0.5，见 2.1.9） */
+--lg-opacity-overlay: 0.18         /* 弹层遮罩（浅色用白；暗色改 rgba(0,0,0,.48)） */
 --lg-z-backdrop: 0
 --lg-z-glass: 10                   /* L1 */
 --lg-z-component: 20               /* L2 */
@@ -332,8 +422,12 @@ CSS：
   --lg-text-tertiary: #9AA2B0;
   --lg-text-placeholder: rgba(88, 98, 115, .5);
   --lg-text-disabled: rgba(88, 98, 115, .4);
-  --lg-text-on-accent: #FFFFFF;
+  --lg-text-on-accent: #343A46;   /* D9：亮粉底配深字（全尺寸 ≥4.89:1） */
+  /* D5 小字号白字实底填充（AA 达标档）；完整品牌组见 §2.9 */
+  --mmh-solid-positive:#1E6B52; --mmh-solid-attention:#9A5A0E; --mmh-solid-danger:#B04052;
+  --mmh-solid-info:#385CB3; --mmh-solid-special:#6242B8;
   --lg-divider: rgba(58, 52, 84, .10);
+  --lg-link: #B23A63;                 /* 链接默认色（03 · 3.10）；暗色 #FFC4D6 */
 
   /* ── 颜色：强调 ─────────────────────────── */
   --lg-purple-600: #8066F0; --lg-purple-500: #9A78FF; --lg-purple-300: #B69AFF;
@@ -379,6 +473,14 @@ CSS：
   --lg-radius-control: 20px; --lg-radius-btn-lg: 26px; --lg-radius-btn: 22px;
   --lg-radius-btn-sm: 18px; --lg-radius-chip: 999px; --lg-radius-round: 50%;
 
+  /* ── 边框宽度 / 焦点环（2.7.1） ─────────── */
+  --lg-border-hairline: 1px; --lg-divider-hairline: rgba(58,52,84,.10); --lg-border-half: 0.5px;
+  --lg-border-1: 1px; --lg-border-2: 1.5px; --lg-border-3: 2px;
+  --lg-border-width: 1px;                 /* 兼容别名 = --lg-border-1 */
+  --lg-ring-width: 2px; --lg-ring-offset: 2px;
+  --lg-ring-color: rgba(232,93,143,.6);
+  --lg-ring-color-dark: rgba(255,196,214,.7);
+
   /* ── 玻璃 ──────────────────────────────── */
   --lg-glass-panel: rgba(255,255,255,.14);
   --lg-glass-card: rgba(255,255,255,.22);
@@ -390,7 +492,7 @@ CSS：
   --lg-border-white-55: rgba(255,255,255,.55);
   --lg-border-white-70: rgba(255,255,255,.70);
   --lg-border-white-85: rgba(255,255,255,.85);
-  --lg-border-hairline: rgba(58,52,84,.08);
+  --lg-divider-hairline: rgba(58,52,84,.10);
   --lg-blur-16: 16px; --lg-blur-20: 20px; --lg-blur-32: 32px;
   --lg-blur-48: 48px; --lg-blur-60: 60px;
 
@@ -403,7 +505,44 @@ CSS：
   --lg-glow-purple-soft: 0 12px 32px rgba(154,120,255,.28);
   --lg-glow-cyan-soft: 0 12px 32px rgba(114,221,229,.22);
 }
+
+/* ── 暗黑模式（2.1.9）：任意容器根加 data-theme="dark" 即局部/全局切换 ── */
+[data-theme="dark"] {
+  /* 底与文字 */
+  --lg-page-bg: #1B1A21;          --lg-surface: #23222A;
+  --lg-text-primary: #F3EFEC;     --lg-text-secondary: #C9C4CE;
+  --lg-text-tertiary: #A6ADB9;
+  --lg-text-placeholder: rgba(255,255,255,.42);
+  --lg-text-disabled: rgba(255,255,255,.34);
+  --lg-text-on-accent: #1B1A21;   --lg-divider: rgba(255,255,255,.10);
+  --lg-link: #FFC4D6;
+  /* 玻璃（降白、只留顶部边光） */
+  --lg-glass-panel: rgba(255,255,255,.06);
+  --lg-glass-card: rgba(255,255,255,.09);
+  --lg-glass-control: rgba(255,255,255,.12);
+  --lg-glass-popover: rgba(38,36,46,.92);
+  --lg-glass-highlight: inset 0 1px 0 rgba(255,255,255,.16);
+  --lg-border-white-45: rgba(255,255,255,.10); --lg-border-white-55: rgba(255,255,255,.12);
+  --lg-border-white-70: rgba(255,255,255,.14); --lg-border-white-85: rgba(255,255,255,.18);
+  --lg-divider-hairline: rgba(255,255,255,.10);
+  /* 阴影（加深 + 边缘光）/ 遮罩 / 禁用 */
+  --lg-shadow-xs: 0 1px 2px rgba(0,0,0,.28), 0 2px 8px rgba(0,0,0,.22);
+  --lg-shadow-sm: 0 4px 12px rgba(0,0,0,.35);
+  --lg-shadow-md: 0 10px 28px rgba(0,0,0,.42);
+  --lg-shadow-lg: 0 18px 44px rgba(0,0,0,.50);
+  --lg-shadow-xl: 0 32px 80px rgba(0,0,0,.58);
+  --lg-glow-purple-soft: 0 12px 32px rgba(154,120,255,.22);
+  --lg-glow-cyan-soft: 0 12px 32px rgba(114,221,229,.18);
+  --lg-opacity-disabled: 0.5;     --lg-opacity-overlay: 0.48; /* 暗色遮罩改黑 */
+  /* 语义 alias 暗色档（暗底 ≥4.5:1，实测见 2.1.9 表 B） */
+  --lg-sem-positive: #6FC9B4;     --lg-sem-info: #9CAEFF;
+  --lg-sem-attention: #F2C14E;    --lg-sem-risk: #F79AA8;
+  --lg-sem-neutral: #A6ADB9;      --lg-sem-special: #B9A0FF;
+  --lg-ring-color: var(--lg-ring-color-dark);
+}
 ```
+
+> 暗色落地要点：`data-theme="dark"` 加在 `<html>` 或 **局部容器** 上；暗色下玻璃依赖的光斑透明度维持 16–22% 但半径 ×1.2；纯图/插画（`logo.png` 类位图）在暗底上需加 `filter: brightness(.94)` 压白，矢量 Logo 走 `brand/logo-mark.svg` 的 `currentColor` 版本。
 
 > 落地时注意：`backdrop-filter` 需加 `-webkit-` 前缀（Safari）；玻璃效果依赖背景中存在彩色光斑，若页面纯色背景，可在容器下加一层 `--lg-glow-*` 径向渐变节点。
 
@@ -428,8 +567,41 @@ CSS：
   --mmh-grad-primary:  linear-gradient(135deg,#FFA9C2 0%,#F77FA3 45%,#E85D8F 100%);
   --mmh-grad-signature:linear-gradient(120deg,#FFD0D8 0%,#F77FA3 48%,#B69AFF 100%);
   --mmh-grad-mint:     linear-gradient(135deg,#A9E3D4 0%,#6FC9B4 100%);
+
+  /* ── D9 主行动档（高对比）─────────────────────────────────────────
+     亮粉底**必须**承载深字：白字在 #F77FA3 上仅 2.46–2.9:1，不达 AA。
+     引用：docs/审查决策记录.md D9；消费方 `.gm-btn.arco-btn-primary` / `.gm-btn-hc`。 */
+  --mmh-grad-action-hc: linear-gradient(135deg,#FFC4D6 0%,#F77FA3 100%);
+  /* 主行动档承载的文字色。**必须用它**，不要在规则里硬编码 #343A46 —
+     历史上浅色档未定义此 Token、而 9 条规则硬编码了 #343A46，
+     导致"改 Token 完全没效果"。见 P1-17。 */
+  --lg-text-on-accent: #343A46;
+
+  /* ── D5 小字号白字实底填充（AA 达标档）────────────────────────────
+     白字压在这些实底上 ≥4.5:1；`--lg-sem-*` 是**前景**色，不可拿来当填充底。
+     引用：docs/审查决策记录.md D5；Part 03 TK-03-04 / Part 04 CL-04-03 / Part 26 TC-26-03。
+     历史缺陷：这两个 Token 组被多处条款强制要求，却**从未在 02 章定义**，
+     按 README 步骤"复制 02 章末尾的变量块"得到的主题连品牌色都没有。 */
+  --mmh-solid-positive:#1E6B52; --mmh-solid-attention:#9A5A0E; --mmh-solid-danger:#B04052;
+  --mmh-solid-info:#385CB3; --mmh-solid-special:#6242B8;
+
+  /* ── 07 · 7.2 动效档（时长与缓动的**唯一**入口）─────────────────
+     命名与数值以 07 章为准。历史上代码另有一套 `--lg-dur-fast:.14s` /
+     `--lg-dur-base:.18s` / `--lg-dur-slow:.32s` 与 `--lg-ease-standard` /
+     `--lg-ease-emphasized`，与 07 章同值异名或数值不同（fast 差 20ms、base 差 40ms、
+     slow 差 80ms），且把**过冲曲线**当"标准"用 —— 那套命名已废弃。 */
+  --lg-t-fast:120ms; --lg-t-base:220ms; --lg-t-slow:400ms;
+  --lg-t-entrance:800ms; --lg-t-draw:1000ms; --lg-t-breathe:2.4s; --lg-t-float:8s;
+  --lg-ease-out:cubic-bezier(.22,1,.36,1);
+  --lg-ease-in-out:cubic-bezier(.65,0,.35,1);
+  --lg-ease-spring:cubic-bezier(.34,1.56,.64,1);
 }
 ```
+
+> ⚠️ **本块是可交付的最小品牌主题**：它同时包含品牌色（`--mmh-*`）、语义色（`--lg-sem-*`，
+> 见 §2.1.5/§2.8）、达标注文字色（`--lg-text-on-accent`）、D5 实底档（`--mmh-solid-*`）
+> 与动效档（`--lg-t-*`/`--lg-ease-*`）。§2.8 是语义层的最小集，**两者需一起复制**才能得到
+> 与仓库代码一致的主题。Token 名存在性由 `scripts/audit.py` + `scripts/check-style-parity.py` 守门。
 
 **妈咪好模式主值速查（默认）**
 
@@ -454,12 +626,16 @@ CSS：
 
 ```css
 :root{
-  --mmh-m5-g:#4CB98A;   /* 绿 · 低风险（常规产检随访） */
-  --mmh-m5-y:#F2C14E;   /* 黄 · 一般风险（保健机构，增加产检/随访） */
-  --mmh-m5-o:#F0954A;   /* 橙 · 较高风险（县级及以上专案管理） */
-  --mmh-m5-r:#EE5C70;   /* 红 · 高风险（市级及以上救治中心，绿色通道） */
-  --mmh-m5-p:#8F6AE0;   /* 紫 · 合并传染病（传染病管理 + 母婴阻断） */
+  /* ⚠️ 命名以**代码实现**为准：m1..m5。
+     旧文本写作 g/y/o/r/p —— 那五个名字在代码里**零实现**（组件拼的是
+     `var(--mmh-m5-m1…)`），规范那套对组件没有任何影响，只会让读者照抄一份
+     不存在的 Token 名。Part 04 的 CL-04-04 曾引用 m1..m5，与本附录互相矛盾，现已统一。 */
+  --mmh-m5-m1:#4CB98A;   /* 绿 · 低风险（常规产检随访） */
+  --mmh-m5-m2:#F2C14E;   /* 黄 · 一般风险（保健机构，增加产检/随访） */
+  --mmh-m5-m3:#F0954A;   /* 橙 · 较高风险（县级及以上专案管理） */
+  --mmh-m5-m4:#EE5C70;   /* 红 · 高风险（市级及以上救治中心，绿色通道） */
+  --mmh-m5-m5:#8F6AE0;   /* 紫 · 合并传染病（传染病管理 + 母婴阻断） */
 }
 ```
 
-用法：chip 底=对应色 12–18% 洗色 + 深色文字（如橙：`rgba(240,149,74,.16)` 底 / `#9a5b16` 字）；红紫两级可用白字实色 chip。仅作管理标签，不做大面积填充。
+用法：chip 底=对应色 12–18% 洗色 + 深色文字（如橙：`rgba(240,149,74,.16)` 底 / `#9A5B16` 字）；红紫两级可用白字实色 chip。仅作管理标签，不做大面积填充。

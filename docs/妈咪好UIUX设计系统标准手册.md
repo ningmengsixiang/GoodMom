@@ -2,7 +2,7 @@
 
 > **定位**：妈咪好 UIUX 设计系统（妇幼儿童全生命周期）的「38 部分总纲 + 标准速查 + 资产导航」。
 > 本手册不替代分篇规范（详见每部分「来源」），而是把散落规范、代码封装、治理工具按统一标准组织成可评审、可交付、可落地的手册。
-> 版本：V1.0（随主系统 V2.4）· 维护：docs/审查决策记录.md + CHANGELOG.md 同步 · 更新方式见 Part 31。
+> 版本：V1.0（随主系统 V2.8）· 维护：docs/审查决策记录.md + CHANGELOG.md 同步 · 更新方式见 Part 31。
 
 ---
 
@@ -11,7 +11,7 @@
 | Part | 章节 | 主要来源（`../NN-*.md` 即根目录编号规范） | 落地物 / 工具 | 状态 |
 | --- | --- | --- | --- | --- |
 | 01 | 设计系统总则 | 01、README | site/spec.html | ✅ 覆盖 |
-| 02 | 品牌视觉系统 | 12、brand/、logo.png | logo-mark.svg、logo.svg、logo-tile.svg | ✅ 覆盖 |
+| 02 | 品牌视觉系统 | 12、brand/ | logo-mark.svg、logo.svg、logo-tile.svg | ✅ 覆盖 |
 | 03 | Design Token | 02、tokens/* | theme.css、tokens/{design,business,status}.ts | ✅ 覆盖 |
 | 04 | 色彩系统 | 02.1、12.3、14.4.5、D1/D5/D7 | `--lg-sem-*`、`--mmh-m5-*`、`--mmh-solid-*` | ✅ 覆盖 |
 | 05 | Typography | 02.2、07 | 字体栈 token、tabular-nums | ✅ 覆盖 |
@@ -20,7 +20,7 @@
 | 08 | Iconography | 09、goodmom-icons | lg-icons.svg(77)、registry.ts、build-icons.py | ✅ 覆盖 |
 | 09 | Illustration | 12.4、13 | 插画基调条目 | ➕ 增量 |
 | 10 | Motion | 07、7.2/7.3/7.9 | 动效 token、reduced-motion | ✅ 覆盖 |
-| 11 | 100+ 基础组件规范 | 00(94)、03、08、10/11、13 | goodmom-ui 12 模块 | ✅ 覆盖（封装子集） |
+| 11 | 100+ 基础组件规范 | 00(98)、03、08、10/11、13 | goodmom-ui 16 模块 | ✅ 覆盖（封装子集） |
 | 12 | 组件状态规范 | 15、07.8、08、18.2.5 | 六语义/五色/GmStatusTag 等 | ✅ 覆盖 |
 | 13 | UX 交互规范 | 07、17.3、13 | 组合顺序、反馈节奏 | ✅ 覆盖 |
 | 14 | 表单规范 | 03.5、10.6、11 | 玻璃输入/选择/校验 | ✅ 覆盖 |
@@ -32,7 +32,7 @@
 | 20 | PC 端规范 | 03、17 | 桌面栅格与密度 | ✅ 覆盖 |
 | 21 | iPad 端规范 | 10.1.1、10.2.1 | 768–1023 平板档 | ✅ 覆盖 |
 | 22 | Mobile 端规范 | 10、11 | 移动组件全量 | ✅ 覆盖 |
-| 23 | Accessibility 规范 | 07.8/7.9、18、D1–D7 | a11y.py、a11y-dom.py | ✅ 覆盖 |
+| 23 | Accessibility 规范 | 07.8/7.9、18、D1–D12 | a11y.py、a11y-dom.py、audit dark_contrast | ✅ 覆盖 |
 | 24 | 行业设计系统 | 13、15、02.10 | 妇幼医疗领域组件与词库 | ✅ 覆盖 |
 | 25 | Figma 组件库标准 | 03/10/11 + 本章 | — | ➕ 新增 |
 | 26 | Design Token 代码标准 | 02、tokens、theme.css | audit.py 色彩校验 | ✅ 覆盖 |
@@ -63,15 +63,16 @@
 - **非目标（Do Not）**：不做炫技/纯装饰视觉；不做未经临床验证的医学主张；不做与引擎（Arco/Semi）语义冲突的自造组件（先查 08 覆盖矩阵）。
 - **双层源纪律**：设计源=编号规范（00–18）；代码源=goodmom-ui（tokens/*、theme.css、components/*）。任一变更双侧同步，随后 `python3 scripts/refresh-spec.py` 重生成 site/spec.html。
 - **登记纪律**：新组件/术语/图标先登记（00 目录 → 14 术语表 → 09 图标流程 → 10/11 或 08.2 端规范），禁止“先造后补”。
-- **验收点**：新增/修改后执行 `python3 scripts/audit.py`（13 项全绿）、`coverage.py --ci`、`a11y.py --ci`；评审结论落 `docs/审查决策记录.md`。
+- **验收点**：新增/修改后执行 `python3 scripts/audit.py`（15 项全绿）、`coverage.py --ci`、`a11y.py --ci`；评审结论落 `docs/审查决策记录.md`。
 - 关联工具与文件锚点：README.md（角色→文档矩阵）、00-组件总目录.md、docs/audit-report.md。
 
 ## Part 02 · 品牌视觉系统
 - **品牌名唯一写法**：中文「妈咪好」+ 英文「GoodMom」＝**妈咪好 GoodMom**；禁止 Good Mom / Goodmom / 妈咪好goodmom 等异拼（14 章禁别名 + docs/audit-report stale 检查会拦）。
-- **Logo（v2 定案，2026-09）**：正式稿 `brand/logo-mark.svg` / `logo.svg`（孕妈剪影 + 爱心 + GOODMOM）；站点全局图标位用根目录 `../logo.png`；v1 几何版退役仅留档（12.8 与决策记录）。
-  - 尺寸/位置：页面级 ≥24px 高；与文字间距 ≥ logo 高的 0.5×；favicon 用 logo.png（site/preview 已统一）。
+- **Logo（v2 定案，2026-09）**：正式稿 `brand/logo-mark.svg` / `logo.svg` / `logo-tile.svg`（孕妈剪影 + 爱心 + GOODMOM）；站点与文档的图标位**统一引用矢量资产**（favicon 用 `brand/logo-mark.svg`，页面内品牌图用 `brand/logo-tile.svg`）；v1 几何版退役仅留档（12.8 与决策记录）。
+  - 尺寸/位置：页面级 ≥24px 高；与文字间距 ≥ logo 高的 0.5×。
+  - **口径收敛**：BR-02-02（用 SVG）与旧 BR-02-03（用根目录 PNG）互相矛盾，现只保留前者；`logo.png` 已压缩并移入 `brand/`，仅供需要位图的第三方场景（如分享卡片），不再作为站点资源。
   - 禁止：改色/旋转/拉伸变形/叠在花纹上/加投影；深色底上需加白底圆角容器（品牌版式另审）。
-- **品牌 Token（12.3 语义重映射）**：玫瑰梯度 `--mmh-grad-primary`（装饰）与 `--mmh-grad-action-hc`（文字承载 CTA，AA，D5/D6）双轨；桃/杏辅助 `--mmh-mint/peach`；淡紫柔光氛围（图表/技术焦点）。
+- **品牌 Token（12.3 语义重映射）**：玫瑰梯度 `--mmh-grad-primary`（装饰）与 `--mmh-grad-action-hc`（CTA：品牌粉 Rose-300→Rose-500 + 深字 #343A46，AA，D9）双轨；桃/杏辅助 `--mmh-mint/peach`；淡紫柔光氛围（图表/技术焦点）。
 - **品牌语言（12.5 Tone of Voice）**
   - 称呼：妈妈/家长（不用“亲”）；医护端：医生/医护老师。
   - 语气：安心、鼓励、不说教；异常提醒不制造恐慌（“建议尽快预约复查”优于“很危险”）。
@@ -83,7 +84,7 @@
   | 层 | 含义 | 例 | 代码落点 |
   | --- | --- | --- | --- |
   | primitive | 基础刻度（色板 ramp/字号/圆角/间距刻度） | rose-500 `#F77FA3` | tokens/design.ts |
-  | alias | 语义别名（文本/状态/品牌位） | `--lg-sem-positive` `#2f8f76` | theme.css :root + status.ts |
+  | alias | 语义别名（文本/状态/品牌位） | `--lg-sem-positive` `#2F8F76` | theme.css :root + status.ts |
   | component | 组件配方 | 按钮渐变/玻璃档/焦点环 | theme.css `gm-*` 规则 |
 - **命名规范**：`--lg-*`（引擎通用）/`--mmh-*`（妈咪好品牌）+ `{scope}-{语义kebab}`；组件类名 `gm-*`；业务映射 `semanticOf`（business.ts 40+ 词条）。
 - **唯一代码源**：`goodmom-ui/src/tokens/{design,business,status}.ts` + `theme.css`；六进制只允许出现在 token 层与受控生成物（组件内魔法色已收敛：GmProgress/GmAvatar 引 DesignTokens）。
@@ -96,14 +97,14 @@
 - **六语义（alias 深色，14 · 4.4.5 权威）**
   | 语义 | 值 | 覆盖状态 |
   | --- | --- | --- |
-  | positive 正常/正向 | `--lg-sem-positive` `#2f8f76` | 正常/完成/通过/未见异常/阴性 |
-  | info 信息/进行 | `--lg-sem-info` `#4a76d0` | 已建档/筛查中/进行中 |
-  | attention 注意/待办 | `--lg-sem-attention` `#b9771c` | 待复查/待随访/待审核/即将到期 |
-  | risk 风险/异常 | `--lg-sem-risk` `#d35466` | 异常/阳性/失访/逾期 |
-  | neutral 中性/未动 | `--lg-sem-neutral` `#757e8e` | 未开始/草稿/已归档 |
-  | special 特殊/协作 | `--lg-sem-special` `#7a5ce0` | 转诊/会诊/重点管理 |
+  | positive 正常/正向 | `--lg-sem-positive` `#2F8F76` | 正常/完成/通过/未见异常/阴性 |
+  | info 信息/进行 | `--lg-sem-info` `#4A76D0` | 已建档/筛查中/进行中 |
+  | attention 注意/待办 | `--lg-sem-attention` `#B9771C` | 待复查/待随访/待审核/即将到期 |
+  | risk 风险/异常 | `--lg-sem-risk` `#D35466` | 异常/阳性/失访/逾期 |
+  | neutral 中性/未动 | `--lg-sem-neutral` `#757E8E` | 未开始/草稿/已归档 |
+  | special 特殊/协作 | `--lg-sem-special` `#7A5CE0` | 转诊/会诊/重点管理 |
   > 用法：alias 作色点/色块/图形/大标签；**作为小字正文请用主/次级文本色**，具体页面是否达 AA 以 `a11y-dom.py` 报告为准（勿臆测全量达标）。
-- **白字实底档（D5）**：`--mmh-solid-positive #1e6b52 / attention #9a5a0e / danger #b04052 / info #385cb3 / special #6242b8`（白字 4.7–7.0:1）；状态 chip 不得叠加顶部白高光层（实测会把白字拉到 2.5–2.9:1）。
+- **白字实底档（D5）**：`--mmh-solid-positive #1E6B52 / attention #9A5A0E / danger #B04052 / info #385CB3 / special #6242B8`（白字 4.7–7.0:1）；状态 chip 不得叠加顶部白高光层（实测会把白字拉到 2.5–2.9:1）。
 - **孕产妇五色**（`--mmh-m5-m1..m5` = #4CB98A/#F2C14E/#F0954A/#EE5C70/#8F6AE0）：仅妊娠风险分级语境（02.10/15.2.10），与六语义并行不冲突。
 - **文本 AA 实测口径（D7/D7b）**：主 `#343A46`（≥7:1）；次级 `#4F5B6E`（白 6.88 / 暖 4.98）；三级 `#9AA2B0` 只用于 ≥24px 常规/≥18.66px 加粗，小字场景禁止。
 - **背景/别名**：页面暖底与引擎展示色归 PAGE_ALIAS 审计档（D4），代码层不受污染；渐变职责：亮渐变=装饰，文字承载=深档（D6）。
@@ -172,10 +173,10 @@
 - **验收**：`a11y.py`（outline/reduced-motion 静态项）+ 人工走查动效库（侧栏「动效库」视图演示 20 种配方）。
 
 ## Part 11 · 100+ 基础组件规范
-- **目录与覆盖口径（重要）**：00-组件总目录登记 **94 项 = 规范全量**（含字段/交互/领域组件）；`goodmom-ui` **已封装 12 模块 = 代码子集**；二者关系以 `docs/coverage-report.md`（coverage.py 自动统计）为准，README 已标注口径，避免“查 94 以为都有”。
+- **目录与覆盖口径（重要）**：00-组件总目录登记 **98 项 = 规范全量**（含字段/交互/领域组件）；`goodmom-ui` **已封装 16 模块 = 代码子集**；二者关系以 `docs/coverage-report.md`（coverage.py 自动统计）为准，README 已标注口径，避免“查 98 以为都有”。
 - **组件质量基线（03/08 逐组件）**：① 状态全覆盖（hover/focus/press/disabled/loading/error/empty 见 07.8 矩阵）；② props 克制且可组合（GmButton=Arco 全谱透传 + gm 语义类）；③ 同义场景复用同组件（状态标签 GmStatusTag/GmTag 共享 SEMANTIC_COLOR，不同引擎上下文不合并——D3）；④ 支持主题/局部定制（色走 token var）。
 - **引擎策略**：Arco（React）为工程基底、Semi 对齐矩阵见 08；自包含轻量适配（无 Arco 依赖）仅用于 GmTag/GmSteps 类轻组件。
-- **封装子集现状**：GmButton/StatusTag/Tag/Card/Avatar/Progress/Steps/RiskPicker/ClientCard/Empty/Spin/Skeleton（12）。缺封装组件：先用 Arco 原生 + `gm-*` 主题类实现，并按 00 登记制度回填。
+- **封装子集现状**：GmButton/StatusTag/Tag/Card/Avatar/Progress/Steps/RiskPicker/ClientCard/Empty/Spin/Skeleton/GmLink/GmCascader/GmResponsiveView/GmVirtualList（16）。缺封装组件：先用 Arco 原生 + `gm-*` 主题类实现，并按 00 登记制度回填。
 - **验收点**：组件新增须 index.ts 导出 + README 更新 + coverage 计数更新；`npm run typecheck`（CI）通过；组件内无魔法色。
 
 ## Part 12 · 组件状态规范
@@ -205,7 +206,7 @@
 - **PC 玻璃表格（03.7）**：表头二级灰（已升次级 `#4F5B6E`，D7b）、行 hover 淡白底、分隔线 rgba(58,52,84,.08)；操作列右对齐内联（.ops，17.2 基线）。
 - **列/排序/筛选**：列宽可拖（关键列固定需标注）；排序/筛选给 aria-sort/expanded 语义；长文本省略+title。
 - **状态行**：行内 loading（骨架行/局部圈）、错误/空态（GmEmpty 图标 48 居中）、禁用行置灰且说明。
-- **移动降级（10.5.3）**：表格→卡片列表（字段名-值布局）或横滑窄表；禁止行内分页，用「加载更多/到底提示」。
+- **移动降级（10.5.3/10.11.1）**：表格→卡片列表（字段名-值布局）或横滑窄表；三形态由响应式适配容器按**容器宽度**统一切换（≥1024/768–1023/≤767），禁止各页自定断点；禁止行内分页，用「加载更多/到底提示」。
 - **双通道**：结论列颜色+文字（异常/阳性/阴性词），医疗结果不加装饰色文字干扰（用 alias 深色+词）。
 - **验收**：对齐 17.2 覆写类；无全宽贴地边框；无裸 hover 仅色差传达。
 
@@ -271,7 +272,7 @@
 - **ARIA/读屏（07.9）**：装饰图标 aria-hidden；传义图标 role="img"+label；radiogroup/status/dialog 语义到位；加载用 role=status；表格用真实 table/语义 header（不滥用 div 表格）。
 - **触控与缩放**：触控 ≥44/关键 48；200% 文字缩放不破版（弹性布局 + 容器最小内容检查）；安全区 env()。
 - **动效**：prefers-reduced-motion 全局降级（07.5）。
-- **自动化**：静态 `a11y.py`（outline 兜底/禁 span+onClick）已入 CI；渲染级 `a11y-dom.py` 出报告；axe 运行时级走查列长期项（18 章 A3 备注）。
+- **自动化**：静态 `a11y.py`（outline 兜底/禁 span+onClick）已入 CI；渲染级 `a11y-dom.py` 出报告（受限环境无法渲染时必须出 ERR 行而非静默通过）；`audit.py dark_contrast` 守暗色对比度（≥4.5:1）；axe 运行时级走查列长期项（18 章 A3 备注）。
 
 ## Part 24 · 行业设计系统
 - **领域**：妇幼/儿童全生命周期（备孕—孕期—产后—0–6 岁）；双用户端（妈妈/家长 C 端 + 医生/医护 B 端工作台）。
@@ -291,7 +292,7 @@
 
 ## Part 26 · Design Token 代码标准
 - **代码唯一源**：`goodmom-ui/src/tokens/{design,business,status}.ts` + `theme.css`（:root）；命名 = `--lg-*`/`--mmh-*` + scope-kebab；业务词条 semanticOf 见 business.ts（40+）。
-- **硬规则**：① 色值六进制只允许出现在 token 层（组件内 0 魔法色，audit color-css 严格层 FAIL 拦截）；② alias 深色为状态文字唯一源（`--lg-sem-*`）；③ 白字实底用 `--mmh-solid-*`；④ 文字承载行动用 `--mmh-grad-action-hc`（D5/D6）。
+- **硬规则**：① 色值六进制只允许出现在 token 层（组件内 0 魔法色，audit color-css 严格层 FAIL 拦截）；② alias 深色为状态文字唯一源（`--lg-sem-*`）；③ 白字实底用 `--mmh-solid-*`；④ 主行动用 `--mmh-grad-action-hc` + 深字 #343A46（D9）；白字只上 ≥4.5:1 深实底。
 - **页面层**：site/preview 静态页色落 ALLOWED ∪ PAGE_ALIAS（D4）；代码层仅 ALLOWED；旧色回归由 color-banned 拦截（`#3F9C88`）。
 - **生成与同步**：`scripts/gen-spec.py` + `refresh-spec.py`（保留阅读器）重生成 site/spec.html；图标 `build-icons.py`；`coverage.py` 统计封装计数。
 - **工程**：根 `npm run typecheck`（@goodmom/ui + @goodmom/icons）、`npm run build`；CI 含 open-pkg-typecheck。
@@ -299,8 +300,8 @@
 
 ## Part 27 · Design-to-Code 标准
 - **映射纪律**：图面颜色/字号/间距/圆角/阴影只能出自 token；还原以 token 值为准（不允许类型化 token 偏差），视觉微调（±≤2px 类）由设计评审裁定并在决策记录留档。
-- **规范-代码登记**：00 目录=规范全量（94）↔ 代码封装=12（coverage.py 自动统计）↔ docs/coverage-report.md；新增封装双向登记。
-- **页面壳映射**：17.1.1 栅格/17.3.1 组合顺序 → 页面 class 结构；站内不重复定义品牌 :root，统一导航与 logo（`../logo.png`）；HTML 无 `.md` 链接（audit html-md）。
+- **规范-代码登记**：00 目录=规范全量（98）↔ 代码封装=16（coverage.py 自动统计）↔ docs/coverage-report.md；新增封装双向登记。
+- **页面壳映射**：17.1.1 栅格/17.3.1 组合顺序 → 页面 class 结构；站内不重复定义品牌 :root，统一导航与 logo（`../brand/logo-tile.svg`，favicon 用 `../brand/logo-mark.svg`）；HTML 无 `.md` 链接（audit html-md）。
 - **双轨禁令**：Figma、代码、spec 三方必须同源同步；页面出现第三方风格/裸色视为回归（audit 色彩 + stale）。
 - **验收工具**：`audit.py`（含章节/图标/色彩/断点/spec）、`coverage.py`、CI 三 job；规范变更必须跑 `refresh-spec.py`。
 
@@ -313,7 +314,7 @@
 
 ## Part 29 · Design QA 标准
 - **分层走查顺序**：视觉（Token/间距/层级）→ 组件状态齐全 → 交互节奏（07）→ 可访问性（23）→ 响应式（06/21/22）→ 品牌词（14/15）→ 医疗克制（24）→ 合规边界。
-- **自动套件（scripts/）**：`audit.py`（13 项，含 md 链/章节/图标/html-md/stale/色彩 ALLOWED·PAGE_ALIAS/color-banned/bp/spec）、`coverage.py`、`a11y.py`、`a11y-dom.py`、`refresh-spec.py`。
+- **自动套件（scripts/）**：`audit.py`（15 项，含 md 链/章节/图标/html-md/stale/色彩 ALLOWED·PAGE_ALIAS/color-banned/bp/spec/hex-case/mirror/dark 对比度/组件导出）、`coverage.py`、`a11y.py`、`a11y-dom.py`、`refresh-spec.py`。
 - **回归入口**：`python3 scripts/audit.py && python3 scripts/a11y.py --ci && python3 scripts/coverage.py --ci`。
 - **分级与闭环**：发现 → 定级（P0 阻断/P1 明显/P2 优化）→ 修复 → 回归 → 决策记录留档（若涉及多源冲突或品牌视觉）；设计级（白字/渐变/层级取舍）由设计负责人人眼过稿，不得以工具数值代判（D7b）。
 - **证据要求**：每项结论给 `文件:行号`；无法取样/未覆盖处标注待确认。
@@ -321,13 +322,13 @@
 ## Part 30 · Design Governance
 - **登记制度（00 第 3 节）**：新组件 → 00 加行 → 14 补术语/状态 → 09 图标流程 → 10/11 或 08.2 落端规范 → 代码封装回填（Part 27）。
 - **命名/术语唯一源**：14 章（含禁用别名与旧称迁移表）；新增名词先登记，禁止先造后补。
-- **决策记录制**：`docs/审查决策记录.md`（D1–D7b）记录多来源冲突裁决、实测数值、保留项；作为评审与 AI 审查依据，随版本留档。
+- **决策记录制**：`docs/审查决策记录.md`（D1–D12）记录多来源冲突裁决、实测数值、保留项；作为评审与 AI 审查依据，随版本留档。
 - **审计即治理**：ALLOWED（代码）/PAGE_ALIAS（页面）即色板治理边界；color-banned 拦历史回归；bp 管断点；coverage 管封装量——治理不靠口头约定，靠可执行检查。
 - **角色与评审**：设计/工程/PM/AI 贡献统一走“登记 → 实现 → 回归 → 过稿”闭环；未过设计负责人的视觉取舍不得宣称已完成（Part 36/37）。
 
 ## Part 31 · 版本管理
 - **版本载体**：root `package.json`（主版本 V2.x，与系统文档同步）+ workspaces 独立包版本（@goodmom/ui 0.x 等）+ `CHANGELOG.md` + `README.md` 版本记录表。
-- **分级规则**：破坏性/系统性变更 → 中版本（如 V2.3→V2.4 审查整改轮）；局部补丁与文档同步 → 小步提交但 CHANGELOG 记录；决策记录随版本留档。
+- **分级规则**：破坏性/系统性变更 → 中版本（如 V2.4→V2.5 缺口补齐轮）；局部补丁与文档同步 → 小步提交但 CHANGELOG 记录；决策记录随版本留档。
 - **同步矩阵**：改版本时需同步——README 交付统计/版本记录、CHANGELOG 条目、spec.html（refresh）、docs 报告日期；不一致会误导（历史口径问题已修复：README/pkg/spec 同号）。
 - **发布步骤（收尾）**：全量回归（Part 37）→ 更新 CHANGELOG/README → 提交推送 → CI 三 job 绿 → 在决策记录标注版本与轮次。
 
@@ -345,13 +346,13 @@
 
 ## Part 34 · 产品经理使用规范
 - **词库对齐**：PRD/交互稿文案使用 15 章状态词条与 14 术语；新增业务状态先登记再写稿。
-- **组件查重**：提新 UI 前查 00 目录是否已有组件/领域组件（94 全量目录 + 12 封装子集见 docs/coverage-report.md）；已有则复用，避免各自实现。
+- **组件查重**：提新 UI 前查 00 目录是否已有组件/领域组件（98 全量目录 + 16 封装子集见 docs/coverage-report.md）；已有则复用，避免各自实现。
 - **领域口径**：涉及妊娠风险分级（五色）引用 02.10/15.2.10；随访/儿保/疫苗计划等流程用 13 章组件语言描述。
 - **验收引用**：交付验收直接引 Part 37 清单；需求版本与 CHANGELOG 对应。
 
 ## Part 35 · 前端工程师使用规范
 - **接入顺序**：`@arco-design/web-react/dist/css/arco.css` → `@goodmom/ui/theme.css` → 组件/tokens；样式覆盖只改主题层，不在页面写品牌 :root。
-- **可用 API**：Gm* 组件（12 模块，见 goodmom-ui README）、tokens（design/business/status）、gmIcon/GmIcon（title 语义化）、i18n。
+- **可用 API**：Gm* 组件（16 模块，见 goodmom-ui README）、tokens（design/business/status）、gmIcon/GmIcon（title 语义化）、i18n。
 - **工程**：`npm run typecheck`（根：@goodmom/ui+icons）、`npm run build`；CI = docs-links / gm-ui-typecheck / open-pkg-typecheck；本地改动后跑 `scripts/audit.py` 与 `a11y.py --ci`。
 - **页面集成**：先 token 后组件后页面壳（17.1→class）；新封装组件回填 index.ts/README/00/coverage；禁止魔法色与页面级裸断点。
 
@@ -365,22 +366,22 @@
 - **硬性闸门（全部通过才可交付）**
   - `python3 scripts/audit.py`：md 链/章节 00–18/icons 77/html 无 md/stale/色彩（ALLOWED·PAGE_ALIAS）/color-banned/bp/spec 章节 20+阅读器
   - `python3 scripts/a11y.py --ci`：outline 兜底/禁 span+onClick
-  - `python3 scripts/coverage.py --ci`：docs 19/组件 94/12/图标 77 数值对齐
+  - `python3 scripts/coverage.py --ci`：docs 19/组件 98/16/图标 77 数值对齐
   - CI：docs-links、gm-ui-typecheck、open-pkg-typecheck 三 job 绿
 - **文档闸门**：CHANGELOG/README 版本同步；spec.html 由 refresh 重生成；决策记录回填（D-条目与保留项）。
 - **人工闸门**：品牌视觉（白字/渐变/层级）与医疗口径由设计/领域负责人过稿；`docs/a11y-dom-report.md` 残留清单逐条裁决或排期。
 - **交付物清单**：规范 md + site/preview HTML + goodmom-ui/icons + scripts 工具 + docs 报告 + CHANGELOG。
 
 ## Part 38 · 设计系统资产库
-- **资产清单（2026-09 V2.4）**
+- **资产清单（2026-09 V2.5）**
   | 资产 | 数量/位置 |
   | --- | --- |
   | 编号规范文档 | 19 份（根 `[0-9][0-9]-*.md`） |
-  | 组件目录（规范全量） | 94（00-组件总目录.md） |
-  | 代码组件（封装） | 12（goodmom-ui/src，components 9 + adapters… 以 coverage 为准） |
+  | 组件目录（规范全量） | 98（00-组件总目录.md） |
+  | 代码组件（封装） | 16（goodmom-ui/src，以 coverage 为准） |
   | 自绘图标 | 77（icons/lg-icons.svg ↔ registry ↔ 09） |
-  | HTML 展示 | site 3 + preview 4 + fuyouaicansai 交互稿 |
-  | Logo/品牌 | logo.png + brand/{logo-mark,logo-tile,logo}.svg（v2 定案） |
+  | HTML 展示 | site 3 + preview 5 + fuyouaicansai 交互稿 |
+  | Logo/品牌 | `brand/{logo-mark,logo-tile,logo}.svg`（矢量，v2 定案）+ `brand/logo.png`（压缩位图，仅供第三方位图场景） |
   | 报告 | docs/{audit-report,coverage-report,a11y-dom-report,审查决策记录}.md |
 - **同步命令**：spec=`python3 scripts/refresh-spec.py`；图标=`python3 scripts/build-icons.py`；度量=`python3 scripts/coverage.py`；审计/可达=`audit.py / a11y.py / a11y-dom.py`。
 - **维护规则**：资产增减后同步 Part 00 映射与本表；数值型标准改动在决策记录留实测依据。

@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="logo.png" width="96" alt="妈咪好 GoodMom">
+  <img src="brand/logo-tile.svg" width="96" alt="妈咪好 GoodMom">
 </p>
 
 # 妈咪好 GoodMom · 妇幼儿童全生命周期设计系统
@@ -10,19 +10,19 @@
 </p>
 
 <p align="center">
-  <img alt="版本" src="https://img.shields.io/badge/version-2.3-ff9ab6?style=flat-square">
+  <img alt="版本" src="https://img.shields.io/badge/version-2.8-ff9ab6?style=flat-square">
   <img alt="文档" src="https://img.shields.io/badge/规范文档-19-6fc9b4?style=flat-square">
-  <img alt="组件" src="https://img.shields.io/badge/组件-94-9a78ff?style=flat-square">
+  <img alt="组件" src="https://img.shields.io/badge/组件-98-9a78ff?style=flat-square">
   <img alt="图标" src="https://img.shields.io/badge/图标-77-ffc3a0?style=flat-square">
-  <img alt="示例" src="https://img.shields.io/badge/示例页面-7-e85d8f?style=flat-square">
+  <img alt="示例" src="https://img.shields.io/badge/示例页面-6-e85d8f?style=flat-square">
   <img alt="许可证" src="https://img.shields.io/badge/License-MIT-8066f0?style=flat-square">
 </p>
 
 <p align="center">
-  <a href="site/spec.html">📖 规范大全（HTML）</a> ·
-  <a href="site/index.html">🏠 主站</a> ·
-  <a href="site/docs.html">🗂 文档中心</a> ·
-  <a href="preview/examples.html">🖥 示例中心</a> ·
+  <a href="site/index.html#site-spec">📖 规范全文</a> ·
+  <a href="site/index.html">🏠 唯一首页</a> ·
+  <a href="site/index.html#site-docs">🗂 文档索引</a> ·
+  <a href="site/index.html#preview-examples">🖥 组件与状态</a> ·
   <a href="https://github.com/ningmengsixiang/GoodMom">GitHub ↗</a>
 </p>
 
@@ -31,7 +31,7 @@
 
 适用：妈妈/家庭 App（孕期首页、生长曲线、疫苗计划、儿保体检）、机构运营端、医护随访工作台与数据大屏。品牌定义见 [12](12-妈咪好品牌与设计语言.md)，妇幼领域组件见 [13](13-妇幼领域组件规范.md)；01–11 为通用视觉引擎文档。
 
-**交付统计（V2.4）**：19 份规范文档 · 94 项组件（00 总目录）· 77 枚自绘图标（icons/lg-icons.svg）· 90+ 状态标签 · 3 套可交互预览（首页 / 移动端 / 示例中心 7 页）· 1 个开源封装层（goodmom-ui 12 模块）+ 前端参考（frontend-app）
+**交付统计（V2.8）**：19 份规范文档 · 98 项组件（00 总目录）· 77 枚自绘图标（icons/lg-icons.svg）· 60 条状态文案（`docs/coverage-report.md`）· 4 套可交互预览（首页 / 移动端 / 示例中心 6 页 / 新增能力示例）· **2 个开源组件库（`@goodmom/ui` React + Arco 16 模块 · `@goodmom/vue` Vue 3 零基座 16 组件）** + 前端参考（frontend-app）· 1 套前端开发规范 skill
 
 **体系架构**
 
@@ -49,7 +49,7 @@
 
 ## 内容架构（Arco 式导航分组）
 
-> 按业界通用 IA 把本仓资源分组归档；栏目 → 落点 → 状态。整站浏览另见 site/index.html「网站目录」。
+> 按业界通用 IA 把本仓资源分组归档；栏目 → 落点 → 状态。整站浏览见唯一首页 site/index.html（旧入口已全部合并）。
 
 ### ① 开发指南（Developer Guide）
 | 栏目 | 落点 | 状态 |
@@ -59,9 +59,9 @@
 | 设计变量（Token） | [02](02-Token规范.md)（附录 A/B/C CSS） | ✅ |
 | 定制主题 | [02.9](02-Token规范.md) · goodmom-ui/theme.css | ✅（进行中） |
 | 国际化 | 预留（文案词库基础见 [15](15-妇幼业务词库与状态大典.md)） | ⏳ 规划 |
-| 暗黑模式 | 预留（Token 双模式见 [12.3.2](12-妈咪好品牌与设计语言.md) 冷静模式） | ⏳ 规划 |
+| 暗黑模式 | [02 · 2.1.9](02-Token规范.md) 全量映射（夜间暖石板 · `[data-theme="dark"]` 局部/全局）+ `theme.css`/`gm.css` 暗色段 + `audit.py dark_contrast` 守门 | ✅ 已规范 |
 | VChart 图表 | [04 数据可视化](04-数据可视化规范.md) · 首页可视化图库 · 封装层 GmProgress 等 | ✅ |
-| 组件索引 | [00 组件总目录](00-组件总目录.md)（94 项，PC/移动/妇幼） | ✅ |
+| 组件索引 | [00 组件总目录](00-组件总目录.md)（98 项，PC/移动/妇幼） | ✅ |
 
 ### ② 组件（Component，按 Arco 分类）
 | 分类 | 对应 |
@@ -85,19 +85,19 @@
 ### ④ 组件用法（Usage）
 | 栏目 | 落点 |
 | --- | --- |
-| 用法速查（Do/Don't） | [03 · 3.11](03-组件规范.md) |
+| 用法速查（Do/Don't） | [03 · 3.12](03-组件规范.md) |
 | 页面与组合规范 | [17](17-页面布局与组件组合规范.md) |
 | 状态词与语义色 | [14 · 4.4.5](14-命名与术语规范.md) · [15](15-妇幼业务词库与状态大典.md) |
 | 动效/触控用法 | [07](07-交互动效与微交互规范.md) · [10.7](10-移动端组件规范.md) |
 | 合规审计 | [16.6](16-优化与一致性审计.md) |
-| 标准答案（可照抄页面） | preview/examples.html（7 套完整页） |
+| 标准答案（可照抄页面） | site/index.html#preview-examples（6 套完整页） |
 
 ---
 ## 目录结构
 
 | 文件 | 内容 | 适合谁 |
 | --- | --- | --- |
-| [`00-组件总目录.md`](00-组件总目录.md) | **全系统组件总目录**：PC + 移动 + 妇幼领域 94 项一张表平铺（端归属、章节速查、双端形态） | 所有人，先查这张表 |
+| [`00-组件总目录.md`](00-组件总目录.md) | **全系统组件总目录**：PC + 移动 + 妇幼领域 98 项一张表平铺（端归属、章节速查、双端形态） | 所有人，先查这张表 |
 | [`01-设计总览与设计DNA.md`](01-设计总览与设计DNA.md) | 风格定义、核心关键词、10 大视觉特征、5 层空间层级、L.Glass Design DNA | 所有人，先读这一篇 |
 | [`02-Token规范.md`](02-Token规范.md) | 颜色 / 字体 / 间距 / 圆角 / 玻璃材质 / 阴影 全套 Token（含可直接复制的 CSS 变量） | 设计师、前端 |
 | [`03-组件规范.md`](03-组件规范.md) | 按钮、卡片、导航、输入框、开关、徽章、状态点、3D 玻璃图标等组件规格 | 设计师、前端 |
@@ -116,12 +116,13 @@
 | [`16-优化与一致性审计.md`](16-优化与一致性审计.md) | **一致性体检与基线**：计数快照、命名/版本纪律、词库/颜色规则、变更登记 | 维护人（每次改结构先看这里） |
 | [`17-页面布局与组件组合规范.md`](17-页面布局与组件组合规范.md) | **页面与组合全局规范**：页面壳/栅格留白/对齐基线（图标-文字）、组件组合顺序与间距档、实现验收 | 全员（先查后做） |
 | [`18-视觉规范审计报告.md`](18-视觉规范审计报告.md) | **视觉规范审计**：Token/字体/玻璃/图标/组件/页面/无障碍自查与整改行动清单 | 维护人/评审 |
-| [`preview/index.html`](preview/index.html) | 液态玻璃视觉预览页（浏览器直接打开，可视化 Token、组件、微交互与图标库） | 全员对照参考 |
-| [`preview/mobile.html`](preview/mobile.html) | **移动端视觉预览**（手机框：NavBar、底部 TabBar、卡片流、触控按压反馈） | 移动端对照参考 |
-| [`preview/examples.html`](preview/examples.html) | **示例中心**：常用完整页面 7 套（列表/详情/表单/移动/iPad/工作站/孕妇档案），支持顺序浏览 | 全员对照参考 |
-| [`preview/manual.html`](preview/manual.html) | **总览手册（打印版）**：定位/架构/DNA/状态/文档地图，浏览器可另存 PDF | 全员（对外介绍用） |
-| [`site/index.html`](site/index.html) | **开源网站落地页**：品牌 Hero/能力/视觉/快速上手/开源治理（可直接部署 GitHub Pages） | 对外展示用 |
-| [`brand/`](brand/) | **品牌图形资产**：Logo v1 孕妇形象（logo-mark / logo / tile 三种 SVG，规范见 12 · 12.8） | 品牌使用 |
+| [`site/index.html`](site/index.html) | **唯一首页（唯一入口）**：融合原 8 个页面为单文件，顶部主导航切换 8 个模块——首页与总览 / 视觉规范 / 组件与状态 / 移动端 / 交互范式 / 规范全文 / 标准手册 / 文档索引 | 所有人，从这里开始 |
+| `site/fragments/` | 唯一首页的**内容片段**（构建输入，非交付页面），由 `scripts/build-site.py` 组装 | 维护者 |
+| 旧入口（7 个） | `site/spec.html` `site/manual.html` `site/docs.html` `preview/index.html` `preview/examples.html` `preview/mobile.html` `preview/patterns.html` 均已改写为**重定向页**（保留旧链接可达，锚点透传） | 兼容旧链接 |
+
+| [`preview/manual.html`](preview/manual.html) | **总览手册（打印版，保留为独立页）**：定位/架构/DNA/状态/文档地图，浏览器可另存 PDF | 全员（对外介绍用） |
+
+| [`brand/`](brand/) | **品牌图形资产**：Logo v2 正式稿（logo-mark / logo / tile 三种 SVG + 压缩后的 logo.png 位图，规范见 12 · 12.8） | 品牌使用 |
 
 ---
 
@@ -142,8 +143,34 @@
 | --- | --- | --- |
 | `frontend-app/` | Vite + React + Arco 前端骨架（npm workspaces） | 需可联网执行 `npm install && npm run dev`（沙箱无外网） |
 | `frontend-app/packages/gm-arco-ui/` | `@goodmom/gm-arco-ui` 封装层：GmButton / GmStatusTag / 主题 CSS | 骨架完成，待依赖构建验证 |
-| `goodmom-ui/` | **妈咪好开源组件库 @goodmom/ui**（Arco 基底 + GoodMom 封装）：Gm* 组件/主题/语义字典 + LICENSE/NOTICE | 独立开源子库，待联网构建 |
+| `goodmom-ui/` | **妈咪好开源组件库 @goodmom/ui**（Arco 基底 + GoodMom 封装）：Gm* 组件（16 模块，含 GmLink/GmCascader/GmResponsiveView/GmVirtualList）/主题/语义字典 + LICENSE/NOTICE | 独立开源子库，待联网构建 |
+| `goodmom-vue/` | **Vue 3 组件库 @goodmom/vue**（**零基座自研 SFC**，无任何第三方 UI 依赖）：16 个组件 + Token + 业务状态字典 + `.d.ts` 类型 + 单一 `style.css`；含 `playground/` 真机验收台与 Playwright 冒烟 | ✅ 构建/类型/冒烟全通过 |
+| `.claude/skills/goodmom-frontend/` | **前端开发规范 skill**：`SKILL.md`（11 条红线 + 开发流程 + 验收命令）+ 5 份 reference（组件 / Token / 无障碍 / 页面范式 / 提交清单） | ✅ 现行 |
 | `goodmom-icons/` | **图标子包 @goodmom/icons**：77 枚自绘线性图标（registry.ts 编译产物） | 源码就绪，联网构建 |
+
+### Vue 3 快速开始
+
+```bash
+npm install @goodmom/vue
+```
+
+```ts
+import "@goodmom/vue/style.css";                       // 必须引入
+import { GmButton, GmStatusTag } from "@goodmom/vue";  // 按需具名导入（支持 tree-shaking）
+```
+
+```vue
+<GmStatusTag>待随访</GmStatusTag>   <!-- 自动按 15 章词库取 attention 琥珀 -->
+<GmButton type="primary">发起随访</GmButton>
+```
+
+```bash
+npm run typecheck:vue && npm run build:vue
+npx vite --config goodmom-vue/playground/vite.config.ts   # 验收台 http://localhost:5273
+node goodmom-vue/playground/smoke.mjs                    # 冒烟（组件契约逐条断言）
+```
+
+详见 [`goodmom-vue/README.md`](goodmom-vue/README.md) 与[前端开发规范](.claude/skills/goodmom-frontend/SKILL.md)。
 
 ## 找组件（两步定位）
 
@@ -154,9 +181,10 @@
 1. **AI 出图** → 打开 [`05-AI生成Prompt库.md`](05-AI生成Prompt库.md)，复制 Master Prompt 或对应行业 Prompt，粘贴负面提示词。
 2. **Figma 建库** → 按 [`02-Token规范.md`](02-Token规范.md) 建立样式 Token（颜色 / 字体 / 圆角 / 阴影 / 模糊）。
 3. **前端落地** → 复制 02 章末尾的 CSS 变量块，组件按 [`03-组件规范.md`](03-组件规范.md) 实现。
-4. **视觉对照** → 浏览器打开 [`preview/index.html`](preview/index.html) 实时查看效果（含微交互演示，悬停、按压、开关、分段控件等均可直接操作）。
-5. **移动端** → 规范见 [`10-移动端组件规范.md`](10-移动端组件规范.md)，预览 [`preview/mobile.html`](preview/mobile.html)（建议浏览器设备模式）。
-6. **完整示例页** → 打开 [`preview/examples.html`](preview/examples.html)，按“下一页”顺序走完 7 套常用页面。
+4. **视觉对照** → 浏览器打开 [`site/index.html`](site/index.html#preview-index)「视觉规范」模块实时查看效果（含微交互演示，悬停、按压、开关、分段控件均可直接操作）。
+5. **移动端** → 规范见 [`10-移动端组件规范.md`](10-移动端组件规范.md)，预览 [`site/index.html#preview-mobile`](site/index.html#preview-mobile)（建议浏览器设备模式）。
+6. **完整示例页** → 打开 [`site/index.html#preview-examples`](site/index.html#preview-examples)，按“下一页”顺序走完 6 套常用页面。
+7. **交互范式** → 打开 [`site/index.html#preview-patterns`](site/index.html#preview-patterns)：链接全态、级联三形态、拖动容器宽度看响应式切换、1284 条虚拟长列表、暗黑模式与边框档。
 
 ---
 
@@ -192,10 +220,14 @@
 git clone git@github.com:ningmengsixiang/GoodMom.git && cd GoodMom
 
 # 本地预览（无需构建，双击打开即可）
-open preview/index.html      # 首页 · 全组件/样式/状态
-open preview/examples.html   # 示例中心（5 套完整页面，可顺序浏览）
-open preview/mobile.html     # 移动端预览（建议浏览器设备模式）
-open preview/manual.html     # 总览手册（打印 → 另存 PDF）
+open site/index.html   # 唯一入口：顶部导航切换 8 个模块（原 8 个页面已全部并入）
+
+# 维护：站点是"产物"，改内容请改片段后重新构建，不要直接编辑 site/index.html
+python3 scripts/build-site.py            # 生成唯一首页
+python3 scripts/build-site.py --check     # 校验产物与构建结果一致（CI）
+python3 scripts/redirect-legacy.py --check # 校验旧入口仍为重定向
+node scripts/site-smoke.mjs               # 41 项冒烟（需先起静态服务）
+node scripts/site-parity.mjs              # 合并保真度：各模块 vs 原页面
 
 # 前端封装库（Vite + React + Arco）
 cd frontend-app
@@ -228,3 +260,7 @@ bash scripts/print-manual.sh
 | V2.2 | — | 首页专业包装（分组菜单/速览条/三步指南）、打印版总览手册、README 交付统计与架构、仓库初始化（.gitignore/LICENSE/CHANGELOG） |
 | V2.3 | — | 网站整合：主站用户旅程+目录+统一页脚；导航 GitHub 开源入口；示例中心扩至 7 页（PC 工作站/孕妇档案）；Logo 全局接入；视觉与文档一致性同步 |
 | V2.4 | — | A–H 审查整改：可访问性与键盘走查工具（a11y.py）、组件补齐（Empty/Spin/Skeleton）、语义色唯一源 + WCAG 对比度口径、断点收敛 + 平板档、覆盖度量与 CI、Logo v2 定案（决策记录 docs/审查决策记录.md） |
+| V2.5 | — | 七层清单缺口补齐：Link 规范（03.10）、边框宽度档（02.7.1）、暗黑模式全量映射（02.1.9，闭环 18·A2）、Cascader 解禁（03.5.5/10.11.3）、响应式适配容器与虚拟长列表（10.11.1/10.11.2）；新增 4 个代码组件与 preview/patterns.html；00 目录 98 项（决策记录 D11/D12） |
+| V2.6 | 2026-09-10 | Vue 3 组件库 `@goodmom/vue`（16 个 SFC，零第三方 UI 依赖）与前端的开发规范 skill；React/Vue 双库 1:1 同名覆盖 |
+| V2.7 | 2026-09-11 | 站点合并为唯一首页：9 个入口页 → `site/index.html` 单文件 + 单一主导航，4 个旧页转为重定向；新增站点构建管线与 4 件守门工具（build-site / site-parity / site-smoke / redirect-legacy） |
+| V2.8 | 2026-09-12 | 独立审计整改（44 项）：交付物入库 + CI 完整性门禁、首页 90 处畸形锚点与 76 处悬空锚点归零、应用镜像补齐 37 个选择器、语义色板达 AA、`a11y-dom.py` 重写并设阈值、双库样式值对齐、唯一版本源与计数单一源 |

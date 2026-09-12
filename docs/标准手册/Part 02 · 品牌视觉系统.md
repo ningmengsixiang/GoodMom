@@ -11,10 +11,12 @@
 ## 2 规范性条款
 - BR-02-01 应：品牌名唯一写法为「妈咪好 GoodMom」；禁止 Good Mom/Goodmom/妈咪好goodmom 等异拼（14 章禁别名；audit stale 检查执行）。
 - BR-02-02 应：Logo 使用正式 v2 稿 `brand/logo-mark.svg`／`logo.svg`（孕妈剪影＋爱心＋GOODMOM）；v1 几何版退役仅留档（12.8）。
-- BR-02-03 应：站点/文档图标位统一引用根目录 `../logo.png`；favicon 用同一 logo 源。
+- BR-02-03 应：站点/文档图标位统一引用**矢量**品牌资产——favicon 用 `brand/logo-mark.svg`，页面内品牌图用 `brand/logo-tile.svg`。
+  （原条款要求"统一引用根目录 `../logo.png`"，与 BR-02-02 直接矛盾，且 3.28MB 位图被用作 favicon 与 46px 图标，
+   使首页首屏达约 4.2MB。现只保留矢量口径；`logo.png` 压缩后移入 `brand/`，不再作为站点资源。）
 - BR-02-04 应：页面级 logo 高度 ≥24px；与邻近文字间距 ≥logo 高度 0.5×。
 - BR-02-05 不应：改色、旋转、拉伸变形、叠花纹/投影、在深色底上直接放置无底 logo；品牌版式另审。
-- BR-02-06 应：品牌 Token 双轨——装饰用亮渐变 `--mmh-grad-primary`；文字承载 CTA 用 `--mmh-grad-action-hc`（AA，D5/D6）。
+- BR-02-06 应：品牌 Token 双轨——装饰用亮渐变 `--mmh-grad-primary`；CTA 用 `--mmh-grad-action-hc`（Rose-300→Rose-500）配深字 #343A46（AA，D9）。
 - BR-02-07 应：文案语气遵守 12.5——称呼妈妈/家长（不用“亲”）、医护称医生/医护老师；异常提醒不制造恐慌；界面禁 emoji。
 - BR-02-08 不应：混入第三方/竞品元素或过期品牌资产；页面标题/正文品牌词与 BR-02-01 一致。
 

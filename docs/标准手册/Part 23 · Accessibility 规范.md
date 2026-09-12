@@ -12,5 +12,7 @@
 - AC-23-04 应：ARIA/读屏（07.9）——装饰图标 aria-hidden；传义图标 role=img+label；radiogroup/status/dialog 语义；表格用真实语义。
 - AC-23-05 应：触控 ≥44/关键 48；200% 缩放不破版；安全区 env()。
 - AC-23-06 应：`prefers-reduced-motion` 降级（07.5）。
-- AC-23-07 应：自动化——`a11y.py`（静态，入 CI）；`a11y-dom.py`（渲染级报告）；axe 运行时级列长期项。
+- AC-23-07 应：自动化——`a11y.py`（静态，入 CI）；`a11y-dom.py`（渲染级报告，受限环境无法渲染时必须出 ERR 行而非静默通过）；`audit.py dark_contrast`（暗色对比度守门）；axe 运行时级列长期项。
+- AC-23-08 应：暗黑模式同样满足 AA——暗色文字/语义色在最坏合成面（12% 白玻璃）实测 ≥4.5:1（02 · 2.1.9 表，守门 dark_contrast）。
+- AC-23-09 应：窗口化长列表必须给 `aria-posinset/aria-setsize` 与容器 `aria-label`，并支持 PageUp/PageDown/Home/End；响应式容器两形态都要能被读屏完整读出（真实 table / dl 语义）。
 - 验收：[ ] 静态+渲染报告无新增实色失败；[ ] 键盘全流程可达；[ ] reduced-motion 生效。

@@ -1,22 +1,49 @@
 {
-  "date": "2026-09-07",
+  "date": "2026-09-12",
   "docs": 19,
-  "components_spec_defined": 94,
-  "components_code_implemented": 12,
-  "component_names": [
+  "components_spec_defined": 98,
+  "components_react": 16,
+  "components_vue": 16,
+  "components_code_implemented": 32,
+  "component_names_react": [
     "GmAvatar",
     "GmButton",
     "GmCard",
+    "GmCascader",
     "GmClientCard",
     "GmEmpty",
+    "GmLink",
     "GmProgress",
+    "GmResponsiveView",
     "GmRiskPicker",
     "GmSkeleton",
     "GmSpin",
     "GmStatusTag",
     "GmSteps",
-    "GmTag"
+    "GmTag",
+    "GmVirtualList"
+  ],
+  "component_names_vue": [
+    "GmAvatar",
+    "GmButton",
+    "GmCard",
+    "GmCascader",
+    "GmClientCard",
+    "GmEmpty",
+    "GmLink",
+    "GmProgress",
+    "GmResponsiveView",
+    "GmRiskPicker",
+    "GmSkeleton",
+    "GmSpin",
+    "GmStatusTag",
+    "GmSteps",
+    "GmTag",
+    "GmVirtualList"
   ],
   "icons_sprite": 77,
-  "icons_registry": 77
+  "icons_registry": 77,
+  "status_texts": 60,
+  "example_views": 6,
+  "site_modules": 8
 }

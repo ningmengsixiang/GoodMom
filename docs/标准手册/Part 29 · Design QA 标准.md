@@ -7,7 +7,7 @@
 ## 1 目的与适用范围
 ## 2 条款
 - QA-29-01 应：走查顺序——视觉→状态→交互→可访问→响应式→品牌词→医疗克制→合规。
-- QA-29-02 应：套件 audit.py（13 项）/coverage.py/a11y.py/a11y-dom.py/refresh-spec.py。
+- QA-29-02 应：套件 audit.py（**15 项**：md 链/章节/图标/html-md/stale/色彩/color-banned/bp/spec/hex-case/mirror/**dark 对比度**/**组件导出**）/coverage.py/a11y.py/a11y-dom.py/refresh-spec.py；示例页渲染回归 `patterns-smoke.cjs`（Playwright，43 项断言，非 CI 阻断项）。
 - QA-29-03 应：回归入口 `audit.py && a11y.py --ci && coverage.py --ci`。
 - QA-29-04 应：分级 P0/P1/P2 修复闭环并留档；设计级项由设计负责人过稿，工具数值不代判（D7b）。
 - QA-29-05 应：结论带文件:行号证据；无法取样处标待确认。

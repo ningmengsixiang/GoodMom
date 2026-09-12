@@ -19,6 +19,7 @@
 | Grid 栅格 | ✅ 04.4 | 12 列 / 24px 栅栏 |
 | Button 按钮 | ✅ [03 · 3.2](03-组件规范.md) | 4 变体 × 3 尺寸 × 状态 |
 | FloatButton 悬浮按钮 | ➕ | 玻璃悬浮圆钮（见 8.2.1） |
+| Link 链接 | ✅ [03 · 3.10](03-组件规范.md) | 文字型操作：默认/强调/弱化/危险 × 三尺寸 × 状态谱（含外链与暗色档） |
 | Typography 版式 | ✅ [02 · 2.2](02-Token规范.md) | 追加省略规则见 8.2.13 |
 | Divider 分割线 | ➕ | 玻璃细分隔线 Token 化 |
 | Icon 图标 | ✅ [09](09-图标库规范.md) | **LG 自绘图标库**（本次交付） |
@@ -40,7 +41,8 @@
 | Slider | ➕ | 玻璃滑杆（见 8.2.6） |
 | Rating 评分 | ⏸ | 大屏/SaaS 低频；如需用玻璃星形徽章替代 |
 | TagInput 标签输入 | ⏸ | 可用 Select multiple 玻璃 chip 替代 |
-| Cascader / TreeSelect / Transfer | ⏸ | 低频复杂选择；先做 Tree 弹层版 |
+| Cascader 级联选择 | ✅ [03 · 3.5.5](03-组件规范.md) | 弹层/内联/移动多列 Picker 三形态（见 8.2.19） |
+| TreeSelect / Transfer | ⏸ | 低频复杂选择；先做 Tree 弹层版 |
 | ColorPicker | ⏸ | 设计工具场景，非产品 UI |
 | PinCode 验证码 | ⏸ | 登录类页面专用，暂不纳入大屏体系 |
 | Upload | ➕ | 玻璃上传区（见 8.2.10） |
@@ -76,7 +78,8 @@
 | Carousel 轮播 | ⏸ | 大屏非交互展示场景少用 |
 | Calendar 日历 | ⏸ | 与 DatePicker 弹层共存即可 |
 | Image / Cropper | ⏸ | 素材管理页低频；大屏用图卡 |
-| ScrollList / OverflowList | ⏸ | 工程层能力 |
+| ScrollList / OverflowList | ⏸ | 工程层能力（长列表性能见 8.2.21 VirtualList） |
+| VirtualList 虚拟长列表 | ➕ | 移动长列表 / 超大表格窗口化（见 8.2.21） |
 | UserGuide 用户引导 | ⏸ | 可后续做玻璃新手引导遮罩 |
 | Highlight 高亮文本 | ⏸ | 工程能力 |
 
@@ -102,7 +105,9 @@
 
 ### 工程类（其他）
 
-`ConfigProvider / LocaleProvider / 无障碍 / 国际化 / 暗色模式 / D2C`：工程能力，与本视觉规范解耦；LG 主题接入即替换 02.8 Token 变量。暗色模式为后续版本（V1.1 规划项）。
+`ConfigProvider / LocaleProvider / 无障碍 / 国际化 / D2C`：工程能力，与本视觉规范解耦；LG 主题接入即替换 02.8 Token 变量。
+**暗色模式**：已规范——[02 · 2.1.9](02-Token规范.md) 色彩映射 + 02.8 `[data-theme="dark"]` 变量段 + theme.css 落地（见 8.2.22）。
+**响应式适配容器（跨端形态切换）**：已规范——[10 · 10.11.1](10-移动端组件规范.md)（见 8.2.20）。
 
 ---
 
@@ -189,6 +194,31 @@
 - 玻璃气泡（同 3.9 Popover）+ 文案 13px + 按钮组「取消(ghost) / 确认(primary 或 danger 主色)」。
 - 危险操作确认按钮用 danger 色玻璃渐变；动效 240ms，可含 1 次微回弹。
 
+### 8.2.18 Link（链接）
+- 视觉与状态谱见 [03 · 3.10](03-组件规范.md)：默认 `--lg-link`（#B23A63）、强调=主文字+600 字重+箭头、弱化=次级文字、危险=语义红；hover 加深 + 下划线（140ms）。
+- 代码：`GmLink`（17 章封装子集）；段落内长文必须常显下划线；移动端热区 ≥44×44。
+- 暗色：自动切 `#FFC4D6`（11.61:1，02 · 2.1.9）。
+
+### 8.2.19 Cascader（级联选择）
+- 三形态见 [03 · 3.5.5](03-组件规范.md)：`popup`（PC 弹层，默认）/ `inline`（内联铺开）/ `picker`（移动底部多列）。
+- 列宽 168（≥4 级 148）、选项行高 34、选中层级 2px 品牌粉指示条；`changeOnSelect` 默认关闭（只有叶子可提交）。
+- 代码：`GmCascader`；键盘 ←/→ 跨列、↑/↓ 列内、Esc 归还焦点；`aria-haspopup="listbox"` + `role="listbox"/"option"`。
+
+### 8.2.20 ResponsiveView（响应式适配容器）
+- 同一数据源按**容器宽度**切换形态：`table`（≥1024）/ `condensed`（768–1023 平板）/ `card`（≤767 卡片列表）；断点走 767/1024 体系（audit `bp`）。
+- 同一时刻只渲染一个分支（不做 CSS 双渲染后隐藏）；排序/筛选/分页状态由页面持有，切形态不重置。
+- 表格→卡片字段映射与降级口径见 [10 · 10.5.3](10-移动端组件规范.md)；代码：`GmResponsiveView`。
+
+### 8.2.21 VirtualList（虚拟长列表）
+- 阈值：移动列表 >50 项、PC 表格 >200 行、任意一次渲染 DOM 行数 >300 时必须窗口化；固定行高 + `overscan` 4。
+- 规格见 [10 · 10.11.2](10-移动端组件规范.md)：吸顶、上拉加载（`onEndReached` 距底 4 项触发一次）、与 SwipeAction/PullRefresh 组合顺序。
+- 代码：`GmVirtualList`；`role="list"` + `aria-posinset/aria-setsize`；动态高行暂不支持（超出行高的行改分页或卡片流）。
+
+### 8.2.22 暗黑模式（Dark Mode）
+- Token 映射见 [02 · 2.1.9](02-Token规范.md)：页面底 `#1B1A21`、面 `#23222A`、文字 `#F3EFEC`；玻璃降白（.14–.60 → .06–.12）、阴影加深、语义 alias 切浅档。
+- 落地：`[data-theme="dark"]` 可加在 `<html>` 或任意容器根（支持局部暗色卡/弹层）；变量段见 02.8 与 `theme.css`。
+- 守门：`scripts/audit.py` 的 `dark_contrast` 对正文/次级/三级/语义色做 WCAG 实测，<4.5:1 直接 FAIL。
+
 ---
 
 ## 8.3 暂缓/不适用说明
@@ -196,7 +226,8 @@
 | 组件 | 理由 | 何时重新评估 |
 | --- | --- | --- |
 | Rating / PinCode / ColorPicker | 与目标产品（安全/云/软件工厂大屏）匹配度低 | 出现 C 端或通用 SaaS 页面需求时 |
-| Cascader / Transfer / TreeSelect | 低频复杂选择，实现成本高 | 出现多级组织/权限选择页 |
+| Transfer / TreeSelect | 低频复杂选择，实现成本高 | 出现多级组织/权限选择页 |
+| ~~Cascader~~（已解禁） | 2026-09 解禁：妇幼业务「机构-科室-病区」「省市区」三级选择为高频刚需 | 已规范，见 [03 · 3.5.5](03-组件规范.md) |
 | Resizable / ScrollList / OverflowList | 工程层能力而非视觉组件 | 进入复杂编辑器产品 |
 | Carousel / Calendar | 大屏非交互展示不需要 | 出现运营大屏需求 |
 | Image / Cropper / UserGuide | 低频 | 出现素材/引导场景 |
@@ -207,12 +238,13 @@
 ## 8.4 对齐后的组件地图（LG 规范 → Semi 名）
 
 ```text
-LG 已覆盖：Button Card Nav(侧栏) Tabs Breadcrumb Input Select Switch Checkbox Radio
+LG 已覆盖：Button Link Card Nav(侧栏) Tabs Breadcrumb Input Select Cascader Switch Checkbox Radio
            Badge Tag Avatar Table Timeline Tooltip Popover Dropdown Modal Drawer(≈SideSheet)
            Toast Notification Divider Layout Grid Typography Icon Space
+           暗色模式(02.1.9/8.2.22) 响应式适配容器(10.11.1) 虚拟长列表(10.11.2)
 LG 本期补齐：FloatButton/BackTop Steps Pagination Anchor Progress Slider InputNumber
            Form DatePicker Upload Descriptions Empty List Skeleton/Spin Banner Popconfirm
-LG 观察项：AI 组件、暗色模式、D2C
+LG 观察项：AI 组件、D2C
 ```
 
 > 验收：新页面绘制前，先按本表确认每个需要的组件处于 ✅ 或 ➕，并引用其规范章节；暂缓项若必须使用，须先评审是否破坏 DNA。

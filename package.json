@@ -1,19 +1,36 @@
 {
   "name": "goodmom-design-system",
   "private": true,
-  "version": "2.4.0",
+  "version": "2.8.0",
   "workspaces": [
     "goodmom-ui",
-    "goodmom-icons"
+    "goodmom-icons",
+    "goodmom-vue"
   ],
   "scripts": {
-    "typecheck": "npm run typecheck -w @goodmom/ui && npm run typecheck -w @goodmom/icons",
-    "build": "npm run build -w @goodmom/ui && npm run build -w @goodmom/icons",
+    "typecheck": "npm run typecheck -w @goodmom/ui && npm run typecheck -w @goodmom/icons && npm run typecheck -w @goodmom/vue",
+    "build": "npm run build -w @goodmom/ui && npm run build -w @goodmom/icons && npm run build -w @goodmom/vue",
+    "build:vue": "npm run build -w @goodmom/vue",
+    "typecheck:vue": "npm run typecheck -w @goodmom/vue",
+    "publish:vue": "npm run build -w @goodmom/vue && npm publish ./goodmom-vue --access public",
     "publish:icons": "npm run build -w @goodmom/icons && npm publish ./goodmom-icons --access public",
     "publish:ui": "npm run build -w @goodmom/ui && npm publish ./goodmom-ui --access public",
-    "publish": "npm run publish:icons && npm run publish:ui"
+    "publish": "npm run publish:icons && npm run publish:ui && npm run publish:vue",
+    "storybook": "storybook dev -p 6006",
+    "build-storybook": "storybook build"
   },
   "devDependencies": {
-    "typescript": "^5.3.0"
+    "@chromatic-com/storybook": "latest",
+    "@storybook/addon-a11y": "^10.6.0",
+    "@storybook/addon-docs": "^10.6.0",
+    "@storybook/addon-mcp": "^10.6.0",
+    "@storybook/addon-vitest": "^10.6.0",
+    "@storybook/react-vite": "^10.6.0",
+    "@vitest/browser-playwright": "latest",
+    "@vitest/coverage-v8": "latest",
+    "playwright": "^1.62.0",
+    "storybook": "^10.6.0",
+    "typescript": "^5.3.0",
+    "vitest": "latest"
   }
 }

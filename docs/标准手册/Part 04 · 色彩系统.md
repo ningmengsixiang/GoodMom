@@ -11,20 +11,25 @@
 - CL-04-01 应：六语义（14.4.5）色值与用途如下（alias 深色作文字/色点/图形；`-500/-300` 仅供填充/色块/图表强调）：
   | 语义 | token | 值 | 覆盖状态 |
   | --- | --- | --- | --- |
-  | positive | --lg-sem-positive | #2f8f76 | 正常/完成/通过/未见异常/阴性 |
-  | info | --lg-sem-info | #4a76d0 | 已建档/筛查中/进行中 |
-  | attention | --lg-sem-attention | #b9771c | 待复查/待随访/待审核/即将到期 |
-  | risk | --lg-sem-risk | #d35466 | 异常/阳性/失访/逾期 |
-  | neutral | --lg-sem-neutral | #757e8e | 未开始/草稿/已归档 |
-  | special | --lg-sem-special | #7a5ce0 | 转诊/会诊/重点管理 |
-- CL-04-02 应：alias 深色作小字正文时是否达 AA 以 `a11y-dom.py` 实测为准，不作默认保证；正文文字优先用主/次级文本色。
-- CL-04-03 应：白字实底使用 `--mmh-solid-*`（positive #1e6b52／attention #9a5a0e／danger #b04052／info #385cb3／special #6242b8，白字 4.7–7.0:1）；状态 chip 顶部不得叠白色高光层（会降至 2.5–2.9:1，D5）。
+  | positive | --lg-sem-positive | #25715D | 正常/完成/通过/未见异常/阴性 |
+  | info | --lg-sem-info | #3261C1 | 已建档/筛查中/进行中 |
+  | attention | --lg-sem-attention | #8D5A15 | 待复查/待随访/待审核/即将到期 |
+  | risk | --lg-sem-risk | #B72F42 | 异常/阳性/失访/逾期 |
+  | neutral | --lg-sem-neutral | #5E6673 | 未开始/草稿/已归档 |
+  | special | --lg-sem-special | #6A48DC | 转诊/会诊/重点管理 |
+- CL-04-02 应：alias 深色作小字正文时必须达 AA。**2026-09 收敛**：原色板在近白底上 5/6 不达 4.5:1（3.67–4.38:1），
+  现取"保持色相、压暗"至实测 近白 ≥5.79:1 ／ 13% 淡色片 ≥4.85:1 ／ 18% 淡色片 ≥4.50:1；
+  四个来源（React tokens/status.ts、Vue tokens/status.ts、theme.css、base.css）必须同号，
+  由 `scripts/check-status-map.py` 守门。渲染级复测见 `scripts/a11y-dom.py` 与 `docs/a11y-dom-report.md`。
+- CL-04-03 应：白字实底使用 `--mmh-solid-*`（positive #1E6B52／attention #9A5A0E／danger #B04052／info #385CB3／special #6242B8，白字 4.7–7.0:1）；状态 chip 顶部不得叠白色高光层（会降至 2.5–2.9:1，D5）。
 - CL-04-04 应：孕产妇五色 `--mmh-m5-m1..m5`（#4CB98A/#F2C14E/#F0954A/#EE5C70/#8F6AE0）仅用于妊娠风险分级语境（02.10/15.2.10）。
 - CL-04-05 应：文本对比度：主 #343A46（≥7:1）／次级 #4F5B6E（白 6.88/暖 4.98）／三级 #9AA2B0 仅大字号（≥24px 常规/≥18.66px 粗体），小字禁止（D7/D7b）。
-- CL-04-06 应：渐变职责二分——亮渐变 `--mmh-grad-primary` 装饰；文字承载行动 `--mmh-grad-action-hc`（#B23A63→#9E3054，白字 ≥4.5）；(D6)。
+- CL-04-06 应：主行动 `--mmh-grad-action-hc`（Rose-300→Rose-500 = #FFC4D6→#F77FA3）配**深字 #343A46**（文字区 4.89–7.67 ≥4.5）；`--mmh-grad-primary`（含 #E85D8F 深端）仅装饰。禁止亮粉底+白字（2.46–3.48）。(D9)。
 - CL-04-07 应：页面暖底/引擎展示色归 PAGE_ALIAS 审计档（D4）；代码层仅 ALLOWED；禁止页面自定义品牌 :root 裸色。
 - CL-04-08 不应：纯红/纯荧光色（02.1.5）；颜色单独传义（必须文字/图标双通道）；图表语义色挪用（数据色序见 Part 16）。
-- CL-04-09 可：暗色与冷静模式经 Token 映射（12.3.2），不改语义表。
+- CL-04-09 应：暗黑模式 = **夜间暖石板**（02 · 2.1.9）：页面底 #1B1A21／二次面 #23222A／文字 #F3EFEC·#C9C4CE·#A6ADB9；禁纯黑 #000000 与纯白 #FFFFFF；玻璃白叠加降至 .06–.12、阴影加深、语义 alias 切浅档（positive #6FC9B4／info #9CAEFF／attention #F2C14E／risk #F79AA8／neutral #A6ADB9／special #B9A0FF）。
+- CL-04-10 不应：暗色下沿用浅色玻璃白度（面板发灰）、沿用浅色 alias 深色（对比不足）、新造暗色专用色相。
+- CL-04-11 应：暗色文字/语义色以最坏情形（12% 白合成面）实测 ≥4.5:1，由 `scripts/audit.py dark_contrast` 守门（当前最低 5.37:1）。
 
 ## 3 验收
 - [ ] 页面样式色在 ALLOWED∪PAGE_ALIAS；[ ] 白字位置比照 D5/D6 深档；[ ] a11y-dom 报告无新增实色失败（长尾登记 D7b）。

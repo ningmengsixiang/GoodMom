@@ -9,7 +9,8 @@
 以「primitive→alias→component」三层模型提供唯一数值源，消灭魔法值与跨文件色漂移。
 
 ## 2 规范性条款
-- TK-03-01 应：所有颜色/字号/间距/圆角/阴影/动效时长/断点取值出自 token；组件与页面禁止裸魔法值（audit color-css 严格层 FAIL 拦截）。
+- TK-03-01 应：所有颜色/字号/间距/圆角/**边框宽度**/阴影/动效时长/断点取值出自 token；组件与页面禁止裸魔法值（audit color-css 严格层 FAIL 拦截）。
+- TK-03-02 应：双模式（浅色/暗色）经 `[data-theme="dark"]` 语义层重定义，可挂 `<html>` 或任意容器根；暗色映射见 02·2.1.9，守门见 `audit.py dark_contrast`。
 - TK-03-02 应：色值六进制只允许出现在 token 层文件（`goodmom-ui/src/tokens/*.ts`、theme.css 与受控生成物）。
 - TK-03-03 应：三层引用方向 primitive→alias→component，禁止反向引用或跨层裸值。
 - TK-03-04 应：状态文字/色点使用语义 alias 深色（`--lg-sem-*`，值见 Part 04 与 14.4.5）；白字实底使用 `--mmh-solid-*`（D5）。
@@ -21,9 +22,10 @@
 
 ## 3 参考数值（只列已收敛核心，全表以 02 章为准）
 - 文本：primary `#343A46`／secondary `#4F5B6E`（D7）／tertiary `#9AA2B0`（仅大字号）。
-- 六语义 alias：positive #2f8f76 / info #4a76d0 / attention #b9771c / risk #d35466 / neutral #757e8e / special #7a5ce0。
-- 白字 solid：positive #1e6b52 / attention #9a5a0e / danger #b04052 / info #385cb3 / special #6242b8。
+- 六语义 alias：positive #2F8F76 / info #4A76D0 / attention #B9771C / risk #D35466 / neutral #757E8E / special #7A5CE0。
+- 白字 solid：positive #1E6B52 / attention #9A5A0E / danger #B04052 / info #385CB3 / special #6242B8。
 - 圆角（02.4）：容器 40／卡 lg28·卡 22／控件 20／按钮 26·22·18（底 ≥16）/chip 999。
+- 边框宽度（02.7.1）：hairline/0.5/1/1.5/2px 四档 + 焦点环（`--lg-ring-width:2px`/`--lg-ring-offset:2px`）；禁 3px 以上常规描边；**加粗不许吃布局**（用 `box-shadow`/`outline`，禁改 `border-width`）。
 - 动效/断点/间距：见 Part 07/10/06（各自条款引用 02.2/2.3/2.4、07.2、10.2）。
 
 ## 4 验收

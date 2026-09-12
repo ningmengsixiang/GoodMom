@@ -12,6 +12,8 @@
 - ST-12-04 应：五色（绿/黄/橙/红/紫）仅妊娠风险语境，升级规则 15.2.10：红=当日处置/橙=24h 复核/黄=周内/蓝绿=常规。
 - ST-12-05 应：双通道——颜色+文字/图标；色点 aria-hidden、文字始终存在。
 - ST-12-06 不应：裸禁用无理由；loading 文字跳动/整钮旋转；hover 与 press 同时作为唯一入口。
+- ST-12-07 应：链接状态谱（03 · 3.10）——default/hover/active/focus-visible/loading/disabled，**不自定义 visited 色**；禁用链接不可聚焦。
+- ST-12-08 应：暗色下组件状态同谱生效（语义 alias 切浅档、玻璃降白），状态色不得在暗色下换相（02 · 2.1.9）。
 - 落地：tokens/status.ts（SEMANTIC_COLOR/FIVE_COLOR）、business.ts（semanticOf 40+）、theme.css（呼吸 2.4s/焦点环）。
 
 ## 3 验收
