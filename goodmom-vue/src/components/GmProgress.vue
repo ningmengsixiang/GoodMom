@@ -28,6 +28,12 @@ const props = withDefaults(
     diameter?: number;
     /** 读屏朗读文本，如「已完成 3/5 项」；强烈建议传 */
     valueText?: string;
+    /** 语义色四值；优先级高于 positive/danger（与 React 侧同一契约） */
+    status?: "normal" | "success" | "warning" | "danger";
+    /** 不确定时长（未知进度）—— 滑动条形态，不报具体数值 */
+    indeterminate?: boolean;
+    /** 无 valueText 时的读屏名称 */
+    ariaLabel?: string;
   }>(),
   {
     type: "line",
@@ -37,17 +43,23 @@ const props = withDefaults(
     size: "default",
     diameter: undefined,
     valueText: undefined,
+    status: undefined,
+    indeterminate: false,
+    ariaLabel: undefined,
   }
 );
 
 const clamped = computed(() => Math.max(0, Math.min(100, Number(props.percent) || 0)));
 
-const toneClass = computed(() =>
-  props.danger ? "gm-progress--danger" : props.positive ? "gm-progress--positive" : ""
-);
+const toneClass = computed(() => {
+  const t = props.status ?? (props.danger ? "danger" : props.positive ? "success" : "normal");
+  return t === "normal" ? "" : `gm-progress--${t}`;
+});
+const isIndet = computed(() => props.indeterminate === true);
 
 /** 尺寸映射（对齐 02.4 与 08 · 8.2.5） */
-const sizeMap = { small: { bar: 4, ring: 56, stroke: 6 }, default: { bar: 8, ring: 72, stroke: 8 }, large: { bar: 12, ring: 96, stroke: 10 } } as const;
+/* 08 · 8.2.5 原文高度：默认 6 / 细 3 / 粗 10。原为 4/8/12，与规范不符，本轮修正。 */
+const sizeMap = { small: { bar: 3, ring: 56, stroke: 6 }, default: { bar: 6, ring: 72, stroke: 8 }, large: { bar: 10, ring: 96, stroke: 10 } } as const;
 
 const barHeight = computed(() => sizeMap[props.size].bar);
 const ringSize = computed(() => props.diameter ?? sizeMap[props.size].ring);
@@ -62,12 +74,24 @@ const showRingText = computed(() => props.text || props.type === "circle");
 
 <template>
   <div
-    :class="['gm-progress', type === 'circle' && 'gm-progress--circle', type === 'line' && `gm-progress--${size}`, toneClass]"
+    v-if="isIndet"
+    :class="['gm-progress', 'gm-progress--indet', `gm-progress--${size}`]"
+    role="progressbar"
+    :aria-label="ariaLabel || valueText || '加载中'"
+    aria-valuetext="加载中"
+  >
+    <!-- 未知进度**不报** aria-valuenow：报一个具体数值等于给读屏假数据 -->
+    <i aria-hidden="true" />
+  </div>
+  <div
+    v-else
+    :class="['gm-progress', type === 'circle' && 'gm-progress--circle', type === 'line' && `gm-progress--${size}`, toneClass, clamped >= 100 && 'is-done']"
     role="progressbar"
     :aria-valuenow="clamped"
     aria-valuemin="0"
     aria-valuemax="100"
-    :aria-valuetext="valueText"
+    :aria-label="ariaLabel"
+    :aria-valuetext="valueText || (clamped >= 100 ? '已完成' : `${clamped}%`)"
   >
     <template v-if="type === 'line'">
       <div class="gm-progress__track" :style="{ height: barHeight + 'px' }">

@@ -48,6 +48,7 @@
   --lg-text-placeholder:rgba(88,98,115,.5); --lg-text-disabled:rgba(88,98,115,.4);
   --lg-text-on-accent:#343A46;
   --lg-divider:rgba(58,52,84,.10);
+  --lg-track:rgba(58,52,84,.08);   /* 08 · 8.2.5 进度槽/骨架槽；暗色档翻白 */
   --lg-link:#B23A63; --lg-link-hover:#9E3054;
   --lg-glass-panel:rgba(255,255,255,.14); --lg-glass-card:rgba(255,255,255,.22);
   --lg-glass-control:rgba(255,255,255,.35); --lg-glass-popover:rgba(255,255,255,.60);
@@ -82,7 +83,7 @@
   --lg-page-bg:#1B1A21; --lg-surface:#23222A;
   --lg-text-primary:#F3EFEC; --lg-text-secondary:#C9C4CE; --lg-text-tertiary:#A6ADB9;
   --lg-text-placeholder:rgba(255,255,255,.42); --lg-text-disabled:rgba(255,255,255,.34);
-  --lg-text-on-accent:#1B1A21; --lg-divider:rgba(255,255,255,.10);
+  --lg-text-on-accent:#1B1A21; --lg-divider:rgba(255,255,255,.10); --lg-track:rgba(255,255,255,.12);
   --lg-link:#FFC4D6; --lg-link-hover:#FFA9C2;
   --lg-glass-panel:rgba(255,255,255,.06); --lg-glass-card:rgba(255,255,255,.09);
   --lg-glass-control:rgba(255,255,255,.12); --lg-glass-popover:rgba(38,36,46,.92);

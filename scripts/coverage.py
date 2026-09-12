@@ -20,8 +20,10 @@
 ## 口径（写清楚，避免"作用域比结论窄"）
 
 - 组件（规范全量）：`00-组件总目录.md` 的编号行数。
-- 组件（代码已封装）：`@goodmom/ui` 的 `components/*.tsx` + `adapters/*.tsx`，
-  加上 `@goodmom/vue` 的 `components/*.vue`。**两库分别列出，另给合计**。
+- 组件（代码已封装）：`@goodmom/ui` 的 `components/*.tsx`，加上
+  `@goodmom/vue` 的 `components/*.vue`。**两库分别列出，另给合计**。
+  （React 侧的 `src/adapters/` 已清空移除：Vue 把所有组件放在 `src/components/`，
+  同组件跨包不同目录属 P1-12 第 8 条缺陷，现由 `check-component-contract.py` 守门。）
 - 图标：`icons/lg-icons.svg` 的 `<symbol>` 数 vs `goodmom-icons` registry 唯一 ID 数。
 - 状态文案：`15-妇幼业务词库与状态大典.md` §15.2 表格登记的条数。
 - 示例页：站点 `preview-examples` 模块的 `.view` 数（真值取自站点产物/片段）。
@@ -44,9 +46,8 @@ BASELINE = "docs/coverage.json"
 
 
 def count_react() -> list:
-    return sorted(os.path.basename(x)[:-4]
-                  for x in glob.glob("goodmom-ui/src/components/*.tsx")
-                  + glob.glob("goodmom-ui/src/adapters/*.tsx"))
+    """React 侧组件目录**只有** components/（adapters/ 已废弃并移除，见文件头口径）"""
+    return sorted(os.path.basename(x)[:-4] for x in glob.glob("goodmom-ui/src/components/*.tsx"))
 
 
 def count_vue() -> list:

@@ -8,6 +8,7 @@ import "./styles/index.css";
 
 import GmAvatar from "./components/GmAvatar.vue";
 import GmButton from "./components/GmButton.vue";
+import GmButtonGroup from "./components/GmButtonGroup.vue";
 import GmCard from "./components/GmCard.vue";
 import GmCascader from "./components/GmCascader.vue";
 import GmClientCard from "./components/GmClientCard.vue";
@@ -16,6 +17,7 @@ import GmLink from "./components/GmLink.vue";
 import GmProgress from "./components/GmProgress.vue";
 import GmResponsiveView from "./components/GmResponsiveView.vue";
 import GmRiskPicker from "./components/GmRiskPicker.vue";
+import GmResult from "./components/GmResult.vue";
 import GmSkeleton from "./components/GmSkeleton.vue";
 import GmSpin from "./components/GmSpin.vue";
 import GmStatusTag from "./components/GmStatusTag.vue";
@@ -27,6 +29,7 @@ import GmVirtualList from "./components/GmVirtualList.vue";
 export const components = {
   GmAvatar,
   GmButton,
+  GmButtonGroup,
   GmCard,
   GmCascader,
   GmClientCard,
@@ -35,6 +38,7 @@ export const components = {
   GmProgress,
   GmResponsiveView,
   GmRiskPicker,
+  GmResult,
   GmSkeleton,
   GmSpin,
   GmStatusTag,
@@ -71,6 +75,7 @@ export default GoodMomVue;
 export {
   GmAvatar,
   GmButton,
+  GmButtonGroup,
   GmCard,
   GmCascader,
   GmClientCard,

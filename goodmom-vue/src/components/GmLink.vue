@@ -34,6 +34,8 @@ const props = withDefaults(
     size?: GmLinkSize;
     /** 读屏补充说明（如「查看张三档案」）；无可见文字时必传 */
     ariaLabel?: string;
+    /** 前置图标（与 React 版的 `icon` prop 同契约；也可用 icon 插槽） */
+    icon?: unknown;
   }>(),
   {
     href: undefined,
@@ -74,7 +76,7 @@ function onClick(ev: MouseEvent) {
 <template>
   <!-- 禁用态：非交互元素，tone 保留，不渲染 href / 事件 -->
   <span v-if="disabled" :class="classes" aria-disabled="true">
-    <span v-if="$slots.icon" class="gm-link__ic" aria-hidden="true"><slot name="icon" /></span>
+    <span v-if="$slots.icon || icon" class="gm-link__ic" aria-hidden="true"><slot name="icon">{{ icon }}</slot></span>
     <span class="gm-link__t"><slot /></span>
   </span>
 
@@ -87,7 +89,7 @@ function onClick(ev: MouseEvent) {
     :rel="isExternal ? 'noopener noreferrer' : undefined"
     @click="onClick"
   >
-    <span v-if="$slots.icon" class="gm-link__ic" aria-hidden="true"><slot name="icon" /></span>
+    <span v-if="$slots.icon || icon" class="gm-link__ic" aria-hidden="true"><slot name="icon">{{ icon }}</slot></span>
     <span class="gm-link__t"><slot /></span>
     <span v-if="isExternal" class="gm-link__ex" aria-hidden="true">
       <svg width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.7"
@@ -101,7 +103,7 @@ function onClick(ev: MouseEvent) {
   </a>
 
   <button v-else type="button" :class="classes" :aria-label="ariaLabel" @click="onClick">
-    <span v-if="$slots.icon" class="gm-link__ic" aria-hidden="true"><slot name="icon" /></span>
+    <span v-if="$slots.icon || icon" class="gm-link__ic" aria-hidden="true"><slot name="icon">{{ icon }}</slot></span>
     <span class="gm-link__t"><slot /></span>
   </button>
 </template>

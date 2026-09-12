@@ -1011,9 +1011,30 @@ import { GmIcon } from "@goodmom/icons";
 .gm-mod--preview-index .ringbox .rl{font-size:11px;color:var(--lg-text-tertiary)}
 .gm-mod--preview-index .ringbox svg{width:86px;height:86px}
 .gm-mod--preview-index .skelrow{display:flex;flex-direction:column;gap:8px;margin-top:6px}
-.gm-mod--preview-index .sk{height:12px;border-radius:8px;background:rgba(255,255,255,.6);border:1px solid rgba(255,255,255,.7);animation:skpulse 1.6s ease-in-out infinite}
+.gm-mod--preview-index .sk{height:12px;border-radius:999px;background:rgba(255,255,255,.55);animation:skpulse 1.6s ease-in-out infinite}   /* 08 · 8.2.15：圆角胶囊 + 规范底色；白描边在白底上等于没有边，去掉 */
 @keyframes skpulse{0%,100%{opacity:1}50%{opacity:.55}}
 .gm-mod--preview-index .emptybox{display:flex;flex-direction:column;align-items:center;gap:10px;padding:18px 0;color:var(--lg-text-tertiary)}
+/* ── 结果页三通道 + 进度条（V2.9 新增演示；数值镜像 theme.css 的 .gm-result / .gm-progress，
+   对应 Part 19 · EL-19-03 与 08 · 8.2.5。改这里请同步改组件库，否则演示会与库漂移）── */
+.gm-mod--preview-index .rst{display:flex;gap:12px;flex-wrap:wrap;align-items:stretch}
+.gm-mod--preview-index .rst .one{flex:1;min-width:150px;display:flex;flex-direction:column;align-items:center;gap:6px;
+  padding:14px 10px;border-radius:18px;background:rgba(255,255,255,.5);border:1px solid var(--lg-divider,rgba(58,52,84,.10))}
+.gm-mod--preview-index .rst .ic{width:44px;height:44px;border-radius:50%;display:flex;align-items:center;justify-content:center;
+  background:var(--lg-glass-control);border:1px solid var(--lg-divider,rgba(58,52,84,.10))}
+.gm-mod--preview-index .rst .ic svg{width:22px;height:22px;stroke:currentColor;fill:none;stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round}
+.gm-mod--preview-index .rst .one.s .ic{color:var(--lg-sem-positive,#25715D)} .gm-mod--preview-index .rst .one.e .ic{color:var(--lg-sem-risk,#B72F42)}
+.gm-mod--preview-index .rst .one.w .ic{color:var(--lg-sem-attention,#8D5A15)} .gm-mod--preview-index .rst .one.i .ic{color:var(--lg-sem-info,#3261C1)}
+.gm-mod--preview-index .rst .t{font-size:12.5px;font-weight:600;color:var(--lg-text-primary)}
+.gm-mod--preview-index .rst .one.e .t{color:var(--lg-sem-risk,#B72F42)}
+.gm-mod--preview-index .rst .d{font-size:11px;color:var(--lg-text-secondary);text-align:center;line-height:1.6}
+.gm-mod--preview-index .pgr{display:flex;flex-direction:column;gap:8px;margin-top:8px}
+.gm-mod--preview-index .pgr .tr{height:6px;border-radius:999px;background:rgba(58,52,84,.08);overflow:hidden}
+.gm-mod--preview-index .pgr .tr i{display:block;height:100%;border-radius:999px;background:linear-gradient(90deg,var(--mmh-rose-300,#FFC4D6),var(--mmh-rose-500,#F77FA3))}
+.gm-mod--preview-index .pgr .tr.ind{position:relative}
+.gm-mod--preview-index .pgr .tr.ind i{position:absolute;top:0;bottom:0;left:0;width:34%;animation:gmIndet 1.4s cubic-bezier(.65,0,.35,1) infinite}
+@keyframes gmIndet{from{transform:translateX(-100%)}to{transform:translateX(294%)}}
+.gm-mod--preview-index .pgr .cap{font-size:11px;color:var(--lg-text-secondary)}
+
 .gm-mod--preview-index .emptybox .ec{width:56px;height:56px;border-radius:50%;display:flex;align-items:center;justify-content:center;background:var(--mmh-rose-100,#FFF0F4);border:1px solid var(--mmh-rose-300,#FFC4D6);color:var(--mmh-rose-500,#F77FA3)}
 .gm-mod--preview-index .slrow{display:flex;align-items:center;gap:14px}
 .gm-mod--preview-index input[type=range].lgs{-webkit-appearance:none;appearance:none;flex:1;height:6px;border-radius:999px;outline:none;
@@ -1819,6 +1840,30 @@ import { GmIcon } from "@goodmom/icons";
         <div style="height:8px"></div>
         <div class="emptybox"><span class="ec"><svg class="ni" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 7v5.2l3.4 2"/></svg></span>本周暂无到期随访 · 会自动提醒你</div>
         <p class="note">Empty（玻璃占位）→ 08 · 8.2.12 / Skeleton → 8.2.15</p>
+        <div style="height:14px"></div>
+        <h3 style="margin:0 0 6px">结果页 · 三通道（色 / 文案 / 动作）</h3>
+        <p class="mi-hint" style="margin:0 0 10px">Part 19 · EL-19-03：色走 <code>--lg-sem-*</code>、文案给可理解的下一步、
+        动作给唯一主行动。<b>不暴露内部结构</b>（不显示错误码/堆栈）——错误码属内部结构，界面只给用户能做的事。</p>
+        <div class="rst">
+          <div class="one s"><span class="ic"><svg viewBox="0 0 24 24"><path d="M4.5 12.5l5 5L19.5 7"/></svg></span>
+            <span class="t">已建档</span><span class="d">档案已同步到随访队列</span></div>
+          <div class="one e"><span class="ic"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 7.5v6"/><circle cx="12" cy="17" r=".9"/></svg></span>
+            <span class="t">提交未成功</span><span class="d">网络中断，现场数据已保留 · 可稍后重试</span></div>
+          <div class="one w"><span class="ic"><svg viewBox="0 0 24 24"><path d="M12 4.5 21 19.5H3z"/><path d="M12 10v4"/><circle cx="12" cy="17" r=".9"/></svg></span>
+            <span class="t">结果待复核</span><span class="d">需医护确认后进入下一步</span></div>
+          <div class="one i"><span class="ic"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 11v5.5"/><circle cx="12" cy="7.8" r=".9"/></svg></span>
+            <span class="t">已转诊</span><span class="d">等待接收机构确认</span></div>
+        </div>
+        <p class="note">GmResult · <code>role="alert"</code>（error）/ <code>role="status"</code>（其余）→ Part 19 · EL-19-03</p>
+
+        <div style="height:12px"></div>
+        <h3 style="margin:0 0 6px">进度条 · 已知 / 未知时长</h3>
+        <div class="pgr">
+          <div class="tr"><i style="width:62%" data-w="62"></i></div>
+          <span class="cap">已知进度 62% · 高度三档 3 / 6 / 10（08 · 8.2.5）· 达到 100% 一次白扫光</span>
+          <div class="tr ind"><i></i></div>
+          <span class="cap">不确定时长（indeterminate）· 滑动短条，<b>不报 aria-valuenow</b>（未知进度不得给读屏假数值）</span>
+        </div>
       </div>
     </div>
 
@@ -5134,9 +5179,9 @@ bash scripts/print-manual.sh</pre>
 <h4>① 基础 Foundations</h4>
 <table><thead><tr><th>#</th><th>组件</th><th>端</th><th>PC 规范</th><th>移动规范/形态</th><th>备注</th></tr></thead><tbody><tr><td>1</td><td>设计 Token（颜色/字体/间距/圆角/边框/玻璃/阴影/动效）</td><td>双</td><td>[02](#ch-02)（暗色映射 02 · 2.1.9）</td><td>02 + [10 · 10.2](#ch-10) 移动增量</td><td>双端同源；暗色走 <code>[data-theme="dark"]</code></td></tr><tr><td>2</td><td>Layout / 空间层级 L0–L4</td><td>双</td><td>[01 · 1.4](#ch-01)</td><td>10.3.3 单列卡片流</td><td>PC 空间 OS / 移动卡片流</td></tr><tr><td>3</td><td>Grid 栅格</td><td>PC</td><td>04.4（12 列）</td><td>10.3.3（单列/对排）</td><td>移动不引 12 列</td></tr><tr><td>4</td><td>Space 间距</td><td>双</td><td>[02 · 2.3](#ch-02)</td><td>10.2</td><td>—</td></tr><tr><td>5</td><td>Typography 版式</td><td>双</td><td>[02 · 2.2](#ch-02)</td><td>10.2 移动字号（正文 ≥16）</td><td>—</td></tr><tr><td>6</td><td>Divider 分割线</td><td>双</td><td><code>--lg-divider</code></td><td>同款细线</td><td>—</td></tr><tr><td>7</td><td>Link 链接</td><td>双</td><td>[03 · 3.10](#ch-03)</td><td>11.2.18（热区 ≥44）</td><td>文字型操作：默认/强调/弱化/危险/外链</td></tr><tr><td>8</td><td>图标系统 Icon（LG 自绘库）</td><td>双</td><td>[09](#ch-09)</td><td>09 · 9.4 移动尺寸档 22–24</td><td><code>lg-icon-*</code> 77 枚</td></tr><tr><td>9</td><td>动效 / 微交互</td><td>双</td><td>[07](#ch-07)</td><td>07 + 10.7 触控版（去 hover）</td><td>双端红线一致</td></tr></tbody></table>
 <h4>② 导航 Navigation</h4>
-<table><thead><tr><th>#</th><th>组件</th><th>端</th><th>PC 规范</th><th>移动规范/形态</th><th>备注</th></tr></thead><tbody><tr><td>10</td><td>Button 按钮</td><td>双</td><td>[03 · 3.2](#ch-03)</td><td>10.4（M44/L48，可全宽）</td><td>类型/状态/尺寸/形态全谱（对齐 Arco）见 03 · 3.2.4</td></tr><tr><td>11</td><td>FloatButton / Fab / BackTop</td><td>双</td><td>08 · 8.2.1</td><td>10.4.1（TabBar 之上）</td><td>PC 右下 / 移动抬升</td></tr><tr><td>12</td><td>NavBar 顶部导航</td><td>M</td><td>—（PC 用 TopBar 3.4.2）</td><td>[10 · 10.3.1](#ch-10)</td><td>返回+标题+操作</td></tr><tr><td>13</td><td>TabBar 底部标签</td><td>M</td><td>—</td><td>10.3.2</td><td>3–5 Tab 玻璃胶囊</td></tr><tr><td>14</td><td>Navigation 侧栏导航</td><td>PC</td><td>[03 · 3.4.1](#ch-03)</td><td>⏸（移动禁用）</td><td>—</td></tr><tr><td>15</td><td>Breadcrumb 面包屑</td><td>PC</td><td>03.4.3</td><td>⏸</td><td>移动用 NavBar 层级</td></tr><tr><td>16</td><td>Tabs 页签</td><td>双</td><td>03.4.3 + [07 · 7.3.5](#ch-07)</td><td>10.4（横滑）</td><td>指示条双端同语言</td></tr><tr><td>17</td><td>Segmented 分段</td><td>双</td><td>03.4.3</td><td>[11 · 11.2.2](#ch-11)</td><td>移动可横滑</td></tr><tr><td>18</td><td>SearchBar 搜索栏</td><td>M</td><td>—（PC 全局搜索 3.4.2）</td><td>11.2.1</td><td>聚焦态/建议列表</td></tr><tr><td>19</td><td>IndexBar 索引栏</td><td>M</td><td>—</td><td>11.2.3</td><td>资产/通讯录</td></tr><tr><td>20</td><td>Anchor 锚点</td><td>PC</td><td>08 · 8.2.4</td><td>⏸</td><td>大文档页</td></tr><tr><td>21</td><td>Steps 步骤条</td><td>双</td><td>08 · 8.2.2</td><td>10.4（竖版）</td><td>流程引导</td></tr><tr><td>22</td><td>Pagination 分页</td><td>PC</td><td>08 · 8.2.3</td><td>⏸（移动改 LoadMore #23）</td><td>—</td></tr><tr><td>23</td><td>LoadMore 加载更多</td><td>M</td><td>—</td><td>10.4.1</td><td>到底胶囊</td></tr><tr><td>24</td><td>Dropdown 下拉菜单</td><td>PC</td><td>03.5.4</td><td>⏸（移动改 #50 Picker）</td><td>—</td></tr><tr><td>25</td><td>PullRefresh 下拉刷新</td><td>M</td><td>—</td><td>10.4.1</td><td>玻璃进度环</td></tr><tr><td>26</td><td>Drawer / SideSheet</td><td>双</td><td>[03 · 3.9](#ch-03)</td><td>10.4（底部上滑）</td><td>PC 右侧 / 移动底部</td></tr><tr><td>27</td><td>BottomSheet 底部面板</td><td>M</td><td>—</td><td>10.4.1</td><td>选择/详情承载</td></tr><tr><td>28</td><td>Tree 树形控件</td><td>PC ⏸</td><td>08.3</td><td>⏸</td><td>低频，见 08.3</td></tr></tbody></table>
+<table><thead><tr><th>#</th><th>组件</th><th>端</th><th>PC 规范</th><th>移动规范/形态</th><th>备注</th></tr></thead><tbody><tr><td>10</td><td>Button 按钮</td><td>双</td><td>[03 · 3.2](#ch-03)</td><td>10.4（M44/L48，可全宽）</td><td>类型/状态/尺寸/形态全谱见 03 · 3.2.4；<b>层级决策 3.2.6 / 仅图标 3.2.8 / 加载与禁用 3.2.9 / 双库契约 3.2.10</b></td></tr><tr><td>10b</td><td>Button.Group 按钮组 / 分段控件</td><td>双</td><td>[03 · 3.2.7](#ch-03)</td><td>10.4（全宽堆叠用 long）</td><td>三形态 attached/round/segmented；segmented 走 radiogroup 语义 + 方向键；两侧同名 <code>GmButtonGroup</code>（<code>check-component-contract.py</code> 守门）</td></tr><tr><td>11</td><td>FloatButton / Fab / BackTop</td><td>双</td><td>08 · 8.2.1</td><td>10.4.1（TabBar 之上）</td><td>PC 右下 / 移动抬升</td></tr><tr><td>12</td><td>NavBar 顶部导航</td><td>M</td><td>—（PC 用 TopBar 3.4.2）</td><td>[10 · 10.3.1](#ch-10)</td><td>返回+标题+操作</td></tr><tr><td>13</td><td>TabBar 底部标签</td><td>M</td><td>—</td><td>10.3.2</td><td>3–5 Tab 玻璃胶囊</td></tr><tr><td>14</td><td>Navigation 侧栏导航</td><td>PC</td><td>[03 · 3.4.1](#ch-03)</td><td>⏸（移动禁用）</td><td>—</td></tr><tr><td>15</td><td>Breadcrumb 面包屑</td><td>PC</td><td>03.4.3</td><td>⏸</td><td>移动用 NavBar 层级</td></tr><tr><td>16</td><td>Tabs 页签</td><td>双</td><td>03.4.3 + [07 · 7.3.5](#ch-07)</td><td>10.4（横滑）</td><td>指示条双端同语言</td></tr><tr><td>17</td><td>Segmented 分段</td><td>双</td><td>03.4.3</td><td>[11 · 11.2.2](#ch-11)</td><td>移动可横滑</td></tr><tr><td>18</td><td>SearchBar 搜索栏</td><td>M</td><td>—（PC 全局搜索 3.4.2）</td><td>11.2.1</td><td>聚焦态/建议列表</td></tr><tr><td>19</td><td>IndexBar 索引栏</td><td>M</td><td>—</td><td>11.2.3</td><td>资产/通讯录</td></tr><tr><td>20</td><td>Anchor 锚点</td><td>PC</td><td>08 · 8.2.4</td><td>⏸</td><td>大文档页</td></tr><tr><td>21</td><td>Steps 步骤条</td><td>双</td><td>08 · 8.2.2</td><td>10.4（竖版）</td><td>流程引导</td></tr><tr><td>22</td><td>Pagination 分页</td><td>PC</td><td>08 · 8.2.3</td><td>⏸（移动改 LoadMore #23）</td><td>—</td></tr><tr><td>23</td><td>LoadMore 加载更多</td><td>M</td><td>—</td><td>10.4.1</td><td>到底胶囊</td></tr><tr><td>24</td><td>Dropdown 下拉菜单</td><td>PC</td><td>03.5.4</td><td>⏸（移动改 #50 Picker）</td><td>—</td></tr><tr><td>25</td><td>PullRefresh 下拉刷新</td><td>M</td><td>—</td><td>10.4.1</td><td>玻璃进度环</td></tr><tr><td>26</td><td>Drawer / SideSheet</td><td>双</td><td>[03 · 3.9](#ch-03)</td><td>10.4（底部上滑）</td><td>PC 右侧 / 移动底部</td></tr><tr><td>27</td><td>BottomSheet 底部面板</td><td>M</td><td>—</td><td>10.4.1</td><td>选择/详情承载</td></tr><tr><td>28</td><td>Tree 树形控件</td><td>PC ⏸</td><td>08.3</td><td>⏸</td><td>低频，见 08.3</td></tr></tbody></table>
 <h4>③ 展示 Data Display</h4>
-<table><thead><tr><th>#</th><th>组件</th><th>端</th><th>PC 规范</th><th>移动规范/形态</th><th>备注</th></tr></thead><tbody><tr><td>29</td><td>Card 卡片</td><td>双</td><td>[03 · 3.3](#ch-03)</td><td>10.4</td><td>三层结构同源</td></tr><tr><td>30</td><td>KPI / Statistic 统计卡</td><td>双</td><td>03.3.2、[04 · 4.3.1](#ch-04)</td><td>10.5.1</td><td>数字聚焦</td></tr><tr><td>31</td><td>Cell 单元行（分组）</td><td>M</td><td>—</td><td>[11 · 11.2.4](#ch-11)</td><td>组标题+玻璃卡</td></tr><tr><td>32</td><td>List 列表</td><td>双</td><td>08 · 8.2.14</td><td>10.4（行卡片 52+）</td><td>—</td></tr><tr><td>33</td><td>Table 表格</td><td>PC</td><td>[03 · 3.7](#ch-03)</td><td>⏸（移动改卡片/横滑窄表 10.5.3）</td><td>—</td></tr><tr><td>34</td><td>Collapse 折叠面板</td><td>双</td><td>PC ⏸（08.3）</td><td>11.2.6</td><td>移动细则先行</td></tr><tr><td>35</td><td>Swiper 轮播</td><td>M</td><td>—</td><td>11.2.7</td><td>运营位/图片组</td></tr><tr><td>36</td><td>NoticeBar 公告条</td><td>M</td><td>—（PC 用 Banner #69）</td><td>11.2.8</td><td>单条滚动</td></tr><tr><td>37</td><td>Timeline 时间线/事件流</td><td>双</td><td>04.3.9</td><td>10.4（竖版）</td><td>告警/流水线</td></tr><tr><td>38</td><td>Descriptions 描述列表</td><td>PC</td><td>08 · 8.2.11</td><td>⏸（移动改详情页 Cell）</td><td>—</td></tr><tr><td>39</td><td>Empty 空状态</td><td>双</td><td>08 · 8.2.12</td><td>08 移动化（图标 48）</td><td>—</td></tr><tr><td>40</td><td>Result 结果页</td><td>M</td><td>—</td><td>11.2.10</td><td>成功/失败全屏态</td></tr><tr><td>41</td><td>Image 图片</td><td>双</td><td>03 卡片体系</td><td>懒加载+圆角卡</td><td>—</td></tr><tr><td>42</td><td>ImageViewer 图片预览</td><td>M</td><td>—</td><td>11.2.9</td><td>全屏缩放</td></tr><tr><td>43</td><td>Avatar 头像</td><td>双</td><td>03.4.2</td><td>同款</td><td>—</td></tr><tr><td>44</td><td>Badge / Tag / 状态点</td><td>双</td><td>[03 · 3.6](#ch-03)</td><td>同款（热区 44）</td><td>—</td></tr><tr><td>45</td><td>Skeleton / Spin</td><td>双</td><td>08 · 8.2.15</td><td>同款移动档</td><td>—</td></tr><tr><td>46</td><td>Progress 进度</td><td>双</td><td>08 · 8.2.5</td><td>10.4</td><td>线性/环形</td></tr><tr><td>47</td><td>Rate 评分</td><td>M</td><td>PC ⏸（08.3）</td><td>11.2.12</td><td>提交型评分</td></tr></tbody></table>
+<table><thead><tr><th>#</th><th>组件</th><th>端</th><th>PC 规范</th><th>移动规范/形态</th><th>备注</th></tr></thead><tbody><tr><td>29</td><td>Card 卡片</td><td>双</td><td>[03 · 3.3](#ch-03)</td><td>10.4</td><td>三层结构同源</td></tr><tr><td>30</td><td>KPI / Statistic 统计卡</td><td>双</td><td>03.3.2、[04 · 4.3.1](#ch-04)</td><td>10.5.1</td><td>数字聚焦</td></tr><tr><td>31</td><td>Cell 单元行（分组）</td><td>M</td><td>—</td><td>[11 · 11.2.4](#ch-11)</td><td>组标题+玻璃卡</td></tr><tr><td>32</td><td>List 列表</td><td>双</td><td>08 · 8.2.14</td><td>10.4（行卡片 52+）</td><td>—</td></tr><tr><td>33</td><td>Table 表格</td><td>PC</td><td>[03 · 3.7](#ch-03)</td><td>⏸（移动改卡片/横滑窄表 10.5.3）</td><td>—</td></tr><tr><td>34</td><td>Collapse 折叠面板</td><td>双</td><td>PC ⏸（08.3）</td><td>11.2.6</td><td>移动细则先行</td></tr><tr><td>35</td><td>Swiper 轮播</td><td>M</td><td>—</td><td>11.2.7</td><td>运营位/图片组</td></tr><tr><td>36</td><td>NoticeBar 公告条</td><td>M</td><td>—（PC 用 Banner #69）</td><td>11.2.8</td><td>单条滚动</td></tr><tr><td>37</td><td>Timeline 时间线/事件流</td><td>双</td><td>04.3.9</td><td>10.4（竖版）</td><td>告警/流水线</td></tr><tr><td>38</td><td>Descriptions 描述列表</td><td>PC</td><td>08 · 8.2.11</td><td>⏸（移动改详情页 Cell）</td><td>—</td></tr><tr><td>39</td><td>Empty 空状态</td><td>双</td><td>08 · 8.2.12</td><td>08 移动化（图标 48）</td><td>—</td></tr><tr><td>40</td><td>Result 结果页</td><td>M</td><td>✅ GmResult</td><td>11.2.10</td><td>成功/失败全屏态；<b>三通道</b>（色/文案/动作），见 Part 19 · EL-19-03</td></tr><tr><td>41</td><td>Image 图片</td><td>双</td><td>03 卡片体系</td><td>懒加载+圆角卡</td><td>—</td></tr><tr><td>42</td><td>ImageViewer 图片预览</td><td>M</td><td>—</td><td>11.2.9</td><td>全屏缩放</td></tr><tr><td>43</td><td>Avatar 头像</td><td>双</td><td>03.4.2</td><td>同款</td><td>—</td></tr><tr><td>44</td><td>Badge / Tag / 状态点</td><td>双</td><td>[03 · 3.6](#ch-03)</td><td>同款（热区 44）</td><td>—</td></tr><tr><td>45</td><td>Skeleton / Spin</td><td>双</td><td>08 · 8.2.15</td><td>同款移动档</td><td>—</td></tr><tr><td>46</td><td>Progress 进度</td><td>双</td><td>08 · 8.2.5</td><td>10.4</td><td>线性/环形</td></tr><tr><td>47</td><td>Rate 评分</td><td>M</td><td>PC ⏸（08.3）</td><td>11.2.12</td><td>提交型评分</td></tr></tbody></table>
 <h4>④ 数据录入 Data Entry</h4>
 <table><thead><tr><th>#</th><th>组件</th><th>端</th><th>PC 规范</th><th>移动规范/形态</th><th>备注</th></tr></thead><tbody><tr><td>48</td><td>Input / TextArea</td><td>双</td><td>[03 · 3.5.1](#ch-03)</td><td>10.6.2（44 高/16px）</td><td>防 iOS 缩放</td></tr><tr><td>49</td><td>Select 选择器</td><td>双</td><td>03.5.4</td><td>⏸（移动改 #50）</td><td>—</td></tr><tr><td>50</td><td>Picker（滚轮）</td><td>M</td><td>—</td><td>10.6.3</td><td>底部弹层</td></tr><tr><td>51</td><td>Date / Time Picker</td><td>双</td><td>08 · 8.2.9</td><td>10.6.3（滚轮/原生）</td><td>—</td></tr><tr><td>52</td><td>Radio / Checkbox</td><td>双</td><td>03.5.2</td><td>10.6.4</td><td>—</td></tr><tr><td>53</td><td>Switch 开关</td><td>双</td><td>03.5.3</td><td>10.6.4（48×28）</td><td>弹簧动效双端</td></tr><tr><td>54</td><td>Slider 滑杆</td><td>双</td><td>08 · 8.2.6</td><td>08 移动化（热区 ≥44）</td><td>—</td></tr><tr><td>55</td><td>Stepper 步进器</td><td>M（PC 用 #56）</td><td>—</td><td>11.2.11</td><td>长按连发</td></tr><tr><td>56</td><td>InputNumber</td><td>PC</td><td>08 · 8.2.7</td><td>⏸</td><td>精确输入</td></tr><tr><td>57</td><td>Upload 上传</td><td>双</td><td>08 · 8.2.10（拖拽）</td><td>11.2.13（拍照/相册/九宫格）</td><td>—</td></tr><tr><td>58</td><td>Form 表单</td><td>双</td><td>08 · 8.2.8</td><td>08 移动化（一列/键盘联动）</td><td>—</td></tr><tr><td>59</td><td>OTP / 验证码</td><td>M（PC ⏸）</td><td>08.3</td><td>11.2.14</td><td>—</td></tr><tr><td>60</td><td>Cascader 级联选择</td><td>双</td><td>[03 · 3.5.5](#ch-03)</td><td>[10 · 10.11.3](#ch-10)（多列 Picker）</td><td>2026-09 解禁；≤4 级</td></tr><tr><td>61</td><td>Transfer / TreeSelect</td><td>⏸ 双端</td><td>08.3</td><td>08.3</td><td>低频</td></tr><tr><td>62</td><td>ColorPicker / 评分(PC)</td><td>⏸</td><td>08.3</td><td>—</td><td>低频</td></tr></tbody></table>
 <h4>⑤ 操作与反馈 Feedback</h4>
@@ -5647,6 +5692,78 @@ box-shadow: 0 1px 2px rgba(178,58,99,.06);</pre>
 <ul><li>按钮有文字时，装饰图标必须 <code>aria-hidden="true"</code>（或 class 约定隐藏）；纯图标按钮必须 <code>aria-label</code>/<code>title</code>/可视文本三选一。</li><li>图标不承载颜色语义；危险等语义仍由文字 + 语义色双通道表达。</li></ul>
 <p><b>6) Do / Don't</b></p>
 <ul><li>✔ 左图标+文字用固定 gap（6–8）；✔ 箭头类 hover 位移 2px；✔ 图标 stroke 继承 <code>currentColor</code>。</li><li>✘ 图标贴字（gap 0）；✘ 用 emoji 当图标；✘ 图标被 flex 拉伸变形；✘ 文字按钮为对齐而塞图标。</li></ul>
+<h4>3.2.6 层级与用法决策（Button Hierarchy）</h4>
+<blockquote>目的：终结"每个区块都放一个主按钮"。按钮的层级表达的<b>是页面意图的唯一性</b>，<br>不是装饰强度。同一视口内主行动越少，用户越知道下一步该点哪。</blockquote>
+<p><b>1) 层级定义（四层，从高到低）</b></p>
+<table><thead><tr><th>层级</th><th>用哪个</th><th>一屏允许几个</th><th>语义</th></tr></thead><tbody><tr><td>L1 主行动</td><td><code>type="primary"</code></td><td><b>1 个</b>（表单对话框 / 空态页可各 1 个）</td><td>这个页面最想让你做的事</td></tr><tr><td>L2 次行动</td><td><code>type="secondary"</code> / <code>type="default"</code></td><td>≤2 个</td><td>并行但次要的动作（取消、暂存）</td></tr><tr><td>L3 弱行动</td><td><code>type="outline"</code> / <code>type="dashed"</code></td><td>不限</td><td>列举型动作（导出、添加、筛选）</td></tr><tr><td>L4 行内动作</td><td><code>type="text"</code></td><td>不限</td><td>表格行/卡片内的最低干扰操作</td></tr></tbody></table>
+<p><b>2) 选择决策树（按顺序问）</b></p>
+<pre>这个动作是&quot;本页最想让人做的事&quot;吗？
+├─ 是  → primary（若同屏已有 primary，则本动作降级为 secondary）
+└─ 否  → 它和主行动并列出现在按钮区吗？
+        ├─ 是  → secondary / default
+        └─ 否  → 它在重复出现的容器里（表格行、卡片、列表项）吗？
+                ├─ 是  → text（≥3 个动作时只留 1 个可见，其余收进&quot;更多&quot;）
+                └─ 否  → outline / dashed</pre>
+<p><b>3) 破坏性动作</b></p>
+<ul><li>用 <code>status="danger"</code>，且<b>必须</b>满足：① 文案写清对象（"删除「张女士」的档案"而不是"删除"）；</li></ul>
+<p>② 二次确认（Popconfirm / Modal，见 03 · 3.9）；③ 确认层的确定按钮才是 danger 实底， 触发它的入口用 <code>type="text"</code> + danger 字色，避免页面出现两个红色实底。</p>
+<ul><li><b>禁止</b>用 danger 表达"普通但重要"（如"提交"）——红色只留给不可逆。</li></ul>
+<p><b>4) 排布规则</b></p>
+<table><thead><tr><th>场景</th><th>顺序</th><th>说明</th></tr></thead><tbody><tr><td>对话框底栏</td><td>左对齐或右对齐<b>取消 → 确定</b></td><td>中文界面按阅读顺序"取消在前"，与 macOS 相反；两端对齐时取消在左</td></tr><tr><td>表单页底部</td><td><b>主行动在最右</b>，其后可跟 text 级"暂存草稿"</td><td>移动端全宽堆叠：主行动在上</td></tr><tr><td>表格行内</td><td>全部 text 级，最多 2 个可见</td><td>更多动作收进"更多 ›"，禁止行内出现实底按钮</td></tr><tr><td>移动端底栏</td><td><code>long</code> 全宽，主行动在下</td><td>底部安全区 <code>env(safe-area-inset-bottom)</code></td></tr></tbody></table>
+<p><b>5) 一屏多主行动的处理</b></p>
+<p>若确有并行主行动（如"保存并提交 / 保存草稿"），只保留<b>一个</b> primary， 另一个降为 <code>secondary</code>；两者都是"完成"语义时，把主次判断交给顺序与文案， 不要靠两个 primary 并列。</p>
+<hr>
+<h4>3.2.7 按钮组 Button.Group</h4>
+<blockquote>三个及以上、语义同级、可连续选择的动作才用组。<b>两个按钮不用组</b>（直接并排 + 间距 12）。</blockquote>
+<p><b>1) 三形态</b></p>
+<table><thead><tr><th>形态</th><th><code>shape</code></th><th>视觉</th><th>用途</th></tr></thead><tbody><tr><td>相连组</td><td><code>attached</code>（默认）</td><td>兄弟相连，首左/末右保留外圆角，中间直角共享边，相邻边只留一条</td><td>并列同级动作（日/周/月）</td></tr><tr><td>胶囊组</td><td><code>round</code></td><td>同上但两端全圆角</td><td>同上，用在圆角语境（与 round 按钮混排）</td></tr><tr><td>分段控件</td><td><code>segmented</code></td><td>玻璃槽 + 内部滑块，<b>有且只有一个</b>选中项</td><td>视图切换、筛选档位</td></tr></tbody></table>
+<p><b>2) 语义与键盘（硬性）</b></p>
+<table><thead><tr><th>形态</th><th>role</th><th>子项要求</th><th>键盘</th></tr></thead><tbody><tr><td>attached / round</td><td><code>group</code></td><td>普通 <code>&lt;GmButton&gt;</code></td><td>各自 Tab 可达</td></tr><tr><td>segmented</td><td><code>radiogroup</code></td><td><code>role="radio"</code> + <code>aria-checked</code>，roving tabindex（选中项 <code>0</code>，其余 <code>-1</code>）</td><td><code>←/→/↑/↓</code> 移动并激活，<code>Home/End</code> 到首尾</td></tr></tbody></table>
+<blockquote>分段控件必须用 <b>radio 语义</b>而不是 toggle：它的本质是"多选一"，读屏需要播报<br>"第 2 项，共 4 项，已选中"。这与 <code>GmRiskPicker</code> 的既有做法一致。</blockquote>
+<p><b>3) 几何约束</b></p>
+<ul><li>组内成员<b>必须同类型、同尺寸</b>（混排会让共享边的描边与高度对不齐）。</li><li>组内文字长度差 ≤2 倍；超出时给固定宽度，不靠 padding 撑。</li><li>组的可访问名（<code>ariaLabel</code>）<b>必填</b>；<code>segmented</code> 缺它时组件在开发期告警。</li></ul>
+<p><b>4) 代码契约</b></p>
+<pre>&lt;GmButtonGroup shape=&quot;segmented&quot; ariaLabel=&quot;视图切换&quot;&gt;
+  {[&quot;列表&quot;,&quot;看板&quot;,&quot;日历&quot;].map((t, i) =&gt; (
+    &lt;GmButton key={t} role=&quot;radio&quot; aria-checked={i === 0} tabIndex={i === 0 ? 0 : -1}&gt;{t}&lt;/GmButton&gt;
+  ))}
+&lt;/GmButtonGroup&gt;</pre>
+<hr>
+<h4>3.2.8 仅图标按钮 Icon-only Button</h4>
+<p><b>1) 判定</b>：无文字子节点（React 无 <code>children</code> / Vue 无默认插槽）即视为仅图标。</p>
+<p><b>2) 可访问名（硬性）</b>：必须给 <code>ariaLabel</code>。两个库在开发期对"仅图标 + 无 <code>ariaLabel</code>"<b>显式告警</b>， 不静默通过 —— 只靠图标无法被读屏识别，且在生产环境几乎不可能被发现。</p>
+<p><b>3) 形状与尺寸</b>：用 <code>shape="circle"</code>，宽=高（<code>aspect-ratio:1</code>）；尺寸档与文本按钮一致 （mini 26 / small 32 / default 40 / large 48）。<b>不要</b>用 <code>round</code> 当图标按钮——宽高不等会变椭圆。</p>
+<p><b>4) 位置与数量</b>：工具栏/顶栏用；同组图标按钮间距 ≥8；≥5 个图标动作时改用"更多"溢出菜单。</p>
+<p><b>5) 提示</b>：可加 <code>title</code> 作为鼠标悬停补充，但 <code>ariaLabel</code> 才是唯一可访问名来源（<code>title</code> 不能替代）。</p>
+<hr>
+<h4>3.2.9 加载 · 禁用 · 幂等（Loading / Disabled）</h4>
+<p><b>1) 加载（<code>loading</code>）</b></p>
+<table><thead><tr><th>规则</th><th>要求</th></tr></thead><tbody><tr><td>内容不换</td><td>文案保持不变（"提交中"由<b>文案</b>改，不靠按钮消失再出现）</td></tr><tr><td>宽度不跳</td><td>指示器<b>替换前置图标位</b>，宽度由原内容撑开；禁止整钮换成一个转圈导致布局位移</td></tr><tr><td>语义</td><td>加 <code>aria-busy="true"</code> 且 <code>disabled</code>（读屏可知"正在处理"，且键盘不会重复触发）</td></tr><tr><td>时长</td><td>预计 &gt;400ms 才进 loading；&lt;400ms 直接出结果（避免闪一下的转圈）</td></tr><tr><td>视觉</td><td>细环 0.9s/圈，<code>currentColor</code> 继承（深浅底通吃）；<code>prefers-reduced-motion</code> 下停止旋转（见 07.5）</td></tr></tbody></table>
+<p><b>2) 禁用（<code>disabled</code>）</b></p>
+<ul><li><b>必须给理由</b>：禁用旁边或 Tooltip 里说明"为什么不能点"（"档案未归档，暂不可提交"）。</li></ul>
+<p>裸禁用是本系统的红线（03 · 3.2.4 反面清单）。</p>
+<ul><li>键盘不可聚焦（原生 <code>disabled</code>）；若希望"可聚焦以便读屏说明原因"，改用 <code>aria-disabled="true"</code> 并自行拦点击。</li><li><code>opacity .55</code>，<b>不去掉文字</b>（保留可读的说明信息）。</li></ul>
+<p><b>3) 幂等</b>：所有会产生副作用的按钮（提交/删除/支付）在请求期间必须 <code>loading</code>， 且组件层在 <code>loading</code> 时拦截点击（<code>preventDefault + stopPropagation</code>）——不依赖调用方自觉。</p>
+<hr>
+<h4>3.2.10 双库契约表（@goodmom/ui ↔ @goodmom/vue）</h4>
+<blockquote>同名的 <code>GmButton</code> 在两个包里<b>必须</b>是同一个契约：同名 props、同默认值、同 className、<br>同 ARIA、同 DOM 结构。由 <code>scripts/check-component-contract.py</code> 机械比对。</blockquote>
+<table><thead><tr><th>prop</th><th>类型</th><th>默认值</th><th>说明</th></tr></thead><tbody><tr><td><code>type</code></td><td><code>primary</code> \</td><td><code>secondary</code> \</td><td><code>outline</code> \</td><td><code>dashed</code> \</td><td><code>text</code> \</td><td><code>default</code></td><td><code>primary</code></td><td>视觉类型</td></tr><tr><td><code>status</code></td><td><code>default</code> \</td><td><code>success</code> \</td><td><code>warning</code> \</td><td><code>danger</code></td><td><code>default</code></td><td>语义状态色</td></tr><tr><td><code>size</code></td><td><code>mini</code> \</td><td><code>small</code> \</td><td><code>default</code> \</td><td><code>large</code></td><td><code>default</code></td><td>尺寸档</td></tr><tr><td><code>shape</code></td><td><code>round</code> \</td><td><code>circle</code> \</td><td><code>square</code></td><td><code>round</code></td><td>形状</td></tr><tr><td><code>long</code></td><td><code>boolean</code></td><td><code>false</code></td><td>全宽</td></tr><tr><td><code>disabled</code></td><td><code>boolean</code></td><td><code>false</code></td><td>禁用</td></tr><tr><td><code>loading</code></td><td><code>boolean</code></td><td><code>false</code></td><td>加载中</td></tr><tr><td><code>nativeType</code></td><td><code>button</code> \</td><td><code>submit</code> \</td><td><code>reset</code></td><td><code>button</code></td><td>原生 type</td></tr><tr><td><code>ariaLabel</code></td><td><code>string</code></td><td>—</td><td>仅图标按钮必填</td></tr><tr><td><code>icon</code></td><td>节点 / 插槽</td><td>—</td><td>前置图标</td></tr></tbody></table>
+<p><b>类名契约（两侧完全一致，共用同一份 CSS）</b></p>
+<pre>gm-btn
+gm-btn--{type}                 gm-btn--primary / --secondary / --outline / --dashed / --text / --default
+gm-btn--{status}               仅当 status !== default
+gm-btn--sz-{size}              --sz-mini / --sz-small / --sz-default / --sz-large
+gm-btn--circle | --square      仅当 shape !== round
+gm-btn--long | --icon-only
+gm-btn--disabled | --loading
+gm-btn__spinner | gm-btn__icon</pre>
+<blockquote><b><code>--sz-</code> 前缀不是风格问题</b>：尺寸类若直接叫 <code>--default</code> / <code>--small</code>，就会与<br>"类型"类的 <code>.gm-btn--default</code> 同名同特异性 —— 后写的规则会静默吃掉类型底色<br>（实测踩过：<code>type="primary"</code> 的按钮被尺寸规则覆盖成灰底）。<br><br><code>--icon-only</code> 的宽度由 <code>.gm-btn--icon-only</code> + <code>.gm-btn--sz-*</code> 组合决定，不写内联样式。</blockquote>
+<p><b>守住契约的机制（三层，缺一不可）</b></p>
+<table><thead><tr><th>层</th><th>工具</th><th>防的是</th></tr></thead><tbody><tr><td>CSS 值</td><td><code>scripts/check-style-parity.py</code></td><td>两库同名选择器的<b>解析值</b>漂移；并检出"只存在于单侧"的选择器</td></tr><tr><td>props / 默认值 / 类名</td><td><code>scripts/check-component-contract.py</code></td><td>两库 API 面漂移（含默认外观相反这类问题）</td></tr><tr><td>镜像</td><td><code>scripts/audit.py mirror_sync()</code></td><td>React 包 ↔ 应用镜像逐字节漂移</td></tr></tbody></table>
+<p><b>历史教训（本节存在的原因）</b>：React 侧曾用 <code>.gm-btn.arco-btn-*</code>、Vue 侧用 <code>.gm-btn--*</code>， 两套选择器<b>交集为空</b> —— 于是"双库解析值比对"从来没有比过按钮一眼，而 <code>&lt;GmButton&gt;确定&lt;/GmButton&gt;</code> 在 React 是中性方角按钮、在 Vue 是粉色胶囊按钮。 <b>只比共同选择器是不够的，必须同时检出"单侧独有"。</b></p>
+<hr>
+<h4>3.2.11 验收清单（Button DoD）</h4>
+<ul><li>[ ] 一屏 primary ≤1；破坏性动作走 danger + 二次确认 + 对象名写进文案</li><li>[ ] 尺寸档取自四档；交互圆角 ≥16px（02 · 2.4 底线）</li><li>[ ] 仅图标按钮有 <code>ariaLabel</code>；<code>role="radio"</code>/<code>aria-checked</code> 的分段控件有 <code>ariaLabel</code></li><li>[ ] <code>loading</code> 有 <code>aria-busy</code> 且宽度不跳；<code>disabled</code> 有可见理由</li><li>[ ] 类型 / 状态 / 尺寸 / 形状四维的正交组合在 Storybook 有样例</li><li>[ ] <code>python3 scripts/check-component-contract.py</code> 与 <code>check-style-parity.py</code> 均为 0 差异</li><li>[ ] 渲染级对比度：按实底承载的字 ≥4.5:1（<code>python3 scripts/a11y-dom.py</code>）</li></ul>
 <hr>
 <h3>3.3 卡片与面板 Card / Panel</h3>
 <h4>3.3.1 玻璃面板（L1，页面大容器）</h4>
@@ -6232,7 +6349,7 @@ document.querySelectorAll(&#x27;.panel,.kpi&#x27;).forEach(el =&gt; io.observe(e
 <h4>8.2.4 Anchor（锚点）</h4>
 <ul><li>右侧纵向玻璃小胶囊（L4 淡版），列表项 12px 次级色；当前项 13px 紫 600 + 左侧 2px 紫渐变竖条（收缩展开 200ms）。</li><li>页面滚动联动自动高亮（工程层）。</li></ul>
 <h4>8.2.5 Progress（进度）</h4>
-<ul><li><b>线性</b>：轨道 <code>rgba(58,52,84,0.08)</code> 圆角胶囊，进度填充紫渐变，圆头端点；成功绿 / 危险红按语义。高度：默认 6，细 3，粗 10。</li><li><b>环形</b>：同 04.3.4 Donut 环样式（细环 10px），中心百分比 <code>tabular-nums</code>。</li><li>动效：填充宽度 700ms ease-out（07 M3）；达到 100% 一次白扫光提示。</li></ul>
+<ul><li><b>线性</b>：轨道 <code>rgba(58,52,84,0.08)</code> 圆角胶囊（暗色档改 <code>rgba(255,255,255,.12)</code>），进度填充<b>品牌玫渐变</b>（原文「紫渐变」属 LG 紫引擎期残留，品牌化后为玫），圆头端点；成功 / 警告 / 危险按 **<code>--lg-sem-*</code> 语义 alias**（暗色档自动换浅档）。高度：默认 6，细 3，粗 10（档名 <code>size: small|default|large</code>，两库同名同值）。</li><li><b>不确定时长（indeterminate）</b>：进度未知时（如结果条数未知）用滑动短条，<b>不得报 <code>aria-valuenow</code></b> —— 未知进度报具体数值等于给读屏假数据。</li><li><b>环形</b>：同 04.3.4 Donut 环样式（细环 10px），中心百分比 <code>tabular-nums</code>。</li><li>动效：填充宽度 700ms ease-out（07 M3）；达到 100% 一次白扫光提示。</li></ul>
 <h4>8.2.6 Slider（滑杆）</h4>
 <ul><li>轨道玻璃内阴影凹槽；滑块=白色玻璃圆（20px）+ 紫描边，hover 放大 1.05（spring 220ms），拖拽时出现紫辉光。</li><li>已选段紫渐变；刻度 label caption。</li><li>大屏调节场景（如告警阈值）建议滑块 + 右侧 InputNumber 联动。</li></ul>
 <h4>8.2.7 InputNumber（数字步进器）</h4>
@@ -6252,7 +6369,7 @@ document.querySelectorAll(&#x27;.panel,.kpi&#x27;).forEach(el =&gt; io.observe(e
 <h4>8.2.14 List（列表）</h4>
 <ul><li>玻璃卡 + 行（高 52–64）：行首可选玻璃头像/图标、中部主副文本（body / caption）、行尾操作（Ghost 图标钮）。</li><li>hover 淡白玻璃底；行间 hairline 分隔。选代 3.7 表格同款行组件即可（规格同源）。</li></ul>
 <h4>8.2.15 Skeleton / Spin（加载）</h4>
-<ul><li>Skeleton：玻璃条 <code>rgba(255,255,255,0.55)</code> 圆角胶囊骨架 + 1.6s 上下微透明呼吸（α .5↔.85，ease-in-out）——<b>禁止左右扫光马赛克</b>。</li><li>Spin：18–40px 细环（2px），紫渐变 0.9s/圈旋转；深底/按钮内为白/浅色。仅允许这一个旋转元素。</li><li>首次进入用 Skeleton，刷新用局部 Spin，二者不叠加。</li></ul>
+<ul><li>Skeleton：玻璃条 <code>rgba(255,255,255,0.55)</code> 圆角胶囊骨架 + 1.6s 上下微透明呼吸（α .5↔.85，ease-in-out）——<b>禁止左右扫光马赛克</b>。</li><li>Spin：18–40px 细环（2px），<b>品牌玫渐变</b> 0.9s/圈旋转（原文写「紫渐变」属 LG 紫引擎期残留，品牌化后为玫；<code>GmSpin</code> 的 <code>size</code> 入参夹到 [18,40]，并支持 <code>sm/md/lg/xl</code> = 18/24/32/40）；深底/按钮内用 <code>tone="inverse"</code>（白/浅色环）。仅允许这一个旋转元素。</li><li>Spin 防闪：<code>delay</code> 默认 300ms（EL-19-06「loading 与内容不得闪切」的落地手段）。</li><li>首次进入用 Skeleton，刷新用局部 Spin，二者不叠加。</li></ul>
 <h4>8.2.16 Banner（通知横幅）</h4>
 <ul><li>玻璃横幅条（圆角 20，L3）：左侧语义图标（success/warning/error/info，见 09 图标库 s-*），正文 14px，右侧关闭（Ghost 图标钮）；可折叠。</li><li>大屏化：做成窄横幅贴顶部玻璃栏下方，重要告警才出现；出现 400ms 上滑淡入。</li></ul>
 <h4>8.2.17 Popconfirm（气泡确认）</h4>

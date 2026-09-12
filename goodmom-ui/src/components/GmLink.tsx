@@ -23,6 +23,8 @@ export interface GmLinkProps {
   disabled?: boolean;
   /** 前置图标（16px 槽位） */
   icon?: React.ReactNode;
+  /** 仅图标链接的可访问名（无文字时必须传）。与 Vue 版同名 prop */
+  ariaLabel?: string;
   /** 字号 12 / 14 / 16（class 后缀 --sm / --lg） */
   size?: "small" | "default" | "large";
   onClick?: React.MouseEventHandler<HTMLElement>;
@@ -59,6 +61,7 @@ const GmLink = ({
   external = false,
   disabled = false,
   icon,
+  ariaLabel,
   size = "default",
   onClick,
   className,
@@ -93,7 +96,7 @@ const GmLink = ({
   /* 禁用态：非交互元素，tone 保持，不渲染 href / onClick */
   if (disabled) {
     return (
-      <span className={cls} aria-disabled="true" style={style}>
+      <span className={cls} aria-disabled="true" aria-label={ariaLabel} style={style}>
         {inner}
       </span>
     );
@@ -106,6 +109,7 @@ const GmLink = ({
         href={href}
         style={style}
         onClick={onClick}
+        aria-label={ariaLabel}
         {...(isExternal ? { target: "_blank", rel: "noopener noreferrer" } : {})}
       >
         {inner}
@@ -114,7 +118,7 @@ const GmLink = ({
   }
 
   return (
-    <button type="button" className={cls} style={style} onClick={onClick}>
+    <button type="button" className={cls} style={style} onClick={onClick} aria-label={ariaLabel}>
       {inner}
     </button>
   );

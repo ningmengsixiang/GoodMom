@@ -30,13 +30,16 @@ export interface GmStatusTagProps {
   /** 显式覆盖颜色（hex 或 CSS 变量表达式）；传入后不再走语义通道 */
   color?: string;
   size?: "small" | "default" | "large";
+  /** 可关闭：显示关闭按钮并触发 onClose（与 Vue 版 `close` 事件同契约） */
   closable?: boolean;
+  /** 关闭回调。Vue 版是 `@close` 事件，两侧必须都提供，否则 React 侧关闭后无法恢复 */
+  onClose?: () => void;
 }
 
 const TINT_PCT = 13;
 const BORDER_PCT = 32;
 
-const GmStatusTag = ({ children, semantic = "neutral", five, color, size = "small", closable }: GmStatusTagProps) => {
+const GmStatusTag = ({ children, semantic = "neutral", five, color, size = "small", closable, onClose }: GmStatusTagProps) => {
   /* 取色优先级：显式 color > 五色 > 语义。
      语义/五色走 CSS 变量（可随暗色档与业务覆盖切换），显式 color 则原样使用。 */
   const base = color
@@ -58,7 +61,9 @@ const GmStatusTag = ({ children, semantic = "neutral", five, color, size = "smal
 
   return (
     <span
-      className={"gm-tag gm-status-tag" + sizeCls}
+      /* 只挂 gm-status-tag：`.gm-status-tag` 已是完整的胶囊样式，
+         再挂通用的 `.gm-tag` 会叠加两层内边距与描边（视觉发胖）。 */
+      className={"gm-status-tag" + sizeCls}
       style={style}
       data-semantic={color || five ? undefined : semantic}
     >
@@ -66,7 +71,7 @@ const GmStatusTag = ({ children, semantic = "neutral", five, color, size = "smal
       {srLabel && <span className="gm-sr-only">{srLabel}：</span>}
       {children}
       {closable && (
-        <button type="button" className="gm-status-tag__close" aria-label="移除">
+        <button type="button" className="gm-status-tag__close" aria-label="移除" onClick={onClose}>
           ✕
         </button>
       )}

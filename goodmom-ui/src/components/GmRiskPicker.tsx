@@ -5,11 +5,13 @@ import { FIVE_COLOR, FIVE_VAR, GmFive } from "../tokens/status";
  *  可访问性（D 审查 P0-2）：radiogroup 语义 + 键盘方向键/Home/End 切换，焦点可见 */
 export interface GmRiskPickerProps {
   value?: GmFive; onChange?: (v: GmFive) => void; disabled?: boolean;
+  /** 单选组的可访问名，默认「妊娠风险等级」（等价的 Vue 版同名 prop） */
+  ariaLabel?: string;
 }
 const LABEL: Record<GmFive, string> = { m1: "绿 · 低风险", m2: "黄 · 一般风险", m3: "橙 · 较高风险", m4: "红 · 高风险", m5: "紫 · 合并传染病" };
 const ORDER: GmFive[] = ["m1", "m2", "m3", "m4", "m5"];
 
-const GmRiskPicker = ({ value, onChange, disabled }: GmRiskPickerProps) => {
+const GmRiskPicker = ({ value, onChange, disabled, ariaLabel = "妊娠风险等级" }: GmRiskPickerProps) => {
   /* P1-12：原实现手拼 "var(--mmh-m5-" + k + ",…)"，因为 React 侧没有 FIVE_VAR 常量
      （Vue 有、React 无 —— 两个库的 Token 引用能力不对等）。现统一走 FIVE_VAR。 */
   const cssColor = (k: GmFive) => `var(${FIVE_VAR[k]},${FIVE_COLOR[k]})`; /* 业务侧可覆盖 */
@@ -36,7 +38,7 @@ const GmRiskPicker = ({ value, onChange, disabled }: GmRiskPickerProps) => {
   };
 
   return (
-    <div className="gm-risk" role="radiogroup" aria-label="妊娠风险等级" onKeyDown={onKeyDown}>
+    <div className="gm-risk" role="radiogroup" aria-label={ariaLabel} onKeyDown={onKeyDown}>
       {ORDER.map((k) => (
         <button
           type="button"

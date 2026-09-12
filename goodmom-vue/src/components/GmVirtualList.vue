@@ -29,6 +29,8 @@ export interface GmVirtualListProps<T> {
   endThreshold?: number;
   /** 默认「长列表」 */
   ariaLabel?: string;
+  /** 行 key 生成器（与 React 版同名 prop）。不传则用下标 —— 排序/筛选后会复用错行 */
+  itemKey?: (item: T, index: number) => string | number;
 }
 
 const props = withDefaults(defineProps<GmVirtualListProps<T>>(), {
@@ -36,6 +38,7 @@ const props = withDefaults(defineProps<GmVirtualListProps<T>>(), {
   onEndReached: undefined,
   endThreshold: 4,
   ariaLabel: "长列表",
+  itemKey: undefined,
 });
 
 const slots = defineSlots<{
@@ -139,7 +142,7 @@ defineExpose({
       <div class="gm-vlist__inner" :style="{ height: totalHeight + 'px', transform: `translateY(${start * itemHeight}px)` }">
         <div
           v-for="(item, i) in visible"
-          :key="start + i"
+          :key="itemKey ? itemKey(item, start + i) : start + i"
           class="gm-vlist__item"
           role="listitem"
           :aria-posinset="start + i + 1"

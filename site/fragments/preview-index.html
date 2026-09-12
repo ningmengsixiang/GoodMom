@@ -596,9 +596,30 @@ footer a{color:var(--lg-sem-special);text-decoration:none;font-weight:500}
 .ringbox .rl{font-size:11px;color:var(--lg-text-tertiary)}
 .ringbox svg{width:86px;height:86px}
 .skelrow{display:flex;flex-direction:column;gap:8px;margin-top:6px}
-.sk{height:12px;border-radius:8px;background:rgba(255,255,255,.6);border:1px solid rgba(255,255,255,.7);animation:skpulse 1.6s ease-in-out infinite}
+.sk{height:12px;border-radius:999px;background:rgba(255,255,255,.55);animation:skpulse 1.6s ease-in-out infinite}   /* 08 · 8.2.15：圆角胶囊 + 规范底色；白描边在白底上等于没有边，去掉 */
 @keyframes skpulse{0%,100%{opacity:1}50%{opacity:.55}}
 .emptybox{display:flex;flex-direction:column;align-items:center;gap:10px;padding:18px 0;color:var(--lg-text-tertiary)}
+/* ── 结果页三通道 + 进度条（V2.9 新增演示；数值镜像 theme.css 的 .gm-result / .gm-progress，
+   对应 Part 19 · EL-19-03 与 08 · 8.2.5。改这里请同步改组件库，否则演示会与库漂移）── */
+.rst{display:flex;gap:12px;flex-wrap:wrap;align-items:stretch}
+.rst .one{flex:1;min-width:150px;display:flex;flex-direction:column;align-items:center;gap:6px;
+  padding:14px 10px;border-radius:18px;background:rgba(255,255,255,.5);border:1px solid var(--lg-divider,rgba(58,52,84,.10))}
+.rst .ic{width:44px;height:44px;border-radius:50%;display:flex;align-items:center;justify-content:center;
+  background:var(--lg-glass-control);border:1px solid var(--lg-divider,rgba(58,52,84,.10))}
+.rst .ic svg{width:22px;height:22px;stroke:currentColor;fill:none;stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round}
+.rst .one.s .ic{color:var(--lg-sem-positive,#25715D)} .rst .one.e .ic{color:var(--lg-sem-risk,#B72F42)}
+.rst .one.w .ic{color:var(--lg-sem-attention,#8D5A15)} .rst .one.i .ic{color:var(--lg-sem-info,#3261C1)}
+.rst .t{font-size:12.5px;font-weight:600;color:var(--lg-text-primary)}
+.rst .one.e .t{color:var(--lg-sem-risk,#B72F42)}
+.rst .d{font-size:11px;color:var(--lg-text-secondary);text-align:center;line-height:1.6}
+.pgr{display:flex;flex-direction:column;gap:8px;margin-top:8px}
+.pgr .tr{height:6px;border-radius:999px;background:rgba(58,52,84,.08);overflow:hidden}
+.pgr .tr i{display:block;height:100%;border-radius:999px;background:linear-gradient(90deg,var(--mmh-rose-300,#FFC4D6),var(--mmh-rose-500,#F77FA3))}
+.pgr .tr.ind{position:relative}
+.pgr .tr.ind i{position:absolute;top:0;bottom:0;left:0;width:34%;animation:gmIndet 1.4s cubic-bezier(.65,0,.35,1) infinite}
+@keyframes gmIndet{from{transform:translateX(-100%)}to{transform:translateX(294%)}}
+.pgr .cap{font-size:11px;color:var(--lg-text-secondary)}
+
 .emptybox .ec{width:56px;height:56px;border-radius:50%;display:flex;align-items:center;justify-content:center;background:var(--mmh-rose-100,#FFF0F4);border:1px solid var(--mmh-rose-300,#FFC4D6);color:var(--mmh-rose-500,#F77FA3)}
 .slrow{display:flex;align-items:center;gap:14px}
 input[type=range].lgs{-webkit-appearance:none;appearance:none;flex:1;height:6px;border-radius:999px;outline:none;
@@ -1406,6 +1427,30 @@ section.block:first-of-type{margin-top:8px}
         <div style="height:8px"></div>
         <div class="emptybox"><span class="ec"><svg class="ni" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 7v5.2l3.4 2"/></svg></span>本周暂无到期随访 · 会自动提醒你</div>
         <p class="note">Empty（玻璃占位）→ 08 · 8.2.12 / Skeleton → 8.2.15</p>
+        <div style="height:14px"></div>
+        <h3 style="margin:0 0 6px">结果页 · 三通道（色 / 文案 / 动作）</h3>
+        <p class="mi-hint" style="margin:0 0 10px">Part 19 · EL-19-03：色走 <code>--lg-sem-*</code>、文案给可理解的下一步、
+        动作给唯一主行动。<b>不暴露内部结构</b>（不显示错误码/堆栈）——错误码属内部结构，界面只给用户能做的事。</p>
+        <div class="rst">
+          <div class="one s"><span class="ic"><svg viewBox="0 0 24 24"><path d="M4.5 12.5l5 5L19.5 7"/></svg></span>
+            <span class="t">已建档</span><span class="d">档案已同步到随访队列</span></div>
+          <div class="one e"><span class="ic"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 7.5v6"/><circle cx="12" cy="17" r=".9"/></svg></span>
+            <span class="t">提交未成功</span><span class="d">网络中断，现场数据已保留 · 可稍后重试</span></div>
+          <div class="one w"><span class="ic"><svg viewBox="0 0 24 24"><path d="M12 4.5 21 19.5H3z"/><path d="M12 10v4"/><circle cx="12" cy="17" r=".9"/></svg></span>
+            <span class="t">结果待复核</span><span class="d">需医护确认后进入下一步</span></div>
+          <div class="one i"><span class="ic"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 11v5.5"/><circle cx="12" cy="7.8" r=".9"/></svg></span>
+            <span class="t">已转诊</span><span class="d">等待接收机构确认</span></div>
+        </div>
+        <p class="note">GmResult · <code>role="alert"</code>（error）/ <code>role="status"</code>（其余）→ Part 19 · EL-19-03</p>
+
+        <div style="height:12px"></div>
+        <h3 style="margin:0 0 6px">进度条 · 已知 / 未知时长</h3>
+        <div class="pgr">
+          <div class="tr"><i style="width:62%" data-w="62"></i></div>
+          <span class="cap">已知进度 62% · 高度三档 3 / 6 / 10（08 · 8.2.5）· 达到 100% 一次白扫光</span>
+          <div class="tr ind"><i></i></div>
+          <span class="cap">不确定时长（indeterminate）· 滑动短条，<b>不报 aria-valuenow</b>（未知进度不得给读屏假数值）</span>
+        </div>
       </div>
     </div>
 

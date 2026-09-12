@@ -83,7 +83,7 @@
 .gm-btn--loading{opacity:.9;cursor:wait}
 /* loading 指示器：继承 currentColor，深浅底通吃 */
 .gm-btn__spinner{width:14px;height:14px;flex:none;border-radius:50%;display:inline-block;
-  border:2px solid rgba(128,128,128,.35);border-top-color:currentColor;animation:gmSpin .8s linear infinite}
+  border:2px solid rgba(128,128,128,.35);border-top-color:currentColor;animation:gmSpin .9s linear infinite}
 .gm-btn__icon{display:inline-flex;align-items:center;flex:none}
 /* 03 · 3.2.5 文字 + 图标组合：容器几何居中，图标 flex:none 防挤压 */
 .gm-btn--icon-only{padding:0;width:40px}
@@ -220,16 +220,29 @@
   background:var(--lg-glass-control);border:1px dashed var(--lg-divider-hairline);color:var(--lg-link);
   box-shadow:inset 0 1px 0 rgba(255,255,255,.8)}
 .gm-empty .t{font-size:13px;color:var(--lg-text-secondary);font-weight:600}
-.gm-empty .d{font-size:11.5px;color:var(--lg-text-tertiary);line-height:1.7}
+.gm-empty .d{font-size:12px;color:var(--lg-text-secondary);line-height:1.7}   /* 02 · 2.1.1：小字回次级色 */
 .gm-spin{display:inline-flex;align-items:center;gap:8px;color:var(--lg-link);font-size:12px}
+/* Spin：深底 / 实底按钮内用白·浅色环（08 · 8.2.15「深底/按钮内为白/浅色」） */
+.gm-spin--inverse{color:rgba(255,255,255,.92)}
+.gm-spin--inverse i{border-color:rgba(255,255,255,.30);border-top-color:#FFFFFF}
 .gm-spin i{flex:none;border-radius:50%;border:2px solid rgba(232,93,143,.22);border-top-color:var(--mmh-rose-600);
-  animation:gmSpin .8s linear infinite;display:inline-block}
+  animation:gmSpin .9s linear infinite;display:inline-block}
 @keyframes gmSpin{to{transform:rotate(360deg)}}
+/* ── 08 · 8.2.15 Skeleton / Spin（V2.9 完善）───────────────────────────────
+   ① 骨架**禁止左右扫光马赛克**（规范原话）。旧实现用 `linear-gradient(90deg,…)` +
+      `background-position` 动画＝横向扫光，且周期 1.15s —— 与规范「上下微透明呼吸
+      α .5↔.85、1.6s、ease-in-out」双违。现改为纯 opacity 呼吸。
+      注：站点演示（preview-index 的 `.sk` / `skpulse`）一直是**按规范实现**的，
+      即"演示是对的、库是错的" —— 库才是开发者会复制的那一份，必须修库。
+   ② 骨架形状＝**圆角胶囊**（旧值 7px 是圆角矩形，不符）。
+   ③ Spin＝**0.9s/圈**（旧值 0.8s）。                                 */
 .gm-skeleton{display:flex;flex-direction:column;gap:9px;width:100%}
-.gm-skeleton i{display:block;height:12px;border-radius:7px;
-  background:linear-gradient(90deg,var(--lg-divider) 25%,rgba(255,255,255,.85) 50%,var(--lg-divider) 75%);
-  background-size:200% 100%;animation:gmSk 1.15s linear infinite}
-@keyframes gmSk{to{background-position:-200% 0}}
+.gm-skeleton i{display:block;height:12px;border-radius:999px;background:rgba(255,255,255,.55);
+  animation:gmBreath 1.6s ease-in-out infinite}
+.gm-skeleton i:nth-child(2){animation-delay:.12s}
+.gm-skeleton i:nth-child(3){animation-delay:.24s}
+.gm-skeleton i:nth-child(n+4){animation-delay:.36s}
+@keyframes gmBreath{0%,100%{opacity:.5}50%{opacity:.85}}
 
 /* ─────────────────────────────────────────────────────────────────────────
    03 · 3.10 GmLink 链接 / 文字按钮
@@ -335,13 +348,38 @@
    08 · 8.2.5 GmProgress 进度条（自包含，替代原 Arco Progress）
    ───────────────────────────────────────────────────────────────────────── */
 .gm-progress{display:flex;align-items:center;gap:10px;width:100%}
-.gm-progress__track{position:relative;flex:1;min-width:0;height:8px;border-radius:999px;background:var(--lg-divider);overflow:hidden}
-.gm-progress--sm .gm-progress__track{height:4px}
-.gm-progress--lg .gm-progress__track{height:12px}
+/* ── 08 · 8.2.5 进度条（V2.9 完善）─────────────────────────────────────────
+   1. 轨道＝规范原文 `rgba(58,52,84,.08)` 圆角胶囊（暗色档翻白），不再是 --lg-divider 的 .10；
+   2. 高度＝规范原文 默认 6 / 细 3 / 粗 10（原 8/4/12 不符）；
+   3. **类名修正**：组件输出的是 `--small/--default/--large`，而这里写的是 `--sm/--lg`
+      —— 从来对不上，是**死代码**（尺寸实际靠内联 style 生效）。现按真实类名写。
+   4. 语义色走 `--lg-sem-*` alias（02 · 2.1.5），随暗色档自动换浅档。 */
+.gm-progress__track{position:relative;flex:1;min-width:0;height:6px;border-radius:999px;
+  background:var(--lg-track,rgba(58,52,84,.08));overflow:hidden}
+.gm-progress--small .gm-progress__track{height:3px}
+.gm-progress--large .gm-progress__track{height:10px}
 .gm-progress__fill{height:100%;border-radius:999px;background:var(--mmh-grad-primary);
   transition:width var(--lg-t-slow) var(--lg-ease-out)}
-.gm-progress--positive .gm-progress__fill{background:var(--mmh-grad-mint)}
-.gm-progress--danger .gm-progress__fill{background:linear-gradient(90deg,#F79AA8,#B04052)}
+.gm-progress--success .gm-progress__fill{background:var(--lg-sem-positive)}
+.gm-progress--warning .gm-progress__fill{background:var(--lg-sem-attention)}
+.gm-progress--danger .gm-progress__fill{background:var(--lg-sem-risk)}
+.gm-progress--positive .gm-progress__fill{background:var(--lg-sem-positive)}   /* 旧类名保留兼容 */
+
+/* 达到 100%：**一次**白扫光（08 · 8.2.5），只跑一轮；只动 transform（07 性能红线） */
+.gm-progress.is-done .gm-progress__fill{position:relative;overflow:hidden}
+.gm-progress.is-done .gm-progress__fill::after{content:"";position:absolute;inset:0;border-radius:999px;
+  background:linear-gradient(90deg,transparent,rgba(255,255,255,.75),transparent);
+  animation:gmProgressSweep .7s ease-out 1 both}
+@keyframes gmProgressSweep{from{transform:translateX(-100%)}to{transform:translateX(100%)}}
+
+/* 不确定时长（indeterminate）：滑动的短条，且**不报** aria-valuenow */
+.gm-progress--indet{position:relative;display:block;width:100%;height:6px;border-radius:999px;
+  background:var(--lg-track,rgba(58,52,84,.08));overflow:hidden}
+.gm-progress--indet.gm-progress--small{height:3px}
+.gm-progress--indet.gm-progress--large{height:10px}
+.gm-progress--indet i{position:absolute;top:0;bottom:0;left:0;width:34%;border-radius:999px;
+  background:var(--mmh-grad-primary);animation:gmProgressIndet 1.4s cubic-bezier(.65,0,.35,1) infinite}
+@keyframes gmProgressIndet{from{transform:translateX(-100%)}to{transform:translateX(294%)}}
 .gm-progress__text{flex:none;font-size:12px;color:var(--lg-text-secondary);font-variant-numeric:tabular-nums}
 .gm-progress--circle{display:inline-flex;flex-direction:column;gap:6px;width:auto}
 .gm-progress__ring{position:relative;display:inline-flex;align-items:center;justify-content:center}
@@ -358,3 +396,32 @@
   .gm-cascader__trigger{min-width:0}
   .gm-cascader__panel{left:0;right:0}
 }
+
+
+/* ══════════════════════════════════════════════════════════════════════════
+   03 · 3.2.2 / Part 19 · EL-19-03 —— GmResult 结果页（V2.9 补齐）
+   三通道：色（语义 alias）· 文案（title/desc）· 动作（actionText 按钮）。
+   与 .gm-empty 的分工：Empty＝没有数据但一切正常；Result＝操作有结论。
+   ══════════════════════════════════════════════════════════════════════════ */
+.gm-result{display:flex;flex-direction:column;align-items:center;justify-content:center;
+  gap:8px;padding:32px 20px;text-align:center}
+.gm-result__ic{width:56px;height:56px;border-radius:50%;display:flex;align-items:center;justify-content:center;
+  background:var(--lg-glass-control);border:var(--lg-border-1) solid var(--lg-divider);
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.8)}
+/* 色通道：图标与标题取语义 alias（02 · 2.1.5），暗色档自动换浅档 */
+.gm-result--success .gm-result__ic{color:var(--lg-sem-positive)}
+.gm-result--error   .gm-result__ic{color:var(--lg-sem-risk)}
+.gm-result--warning .gm-result__ic{color:var(--lg-sem-attention)}
+.gm-result--info    .gm-result__ic{color:var(--lg-sem-info)}
+.gm-result__t{font-size:14px;font-weight:600;color:var(--lg-text-primary)}
+.gm-result--error .gm-result__t{color:var(--lg-sem-risk)}
+.gm-result__d{font-size:12px;color:var(--lg-text-secondary);line-height:1.7;max-width:34em}
+/* 动作通道：唯一主行动（03 · 3.2.4），走主按钮配方 */
+.gm-result__act{margin-top:6px;height:40px;padding:0 20px;border-radius:22px;cursor:pointer;
+  font-family:var(--lg-font);font-size:14px;font-weight:600;border:var(--lg-border-1) solid transparent;
+  background:var(--mmh-grad-action-hc,#F77FA3);color:var(--lg-text-on-accent);
+  box-shadow:0 1px 2px rgba(178,58,99,.22),0 8px 20px rgba(240,127,163,.30);
+  transition:transform var(--lg-t-base) var(--lg-ease-spring),box-shadow var(--lg-t-base) ease}
+.gm-result__act:hover{transform:translateY(-1px);box-shadow:0 2px 4px rgba(178,58,99,.24),0 12px 26px rgba(240,127,163,.38)}
+.gm-result__act:active{transform:scale(.96)}
+.gm-result__act:focus-visible{outline:var(--lg-ring-width) solid var(--lg-ring-color);outline-offset:var(--lg-ring-offset)}

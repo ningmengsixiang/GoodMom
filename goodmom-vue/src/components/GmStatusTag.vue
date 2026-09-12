@@ -16,7 +16,7 @@
  * ② 挂载后用 DOM textContent 校正（覆盖任意自定义插槽结构，最可靠）。
  */
 import { computed, onMounted, ref, Fragment, Text, type VNode } from "vue";
-import { FIVE_COLOR, FIVE_VAR, SEMANTIC_VAR, type GmFive, type GmSemantic } from "../tokens/status";
+import { FIVE_COLOR, FIVE_VAR, SEMANTIC_LABEL, SEMANTIC_VAR, type GmFive, type GmSemantic } from "../tokens/status";
 import { semanticOf } from "../tokens/business";
 import { cx } from "../utils";
 
@@ -99,6 +99,13 @@ const style = computed(() => ({
   borderColor: `color-mix(in srgb, ${resolved.value} 32%, transparent)`,
 }));
 
+/**
+ * 颜色之外的第二通道：把**语义档名**显式给读屏（如「注意：待随访」）。
+ * 可见文字往往不直接说出语义档（「待随访」→ attention），只靠颜色传达属 WCAG 1.4.1 违规。
+ * 显式传 color/five 时不加（调用方自定义的非语义着色没有档名可说）。
+ */
+const srLabel = computed(() => (props.color || props.five ? "" : SEMANTIC_LABEL[derived.value]));
+
 /** small 复用 default 档视觉（12px / padding 3 10） */
 const sizeClass = computed(() => `gm-status-tag--${props.size === "small" ? "default" : props.size}`);
 </script>
@@ -106,6 +113,7 @@ const sizeClass = computed(() => `gm-status-tag--${props.size === "small" ? "def
 <template>
   <span :class="cx('gm-status-tag', sizeClass)" :style="style">
     <span class="gm-status-dot" :style="{ background: resolved }" aria-hidden="true" />
+    <span v-if="srLabel" class="gm-sr-only">{{ srLabel }}：</span>
     <span ref="textRef" data-gm-text><slot /></span>
     <button v-if="closable" type="button" class="gm-status-tag__close" :aria-label="closeLabel" @click="emit('close', $event)">
       ✕

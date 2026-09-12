@@ -542,10 +542,158 @@ def logo_guard():
     return True
 
 
+
+# ══════════════════════════════════════════════════════════════════════════
+# 状态与加载族 · 规范符合性守门（08 · 8.2.5/8.2.15、Part 19 三态）
+#
+# 每一条都对应一个**已发生过的真实漂移**，全部有规范原文可引：
+#   · 骨架曾实现为「左右扫光马赛克 + 1.15s」—— 08 · 8.2.15 明文**禁止扫光**，且周期应为 1.6s；
+#     同期站点演示却一直是对的（"演示对、库错"），说明这类漂移只靠人眼不可能守住。
+#   · 骨架圆角曾为 7px 圆角矩形 —— 规范要求**圆角胶囊**。
+#   · Spin 曾为 0.8s/圈 —— 08 · 8.2.15 与 EL-19-02 都写 0.9s。
+#   · GmSpin 默认尺寸曾为 16 —— 规范细环区间是 18–40。
+#   · GmResult（EL-19-03 的 Error 三通道）曾**在两个库里都不存在**，只登记在 00 目录 #40。
+#   · 结果/错误组件不得暴露内部结构 —— 故不得出现 code/stack 类 prop（EL-19-03 明文）。
+# ══════════════════════════════════════════════════════════════════════════
+
+def loading_spec():
+    import io as _io
+    bad = []
+
+    REACT_CSS = "goodmom-ui/src/theme.css"
+    VUE_CSS = "goodmom-vue/src/styles/components.css"
+
+    for f in (REACT_CSS, VUE_CSS):
+        if not os.path.exists(f):
+            bad.append("%s 不存在" % f); continue
+        css = _io.open(f, encoding="utf-8").read()
+
+        # ① 骨架禁止左右扫光：不得出现由 background-position 驱动的关键帧
+        if re.search(r"@keyframes\s+gm\w*\{[^}]*background-position", css) or "background-position:-200% 0" in css:
+            bad.append("%s：骨架仍用 background-position 扫光 —— 08 · 8.2.15 明文禁止左右扫光马赛克" % f)
+
+        # ② 骨架＝圆角胶囊 + 规范底色 + 呼吸关键帧
+        m = re.search(r"\.gm-skeleton i\{([^}]*)\}", css)
+        if not m:
+            bad.append("%s：缺少 .gm-skeleton i 规则" % f)
+        else:
+            body = m.group(1)
+            if "border-radius:999px" not in body:
+                bad.append("%s：骨架不是圆角胶囊（08 · 8.2.15）" % f)
+            if "rgba(255,255,255,.55)" not in body:
+                bad.append("%s：骨架底不是规范值 rgba(255,255,255,.55)（08 · 8.2.15）" % f)
+            if "gmBreath" not in body:
+                bad.append("%s：骨架动画应为 gmBreath（1.6s 上下微透明呼吸）" % f)
+        if "@keyframes gmBreath" not in css:
+            bad.append("%s：缺少 gmBreath 关键帧" % f)
+        elif not re.search(r"@keyframes\s+gmBreath\{0%,100%\{opacity:\.5\}50%\{opacity:\.85\}\}", css):
+            bad.append("%s：gmBreath 必须为 α .5↔.85（08 · 8.2.15）" % f)
+
+        # ③ Spin 周期必须 0.9s
+        if re.search(r"gmSpin\s+(?!\.9s)[\d.]+s", css):
+            bad.append("%s：Spin 周期不是 0.9s/圈（08 · 8.2.15 / EL-19-02）" % f)
+
+        # ④ 进度条高度档必须为规范值 3/6/10
+        for cls, h in (("small", "3px"), ("large", "10px")):
+            if f == REACT_CSS:
+                if not re.search(r"\.gm-progress--%s[^{]*\{[^}]*height:%s" % (cls, h), css):
+                    bad.append("%s：进度条 --%s 档高度应为 %s（08 · 8.2.5）" % (f, cls, h))
+            else:
+                if not re.search(r"\.gm-progress--%s[^{]*\{[^}]*height:%s" % (cls, h), css):
+                    bad.append("%s：进度条 --%s 档高度应为 %s（08 · 8.2.5）" % (f, cls, h))
+
+    # ④b 站点演示的骨架必须与库同口径（演示是别人会照抄的那份）
+    demo = "site/fragments/preview-index.html"
+    if os.path.exists(demo):
+        t = _io.open(demo, encoding="utf-8").read()
+        m = re.search(r"\.sk\{([^}]*)\}", t)
+        if m:
+            body = m.group(1)
+            if "border-radius:999px" not in body:
+                bad.append("站点演示 .sk 不是圆角胶囊 —— 与库不一致会被照抄（08 · 8.2.15）")
+            if "rgba(255,255,255,.55)" not in body:
+                bad.append("站点演示 .sk 底色不是规范值 rgba(255,255,255,.55)（08 · 8.2.15）")
+            if re.search(r"border:1px solid rgba\(255,\s*255,\s*255", body):
+                bad.append("站点演示 .sk 仍带白描边 —— 在白底上等于没有边（V2.9 已全站收口）")
+
+    # ⑤ Spin 尺寸下限 18（08 · 8.2.15 细环 18–40）
+    spin = "goodmom-ui/src/components/GmSpin.tsx"
+    if os.path.exists(spin):
+        t = _io.open(spin, encoding="utf-8").read()
+        m = re.search(r"SIZE_MIN\s*=\s*(\d+)", t)
+        if not m or int(m.group(1)) < 18:
+            bad.append("GmSpin 尺寸下限低于 18 —— 08 · 8.2.15 规定细环 18–40px")
+
+    # ⑥ GmResult 必须两库都有，且**不得**暴露内部结构（EL-19-03）
+    for f in ("goodmom-ui/src/components/GmResult.tsx", "goodmom-vue/src/components/GmResult.vue"):
+        if not os.path.exists(f):
+            bad.append("%s 缺失 —— Part 19 · EL-19-03 要求 Error 三通道（色/文案/动作）" % f)
+            continue
+        t = _io.open(f, encoding="utf-8").read()
+        if re.search(r"^\s*(code|stack|trace)\??\s*:", t, re.M):
+            bad.append("%s：出现了 code/stack 类 prop —— EL-19-03 明文禁止暴露内部结构" % f)
+        if "role=" not in t:
+            bad.append("%s：缺少 role（error 应为 alert、其余 status）" % f)
+
+    if bad:
+        for b in bad:
+            rec("FAIL", "loading-spec", b)
+        return False
+    rec("OK", "loading-spec", "状态与加载族符合 08 · 8.2.5/8.2.15 与 EL-19-02/03："
+        "骨架＝胶囊+1.6s 呼吸（无扫光）· Spin 0.9s 且下限 18 · 进度条 3/6/10 · GmResult 三通道齐备")
+    return True
+
+
+
+# ══════════════════════════════════════════════════════════════════════════
+# CSS 语法平衡守门（注释 / 花括号）
+#
+# 为什么必须有：一个**未闭合的 `/*`** 会把它后面的所有规则吞成注释 —— 浏览器不报错、
+# 页面不报错、既有门禁全绿，只有"某个组件突然没样式了"。本轮真实踩到：
+# 往 `.gm-spin` 前插注释时漏写 `*/`，导致 Vue 侧 `.gm-spin i` / `.gm-spin--inverse`
+# 整段失效（连 `check-style-parity.py` 都因此误报"单边选择器"）。
+# 同理，多余的 `}` 会让解析器错位。这类缺陷只能靠机械检查。
+# ══════════════════════════════════════════════════════════════════════════
+
+def css_syntax():
+    import io as _io, glob as _glob
+    bad = []
+    targets = ["goodmom-ui/src/theme.css", "frontend-app/packages/gm-arco-ui/src/gm.css"]
+    targets += sorted(_glob.glob("goodmom-vue/src/styles/*.css"))
+    # 站点片段：只取 `<!--@css-->` 与 `<!--@body-->` 之间的样式段（正文里的 `<pre>` 代码示例不算）
+    for f in sorted(_glob.glob("site/fragments/*.html")):
+        t = _io.open(f, encoding="utf-8").read()
+        i, j = t.find("<!--@css-->"), t.find("<!--@body-->")
+        if i >= 0 and j > i:
+            seg = t[i + 10:j]
+            targets.append((f, seg))
+
+    for item in targets:
+        if isinstance(item, tuple):
+            f, css = item
+        else:
+            f, css = item, _io.open(item, encoding="utf-8").read()
+        if css.count("/*") != css.count("*/"):
+            bad.append("%s：注释不闭合（/* %d 个 vs */ %d 个）—— 未闭合的 /* 会吞掉其后所有规则"
+                       % (f, css.count("/*"), css.count("*/")))
+        stripped = re.sub(r"/\*.*?\*/", "", css, flags=re.S)
+        if stripped.count("{") != stripped.count("}"):
+            bad.append("%s：花括号不平衡（{ %d vs } %d）"
+                       % (f, stripped.count("{"), stripped.count("}")))
+
+    if bad:
+        for b in bad:
+            rec("FAIL", "css-syntax", b)
+        return False
+    rec("OK", "css-syntax", "全部 CSS（两库样式表 + 站点片段样式段）注释与花括号平衡"
+        "（未闭合注释会静默吞掉规则，是本轮实际踩过的坑）")
+    return True
+
+
 def main():
     hard = []
     hard.append(md_links()); hard.append(chapter_seq()); hard.append(icons())
-    hard.append(html_no_md()); hard.append(stale_words()); hard.append(colors()); hard.append(banned_colors()); hard.append(breakpoint_reg()); hard.append(spec_health()); hard.append(hex_case()); hard.append(mirror_sync()); hard.append(dark_contrast()); hard.append(exports_check()); hard.append(logo_guard())
+    hard.append(html_no_md()); hard.append(stale_words()); hard.append(colors()); hard.append(banned_colors()); hard.append(breakpoint_reg()); hard.append(spec_health()); hard.append(hex_case()); hard.append(mirror_sync()); hard.append(dark_contrast()); hard.append(exports_check()); hard.append(logo_guard()); hard.append(loading_spec()); hard.append(css_syntax())
     passed = all(hard)
     report = ["# 规范审计报告（自动）", "",
               "- 命令：`python3 scripts/audit.py`", "- 时间：%(now)s" % {"now": __import__("datetime").datetime.now().strftime("%Y-%m-%d %H:%M")},
