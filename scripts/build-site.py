@@ -766,6 +766,129 @@ body{margin:0;font-family:var(--sh-font);color:var(--sh-t);line-height:1.7;-webk
   /* 全局 reduce-motion 规则已把动画压到 0.01ms；这里只补"退场后仍占位"的兜底 */
   .gm-toast.is-leaving{opacity:0}
 }
+/* ══════════════════════════════════════════════════════════════════════════
+   03 · 3.7 / 08 · 8.2.11 / 08 · 8.2.13 / 11 · 11.2.6 / Part 15 · TB-15-01/02
+   —— 数据呈现层：玻璃表格 / 描述列表 / 折叠（全站唯一配方）
+   为什么放外壳：这三类在 5 个页面各有实现，实测漂移成 ——
+     表头字号 11 / 11.5 / 12px（类型阶最小档是 caption 12）、字重 500 / 600（03.7 要 600）、
+     表体 12.5 / 13px（02 · 2.2.2 场景列写明「表格正文」= body-sm 14/20）、
+     行高 45–57（03.7 要 44–52）、分隔 rgba(…) .06 / .08 / .09 三种、
+     操作列有的 `style="text-align:right"` 有的没有、`.op` 与 `.ops` 两个名字；
+     描述列表完全没有 8.2.13 要求的「省略 + Tooltip 全文」；折叠只有一个 0s 过渡的 details。
+   模块侧只加 class 取用（.gm-tbl / .gm-desc / .gm-fold），不再各写一份。
+   ══════════════════════════════════════════════════════════════════════════ */
+
+/* ── 玻璃表格（03 · 3.7 + TB-15-01/02）──────────────────────────────────
+   表头 body-sm 600 + 次级色；行高 44–52；hairline 分隔；hover 淡白底。
+   行高算术：padding 12×2 + 行高 20 + 分隔 1 = 45；内联元素上限 27px
+   （表格内头像 26 / 按钮 mini 26 / 徽章 ≤26）时最坏 12+26+12+1 = 51，仍在档内。
+   `font-variant-numeric:tabular-nums` 落整表：中文不受影响，阿拉伯数字列自动对齐
+   （17.2.2「数字一律 tabular-nums」；逐格标 .num 必然漏标）。 */
+.gm-tbl{width:100%;border-collapse:collapse;font-size:14px;line-height:20px;
+  color:var(--lg-text-primary,#343A46);font-variant-numeric:tabular-nums}
+.gm-tbl caption{text-align:left;font-size:12px;line-height:16px;color:var(--lg-text-secondary,#4F5B6E);padding:0 0 8px}
+.gm-tbl th{text-align:left;font-size:14px;line-height:20px;font-weight:600;
+  color:var(--lg-text-secondary,#4F5B6E);padding:12px 14px;white-space:nowrap;
+  border-bottom:var(--lg-border-hairline,1px) solid var(--lg-divider,rgba(58,52,84,.10))}
+.gm-tbl td{padding:12px 14px;vertical-align:middle;white-space:nowrap;
+  border-bottom:var(--lg-border-hairline,1px) solid var(--lg-divider,rgba(58,52,84,.10))}
+/* 单元格里的**直接子元素**不折行：折行会把行高从 45 顶到 80（实测 .cell-av 在
+   375px 被 `flex-wrap:wrap` 拆成两行，头像 26 + 文字 20 + 间距 9 = 55）。
+   单元格的文字不折行由下面的窄视口规则给（配合 .gm-tbl-wrap 横滑）。 */
+/* ⚠️ 用 `td>span`/`td>div` 而不是 `td>*`：后者与页面里的 `.block span`
+   （0,1,1）**同权**，而模块样式更靠后 → 会被 `flex-wrap:wrap` 反压回去。 */
+.gm-tbl td>span,.gm-tbl td>div,.gm-tbl td>a{flex-wrap:nowrap}
+.gm-tbl tbody tr{transition:background 140ms ease}
+.gm-tbl tbody tr:hover{background:rgba(255,255,255,.5)}
+.gm-tbl thead tr:hover{background:none}
+/* 操作列右对齐内联（TB-15-01 的 .ops 基线，定义见 17 · 17.2.3） */
+.gm-tbl .col-ops,.gm-tbl th.col-ops{text-align:right}
+.gm-tbl .ops{display:inline-flex;align-items:center;justify-content:flex-end;gap:12px;flex-wrap:nowrap}
+.gm-tbl .ops a,.gm-tbl .ops button{font-size:13px;line-height:18px}
+.gm-tbl .ops a{color:var(--lg-link,#B23A63);text-decoration:none;font-weight:500}
+.gm-tbl .ops a:hover{text-decoration:underline}
+/* ── 内联元素的垂直档：一律 26 高 ─────────────────────────────────────
+   `.badge`/`.tg`/`.av` 若沿用页面自己的档，12px 字继承 line-height:1.7 会撑到 30px、
+   32px 头像更是直接顶破 —— 实测行高 55/57（03.7 是 44–52）。
+   ⚠️ 特异性陷阱：模块内规则经 `scope_css` 会被加上 `.gm-mod--x ` 前缀（0,2,0），
+   与外壳的 `.gm-tbl .badge`（0,2,0）**同权**，而模块样式在文档里更靠后 —— 模块赢。
+   实测：`.gm-tbl .badge{padding-top:3px}` 完全没有生效（算出来还是 4px 12px）。
+   故凡覆盖"模块里已有的类"，必须写成 `.gm-tbl td .badge` 这类 ≥ 0,2,1 的形式。 */
+.gm-tbl td .badge,.gm-tbl td .tg,.gm-tbl td .tag,.gm-tbl td .status-tag{
+  padding-top:3px;padding-bottom:3px;line-height:18px;font-size:12px}
+.gm-tbl td .av{width:26px;height:26px;font-size:11px}
+.gm-tbl td .btn.mini{height:26px;padding:0 12px;font-size:12px;border-radius:16px}
+/* 首列可加玻璃头像/Logo（03.7 圆角：圆形头像走 50%，方形标识走 12） */
+.gm-tbl td .lg-mark{width:26px;height:26px;border-radius:12px;object-fit:cover;flex:none}
+/* 窄视口：只收横向内边距，**字号不动** —— 02 · 2.2.2 的类型阶里没有 13px，
+   降字号等于自己制造一条"不在阶上"的缺陷（表格正文一律 body-sm 14/20）。
+   宽表横滑由 .gm-tbl-wrap 承担；≤767 的卡片流另由 ResponsiveView 切换（TB-15-04/07）。 */
+@media (max-width:1023px){
+  /* 窄视口把表格切成「横滑窄表」（TB-15-04）：收横向内边距 + 由 .gm-tbl-wrap 横滑。
+     单元格**一律**不折行（见上），折行会把行高从 45 涨到 65 顶破 03 · 3.7。 */
+  .gm-tbl th,.gm-tbl td{padding-left:12px;padding-right:12px}
+  .gm-tbl-wrap{overflow-x:auto;-webkit-overflow-scrolling:touch}
+}
+/* ⚠️ 表格文字**不写死暗色档颜色**：写死会在"没有暗色档的模块"里制造低对比 ——
+   卡片底仍是浅色，文字却被改成 #C9C4CE/#F3EFEC，实测 1.71:1 / 1.14:1（page-qa 抓到的）。
+   正确做法是读 Token：模块自己实现了暗色档时 `--lg-text-secondary` 自然翻成浅档，
+   没实现时保持深档、与浅底匹配。背景同理走透明，让模块的卡片底决定。 */
+[data-theme="dark"] .gm-tbl tbody tr:hover{background:rgba(255,255,255,.06)}
+
+/* ── 描述列表（08 · 8.2.11 + 8.2.13）────────────────────────────────────
+   玻璃卡内键值网格：key caption、value body-sm；分栏 2–4 自适应。
+   key 用**次级色**而非 8.2.11 字面写的「三级色」：三级色 #9AA2B0 在 12px 上仅约 2.6:1，
+   与 02 · 2.1.1「三级色只可用于 ≥24px 常规」冲突，按后者从严（同 8.2.11 之前
+   Spacing/Descriptions 的既有裁决口径，见 D19）。
+   8.2.13：描述列表 ≤1 行 → value 单行省略，全文走 title（TB-15-02 同口径）。 */
+.gm-desc{display:grid;grid-template-columns:repeat(var(--gm-desc-cols,3),minmax(0,1fr));
+  gap:12px 20px;margin:0}
+.gm-desc>div{min-width:0}
+.gm-desc dt,.gm-desc .k{font-size:12px;line-height:16px;font-weight:400;
+  color:var(--lg-text-secondary,#4F5B6E)}
+.gm-desc dd,.gm-desc .v{margin:2px 0 0;font-size:14px;line-height:20px;font-weight:600;
+  color:var(--lg-text-primary,#343A46);
+  overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+@media (max-width:1023px){.gm-desc{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media (max-width:767px){.gm-desc{grid-template-columns:repeat(var(--gm-desc-cols-sm,1),minmax(0,1fr))}}
+/* 描述列表同理：颜色一律走 Token，不写死暗色档（否则无暗色档的模块上变成浅字压浅底） */
+
+/* ── 折叠面板（11 · 11.2.6）────────────────────────────────────────────
+   玻璃卡 + 标题行 44 热区；展开内容淡入 + **高度过渡 300ms**——用
+   `grid-template-rows: 0fr → 1fr` 而不是 max-height（后者要猜一个值，
+   猜大了过渡提前结束、猜小了内容被截，且必然伴随布局抖动）。
+   箭头 `lg-icon-chevron-down` 旋转 180° / 220ms；一屏同时展开 ≤3 组（由外壳脚本保证）。 */
+.gm-fold{border-radius:20px;overflow:hidden;
+  background:linear-gradient(160deg,rgba(255,255,255,.62),rgba(255,255,255,.3));
+  border:1px solid var(--lg-divider,rgba(58,52,84,.10))}
+.gm-fold+.gm-fold{margin-top:8px}
+.gm-fold>summary{display:flex;align-items:center;gap:10px;min-height:44px;
+  padding:12px 16px;cursor:pointer;list-style:none;
+  font-size:14px;line-height:20px;font-weight:600;color:var(--lg-text-primary,#343A46)}
+.gm-fold>summary::-webkit-details-marker{display:none}
+.gm-fold>summary::marker{content:""}
+.gm-fold>summary:hover{background:rgba(255,255,255,.5)}
+.gm-fold>summary:focus-visible{outline:var(--sh-ring) solid var(--sh-ring-c);outline-offset:-2px}
+.gm-fold .gm-fold__dot{width:8px;height:8px;border-radius:50%;flex:none;background:var(--lg-sem-neutral,#5E6673)}
+.gm-fold[data-tone="positive"] .gm-fold__dot{background:var(--lg-sem-positive,#25715D)}
+.gm-fold[data-tone="attention"] .gm-fold__dot{background:var(--lg-sem-attention,#8D5A15)}
+.gm-fold[data-tone="risk"] .gm-fold__dot{background:var(--lg-sem-risk,#B72F42)}
+.gm-fold[data-tone="info"] .gm-fold__dot{background:var(--lg-sem-info,#3261C1)}
+.gm-fold .gm-fold__arr{margin-left:auto;flex:none;width:16px;height:16px;color:var(--lg-text-secondary,#4F5B6E);
+  transition:transform 220ms var(--lg-ease-out,cubic-bezier(.22,1,.36,1))}
+.gm-fold[open] .gm-fold__arr{transform:rotate(180deg)}
+.gm-fold__body{display:grid;grid-template-rows:0fr;opacity:0;
+  transition:grid-template-rows 300ms var(--lg-ease-out,cubic-bezier(.22,1,.36,1)),opacity 300ms ease}
+.gm-fold[open] .gm-fold__body{grid-template-rows:1fr;opacity:1}
+/* ⚠️ 折叠代理层**不能自带 padding**：`0fr` 轨道的基尺寸取子项的 min-content 贡献，
+   而 padding 不可压缩 —— 实测留着 14px 下内边距时收起后残留 14px 高。
+   故 padding 一律放到再下一层的内容元素上（`.gm-fold__body>div>*`）。 */
+.gm-fold__body>div{overflow:hidden;min-height:0}
+.gm-fold__body>div>*{margin:0;padding:0 16px 14px;font-size:14px;line-height:22px;color:var(--lg-text-secondary,#4F5B6E)}
+@media (prefers-reduced-motion:reduce){
+  .gm-fold__body,.gm-fold .gm-fold__arr{transition:none}
+}
+/* 折叠同理：底走 Token（模块没做暗色档时保持浅玻璃，文字仍是深档 → 仍可读） */
 /* ── 移动端：导航横向滚动，不换行挤压 ── */
 @media (max-width:767px){
   .sh-top-in{gap:8px}
@@ -926,6 +1049,63 @@ __MODULES__
    · 挂载点取当前可见模块：模块 CSS 是作用域化的（.gm-mod--x .gm-toast），
      挂到 body 上虽然看得见，但拿不到模块内定义的 Token 与样式。
    ══════════════════════════════════════════════════════════════════════════ */
+/* ══════════════════════════════════════════════════════════════════════════
+   11 · 11.2.6 —— 折叠面板行为：高度过渡 300ms（grid-template-rows）+ 一屏 ≤3 组
+   原生 <details> 切换的是 display，没法过渡 —— 直接给它加 transition 是无效的
+   （实测原有实现 `transition: 0s / all`，即"写着过渡但根本没过渡"）。
+   这里拦截 summary 点击：展开时先 open 再把 0fr 推到 1fr；收起时先把 1fr 推回 0fr、
+   等 300ms 再置 open=false。同组内超过 3 组自动收起最早展开的那一组。
+   ══════════════════════════════════════════════════════════════════════════ */
+(function(){
+  var DUR = 300;
+  var folds = Array.prototype.slice.call(document.querySelectorAll('details.gm-fold'));
+  if(!folds.length) return;
+  function sync(d){
+    var sum = d.querySelector('summary');
+    if(sum) sum.setAttribute('aria-expanded', d.open ? 'true' : 'false');
+  }
+  folds.forEach(function(d, i){
+    var sum = d.querySelector('summary');
+    var body = d.querySelector('.gm-fold__body');
+    if(!sum || !body) return;
+    if(!sum.id) sum.id = 'gmFoldSum' + i;
+    if(!body.id) body.id = 'gmFoldBody' + i;
+    sum.setAttribute('aria-expanded', d.open ? 'true' : 'false');   /* 原生 details 不带这个属性 */
+    sum.setAttribute('aria-controls', body.id);
+    sum.addEventListener('click', function(e){
+      e.preventDefault();
+      if(d.dataset.anim === '1') return;
+      d.dataset.anim = '1';
+      if(d.open){
+        body.style.gridTemplateRows = '0fr';
+        body.style.opacity = '0';
+        /* 展开态**立刻**同步给读屏：等 300ms 动画跑完再改，AT 会慢半拍 */
+        sum.setAttribute('aria-expanded', 'false');
+        setTimeout(function(){ d.open = false; body.style.gridTemplateRows = ''; body.style.opacity = ''; d.dataset.anim = ''; sync(d); }, DUR);
+      }else{
+        /* 一屏同时展开 ≤3 组：超出时收起同组里最早展开的那一个 */
+        var group = d.getAttribute('data-fold-group') || '';
+        var openSibs = folds.filter(function(x){ return x !== d && x.open && (x.getAttribute('data-fold-group') || '') === group; });
+        if(openSibs.length >= 3){
+          var first = openSibs[0];
+          var fb = first.querySelector('.gm-fold__body');
+          first.open = false;
+          if(fb){ fb.style.gridTemplateRows = ''; fb.style.opacity = ''; }
+          sync(first);
+        }
+        d.open = true;
+        sum.setAttribute('aria-expanded', 'true');
+        body.style.gridTemplateRows = '0fr';
+        void body.offsetHeight;                    /* 强制 reflow，让 0fr→1fr 真的产生过渡 */
+        body.style.gridTemplateRows = '1fr';
+        body.style.opacity = '1';
+        setTimeout(function(){ body.style.gridTemplateRows = ''; body.style.opacity = ''; d.dataset.anim = ''; sync(d); }, DUR);
+      }
+    });
+    /* 键盘：Enter/Space 由原生 summary 触发 click，无需另处理 */
+  });
+})();
+
 window.gmToast = (function(){
   var DWELL = 2400, LEAVE = 240;   /* MD-18-01：驻留 2.4s · 淡出上滑 240ms */
   var node = null, t1 = null, t2 = null;

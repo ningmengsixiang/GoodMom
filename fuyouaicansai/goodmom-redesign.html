@@ -9,7 +9,11 @@
 :root{--t:#343A46;--t2:#4F5B6E;--t3:#4F5B6E;--rose-d:#E85D8F;--rose-deep:#B23A63;--mint:#6FC9B4;--info:#6D9EFF;--warn:#F2B25C;--danger:#EF6A7B;--purple:#9A78FF;--purple-deep:#8066F0;
   /* 文字专用深档（02 · 2.1.5：-500 档仅作填充/色块/图表强调；文字走深色 alias） */
   --sem-positive:#25715D;--sem-warn:#8D5A15;--sem-danger:#B72F42;--sem-special:#6A48DC;--sem-neutral:#5E6673;
---g:linear-gradient(135deg,#FFC4D6,#F77FA3);--gp:linear-gradient(135deg,#C7A6FF,#8F6AE0)}
+--g:linear-gradient(135deg,#FFC4D6,#F77FA3);--gp:linear-gradient(135deg,#C7A6FF,#8F6AE0);
+  /* 系统 Token 别名（惰性引用，值不重复写）：数据呈现层读 --lg-* 命名，
+     本页私有命名 --t/--t2/--t3 由这里接过去。 */
+  --lg-text-primary:var(--t);--lg-text-secondary:var(--t2);--lg-text-tertiary:var(--t3);
+  --lg-divider:rgba(58,52,84,.10)}
 *{box-sizing:border-box;margin:0;padding:0}
 body{font-family:"PingFang SC","Inter","MiSans","Noto Sans SC",sans-serif;color:var(--t);line-height:1.7;background:#E9D2C9;padding-left:0;transition:padding .25s ease;
  background:radial-gradient(1000px 600px at 90% -8%,rgba(247,127,163,.2),transparent 65%),radial-gradient(900px 560px at -6% 24%,rgba(182,154,255,.15),transparent 65%),linear-gradient(165deg,#FDF2EE,#F6E2DB 55%,#E6CFC6)}
@@ -93,7 +97,12 @@ h2{font-size:20px;margin:16px 0 6px}
 .btn.sm{height:32px;padding:0 13px;font-size:12.5px;border-radius:18px}
 .av{width:42px;height:42px;border-radius:50%;display:inline-flex;align-items:center;justify-content:center;color:#343A46;font-weight:700;background:var(--g);flex:none;font-size:16px}
 .av.mint{background:linear-gradient(150deg,#7FD8C2,#4FB59C)}.av.purp{background:linear-gradient(150deg,#B9A0FF,#8066F0)}
+/* ⚠️ 网格子项必须 min-width:0：默认 `min-width:auto` 会让列被**内容的最小宽度**撑开 ——
+   引入横滑容器后，表格的 min-content（604px）会把 .card 撑到 634px，
+   实测 375px 视口溢出 271px。这与 16 章记的「网格子项 min-width:auto」是同一根因。 */
 .two{display:grid;grid-template-columns:1.7fr 1fr;gap:16px}
+.two>*{min-width:0}
+.gm-tbl td>span,.gm-tbl td>div,.gm-tbl td>a{flex-wrap:nowrap}
 .g4{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}
 .g2auto{display:grid;grid-template-columns:repeat(auto-fit,minmax(185px,1fr));gap:10px}
 .chk{display:flex;gap:8px;align-items:center;background:rgba(255,255,255,.5);border:1px solid var(--lg-divider,rgba(58,52,84,.10));border-radius:14px;padding:10px 12px}  /* 03 · 3.2.4：浅底控件的边用暖中性 hairline（白边在白底上等于没有边） */
@@ -116,11 +125,78 @@ h2{font-size:20px;margin:16px 0 6px}
 .stitle{display:block;font-size:12px;color:var(--t2);white-space:nowrap}
 .snum{display:block;font-size:26px;font-weight:700;line-height:1.3}
 .snote{display:block;font-size:11px;color:var(--t3)}
-.desc{display:grid;grid-template-columns:repeat(3,1fr);gap:12px 20px}
-.desc .k{font-size:11.5px;color:var(--t3)}.desc .v{font-size:14px;font-weight:600;margin-top:2px}
-table{width:100%;border-collapse:collapse;font-size:12.5px}
-th,td{text-align:left;padding:9px 8px;border-bottom:1px solid rgba(58,52,84,.08);vertical-align:middle}
-th{color:var(--t3);font-size:11px;font-weight:500}
+
+/* ═══ 数据呈现层：玻璃表格（03 · 3.7 / TB-15-01/02）═══════════════════════
+   本页是**独立交付页**（不并入 site/index.html），拿不到站点外壳的「数据呈现层」，
+   故此处放同源配方 —— 数值与 scripts/build-site.py 里那一份逐项一致，
+   由 `audit.py data-present` 逐条比对，任一侧漂移即 FAIL。
+   旧实现（已删）实测：表头 11px / 字重 500（03.7 要 body-sm 14 + 600）、
+   表体 12.5px（02 · 2.2.2 场景列写明「表格正文」= body-sm 14/20）、
+   分隔 rgba(58,52,84,.08)（规范 .10）、操作列靠行内 style 右对齐。 */
+.gm-tbl{width:100%;border-collapse:collapse;font-size:14px;line-height:20px;color:var(--t);
+  font-variant-numeric:tabular-nums}
+.gm-tbl th{text-align:left;font-size:14px;line-height:20px;font-weight:600;
+  color:var(--lg-text-secondary,#4F5B6E);   /* 系统 Token 命名：与外壳配方逐项同值，门禁比对 */
+  padding:12px 14px;white-space:nowrap;
+  border-bottom:1px solid var(--lg-divider,rgba(58,52,84,.10))}
+.gm-tbl td{padding:12px 14px;vertical-align:middle;white-space:nowrap;
+  color:var(--lg-text-primary,#343A46);border-bottom:1px solid var(--lg-divider,rgba(58,52,84,.10))}
+.gm-tbl tbody tr{transition:background 140ms ease}
+.gm-tbl tbody tr:hover{background:rgba(255,255,255,.5)}
+.gm-tbl .col-ops,.gm-tbl th.col-ops{text-align:right}
+.gm-tbl .ops{display:inline-flex;align-items:center;justify-content:flex-end;gap:12px;flex-wrap:nowrap}
+.gm-tbl .ops a,.gm-tbl .ops button{font-size:13px;line-height:18px}
+.gm-tbl .ops a{color:var(--lg-link,#B23A63);text-decoration:none;font-weight:500}
+.gm-tbl .ops a:hover{text-decoration:underline}
+.gm-tbl td .tag{padding-top:3px;padding-bottom:3px;line-height:18px}
+.gm-tbl td .btn.sm{height:26px;padding:0 12px;font-size:12px;border-radius:16px}
+.gm-tbl-wrap{overflow-x:auto;-webkit-overflow-scrolling:touch}
+@media (max-width:1023px){
+  /* TB-15-04：窄视口切「横滑窄表」（横向滚动交给 .gm-tbl-wrap）。
+     单元格不折行见上方 .gm-tbl td —— 折行会把行高从 45 涨到 65，顶破 03 · 3.7 的 44–52。 */
+}
+
+/* ═══ 数据呈现层：描述列表（08 · 8.2.11 + 8.2.13）═══════════════════════
+   key caption + 次级色（8.2.11 字面写「三级色」，但 #9AA2B0 在 12px 上约 2.6:1，
+   与 02 · 2.1.1「三级色只可用于 ≥24px」冲突，按后者从严）；value body-sm 14/20；
+   8.2.13：描述列表 ≤1 行 → 单行省略，全文走 title。 */
+.gm-desc{display:grid;grid-template-columns:repeat(var(--gm-desc-cols,3),minmax(0,1fr));
+  gap:12px 20px;margin:0}
+.gm-desc>div{min-width:0}
+.gm-desc dt,.gm-desc .k{font-size:12px;line-height:16px;font-weight:400;color:var(--lg-text-secondary,#4F5B6E)}
+.gm-desc dd,.gm-desc .v{margin:2px 0 0;font-size:14px;line-height:20px;font-weight:600;color:var(--lg-text-primary,#343A46);
+  overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+
+/* ═══ 数据呈现层：折叠面板（11 · 11.2.6）═══════════════════════════════
+   玻璃卡 + 标题行 44 热区；展开 300ms（grid-template-rows 0fr→1fr，避免 max-height
+   猜值导致的截断与抖动）；箭头旋转 180° / 220ms；一屏同组 ≤3 组。
+   ⚠️ 折叠代理层 `.gm-fold__body>div` **不能自带 padding**：`0fr` 轨道的基尺寸取子项的
+   min-content 贡献，而 padding 不可压缩 —— 实测留着 14px 下内边距时收起后残留 14px 高。
+   故内边距一律放到再下一层内容元素上。 */
+.gm-fold{border-radius:20px;overflow:hidden;
+  background:linear-gradient(160deg,rgba(255,255,255,.64),rgba(255,255,255,.32));
+  border:1px solid rgba(58,52,84,.10)}
+.gm-fold+.gm-fold{margin-top:8px}
+.gm-fold>summary{display:flex;align-items:center;gap:10px;min-height:44px;
+  padding:12px 16px;cursor:pointer;list-style:none;
+  font-size:14px;line-height:20px;font-weight:600;color:var(--lg-text-primary,#343A46)}
+.gm-fold>summary::-webkit-details-marker{display:none}
+.gm-fold>summary::marker{content:""}
+.gm-fold>summary:hover{background:rgba(255,255,255,.5)}
+.gm-fold>summary:focus-visible{outline:2px solid rgba(232,93,143,.6);outline-offset:-2px}
+.gm-fold .gm-fold__dot{width:8px;height:8px;border-radius:50%;flex:none;background:var(--sem-neutral,#5E6673)}
+.gm-fold[data-tone="positive"] .gm-fold__dot{background:var(--sem-positive,#25715D)}
+.gm-fold[data-tone="attention"] .gm-fold__dot{background:var(--sem-warn,#8D5A15)}
+.gm-fold[data-tone="risk"] .gm-fold__dot{background:var(--sem-danger,#B72F42)}
+.gm-fold .gm-fold__arr{margin-left:auto;flex:none;width:16px;height:16px;color:var(--lg-text-secondary,#4F5B6E);
+  transition:transform 220ms cubic-bezier(.22,1,.36,1)}
+.gm-fold[open] .gm-fold__arr{transform:rotate(180deg)}
+.gm-fold__body{display:grid;grid-template-rows:0fr;opacity:0;
+  transition:grid-template-rows 300ms cubic-bezier(.22,1,.36,1),opacity 300ms ease}
+.gm-fold[open] .gm-fold__body{grid-template-rows:1fr;opacity:1}
+.gm-fold__body>div{overflow:hidden;min-height:0}
+.gm-fold__body>div>*{margin:0;padding:0 16px 14px;color:var(--lg-text-secondary,#4F5B6E)}
+@media (prefers-reduced-motion:reduce){.gm-fold__body,.gm-fold .gm-fold__arr{transition:none}}
 .pad{padding:16px 18px}
 .rowb{display:flex;gap:12px;align-items:center;padding:11px 4px;border-bottom:1px dashed rgba(58,52,84,.07);flex-wrap:wrap}
 .bubble{max-width:82%;padding:12px 14px;border-radius:16px;font-size:13px;line-height:1.85}
@@ -159,9 +235,7 @@ th{color:var(--t3);font-size:11px;font-weight:500}
   .g2auto{grid-template-columns:repeat(auto-fit,minmax(150px,1fr))}
 }
 @media(max-width:440px){
-  .g4,.desc{grid-template-columns:1fr 1fr}
   .snum{font-size:22px}
-  .desc .v{font-size:13px}
   .rowb{gap:6px}
   .mla{margin-left:0}
 }
@@ -429,11 +503,11 @@ textarea.inp{resize:vertical;min-height:76px;line-height:1.7}
     <div class="two">
       <div class="card pad">
         <b>待复核智能建议</b><span style="font-size:11px;color:var(--t3);margin-left:8px">AI 已分析 · 需专家确认</span>
-        <table><tr><th>对象</th><th>AI 建议</th><th>置信</th><th style="text-align:right">操作</th></tr>
-        <tr><td>陈静 · 孕 12 周</td><td>妊娠合并心脏病 · 建议转市妇幼绿色通道</td><td><span class="tag o"><i></i>0.86</span></td><td style="text-align:right"><span class="ops"><button class="btn mint sm" data-act="adopt">采纳</button> <button class="btn line sm" data-act="review">复核</button></span></td></tr>
-        <tr><td>安安 · 36 月龄</td><td>生长低于 P3 · 建议专案随访 + 内分泌转诊</td><td><span class="tag r"><i></i>0.93</span></td><td style="text-align:right"><span class="ops"><button class="btn mint sm" data-act="adopt">采纳</button></span></td></tr>
-        <tr><td>赵甜甜 · 18 月龄</td><td>屈光异常趋势 · 建议 3 月后复查并涂氟</td><td><span class="tag g"><i></i>0.72</span></td><td style="text-align:right"><span class="ops"><button class="btn line sm" data-act="review">复核</button></span></td></tr>
-        </table>
+        <div class="gm-tbl-wrap"><table class="gm-tbl"><tr><th scope="col">对象</th><th scope="col">AI 建议</th><th scope="col">置信</th><th scope="col" class="col-ops">操作</th></tr>
+        <tr><td>陈静 · 孕 12 周</td><td>妊娠合并心脏病 · 建议转市妇幼绿色通道</td><td><span class="tag o"><i></i>0.86</span></td><td class="col-ops"><span class="ops"><button class="btn mint sm" data-act="adopt">采纳</button> <button class="btn line sm" data-act="review">复核</button></span></td></tr>
+        <tr><td>安安 · 36 月龄</td><td>生长低于 P3 · 建议专案随访 + 内分泌转诊</td><td><span class="tag r"><i></i>0.93</span></td><td class="col-ops"><span class="ops"><button class="btn mint sm" data-act="adopt">采纳</button></span></td></tr>
+        <tr><td>赵甜甜 · 18 月龄</td><td>屈光异常趋势 · 建议 3 月后复查并涂氟</td><td><span class="tag g"><i></i>0.72</span></td><td class="col-ops"><span class="ops"><button class="btn line sm" data-act="review">复核</button></span></td></tr>
+        </table></div>
       </div>
       <div class="card pad">
         <b>AI 智能助手</b>
@@ -482,14 +556,14 @@ textarea.inp{resize:vertical;min-height:76px;line-height:1.7}
     <div class="two">
       <div>
         <div class="card pad"><b>基本信息 · 最近评估</b>
-          <div class="desc" style="margin-top:10px">
-            <div><div class="k">出生</div><div class="v num">2023-04-12 · 3.2kg/50cm</div></div>
-            <div><div class="k">生长</div><div class="v">P75 · P62 · P58</div></div>
-            <div><div class="k">营养</div><div class="v">评估通过</div></div>
-            <div><div class="k">心理行为</div><div class="v">发育正常</div></div>
-            <div><div class="k">视力 / 听力</div><div class="v">待复查 / 通过</div></div>
-            <div><div class="k">口腔</div><div class="v">建议涂氟</div></div>
-          </div>
+          <dl class="gm-desc" style="margin-top:10px">
+            <div><dt class="k">出生</dt><dd class="v num" title="2023-04-12 · 3.2kg/50cm">2023-04-12 · 3.2kg/50cm</dd></div>
+            <div><dt class="k">生长</dt><dd class="v" title="P75 · P62 · P58">P75 · P62 · P58</dd></div>
+            <div><dt class="k">营养</dt><dd class="v" title="评估通过">评估通过</dd></div>
+            <div><dt class="k">心理行为</dt><dd class="v" title="发育正常">发育正常</dd></div>
+            <div><dt class="k">视力 / 听力</dt><dd class="v" title="待复查 / 通过">待复查 / 通过</dd></div>
+            <div><dt class="k">口腔</dt><dd class="v" title="建议涂氟">建议涂氟</dd></div>
+          </dl>
         </div>
         <div class="card pad" style="margin-top:12px"><b>健康事件时间线</b>
           <div class="rowb"><span class="tag g">体检</span><span>2025-05-06 · 18 月龄儿保，生长正常</span></div>
@@ -507,7 +581,9 @@ textarea.inp{resize:vertical;min-height:76px;line-height:1.7}
         <div style="margin-top:10px"><button class="btn mint sm" data-act="advice">智能随访建议</button></div>
       </div>
     </div>
-    <div class="card pad" style="margin-top:16px"><b>健康保健清单（五健 + 口腔）</b>
+    <details class="gm-fold" data-fold-group="archive" style="margin-top:16px" open>
+      <summary><span class="gm-fold__dot" data-tone="positive"></span>健康保健清单（五健 + 口腔）<span class="tag g" style="margin-left:8px">5/6 通过</span><svg class="gm-fold__arr" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg></summary>
+      <div class="gm-fold__body"><div>
       <div class="g2auto" style="margin-top:10px">
         <div class="chk"><b>生长发育</b><span class="tag g">P62</span></div>
         <div class="chk"><b>营养喂养</b><span class="tag g">通过</span></div>
@@ -516,12 +592,16 @@ textarea.inp{resize:vertical;min-height:76px;line-height:1.7}
         <div class="chk"><b>听力保健</b><span class="tag g">通过</span></div>
         <div class="chk"><b>口腔保健</b><span class="tag o">待检</span></div>
       </div>
-    </div>
-    <div class="card pad" style="margin-top:12px"><b>疫苗计划</b>
+      </div></div>
+    </details>
+    <details class="gm-fold" data-fold-group="archive" style="margin-top:12px">
+      <summary><span class="gm-fold__dot" data-tone="attention"></span>疫苗计划<span class="tag o" style="margin-left:8px">1 项待种</span><svg class="gm-fold__arr" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg></summary>
+      <div class="gm-fold__body"><div>
       <div class="rowb"><span class="tag g">已完成</span><span>出生 · 乙肝① / 2 月龄 · 脊灰① / 4 月龄 · 百白破②</span></div>
       <div class="rowb"><span class="tag o">待种</span><span>18 月龄 · 百白破④ · 甲肝 · 剩余 26 天可预约</span></div>
       <div class="rowb"><span class="tag n">计划</span><span>24 月龄 · 乙脑/流脑加强 · 届时提醒</span></div>
-    </div>
+      </div></div>
+    </details>
   </div>
 
   <!-- P3 多智能体会诊 -->
@@ -574,11 +654,11 @@ textarea.inp{resize:vertical;min-height:76px;line-height:1.7}
         <span class="tag y"><i></i>黄 · 一般风险</span><span class="tag b"><i></i>随访中</span>
         <span class="mla" style="font-size:12px;color:var(--t3)">王立医生 · 06-25</span>
       </div>
-      <div class="desc" style="margin-top:12px">
-        <div><div class="k">主诉 / 本次评估</div><div class="v">OGTT 异常 · 血糖控制波动</div></div>
-        <div><div class="k">AI 辅助结论</div><div class="v">GDM · 建议强化饮食 + 血糖监测</div></div>
-        <div><div class="k">置信度</div><div class="v"><span class="tag o"><i></i>0.91</span></div></div>
-      </div>
+      <dl class="gm-desc" style="margin-top:12px">
+        <div><dt class="k">主诉 / 本次评估</dt><dd class="v" title="OGTT 异常 · 血糖控制波动">OGTT 异常 · 血糖控制波动</dd></div>
+        <div><dt class="k">AI 辅助结论</dt><dd class="v" title="GDM · 建议强化饮食 + 血糖监测">GDM · 建议强化饮食 + 血糖监测</dd></div>
+        <div><dt class="k">置信度</dt><dd class="v" title="0.91"><span class="tag o"><i></i>0.91</span></dd></div>
+      </dl>
     </div>
     <div class="card pad" style="margin-top:12px"><b>证据链</b>
       <div class="rowb"><span class="tag g">指标</span><span>空腹 5.4 / 1h 10.6 / 2h 9.3（OGTT）</span></div>
@@ -590,11 +670,11 @@ textarea.inp{resize:vertical;min-height:76px;line-height:1.7}
       <div class="card pad"><b>历史建议对比</b><div class="rowb">06-18 · 饮食指导（已执行）</div><div class="rowb">05-28 · 建议建档黄级专案（已采纳）</div><div class="rowb">05-20 · 建议 OGTT（已执行并出结果）</div></div>
     </div>
     <div class="card pad" style="margin-top:12px"><b>相关检查与筛查结果</b>
-      <table style="margin-top:8px"><tr><th>日期</th><th>项目</th><th>结果</th><th>结论</th></tr>
+      <div class="gm-tbl-wrap"><table class="gm-tbl" style="margin-top:8px"><tr><th scope="col">日期</th><th scope="col">项目</th><th scope="col">结果</th><th scope="col">结论</th></tr>
         <tr><td class="num">06-25</td><td>OGTT 糖耐量</td><td class="num">空腹5.4/1h 10.6/2h 9.3</td><td><span class="tag o">异常</span></td></tr>
         <tr><td class="num">06-28</td><td>血常规 / 肝肾功能</td><td class="num">大致正常</td><td><span class="tag g">正常</span></td></tr>
         <tr><td class="num">06-28</td><td>产科 B 超</td><td class="num">胎心 148bpm</td><td><span class="tag g">正常</span></td></tr>
-      </table>
+      </table></div>
     </div>
     <div class="two" style="margin-top:12px">
       <div class="card pad"><b>近 7 日空腹血糖趋势</b>
@@ -753,6 +833,47 @@ ROOT.addEventListener('click',function(e){
   if(e.target===mk)closeMask(mk);
 });
 document.addEventListener('keydown',function(e){if(e.key==='Escape')closeMask()});
+
+/* ---------- 折叠行为（11 · 11.2.6）：300ms 高度过渡 + 一屏同组 ≤3 组 ---------- */
+(function(){
+  var DUR = 300;
+  var folds = [].slice.call(document.querySelectorAll('details.gm-fold'));
+  if(!folds.length) return;
+  folds.forEach(function(d, i){
+    var sum = d.querySelector('summary'), body = d.querySelector('.gm-fold__body');
+    if(!sum || !body) return;
+    if(!sum.id) sum.id = 'gmFoldSum' + i;
+    if(!body.id) body.id = 'gmFoldBody' + i;
+    /* 原生 details 不报 aria-expanded/aria-controls，补上（读屏才知道这是可展开控件） */
+    sum.setAttribute('aria-expanded', d.open ? 'true' : 'false');
+    sum.setAttribute('aria-controls', body.id);
+    sum.addEventListener('click', function(e){
+      e.preventDefault();
+      if(d.dataset.anim === '1') return;
+      d.dataset.anim = '1';
+      if(d.open){
+        body.style.gridTemplateRows = '0fr'; body.style.opacity = '0';
+        sum.setAttribute('aria-expanded', 'false');   /* 立即同步给读屏，不等 300ms 动画 */
+        setTimeout(function(){ d.open = false; body.style.gridTemplateRows = ''; body.style.opacity = ''; d.dataset.anim = ''; }, DUR);
+      }else{
+        var group = d.getAttribute('data-fold-group') || '';
+        var openSibs = folds.filter(function(x){ return x !== d && x.open && (x.getAttribute('data-fold-group') || '') === group; });
+        if(openSibs.length >= 3){
+          var first = openSibs[0], fb = first.querySelector('.gm-fold__body');
+          first.open = false;
+          if(fb){ fb.style.gridTemplateRows = ''; fb.style.opacity = ''; }
+          var fs = first.querySelector('summary'); if(fs) fs.setAttribute('aria-expanded','false');
+        }
+        d.open = true;
+        sum.setAttribute('aria-expanded', 'true');
+        body.style.gridTemplateRows = '0fr';
+        void body.offsetHeight;
+        body.style.gridTemplateRows = '1fr'; body.style.opacity = '1';
+        setTimeout(function(){ body.style.gridTemplateRows = ''; body.style.opacity = ''; d.dataset.anim = ''; }, DUR);
+      }
+    });
+  });
+})();
 
 /* ---------- 交互注册表 ---------- */
 var A={},R={};
@@ -918,7 +1039,7 @@ R['m-issue']=function(m){
 function queueBody(){
   var rows=[['陈静','孕 12 周 · 心脏病','红','转诊评估 · 今日 16:00 前'],['安安','36 月龄 · P3 以下','橙','高危儿专案复核 · 07-02'],['赵甜甜','18 月龄 · 屈光异常','黄','3 月后复查 + 涂氟'],['张敏','孕 28 周 · GDM','黄','随访中 · 07-08 复诊'],['朵朵','18 月龄 · 常规','蓝','下次 24 月龄儿保']];
   var cls={红:'r',橙:'o',黄:'y',蓝:'b',绿:'g'};
-  return '<table><tr><th>姓名</th><th>说明</th><th>级别</th><th>下一步</th></tr>'+rows.map(function(r){return '<tr><td>'+esc(r[0])+'</td><td>'+esc(r[1])+'</td><td><span class="tag '+cls[r[2]]+'">'+r[2]+'</span></td><td>'+esc(r[3])+'</td></tr>'}).join('')+'</table>'+
+  return '<div class="gm-tbl-wrap"><table class="gm-tbl"><tr><th scope="col">姓名</th><th scope="col">说明</th><th scope="col">级别</th><th scope="col">下一步</th></tr>'+rows.map(function(r){return '<tr><td>'+esc(r[0])+'</td><td>'+esc(r[1])+'</td><td><span class="tag '+cls[r[2]]+'">'+r[2]+'</span></td><td>'+esc(r[3])+'</td></tr>'}).join('')+'</table></div>'+
   '<div class="hint">五色队列按 02.10 规则自动升级：红=当日处置 · 橙=24h 复核 · 黄=周内随访 · 蓝/绿=常规。</div>';
 }
 function openQueue(){modal({title:'五色管理 · 高危队列（今日）',w:'720px',body:queueBody(),foot:[{label:'查看处置规则',cls:'mint',act:'m-rule'},{label:'关闭',cls:'line',close:1}]})}
@@ -928,7 +1049,7 @@ A['queue']=openQueue;A['s-queue']=openQueue;
 /* ---------- 指标卡弹层 ---------- */
 A['s-todo']=function(){
   modal({title:'今日待处理 · 42',w:'660px',
-    body:'<table><tr><th>类型</th><th>事项</th><th>数量</th></tr><tr><td><span class="tag r">会诊</span></td><td>陈静红级会诊等 18 项</td><td class="num">18</td></tr><tr><td><span class="tag o">复核</span></td><td>AI 建议待专家确认</td><td class="num">24</td></tr></table>',
+    body:'<div class="gm-tbl-wrap"><table class="gm-tbl"><tr><th scope="col">类型</th><th scope="col">事项</th><th scope="col">数量</th></tr><tr><td><span class="tag r">会诊</span></td><td>陈静红级会诊等 18 项</td><td class="num">18</td></tr><tr><td><span class="tag o">复核</span></td><td>AI 建议待专家确认</td><td class="num">24</td></tr></table></div>',
     foot:[{label:'知道了',cls:'line',close:1}]});
 };
 A['s-rate']=function(){
@@ -938,7 +1059,7 @@ A['s-rate']=function(){
 };
 A['s-new']=function(){
   modal({title:'今日新建档 · 18',w:'660px',
-    body:'<table><tr><th>类型</th><th>说明</th><th>状态</th></tr><tr><td>孕产妇建档</td><td>早孕 9 例 · 复诊 0 例</td><td><span class="tag g">9</span></td></tr><tr><td>儿童建档</td><td>新生儿 6 例 · 儿保 3 例</td><td><span class="tag g">9</span></td></tr></table>',
+    body:'<div class="gm-tbl-wrap"><table class="gm-tbl"><tr><th scope="col">类型</th><th scope="col">说明</th><th scope="col">状态</th></tr><tr><td>孕产妇建档</td><td>早孕 9 例 · 复诊 0 例</td><td><span class="tag g">9</span></td></tr><tr><td>儿童建档</td><td>新生儿 6 例 · 儿保 3 例</td><td><span class="tag g">9</span></td></tr></table></div>',
     foot:[{label:'关闭',cls:'line',close:1}]});
 };
 

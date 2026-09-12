@@ -670,6 +670,13 @@ def css_syntax():
         if i >= 0 and j > i:
             seg = t[i + 10:j]
             targets.append((f, seg))
+    # 独立交付页（不并入 site/index.html，拿不到任何构建期校验）：
+    # 它的 `<style>` 此前完全不在检查范围内 —— 本轮往它的 CSS 段里插规则时差点留下不平衡的
+    # 花括号，而不平衡会让**其后所有规则被静默吞掉**（浏览器不报错）。一并纳入。
+    for f in sorted(_glob.glob("fuyouaicansai/*.html")) + sorted(_glob.glob("preview/*.html")):
+        t = _io.open(f, encoding="utf-8").read()
+        for m in re.finditer(r"<style\b[^>]*>(.*?)</style>", t, re.S):
+            targets.append(("%s<style#%d>" % (f, m.start()), m.group(1)))
 
     for item in targets:
         if isinstance(item, tuple):
@@ -882,6 +889,193 @@ def undefined_tokens():
     return True
 
 
+# ══════════════════════════════════════════════════════════════════════════
+# 数据呈现层守门（03 · 3.7 / 08 · 8.2.11 / 08 · 8.2.13 / 11 · 11.2.6 / Part 15）
+#
+# 为什么必须有：这一族在 5 个页面各有一份实现，实测漂移成 ——
+#   表头字号 11 / 11.5 / 12px（类型阶最小档是 caption 12）、字重 500 / 600（03.7 要 600）、
+#   表体 12.5 / 13px（02 · 2.2.2 场景列写明「表格正文」= body-sm 14/20）、
+#   分隔 rgba(…) 有 .06 / .08 / .09 三种、操作列有的靠行内 style 右对齐有的没有、
+#   `.op` 与 `.ops` 两个名字；描述列表完全没有 8.2.13 要求的「省略 + 全文」；
+#   折叠只有一个 `transition: 0s / all` 的 details（写着过渡但根本没过渡）。
+# 数值类的一致性靠"外壳与独立页两份配方逐项相等"来守 —— 任一侧漂移即 FAIL。
+# 渲染级的实测（行高档、收起残留、特异性失效）在 scripts/page-qa.mjs 里另有一组。
+# ══════════════════════════════════════════════════════════════════════════
+
+def data_present():
+    import io as _io, glob as _glob
+    bad = []
+    SHELL = "scripts/build-site.py"
+    DEMO = "fuyouaicansai/goodmom-redesign.html"
+    if not os.path.exists(SHELL):
+        rec("FAIL", "data-present", "%s 不存在" % SHELL); return False
+    sh = _io.open(SHELL, encoding="utf-8").read()
+
+    def block(text, sel):
+        """取 `选择器{…}` 的声明体。
+
+        ⚠️ 选择器末尾的 `{` 要先摘掉再统一补 `\{`：`re.escape("{")` 会把它转义成 `\{`，
+        直接拼接就成了 `\{\{`（要求两个连续花括号）→ 任何规则都匹配不到，
+        门禁会**全量误报"缺少配方"**（本轮实测踩到）。
+        """
+        sel = sel[:-1] if sel.endswith("{") else sel
+        m = re.search(re.escape(sel) + r"\s*\{([^}]*)\}", text)
+        return m.group(1) if m else None
+
+    # ── ① 外壳：三套配方齐备且数值符合规范 ─────────────────────────────
+    checks = [
+        (".gm-tbl{", "font-size:14px", "玻璃表格正文必须 body-sm 14px（02 · 2.2.2「表格正文」档）"),
+        (".gm-tbl{", "tabular-nums", "玻璃表格必须 tabular-nums（17 · 17.2.2「数字一律等宽」）"),
+        (".gm-tbl td{", "white-space:nowrap",
+         "单元格必须不折行：折行会把行高从 45 涨到 65，直接顶破 03 · 3.7 的 44–52"
+         "（宽表横滑由 .gm-tbl-wrap 承担，TB-15-04）"),
+        (".gm-tbl td>span,.gm-tbl td>div,.gm-tbl td>a{", "flex-wrap:nowrap",
+         "单元格内联元素必须不折行：页面里 `.block span{flex-wrap:wrap}` 这类通用规则会把"
+         "头像与文字拆成两行（实测 .cell-av 55px → 行高 80px）"),
+        (".gm-tbl-wrap{", "overflow-x:auto", "宽表横滑必须由外层容器承担（TB-15-04 / TB-15-02 保留表头语义）"),
+        (".gm-tbl th{", "font-size:14px", "表头必须 body-sm 14px（03 · 3.7）"),
+        (".gm-tbl th{", "font-weight:600", "表头必须 600（03 · 3.7「body-sm 600 字重」）"),
+        (".gm-tbl th{", "var(--lg-text-secondary", "表头必须次级色（03 · 3.7 / TB-15-01 D7b）"),
+        (".gm-tbl th{", "var(--lg-divider", "表头分隔必须走 --lg-divider（TB-15-01 rgba(58,52,84,.08–.10)）"),
+        (".gm-tbl td{", "padding:12px 14px", "单元格内边距 12px 是行高 44–52 的算术前提（12+20+12+1=45）"),
+        (".gm-desc{", "var(--gm-desc-cols,3)", "描述列表分栏 2–4 自适应（08 · 8.2.11）"),
+        (".gm-desc dd,.gm-desc .v{", "text-overflow:ellipsis", "描述列表 ≤1 行省略（08 · 8.2.13）"),
+        (".gm-desc dd,.gm-desc .v{", "white-space:nowrap", "描述列表 ≤1 行省略（08 · 8.2.13）"),
+        (".gm-desc dt,.gm-desc .k{", "font-size:12px", "描述列表 key 用 caption 12px（08 · 8.2.11）"),
+        (".gm-fold>summary{", "min-height:44px", "折叠标题行 44 热区（11 · 11.2.6）"),
+        (".gm-fold__body{", "grid-template-rows 300ms", "折叠高度过渡 300ms 且用 grid-template-rows（11 · 11.2.6）"),
+        (".gm-fold .gm-fold__arr{", "transform 220ms", "折叠箭头旋转 220ms（11 · 11.2.6）"),
+    ]
+    for sel, needle, why in checks:
+        b = block(sh, sel)
+        if b is None:
+            bad.append("%s：缺少外壳配方 %s —— %s" % (SHELL, sel, why))
+        elif needle not in b:
+            bad.append("%s：%s 里没有 `%s` —— %s" % (SHELL, sel, needle, why))
+
+    # 折叠代理层不得自带 padding（0fr 轨道基尺寸取 min-content，padding 不可压缩）
+    b = block(sh, ".gm-fold__body>div")
+    if b is None:
+        bad.append("%s：缺少 .gm-fold__body>div 折叠代理层" % SHELL)
+    elif "padding" in b:
+        bad.append("%s：折叠代理层 .gm-fold__body>div 不得带 padding —— "
+                   "`0fr` 轨道的基尺寸取子项 min-content，padding 不可压缩，"
+                   "实测收起后残留 14px 高（内边距应放在 `.gm-fold__body>div>*` 上）" % SHELL)
+
+    # 表格不得用 display:block 做横滑：会在 Chrome / Firefox 里把表格语义从无障碍树里抹掉
+    for sel in (".gm-tbl{", ".gm-tbl-wrap{"):
+        b = block(sh, sel)
+        if b and re.search(r"display:\s*block", b) and sel == ".gm-tbl{":
+            bad.append("%s：%s 不得设 display:block —— 会抹掉表格语义（TB-15-02），"
+                       "横滑要放在外层容器上" % (SHELL, sel))
+
+    # ── ② 站点片段：不得再有私有表格/描述列表/折叠实现，且必须接系统 Token ──
+    # 数据呈现层读的是系统命名（--lg-text-secondary / --lg-divider）；
+    # 片段若只用私有命名（--t2 / --line）且不接别名，暗色档就会"页面翻了、表格没翻"，
+    # 实测暗底深字 1.61:1（page-qa 抓到 12 条）。
+    PRIVATE = [
+        (r"table\.t\s*\{", "table.t", "预览页私有的表格配方"),
+        (r"table\.gm\s*\{", "table.gm", "行业模式页私有的表格配方"),
+        (r"\.mtable\b[^{]*\{", ".mtable", "视觉规范页私有的表格配方"),
+        (r"details\.gfold\b", "details.gfold", "视觉规范页私有的折叠实现"),
+        (r"\.desc\s*\{[^}]*grid-template-columns", ".desc", "私有的描述列表网格配方"),
+        (r"th,td\s*\{[^}]*border-bottom", "th,td", "全局裸选择器写的表格样式（会外溢到规范正文表格）"),
+    ]
+    for f in sorted(_glob.glob("site/fragments/*.html")):
+        t = _io.open(f, encoding="utf-8").read()
+        code = re.sub(r"/\*.*?\*/", "", t, flags=re.S)
+        code = re.sub(r"<!--.*?-->", "", code, flags=re.S)
+        # 文档型模块（规范正文/手册/文档索引）的表格是文档表格，整套数据表格规则都不适用
+        docmod = os.path.basename(f) in ("site-spec.html", "site-manual.html", "site-docs.html")
+        for pat, name, why in ([] if docmod else PRIVATE):
+            if re.search(pat, code):
+                bad.append("%s：又出现了 %s（%s）—— 数据呈现层应统一取用外壳的 "
+                           ".gm-tbl / .gm-desc / .gm-fold" % (f, name, why))
+        # 表格必须带 class 且表头必须有 scope
+        # 例外：规范正文 / 标准手册 / 文档索引模块的表格是**文档表格**（Markdown 生成、
+        # 随文档版式排版），不属 03 · 3.7「数据表格」管辖。
+        doc_table = os.path.basename(f) in ("site-spec.html", "site-manual.html", "site-docs.html")
+        for m in re.finditer(r"<table(?![^>]*\bclass=)[^>]*>", code):
+            if doc_table:
+                break
+            bad.append("%s：存在没有 class 的 <table> —— 未接入 .gm-tbl 配方" % f)
+        for m in re.finditer(r'<table\b[^>]*class="([^"]*)"', code):
+            if doc_table:
+                break
+            if "gm-tbl" not in m.group(1) and "tbl-doc" not in m.group(1):
+                bad.append("%s：<table class=\"%s\"> 未接入 .gm-tbl（数据表格应统一取用外壳配方）"
+                           % (f, m.group(1)[:40]))
+        # 用了数据呈现层的片段，必须定义系统 Token（或做惰性别名）
+        if re.search(r'class="[^"]*\bgm-(tbl|desc|fold)\b', code) and not doc_table:
+            for tok in ("--lg-text-secondary", "--lg-divider"):
+                if tok + ":" not in code:
+                    bad.append("%s：用了数据呈现层却未定义 %s —— 外壳配方读的是系统 Token，"
+                               "片段只有私有命名（--t2/--line）时，暗色档会出现"
+                               "「页面翻了、表格没翻」的暗底深字（实测 1.61:1）" % (f, tok))
+            # ⚠️ 别名**只能**接数据呈现层真正读取的那几个 Token。多接一个
+            # `--lg-text-tertiary` 就会把页面里 `var(--lg-text-tertiary, 深色兜底)` 的写法
+            # 从"走兜底"改成"走别名值" —— 实测 preview-patterns 的禁用态链接因此从可读的
+            # 兜底色变成 #8A92A3（3.12:1），被 a11y-dom 判为**新增确证失败**。
+            # 只禁"**别名**多接"（值是对私有 Token 的 var() 引用）；
+            # 片段自己正常定义 --lg-text-tertiary 的**字面值**不算（那是它的基础令牌集）。
+            extra = re.findall(r"(--lg-text-(?:tertiary|disabled|placeholder|on-accent))\s*:\s*var\(", code)
+            if extra:
+                bad.append("%s：别名多接了 %s —— 数据呈现层不读它，而页面里 "
+                           "`var(%s, 兜底)` 的写法会因此从\"走兜底\"变成\"走别名值\"，"
+                           "可能把本来合格的对比度改坏（实测 3.12:1）" % (f, extra[0], extra[0]))
+        # .gm-tbl 表内所有 <th> 必须有 scope（TB-15-02 表头语义）
+        for tbm in re.finditer(r'<table\b[^>]*class="[^"]*gm-tbl[^"]*"[^>]*>(.*?)</table>', code, re.S):
+            for thm in re.finditer(r"<th\b([^>]*)>", tbm.group(1)):
+                if "scope=" not in thm.group(1):
+                    bad.append("%s：.gm-tbl 的表头缺 scope —— TB-15-02 要求保留表头语义"
+                               "（读屏靠它把列头绑到单元格）" % f)
+                    break
+        # 描述列表 / 折叠：键值必须落在 .gm-desc / .gm-fold 上
+        # 键值项判定要按**整词**：`\bk\b` 会误命中 `class="k-head"`（连字符是词边界），
+        # 于是把卡片的 kpi 子元素当成"描述列表的键值项"报出来（实测的假阳性）。
+        for m in re.finditer(r'<div class="([^"]*)"', code):
+            toks = m.group(1).split()
+            if "k" not in toks:
+                continue
+            ctx = code[max(0, m.start() - 500):m.start()]
+            if 'class="gm-desc"' not in ctx and "gm-desc " not in ctx:
+                bad.append("%s：出现了不在 .gm-desc 里的键值项（class=\"k\" 是描述列表的键；"
+                           "键值网格必须走外壳配方）" % f)
+                break
+
+    # ── ③ 独立演示页：同源配方的关键数值必须与外壳逐项相等 ────────────────
+    if os.path.exists(DEMO):
+        d = _io.open(DEMO, encoding="utf-8").read()
+        for sel, needle, why in checks:
+            if not sel.startswith((".gm-tbl", ".gm-desc", ".gm-fold")):
+                continue
+            if sel == ".gm-tbl-wrap{":
+                continue   # 独立页的横滑容器写法见下（无媒体查询包裹）
+            b = block(d, sel)
+            if b is None:
+                bad.append("%s：缺少同源配方 %s（独立页拿不到站点外壳，必须自带一份）" % (DEMO, sel))
+            elif needle not in b:
+                bad.append("%s：%s 里没有 `%s` —— 与外壳配方漂移（%s）" % (DEMO, sel, needle, why))
+        # 折叠脚本与 aria
+        if "aria-expanded" not in d or "aria-controls" not in d:
+            bad.append("%s：折叠未补 aria-expanded / aria-controls（原生 details 不报展开态，"
+                       "读屏不知道这是可展开控件）" % DEMO)
+        # 表格：role 语义不得被 display:block 抹掉
+        if re.search(r"\.gm-tbl\{[^}]*display:\s*block", d):
+            bad.append("%s：.gm-tbl 不得设 display:block 做横滑 —— "
+                       "会把表格语义从无障碍树里抹掉（TB-15-02）" % DEMO)
+
+    if bad:
+        for b in bad:
+            rec("FAIL", "data-present", b)
+        return False
+    rec("OK", "data-present", "数据呈现层符合 03 · 3.7 / 08 · 8.2.11+8.2.13 / 11 · 11.2.6 / TB-15-01/02："
+        "表格 body-sm 14+600 次级表头 · tabular-nums · 行高算术 44–52 · 操作列右对齐；"
+        "描述列表 caption key + body-sm value + 单行省略；折叠 44 热区 + 300ms grid-rows + 220ms 箭头；"
+        "外壳与独立页两份配方逐项相等，页面侧零私有实现")
+    return True
+
+
 # 门禁登记表：名字 → 函数。集中登记是为了支持 `--only <名>`（负向测试要能
 # 精确地"只跑这一条"，否则注入缺陷后先被其它门禁拦下，反而证明不了目标门禁有效）。
 GATES = [
@@ -891,8 +1085,9 @@ GATES = [
     ("hex-case", hex_case), ("mirror", mirror_sync), ("dark", dark_contrast),
     ("exports", exports_check), ("logo-guard", logo_guard), ("loading-spec", loading_spec),
     ("css-syntax", css_syntax), ("feedback-spec", feedback_spec),
-    ("undefined-token", undefined_tokens),
+    ("undefined-token", undefined_tokens), ("data-present", data_present),
 ]
+
 
 
 def main():

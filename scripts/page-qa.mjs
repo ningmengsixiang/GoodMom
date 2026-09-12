@@ -492,6 +492,112 @@ const PROBE = (spec) => {
     }
   }
 
+
+  // ── 6b. 数据呈现层：玻璃表格 / 描述列表 / 折叠（03 · 3.7 / 08 · 8.2.11 / 11 · 11.2.6）──
+  // 为什么必须放在**渲染级**：这一族的缺陷全是"算出来才知道"的 ——
+  //   · 行高：由内联元素（头像 / 徽章 / 按钮）撑出来的，静态看 CSS 算不出 55 还是 51；
+  //   · 特异性：模块内规则经构建会加 `.gm-mod--x ` 前缀（0,2,0），与外壳的
+  //     `.gm-tbl .badge`（0,2,0）**同权**而模块更靠后 → 外壳那条静默失效；
+  //   · 折叠收起：`0fr` 轨道的基尺寸取子项 min-content，padding 不可压缩 →
+  //     代理层若自带内边距，收起后残留十几像素（实测 14px）。
+  // 这三类都不可能靠读 CSS 发现，只能量。
+  {
+    const px = (v) => parseFloat(v) || 0;
+    // 玻璃表格
+    for (const tb of root.querySelectorAll('table.gm-tbl')) {
+      if (!visible(tb)) continue;
+      const th = tb.querySelector('th');
+      const cs0 = th ? getComputedStyle(th) : null;
+      if (cs0) {
+        if (px(cs0.fontSize) !== 14) push('tbl-head-type', 'P2', '03 · 3.7 / 02 · 2.2.2', pathOf(th), `表头字号 ${cs0.fontSize} ≠ body-sm 14px`);
+        if (parseInt(cs0.fontWeight, 10) < 600) push('tbl-head-type', 'P2', '03 · 3.7', pathOf(th), `表头字重 ${cs0.fontWeight} < 600`);
+        const noScope = [...tb.querySelectorAll('th')].filter((x) => !x.getAttribute('scope'));
+        if (noScope.length) push('tbl-th-scope', 'P2', 'Part 15 · TB-15-02', pathOf(noScope[0]), `${noScope.length} 个表头缺 scope（表头语义靠它绑定列）`);
+      }
+      const td = tb.querySelector('tbody td');
+      if (td && px(getComputedStyle(td).fontSize) !== 14) {
+        push('tbl-body-type', 'P2', '02 · 2.2.2', pathOf(td), `表格正文 ${getComputedStyle(td).fontSize} ≠ body-sm 14px（「表格正文」在类型阶上就是这一档）`);
+      }
+      // 行高 44–52（03 · 3.7）；由内联元素撑破是最常见的超档原因，故把元凶一并报出来
+      for (const tr of tb.querySelectorAll('tbody tr')) {
+        const h = Math.round(tr.getBoundingClientRect().height);
+        if (!h) continue;
+        if (h < 44 || h > 52) {
+          let tall = '', max = 0;
+          for (const c of tr.querySelectorAll('td *')) {
+            const ch = c.getBoundingClientRect().height;
+            if (ch > max) { max = ch; tall = pathOf(c) + ` ${Math.round(ch)}px`; }
+          }
+          push('tbl-row-height', 'P2', '03 · 3.7', pathOf(tr),
+            `行高 ${h}px 不在 44–52；最高内联元素 ${tall}（单元格折行与内联元素超高都会顶破这一档）`);
+        }
+      }
+      // 操作列右对齐（TB-15-01）
+      const opsTh = tb.querySelector('th.col-ops');
+      if (opsTh) {
+        for (const td2 of tb.querySelectorAll('tbody td.col-ops')) {
+          if (getComputedStyle(td2).textAlign !== 'right') {
+            push('tbl-ops-align', 'P2', 'Part 15 · TB-15-01', pathOf(td2), `操作列 text-align=${getComputedStyle(td2).textAlign} ≠ right`);
+            break;
+          }
+        }
+      }
+      // 数字对齐（17 · 17.2.2）
+      if (getComputedStyle(tb).fontVariantNumeric.indexOf('tabular-nums') < 0) {
+        push('tbl-tabular', 'P2', '17 · 17.2.2 / 03 · 3.7', pathOf(tb), '表格未启用 tabular-nums（数字列无法对齐）');
+      }
+      // 禁止给 table 自己设 display:block 做横滑：会把表格语义从无障碍树里抹掉
+      if (getComputedStyle(tb).display !== 'table') {
+        push('tbl-display', 'P1', 'Part 15 · TB-15-02', pathOf(tb), `table 的 display=${getComputedStyle(tb).display} ≠ table（会丢失表格语义，横滑应用外层容器）`);
+      }
+    }
+    // 描述列表
+    for (const d of root.querySelectorAll('.gm-desc')) {
+      if (!visible(d)) continue;
+      const dd = d.querySelector('dd,.v');
+      if (!dd) continue;
+      const cs1 = getComputedStyle(dd);
+      if (px(cs1.fontSize) !== 14 || px(cs1.lineHeight) !== 20) {
+        push('desc-value-type', 'P2', '08 · 8.2.11 / 02 · 2.2.2', pathOf(dd), `value ${cs1.fontSize}/${cs1.lineHeight} ≠ body-sm 14/20`);
+      }
+      // 8.2.13：描述列表 ≤1 行 → 单行省略；长文本详情必须给全文（title）
+      if (cs1.whiteSpace !== 'nowrap' || cs1.textOverflow !== 'ellipsis') {
+        push('desc-ellipsis', 'P2', '08 · 8.2.13', pathOf(dd), `value 未做单行省略（white-space=${cs1.whiteSpace} / text-overflow=${cs1.textOverflow}）`);
+      }
+      const k = d.querySelector('dt,.k');
+      if (k && px(getComputedStyle(k).fontSize) !== 12) {
+        push('desc-key-type', 'P3', '08 · 8.2.11 / 02 · 2.2.2', pathOf(k), `key ${getComputedStyle(k).fontSize} ≠ caption 12px`);
+      }
+    }
+    // 折叠面板
+    for (const f of root.querySelectorAll('details.gm-fold')) {
+      if (!visible(f)) continue;
+      const sum = f.querySelector('summary');
+      const body = f.querySelector('.gm-fold__body');
+      if (!sum || !body) { push('fold-structure', 'P2', '11 · 11.2.6', pathOf(f), '缺 summary 或 .gm-fold__body（高度过渡无处施加）'); continue; }
+      const sb = sum.getBoundingClientRect();
+      if (sb.height < 44) push('fold-hit', 'P2', '11 · 11.2.6', pathOf(sum), `标题行 ${Math.round(sb.height)}px < 44 触控热区`);
+      const bcs = getComputedStyle(body);
+      // ⚠️ 看 `transition-property` 而不是 `transition-duration`：本工具为了测量稳定，
+      // 加载后会注入 `*{transition-duration:0s!important}`（见 STABILIZE），
+      // 于是任何元素的 duration 都读成 0s —— 拿它判定"有没有写过渡"必然误报（实测踩过）。
+      // property 不受影响，仍能证明"过渡确实声明在 grid-template-rows 上"。
+      const noMotion = matchMedia('(prefers-reduced-motion: reduce)').matches;
+      if (!noMotion && (bcs.gridTemplateRows === 'none' || !/grid-template-rows/.test(bcs.transitionProperty))) {
+        push('fold-transition', 'P2', '11 · 11.2.6', pathOf(body), `高度过渡缺失（grid-template-rows=${bcs.gridTemplateRows} / transition=${bcs.transitionDuration}）`);
+      }
+      if (!f.open) {
+        const h = Math.round(body.getBoundingClientRect().height);
+        if (h > 0) push('fold-collapse', 'P2', '11 · 11.2.6', pathOf(body), `收起后仍占位 ${h}px（代理层自带 padding 会让 0fr 轨道撑住）`);
+        if (sum.getAttribute('aria-expanded') !== 'false') {
+          push('fold-aria', 'P2', 'Part 23 / 11 · 11.2.6', pathOf(sum), `收起态 aria-expanded=${sum.getAttribute('aria-expanded')} ≠ false`);
+        }
+      } else if (sum.getAttribute('aria-expanded') !== 'true') {
+        push('fold-aria', 'P2', 'Part 23 / 11 · 11.2.6', pathOf(sum), `展开态 aria-expanded=${sum.getAttribute('aria-expanded')} ≠ true`);
+      }
+    }
+  }
+
   // ── 7. 版本与计数（16 · 16.2 / 14.1.1）──────────────────────────────────
   {
     // 版本号只查**界面载体**（顶栏/页脚/徽章）。规范正文里的版本沿革（V1.0→V2.8）

@@ -52,6 +52,12 @@ const INTENTIONAL = new Set([
   // 它们原本以静态元素常驻 DOM，靠 class 切换显隐；现在统一由外壳的 window.gmToast()
   // **按需创建**（这样才拿得到"顶部偏上 + 避让吸顶导航"的统一位置，也不会在加载时闪一下）。
   "copied", "mtoast",
+  // V2.9 数据呈现层（D19）：各页私有的表格/描述列表/折叠类名统一收敛到外壳配方 ——
+  //   mtable / t / gm → gm-tbl（玻璃表格）· desc → gm-desc（描述列表）
+  //   gfold / arr / gfb → gm-fold（折叠，箭头发改用 lg-icon-chevron-down 的 SVG）
+  //   op → ops（TB-15-01 引用的基线名，17.2.3 已正式定义）
+  // 这一组是"改名"，不是"删功能"：对应元素仍在，只是换了统一的类名。
+  "mtable", "gm", "desc", "gfold", "arr", "gfb", "op",
 ]);
 
 /** 有意移除的 **id**（同上一类，节点整体不再常驻 DOM） */

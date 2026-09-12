@@ -168,6 +168,13 @@
 - 玻璃卡内键值网格：key caption 三级色、value body-sm；奇数行淡白玻璃底（可选）。
 - 分栏 2–4 列自适应；长文本省略 + Tooltip（ellipsis 规则 8.2.13）。
 - 适用：资产详情、合规策略、实例配置等"只读信息"。
+  > **口径裁决（V2.9）**：key 的「三级色」与 02 · 2.1.1「三级色只可用于 ≥24px 常规」直接冲突 ——
+  > caption 档的 key 只有 12px，三级色 #9AA2B0 在此约 **2.6:1**，不合格。**以 02 · 2.1.1 为准**：
+  > key 走**次级色** `--lg-text-secondary`（与 TB-15-01 对表头的同一裁决一致）。
+  > **落地实现**：`.gm-desc`（外壳一份配方 + 独立演示页同源一份）
+  > —— 结构用 `<dl>` + `<dt class="k">` / `<dd class="v" title="全文">`（键值语义）；
+  > value 承 body-sm **14/20**（旧实现 14px 但行高 1.7≈23.8px，不在档上）；
+  > 按 8.2.13 做**单行省略**（`white-space:nowrap` + `ellipsis`），全文走 `title`（TB-15-02 同口径）。
 
 ### 8.2.12 Empty（空状态）
 - 玻璃圆角占位卡：淡紫洗色圆底 + `lg-icon-search`/`lg-icon-cloud` 等 40px 图标 + 标题 body + 说明 caption；可带一个次按钮。

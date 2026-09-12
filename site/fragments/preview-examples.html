@@ -2,6 +2,9 @@
 /* ═══ GoodMom Tokens（精简，同 02/12）═══ */
 :root{
   --text:#343A46;--t2:#4F5B6E;--t3:#4F5B6E;--line:rgba(58,52,84,.09);
+  /* 系统 Token 别名（惰性引用）：数据呈现层读 --lg-* 命名，本页私有命名由这里接过去。
+     不接的后果不是"没样式"，而是暗色档里"页面翻了、表格没翻"的暗底深字。 */
+  --lg-text-primary:var(--text);--lg-text-secondary:var(--t2);  --lg-divider:var(--line);
   --rose:#F77FA3;--rose-d:#E85D8F;--rose-deep:#B23A63;--mint:#6FC9B4;--mint-d:#4FB59C;
   --info:#6D9EFF;--warn:#F2B25C;--danger:#EF6A7B;--purple:#9A78FF;
   /* 文字专用深档 alias（02 · 2.1.5：-500 仅作填充/色块/图表强调，文字走深色 alias） */
@@ -67,7 +70,7 @@ background:rgba(255,255,255,.5);border:1px solid var(--lg-divider,rgba(58,52,84,
 .btn.line{background:transparent;color:var(--mmh-rose-700,#B23A63);border:1.5px solid rgba(232,93,143,.45);box-shadow:0 1px 2px rgba(178,58,99,.06)}
 .btn.line:hover{border-color:rgba(232,93,143,.75);background:rgba(247,127,163,.07)}
 .btn.danger{background:linear-gradient(135deg,#C25064,#B04052);color:#FFF}
-.btn.mini{height:30px;font-size:12px;padding:0 12px}
+.btn.mini{height:26px;font-size:12px;padding:0 12px;border-radius:16px}   /* 03 · 3.2.4：mini 26 高（原 30 不在档上） */
 /* PC 顶栏 */
 .pcbar{position:relative;max-width:1180px;margin:14px auto 0;padding:8px 12px;border-radius:999px;display:flex;align-items:center;gap:12px}
 .pcbar .logo{font-weight:700;color:var(--rose-deep);display:flex;align-items:center;gap:8px;font-size:15px}
@@ -84,11 +87,18 @@ background:rgba(255,255,255,.5);border:1px solid var(--lg-divider,rgba(58,52,84,
 .kpi .l{font-size:12px;color:var(--t2);display:flex;align-items:center;gap:6px}
 .kpi .v{font-size:26px;font-weight:700;margin-top:6px}
 .kpi .d{font-size:11.5px;color:var(--t3);margin-top:4px}
-table.t{width:100%;border-collapse:separate;border-spacing:0;font-size:13px}
-table.t th{text-align:left;font-size:11.5px;color:var(--t3);font-weight:500;padding:10px 14px;border-bottom:1px solid var(--line)}
-table.t td{padding:12px 14px;border-bottom:1px solid rgba(58,52,84,.06)}
-table.t tr{transition:background .2s}
-table.t tbody tr:hover{background:rgba(255,255,255,.5)}
+/* 描述列表：网格/排版/省略都在外壳的 .gm-desc 里，本页只补一处卡片内边距。 */
+.gm-desc{padding:14px}
+
+/* 玻璃表格：配方在**外壳**（scripts/build-site.py 的「数据呈现层」），本页只加 class。
+   旧实现（已删）实测：表头 11.5px / 字重 500（03 · 3.7 要 body-sm 600）、表体 13px
+   （02 · 2.2.2 场景列写明「表格正文」= body-sm 14/20）、分隔 hairline 却两套色
+   （`var(--line)` 与 rgba(58,52,84,.06)）、行高 57（03.7 要 44–52，超档原因是
+   表格内头像 32px 与内联小钮 30px）。
+   本页只保留表格**专属**的一条：移动端宽表横滑 —— 用外层容器滚动，而不是给
+   `<table>` 自己加 `display:block`：后者会在 Chrome / Firefox 里把表格语义
+   从无障碍树里抹掉，读屏只能听到一串散字（TB-15-02 要求保留表头语义）。 */
+.gm-tbl-wrap{overflow-x:auto;-webkit-overflow-scrolling:touch}
 /* 头像/标识：由「饱和渐变 + 白字」改为**浅色品牌染 + 对应深档文字**。
    理由（算术）：#F77FA3/#4FB59C 这类饱和面上，白字 2.46–4.14、深字 2.3–3.4，
    两个方向都过不了 AA；浅染 + 深字可达 4.6–8.9，且保留原来的轻盈观感。
@@ -97,11 +107,6 @@ table.t tbody tr:hover{background:rgba(255,255,255,.5)}
   background:linear-gradient(150deg,#FFDEE8,#FFF0F4);font-size:12px}
 .av.mint{background:linear-gradient(150deg,#A5F1EE,#E0F8F6);color:var(--lg-sem-positive,#25715D)}
 .av.purp{background:linear-gradient(150deg,#D9CBFE,#EDE7FE);color:var(--mmh-solid-special,#6242B8)}
-.op a{color:var(--rose-deep);text-decoration:none;font-size:12.5px;margin-right:12px;font-weight:500}
-.op a:hover{opacity:.7}
-.desc{display:grid;grid-template-columns:repeat(3,1fr);gap:12px 22px;padding:14px}
-.desc .k{font-size:11.5px;color:var(--t3);margin-bottom:3px}
-.desc .v{font-size:14px;font-weight:600}
 .hr{height:1px;background:var(--line);margin:12px 0}
 /* 生命周期轴 */
 .lca{display:flex;align-items:flex-start;gap:0;padding:10px 6px 2px}
@@ -160,8 +165,7 @@ table.t tbody tr:hover{background:rgba(255,255,255,.5)}
 .two{display:grid;grid-template-columns:1.6fr 1fr;gap:16px;margin-top:14px}
 /* 10 · 10.11.1 宽表：小屏在容器内横滚（实测修复前 375px 溢出 347px） */
 @media(max-width:767px){
-  .two{grid-template-columns:1fr}.kpis{grid-template-columns:repeat(2,1fr)}.desc{grid-template-columns:1fr 1fr}
-  table.t{display:block;max-width:100%;overflow-x:auto;-webkit-overflow-scrolling:touch}
+  .two{grid-template-columns:1fr}.kpis{grid-template-columns:repeat(2,1fr)}
   /* 10 · 10.4：表格复选框视觉 22×22、热区 44×44；下拉项/操作链接热区 ≥44 */
   input[type="checkbox"]{width:22px;height:22px;position:relative}
   input[type="checkbox"]::before{content:"";position:absolute;inset:-11px}
@@ -170,13 +174,15 @@ table.t tbody tr:hover{background:rgba(255,255,255,.5)}
 /* 10 · 10.4：≤767px 热区 ≥44×44。复选框按 10 章「视觉 22×22、热区 44×44」实现：
    视觉盒子不动，用 ::after 扩热区。 */
 @media(max-width:767px){
-  input[type="checkbox"],.pcbar .btn,.op a,.ngt,.pcbar .search input,.note button,p a,li a{position:relative}
-  input[type="checkbox"]::after,.pcbar .btn::after,.op a::after,.ngt::after,
+  /* ⚠️ 选择器随 .op→.ops 改名同步更新：改名时漏改这处，会让 ≤767px 的热区扩增**静默失联**
+     （实测操作链接热区只剩 13×36，page-qa 的 touch-target 抓到 17 条）。 */
+  input[type="checkbox"],.pcbar .btn,.ops a,.ngt,.pcbar .search input,.note button,p a,li a{position:relative}
+  input[type="checkbox"]::after,.pcbar .btn::after,.ops a::after,.ngt::after,
   .pcbar .search input::after,.note button::after,p a::after,li a::after{
     content:"";position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);
     width:100%;min-width:44px;height:100%;min-height:44px}
 }
-@media(max-width:640px){.kpis{grid-template-columns:1fr 1fr}.form2{grid-template-columns:1fr}.desc{grid-template-columns:1fr}}
+@media(max-width:640px){.kpis{grid-template-columns:1fr 1fr}.form2{grid-template-columns:1fr}}
 footer.note{max-width:1180px;margin:10px auto 40px;text-align:center;font-size:11.5px;color:var(--t3);line-height:2;padding:0 18px}
 footer.note a{color:var(--rose-deep);text-decoration:none}
 
@@ -187,19 +193,16 @@ footer.note a{color:var(--rose-deep);text-decoration:none}
 .hub::-webkit-scrollbar{height:0}
 .pcbar{flex-wrap:wrap;row-gap:10px}
 .pcbar .search{flex:1 1 220px;min-width:200px}
-.t th,.t td{vertical-align:middle}
 .td-group{white-space:nowrap}
 .chip{white-space:nowrap}
 .tg.pill-sel{outline:2px solid currentColor;outline-offset:1px;font-weight:600}
 .mwrap{padding-bottom:120px}
 .lc{white-space:nowrap}
-.btn.lg{height:50px;padding:0 30px;font-size:15.5px;border-radius:18px}
+.btn.lg{height:48px;padding:0 30px;font-size:16px;border-radius:26px}   /* 03 · 3.2.4：large 48 / 圆角 26（原 50 / 18 不在档上） */
 .btnrow{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
 .btn:hover{filter:brightness(.97)}
-.desc .v{line-height:1.5}
 .mobottom{display:flex;gap:8px;padding:10px;border-radius:24px}
 .lvitem .m span{line-height:1.6;display:block;margin-top:2px}
-table.t .op a:last-child{margin-right:0}
 /* iPad 页 */
 .ipadgrid{display:grid;grid-template-columns:1.7fr 1fr;gap:16px;margin-top:14px}
 @media(max-width:767px){.ipadgrid{grid-template-columns:1fr}}
@@ -229,16 +232,11 @@ textarea.note{width:100%;min-height:84px;border-radius:18px;border:1px solid rgb
 .view .ic svg,.view .fi svg,.wjrow .ic svg,.lvitem .ic svg{width:21px;height:21px;display:block}
 .view .btn.lg svg{width:17px;height:17px}
 .tg{line-height:1;white-space:nowrap}
-.op{white-space:nowrap}
-.op a{display:inline-block;padding:2px 2px}
-table.t td,table.t th{padding-left:12px;padding-right:12px}
 .av{flex:none;line-height:1}
 .kpis .kpi{min-width:0}
 .kpis .kpi .l{white-space:nowrap}
 .lca .lc .d svg{width:11px;height:11px;stroke:#343A46;margin:0 auto}
 .stp .n svg{width:12px;height:12px;stroke:#FFF;display:inline-block;vertical-align:-2px}
-.view .desc{min-width:0}
-.view .desc .v{overflow-wrap:anywhere}
 .mobottom .b1 svg{width:17px;height:17px}
 .pcbar .btn svg{width:15px;height:15px}
 .wiz .pcbar .search{min-width:0}
@@ -268,10 +266,10 @@ table.t td,table.t th{padding-left:12px;padding-right:12px}
 .tg i{flex:none}
 .u{display:inline-flex;align-items:center;justify-content:center}
 .lca .lc .d{display:flex;align-items:center;justify-content:center;line-height:1}
-.t td,.t th{vertical-align:middle}
-.op{display:inline-flex;align-items:center;gap:12px}
-.op a{display:inline-flex;align-items:center;gap:4px;vertical-align:middle}
-.desc .v{line-height:1.7}
+/* 操作列内联动作组：`.ops` 基线（TB-15-01 引用，定义见 17 · 17.2.3）。
+   尺寸/颜色/对齐由外壳的 `.gm-tbl .ops` 统一给出，这里只留垂直对齐。 */
+.ops{display:inline-flex;align-items:center;justify-content:flex-end;gap:12px}
+.ops a{display:inline-flex;align-items:center;gap:4px;vertical-align:middle}
 .pcbar .search svg{flex:none}
 .kpi .l{display:inline-flex;align-items:center;gap:6px}
 .mobottom .b1{display:inline-flex;align-items:center;justify-content:center;gap:6px}
@@ -327,17 +325,19 @@ table.t td,table.t th{padding-left:12px;padding-right:12px}
       <span class="chip on">全部</span><span class="chip">待筛查</span><span class="chip">异常</span><span class="chip">待随访</span><span class="chip">已结案</span>
       <span style="font-size:11.5px;color:var(--t3);margin-left:auto">共 12,849 条 · 导出 / 打印 / 批量操作</span>
     </div>
-    <table class="t">
-      <thead><tr><th style="width:34px"><input type="checkbox" aria-label="全选本页服务对象"></th><th>服务对象</th><th>档案类型</th><th>最近筛查 / 体检</th><th>风险与五色</th><th>结果</th><th>随访</th><th style="text-align:right">操作</th></tr></thead>
+    <div class="gm-tbl-wrap">
+    <table class="gm-tbl">
+      <thead><tr><th scope="col" style="width:34px"><input type="checkbox" aria-label="全选本页服务对象"></th><th scope="col">服务对象</th><th scope="col">档案类型</th><th scope="col">最近筛查 / 体检</th><th scope="col">风险与五色</th><th scope="col">结果</th><th scope="col">随访</th><th scope="col" class="col-ops">操作</th></tr></thead>
       <tbody>
-        <tr><td><input type="checkbox" aria-label="选择该行服务对象"></td><td><span style="display:flex;align-items:center;gap:9px"><span class="av purp">李</span><b>李慧 · 女 36</b></span></td><td>妇女 · 两癌</td><td class="num">宫颈 TCT · 05-12</td><td><span class="tg r"><i></i>检查异常</span></td><td><span class="tg o">待复查</span></td><td><span class="tg o">待随访</span></td><td style="text-align:right"><span class="op"><a href="#">查看</a><a href="#">随访</a><a href="#">转诊</a></span></td></tr>
-        <tr><td><input type="checkbox" aria-label="选择该行服务对象"></td><td><span style="display:flex;align-items:center;gap:9px"><span class="av">张</span><b>张敏 · 孕 28 周</b></span></td><td>孕产妇</td><td class="num">产检 · 04-28</td><td><span class="tg y"><i></i>黄 · 一般风险</span></td><td><span class="tg g">正常</span></td><td><span class="tg b">已预约</span></td><td style="text-align:right"><span class="op"><a href="#">查看</a><a href="#">产检</a><a href="#">更多</a></span></td></tr>
-        <tr><td><input type="checkbox" aria-label="选择该行服务对象"></td><td><span style="display:flex;align-items:center;gap:9px"><span class="av">王</span><b>王雨桐 · 女 32</b></span></td><td>妇女 · 两癌</td><td class="num">乳腺 B 超 · 05-20</td><td><span class="tg o"><i></i>橙 · 较高风险</span></td><td><span class="tg r">可疑</span></td><td><span class="tg o">待随访</span></td><td style="text-align:right"><span class="op"><a href="#">查看</a><a href="#">随访</a><a href="#">转诊</a></span></td></tr>
-        <tr><td><input type="checkbox" aria-label="选择该行服务对象"></td><td><span style="display:flex;align-items:center;gap:9px"><span class="av mint">赵</span><b>赵甜甜 · 18 月龄</b></span></td><td>儿童 · 儿保</td><td class="num">儿保体检 · 05-06</td><td><span class="tg r"><i></i>生长低于 P3</span></td><td><span class="tg r">异常</span></td><td><span class="tg o">待随访</span></td><td style="text-align:right"><span class="op"><a href="#">查看</a><a href="#">随访</a><a href="#">更多</a></span></td></tr>
-        <tr><td><input type="checkbox" aria-label="选择该行服务对象"></td><td><span style="display:flex;align-items:center;gap:9px"><span class="av purp">陈</span><b>陈静 · 孕 12 周</b></span></td><td>孕产妇</td><td class="num">首次产检 · 06-02</td><td><span class="tg r"><i></i>红 · 高风险</span></td><td><span class="tg o">待复核</span></td><td><span class="tg b">随访中</span></td><td style="text-align:right"><span class="op"><a href="#">查看</a><a href="#">评估</a><a href="#">转诊</a></span></td></tr>
-        <tr><td><input type="checkbox" aria-label="选择该行服务对象"></td><td><span style="display:flex;align-items:center;gap:9px"><span class="av">刘</span><b>刘佳 · 女 28</b></span></td><td>妇女 · 两癌</td><td class="num">— 未筛查</td><td><span class="tg n"><i></i>待筛查</span></td><td><span class="tg n">未出结果</span></td><td><span class="tg n">未随访</span></td><td style="text-align:right"><span class="op"><a href="#">查看</a><a href="#">开始筛查</a></span></td></tr>
+        <tr><td><input type="checkbox" aria-label="选择该行服务对象"></td><td><span style="display:flex;align-items:center;gap:9px"><span class="av purp">李</span><b>李慧 · 女 36</b></span></td><td>妇女 · 两癌</td><td class="num">宫颈 TCT · 05-12</td><td><span class="tg r"><i></i>检查异常</span></td><td><span class="tg o">待复查</span></td><td><span class="tg o">待随访</span></td><td class="col-ops"><span class="ops"><a href="#">查看</a><a href="#">随访</a><a href="#">转诊</a></span></td></tr>
+        <tr><td><input type="checkbox" aria-label="选择该行服务对象"></td><td><span style="display:flex;align-items:center;gap:9px"><span class="av">张</span><b>张敏 · 孕 28 周</b></span></td><td>孕产妇</td><td class="num">产检 · 04-28</td><td><span class="tg y"><i></i>黄 · 一般风险</span></td><td><span class="tg g">正常</span></td><td><span class="tg b">已预约</span></td><td class="col-ops"><span class="ops"><a href="#">查看</a><a href="#">产检</a><a href="#">更多</a></span></td></tr>
+        <tr><td><input type="checkbox" aria-label="选择该行服务对象"></td><td><span style="display:flex;align-items:center;gap:9px"><span class="av">王</span><b>王雨桐 · 女 32</b></span></td><td>妇女 · 两癌</td><td class="num">乳腺 B 超 · 05-20</td><td><span class="tg o"><i></i>橙 · 较高风险</span></td><td><span class="tg r">可疑</span></td><td><span class="tg o">待随访</span></td><td class="col-ops"><span class="ops"><a href="#">查看</a><a href="#">随访</a><a href="#">转诊</a></span></td></tr>
+        <tr><td><input type="checkbox" aria-label="选择该行服务对象"></td><td><span style="display:flex;align-items:center;gap:9px"><span class="av mint">赵</span><b>赵甜甜 · 18 月龄</b></span></td><td>儿童 · 儿保</td><td class="num">儿保体检 · 05-06</td><td><span class="tg r"><i></i>生长低于 P3</span></td><td><span class="tg r">异常</span></td><td><span class="tg o">待随访</span></td><td class="col-ops"><span class="ops"><a href="#">查看</a><a href="#">随访</a><a href="#">更多</a></span></td></tr>
+        <tr><td><input type="checkbox" aria-label="选择该行服务对象"></td><td><span style="display:flex;align-items:center;gap:9px"><span class="av purp">陈</span><b>陈静 · 孕 12 周</b></span></td><td>孕产妇</td><td class="num">首次产检 · 06-02</td><td><span class="tg r"><i></i>红 · 高风险</span></td><td><span class="tg o">待复核</span></td><td><span class="tg b">随访中</span></td><td class="col-ops"><span class="ops"><a href="#">查看</a><a href="#">评估</a><a href="#">转诊</a></span></td></tr>
+        <tr><td><input type="checkbox" aria-label="选择该行服务对象"></td><td><span style="display:flex;align-items:center;gap:9px"><span class="av">刘</span><b>刘佳 · 女 28</b></span></td><td>妇女 · 两癌</td><td class="num">— 未筛查</td><td><span class="tg n"><i></i>待筛查</span></td><td><span class="tg n">未出结果</span></td><td><span class="tg n">未随访</span></td><td class="col-ops"><span class="ops"><a href="#">查看</a><a href="#">开始筛查</a></span></td></tr>
       </tbody>
     </table>
+    </div>
     <div style="display:flex;align-items:center;gap:8px;justify-content:flex-end;margin-top:14px;font-size:12px;color:var(--t3)">
       第 1/428 页 · 共 12,849 条
       <span class="chip on" style="padding:5px 12px">1</span><span class="chip" style="padding:5px 12px">2</span><span class="chip" style="padding:5px 12px">3</span><span class="chip" style="padding:5px 12px">…</span><span class="chip" style="padding:5px 12px">428</span>
@@ -384,14 +384,14 @@ table.t td,table.t th{padding-left:12px;padding-right:12px}
         <div style="display:flex;gap:8px;margin-bottom:12px">
           <span class="chip on">基本信息</span><span class="chip">健康保健</span><span class="chip">生长曲线</span><span class="chip">疫苗</span><span class="chip">随访记录</span>
         </div>
-        <div class="desc">
-          <div><div class="k">出生日期</div><div class="v num">2023-04-12 · 足月顺产</div></div>
-          <div><div class="k">出生体重 / 身长</div><div class="v num">3.2kg / 50cm</div></div>
-          <div><div class="k">监护人</div><div class="v">刘女士（妈妈）· 138****5210</div></div>
-          <div><div class="k">户籍 / 现住址</div><div class="v">朝阳区 · 望京街道</div></div>
-          <div><div class="k">建档机构</div><div class="v">望京社区卫生服务中心</div></div>
-          <div><div class="k">过敏史</div><div class="v">青霉素过敏史（医生备注）</div></div>
-        </div>
+        <dl class="gm-desc">
+          <div><dt class="k">出生日期</dt><dd class="v num" title="2023-04-12 · 足月顺产">2023-04-12 · 足月顺产</dd></div>
+          <div><dt class="k">出生体重 / 身长</dt><dd class="v num" title="3.2kg / 50cm">3.2kg / 50cm</dd></div>
+          <div><dt class="k">监护人</dt><dd class="v" title="刘女士（妈妈）· 138****5210">刘女士（妈妈）· 138****5210</dd></div>
+          <div><dt class="k">户籍 / 现住址</dt><dd class="v" title="朝阳区 · 望京街道">朝阳区 · 望京街道</dd></div>
+          <div><dt class="k">建档机构</dt><dd class="v" title="望京社区卫生服务中心">望京社区卫生服务中心</dd></div>
+          <div><dt class="k">过敏史</dt><dd class="v" title="青霉素过敏史（医生备注）">青霉素过敏史（医生备注）</dd></div>
+        </dl>
       </div>
 
       <div class="card" style="padding:16px 18px;margin-top:14px">
@@ -506,12 +506,12 @@ table.t td,table.t th{padding-left:12px;padding-right:12px}
         <div class="card" style="padding:20px">
           <div style="text-align:center;margin-bottom:8px"><span style="font-size:13px;color:var(--t3)">即将完成</span><div style="font-size:17px;font-weight:700;color:var(--rose-deep);margin-top:4px">张敏 · 孕产妇健康档案</div></div>
           <div class="hr"></div>
-          <div class="desc" style="grid-template-columns:repeat(2,1fr)">
-            <div><div class="k">预产期 / 孕周</div><div class="v num">2025-10-17 · 孕 22 周</div></div>
-            <div><div class="k">妊娠风险初评</div><div class="v"><span class="tg y pill-sel">黄 · 一般风险</span></div></div>
-            <div><div class="k">建档机构 / 医生</div><div class="v">望京社区卫生服务中心 · 王医生</div></div>
-            <div><div class="k">随访计划</div><div class="v">自动生成：按黄级增加产检频次（15.2.10）</div></div>
-          </div>
+          <dl class="gm-desc" style="--gm-desc-cols:2;--gm-desc-cols-sm:1">
+            <div><dt class="k">预产期 / 孕周</dt><dd class="v num" title="2025-10-17 · 孕 22 周">2025-10-17 · 孕 22 周</dd></div>
+            <div><dt class="k">妊娠风险初评</dt><dd class="v" title="黄 · 一般风险"><span class="tg y pill-sel">黄 · 一般风险</span></dd></div>
+            <div><dt class="k">建档机构 / 医生</dt><dd class="v" title="望京社区卫生服务中心 · 王医生">望京社区卫生服务中心 · 王医生</dd></div>
+            <div><dt class="k">随访计划</dt><dd class="v" title="自动生成：按黄级增加产检频次（15.2.10）">自动生成：按黄级增加产检频次（15.2.10）</dd></div>
+          </dl>
           <div style="font-size:11.5px;color:var(--t3);line-height:1.8;margin-top:10px">提交即创建档案并开始随访管理；如需修改可返回上一步或保存草稿。</div>
           <div style="display:flex;gap:10px;justify-content:flex-end;margin-top:14px">
             <button class="btn gho">另存草稿</button>
@@ -577,15 +577,17 @@ table.t td,table.t th{padding-left:12px;padding-right:12px}
       <div>
         <div class="card" style="padding:14px 16px;margin-bottom:12px">
           <b style="font-size:15px;display:block;margin-bottom:8px">今日待办（危险 &gt; 逾期 &gt; 待处理）</b>
-          <table class="t">
-            <thead><tr><th>服务对象</th><th>事项</th><th>风险</th><th>时限</th><th></th></tr></thead>
+          <div class="gm-tbl-wrap">
+            <table class="gm-tbl">
+            <thead><tr><th scope="col">服务对象</th><th scope="col">事项</th><th scope="col">风险</th><th scope="col">时限</th><th scope="col" class="col-ops">操作</th></tr></thead>
             <tbody>
-              <tr><td>安安 · 36 月龄</td><td>高危随访（P3 以下）</td><td><span class="tg r"><i></i>红 · 高危</span></td><td class="num" style="color:#B72F42">已逾期 3 天</td><td><button class="btn pri mini">立即随访</button></td></tr>
-              <tr><td>张敏 · 孕 28 周</td><td>产检预约（GDM）</td><td><span class="tg y"><i></i>黄 · 一般</span></td><td class="num">今日 15:00</td><td><button class="btn mint mini">确认到诊</button></td></tr>
-              <tr><td>赵甜甜 · 18 月龄</td><td>视力复查</td><td><span class="tg o"><i></i>待复查</span></td><td class="num">明日</td><td><button class="btn line mini">查看档案</button></td></tr>
-              <tr><td>李慧 · 36 岁</td><td>宫颈筛查异常</td><td><span class="tg o"><i></i>待复查</span></td><td class="num">后天</td><td><button class="btn line mini">安排复查</button></td></tr>
+              <tr><td>安安 · 36 月龄</td><td>高危随访（P3 以下）</td><td><span class="tg r"><i></i>红 · 高危</span></td><td class="num" style="color:#B72F42">已逾期 3 天</td><td class="col-ops"><button class="btn pri mini">立即随访</button></td></tr>
+              <tr><td>张敏 · 孕 28 周</td><td>产检预约（GDM）</td><td><span class="tg y"><i></i>黄 · 一般</span></td><td class="num">今日 15:00</td><td class="col-ops"><button class="btn mint mini">确认到诊</button></td></tr>
+              <tr><td>赵甜甜 · 18 月龄</td><td>视力复查</td><td><span class="tg o"><i></i>待复查</span></td><td class="num">明日</td><td class="col-ops"><button class="btn line mini">查看档案</button></td></tr>
+              <tr><td>李慧 · 36 岁</td><td>宫颈筛查异常</td><td><span class="tg o"><i></i>待复查</span></td><td class="num">后天</td><td class="col-ops"><button class="btn line mini">安排复查</button></td></tr>
             </tbody>
           </table>
+          </div>
         </div>
         <div class="card" style="padding:14px 16px">
           <b style="font-size:15px;display:block;margin-bottom:8px">风险队列 · 五色筛选</b>
@@ -660,14 +662,14 @@ table.t td,table.t th{padding-left:12px;padding-right:12px}
       <div>
         <div class="card" style="padding:14px 18px;margin-bottom:12px">
           <b style="font-size:15px;display:block;margin-bottom:6px">基本信息</b>
-          <div class="desc" style="grid-template-columns:repeat(3,1fr);padding:8px 0">
-            <div><div class="k">LMP / 预产期</div><div class="v num">2025-01-10 · 10-17</div></div>
-            <div><div class="k">孕产次</div><div class="v">孕 1 产 0</div></div>
-            <div><div class="k">联系方式</div><div class="v">138****5210</div></div>
-            <div><div class="k">合并症</div><div class="v" style="color:#8D5A15">GDM（糖耐量异常）</div></div>
-            <div><div class="k">过敏史</div><div class="v">青霉素</div></div>
-            <div><div class="k">五色等级</div><div class="v"><span class="tg y"><i></i>黄 · 一般风险</span></div></div>
-          </div>
+          <dl class="gm-desc" style="padding:8px 0">
+            <div><dt class="k">LMP / 预产期</dt><dd class="v num" title="2025-01-10 · 10-17">2025-01-10 · 10-17</dd></div>
+            <div><dt class="k">孕产次</dt><dd class="v" title="孕 1 产 0">孕 1 产 0</dd></div>
+            <div><dt class="k">联系方式</dt><dd class="v" title="138****5210">138****5210</dd></div>
+            <div><dt class="k">合并症</div><div class="v" style="color:#8D5A15">GDM（糖耐量异常）</div></div>
+            <div><div class="k">过敏史</dt><dd class="v" title="青霉素">青霉素</dd></div>
+            <div><dt class="k">五色等级</dt><dd class="v" title="黄 · 一般风险"><span class="tg y"><i></i>黄 · 一般风险</span></dd></div>
+          </dl>
         </div>
         <div class="card" style="padding:14px 18px;margin-bottom:12px">
           <b style="font-size:15px;display:block;margin-bottom:8px">产检计划</b>
@@ -681,14 +683,16 @@ table.t td,table.t th{padding-left:12px;padding-right:12px}
         </div>
         <div class="card" style="padding:14px 18px">
           <b style="font-size:15px;display:block;margin-bottom:8px">检查与筛查结果</b>
-          <table class="t">
-            <thead><tr><th>日期</th><th>项目</th><th>结论</th></tr></thead>
+          <div class="gm-tbl-wrap">
+            <table class="gm-tbl">
+            <thead><tr><th scope="col">日期</th><th scope="col">项目</th><th scope="col">结论</th></tr></thead>
             <tbody>
               <tr><td class="num">05-20</td><td>唐筛 / 大排畸</td><td><span class="tg g"><i></i>正常</span></td></tr>
               <tr><td class="num">06-25</td><td>OGTT 糖耐量</td><td><span class="tg o"><i></i>异常 · 待随访</span></td></tr>
               <tr><td class="num">06-28</td><td>建档复查 · 胎心</td><td><span class="tg g"><i></i>正常 · 148bpm</span></td></tr>
             </tbody>
           </table>
+          </div>
         </div>
       </div>
       <div>

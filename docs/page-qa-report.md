@@ -1,6 +1,6 @@
 # 逐页规范质检报告（Page-level Spec QA）
 
-- 生成时间：`2026-09-12 07:41:06+0800`
+- 生成时间：`2026-09-12 08:02:00+0800`
 - 工具：`node scripts/page-qa.mjs`（Playwright 真实渲染；桌面 1440 / 移动 375 / 暗色档各测一遍）
 - 口径：每条 finding 都带**规范锚点 + 选择器 + 实测值**，可逐条复现与回归
 - 范围：真实页面 10 个（唯一首页 8 模块逐模块 · 打印手册 · 演示页）；重定向桩 7 个**单独统计**（服务端摘掉跳转脚本后测桩自身，避免测成目标模块而重复计数）
@@ -15,40 +15,40 @@
 
 ## 0b. 档位偏离分布（P3 · 聚合，非逐条）
 
-**偏离 4px 网格**（spacing-grid，锚点 02 · 2.3.1，共 30118 处）
+**偏离 4px 网格**（spacing-grid，锚点 02 · 2.3.1，共 30132 处）
 
 | 实测值 | 命中元素数 | 样例 |
 | --- | --- | --- |
 | 7 | 9206 | `site/index.html · preview-index` `div>span>div#preview-index--segNav>span.seg-it.on` |
-| 9 | 9204 | `site/index.html · preview-index` `div.panel.glass-l2>div>div>div` |
+| 9 | 9172 | `site/index.html · preview-index` `div.panel.glass-l2>div>div>div` |
 | 1 | 2952 | `site/index.html · preview-index` `div.grid.g2>div.panel.glass-l2>div.field>input` |
 | 5 | 2752 | `site/index.html · preview-index` `div.wrap>header.hero.glass>div.hero-main>span.kicker` |
-| 14 | 1477 | `site/index.html · site-index` `div.wrap>div.hero.glass>div.stat>span` |
-| 6 | 1307 | `site/index.html · site-index` `section#gm-mod-site-index>div.wrap>div.hero.glass>div.stat` |
-| 10 | 1008 | `site/index.html · site-index` `section#gm-mod-site-index>div.wrap>div.hero.glass>div.cta` |
+| 14 | 1733 | `site/index.html · site-index` `div.wrap>div.hero.glass>div.stat>span` |
+| 6 | 1301 | `site/index.html · site-index` `section#gm-mod-site-index>div.wrap>div.hero.glass>div.stat` |
+| 10 | 860 | `site/index.html · site-index` `section#gm-mod-site-index>div.wrap>div.hero.glass>div.cta` |
 | 21.28 | 558 | `site/index.html · site-spec` `div.wrap>section#site-spec--ch-readme>div.md>h4` |
 | 22 | 382 | `site/index.html · site-index` `section#gm-mod-site-index>div.wrap>div.hero.glass>div.cta` |
 | 18 | 342 | `site/index.html · site-index` `main#gm-main>section#gm-mod-site-index>div.wrap>div.journey` |
-| 2 | 272 | `site/index.html · site-index` `div.secpad>div.sem>div.s>span` |
-| 3 | 158 | `site/index.html · preview-index` `div.panel.glass-l2>div.descrow>div.it>b` |
-| 13 | 129 | `site/index.html · site-index` `div.wrap>div.grid>div.card>p` |
+| 3 | 218 | `site/index.html · preview-index` `div.panel.glass-l2>div.descrow>div.it>b` |
+| 2 | 204 | `site/index.html · site-index` `div.secpad>div.sem>div.s>span` |
+| 13 | 121 | `site/index.html · site-index` `div.wrap>div.grid>div.card>p` |
 | 26 | 114 | `site/index.html · site-index` `main#gm-main>section#gm-mod-site-index>div.wrap>p.sub` |
-| 11 | 111 | `site/index.html · preview-index` `div.wrap>section#preview-index--allcomp>div.covline>span.cv` |
+| 11 | 71 | `site/index.html · preview-index` `div.wrap>section#preview-index--allcomp>div.covline>span.cv` |
 | 19.92 | 36 | `site/index.html · preview-index` `div.wrap>section#preview-index--guide>div.sec-head>h2` |
 | 15 | 25 | `site/index.html · site-index` `div.wrap>div.grid>div.card>h3` |
 | 34 | 21 | `site/index.html · site-spec` `main#gm-main>section#gm-mod-site-spec>div.wrap>section#site-spec--ch-readme` |
 
-**字号不在层级**（type-scale，锚点 02 · 2.2.2，共 5863 处）
+**字号不在层级**（type-scale，锚点 02 · 2.2.2，共 5785 处）
 
 | 实测值 | 命中元素数 | 样例 |
 | --- | --- | --- |
-| 12.5 | 4328 | `site/index.html · site-index` `main#gm-main>section#gm-mod-site-index>div.wrap>pre.tree` |
+| 12.5 | 4301 | `site/index.html · site-index` `main#gm-main>section#gm-mod-site-index>div.wrap>pre.tree` |
 | 13.5 | 441 | `site/index.html · site-index` `div.secpad>div.tree2>div.gr>b` |
-| 11 | 368 | `site/index.html · site-index` `div.hero.glass>div.stat>span>i` |
-| 13 | 298 | `site/index.html · site-index` `section#gm-mod-site-index>div.wrap>h2#site-index--start>span.secnum` |
+| 11 | 370 | `site/index.html · site-index` `div.hero.glass>div.stat>span>i` |
+| 13 | 252 | `site/index.html · site-index` `section#gm-mod-site-index>div.wrap>h2#site-index--start>span.secnum` |
 | 10 | 189 | `site/index.html · site-index` `section#gm-mod-site-index>div.wrap>h2#site-index--start>small` |
 | 10.5 | 64 | `site/index.html · preview-index` `div.stmods>div.stmod>div>span.tpill.c-g` |
-| 11.5 | 32 | `site/index.html · preview-index` `section#preview-index--component>div.panel.glass-l2>div.panel.glass-l2>p.mh` |
+| 11.5 | 25 | `site/index.html · preview-index` `section#preview-index--component>div.panel.glass-l2>div.panel.glass-l2>p.mh` |
 | 20 | 25 | `site/index.html · site-spec` `div.wrap>section#site-spec--ch-readme>div.chap-hd>b` |
 | 26 | 23 | `site/index.html · site-index` `section#gm-mod-site-index>div.wrap>h2#site-index--start>span` |
 | 17 | 23 | `site/index.html · preview-index` `div>div>div.stepbox>button.stpm` |
@@ -77,7 +77,7 @@
 ### site/index.html · preview-index
 
 - 结构：标题 86 个 · 焦点样本 60 个（其中不可见 0）· emoji 0 处
-- 对比度（浅色档）：确证失败 0（渐变上界 0）· 无法判定 1230
+- 对比度（浅色档）：确证失败 0（渐变上界 0）· 无法判定 1229
 - 横向溢出：桌面 0px / 移动 0px
 - 移动端非行内热区受检 0 个
 
@@ -88,7 +88,7 @@
 ### site/index.html · preview-examples
 
 - 结构：标题 0 个 · 焦点样本 34 个（其中不可见 0）· emoji 0 处
-- 对比度（浅色档）：确证失败 0（渐变上界 0）· 无法判定 406
+- 对比度（浅色档）：确证失败 0（渐变上界 0）· 无法判定 407
 - 横向溢出：桌面 0px / 移动 0px
 - 移动端非行内热区受检 0 个
 
@@ -161,7 +161,7 @@
 ### fuyouaicansai/goodmom-redesign.html
 
 - 结构：标题 1 个 · 焦点样本 14 个（其中不可见 0）· emoji 0 处
-- 对比度（浅色档）：确证失败 0（渐变上界 0）· 无法判定 319
+- 对比度（浅色档）：确证失败 0（渐变上界 0）· 无法判定 321
 - 横向溢出：桌面 0px / 移动 0px
 - 移动端非行内热区受检 0 个
 

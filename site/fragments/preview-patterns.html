@@ -12,7 +12,15 @@
   --glass-card:rgba(255,255,255,.22);--glass-control:rgba(255,255,255,.35);--glass-popover:rgba(255,255,255,.6);
   --bw-hairline:1px;--bw-1:1px;--bw-2:1.5px;--bw-3:2px;
   --ring:rgba(232,93,143,.6);--ring-off:2px;
-}:root{font-family:var(--font);color:var(--text);background:#E7D4CB;
+}
+/* ═══ 系统 Token 别名（V2.9）═══
+   本页历史上用私有命名（--text/--t2/--t3/--line），而**数据呈现层（玻璃表格 / 描述列表 /
+   折叠）统一读系统命名（--lg-text-primary / --lg-text-secondary / --lg-divider）**。
+   两边不接起来，就会出现"页面在暗色档把 --t2 翻成浅色，而表格读 --lg-text-secondary
+   拿到的还是浅色档深字"——实测暗底深字 1.61:1 / 1.50:1（page-qa 抓到 12 条）。
+   这里做**惰性别名**（值是对自己那套 Token 的引用）：暗色档翻转 --text/--t2/--line 时，
+   --lg-* 自动跟着翻，一处也不用重复写。 */
+:root{--lg-text-primary:var(--text);--lg-text-secondary:var(--t2);--lg-divider:var(--line)}:root{font-family:var(--font);color:var(--text);background:#E7D4CB;
   background:radial-gradient(1100px 620px at 90% -8%,rgba(247,127,163,.20),transparent 65%),
   radial-gradient(900px 560px at -6% 24%,rgba(182,154,255,.15),transparent 65%),
   linear-gradient(165deg,#FDF2EE,#F6E2DB 55%,#E6CFC6);min-height:100vh;-webkit-font-smoothing:antialiased}
@@ -95,10 +103,11 @@
   border:1px dashed rgba(178,58,99,.35);background:rgba(255,255,255,.28)}
 .rv-box::after{content:"↔ 拖动右下角改容器宽度（形态见上方实时读数）";font-size:11px;color:var(--t2)}
 .rv-mode{font-size:11px;color:var(--rose-deep);font-weight:600;margin-bottom:8px}
-table.gm{width:100%;border-collapse:collapse;font-size:13px}
-table.gm th{text-align:left;font-size:12px;font-weight:600;color:var(--t2);padding:8px 10px;border-bottom:var(--bw-hairline) solid var(--line)}
-table.gm td{padding:10px;border-bottom:var(--bw-hairline) solid var(--line)}
-table.gm tr:hover td{background:rgba(255,255,255,.42)}
+/* 玻璃表格：配方在**外壳**（scripts/build-site.py 的「数据呈现层」）。
+   旧实现（已删）实测：表头 12px（类型阶最小档是 caption 12、03.7 要 body-sm 14/600）、
+   表体 13px（02 · 2.2.2 场景列写明「表格正文」= body-sm 14/20）、行高 49（✓ 在 44–52 内）、
+   暗色由三条 `#C9C4CE/#F3EFEC` 手写覆盖替代（现由外壳统一给出）。
+   本页**只负责把渲染函数生成的 `<table>` 标上 class**（见下方 rvTable / rvCondensed）。 */
 .cd{display:flex;align-items:center;gap:12px;padding:12px;border-radius:18px;background:rgba(255,255,255,.5);
   border:var(--bw-1) solid rgba(255,255,255,.75);margin-bottom:8px}
 .cd .m{flex:1;min-width:0}
@@ -143,7 +152,6 @@ table.gm tr:hover td{background:rgba(255,255,255,.42)}
 .dk .vl-sticky{background:rgba(38,36,46,.86);color:#C9C4CE}
 .dk .vl-it{color:#F3EFEC}
 .dk .cd{background:rgba(255,255,255,.06);border-color:rgba(255,255,255,.12)}
-.dk table.gm th{color:#C9C4CE}.dk table.gm td{color:#F3EFEC}
 .dk .sw{background:#23222A;border-color:rgba(255,255,255,.14)}
 /* ── 02.7.1 边框档 ── */
 .bws{display:flex;gap:14px;flex-wrap:wrap}
@@ -177,6 +185,13 @@ html[data-theme="dark"] body{background:#1B1A21;color:#F3EFEC;
 [data-theme="dark"] .hub{background:linear-gradient(160deg,rgba(255,255,255,.09),rgba(255,255,255,.06));border-color:rgba(255,255,255,.14)}
 [data-theme="dark"] .glass{background:linear-gradient(160deg,rgba(255,255,255,.09),rgba(255,255,255,.06));border-color:rgba(255,255,255,.14);
   box-shadow:inset 0 1px 0 rgba(255,255,255,.16),0 18px 44px rgba(0,0,0,.5);color:#F3EFEC}
+/* ⚠️ Token 翻档必须同时挂在**模块根**上，不能只挂在 `.glass` 内：
+   `.rv-box`（响应式适配演示容器）不是 `.glass`，里面的表格拿不到翻档后的 Token ——
+   于是「暗底 + 浅色档深字」：实测表头 1.61:1 / 正文 1.50:1（page-qa 暗色对比度抓到 12 条）。
+   原先靠给表格单独写 `[data-theme=dark] table.gm th{color:#C9C4CE}` 兜，
+   那是给症状打补丁：表格以外的同类元素同样中招，且数据呈现层已统一到外壳。 */
+[data-theme="dark"]{--text:#F3EFEC;--t2:#C9C4CE;--t3:#A6ADB9;--line:rgba(255,255,255,.1);--link:#FFC4D6;--link-h:#FFA9C2;--rose-deep:#FF9AB6;
+  --glass-control:rgba(255,255,255,.12);--glass-popover:rgba(38,36,46,.92);--glass-card:rgba(255,255,255,.09);--ring:rgba(255,196,214,.7)}
 [data-theme="dark"] .glass{--text:#F3EFEC;--t2:#C9C4CE;--t3:#A6ADB9;--line:rgba(255,255,255,.1);--link:#FFC4D6;--link-h:#FFA9C2;--rose-deep:#FF9AB6;
   --glass-control:rgba(255,255,255,.12);--glass-popover:rgba(38,36,46,.92);--glass-card:rgba(255,255,255,.09);--ring:rgba(255,196,214,.7)}
 [data-theme="dark"] .hub a{color:#C9C4CE}[data-theme="dark"] .hub a:hover{background:rgba(255,255,255,.08)}
@@ -195,7 +210,6 @@ html[data-theme="dark"] body{background:#1B1A21;color:#F3EFEC;
 [data-theme="dark"] .bw{background:rgba(255,255,255,.06)}[data-theme="dark"] .bw code{color:#F3EFEC}
 [data-theme="dark"] .rv-box{background:rgba(255,255,255,.06);border-color:rgba(255,196,214,.35)}
 [data-theme="dark"] .sw{background:rgba(255,255,255,.1);border-color:rgba(255,255,255,.14);color:#C9C4CE}
-[data-theme="dark"] table.gm th{color:#C9C4CE}[data-theme="dark"] table.gm td{color:#F3EFEC}
 [data-theme="dark"] .cd{background:rgba(255,255,255,.06);border-color:rgba(255,255,255,.12)}
 
 /* 整体暗色（示例页）：与 02 · 2.1.9 同口径的页面级覆写 */
@@ -205,6 +219,13 @@ html[data-theme="dark"] body{background:#1B1A21;color:#F3EFEC;
 [data-theme="dark"] .hub{background:linear-gradient(160deg,rgba(255,255,255,.09),rgba(255,255,255,.06));border-color:rgba(255,255,255,.14)}
 [data-theme="dark"] .glass{background:linear-gradient(160deg,rgba(255,255,255,.09),rgba(255,255,255,.06));border-color:rgba(255,255,255,.14);
   box-shadow:inset 0 1px 0 rgba(255,255,255,.16),0 18px 44px rgba(0,0,0,.5);color:#F3EFEC}
+/* ⚠️ Token 翻档必须同时挂在**模块根**上，不能只挂在 `.glass` 内：
+   `.rv-box`（响应式适配演示容器）不是 `.glass`，里面的表格拿不到翻档后的 Token ——
+   于是「暗底 + 浅色档深字」：实测表头 1.61:1 / 正文 1.50:1（page-qa 暗色对比度抓到 12 条）。
+   原先靠给表格单独写 `[data-theme=dark] table.gm th{color:#C9C4CE}` 兜，
+   那是给症状打补丁：表格以外的同类元素同样中招，且数据呈现层已统一到外壳。 */
+[data-theme="dark"]{--text:#F3EFEC;--t2:#C9C4CE;--t3:#A6ADB9;--line:rgba(255,255,255,.1);--link:#FFC4D6;--link-h:#FFA9C2;--rose-deep:#FF9AB6;
+  --glass-control:rgba(255,255,255,.12);--glass-popover:rgba(38,36,46,.92);--glass-card:rgba(255,255,255,.09);--ring:rgba(255,196,214,.7)}
 [data-theme="dark"] .glass{--text:#F3EFEC;--t2:#C9C4CE;--t3:#A6ADB9;--line:rgba(255,255,255,.1);--link:#FFC4D6;--link-h:#FFA9C2;--rose-deep:#FF9AB6;
   --glass-control:rgba(255,255,255,.12);--glass-popover:rgba(38,36,46,.92);--glass-card:rgba(255,255,255,.09);--ring:rgba(255,196,214,.7)}
 [data-theme="dark"] .hub a{color:#C9C4CE}[data-theme="dark"] .hub a:hover{background:rgba(255,255,255,.08)}
@@ -223,7 +244,6 @@ html[data-theme="dark"] body{background:#1B1A21;color:#F3EFEC;
 [data-theme="dark"] .bw{background:rgba(255,255,255,.06)}[data-theme="dark"] .bw code{color:#F3EFEC}
 [data-theme="dark"] .rv-box{background:rgba(255,255,255,.06);border-color:rgba(255,196,214,.35)}
 [data-theme="dark"] .sw{background:rgba(255,255,255,.1);border-color:rgba(255,255,255,.14);color:#C9C4CE}
-[data-theme="dark"] table.gm th{color:#C9C4CE}[data-theme="dark"] table.gm td{color:#F3EFEC}
 [data-theme="dark"] .cd{background:rgba(255,255,255,.06);border-color:rgba(255,255,255,.12)}
 
 <!--@body-->
@@ -402,244 +422,9 @@ html[data-theme="dark"] body{background:#1B1A21;color:#F3EFEC;
 
 
 
-<script>
-
-/* 合并入单一首页的作用域适配：本模块原先独占 <body>，动态节点与状态类都挂在 body 上；合并后 body 属于外壳，改挂模块根以保持与原页面等价的作用域。 */
-function MODROOT_preview_patterns(){return document.getElementById("gm-mod-preview-patterns")||document.documentElement;}
-/* 合并入单一首页的作用域适配：本模块原先独占 <body>，动态节点与状态类都挂在 body 上；合并后 body 属于外壳，改挂模块根以保持与原页面等价的作用域。 */
-function MODROOT_preview_patterns(){return document.getElementById("gm-mod-preview-patterns")||document.documentElement;}
-/* ── 级联数据：机构 → 科室 → 病区（妇幼业务） ── */
-var CAS_DATA = [
-  { value:"h1", label:"市妇幼保健院", children:[
-    { value:"d1", label:"孕产保健科", children:[{value:"w1",label:"产科门诊"},{value:"w2",label:"高危门诊"},{value:"w3",label:"胎心监护室"}] },
-    { value:"d2", label:"儿童保健科", children:[{value:"w4",label:"儿保门诊"},{value:"w5",label:"生长发育门诊"}] },
-    { value:"d3", label:"妇女保健科", children:[{value:"w6",label:"两癌筛查门诊"},{value:"w7",label:"更年期门诊"}] } ] },
-  { value:"h2", label:"区人民医院", children:[
-    { value:"d4", label:"妇产科", children:[{value:"w8",label:"产科一区"},{value:"w9",label:"产科二区"}] },
-    { value:"d5", label:"儿科", children:[] } ] },
-  { value:"h3", label:"社区卫生服务中心", children:[
-    { value:"d6", label:"预防保健科", children:[{value:"w10",label:"疫苗接种室"}] } ] }
-];
-
-function buildCascader(root, opts){
-  opts = opts || {};
-  var path = [];                                  /* 已选路径 */
-  var panel = root.querySelector(".cas-p");
-  var trigger = root.querySelector(".cas-t");
-  var inline = root.classList.contains("inline") || opts.inline;
-  var picker = !!opts.picker;
-
-  function level(i){                              /* 返回第 i 层选项 */
-    var list = CAS_DATA;
-    for (var k = 0; k < i; k++){
-      var cur = list.filter(function(o){ return o.value === path[k]; })[0];
-      if (!cur || !cur.children) return null;
-      list = cur.children;
-    }
-    return list;
-  }
-  function optionAt(i, value){
-    var list = level(i) || [];
-    return list.filter(function(o){ return o.value === value; })[0];
-  }
-  function isLeaf(i){                             /* 第 i 层已选项是否为叶子 */
-    var o = optionAt(i, path[i]);
-    return !!o && (!o.children || !o.children.length);
-  }
-  function render(){
-    var html = "", i = 0, list = level(0), visible = true;
-    while (list && visible && i < 4){
-      html += '<div class="cas-col" role="listbox" aria-label="第' + (i+1) + '列">';
-      if (!list.length){ html += '<div class="cas-e">暂无可选项</div>'; }
-      list.forEach(function(o){
-        var sel = path[i] === o.value ? " sel" : "";
-        html += '<button class="cas-o' + sel + '" type="button" role="option" aria-selected="' + (path[i]===o.value) + '" data-i="' + i + '" data-v="' + o.value + '">' + o.label + '</button>';
-      });
-      html += "</div>";
-      visible = path[i] !== undefined;
-      i++; list = level(i);
-    }
-    panel.innerHTML = html;
-    panel.querySelectorAll(".cas-o").forEach(function(b){
-      b.addEventListener("click", function(){
-        var idx = +b.dataset.i;
-        path = path.slice(0, idx);
-        path[idx] = b.dataset.v;
-        render();
-        var has = optionAt(idx, b.dataset.v);
-        if (has && has.children && has.children.length) return;   /* 还有下级：停留在当前层 */
-        if (!picker) close(); else syncPicker();
-      });
-    });
-    updateTrigger();
-    if (picker) syncPicker();
-  }
-  function updateTrigger(){
-    if (!trigger) return;
-    var labels = [], list = CAS_DATA;
-    for (var i = 0; i < path.length; i++){
-      var cur = list.filter(function(o){ return o.value === path[i]; })[0];
-      if (!cur) break;
-      labels.push(cur.label); list = cur.children || [];
-    }
-    var span = trigger.querySelector(".ph") || trigger.querySelector(".v");
-    span.className = labels.length ? "v" : "ph";
-    span.textContent = labels.length ? labels.join(" / ") : "请选择机构 / 科室 / 病区";
-    trigger.setAttribute("aria-expanded", root.classList.contains("open") ? "true" : "false");
-  }
-  function open(){ if (picker) return openPicker(); root.classList.add("open"); updateTrigger(); }
-  function close(){ root.classList.remove("open"); if (trigger) trigger.focus(); }
-  if (trigger){
-    trigger.addEventListener("click", function(){ root.classList.contains("open") ? close() : open(); });
-    trigger.addEventListener("keydown", function(e){ if (e.key === "Escape") close(); });
-  }
-  document.addEventListener("keydown", function(e){ if (e.key === "Escape" && root.classList.contains("open") && !picker) close(); });
-  document.addEventListener("click", function(e){
-    if (picker || inline || !root.classList.contains("open")) return;
-    /* 选项点击会同步重渲染 → 被点节点已脱离文档，root.contains(target) 会误判为「外部点击」而收起面板；
-       改用 composedPath（派发时快照）判定，保证面板内点击不被当成外部关闭 */
-    var path = e.composedPath ? e.composedPath() : null;
-    var inside = path ? path.indexOf(root) !== -1 : root.contains(e.target);
-    if (!inside) close();
-  });
-
-  var pickerOk = null;
-  function syncPicker(){                          /* 只有叶子可提交（changeOnSelect=false） */
-    if (pickerOk) pickerOk.disabled = !(path.length && isLeaf(path.length - 1));
-  }
-  function openPicker(){
-    var mask = document.createElement("div"); mask.className = "cas-mask";
-    var sheet = document.createElement("div"); sheet.className = "cas-sheet";
-    sheet.setAttribute("role","dialog"); sheet.setAttribute("aria-modal","true"); sheet.setAttribute("aria-label","级联选择");
-    var inner = document.createElement("div"); inner.className = "cas-p";
-    var foot = document.createElement("div"); foot.className = "cas-foot";
-    foot.innerHTML = '<button class="cas-btn" type="button" data-x>取消</button><button class="cas-btn pri" type="button" data-ok>确定</button>';
-    sheet.appendChild(inner); sheet.appendChild(foot);
-    document.body.appendChild(mask); document.body.appendChild(sheet);
-    var realPanel = panel; panel = inner;
-    pickerOk = foot.querySelector("[data-ok]");
-    render();
-    function done(){ panel = realPanel; pickerOk = null; mask.remove(); sheet.remove(); render(); if (trigger) trigger.focus(); }
-    mask.addEventListener("click", done);
-    foot.querySelector("[data-x]").addEventListener("click", done);
-    pickerOk.addEventListener("click", done);
-  }
-
-  render();
-  if (inline) root.classList.add("open");
-  return { open: open, close: close };
-}
-
-buildCascader(document.getElementById("cas-popup"));
-buildCascader(document.getElementById("cas-inline"), { inline:true });
-buildCascader(document.getElementById("cas-dark"));
-var pickerHost = document.createElement("div"); pickerHost.className = "cas"; pickerHost.style.display = "none";
-var pickerTrig = document.createElement("button"); pickerTrig.type = "button"; pickerTrig.className = "cas-t";
-pickerTrig.innerHTML = '<span class="ph">请选择</span><span class="ar">▾</span>';
-pickerHost.appendChild(pickerTrig);
-var pickerPanel = document.createElement("div"); pickerPanel.className = "cas-p"; pickerHost.appendChild(pickerPanel);
-document.body.appendChild(pickerHost);
-var picker = buildCascader(pickerHost, { picker:true });
-document.getElementById("cas-open").addEventListener("click", function(){ picker.open(); });
-
-/* ── 响应式适配容器：按容器宽度（ResizeObserver）切换三形态 ── */
-var RV_ROWS = [
-  { name:"王小雨", week:"28w+3", risk:"橙色（较高）", next:"03-18", doctor:"李文", phone:"138****2210" },
-  { name:"陈子涵", week:"12w+1", risk:"绿色（低）", next:"03-22", doctor:"张倩", phone:"139****7761" },
-  { name:"刘美娜", week:"36w+5", risk:"红色（高）", next:"03-11", doctor:"李文", phone:"137****9032" },
-  { name:"赵一诺", week:"20w+2", risk:"黄色（一般）", next:"04-02", doctor:"王强", phone:"136****4412" },
-  { name:"孙可儿", week:"32w+0", risk:"橙色（较高）", next:"03-19", doctor:"张倩", phone:"135****3378" }
-];
-var rvBox = document.getElementById("rv-box"), rvOut = document.getElementById("rv-out"), rvMode = document.getElementById("rv-mode");
-var rvLock = "auto", rvCurrent = "table", rvLastReported = null;
-
-function tgClass(risk){
-  if (risk.indexOf("红") === 0) return "r";
-  if (risk.indexOf("橙") === 0) return "o";
-  if (risk.indexOf("黄") === 0) return "n";
-  return "g";
-}
-function rvTable(rows){
-  return '<table class="gm"><thead><tr><th scope="col">姓名</th><th scope="col">孕周</th><th scope="col">风险</th>' +
-    '<th scope="col">下次产检</th><th scope="col">随访医生</th><th scope="col">联系电话</th></tr></thead><tbody>' +
-    rows.map(function(r){ return "<tr><td>" + r.name + "</td><td class='num'>" + r.week + "</td><td><span class='tg " + tgClass(r.risk) +
-      "'><i></i>" + r.risk + "</span></td><td class='num'>" + r.next + "</td><td>" + r.doctor + "</td><td class='num'>" + r.phone + "</td></tr>"; }).join("") +
-    "</tbody></table>";
-}
-function rvCondensed(rows){
-  return '<table class="gm"><thead><tr><th scope="col">姓名</th><th scope="col">孕周</th><th scope="col">风险</th><th scope="col">操作</th></tr></thead><tbody>' +
-    rows.map(function(r){ return "<tr><td>" + r.name + "</td><td class='num'>" + r.week + "</td><td><span class='tg " + tgClass(r.risk) +
-      "'><i></i>" + r.risk + "</span></td><td><a class='lk sm' href='#1'><span class='t'>详情</span></a></td></tr>"; }).join("") + "</tbody></table>";
-}
-function rvCard(rows){
-  return '<div role="list">' + rows.map(function(r){
-    return '<div class="cd" role="listitem"><div class="m"><b>' + r.name + '</b>' +
-      '<dl><dt>孕周</dt><dd class="num">' + r.week + '</dd><dt>风险</dt><dd>' + r.risk + '</dd><dt>下次产检</dt><dd class="num">' + r.next +
-      '</dd><dt>医生</dt><dd>' + r.doctor + '</dd><dt>电话</dt><dd class="num">' + r.phone + '</dd></dl></div>' +
-      '<span class="tg ' + tgClass(r.risk) + '"><i></i>' + r.risk + '</span></div>';
-  }).join("") + "</div>";
-}
-function resolveMode(width){
-  if (rvLock !== "auto") return rvLock;
-  if (width >= 1024) return "table";
-  if (width >= 768) return "condensed";
-  return "card";
-}
-function renderRv(){
-  var w = Math.round(rvBox.clientWidth);
-  var mode = resolveMode(w);
-  rvCurrent = mode;
-  rvOut.innerHTML = mode === "table" ? rvTable(RV_ROWS) : mode === "condensed" ? rvCondensed(RV_ROWS) : rvCard(RV_ROWS);
-  rvMode.textContent = "当前形态：" + mode + "（容器 " + w + "px）｜数据 5 条 · 状态不随形态重置";
-}
-if (typeof ResizeObserver !== "undefined") new ResizeObserver(renderRv).observe(rvBox);
-window.addEventListener("resize", renderRv);
-document.querySelectorAll("[data-rv]").forEach(function(b){
-  b.addEventListener("click", function(){ rvLock = b.dataset.rv; renderRv(); });
-});
-renderRv();
-
-/* ── 虚拟长列表：固定行高 + overscan 4 ── */
-var VL_TOTAL = 1284, VL_H = 52, VL_OVERSCAN = 4;
-var vp = document.getElementById("vl-vp"), vin = document.getElementById("vl-in");
-var vCount = document.getElementById("vl-count"), vIdx = document.getElementById("vl-idx"), vEnd = document.getElementById("vl-end");
-var endFired = 0, lastEnd = -1;
-vin.style.height = (VL_TOTAL * VL_H) + "px";
-function vlRender(){
-  var top = vp.scrollTop, h = vp.clientHeight;
-  var start = Math.max(0, Math.floor(top / VL_H) - VL_OVERSCAN);
-  var end = Math.min(VL_TOTAL, Math.ceil((top + h) / VL_H) + VL_OVERSCAN);
-  var html = "";
-  for (var i = start; i < end; i++){
-    html += '<div class="vl-it" role="listitem" aria-posinset="' + (i+1) + '" aria-setsize="' + VL_TOTAL + '" style="height:' + VL_H + 'px;position:absolute;left:0;right:0;top:' + (i*VL_H) + 'px">' +
-      '<span style="width:26px;height:26px;border-radius:50%;background:var(--mmh-grad-action-hc);flex:none"></span>' +
-      '<span style="flex:1">随访对象 #' + String(i+1).padStart(4,"0") + ' · 第 ' + (i+1) + ' 条</span>' +
-      '<span class="tg ' + (i % 7 === 0 ? "r" : i % 3 === 0 ? "o" : "g") + '"><i></i>' + (i % 7 === 0 ? "逾期" : i % 3 === 0 ? "待随访" : "已完成") + '</span></div>';
-  }
-  vin.innerHTML = html;
-  vCount.textContent = (end - start);
-  vIdx.textContent = start;
-  if (VL_TOTAL - (top + h) / VL_H <= 4 && lastEnd !== start){ lastEnd = start; endFired++; vEnd.textContent = endFired; }
-  if (VL_TOTAL - (top + h) / VL_H > 4){ lastEnd = -1; }
-}
-vp.addEventListener("scroll", vlRender);
-vp.addEventListener("keydown", function(e){
-  if (e.key === "PageDown"){ vp.scrollTop += vp.clientHeight; e.preventDefault(); }
-  if (e.key === "PageUp"){ vp.scrollTop -= vp.clientHeight; e.preventDefault(); }
-  if (e.key === "Home"){ vp.scrollTop = 0; e.preventDefault(); }
-  if (e.key === "End"){ vp.scrollTop = vin.clientHeight; e.preventDefault(); }
-});
-vlRender();
-
-/* ── 暗黑模式：整体切换 data-theme="dark"（示例页简化版，仅覆盖本页 Token） ── */
-document.getElementById("dk-toggle").addEventListener("click", function(){
-  var on = document.documentElement.getAttribute("data-theme") === "dark";
-  if (on){ document.documentElement.removeAttribute("data-theme"); this.textContent = '切换本页整体暗色（data-theme）'; }
-  else { document.documentElement.setAttribute("data-theme", "dark"); this.textContent = '恢复浅色（移除 data-theme）'; }
-});
-
-
-</script>
+<!-- 体例说明：本模块脚本只有 @js 分段一段（构建时以它为唯一出处）。
+     历史上同一段脚本在 body 内联 script 里还留了一份逐行副本，构建会静默
+     丢弃它（drop_body_scripts），两份并存极易改错一边 —— V2.9 已删除。 -->
 
 <!--@js-->
 /* ── 级联数据：机构 → 科室 → 病区（妇幼业务） ── */
@@ -794,16 +579,16 @@ function tgClass(risk){
   return "g";
 }
 function rvTable(rows){
-  return '<table class="gm"><thead><tr><th scope="col">姓名</th><th scope="col">孕周</th><th scope="col">风险</th>' +
+  return '<div class="gm-tbl-wrap"><table class="gm-tbl"><thead><tr><th scope="col">姓名</th><th scope="col">孕周</th><th scope="col">风险</th>' +
     '<th scope="col">下次产检</th><th scope="col">随访医生</th><th scope="col">联系电话</th></tr></thead><tbody>' +
     rows.map(function(r){ return "<tr><td>" + r.name + "</td><td class='num'>" + r.week + "</td><td><span class='tg " + tgClass(r.risk) +
       "'><i></i>" + r.risk + "</span></td><td class='num'>" + r.next + "</td><td>" + r.doctor + "</td><td class='num'>" + r.phone + "</td></tr>"; }).join("") +
-    "</tbody></table>";
+    "</tbody></table></div>";
 }
 function rvCondensed(rows){
-  return '<table class="gm"><thead><tr><th scope="col">姓名</th><th scope="col">孕周</th><th scope="col">风险</th><th scope="col">操作</th></tr></thead><tbody>' +
+  return '<div class="gm-tbl-wrap"><table class="gm-tbl"><thead><tr><th scope="col">姓名</th><th scope="col">孕周</th><th scope="col">风险</th><th scope="col" class="col-ops">操作</th></tr></thead><tbody>' +
     rows.map(function(r){ return "<tr><td>" + r.name + "</td><td class='num'>" + r.week + "</td><td><span class='tg " + tgClass(r.risk) +
-      "'><i></i>" + r.risk + "</span></td><td><a class='lk sm' href='#1'><span class='t'>详情</span></a></td></tr>"; }).join("") + "</tbody></table>";
+      "'><i></i>" + r.risk + "</span></td><td class='col-ops'><span class='ops'><a class='lk sm' href='#1'><span class='t'>详情</span></a></span></td></tr>"; }).join("") + "</tbody></table></div>";
 }
 function rvCard(rows){
   return '<div role="list">' + rows.map(function(r){

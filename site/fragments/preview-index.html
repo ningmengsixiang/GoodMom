@@ -139,13 +139,13 @@ section.block{margin-top:26px}
    统一用 `::after` 把可点区域扩到 44×44（10 章明确认可的补足方式）。 */
 @media(max-width:767px){
   .btn,.bx,.btnrow a,.btnrow button,.gbtn,.mbtn,.direct.primary,.sysbar a,.sbtn,
-  .op a,.ngdrop a,.hub a,.go-link,.excard .go,.chk,.switch,.field input,.seg-it,.tabmini i,.mchip,
+  .ngdrop a,.hub a,.go-link,.excard .go,.chk,.switch,.field input,.seg-it,.tabmini i,.mchip,
   .covline a,.stpm,.stpp,.uprow .del,.slrow input,footer a,.excard,.steps .sd,
   .tab,#preview-index--exhome a,.panel span a,.panel a,.mrow2 a,.bxrow,.btnrow{position:relative}
   /* 按钮行在 375px 不换行 → 溢出 4px */
   .bxrow,.btnrow{flex-wrap:wrap}
   .btn::after,.bx::after,.btnrow a::after,.btnrow button::after,.gbtn::after,.mbtn::after,
-  .direct.primary::after,.sysbar a::after,.sbtn::after,.op a::after,
+  .direct.primary::after,.sysbar a::after,.sbtn::after,
   .ngdrop a::after,.hub a::after,.go-link::after,.excard .go::after,
   .chk::after,.switch::after,.field input::after,.seg-it::after,.tabmini i::after,.mchip::after,
   .covline a::after,.stpm::after,.stpp::after,.uprow .del::after,.slrow input::after,
@@ -166,7 +166,6 @@ section.block{margin-top:26px}
   .pcbub{position:static;width:100%;bottom:auto;margin-top:8px;transform:none}
   .pcwrap .pcbub::after{display:none}
   .tnum-demo{gap:16px}
-  .mtable{display:block;max-width:100%;overflow-x:auto;-webkit-overflow-scrolling:touch}
   .phone{max-width:100%}
   /* 17 · 页面壳：.block 内的横排演示（玻璃顶部栏 / 分段控件）在 375px 把行撑到 497px */
   .block,.block>*,.mrow2,.mnav,.mglass,.seg{min-width:0;max-width:100%}
@@ -320,7 +319,7 @@ section.block{margin-top:26px}
 .badges{display:flex;flex-wrap:wrap;gap:10px;align-items:center}
 .badge{display:inline-flex;align-items:center;gap:6px;font-size:12px;font-weight:500;color:var(--lg-text-secondary);
   padding:4px 12px;border-radius:var(--lg-radius-chip);background:rgba(255,255,255,.5);
-  border:1px solid rgba(255,255,255,.7)}
+  border:1px solid var(--lg-divider,rgba(58,52,84,.10))}   /* 白边落在浅底上等于没有边（D16 同类） */
 .dot{width:7px;height:7px;border-radius:50%}
 .dot.success{background:var(--lg-success-500);box-shadow:0 0 0 3px rgba(66,199,161,.18)}
 .dot.warning{background:var(--lg-warning-500);box-shadow:0 0 0 3px rgba(242,178,92,.18)}
@@ -351,13 +350,13 @@ section.block{margin-top:26px}
    统一用 `::after` 把可点区域扩到 44×44（10 章明确认可的补足方式）。 */
 @media(max-width:767px){
   .btn,.bx,.btnrow a,.btnrow button,.gbtn,.mbtn,.direct.primary,.sysbar a,.sbtn,
-  .op a,.ngdrop a,.hub a,.go-link,.excard .go,.chk,.switch,.field input,.seg-it,.tabmini i,.mchip,
+  .ngdrop a,.hub a,.go-link,.excard .go,.chk,.switch,.field input,.seg-it,.tabmini i,.mchip,
   .covline a,.stpm,.stpp,.uprow .del,.slrow input,footer a,.excard,.steps .sd,
   .tab,#preview-index--exhome a,.panel span a,.panel a,.mrow2 a,.bxrow,.btnrow{position:relative}
   /* 按钮行在 375px 不换行 → 溢出 4px */
   .bxrow,.btnrow{flex-wrap:wrap}
   .btn::after,.bx::after,.btnrow a::after,.btnrow button::after,.gbtn::after,.mbtn::after,
-  .direct.primary::after,.sysbar a::after,.sbtn::after,.op a::after,
+  .direct.primary::after,.sysbar a::after,.sbtn::after,
   .ngdrop a::after,.hub a::after,.go-link::after,.excard .go::after,
   .chk::after,.switch::after,.field input::after,.seg-it::after,.tabmini i::after,.mchip::after,
   .covline a::after,.stpm::after,.stpp::after,.uprow .del::after,.slrow input::after,
@@ -664,19 +663,22 @@ input[type=range].lgs::-webkit-slider-thumb{-webkit-appearance:none;width:20px;h
 .descrow{display:grid;grid-template-columns:repeat(3,1fr);gap:10px 18px;margin-top:8px}
 .descrow .it b{display:block;font-size:11px;color:var(--lg-text-tertiary);font-weight:500;margin-bottom:3px}
 .descrow .it span{font-size:14px;color:var(--lg-text-primary);font-weight:600;font-variant-numeric:tabular-nums}
-details.gfold{border-radius:18px;background:rgba(255,255,255,.4);border:1px solid rgba(255,255,255,.7);margin:8px 0;overflow:hidden}
-details.gfold summary{cursor:pointer;list-style:none;display:flex;align-items:center;gap:10px;padding:12px 14px;font-size:13px;font-weight:600}
-details.gfold summary::-webkit-details-marker{display:none}
-details.gfold summary .arr{margin-left:auto;transition:transform .25s var(--lg-ease-out);color:var(--lg-text-tertiary)}
-details.gfold[open] summary .arr{transform:rotate(180deg)}
-details.gfold .gfb{padding:0 14px 12px;font-size:12px;color:var(--lg-text-secondary);line-height:1.9}
-.mtable{width:100%;border-collapse:separate;border-spacing:0;font-size:13px}
-.mtable th{font-size:11px;color:var(--lg-text-secondary);font-weight:500;text-align:left;padding:8px 12px;border-bottom:1px solid rgba(58,52,84,.08)}
-.mtable td{padding:11px 12px;border-bottom:1px solid rgba(58,52,84,.06)}
-.mtable tbody tr{transition:background .2s}
-.mtable tbody tr:hover{background:rgba(255,255,255,.5)}
-.mtable .cell-av{display:flex;align-items:center;gap:9px}
-.mtable .mini-av{width:28px;height:28px;border-radius:50%;background:linear-gradient(150deg,var(--mmh-rose-200,#FFDEE8),var(--mmh-rose-100,#FFF0F4));border:1px solid rgba(255,255,255,.9);display:flex;align-items:center;justify-content:center;color:var(--mmh-rose-700,#B23A63);font-size:12px;font-weight:600}
+/* 折叠：配方在**外壳**（.gm-fold）。旧实现（已删）实测四处不符 11 · 11.2.6：
+   ① 没有任何高度过渡（`transition: 0s / all` —— 写着过渡其实没过渡，因为原生
+      details 切的是 display，加 transition 无效）；
+   ② 箭头 .25s（规范 220ms）；③ 标题 13px 不在类型阶；④ 用「▾」字符代替 lg-icon-chevron-down；
+   ⑤ 卡片描边是 rgba(255,255,255,.7) 白边 —— 落在浅底上等于没有边（V2.9 已收口的缺陷类）。 */
+/* 玻璃表格：配方在**外壳**（scripts/build-site.py 的「数据呈现层」），本页只加 class。
+   旧实现（已删）实测：表头 11px / 字重 500（03 · 3.7 要 body-sm 600）、
+   表体 13px（02 · 2.2.2 场景列写明「表格正文」= body-sm 14/20）、
+   分隔 rgba(58,52,84,.06)、行高 55（03.7 要 44–52，超档原因是内联按钮 32px 与头像 28px）。
+   本页只保留表格**专属**的两条：单元格内头像-文字的对齐、以及表格内联小钮档位。 */
+.cell-av{display:flex;align-items:center;gap:9px}
+.mini-av{width:26px;height:26px;border-radius:50%;background:linear-gradient(150deg,var(--mmh-rose-200,#FFDEE8),var(--mmh-rose-100,#FFF0F4));
+  border:1px solid var(--lg-divider,rgba(58,52,84,.10));display:flex;align-items:center;justify-content:center;color:var(--mmh-rose-700,#B23A63);font-size:11px;font-weight:600}
+/* 03 · 3.2.4 mini 档：26 高（行内小钮）。表格内联操作必须走这一档 ——
+   32px 的 small 档会把行高顶到 57，超出 03 · 3.7 的 44–52。 */
+.btn-mini{height:26px;padding:0 12px;font-size:12px;border-radius:16px}
 .band-legend{display:flex;gap:16px;font-size:11px;color:var(--lg-text-secondary);margin-top:8px;flex-wrap:wrap}
 .band-legend i{display:inline-block;width:10px;height:10px;border-radius:3px;margin-right:5px;vertical-align:-1px}
 
@@ -1536,22 +1538,24 @@ section.block:first-of-type{margin-top:8px}
           <div class="it"><b>下次体检</b><span>21 月龄</span></div>
           <div class="it"><b>随访状态</b><span style="color:var(--mmh-rose-700,#B23A63)">计划中</span></div>
         </div>
-        <details class="gfold"><summary>2024-10 儿保随访记录<span class="arr">▾</span></summary><div class="gfb">身高体重头围均正常，喂养指导完成；下次重点关注语言发育与 21 月龄体检。</div></details>
-        <details class="gfold"><summary>2024-07 疫苗：百白破 ②<span class="arr">▾</span></summary><div class="gfb">接种后留观 30 分钟无异常，下次疫苗接种为 12 月龄麻腮风。</div></details>
+        <details class="gm-fold" data-fold-group="baby-visit"><summary><span class="gm-fold__dot" data-tone="positive"></span>2024-10 儿保随访记录<svg class="gm-fold__arr" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg></summary><div class="gm-fold__body"><div><p>身高体重头围均正常，喂养指导完成；下次重点关注语言发育与 21 月龄体检。</p></div></div></details>
+        <details class="gm-fold" data-fold-group="baby-visit"><summary><span class="gm-fold__dot" data-tone="info"></span>2024-07 疫苗：百白破 ②<svg class="gm-fold__arr" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg></summary><div class="gm-fold__body"><div><p>接种后留观 30 分钟无异常，下次疫苗接种为 12 月龄麻腮风。</p></div></div></details>
       </div>
 
       <div class="panel glass-l2">
         <h3 class="panel-h3"><i></i>随访队列（玻璃表格）<span class="spec-chip">03 · 3.7 · 13 · 13.3.5</span></h3>
         <p class="mh">医护工作台表格 → 03 · 3.7 / 13 · 13.3.5</p>
-        <table class="mtable">
-          <thead><tr><th>宝宝</th><th>月龄</th><th>上次随访</th><th>风险</th><th></th></tr></thead>
+        <div class="gm-tbl-wrap">
+        <table class="gm-tbl">
+          <thead><tr><th scope="col">宝宝</th><th scope="col">月龄</th><th scope="col">上次随访</th><th scope="col">风险</th><th scope="col" class="col-ops">操作</th></tr></thead>
           <tbody>
-            <tr><td><span class="cell-av"><span class="mini-av">朵</span>朵朵</span></td><td class="num">18m</td><td class="num">已完成</td><td><span class="badge status"><span class="dot success"></span>正常</span></td><td><button class="btn btn-primary btn-sm">随访</button></td></tr>
-            <tr><td><span class="cell-av"><span class="mini-av" style="background:linear-gradient(150deg,#FDE9EE,#FFF0F4);color:var(--lg-sem-risk)">安</span>安安</span></td><td class="num">36m</td><td class="num" style="color:var(--lg-sem-risk)">逾期</td><td><span class="badge status"><span class="dot danger"></span>P3 以下</span></td><td><button class="btn btn-primary btn-sm">优先随访</button></td></tr>
-            <tr><td><span class="cell-av"><span class="mini-av" style="background:linear-gradient(150deg,#D9CBFE,#EDE7FE);color:var(--mmh-solid-special,#6242B8)">乐</span>乐乐</span></td><td class="num">5m</td><td class="num">已预约</td><td><span class="badge status"><span class="dot running"></span>评估中</span></td><td><button class="btn btn-tertiary btn-sm">查看</button></td></tr>
-            <tr><td><span class="cell-av"><span class="mini-av" style="background:linear-gradient(150deg,#A9E3D4,#E2F6F0);color:#25715D">米</span>大米</span></td><td class="num">12m</td><td class="num">已完成</td><td><span class="badge status"><span class="dot warning"></span>关注</span></td><td><button class="btn btn-secondary btn-sm">计划随访</button></td></tr>
+            <tr><td><span class="cell-av"><span class="mini-av">朵</span>朵朵</span></td><td class="num">18m</td><td class="num">已完成</td><td><span class="badge status"><span class="dot success"></span>正常</span></td><td class="col-ops"><button class="btn btn-primary btn-mini">随访</button></td></tr>
+            <tr><td><span class="cell-av"><span class="mini-av" style="background:linear-gradient(150deg,#FDE9EE,#FFF0F4);color:var(--lg-sem-risk)">安</span>安安</span></td><td class="num">36m</td><td class="num" style="color:var(--lg-sem-risk)">逾期</td><td><span class="badge status"><span class="dot danger"></span>P3 以下</span></td><td class="col-ops"><button class="btn btn-primary btn-mini">优先随访</button></td></tr>
+            <tr><td><span class="cell-av"><span class="mini-av" style="background:linear-gradient(150deg,#D9CBFE,#EDE7FE);color:var(--mmh-solid-special,#6242B8)">乐</span>乐乐</span></td><td class="num">5m</td><td class="num">已预约</td><td><span class="badge status"><span class="dot running"></span>评估中</span></td><td class="col-ops"><button class="btn btn-tertiary btn-mini">查看</button></td></tr>
+            <tr><td><span class="cell-av"><span class="mini-av" style="background:linear-gradient(150deg,#A9E3D4,#E2F6F0);color:#25715D">米</span>大米</span></td><td class="num">12m</td><td class="num">已完成</td><td><span class="badge status"><span class="dot warning"></span>关注</span></td><td class="col-ops"><button class="btn btn-secondary btn-mini">计划随访</button></td></tr>
           </tbody>
         </table>
+        </div>
         <p class="note">行内操作最小为 Ghost/小按钮；风险三档：正常 / 关注(琥珀) / 高危(红)——颜色不单独承载语义。</p>
       </div>
     </div>
@@ -2413,7 +2417,9 @@ section.block:first-of-type{margin-top:8px}
   }
 
   /* 5) 表格 / 反馈面板操作按钮反馈 */
-  [].slice.call(document.querySelectorAll('.mtable .btn,.btn.act')).forEach(function(b){
+  /* ⚠️ 选择器随类名同步：表格的类已从 .mtable 改为 .gm-tbl ——
+     漏改这处会让"点表格里的操作按钮给出反馈"静默失效（查不到元素、无声无息）。 */
+  [].slice.call(document.querySelectorAll('.gm-tbl .btn,.btn.act')).forEach(function(b){
     b.addEventListener('click',function(){
       toast('已执行：'+(b.textContent.trim()||'操作'));
     });
