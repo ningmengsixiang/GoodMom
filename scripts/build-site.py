@@ -296,9 +296,14 @@ def prefix_js_ids(js: str, mod: str) -> str:
     这些 id 不由 prefix_ids 处理（它只管标记属性）；若只给 getElementById 加前缀，
     两边就对不上 → 查不到按钮 → addEventListener 抛 null（弹窗按钮点不动）。
     这里把脚本内 `id="x"` / `id='x'` 与 setAttribute("id","x") 一并加前缀。
+    同理，指向 id 的 IDREF 属性（aria-labelledby / for / …）也必须一起改，
+    否则 JS 拼出来的浮层会留下"引用合法但指向不存在"的空引用。
     """
     pid = f"{mod}--"
-    if not re.search(r"\bid\s*[=:]", js):
+    idref = ("aria-labelledby", "aria-describedby", "aria-controls", "aria-owns",
+             "aria-activedescendant", "aria-flowto", "for", "list", "form", "headers")
+    if not re.search(r"\bid\s*[=:]", js) and not re.search(
+            r"\b(?:%s)\s*[=:]" % "|".join(idref), js):
         return js
 
     def attr(m: re.Match) -> str:
@@ -317,6 +322,12 @@ def prefix_js_ids(js: str, mod: str) -> str:
 
     # setAttribute("id","x") / setAttribute('id','x')
     js = re.sub(r'(setAttribute\(\s*["\']id["\']\s*,\s*)(["\'])([\w-]+)\2', setattr, js)
+
+    # IDREF：字符串里的 aria-labelledby="x" 与 setAttribute('aria-labelledby','x')
+    for a in idref:
+        js = re.sub(r"(\b%s=)(['\"])([\w-]+)\2" % a, attr, js)
+        js = re.sub(
+            r'(setAttribute\(\s*["\']%s["\']\s*,\s*)(["\'])([\w-]+)\2' % a, setattr, js)
     return js
 
 
@@ -371,14 +382,34 @@ def scope_js(js: str, mod: str) -> str:
 
 
 def prefix_ids(html: str, mod: str) -> str:
-    """给模块内所有 id 加 `<mod>--` 前缀，避免跨模块 id 冲突"""
+    """给模块内所有 id 加 `<mod>--` 前缀，避免跨模块 id 冲突
+
+    ⚠️ 必须**同时**改写引用这些 id 的属性（IDREF），否则合并后引用静默断链：
+    `id="preview-index--pcBubTitle"` 配 `aria-labelledby="pcBubTitle"` ——
+    两边都合法、都通得过任何静态检查，但读屏软件拿到的是空引用。
+    （实测：V2.9 新加的 Popconfirm 气泡首个 IDREF 就踩到了这个坑。）
+    IDREF 属性清单取 HTML/ARIA 规范里会指向元素 id 的那些。
+    """
     pid = f"{mod}--"
 
     def rid(m: re.Match) -> str:
         v = m.group(2)
         return m.group(1) + (v if v.startswith(pid) else pid + v) + m.group(3)
 
-    return re.sub(r'(\bid\s*=\s*["\'])([^"\']+)(["\'])', rid, html)
+    html = re.sub(r'(\bid\s*=\s*["\'])([^"\']+)(["\'])', rid, html)
+
+    # IDREF 属性可能含多个空格分隔的 id（如 aria-labelledby="a b"），逐个加前缀
+    idref = ("aria-labelledby", "aria-describedby", "aria-controls", "aria-owns",
+             "aria-activedescendant", "aria-flowto", "for", "list", "form", "headers")
+
+    def ridref(m: re.Match) -> str:
+        vals = m.group(2).split()
+        vals = [v if (v.startswith(pid) or v.startswith("#")) else pid + v for v in vals]
+        return m.group(1) + " ".join(vals) + m.group(3)
+
+    for a in idref:
+        html = re.sub(r'(\b%s\s*=\s*["\'])([^"\']+)(["\'])' % a, ridref, html)
+    return html
 
 
 MODULE_IDS = {m[0] for m in MODULES}
@@ -642,6 +673,12 @@ SHELL = """<!DOCTYPE html>
   --sh-grad-action:linear-gradient(135deg,#FFC4D6 0%,#F77FA3 100%);
   --sh-font:"Inter","SF Pro Display",-apple-system,"PingFang SC","MiSans","Noto Sans SC",sans-serif;
   --sh-ring:2px;--sh-ease:cubic-bezier(.22,1,.36,1);
+  /* Part 18 · MD-18-04「Toast 顶部偏上」。
+     合并为单一首页后，外壳多了一条 sticky 吸顶导航（桌面 60px / 移动 144px，z-index 200）。
+     模块内的 Toast 若沿用独立页的 top:20px，会被这条导航整条盖住——
+     实测：节点存在于 20px 处、样式全部生效，但**视觉完全不可见**（无任何静态检查能发现）。
+     故由外壳统一给出避让值，模块侧只读 --gm-toast-top（缺省 20px，供未套外壳的独立页）。 */
+  --gm-toast-top:76px;
 }
 *{box-sizing:border-box}
 html{-webkit-text-size-adjust:100%}
@@ -688,6 +725,47 @@ body{margin:0;font-family:var(--sh-font);color:var(--sh-t);line-height:1.7;-webk
 .gm-mod--site-spec aside,.gm-mod--site-manual aside{position:sticky;top:70px}
 /* 模块内的锚点跳转留出吸顶导航高度 */
 .gm-mod [id]{scroll-margin-top:78px}
+/* ══════════════════════════════════════════════════════════════════════════
+   Part 18 · MD-18-01/04 —— 全局反馈层：Toast（唯一一份实现，属于外壳而非某个模块）
+   为什么放外壳：Toast 是**跨模块的浮层**。若每个模块各写一份，
+   ① 三处实现漂移（实测旧站：bottom:34px / bottom:26px / top:20px，320/240/250ms 各不相同，
+      驻留 1500 / 1600 / 2300 / 2400ms 四种都有，全部缺 role/aria-live）；
+   ② 合并成单一首页后，模块内的 `top:20px` 会被 60px（移动 144px）的吸顶导航整条盖住。
+   放进外壳 → 一份配方 + 一个 window.gmToast()，挂载点由 .gm-mod.is-on 决定，
+   既拿到模块作用域，又不必每个模块复制一遍。
+   ⛔ 不套白描边：白边落在浅色提示底上等于「没有边」，形状会糊（V2.9 已收口的缺陷类）。
+   ⚠️ 进出场都用**动画**而非 transition：`.gm-toast` 的静态态即"已显示"，
+      进场靠 gmToastIn 的 both 填充、退场靠 gmToastOut 的 forwards 填充。
+      改为 transition 时，取消动画那一瞬计算值先跳回静态态、过渡取不到起点 → 退场闪一下。
+   ══════════════════════════════════════════════════════════════════════════ */
+.gm-toast{position:fixed;left:50%;top:var(--gm-toast-top,20px);z-index:250;
+  display:inline-flex;align-items:center;gap:9px;max-width:min(84vw,420px);
+  padding:10px 18px;border-radius:999px;pointer-events:none;
+  background:linear-gradient(160deg,rgba(255,255,255,.97),rgba(255,255,255,.9));
+  border:1px solid var(--lg-divider,rgba(58,52,84,.10));
+  color:var(--lg-text-primary,#343A46);
+  font-family:var(--sh-font);font-size:13px;font-weight:600;line-height:1.6;
+  box-shadow:0 1px 2px rgba(58,52,84,.06),0 12px 30px rgba(58,52,84,.14);
+  animation:gmToastIn 320ms cubic-bezier(.22,1,.36,1) both}
+.gm-toast.is-leaving{animation:gmToastOut 240ms ease-in forwards}
+@keyframes gmToastIn{from{opacity:0;transform:translate(-50%,-24px)}to{opacity:1;transform:translate(-50%,0)}}
+@keyframes gmToastOut{from{opacity:1;transform:translate(-50%,0)}to{opacity:0;transform:translate(-50%,-24px)}}
+/* 语义双通道：色点（14 · 4.4.5 alias）+ 文案，不靠颜色单独传义 */
+.gm-toast__dot{width:8px;height:8px;border-radius:50%;flex:none;background:var(--lg-sem-neutral,#5E6673)}
+.gm-toast--success .gm-toast__dot{background:var(--lg-sem-positive,#25715D)}
+.gm-toast--error   .gm-toast__dot{background:var(--lg-sem-risk,#B72F42)}
+.gm-toast--warning .gm-toast__dot{background:var(--lg-sem-attention,#8D5A15)}
+.gm-toast--info    .gm-toast__dot{background:var(--lg-sem-info,#3261C1)}
+.gm-toast__t{min-width:0}
+/* 暗色档（02 · 2.1.9）：模块根挂 data-theme="dark" 时提示底必须跟着翻 ——
+   否则 `var(--lg-text-primary)` 取到暗色档的浅色字，压在 97% 白的底上实测 1.14:1（看不见）。 */
+[data-theme="dark"] .gm-toast{
+  background:linear-gradient(160deg,rgba(38,36,46,.97),rgba(38,36,46,.9));
+  box-shadow:0 1px 2px rgba(0,0,0,.35),0 12px 30px rgba(0,0,0,.5)}
+@media (prefers-reduced-motion: reduce){
+  /* 全局 reduce-motion 规则已把动画压到 0.01ms；这里只补"退场后仍占位"的兜底 */
+  .gm-toast.is-leaving{opacity:0}
+}
 /* ── 移动端：导航横向滚动，不换行挤压 ── */
 @media (max-width:767px){
   .sh-top-in{gap:8px}
@@ -696,6 +774,8 @@ body{margin:0;font-family:var(--sh-font);color:var(--sh-t);line-height:1.7;-webk
   .sh-tabs::-webkit-scrollbar{display:none}
   .sh-ext{margin-left:0;order:2}
   .sh-brand{order:1}
+  /* 移动端吸顶导航换成两行（实测 144px），Toast 的避让值随之抬高 */
+  :root{--gm-toast-top:160px}
 }
 @media (prefers-reduced-motion: reduce){
   .sh-tab{transition:none}
@@ -835,6 +915,44 @@ __MODULES__
       activate(tabs[0].getAttribute('data-mod'), false);
     }
   });
+})();
+
+/* ══════════════════════════════════════════════════════════════════════════
+   Part 18 · MD-18-01/04 —— 全局轻提示 window.gmToast(msg, status)
+   全站**唯一**实现：模块侧只调用它，不再各自造 Toast。
+   · 同类仅 1 条：每次先摘掉上一个节点（MD-18-04）
+   · 驻留 2.4s 在此内置，调用点不写 setTimeout —— 否则每个调用点都会写错一次
+   · role：error → alert + assertive（失败必须立刻被读到）；其余 → status + polite
+   · 挂载点取当前可见模块：模块 CSS 是作用域化的（.gm-mod--x .gm-toast），
+     挂到 body 上虽然看得见，但拿不到模块内定义的 Token 与样式。
+   ══════════════════════════════════════════════════════════════════════════ */
+window.gmToast = (function(){
+  var DWELL = 2400, LEAVE = 240;   /* MD-18-01：驻留 2.4s · 淡出上滑 240ms */
+  var node = null, t1 = null, t2 = null;
+  return function(msg, status){
+    status = status || 'info';
+    if(node && node.parentNode) node.parentNode.removeChild(node);
+    clearTimeout(t1); clearTimeout(t2);
+    var n = document.createElement('div');
+    n.className = 'gm-toast gm-toast--' + status;
+    n.setAttribute('role', status === 'error' ? 'alert' : 'status');
+    n.setAttribute('aria-live', status === 'error' ? 'assertive' : 'polite');
+    var dot = document.createElement('i');
+    dot.className = 'gm-toast__dot'; dot.setAttribute('aria-hidden', 'true');
+    var txt = document.createElement('span');
+    txt.className = 'gm-toast__t'; txt.textContent = msg;
+    n.appendChild(dot); n.appendChild(txt);
+    (document.querySelector('.gm-mod.is-on') || document.body).appendChild(n);
+    node = n;
+    t1 = setTimeout(function(){
+      if(!n.parentNode) return;
+      n.classList.add('is-leaving');
+      t2 = setTimeout(function(){
+        if(n.parentNode) n.parentNode.removeChild(n);
+        if(node === n) node = null;
+      }, LEAVE);
+    }, DWELL);
+  };
 })();
 </script>
 </body>
@@ -1166,6 +1284,22 @@ def validate_html(html: str) -> list[str]:
     if dead:
         top = ", ".join(f"{k}×{v}" for k, v in sorted(dead.items(), key=lambda kv: -kv[1])[:6])
         errs.append("悬空锚点：%d 处（%s）" % (sum(dead.values()), top))
+
+    # IDREF 完整性：`aria-labelledby="x"` 这类引用必须指向真实存在的 id。
+    # 合并成单一首页后 id 会加模块前缀，若只改 id 不改引用，两边都"合法"、
+    # 静态检查全绿，但读屏拿到的是空引用（实测 Popconfirm 气泡踩过）。
+    idref_attrs = ("aria-labelledby", "aria-describedby", "aria-controls", "aria-owns",
+                   "aria-activedescendant", "aria-flowto", "for", "list", "form", "headers")
+    unresolved: dict[str, int] = {}
+    for a in idref_attrs:
+        for m in re.finditer(r'\b%s\s*=\s*"([^"]+)"' % a, markup):
+            for tok in m.group(1).split():
+                if tok and not tok.startswith("#") and tok not in ids:
+                    unresolved[f"{a}={tok}"] = unresolved.get(f"{a}={tok}", 0) + 1
+    if unresolved:
+        top = ", ".join(f"{k}×{v}" for k, v in sorted(unresolved.items(), key=lambda kv: -kv[1])[:6])
+        errs.append("断链 IDREF（aria-labelledby / for 等指向不存在的 id）：%d 处（%s）"
+                    % (sum(unresolved.values()), top))
     return errs
 
 

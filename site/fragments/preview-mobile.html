@@ -1,6 +1,10 @@
 <!--@css-->
 /* ── LG Tokens（精简，同 02；移动增量见 10-移动端组件规范.md）── */
 :root{
+  /* V2.9 补：本页 3 处无兜底引用 --sem-special，但它从未定义 ——
+     浏览器会在计算值阶段静默丢弃这些声明（.navbar 图标按下态 / notice 图标 / 搜索按钮全都会
+     退化成继承色）。取值照抄 02 · 2.1.5 的文字专用深档 alias，不新造色。 */
+  --sem-special:#6A48DC;
   --warm-ivory:#E6D9D0; --soft-beige:#D7C5BC;
   --text:#343A46; --text-2:#4F5B6E; --text-3:#4F5B6E;
   --purple:#B69AFF; --purple-d:#9A78FF; --cyan:#72DDE5;
@@ -199,12 +203,10 @@ svg.i{width:22px;height:22px;stroke:currentColor;fill:none;stroke-width:1.7;
 .up .ring{width:22px;height:22px;border-radius:50%;border:2px solid rgba(154,120,255,.25);border-top-color:var(--sem-special);
   animation:spin .9s linear infinite}
 @keyframes spin{to{transform:rotate(360deg)}}
-/* 底部玻璃 Toast */
-.mtoast{position:fixed;left:50%;top:calc(env(safe-area-inset-top) + 96px);transform:translateX(-50%) translateY(-8px);
-  z-index:50;padding:10px 18px;border-radius:999px;font-size:13px;color:#FFF;font-weight:600;
-  background:rgba(58,52,84,.78);-webkit-backdrop-filter:blur(16px);backdrop-filter:blur(16px);
-  opacity:0;pointer-events:none;transition:opacity .25s ease,transform .25s var(--ease);max-width:86%}
-.mtoast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+/* Part 18 · MD-18-01/04 —— Toast 的样式与实现都在**外壳**（scripts/build-site.py 的
+   全局反馈层），本模块只调用 window.gmToast(msg, status)。
+   旧实现（.mtoast，已删）：注解写「底部玻璃 Toast」、实际定位 top:96px（合并为单一首页后
+   移动端吸顶导航实测 144px —— 96px 会被整条盖住）、过渡 .25s、驻留 1600ms、无 role/aria-live。 */
 
 /* 移动端补充：评分与步骤（组件丰富化） */
 .mrate{display:flex;gap:8px;cursor:pointer}
@@ -453,7 +455,6 @@ svg.i{width:22px;height:22px;stroke:currentColor;fill:none;stroke-width:1.7;
 </nav>
 
 
-<div class="mtoast" id="mtoast"></div>
 
 
 
@@ -464,75 +465,9 @@ svg.i{width:22px;height:22px;stroke:currentColor;fill:none;stroke-width:1.7;
 
 
 
-<script>
-
-/* 合并入单一首页的作用域适配：本模块原先独占 <body>，动态节点与状态类都挂在 body 上；合并后 body 属于外壳，改挂模块根以保持与原页面等价的作用域。 */
-function MODROOT_preview_mobile(){return document.getElementById("gm-mod-preview-mobile")||document.documentElement;}
-/* 合并入单一首页的作用域适配：本模块原先独占 <body>，动态节点与状态类都挂在 body 上；合并后 body 属于外壳，改挂模块根以保持与原页面等价的作用域。 */
-function MODROOT_preview_mobile(){return document.getElementById("gm-mod-preview-mobile")||document.documentElement;}
-(function(){
-  /* TabBar 切换 */
-  var tabs=[].slice.call(document.querySelectorAll('.tab'));
-  tabs.forEach(function(t){
-    t.addEventListener('click',function(){
-      tabs.forEach(function(x){x.classList.remove('on')});
-      t.classList.add('on');
-    });
-  });
-  /* 资源水位条形生长（延迟播放） */
-  var meters=[].slice.call(document.querySelectorAll('.meter i'));
-  setTimeout(function(){
-    meters.forEach(function(m){m.style.width=m.getAttribute('data-w')+'%'});
-  },350);
-})();
-
-/* 11 章组件演示：Toast / Chips / Segmented */
-(function(){
-  var mt=document.getElementById('mtoast'), h=null;
-  window.toastM=function(msg){
-    mt.textContent=msg; mt.classList.add('show');
-    clearTimeout(h); h=setTimeout(function(){ mt.classList.remove('show'); },1600);
-  };
-  [].slice.call(document.querySelectorAll('.chip')).forEach(function(c){
-    c.addEventListener('click',function(){
-      [].slice.call(c.parentNode.children).forEach(function(x){x.classList.remove('on')});
-      c.classList.add('on');
-      toastM('筛选：' + c.textContent);
-    });
-  });
-  [].slice.call(document.querySelectorAll('.seg2 .s2')).forEach(function(s){
-    s.addEventListener('click',function(){
-      [].slice.call(s.parentNode.children).forEach(function(x){x.classList.remove('on')});
-      s.classList.add('on');
-    });
-  });
-
-  /* Rate（移动） */
-  var mrate=document.getElementById('mrate');
-  if(mrate){[].slice.call(mrate.querySelectorAll('svg')).forEach(function(st){
-    st.addEventListener('click',function(){
-      var n=parseInt(st.getAttribute('data-v'),10)||0;
-      [].slice.call(mrate.querySelectorAll('svg')).forEach(function(x){
-        x.classList.toggle('on',parseInt(x.getAttribute('data-v'),10)<=n);});
-    });});}
-
-  /* 移动按钮 Loading 模拟 */
-  var mb=document.getElementById('mbLoad');
-  if(mb){
-    var mbTxt=mb.innerHTML;
-    mb.addEventListener('click',function(){
-      if(mb.getAttribute('data-run'))return;
-      mb.setAttribute('data-run','1');
-      mb.innerHTML='<svg class="ldc" viewBox="0 0 24 24"><circle cx="12" cy="12" r="8.5" fill="none" stroke="rgba(255,255,255,.4)" stroke-width="2.4"/><path d="M20.5 12A8.5 8.5 0 0 0 12 3.5" fill="none" stroke="#FFF" stroke-width="2.4" stroke-linecap="round"/></svg>保存中…';
-      mb.classList.add('loading');
-      mb.setAttribute('disabled','');
-      setTimeout(function(){mb.innerHTML=mbTxt;mb.classList.remove('loading');mb.removeAttribute('disabled');mb.removeAttribute('data-run');},1400);
-    });
-  }
-})();
-
-
-</script>
+<!-- 体例说明：本模块脚本只有 @js 分段一段（构建时以它为唯一出处）。
+     历史上同一段脚本在 body 内联 script 里还留了一份逐行副本，构建会静默
+     丢弃它（drop_body_scripts），两份并存极易改错一边 —— V2.9 已删除。 -->
 
 <!--@js-->
 (function(){
@@ -553,11 +488,9 @@ function MODROOT_preview_mobile(){return document.getElementById("gm-mod-preview
 
 /* 11 章组件演示：Toast / Chips / Segmented */
 (function(){
-  var mt=document.getElementById('mtoast'), h=null;
-  window.toastM=function(msg){
-    mt.textContent=msg; mt.classList.add('show');
-    clearTimeout(h); h=setTimeout(function(){ mt.classList.remove('show'); },1600);
-  };
+  /* Toast 统一走外壳的 window.gmToast：位置（顶部偏上、避让吸顶导航）/ 时序
+     （320ms 入 → 驻留 2.4s → 240ms 出）/ 同类仅 1 条 / role+aria-live 都在那里钉死。 */
+  window.toastM=function(msg,status){ gmToast(msg,status); };
   [].slice.call(document.querySelectorAll('.chip')).forEach(function(c){
     c.addEventListener('click',function(){
       [].slice.call(c.parentNode.children).forEach(function(x){x.classList.remove('on')});

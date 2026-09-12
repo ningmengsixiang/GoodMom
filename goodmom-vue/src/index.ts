@@ -18,6 +18,7 @@ import GmProgress from "./components/GmProgress.vue";
 import GmResponsiveView from "./components/GmResponsiveView.vue";
 import GmRiskPicker from "./components/GmRiskPicker.vue";
 import GmResult from "./components/GmResult.vue";
+import GmToast from "./components/GmToast.vue";
 import GmSkeleton from "./components/GmSkeleton.vue";
 import GmSpin from "./components/GmSpin.vue";
 import GmStatusTag from "./components/GmStatusTag.vue";
@@ -39,6 +40,7 @@ export const components = {
   GmResponsiveView,
   GmRiskPicker,
   GmResult,
+  GmToast,
   GmSkeleton,
   GmSpin,
   GmStatusTag,

@@ -25,6 +25,7 @@ export { default as GmVirtualList } from "./components/GmVirtualList";
 export * from "./tokens/status";
 export * from "./tokens/business";
 export { DesignTokens } from "./tokens/design";
+export { default as GmToast } from "./components/GmToast";
 export { default as GmResult } from "./components/GmResult";
 export { default as GmTag } from "./components/GmTag";
 export { default as GmSteps } from "./components/GmSteps";

@@ -94,3 +94,18 @@ node scripts/page-qa.mjs --ci    # 逐页规范质检（P0–P2 必须为 0）
 `index.html#site-spec--ch-02`）、带 `noindex`。
 
 `../preview/manual.html`（打印版手册）按用途**保留为独立页**，不在合并范围内。
+
+## 反馈层（Toast）为什么在外壳而不在模块里
+
+`site/index.html` 是 8 个模块合并成的唯一首页，模块样式一律作用域隔离在各自的
+`.gm-mod--x` 内。**Toast 是唯一的例外**：它是跨模块浮层，样式与实现都放在外壳
+（`scripts/build-site.py` 的「全局反馈层」），全站只有一份：
+
+- `window.gmToast(msg, status)` —— 同类仅 1 条、驻留计时内置（2.4s）、
+  `error → role="alert"` 其余 `role="status" + aria-live`；
+- 挂载点取 `.gm-mod.is-on`，所以既拿得到模块作用域，又不必每个模块复制一遍实现；
+- 位置由外壳变量 `--gm-toast-top` 给出（桌面 76px / 移动 160px），用于避让
+  60px / 144px 的 sticky 吸顶导航 —— 模块内若自己写 `top:20px`，
+  节点存在、样式生效，但会被导航整条盖住（静态检查发现不了）。
+
+模块侧只调用、不实现。门禁：`python3 scripts/audit.py --only feedback-spec`。

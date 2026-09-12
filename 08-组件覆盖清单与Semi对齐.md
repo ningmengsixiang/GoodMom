@@ -87,7 +87,7 @@
 
 | Semi 组件 | LG 状态 | 说明 / LG 对应 |
 | --- | --- | --- |
-| Toast / Notification | ✅ 3.9 + [07 · 7.3.7](07-交互动效与微交互规范.md) | 玻璃 Toast；Notification 右上堆叠版 |
+| Toast / Notification | ✅ 3.9 + [07 · 7.3.7](07-交互动效与微交互规范.md) | 玻璃 Toast；Notification 右上堆叠版。**Toast 已实现**（V2.9）：`GmToast` 两库同契约（受控 `open`、内置 2.4s 驻留、`role`/`aria-live`、240ms 退场）+ 站点外壳 `window.gmToast()` 唯一实现；守门 `audit.py feedback-spec` |
 | Progress 进度条 | ➕ | 玻璃进度（线性/环形，见 8.2.5） |
 | Skeleton 骨架屏 | ➕ | 玻璃骨架（见 8.2.15） |
 | Spin 加载器 | ➕ | 柔和玻璃 spinner（并入 8.2.15） |

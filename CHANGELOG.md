@@ -1,3 +1,85 @@
+## [V2.9] · 反馈与提示族完善（Toast / Modal / Popconfirm / Tooltip）
+
+> 依据：Part 18 · MD-18-01/02/04。逐条实测证据与决策见 `docs/审查决策记录.md` **D18**。
+
+### 反馈组件从"只有目录登记"到"有唯一实现"
+- **新增 `GmToast`**（`goodmom-ui` React + `goodmom-vue` Vue，props / 默认值 / 契约类名逐项一致）：
+  受控 `open`、**驻留计时内置**（默认 2400ms，调用点不再各写一遍 `setTimeout`）、
+  `error → role="alert" + aria-live="assertive"`、其余 `role="status" + polite`、
+  语义色点走 `--lg-sem-*` 双通道；退场**两阶段挂载**，先播满 240ms 再摘节点。
+- **站点侧收敛为外壳唯一实现 `window.gmToast(msg, status)`**：站点原有 **5 套私有 Toast**（`.copied` / `#toast` /
+  `#gtoast` / `.fx` / `.mtoast`）实测**没有一套完全达标**（位置 `bottom:34px`、滑入 `.35s`/`.25s`、
+  驻留 1500/1600/2300ms 三种、全部没有 `role`/`aria-live`）→ 全部删除，改调用外壳那一份。
+  Toast 是跨模块浮层，故样式与实现都放外壳、只此一份；挂载点取 `.gm-mod.is-on`。
+
+### 阻断级（P0）
+- **Toast 被吸顶导航整条盖住**（本轮最隐蔽）：合并为单一首页后外壳多了一条 60px（移动 **144px**）的
+  sticky 导航（`z-index:200`）。模块内 Toast 沿用独立页的 `top:20px` 时，
+  **节点存在、样式全部生效、逐页质检也不报，但视觉完全不可见** —— 只有渲染级测量能发现。
+  已由外壳统一给出 `--gm-toast-top`（桌面 76px / 移动 160px = 实测导航高度 + 16px），
+  并加门禁：外壳缺这两个值即 FAIL。
+- **IDREF 断链**：合并时 id 加模块前缀，但 `build-site.py` 的 `prefix_ids` 只改 id、不改引用 →
+  `id="preview-index--pcBubTitle"` 配 `aria-labelledby="pcBubTitle"`，两边合法、门禁全绿，读屏拿到空引用。
+  已让 `prefix_ids` / `prefix_js_ids` 同步改写 IDREF 属性（`aria-labelledby` / `aria-describedby` /
+  `aria-controls` / `for` / `list` …），构建断言新增「断链 IDREF」检查。
+
+### 严重（P1）
+- **未定义 Token 让反馈语义色集体失效**：合并后的首页上 `--lg-sem-*` **根本没有定义**，
+  而 `preview-index` 有 **59 处无兜底引用**（`color:var(--lg-sem-special)`）。这类声明在计算值阶段
+  整条失效、被浏览器**静默丢弃**：不报错、静态扫描与对比度检查都看不到（元素退化成继承色）。
+  实测 `.t1` 算出继承色而非紫色。已按 `theme.css` 浅色档补齐 6 个语义色 +
+  `--lg-glass-control` / `--lg-shadow-xl` / `--rose-deep`，`preview-mobile` 的 `--sem-special` 一并补齐。
+- **Modal 无障碍缺失**：站点示例弹层无 `role="dialog"` / `aria-modal`，无 ESC、无焦点管理、无滚动锁
+  （键盘用户进不去也出不来，焦点留在地下的页面上）；演示稿 Modal 同样缺 role 与焦点归还。
+  已按 MD-18-02 全部补齐：遮罩点击 / ESC / × 关闭、打开锁滚动、焦点进面板首元素、**关闭归还触发点**。
+- **白描边回归**：`.tip` 的 `rgba(255,255,255,.75)` 与演示稿 `.toast` 的纯白 1px
+  —— 与 D16 的白底按钮同一缺陷类（白边落在白/浅底上等于「没有边」）。全部改暖中性发丝线。
+
+### 一般（P2）
+- **时序对齐 MD-18-01**：Tooltip `.2s`/5px → **180ms / Y 4px**；Popconfirm 同口径；
+  Modal 遮罩 `.2s` → **250ms**、面板 `.24s`/`scale(.965)`/16px → **320ms / `.98` / 12px**；
+  演示稿 Toast `.25s`/`.22s`/2300ms → **320ms / 2400ms / 240ms**。
+- **该页示例文案与实现打架**：演示稿自己写着「滑入 320ms」「驻留 2.4s」，实现却是 `.25s` / 2300ms —— 现已一致。
+- **Popconfirm** 补 `role="dialog"` + `aria-labelledby`，触发器补 `aria-haspopup="dialog"` + `aria-expanded`。
+- **删掉 550 行死副本**：`preview-index` / `preview-mobile` 的 body 内联 `<script>` 与 `@js` 分段逐行相同，
+  构建静默丢弃前者（`drop_body_scripts`），改错一边毫无提示。只留 `@js` 一份并留注释说明。
+
+### 修复（同轮自测补记）
+- **Toast 暗色档白底白字（P1，自测发现）**：提示底是硬编码的 97% 白，而文字取
+  `var(--lg-text-primary)` —— 暗色档该 token 是浅色字 `#F3EFEC`，
+  **实测 1.14:1，等于看不见**。库侧与外壳都补了 `[data-theme="dark"] .gm-toast` 覆盖，
+  修后实测：浅色 11.42:1、暗色 13.37:1。
+  这类缺陷**任何现有门禁都测不到**：Toast 是交互后才出现的临时节点，
+  逐页质检与对比度门禁扫 DOM 时它并不存在。已把「必须有暗色档」写进 `feedback-spec`。
+
+### 新增门禁与负向测试
+- **`audit.py feedback-spec`**：库侧滑入 320ms / 退场 240ms（且必须是动画而非 transition）、
+  必须 `top:var(--gm-toast-top …)` 且无白描边、四个语义色点必须取 `--lg-sem-*`；组件侧 `role`/`aria-live`/
+  `alert` 分流 / 默认驻留 2400ms / `LEAVE_MS = 240`；外壳侧唯一 `window.gmToast` / `DWELL`/`LEAVE` /
+  同类仅 1 条 / `role` 分流；**站点片段再出现私有 Toast 一律 FAIL**；独立演示页含 Modal 语义一并校验。
+- **`audit.py undefined-token`**：片段里 `var(--x)` 无兜底引用必须有定义（先剥注释再扫描）。
+- **`scripts/gate-negative-tests.py`（新增，20 条用例）**：给每条门禁注入真实缺陷，断言必须 FAIL 且报出
+  预期原因，随后按字节还原。**本轮它当场抓到一个空转门禁**：`feedback-spec` 里的
+  `r"\%s\s*\{" % re.escape(cls)` 会生成要求「字面量反斜杠」的模式，那条检查从写下起就永不命中。
+- `audit.py` 新增 `--only <门禁名>`：负向测试需要"只跑这一条"，否则注入的缺陷会被别的门禁先拦下，
+  反而证明不了目标门禁有效。
+- `site-parity.mjs` 的合并保真度拦下了**有意移除**的两个常驻节点（`.copied` / `.mtoast`），
+  已登记进该脚本的 `INTENTIONAL` / `INTENTIONAL_IDS` 并写明理由 —— 属"登记豁免"，不是放宽判定。
+
+### 结果与回归
+- `page-qa.mjs --ci`：**P0–P2 = 0**（P3 仍为 6 条「模块未实现暗色皮肤」，不阻塞）。
+- `a11y-dom.py`：确证对比度失败 **0**（基线 0）。`site-parity.mjs` **15/15** · `site-smoke.mjs` **48/48**。
+- 其余门禁全绿：`audit.py` · `a11y.py` · `coverage.py` · `check-md-links.py` · `check-anchors.py` ·
+  `check-status-map.py` · `check-version.py` · `check-style-parity.py` · `check-component-contract.py`（19 对组件）·
+  `build-site.py --check` · `redirect-legacy.py --check` · gen 幂等 · 新增负向测试 20/20。
+
+### 仍未做（登记在案）
+`Notification`(#64) / `ActionSheet`(#66) / `Banner`(#69) / `Drawer`(#26) / `NoticeBar`(#36) 两库仍无组件实现；
+`GmModal` / `GmPopconfirm` / `GmTooltip` 尚未做成库组件（本轮只把站点演示对齐到规范）；
+MD-18-03（确认类三段式 busyFor）与 MD-18-06（层叠 ≤2）尚无机械门禁。
+
+---
+
 ## [V2.9] · 逐页规范质检与全量整改（每页质检 → 规范问题 → 修复）
 
 > 依据：新增的渲染级逐页质检工具 `scripts/page-qa.mjs`（17 页 × 桌面/移动/暗色三档 × 17 类规则）。

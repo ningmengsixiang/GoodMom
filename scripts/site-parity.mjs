@@ -48,7 +48,14 @@ const INTENTIONAL = new Set([
   "r",
   // 依托 JS 渲染、初始 DOM 不存在（对比时会被误判为缺失）
   "hub", "on", "dir",
+  // V2.9 有意移除：各页私有的常驻 Toast 节点（.copied / .mtoast）。
+  // 它们原本以静态元素常驻 DOM，靠 class 切换显隐；现在统一由外壳的 window.gmToast()
+  // **按需创建**（这样才拿得到"顶部偏上 + 避让吸顶导航"的统一位置，也不会在加载时闪一下）。
+  "copied", "mtoast",
 ]);
+
+/** 有意移除的 **id**（同上一类，节点整体不再常驻 DOM） */
+const INTENTIONAL_IDS = new Set(["copied", "mtoast"]);
 
 const browser = await chromium.launch();
 const page = await browser.newPage({ viewport: { width: 1440, height: 1000 } });
@@ -94,7 +101,8 @@ for (const [mod, cfg] of Object.entries(MODULES)) {
   // id 差集：原页面 id 去掉模块前缀后应仍存在
   const origIds = new Set(orig.ids);
   const mergedIds = new Set(merged.ids.map((i) => i.replace(`${mod}--`, "")));
-  const missingIds = [...origIds].filter((i) => !mergedIds.has(i) && !mergedIds.has(i.replace(/^.*?--/, "")));
+  const missingIds = [...origIds].filter((i) =>
+    !mergedIds.has(i) && !mergedIds.has(i.replace(/^.*?--/, "")) && !INTENTIONAL_IDS.has(i));
 
   const ok = missingClasses.length === 0 && missingIds.length === 0;
   if (!ok) failed++;

@@ -205,12 +205,14 @@ th{color:var(--t3);font-size:11px;font-weight:500}
 @keyframes bubbleIn{from{opacity:0;transform:translateY(8px) scale(.97)}to{opacity:1;transform:none}}
 /* ============ 弹层（Modal / 抽屉） ============ */
 .mask{position:fixed;inset:0;z-index:120;display:flex;align-items:flex-start;justify-content:center;padding:6vh 16px 24px;
- background:rgba(64,46,64,.34);-webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px);opacity:0;transition:opacity .2s ease}
+ /* MD-18-01：遮罩 250ms */
+ background:rgba(64,46,64,.34);-webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px);opacity:0;transition:opacity 250ms ease}
 .mask.in{opacity:1}
 .dlg{width:min(620px,100%);max-height:82vh;overflow:auto;display:flex;flex-direction:column;border-radius:24px;
  background:linear-gradient(165deg,rgba(255,255,255,.94),rgba(255,255,255,.82) 55%,rgba(252,238,240,.9));border:1px solid rgba(255,255,255,.95);
  box-shadow:inset 0 1px 0 rgba(255,255,255,.95),0 24px 60px rgba(90,60,60,.22);-webkit-backdrop-filter:blur(26px);backdrop-filter:blur(26px);
- transform:translateY(16px) scale(.965);opacity:0;transition:transform .24s cubic-bezier(.2,.85,.3,1.08),opacity .2s ease}
+ /* MD-18-01：面板 320ms、scale(.98→1) 且下移 12px（旧值 240ms/.965/16px + 回弹曲线） */
+ transform:translateY(12px) scale(.98);opacity:0;transition:transform 320ms cubic-bezier(.22,1,.36,1),opacity 320ms cubic-bezier(.22,1,.36,1)}
 .mask.in .dlg{transform:none;opacity:1}
 .mask.dr{align-items:stretch;justify-content:flex-end;padding:12px}
 .mask.dr .dlg{width:min(540px,100%);max-height:100%;border-radius:24px;transform:translateX(40px);opacity:0}
@@ -233,13 +235,26 @@ textarea.inp{resize:vertical;min-height:76px;line-height:1.7}
 .opt input:checked+span::before{content:"";width:6px;height:6px;border-radius:50%;background:rgba(255,255,255,.9)}
 .opts{display:flex;gap:8px;flex-wrap:wrap}
 .hint{font-size:11.5px;color:var(--t3);margin-top:10px;line-height:1.8}
-/* Toast */
-.toast{position:fixed;left:50%;top:20px;transform:translate(-50%,-24px);z-index:300;display:flex;align-items:center;gap:9px;
+/* Toast —— Part 18 · MD-18-01/04
+   位置：顶部偏上 ✓（原实现已正确，保留 20px）
+   时序：滑入 320ms → 驻留 2.4s → 淡出上滑 240ms
+        旧值 transform .25s / opacity .22s、驻留 2300ms —— 三项都与规范不符
+        （本页自己的示例文案写的是「滑入 320ms」「驻留 2.4s」，属于文案与实现打架）
+   描边：⛔ 原为 border:1px solid rgba(255,255,255,1) —— 纯白边落在 97% 白的提示底上
+        等于「没有边」，形状会糊（V2.9 全站已收口的缺陷类）→ 改暖中性发丝线
+   进场用动画而非 transition：静态态即「已显示」，退场用 forwards 收尾，
+   避免取消动画时计算值先跳回静态态导致「退场闪一下」 */
+.toast{position:fixed;left:50%;top:20px;z-index:300;display:flex;align-items:center;gap:9px;
  padding:10px 18px;border-radius:999px;font-size:13px;color:var(--t);background:linear-gradient(160deg,rgba(255,255,255,.97),rgba(255,255,255,.9));
- border:1px solid rgba(255,255,255,1);box-shadow:0 12px 30px rgba(90,60,60,.18);opacity:0;transition:transform .25s cubic-bezier(.2,.9,.3,1.2),opacity .22s ease;pointer-events:none;max-width:84vw}
-.toast.in{transform:translate(-50%,0);opacity:1}
+ border:1px solid rgba(58,52,84,.10);box-shadow:0 1px 2px rgba(58,52,84,.06),0 12px 30px rgba(90,60,60,.18);pointer-events:none;max-width:84vw;
+ animation:toastIn 320ms cubic-bezier(.22,1,.36,1) both}
+.toast.leaving{animation:toastOut 240ms ease-in forwards}
+@keyframes toastIn{from{opacity:0;transform:translate(-50%,-24px)}to{opacity:1;transform:translate(-50%,0)}}
+@keyframes toastOut{from{opacity:1;transform:translate(-50%,0)}to{opacity:0;transform:translate(-50%,-24px)}}
+@media (prefers-reduced-motion:reduce){.toast{animation-duration:.01ms}.toast.leaving{opacity:0}}
 .toast i{width:8px;height:8px;border-radius:50%;flex:none}
-.toast.good i{background:#25715D}.toast.warn i{background:#8D5A15}.toast.err i{background:#B72F42}.toast.info i{background:#3261C1}
+/* 语义双通道：色点（14 · 4.4.5 alias）+ 文案 */
+.toast.success i{background:#25715D}.toast.warning i{background:#8D5A15}.toast.error i{background:#B72F42}.toast.info i{background:#3261C1}
 /* 数值渐进（可复用滚动计数） */
 .count-up{will-change:contents}
 @media(max-width:720px){
@@ -657,32 +672,57 @@ function esc(s){return String(s==null?'':s).replace(/&/g,'&amp;').replace(/</g,'
 function txt(el){return el?el.textContent.replace(/\s+/g,' ').trim():''}
 
 /* ---------- Toast ---------- */
-var toastT=null;
+var toastT=null,toastT2=null;
+/* 语义名映射：页面调用点沿用 good/warn/err，落到规范的 success/warning/error */
+var TOASTMAP={good:'success',warn:'warning',err:'error',info:'info',
+              success:'success',warning:'warning',error:'error'};
 function toast(msg,type){
-  type=type||'good';
+  var st=TOASTMAP[type]||'info';
+  /* MD-18-04：同类仅 1 条 */
   var old=q('.toast');if(old)old.parentNode.removeChild(old);
-  var t=document.createElement('div');t.className='toast '+type;
-  t.innerHTML='<i></i><span></span>';
+  clearTimeout(toastT);clearTimeout(toastT2);
+  var t=document.createElement('div');
+  t.className='toast '+st;
+  /* 无障碍：error 必须立刻被读到 → alert + assertive；其余 status + polite */
+  t.setAttribute('role',st==='error'?'alert':'status');
+  t.setAttribute('aria-live',st==='error'?'assertive':'polite');
+  t.innerHTML='<i aria-hidden="true"></i><span></span>';
   q('span',t).textContent=msg;
   document.body.appendChild(t);
-  requestAnimationFrame(function(){t.classList.add('in')});
-  clearTimeout(toastT);
-  toastT=setTimeout(function(){t.classList.remove('in');setTimeout(function(){if(t.parentNode)t.parentNode.removeChild(t)},280)},2300);
+  toastT=setTimeout(function(){
+    if(!t.parentNode)return;
+    t.classList.add('leaving');                       /* 淡出上滑 240ms */
+    toastT2=setTimeout(function(){if(t.parentNode)t.parentNode.removeChild(t)},240);
+  },2400);                                            /* 驻留 2.4s */
 }
 
 /* ---------- Modal / Drawer ---------- */
-var stack=[];
+var stack=[],_dlgSeq=0,_dkScroll='',_dkFocus=null;
 function modal(o){
   var m=document.createElement('div');m.className='mask';
-  var d='<div class="dlg"><div class="dhead"><b></b><button class="iconb dclose" type="button" title="关闭"><svg viewBox="0 0 24 24"><path d="M6 6l12 12M18 6L6 18"/></svg></button></div><div class="dbody"></div>'+(o.foot?'<div class="dfoot"></div>':'')+'</div>';
+  var d='<div class="dlg" role="dialog" aria-modal="true" tabindex="-1"><div class="dhead"><b id="dlg-t-'+_dlgSeq+'"></b><button class="iconb dclose" type="button" title="关闭" aria-label="关闭"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg></button></div><div class="dbody"></div>'+(o.foot?'<div class="dfoot"></div>':'')+'</div>';
   m.innerHTML=d;
   q('.dhead b',m).textContent=o.title||'';
+  q('.dlg',m).setAttribute('aria-labelledby','dlg-t-'+_dlgSeq); _dlgSeq++;
   q('.dbody',m).innerHTML=o.body||'';
   if(o.foot){var f=q('.dfoot',m);o.foot.forEach(function(a){var b=document.createElement('button');b.type='button';b.className='btn '+(a.cls||'line')+' sm';b.textContent=a.label;if(a.act)b.setAttribute('data-act2',a.act);if(a.close)b.setAttribute('data-close','1');f.appendChild(b)})}
   if(o.w)q('.dlg',m).style.width=o.w;
   ROOT.appendChild(m);
   requestAnimationFrame(function(){m.classList.add('in')});
   stack.push(m);
+  /* MD-18-02：打开时锁定页面滚动、焦点移入面板；关闭时焦点归还触发点。
+     否则键盘用户Tab 会跑到遮罩后面的页面上（焦点丢失类缺陷）。 */
+  if(stack.length===1){
+    _dkScroll=document.body.style.overflow;
+    document.body.style.overflow='hidden';
+    _dkFocus=document.activeElement;
+  }
+  var dlg=q('.dlg',m);
+  setTimeout(function(){
+    /* MD-18-02「焦点进面板首元素」：按 DOM 顺序取第一个可聚焦元素 */
+    var f=dlg.querySelector('input,select,textarea,button,a[href]')||dlg;
+    if(f&&f.focus)f.focus();
+  },0);
   return m;
 }
 function drawer(o){var m=modal(o);m.classList.add('dr');return m}
@@ -690,7 +730,13 @@ function closeMask(m){
   m=m||stack[stack.length-1];if(!m)return;
   var i=stack.indexOf(m);if(i>-1)stack.splice(i,1);
   m.classList.remove('in');
-  setTimeout(function(){if(m.parentNode)m.parentNode.removeChild(m)},250);
+  setTimeout(function(){if(m.parentNode)m.parentNode.removeChild(m)},320);
+  if(!stack.length){
+    document.body.style.overflow=_dkScroll||'';
+    /* MD-18-02：焦点归还触发点（而不是掉到 body 上） */
+    if(_dkFocus&&_dkFocus.focus)_dkFocus.focus();
+    _dkFocus=null;
+  }
 }
 function busyFor(mask,act,ms,done){
   var b=q('[data-act2="'+act+'"]',mask);

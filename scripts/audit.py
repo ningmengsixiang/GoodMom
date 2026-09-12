@@ -7,6 +7,7 @@ GoodMom 全自动规范审计（scripts/audit.py）
 用法：python3 scripts/audit.py [--strict]
 """
 import glob, os, re, sys, html as _html
+import urllib.parse
 from html.parser import HTMLParser
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -24,11 +25,13 @@ def md_links():
     for f in glob.glob("*.md"):
         t = open(f, encoding="utf-8").read()
         for m in re.finditer(r"\]\(([^)#]+?)(?:#[^)]*)?\)", t):
-            p = m.group(1).split("#")[0]
+            # 先解百分号编码：带空格的路径（`标准手册/Part 18 · …`）在 Markdown 里
+            # 只能写成 `Part%2018%20·%20…`，不解码就会把**合法链接**判成失效。
+            p = urllib.parse.unquote(m.group(1).split("#")[0])
             if p.endswith(".md") and not os.path.exists(p):
                 bad.append((f, p))
     if bad:
-        rec("FAIL", "md-links", "%d 失效链接" % len(bad))
+        rec("FAIL", "md-links", "%d 失效链接：%s" % (len(bad), bad[:4]))
         return False
     rec("OK", "md-links", "全部内链有效")
     return True
@@ -690,10 +693,218 @@ def css_syntax():
     return True
 
 
+# ══════════════════════════════════════════════════════════════════════════
+# 反馈与提示族守门（Part 18 · MD-18-01/02/04 / MO-10-01）
+#
+# 为什么必须有：本族的缺陷**全部是渲染级的、且静态检查看不见**。V2.9 实测到的四类：
+#   ① 位置：Toast 在 bottom（规范要求顶部偏上）；合并成单一首页后还会被吸顶导航盖住 ——
+#      节点存在、样式生效、`page-qa` 也不报，只有渲染级测量能发现；
+#   ② 时序：同一页四种驻留时长（1500/1600/2300/2400ms）、三种滑入时长（.22/.25/.35s）；
+#   ③ 语义：三处 Toast 全都没有 role / aria-live；Modal 没有 role="dialog"/aria-modal；
+#   ④ 描边：`border:1px solid rgba(255,255,255,1)` 落在 97% 白的提示底上等于「没有边」。
+# 这些数值写在四处不同的实现里，靠人眼比对必然再次漂移，故全部机械校验。
+# ══════════════════════════════════════════════════════════════════════════
+
+def feedback_spec():
+    import io as _io, glob as _glob
+    bad = []
+    REACT_CSS = "goodmom-ui/src/theme.css"
+    VUE_CSS = "goodmom-vue/src/styles/components.css"
+    SHELL = "scripts/build-site.py"
+
+    # ── ① 两个组件库：一份配方，进出场都用动画（时间常数 320 / 240）────────
+    for f in (REACT_CSS, VUE_CSS):
+        if not os.path.exists(f):
+            bad.append("%s 不存在" % f); continue
+        css = _io.open(f, encoding="utf-8").read()
+        m = re.search(r"\.gm-toast\{([^}]*)\}", css)
+        if not m:
+            bad.append("%s：缺少 .gm-toast 规则（Part 18 · MD-18-01/04）" % f); continue
+        body = m.group(1)
+        if not re.search(r"animation:\s*gmToastIn\s+320ms", body):
+            bad.append("%s：Toast 滑入必须 320ms（MD-18-01）" % f)
+        if "top:var(--gm-toast-top" not in body:
+            bad.append("%s：Toast 必须定位在**顶部偏上**并读 --gm-toast-top（MD-18-04；旧实现在底部）" % f)
+        if re.search(r"border:[^;]*rgba\(\s*255,\s*255,\s*255", body):
+            bad.append("%s：Toast 带白描边 —— 白边落在浅色提示底上等于没有边（V2.9 已全站收口）" % f)
+        if not re.search(r"\.gm-toast\.is-leaving\{[^}]*gmToastOut\s+240ms", css):
+            bad.append("%s：Toast 退场必须 240ms（MD-18-01），且用动画而非 transition" % f)
+        for kf in ("gmToastIn", "gmToastOut"):
+            if not re.search(r"@keyframes\s+%s\{" % kf, css):
+                bad.append("%s：缺少 @keyframes %s" % (f, kf))
+        if "translate(-50%,-24px)" not in css:
+            bad.append("%s：Toast 进场/退场应做 -24px 位移（MD-18-01「顶部滑入 / 上滑」）" % f)
+        # 暗色档：提示底必须跟着翻（浅底硬编码 + var(--lg-text-primary) 在暗色下 = 白底白字）
+        if not re.search(r'\[data-theme="dark"\]\s+\.gm-toast\{[^}]*rgba\(\s*38,\s*36,\s*46', css):
+            bad.append("%s：缺少 Toast 暗色档 —— 暗色下提示底仍是 97% 白，"
+                       "而 color 取的是暗色档浅色字，实测 1.14:1（等于看不见）" % f)
+
+        # 语义色点走 alias，不新造色（14 · 4.4.5）
+        for st, tok in (("success", "--lg-sem-positive"), ("error", "--lg-sem-risk"),
+                        ("warning", "--lg-sem-attention"), ("info", "--lg-sem-info")):
+            if not re.search(r"\.gm-toast--%s\s+\.gm-toast__dot\{[^}]*%s" % (st, re.escape(tok)), css):
+                bad.append("%s：.gm-toast--%s 的色点应取 %s（14 · 4.4.5）" % (f, st, tok))
+
+    # ── ② 两个组件库：受控组件的无障碍与内置驻留时长 ──────────────────────
+    for f in ("goodmom-ui/src/components/GmToast.tsx", "goodmom-vue/src/components/GmToast.vue"):
+        if not os.path.exists(f):
+            bad.append("%s 缺失 —— Part 18 要求 Toast 有唯一实现，不许每页各造一个" % f); continue
+        t = _io.open(f, encoding="utf-8").read()
+        if "role" not in t or "aria-live" not in t:
+            bad.append("%s：缺少 role / aria-live（MD-18-01 无障碍要求）" % f)
+        if "alert" not in t:
+            bad.append("%s：error 语义应落到 role=\"alert\"（失败必须立刻被读到）" % f)
+        if not re.search(r"duration\s*=\s*2400|duration:\s*2400", t):
+            bad.append("%s：驻留默认值应为 2400ms（MD-18-01 的 2.4s）" % f)
+        if not re.search(r"LEAVE_MS\s*=\s*240", t):
+            bad.append("%s：退场必须真的等满 240ms 再卸载（否则「淡出上滑 240ms」是空话）" % f)
+
+    # ── ③ 站点外壳：唯一一份实现 + 避让吸顶导航 ───────────────────────────
+    if not os.path.exists(SHELL):
+        bad.append("%s 不存在" % SHELL)
+    else:
+        sh = _io.open(SHELL, encoding="utf-8").read()
+        if "--gm-toast-top:76px" not in sh:
+            bad.append("%s：外壳未给出 --gm-toast-top（桌面须避让 60px 吸顶导航；"
+                       "否则 Toast 会被整条盖住，且任何静态检查都发现不了）" % SHELL)
+        if "--gm-toast-top:160px" not in sh:
+            bad.append("%s：移动端须把 --gm-toast-top 抬到 160px（吸顶导航实测 144px）" % SHELL)
+        if not re.search(r"window\.gmToast\s*=", sh):
+            bad.append("%s：外壳缺少全局 window.gmToast —— 站点侧必须只有一份实现" % SHELL)
+        if not re.search(r"DWELL\s*=\s*2400", sh):
+            bad.append("%s：gmToast 驻留应为 2400ms（MD-18-01）" % SHELL)
+        if not re.search(r"LEAVE\s*=\s*240\b", sh):
+            bad.append("%s：gmToast 退场应为 240ms（MD-18-01）" % SHELL)
+        if not re.search(r"window\.gmToast[\s\S]{0,2000}?removeChild\(node\)", sh):
+            bad.append("%s：gmToast 未先摘掉上一个同类节点（MD-18-04「同类仅 1 条」）" % SHELL)
+        if not re.search(r"role',\s*status\s*===\s*'error'\s*\?\s*'alert'\s*:\s*'status'", sh):
+            bad.append("%s：gmToast 未按 error/其余 分流 role" % SHELL)
+        if not re.search(r'\[data-theme="dark"\]\s+\.gm-toast\{', sh):
+            bad.append("%s：外壳缺少 Toast 暗色档 —— 暗色模块里会变成白底白字（实测 1.14:1）" % SHELL)
+
+    # ── ④ 站点页面：不许各自造 Toast（必须调用 gmToast）──────────────────
+    for f in sorted(_glob.glob("site/fragments/*.html")):
+        t = _io.open(f, encoding="utf-8").read()
+        # 旧的三套私有实现（底部定位 / 自定驻留）一律不得回归
+        for cls in (".copied", ".fx"):
+            # ⚠️ 不要写成 `r"\%s\s*\{" % re.escape(cls)`：%s 前面那个反斜杠会**留在结果里**，
+            # 再叠加 re.escape 自带的反斜杠，模式成了 `\\.fx\s*\{` —— 它要求文本里先有一个
+            # 字面量反斜杠，于是这条检查永远不命中（静默空转，实测 repr 为 '\\\\.fx\\s*\\{'）。
+            # 这正是 scripts/gate-negative-tests.py 抓到的：注入 `.fx{…}` 后本门禁仍报 PASS。
+            if re.search(re.escape(cls) + r"\s*\{", t):
+                bad.append("%s：又出现了私有 Toast 样式 %s —— 站点侧应统一用外壳的 .gm-toast"
+                           "（旧实现定位在底部、驻留 1600ms、无 role）" % (f, cls))
+        if re.search(r"className\s*=\s*['\"]copied|className\s*=\s*['\"]fx\b", t):
+            bad.append("%s：又用旧私有类名创建 Toast 节点" % f)
+        for ms in ("1500", "1600", "2300"):
+            if re.search(r"toast[\s\S]{0,400}?setTimeout\([\s\S]{0,120}?,\s*%s\s*\)" % ms, t, re.I):
+                bad.append("%s：Toast 驻留出现 %sms —— MD-18-01 是 2.4s，此值只该出现在 gmToast 里"
+                           % (f, ms))
+
+    # ── ⑤ 独立演示页（不走构建）：实现与语义同样要达标 ────────────────────
+    demo = "fuyouaicansai/goodmom-redesign.html"
+    if os.path.exists(demo):
+        t = _io.open(demo, encoding="utf-8").read()
+        m = re.search(r"\.toast\{([^}]*)\}", t)
+        if not m:
+            bad.append("%s：缺少 .toast 规则" % demo)
+        else:
+            body = m.group(1)
+            if "top:20px" not in body:
+                bad.append("%s：Toast 必须在顶部偏上（MD-18-04）" % demo)
+            if not re.search(r"animation:\s*toastIn\s+320ms", body):
+                bad.append("%s：Toast 滑入必须 320ms（MD-18-01）" % demo)
+            if re.search(r"border:[^;]*rgba\(\s*255,\s*255,\s*255", body):
+                bad.append("%s：Toast 带白描边（V2.9 已全站收口的缺陷类）" % demo)
+        if not re.search(r"\.toast\.leaving\{[^}]*toastOut\s+240ms", t):
+            bad.append("%s：Toast 退场必须 240ms（MD-18-01）" % demo)
+        if not re.search(r"setAttribute\('role'", t) or "aria-live" not in t:
+            bad.append("%s：Toast 缺少 role / aria-live" % demo)
+        if not re.search(r"\}\s*,\s*2400\s*\)", t):
+            bad.append("%s：Toast 驻留应为 2400ms（MD-18-01）" % demo)
+        # Modal：role / aria-modal / ESC / 焦点归还（MD-18-02）
+        if 'role="dialog"' not in t or 'aria-modal="true"' not in t:
+            bad.append("%s：Modal 面板缺 role=\"dialog\" / aria-modal=\"true\"（MD-18-02）" % demo)
+        if "Escape" not in t:
+            bad.append("%s：Modal 缺 ESC 关闭（MD-18-02）" % demo)
+        if not re.search(r"_dkFocus[\s\S]{0,200}?\.focus\(\)", t):
+            bad.append("%s：Modal 关闭后未把焦点归还触发点（MD-18-02「关闭归还触发点」）" % demo)
+        if "role=\"dialog\"" in t and "aria-labelledby" not in t:
+            bad.append("%s：role=dialog 却无 aria-labelledby（或 aria-label）—— 读屏只报「对话框」" % demo)
+
+    if bad:
+        for b in bad:
+            rec("FAIL", "feedback-spec", b)
+        return False
+    rec("OK", "feedback-spec", "反馈与提示族符合 Part 18 · MD-18-01/02/04：Toast 顶部偏上"
+        "（外壳给出 --gm-toast-top 避让吸顶导航）· 320ms 入 / 驻留 2.4s / 240ms 出 · 同类仅 1 条 · "
+        "error→alert、其余→status+aria-live · 无白描边；Modal 有 role=dialog + aria-modal + ESC + 焦点归还")
+    return True
+
+
+# ══════════════════════════════════════════════════════════════════════════
+# 未定义 Token 守门
+#
+# 为什么必须有：`color:var(--lg-sem-special)` 里若该变量**从未定义**且没写兜底，
+# 浏览器会在"计算值阶段"把整条声明判为无效并**静默丢弃** —— 不报错、不警告，
+# 静态扫描看不到、对比度检查也看不到（元素退化成继承色）。
+# 实测：合并后的首页上 `--lg-sem-*` 全部未定义，preview-index 里 59 处引用集体失效 ——
+# 反馈语义色（成功/注意/失败/中性/信息）等于不存在。这类缺陷只能靠机械清点发现。
+# ══════════════════════════════════════════════════════════════════════════
+
+def undefined_tokens():
+    import io as _io, glob as _glob
+    bad = []
+    shell_defs = set()
+    sh = "scripts/build-site.py"
+    if os.path.exists(sh):
+        shell_defs = set(re.findall(r"(--[a-z0-9-]+)\s*:", _io.open(sh, encoding="utf-8").read()))
+    for f in sorted(_glob.glob("site/fragments/*.html")):
+        t = _io.open(f, encoding="utf-8").read()
+        defined = set(re.findall(r"(--[a-z0-9-]+)\s*:", t)) | shell_defs
+        # 只查「无兜底」写法：var(--x)。
+        # 带兜底的写法（var(--x, 兜底值)）即使未定义也能降级，不算缺陷 —— 也就不必报。
+        # 先剥掉注释：文档里写的反例（`var(--lg-sem-xxx)`）不是真的引用，
+        # 不剥会把"注释"算成"缺陷"，逼着人把解释性注释删掉。
+        code = re.sub(r"/\*.*?\*/", "", t, flags=re.S)
+        code = re.sub(r"<!--.*?-->", "", code, flags=re.S)
+        nofb = set(re.findall(r"var\(\s*(--[a-z0-9-]+)\s*\)", code))
+        missing = sorted(nofb - defined)
+        if missing:
+            bad.append("%s：%d 个 Token 被 var() 无兜底引用却从未定义 → 这些声明会被浏览器静默丢弃（%s）"
+                       % (f, len(missing), ", ".join(missing[:8])))
+    if bad:
+        for b in bad:
+            rec("FAIL", "undefined-token", b)
+        return False
+    rec("OK", "undefined-token", "站点片段里 var(--x) 的无兜底引用全部有定义"
+        "（未定义 + 无兜底 = 整条声明被静默丢弃，是 V2.9 实测到的缺陷类）")
+    return True
+
+
+# 门禁登记表：名字 → 函数。集中登记是为了支持 `--only <名>`（负向测试要能
+# 精确地"只跑这一条"，否则注入缺陷后先被其它门禁拦下，反而证明不了目标门禁有效）。
+GATES = [
+    ("md-links", md_links), ("chapter-seq", chapter_seq), ("icons", icons),
+    ("html-no-md", html_no_md), ("stale", stale_words), ("color-css", colors),
+    ("color-banned", banned_colors), ("bp", breakpoint_reg), ("spec", spec_health),
+    ("hex-case", hex_case), ("mirror", mirror_sync), ("dark", dark_contrast),
+    ("exports", exports_check), ("logo-guard", logo_guard), ("loading-spec", loading_spec),
+    ("css-syntax", css_syntax), ("feedback-spec", feedback_spec),
+    ("undefined-token", undefined_tokens),
+]
+
+
 def main():
-    hard = []
-    hard.append(md_links()); hard.append(chapter_seq()); hard.append(icons())
-    hard.append(html_no_md()); hard.append(stale_words()); hard.append(colors()); hard.append(banned_colors()); hard.append(breakpoint_reg()); hard.append(spec_health()); hard.append(hex_case()); hard.append(mirror_sync()); hard.append(dark_contrast()); hard.append(exports_check()); hard.append(logo_guard()); hard.append(loading_spec()); hard.append(css_syntax())
+    import argparse as _ap
+    ap = _ap.ArgumentParser(description="规范审计")
+    ap.add_argument("--only", default="", help="只运行名字含该子串的门禁（负向测试用）")
+    args = ap.parse_args()
+    gates = [(n, f) for n, f in GATES if args.only in n] if args.only else GATES
+    if not gates:
+        print("没有匹配的门禁：%s（可选：%s）" % (args.only, ", ".join(n for n, _ in GATES)))
+        return 2
+    hard = [f() for _n, f in gates]
     passed = all(hard)
     report = ["# 规范审计报告（自动）", "",
               "- 命令：`python3 scripts/audit.py`", "- 时间：%(now)s" % {"now": __import__("datetime").datetime.now().strftime("%Y-%m-%d %H:%M")},

@@ -17,6 +17,12 @@
   --sh-grad-action:linear-gradient(135deg,#FFC4D6 0%,#F77FA3 100%);
   --sh-font:"Inter","SF Pro Display",-apple-system,"PingFang SC","MiSans","Noto Sans SC",sans-serif;
   --sh-ring:2px;--sh-ease:cubic-bezier(.22,1,.36,1);
+  /* Part 18 · MD-18-04「Toast 顶部偏上」。
+     合并为单一首页后，外壳多了一条 sticky 吸顶导航（桌面 60px / 移动 144px，z-index 200）。
+     模块内的 Toast 若沿用独立页的 top:20px，会被这条导航整条盖住——
+     实测：节点存在于 20px 处、样式全部生效，但**视觉完全不可见**（无任何静态检查能发现）。
+     故由外壳统一给出避让值，模块侧只读 --gm-toast-top（缺省 20px，供未套外壳的独立页）。 */
+  --gm-toast-top:76px;
 }
 *{box-sizing:border-box}
 html{-webkit-text-size-adjust:100%}
@@ -63,6 +69,47 @@ body{margin:0;font-family:var(--sh-font);color:var(--sh-t);line-height:1.7;-webk
 .gm-mod--site-spec aside,.gm-mod--site-manual aside{position:sticky;top:70px}
 /* 模块内的锚点跳转留出吸顶导航高度 */
 .gm-mod [id]{scroll-margin-top:78px}
+/* ══════════════════════════════════════════════════════════════════════════
+   Part 18 · MD-18-01/04 —— 全局反馈层：Toast（唯一一份实现，属于外壳而非某个模块）
+   为什么放外壳：Toast 是**跨模块的浮层**。若每个模块各写一份，
+   ① 三处实现漂移（实测旧站：bottom:34px / bottom:26px / top:20px，320/240/250ms 各不相同，
+      驻留 1500 / 1600 / 2300 / 2400ms 四种都有，全部缺 role/aria-live）；
+   ② 合并成单一首页后，模块内的 `top:20px` 会被 60px（移动 144px）的吸顶导航整条盖住。
+   放进外壳 → 一份配方 + 一个 window.gmToast()，挂载点由 .gm-mod.is-on 决定，
+   既拿到模块作用域，又不必每个模块复制一遍。
+   ⛔ 不套白描边：白边落在浅色提示底上等于「没有边」，形状会糊（V2.9 已收口的缺陷类）。
+   ⚠️ 进出场都用**动画**而非 transition：`.gm-toast` 的静态态即"已显示"，
+      进场靠 gmToastIn 的 both 填充、退场靠 gmToastOut 的 forwards 填充。
+      改为 transition 时，取消动画那一瞬计算值先跳回静态态、过渡取不到起点 → 退场闪一下。
+   ══════════════════════════════════════════════════════════════════════════ */
+.gm-toast{position:fixed;left:50%;top:var(--gm-toast-top,20px);z-index:250;
+  display:inline-flex;align-items:center;gap:9px;max-width:min(84vw,420px);
+  padding:10px 18px;border-radius:999px;pointer-events:none;
+  background:linear-gradient(160deg,rgba(255,255,255,.97),rgba(255,255,255,.9));
+  border:1px solid var(--lg-divider,rgba(58,52,84,.10));
+  color:var(--lg-text-primary,#343A46);
+  font-family:var(--sh-font);font-size:13px;font-weight:600;line-height:1.6;
+  box-shadow:0 1px 2px rgba(58,52,84,.06),0 12px 30px rgba(58,52,84,.14);
+  animation:gmToastIn 320ms cubic-bezier(.22,1,.36,1) both}
+.gm-toast.is-leaving{animation:gmToastOut 240ms ease-in forwards}
+@keyframes gmToastIn{from{opacity:0;transform:translate(-50%,-24px)}to{opacity:1;transform:translate(-50%,0)}}
+@keyframes gmToastOut{from{opacity:1;transform:translate(-50%,0)}to{opacity:0;transform:translate(-50%,-24px)}}
+/* 语义双通道：色点（14 · 4.4.5 alias）+ 文案，不靠颜色单独传义 */
+.gm-toast__dot{width:8px;height:8px;border-radius:50%;flex:none;background:var(--lg-sem-neutral,#5E6673)}
+.gm-toast--success .gm-toast__dot{background:var(--lg-sem-positive,#25715D)}
+.gm-toast--error   .gm-toast__dot{background:var(--lg-sem-risk,#B72F42)}
+.gm-toast--warning .gm-toast__dot{background:var(--lg-sem-attention,#8D5A15)}
+.gm-toast--info    .gm-toast__dot{background:var(--lg-sem-info,#3261C1)}
+.gm-toast__t{min-width:0}
+/* 暗色档（02 · 2.1.9）：模块根挂 data-theme="dark" 时提示底必须跟着翻 ——
+   否则 `var(--lg-text-primary)` 取到暗色档的浅色字，压在 97% 白的底上实测 1.14:1（看不见）。 */
+[data-theme="dark"] .gm-toast{
+  background:linear-gradient(160deg,rgba(38,36,46,.97),rgba(38,36,46,.9));
+  box-shadow:0 1px 2px rgba(0,0,0,.35),0 12px 30px rgba(0,0,0,.5)}
+@media (prefers-reduced-motion: reduce){
+  /* 全局 reduce-motion 规则已把动画压到 0.01ms；这里只补"退场后仍占位"的兜底 */
+  .gm-toast.is-leaving{opacity:0}
+}
 /* ── 移动端：导航横向滚动，不换行挤压 ── */
 @media (max-width:767px){
   .sh-top-in{gap:8px}
@@ -71,6 +118,8 @@ body{margin:0;font-family:var(--sh-font);color:var(--sh-t);line-height:1.7;-webk
   .sh-tabs::-webkit-scrollbar{display:none}
   .sh-ext{margin-left:0;order:2}
   .sh-brand{order:1}
+  /* 移动端吸顶导航换成两行（实测 144px），Toast 的避让值随之抬高 */
+  :root{--gm-toast-top:160px}
 }
 @media (prefers-reduced-motion: reduce){
   .sh-tab{transition:none}
@@ -814,10 +863,10 @@ import { GmIcon } from "@goodmom/icons";
 /* copy css */
 .gm-mod--preview-index .copybox{display:flex;justify-content:space-between;align-items:center;gap:14px;flex-wrap:wrap}
 .gm-mod--preview-index .copybox .btn{margin-left:auto}
-.gm-mod--preview-index .copied{position:fixed;left:50%;bottom:34px;transform:translateX(-50%) translateY(20px);opacity:0;pointer-events:none;
-  transition:.35s;z-index:99;padding:10px 22px;border-radius:var(--lg-radius-chip);
-  background:var(--mmh-grad-action-hc,#F77FA3);color:#343A46;font-size:13px;font-weight:600;box-shadow:0 1px 2px rgba(178,58,99,.22),0 8px 20px rgba(240,127,163,.30)}
-.gm-mod--preview-index .copied.show{opacity:1;transform:translateX(-50%) translateY(0)}
+
+/* Part 18 · MD-18-01/04 —— Toast 样式与实现都上移到**外壳**（见 scripts/build-site.py 的
+   全局反馈层）。理由：Toast 是跨模块浮层，若每个模块各存一份配方，实测会漂移成
+   三种位置 / 四种驻留时长。模块侧只调用 window.gmToast(msg, status)。 */
 
 /* footer */
 .gm-mod--preview-index footer{margin-top:40px;text-align:center;font-size:12px;color:var(--lg-text-tertiary);line-height:2}
@@ -895,16 +944,18 @@ import { GmIcon } from "@goodmom/icons";
 /* Tooltip 气泡 */
 .gm-mod--preview-index .tip{position:relative;display:inline-flex;align-items:center;justify-content:center;
   width:42px;height:42px;border-radius:50%;cursor:pointer;font-size:17px;
-  background:rgba(255,255,255,.5);border:1px solid rgba(255,255,255,.75);
+  /* 02 · 2.7.1：浅底交互控件用暖中性发丝边；白 75% 白边落在白底上等于没有边 */
+  background:rgba(255,255,255,.5);border:1px solid var(--lg-divider,rgba(58,52,84,.10));
   box-shadow:var(--lg-shadow-xs);transition:transform var(--lg-t-base) var(--lg-ease-out),box-shadow var(--lg-t-base) var(--lg-ease-out)}
 .gm-mod--preview-index .tip:hover{transform:translateY(-2px);box-shadow:var(--lg-shadow-md)}
 .gm-mod--preview-index .tip::after{content:attr(data-tip);position:absolute;top:calc(100% + 10px);left:50%;
-  transform:translateX(-50%) translateY(-5px);
+  /* MD-18-01：Tooltip 180ms、Y 位移 4px（旧值 .2s / 5px，两项都不符） */
+  transform:translateX(-50%) translateY(-4px);
   background:linear-gradient(160deg,rgba(255,255,255,.96),rgba(255,255,255,.78));
   color:var(--lg-deep-slate);font-size:11px;font-weight:500;padding:6px 11px;border-radius:18px;
-  border:1px solid rgba(255,255,255,.95);box-shadow:var(--lg-shadow-md);
+  border:1px solid var(--lg-divider,rgba(58,52,84,.10));box-shadow:var(--lg-shadow-md);
   opacity:0;pointer-events:none;white-space:nowrap;
-  transition:opacity .2s var(--lg-ease-out),transform .2s var(--lg-ease-out);z-index:5}
+  transition:opacity 180ms var(--lg-ease-out),transform 180ms var(--lg-ease-out);z-index:5}
 .gm-mod--preview-index .tip:hover::after{opacity:1;transform:translateX(-50%) translateY(0)}
 
 /* 数据动效：图表绘制 / 面积淡入 / 条形生长（初始隐藏仅在 JS 启用时生效，防无 JS 白屏） */
@@ -972,6 +1023,17 @@ import { GmIcon } from "@goodmom/icons";
   --lg-grad-hero: var(--mmh-grad-signature);
   --lg-glow-purple-soft: 0 12px 32px rgba(240,127,163,.34);
   --lg-glow-cyan-soft: 0 12px 32px rgba(182,154,255,.24);
+  /* ═══ V2.9 补：本页引用了却从未定义的 Token（02 · 2.1.5 / 14 · 4.4.5）═══
+     实测：模块根上 getComputedStyle().getPropertyValue() 全部返回空 —— 即
+     语义色这类变量在「无兜底引用」写法下于计算值阶段整条失效，浏览器**静默丢弃**该声明，
+     静态扫描与对比度检查都看不到。本页 59 处 --lg-sem-* 引用因此全部落空：
+     反馈语义色（成功/注意/失败/中性/信息）等于不存在。
+     取值一律照抄 goodmom-ui/src/theme.css 的浅色档，不新造色。 */
+  --lg-sem-positive:#25715D; --lg-sem-info:#3261C1; --lg-sem-attention:#8D5A15;
+  --lg-sem-risk:#B72F42; --lg-sem-neutral:#5E6673; --lg-sem-special:#6A48DC;
+  --lg-glass-control:rgba(255,255,255,.35);
+  --lg-shadow-xl:0 24px 60px rgba(58,52,84,.16);
+  --rose-deep:#B23A63;
 }.gm-mod--preview-index{
   background:
     radial-gradient(1200px 700px at 85% -10%, rgba(247,127,163,.20), transparent 65%),
@@ -1216,17 +1278,23 @@ import { GmIcon } from "@goodmom/icons";
 .gm-mod--preview-index .c-r{color:#B72F42;background:rgba(239,106,123,.13);border-color:rgba(239,106,123,.3)}
 .gm-mod--preview-index .c-n{color:#5E6673;background:rgba(88,98,115,.09);border-color:rgba(88,98,115,.18)}
 .gm-mod--preview-index .c-p{color:#6A48DC;background:rgba(154,120,255,.14);border-color:rgba(154,120,255,.3)}
+/* MD-18-01：遮罩 250ms 淡入 + 面板 320ms（scale .98→1、下移 12px）。
+   旧值：面板 .26s / scale(.96) / 6px，遮罩**完全没有动效**（display:none↔flex 切不出过渡）。
+   改用 visibility 而非 display 才能让遮罩真的淡入（display 切换不会触发过渡）。 */
 .gm-mod--preview-index .dmask{position:fixed;inset:0;z-index:90;background:rgba(255,255,255,.25);-webkit-backdrop-filter:blur(16px);backdrop-filter:blur(16px);
-  display:none;align-items:center;justify-content:center;padding:16px}
-.gm-mod--preview-index .dmask.show{display:flex}
+  display:flex;align-items:center;justify-content:center;padding:16px;
+  visibility:hidden;opacity:0;transition:opacity 250ms ease,visibility 0s linear 250ms}
+.gm-mod--preview-index .dmask.show{visibility:visible;opacity:1;transition:opacity 250ms ease}
 .gm-mod--preview-index .dcard{width:min(400px,92vw);border-radius:22px;padding:22px;background:linear-gradient(160deg,rgba(255,255,255,.85),rgba(255,255,255,.6));
-  border:1px solid rgba(255,255,255,.95);box-shadow:var(--lg-shadow-xl);animation:popIn .26s var(--lg-ease-out)}
-@keyframes popIn{from{opacity:0;transform:scale(.96) translateY(6px)}to{opacity:1;transform:none}}
+  border:1px solid rgba(255,255,255,.95);box-shadow:var(--lg-shadow-xl);
+  animation:popIn 320ms var(--lg-ease-out,cubic-bezier(.22,1,.36,1)) both}
+@keyframes popIn{from{opacity:0;transform:scale(.98) translateY(12px)}to{opacity:1;transform:none}}
+@media (prefers-reduced-motion:reduce){.gm-mod--preview-index .dmask,.gm-mod--preview-index .dmask.show{transition:none}}
 .gm-mod--preview-index .pcwrap{position:relative;display:inline-block}
 .gm-mod--preview-index .pcbub{position:absolute;bottom:calc(100% + 10px);left:0;width:214px;border-radius:18px;padding:12px;z-index:30;
   background:linear-gradient(160deg,rgba(255,255,255,.96),rgba(255,255,255,.8));border:1px solid rgba(255,255,255,.95);
-  box-shadow:var(--lg-shadow-lg);opacity:0;pointer-events:none;transform:translateY(5px);
-  transition:opacity .2s var(--lg-ease-out),transform .2s var(--lg-ease-out)}
+  box-shadow:var(--lg-shadow-lg);opacity:0;pointer-events:none;transform:translateY(4px);
+  transition:opacity 180ms var(--lg-ease-out),transform 180ms var(--lg-ease-out)}
 .gm-mod--preview-index .pcwrap.open .pcbub{opacity:1;transform:none;pointer-events:auto}
 .gm-mod--preview-index .pcwrap .pcbub::after{content:"";position:absolute;top:100%;left:18px;border:6px solid transparent;border-top-color:rgba(255,255,255,.9)}
 .gm-mod--preview-index .crum{display:flex;gap:8px;align-items:center;font-size:12px;color:var(--lg-text-tertiary);flex-wrap:wrap}
@@ -2031,11 +2099,11 @@ import { GmIcon } from "@goodmom/icons";
         <h3><i></i>浮层与确认 Dialog · Popconfirm</h3>
         <p class="mh">点击体验：玻璃弹窗（Dialog）· 气泡确认（Popconfirm 危险操作）</p>
         <div class="bxrow" style="margin-bottom:6px">
-          <button class="bx bx-primary" id="preview-index--dlgOpen">打开弹窗 Dialog</button>
+          <button class="bx bx-primary" id="preview-index--dlgOpen" aria-haspopup="dialog" aria-expanded="false">打开弹窗 Dialog</button>
           <span class="pcwrap" id="preview-index--pcWrap">
-            <button class="bx bx-outline st-danger" id="preview-index--pcOpen">气泡确认 · 注销档案</button>
-            <div class="pcbub" id="preview-index--pcBub">
-              <div style="font-size:13px;font-weight:600;margin-bottom:4px">确认注销该档案？</div>
+            <button class="bx bx-outline st-danger" id="preview-index--pcOpen" aria-haspopup="dialog" aria-expanded="false">气泡确认 · 注销档案</button>
+            <div class="pcbub" id="preview-index--pcBub" role="dialog" aria-labelledby="preview-index--pcBubTitle">
+              <div id="preview-index--pcBubTitle" style="font-size:13px;font-weight:600;margin-bottom:4px">确认注销该档案？</div>
               <div style="font-size:11.5px;color:var(--lg-text-secondary);margin-bottom:10px">注销后不可恢复，档案将进入“已注销”状态。</div>
               <div style="display:flex;gap:8px;justify-content:flex-end">
                 <button class="bx bx-text" id="preview-index--pcNo">取消</button>
@@ -2501,7 +2569,6 @@ import { GmIcon } from "@goodmom/icons";
   </footer>
 </div>
 
-<div class="copied" id="preview-index--copied">已复制全部 Token</div>
 
 
 
@@ -2530,15 +2597,23 @@ import { GmIcon } from "@goodmom/icons";
 
 
 
-
+<!-- 体例说明：本模块的脚本只有 @js 分段一段（构建时以它为唯一出处）。
+     历史上同一段脚本在 body 内联 script 里还留了一份逐行副本，构建会静默丢弃它
+     （drop_body_scripts），但两份并存极易改错一边 —— V2.9 已删除。 -->
 
 
 <script>
 /* 合并入单一首页的作用域适配：本模块原先独占 <body>，动态节点与状态类都挂在 body 上；合并后 body 属于外壳，改挂模块根以保持与原页面等价的作用域。 */
 function MODROOT_preview_index(){return document.getElementById("gm-mod-preview-index")||MODROOT_preview_index();}
+/* ══════════════════════════════════════════════════════════════════════════
+   Part 18 · MD-18-01/04 —— 轻提示：本模块的 4 个调用点统一走外壳的
+   window.gmToast(msg, status)。位置（顶部偏上，避让吸顶导航）、时序
+   （320ms 入 / 驻留 2.4s / 240ms 出）、同类仅 1 条、role+aria-live
+   全部在外壳那**一份**实现里钉死，模块侧只给文案与语义。
+   ══════════════════════════════════════════════════════════════════════════ */
+
 (function(){
   var els=document.querySelectorAll('#gm-mod-preview-index .ig');
-  var tip=document.getElementById('preview-index--copied');
   els.forEach(function(t){
     t.addEventListener('click',function(){
       var id=t.querySelector('#gm-mod-preview-index .ig-id').textContent;
@@ -2548,8 +2623,7 @@ function MODROOT_preview_index(){return document.getElementById("gm-mod-preview-
       MODROOT_preview_index().appendChild(ta);ta.select();
       try{document.execCommand('copy');}catch(e){}
       MODROOT_preview_index().removeChild(ta);
-      tip.textContent='已复制 ' + id;tip.classList.add('show');
-      clearTimeout(tip._h);tip._h=setTimeout(function(){tip.classList.remove('show')},1600);
+      gmToast('已复制 ' + id,'success');
     });
   });
 })();
@@ -2572,9 +2646,7 @@ function MODROOT_preview_index(){return document.getElementById("gm-mod-preview-
     MODROOT_preview_index().appendChild(ta); ta.select();
     try{ document.execCommand('copy'); }catch(e){}
     MODROOT_preview_index().removeChild(ta);
-    var tip = document.getElementById('preview-index--copied');
-    tip.classList.add('show');
-    setTimeout(function(){ tip.classList.remove('show'); }, 1600);
+    gmToast('已复制全部 Token','success');
   });
 })();
 
@@ -2694,14 +2766,8 @@ function MODROOT_preview_index(){return document.getElementById("gm-mod-preview-
   });
 
   /* 6) Toast + 重新演示数据动效 */
-  function showToast(msg){
-    var t = document.getElementById('preview-index--toast');
-    if (!t){ t = document.createElement('div'); t.className = 'copied'; t.id = 'toast'; MODROOT_preview_index().appendChild(t); }
-    t.textContent = msg;
-    t.classList.add('show');
-    clearTimeout(t._h);
-    t._h = setTimeout(function(){ t.classList.remove('show'); }, 2400);
-  }
+  /* 收敛到全站唯一实现（原实现自带 2400ms 驻留，位置与语义仍不符规范） */
+  function showToast(msg){ gmToast(msg); }
   var toastBtn = document.getElementById('preview-index--toastBtn');
   if (toastBtn) toastBtn.addEventListener('click', function(){ showToast('处置任务已下发 · 已进入实时流'); });
 
@@ -2747,12 +2813,8 @@ function MODROOT_preview_index(){return document.getElementById("gm-mod-preview-
 (function(){
   var CHECK='<svg class="ni" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="m6 12.5 4 4L18 8"/></svg>';
   var SPIN='<svg class="ld" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="8.5" fill="none" stroke="rgba(255,255,255,.4)" stroke-width="2.4"/><path d="M20.5 12A8.5 8.5 0 0 0 12 3.5" fill="none" stroke="#FFF" stroke-width="2.4" stroke-linecap="round"/></svg>';
-  function toast(m){
-    var el=document.getElementById('preview-index--gtoast');
-    if(!el){el=document.createElement('div');el.className='copied';el.id='preview-index--gtoast';MODROOT_preview_index().appendChild(el);}
-    el.textContent=m; el.classList.add('show');
-    clearTimeout(el._h); el._h=setTimeout(function(){el.classList.remove('show');},1500);
-  }
+  /* 收敛到全站唯一实现（原实现驻留 1500ms，且位置在底部、无 role/aria-live） */
+  function toast(m,status){ gmToast(m,status); }
   window.toastG=toast;
 
   /* 1) 按钮组 Group 切换 */
@@ -2858,19 +2920,50 @@ function MODROOT_preview_index(){return document.getElementById("gm-mod-preview-
       '<div style="display:flex;gap:10px;justify-content:flex-end"><button class="bx bx-text" id="preview-index--dlgNo">取消</button>'+
       '<button class="bx bx-primary" style="height:36px;padding:0 20px;font-size:13px" id="preview-index--dlgYes">确认提交</button></div></div>';
     MODROOT_preview_index().appendChild(mask);
-    function open(){mask.classList.add('show');}
-    function close(){mask.classList.remove('show');}
+    /* MD-18-02：打开锁定滚动、焦点进面板首元素；关闭归还触发点；ESC / 遮罩点击均可关闭。
+       旧实现只做了「遮罩点击关闭」，键盘用户既进不去也出不来（焦点留在地下的页面上）。 */
+    var prevOverflow='';
+    function open(){
+      mask.classList.add('show');
+      dm.setAttribute('aria-expanded','true');
+      prevOverflow=MODROOT_preview_index().style.overflow;
+      MODROOT_preview_index().style.overflow='hidden';
+      var f=mask.querySelector('#gm-mod-preview-index button');
+      if(f)f.focus();
+    }
+    function close(){
+      mask.classList.remove('show');
+      MODROOT_preview_index().style.overflow=prevOverflow;
+      dm.setAttribute('aria-expanded','false');
+      dm.focus();
+    }
     dm.addEventListener('click',open);
     mask.addEventListener('click',function(e){if(e.target===mask)close();});
-    document.getElementById('preview-index--dlgNo').addEventListener('click',function(){close();toast('已取消提交');});
-    document.getElementById('preview-index--dlgYes').addEventListener('click',function(){close();toast('已提交 · 进入待复核');});
+    mask.addEventListener('keydown',function(e){if(e.key==='Escape')close();});
+    document.getElementById('preview-index--dlgNo').addEventListener('click',function(){close();toast('已取消提交','info');});
+    document.getElementById('preview-index--dlgYes').addEventListener('click',function(){close();toast('已提交 · 进入待复核','success');});
   }
   var pc=document.getElementById('preview-index--pcWrap');
   if(pc){
     var bub=document.getElementById('preview-index--pcBub');
-    document.getElementById('preview-index--pcOpen').addEventListener('click',function(e){e.stopPropagation();pc.classList.add('open');});
-    document.getElementById('preview-index--pcNo').addEventListener('click',function(){pc.classList.remove('open');});
-    document.getElementById('preview-index--pcYes').addEventListener('click',function(){pc.classList.remove('open');toast('已注销档案（示例）');});
+    /* MD-18-02：触发器要报出展开态；气泡本身是带交互内容的浮层 → role=dialog（非模态）。
+       旧实现三处都缺，键盘用户无法得知"是否已展开"。 */
+    var pcOpen=document.getElementById('preview-index--pcOpen');
+    function pcOpenFn(){
+      pc.classList.add('open');
+      pcOpen.setAttribute('aria-expanded','true');
+      var f=bub.querySelector('#gm-mod-preview-index button');
+      if(f)f.focus();
+    }
+    function pcCloseFn(){
+      pc.classList.remove('open');
+      pcOpen.setAttribute('aria-expanded','false');
+      pcOpen.focus();
+    }
+    pcOpen.addEventListener('click',function(e){e.stopPropagation();pcOpenFn();});
+    bub.addEventListener('keydown',function(e){if(e.key==='Escape'){e.stopPropagation();pcCloseFn();}});
+    document.getElementById('preview-index--pcNo').addEventListener('click',function(){pcCloseFn();});
+    document.getElementById('preview-index--pcYes').addEventListener('click',function(){pcCloseFn();toast('已注销档案（示例）','warning');});
     document.addEventListener('click',function(e){if(pc&&!pc.contains(e.target))pc.classList.remove('open');});
   }
   var pg=document.getElementById('preview-index--pg1');
@@ -3228,10 +3321,10 @@ background:rgba(255,255,255,.5);border:1px solid var(--lg-divider,rgba(58,52,84,
 .gm-mod--preview-examples .spwrap .sp.off{display:none}
 .gm-mod--preview-examples .tg.multi{cursor:pointer;user-select:none}
 .gm-mod--preview-examples .tg.multi.m-on{outline:2px solid currentColor;outline-offset:1px;font-weight:600}
-.gm-mod--preview-examples .fx{position:fixed;left:50%;bottom:26px;transform:translateX(-50%) translateY(16px);z-index:99;max-width:88%;
-  padding:10px 20px;border-radius:999px;background:rgba(52,58,70,.84);color:#FFF;font-size:13px;font-weight:600;
-  -webkit-backdrop-filter:blur(40px);backdrop-filter:blur(40px);opacity:0;pointer-events:none;transition:.25s ease;text-align:center}
-.gm-mod--preview-examples .fx.show{opacity:1;transform:translateX(-50%) translateY(0)}
+/* Part 18 · MD-18-01/04 —— 轻提示 Toast 的样式与实现都在**外壳**里（scripts/build-site.py
+   的「全局反馈层」），模块侧只调用 window.gmToast(msg, status)。
+   旧实现（已删）：.fx 定位在 bottom:26px（规范要求顶部偏上）、过渡 .25s（应 320ms 入）、
+   驻留 1600ms（应 2400ms）、且完全没有 role/aria-live。 */
 .gm-mod--preview-examples .wizfoot{display:flex;justify-content:space-between;align-items:center;margin-top:16px;gap:10px;flex-wrap:wrap}
 
 
@@ -3816,13 +3909,8 @@ function MODROOT_preview_examples(){return document.getElementById("gm-mod-previ
     });
   });}
 
-  /* 即时反馈 toast */
-  var fxEl=document.getElementById('preview-examples--fx');
-  function fx(m){
-    if(!fxEl){fxEl=document.createElement('div');fxEl.className='fx';fxEl.id='preview-examples--fx';MODROOT_preview_examples().appendChild(fxEl);}
-    fxEl.textContent=m;fxEl.classList.add('show');
-    clearTimeout(fxEl._h);fxEl._h=setTimeout(function(){fxEl.classList.remove('show');},1600);
-  }
+  /* 即时反馈 toast：统一走外壳的 window.gmToast（位置/时序/role 都在那里钉死） */
+  function fx(m,status){ gmToast(m,status); }
   [].slice.call(document.querySelectorAll('#gm-mod-preview-examples .view .btn')).forEach(function(b){
     b.addEventListener('click',function(){fx((b.textContent.trim()||'操作')+'（示例反馈）');});
   });
@@ -3857,6 +3945,10 @@ function MODROOT_preview_examples(){return document.getElementById("gm-mod-previ
 <section class="gm-mod gm-mod--preview-mobile" id="gm-mod-preview-mobile" role="tabpanel" aria-label="移动端" data-title="移动端">
 <style>/* ── LG Tokens（精简，同 02；移动增量见 10-移动端组件规范.md）── */
 .gm-mod--preview-mobile{
+  /* V2.9 补：本页 3 处无兜底引用 --sem-special，但它从未定义 ——
+     浏览器会在计算值阶段静默丢弃这些声明（.navbar 图标按下态 / notice 图标 / 搜索按钮全都会
+     退化成继承色）。取值照抄 02 · 2.1.5 的文字专用深档 alias，不新造色。 */
+  --sem-special:#6A48DC;
   --warm-ivory:#E6D9D0; --soft-beige:#D7C5BC;
   --text:#343A46; --text-2:#4F5B6E; --text-3:#4F5B6E;
   --purple:#B69AFF; --purple-d:#9A78FF; --cyan:#72DDE5;
@@ -4054,12 +4146,10 @@ function MODROOT_preview_examples(){return document.getElementById("gm-mod-previ
 .gm-mod--preview-mobile .up .ring{width:22px;height:22px;border-radius:50%;border:2px solid rgba(154,120,255,.25);border-top-color:var(--sem-special);
   animation:spin .9s linear infinite}
 @keyframes spin{to{transform:rotate(360deg)}}
-/* 底部玻璃 Toast */
-.gm-mod--preview-mobile .mtoast{position:fixed;left:50%;top:calc(env(safe-area-inset-top) + 96px);transform:translateX(-50%) translateY(-8px);
-  z-index:50;padding:10px 18px;border-radius:999px;font-size:13px;color:#FFF;font-weight:600;
-  background:rgba(58,52,84,.78);-webkit-backdrop-filter:blur(16px);backdrop-filter:blur(16px);
-  opacity:0;pointer-events:none;transition:opacity .25s ease,transform .25s var(--ease);max-width:86%}
-.gm-mod--preview-mobile .mtoast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+/* Part 18 · MD-18-01/04 —— Toast 的样式与实现都在**外壳**（scripts/build-site.py 的
+   全局反馈层），本模块只调用 window.gmToast(msg, status)。
+   旧实现（.mtoast，已删）：注解写「底部玻璃 Toast」、实际定位 top:96px（合并为单一首页后
+   移动端吸顶导航实测 144px —— 96px 会被整条盖住）、过渡 .25s、驻留 1600ms、无 role/aria-live。 */
 
 /* 移动端补充：评分与步骤（组件丰富化） */
 .gm-mod--preview-mobile .mrate{display:flex;gap:8px;cursor:pointer}
@@ -4306,7 +4396,6 @@ function MODROOT_preview_examples(){return document.getElementById("gm-mod-previ
 </nav>
 
 
-<div class="mtoast" id="preview-mobile--mtoast"></div>
 
 
 
@@ -4317,7 +4406,9 @@ function MODROOT_preview_examples(){return document.getElementById("gm-mod-previ
 
 
 
-
+<!-- 体例说明：本模块脚本只有 @js 分段一段（构建时以它为唯一出处）。
+     历史上同一段脚本在 body 内联 script 里还留了一份逐行副本，构建会静默
+     丢弃它（drop_body_scripts），两份并存极易改错一边 —— V2.9 已删除。 -->
 
 
 <script>
@@ -4341,11 +4432,9 @@ function MODROOT_preview_mobile(){return document.getElementById("gm-mod-preview
 
 /* 11 章组件演示：Toast / Chips / Segmented */
 (function(){
-  var mt=document.getElementById('preview-mobile--mtoast'), h=null;
-  window.toastM=function(msg){
-    mt.textContent=msg; mt.classList.add('show');
-    clearTimeout(h); h=setTimeout(function(){ mt.classList.remove('show'); },1600);
-  };
+  /* Toast 统一走外壳的 window.gmToast：位置（顶部偏上、避让吸顶导航）/ 时序
+     （320ms 入 → 驻留 2.4s → 240ms 出）/ 同类仅 1 条 / role+aria-live 都在那里钉死。 */
+  window.toastM=function(msg,status){ gmToast(msg,status); };
   [].slice.call(document.querySelectorAll('#gm-mod-preview-mobile .chip')).forEach(function(c){
     c.addEventListener('click',function(){
       [].slice.call(c.parentNode.children).forEach(function(x){x.classList.remove('on')});
@@ -5185,7 +5274,7 @@ bash scripts/print-manual.sh</pre>
 <h4>④ 数据录入 Data Entry</h4>
 <table><thead><tr><th>#</th><th>组件</th><th>端</th><th>PC 规范</th><th>移动规范/形态</th><th>备注</th></tr></thead><tbody><tr><td>48</td><td>Input / TextArea</td><td>双</td><td>[03 · 3.5.1](#ch-03)</td><td>10.6.2（44 高/16px）</td><td>防 iOS 缩放</td></tr><tr><td>49</td><td>Select 选择器</td><td>双</td><td>03.5.4</td><td>⏸（移动改 #50）</td><td>—</td></tr><tr><td>50</td><td>Picker（滚轮）</td><td>M</td><td>—</td><td>10.6.3</td><td>底部弹层</td></tr><tr><td>51</td><td>Date / Time Picker</td><td>双</td><td>08 · 8.2.9</td><td>10.6.3（滚轮/原生）</td><td>—</td></tr><tr><td>52</td><td>Radio / Checkbox</td><td>双</td><td>03.5.2</td><td>10.6.4</td><td>—</td></tr><tr><td>53</td><td>Switch 开关</td><td>双</td><td>03.5.3</td><td>10.6.4（48×28）</td><td>弹簧动效双端</td></tr><tr><td>54</td><td>Slider 滑杆</td><td>双</td><td>08 · 8.2.6</td><td>08 移动化（热区 ≥44）</td><td>—</td></tr><tr><td>55</td><td>Stepper 步进器</td><td>M（PC 用 #56）</td><td>—</td><td>11.2.11</td><td>长按连发</td></tr><tr><td>56</td><td>InputNumber</td><td>PC</td><td>08 · 8.2.7</td><td>⏸</td><td>精确输入</td></tr><tr><td>57</td><td>Upload 上传</td><td>双</td><td>08 · 8.2.10（拖拽）</td><td>11.2.13（拍照/相册/九宫格）</td><td>—</td></tr><tr><td>58</td><td>Form 表单</td><td>双</td><td>08 · 8.2.8</td><td>08 移动化（一列/键盘联动）</td><td>—</td></tr><tr><td>59</td><td>OTP / 验证码</td><td>M（PC ⏸）</td><td>08.3</td><td>11.2.14</td><td>—</td></tr><tr><td>60</td><td>Cascader 级联选择</td><td>双</td><td>[03 · 3.5.5](#ch-03)</td><td>[10 · 10.11.3](#ch-10)（多列 Picker）</td><td>2026-09 解禁；≤4 级</td></tr><tr><td>61</td><td>Transfer / TreeSelect</td><td>⏸ 双端</td><td>08.3</td><td>08.3</td><td>低频</td></tr><tr><td>62</td><td>ColorPicker / 评分(PC)</td><td>⏸</td><td>08.3</td><td>—</td><td>低频</td></tr></tbody></table>
 <h4>⑤ 操作与反馈 Feedback</h4>
-<table><thead><tr><th>#</th><th>组件</th><th>端</th><th>PC 规范</th><th>移动规范/形态</th><th>备注</th></tr></thead><tbody><tr><td>63</td><td>Toast</td><td>双</td><td>[03 · 3.9](#ch-03)</td><td>10.4（中上胶囊）</td><td>—</td></tr><tr><td>64</td><td>Notification</td><td>PC</td><td>03.9</td><td>⏸（移动改推送中心）</td><td>右上堆叠</td></tr><tr><td>65</td><td>Modal / Dialog</td><td>双</td><td>03.9</td><td>[11 · 11.2.15](#ch-11)（竖排按钮）</td><td>—</td></tr><tr><td>66</td><td>ActionSheet</td><td>M</td><td>—</td><td>10.4.1</td><td>破坏性红字</td></tr><tr><td>67</td><td>Popconfirm</td><td>双</td><td>08 · 8.2.17</td><td>10.4（移动走 ActionSheet）</td><td>—</td></tr><tr><td>68</td><td>Popover / Tooltip</td><td>双</td><td>03.9、03.5.4</td><td>10.4（tap 内联帮助）</td><td>移动禁 hover</td></tr><tr><td>69</td><td>Banner 横幅</td><td>PC</td><td>08 · 8.2.16</td><td>⏸（移动用 NoticeBar #36）</td><td>—</td></tr><tr><td>70</td><td>提示/引导（新手）</td><td>⏸ 双端</td><td>08.3</td><td>08.3</td><td>待产品化</td></tr></tbody></table>
+<table><thead><tr><th>#</th><th>组件</th><th>端</th><th>PC 规范</th><th>移动规范/形态</th><th>备注</th></tr></thead><tbody><tr><td>63</td><td>Toast</td><td>双</td><td>[03 · 3.9](#ch-03)</td><td>10.4（中上胶囊）</td><td>✅ 已实现（V2.9）：<code>GmToast</code>（React/Vue 同契约）+ 站点外壳 <code>gmToast()</code>；见 [Part 18](docs/标准手册/Part%2018%20·%20弹窗反馈规范.md)</td></tr><tr><td>64</td><td>Notification</td><td>PC</td><td>03.9</td><td>⏸（移动改推送中心）</td><td>右上堆叠</td></tr><tr><td>65</td><td>Modal / Dialog</td><td>双</td><td>03.9</td><td>[11 · 11.2.15](#ch-11)（竖排按钮）</td><td>⚠️ 仅站点演示达标（<code>role=dialog</code>/<code>aria-modal</code>/ESC/焦点归还，V2.9 补齐）；库组件待补</td></tr><tr><td>66</td><td>ActionSheet</td><td>M</td><td>—</td><td>10.4.1</td><td>破坏性红字</td></tr><tr><td>67</td><td>Popconfirm</td><td>双</td><td>08 · 8.2.17</td><td>10.4（移动走 ActionSheet）</td><td>⚠️ 站点演示气泡已补 <code>role=dialog</code>+<code>aria-expanded</code>；库组件待补</td></tr><tr><td>68</td><td>Popover / Tooltip</td><td>双</td><td>03.9、03.5.4</td><td>10.4（tap 内联帮助）</td><td>移动禁 hover；站点 Tooltip 已按 MD-18-01 收敛 180ms/Y4px（库组件待补）</td></tr><tr><td>69</td><td>Banner 横幅</td><td>PC</td><td>08 · 8.2.16</td><td>⏸（移动用 NoticeBar #36）</td><td>—</td></tr><tr><td>70</td><td>提示/引导（新手）</td><td>⏸ 双端</td><td>08.3</td><td>08.3</td><td>待产品化</td></tr></tbody></table>
 <h4>⑥ 数据可视化 Visualization</h4>
 <table><thead><tr><th>#</th><th>组件</th><th>端</th><th>PC 规范</th><th>移动规范/形态</th><th>备注</th></tr></thead><tbody><tr><td>71</td><td>折线 / 面积趋势</td><td>双</td><td>[04 · 4.3.2](#ch-04)</td><td>10.5.2（≤2 序列）</td><td>面积优先</td></tr><tr><td>72</td><td>柱 / 条形</td><td>双</td><td>04.3.3</td><td>10.5.2</td><td>—</td></tr><tr><td>73</td><td>环形图 Donut</td><td>双</td><td>04.3.4</td><td>10.5.2（≤5 段）</td><td>—</td></tr><tr><td>74</td><td>雷达 / 散点</td><td>PC</td><td>04.3.5/6</td><td>⏸</td><td>移动降级为数字</td></tr><tr><td>75</td><td>拓扑 / 关系网络</td><td>PC</td><td>04.3.7</td><td>⏸（需双指缩放工程）</td><td>大屏核心</td></tr><tr><td>76</td><td>地图</td><td>PC</td><td>04.3.8</td><td>⏸</td><td>—</td></tr><tr><td>77</td><td>KPI / Sparkline 迷你图</td><td>双</td><td>04.3.1</td><td>10.5.1</td><td>96–140 宽</td></tr><tr><td>78</td><td>大屏布局蓝图 A/B/C</td><td>PC</td><td>04.4</td><td>—</td><td>数据安全/云监控/软件工厂</td></tr></tbody></table>
 <h4>⑦ 行业与工程</h4>
@@ -6332,7 +6421,7 @@ document.querySelectorAll(&#x27;.panel,.kpi&#x27;).forEach(el =&gt; io.observe(e
 <h4>展示类（Data Display）</h4>
 <table><thead><tr><th>Semi 组件</th><th>LG 状态</th><th>说明 / LG 对应</th></tr></thead><tbody><tr><td>Card</td><td>✅ 3.3</td><td>—</td></tr><tr><td>Avatar</td><td>✅ 3.4.2</td><td>玻璃头像</td></tr><tr><td>Badge / Tag</td><td>✅ 3.6</td><td>徽章与标签</td></tr><tr><td>Table</td><td>✅ 3.7</td><td>玻璃表格</td></tr><tr><td>Timeline 时间轴</td><td>✅ 04.3.9</td><td>事件流/时间线</td></tr><tr><td>Tooltip / Popover / Dropdown</td><td>✅ 3.9 + 3.5.4</td><td>玻璃浮层</td></tr><tr><td>Modal / SideSheet</td><td>✅ 3.9</td><td>Modal 玻璃弹窗 / Drawer 侧滑</td></tr><tr><td>Descriptions 描述列表</td><td>➕</td><td>玻璃描述列表（资产/合规详情，见 8.2.11）</td></tr><tr><td>Empty 空状态</td><td>➕</td><td>玻璃空状态（见 8.2.12）</td></tr><tr><td>List</td><td>➕</td><td>玻璃列表（复用 3.7 表格行样式，见 8.2.14）</td></tr><tr><td>Collapse / Collapsible</td><td>⏸</td><td>大屏少用；折叠用 Tabs 或 Drawer 承载</td></tr><tr><td>Carousel 轮播</td><td>⏸</td><td>大屏非交互展示场景少用</td></tr><tr><td>Calendar 日历</td><td>⏸</td><td>与 DatePicker 弹层共存即可</td></tr><tr><td>Image / Cropper</td><td>⏸</td><td>素材管理页低频；大屏用图卡</td></tr><tr><td>ScrollList / OverflowList</td><td>⏸</td><td>工程层能力（长列表性能见 8.2.21 VirtualList）</td></tr><tr><td>VirtualList 虚拟长列表</td><td>➕</td><td>移动长列表 / 超大表格窗口化（见 8.2.21）</td></tr><tr><td>UserGuide 用户引导</td><td>⏸</td><td>可后续做玻璃新手引导遮罩</td></tr><tr><td>Highlight 高亮文本</td><td>⏸</td><td>工程能力</td></tr></tbody></table>
 <h4>反馈类（Feedback）</h4>
-<table><thead><tr><th>Semi 组件</th><th>LG 状态</th><th>说明 / LG 对应</th></tr></thead><tbody><tr><td>Toast / Notification</td><td>✅ 3.9 + [07 · 7.3.7](#ch-07)</td><td>玻璃 Toast；Notification 右上堆叠版</td></tr><tr><td>Progress 进度条</td><td>➕</td><td>玻璃进度（线性/环形，见 8.2.5）</td></tr><tr><td>Skeleton 骨架屏</td><td>➕</td><td>玻璃骨架（见 8.2.15）</td></tr><tr><td>Spin 加载器</td><td>➕</td><td>柔和玻璃 spinner（并入 8.2.15）</td></tr><tr><td>Banner 通知横幅</td><td>➕</td><td>玻璃横幅（见 8.2.16）</td></tr><tr><td>Popconfirm 气泡确认</td><td>➕</td><td>玻璃气泡确认（见 8.2.17）</td></tr><tr><td>Feedback 反馈</td><td>⏸</td><td>按场景用 Banner/Toast 组合</td></tr></tbody></table>
+<table><thead><tr><th>Semi 组件</th><th>LG 状态</th><th>说明 / LG 对应</th></tr></thead><tbody><tr><td>Toast / Notification</td><td>✅ 3.9 + [07 · 7.3.7](#ch-07)</td><td>玻璃 Toast；Notification 右上堆叠版。<b>Toast 已实现</b>（V2.9）：<code>GmToast</code> 两库同契约（受控 <code>open</code>、内置 2.4s 驻留、<code>role</code>/<code>aria-live</code>、240ms 退场）+ 站点外壳 <code>window.gmToast()</code> 唯一实现；守门 <code>audit.py feedback-spec</code></td></tr><tr><td>Progress 进度条</td><td>➕</td><td>玻璃进度（线性/环形，见 8.2.5）</td></tr><tr><td>Skeleton 骨架屏</td><td>➕</td><td>玻璃骨架（见 8.2.15）</td></tr><tr><td>Spin 加载器</td><td>➕</td><td>柔和玻璃 spinner（并入 8.2.15）</td></tr><tr><td>Banner 通知横幅</td><td>➕</td><td>玻璃横幅（见 8.2.16）</td></tr><tr><td>Popconfirm 气泡确认</td><td>➕</td><td>玻璃气泡确认（见 8.2.17）</td></tr><tr><td>Feedback 反馈</td><td>⏸</td><td>按场景用 Banner/Toast 组合</td></tr></tbody></table>
 <h4>数据可视化 / AI / Plus（Semi 扩展）</h4>
 <table><thead><tr><th>Semi 能力</th><th>LG 状态</th><th>说明</th></tr></thead><tbody><tr><td>Semi DV / VChart（ECharts 封装）</td><td>✅ 替代方案</td><td>LG [04](#ch-04) 已定义图表样式与数据色序；实现层建议 ECharts + LG theme</td></tr><tr><td>AI 组件（AIChatInput / AIChatDialogue / Sidebar）</td><td>⏸ 观察项</td><td>大屏产品若含 AI 对话浮层，按 LG 玻璃浮层 + AI 星芒图标（[09](#ch-09) ai-*）实现</td></tr><tr><td>AIIcon / AIButton（双色 AI 图标）</td><td>➕ 参考</td><td>LG 用紫渐变玻璃 AI 风格，见 09 · 5</td></tr></tbody></table>
 <h4>工程类（其他）</h4>
@@ -7533,6 +7622,44 @@ function MODROOT_site_docs(){return document.getElementById("gm-mod-site-docs")|
       activate(tabs[0].getAttribute('data-mod'), false);
     }
   });
+})();
+
+/* ══════════════════════════════════════════════════════════════════════════
+   Part 18 · MD-18-01/04 —— 全局轻提示 window.gmToast(msg, status)
+   全站**唯一**实现：模块侧只调用它，不再各自造 Toast。
+   · 同类仅 1 条：每次先摘掉上一个节点（MD-18-04）
+   · 驻留 2.4s 在此内置，调用点不写 setTimeout —— 否则每个调用点都会写错一次
+   · role：error → alert + assertive（失败必须立刻被读到）；其余 → status + polite
+   · 挂载点取当前可见模块：模块 CSS 是作用域化的（.gm-mod--x .gm-toast），
+     挂到 body 上虽然看得见，但拿不到模块内定义的 Token 与样式。
+   ══════════════════════════════════════════════════════════════════════════ */
+window.gmToast = (function(){
+  var DWELL = 2400, LEAVE = 240;   /* MD-18-01：驻留 2.4s · 淡出上滑 240ms */
+  var node = null, t1 = null, t2 = null;
+  return function(msg, status){
+    status = status || 'info';
+    if(node && node.parentNode) node.parentNode.removeChild(node);
+    clearTimeout(t1); clearTimeout(t2);
+    var n = document.createElement('div');
+    n.className = 'gm-toast gm-toast--' + status;
+    n.setAttribute('role', status === 'error' ? 'alert' : 'status');
+    n.setAttribute('aria-live', status === 'error' ? 'assertive' : 'polite');
+    var dot = document.createElement('i');
+    dot.className = 'gm-toast__dot'; dot.setAttribute('aria-hidden', 'true');
+    var txt = document.createElement('span');
+    txt.className = 'gm-toast__t'; txt.textContent = msg;
+    n.appendChild(dot); n.appendChild(txt);
+    (document.querySelector('.gm-mod.is-on') || document.body).appendChild(n);
+    node = n;
+    t1 = setTimeout(function(){
+      if(!n.parentNode) return;
+      n.classList.add('is-leaving');
+      t2 = setTimeout(function(){
+        if(n.parentNode) n.parentNode.removeChild(n);
+        if(node === n) node = null;
+      }, LEAVE);
+    }, DWELL);
+  };
 })();
 </script>
 </body>

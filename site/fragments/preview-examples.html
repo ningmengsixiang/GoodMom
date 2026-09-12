@@ -216,10 +216,10 @@ textarea.note{width:100%;min-height:84px;border-radius:18px;border:1px solid rgb
 .spwrap .sp.off{display:none}
 .tg.multi{cursor:pointer;user-select:none}
 .tg.multi.m-on{outline:2px solid currentColor;outline-offset:1px;font-weight:600}
-.fx{position:fixed;left:50%;bottom:26px;transform:translateX(-50%) translateY(16px);z-index:99;max-width:88%;
-  padding:10px 20px;border-radius:999px;background:rgba(52,58,70,.84);color:#FFF;font-size:13px;font-weight:600;
-  -webkit-backdrop-filter:blur(40px);backdrop-filter:blur(40px);opacity:0;pointer-events:none;transition:.25s ease;text-align:center}
-.fx.show{opacity:1;transform:translateX(-50%) translateY(0)}
+/* Part 18 · MD-18-01/04 —— 轻提示 Toast 的样式与实现都在**外壳**里（scripts/build-site.py
+   的「全局反馈层」），模块侧只调用 window.gmToast(msg, status)。
+   旧实现（已删）：.fx 定位在 bottom:26px（规范要求顶部偏上）、过渡 .25s（应 320ms 入）、
+   驻留 1600ms（应 2400ms）、且完全没有 role/aria-live。 */
 .wizfoot{display:flex;justify-content:space-between;align-items:center;margin-top:16px;gap:10px;flex-wrap:wrap}
 
 
@@ -803,13 +803,8 @@ table.t td,table.t th{padding-left:12px;padding-right:12px}
     });
   });}
 
-  /* 即时反馈 toast */
-  var fxEl=document.getElementById('fx');
-  function fx(m){
-    if(!fxEl){fxEl=document.createElement('div');fxEl.className='fx';fxEl.id='fx';document.body.appendChild(fxEl);}
-    fxEl.textContent=m;fxEl.classList.add('show');
-    clearTimeout(fxEl._h);fxEl._h=setTimeout(function(){fxEl.classList.remove('show');},1600);
-  }
+  /* 即时反馈 toast：统一走外壳的 window.gmToast（位置/时序/role 都在那里钉死） */
+  function fx(m,status){ gmToast(m,status); }
   [].slice.call(document.querySelectorAll('.view .btn')).forEach(function(b){
     b.addEventListener('click',function(){fx((b.textContent.trim()||'操作')+'（示例反馈）');});
   });

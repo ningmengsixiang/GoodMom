@@ -425,3 +425,47 @@
 .gm-result__act:hover{transform:translateY(-1px);box-shadow:0 2px 4px rgba(178,58,99,.24),0 12px 26px rgba(240,127,163,.38)}
 .gm-result__act:active{transform:scale(.96)}
 .gm-result__act:focus-visible{outline:var(--lg-ring-width) solid var(--lg-ring-color);outline-offset:var(--lg-ring-offset)}
+/* ══════════════════════════════════════════════════════════════════════════
+   03 · 3.9 / 10 · MO-10-01 / Part 18 · MD-18-01/04 —— GmToast 轻提示（V2.9 补齐）
+   位置：顶部居中偏上（MD-18-04「顶部偏上；移动端避 TabBar」）。
+   时序：滑入 320ms → 驻留 2.4s（组件内置计时）→ 淡出上滑 240ms（MD-18-01）。
+   ⛔ 不套玻璃白描边：白边落在浅色提示底上等于没有边（V2.9 已收口的缺陷类）。
+   ⚠️ 进出场**都用动画**（不用 transition）：`.gm-toast` 的静态态即"已显示"，
+      进场由 gmToastIn 的 `both` 填充承担、退场由 gmToastOut 的 `forwards` 承担。
+      若改用 transition，取消动画的瞬间计算值会先跳到静态态、过渡无从取起点 ——
+      表现就是"退场闪一下"。全站 0.01ms 的 reduce-motion 全局规则对动画同样生效，
+      因此这里**不再单独写** prefers-reduced-motion 覆盖（写了反而会破坏退场态）。
+   ══════════════════════════════════════════════════════════════════════════ */
+.gm-toast{
+  position:fixed;left:50%;z-index:40;
+  /* 顶部偏上；移动端由外层抬高 --gm-toast-top 以避让 TabBar / 吸顶导航（MD-18-04） */
+  top:var(--gm-toast-top,20px);
+  opacity:1;transform:translate(-50%,0);pointer-events:none;
+  display:inline-flex;align-items:center;gap:9px;max-width:min(84vw,420px);
+  padding:10px 18px;border-radius:999px;
+  background:linear-gradient(160deg,rgba(255,255,255,.97),rgba(255,255,255,.9));
+  border:var(--lg-border-1) solid var(--lg-divider);
+  box-shadow:0 1px 2px rgba(58,52,84,.06),0 12px 30px rgba(58,52,84,.14);
+  color:var(--lg-text-primary);font-family:inherit;font-size:13px;font-weight:600;line-height:1.6;
+  animation:gmToastIn 320ms var(--lg-ease-out) both}
+.gm-toast.is-leaving{animation:gmToastOut 240ms ease-in forwards}
+@keyframes gmToastIn{from{opacity:0;transform:translate(-50%,-24px)}to{opacity:1;transform:translate(-50%,0)}}
+@keyframes gmToastOut{from{opacity:1;transform:translate(-50%,0)}to{opacity:0;transform:translate(-50%,-24px)}}
+/* 语义双通道：色点用 alias（14 · 4.4.5），语义同时由文案承担，不靠颜色单独传义 */
+.gm-toast__dot{width:8px;height:8px;border-radius:50%;flex:none;background:var(--lg-sem-neutral)}
+.gm-toast--success .gm-toast__dot{background:var(--lg-sem-positive)}
+.gm-toast--error   .gm-toast__dot{background:var(--lg-sem-risk)}
+.gm-toast--warning .gm-toast__dot{background:var(--lg-sem-attention)}
+.gm-toast--info    .gm-toast__dot{background:var(--lg-sem-info)}
+.gm-toast__t{min-width:0}
+/* 暗色档（02 · 2.1.9）：提示底必须跟着翻，否则 `color:var(--lg-text-primary)` 在暗色下
+   是浅色字（#F3EFEC）压在 97% 白的底上 —— 实测 1.14:1，等于看不见。
+   这类缺陷只有"真的在暗色下渲染一次"才会暴露，静态检查与对比度门禁都测不到
+   （Toast 是交互后才出现的临时节点，门禁扫 DOM 时它并不存在）。 */
+[data-theme="dark"] .gm-toast{
+  background:linear-gradient(160deg,rgba(38,36,46,.97),rgba(38,36,46,.9));
+  box-shadow:0 1px 2px rgba(0,0,0,.35),0 12px 30px rgba(0,0,0,.5)}
+.gm-toast__act{margin-left:2px;padding:0;border:none;background:none;cursor:pointer;pointer-events:auto;
+  font:inherit;font-weight:600;color:var(--mmh-rose-700,#B23A63);text-decoration:underline;text-underline-offset:2px}
+.gm-toast__act:focus-visible{outline:var(--lg-ring-width) solid var(--lg-ring-color);outline-offset:2px;border-radius:6px}
+

@@ -399,10 +399,10 @@ section.block{margin-top:26px}
 /* copy css */
 .copybox{display:flex;justify-content:space-between;align-items:center;gap:14px;flex-wrap:wrap}
 .copybox .btn{margin-left:auto}
-.copied{position:fixed;left:50%;bottom:34px;transform:translateX(-50%) translateY(20px);opacity:0;pointer-events:none;
-  transition:.35s;z-index:99;padding:10px 22px;border-radius:var(--lg-radius-chip);
-  background:var(--mmh-grad-action-hc,#F77FA3);color:#343A46;font-size:13px;font-weight:600;box-shadow:0 1px 2px rgba(178,58,99,.22),0 8px 20px rgba(240,127,163,.30)}
-.copied.show{opacity:1;transform:translateX(-50%) translateY(0)}
+
+/* Part 18 · MD-18-01/04 —— Toast 样式与实现都上移到**外壳**（见 scripts/build-site.py 的
+   全局反馈层）。理由：Toast 是跨模块浮层，若每个模块各存一份配方，实测会漂移成
+   三种位置 / 四种驻留时长。模块侧只调用 window.gmToast(msg, status)。 */
 
 /* footer */
 footer{margin-top:40px;text-align:center;font-size:12px;color:var(--lg-text-tertiary);line-height:2}
@@ -480,16 +480,18 @@ footer a{color:var(--lg-sem-special);text-decoration:none;font-weight:500}
 /* Tooltip 气泡 */
 .tip{position:relative;display:inline-flex;align-items:center;justify-content:center;
   width:42px;height:42px;border-radius:50%;cursor:pointer;font-size:17px;
-  background:rgba(255,255,255,.5);border:1px solid rgba(255,255,255,.75);
+  /* 02 · 2.7.1：浅底交互控件用暖中性发丝边；白 75% 白边落在白底上等于没有边 */
+  background:rgba(255,255,255,.5);border:1px solid var(--lg-divider,rgba(58,52,84,.10));
   box-shadow:var(--lg-shadow-xs);transition:transform var(--lg-t-base) var(--lg-ease-out),box-shadow var(--lg-t-base) var(--lg-ease-out)}
 .tip:hover{transform:translateY(-2px);box-shadow:var(--lg-shadow-md)}
 .tip::after{content:attr(data-tip);position:absolute;top:calc(100% + 10px);left:50%;
-  transform:translateX(-50%) translateY(-5px);
+  /* MD-18-01：Tooltip 180ms、Y 位移 4px（旧值 .2s / 5px，两项都不符） */
+  transform:translateX(-50%) translateY(-4px);
   background:linear-gradient(160deg,rgba(255,255,255,.96),rgba(255,255,255,.78));
   color:var(--lg-deep-slate);font-size:11px;font-weight:500;padding:6px 11px;border-radius:18px;
-  border:1px solid rgba(255,255,255,.95);box-shadow:var(--lg-shadow-md);
+  border:1px solid var(--lg-divider,rgba(58,52,84,.10));box-shadow:var(--lg-shadow-md);
   opacity:0;pointer-events:none;white-space:nowrap;
-  transition:opacity .2s var(--lg-ease-out),transform .2s var(--lg-ease-out);z-index:5}
+  transition:opacity 180ms var(--lg-ease-out),transform 180ms var(--lg-ease-out);z-index:5}
 .tip:hover::after{opacity:1;transform:translateX(-50%) translateY(0)}
 
 /* 数据动效：图表绘制 / 面积淡入 / 条形生长（初始隐藏仅在 JS 启用时生效，防无 JS 白屏） */
@@ -557,6 +559,17 @@ footer a{color:var(--lg-sem-special);text-decoration:none;font-weight:500}
   --lg-grad-hero: var(--mmh-grad-signature);
   --lg-glow-purple-soft: 0 12px 32px rgba(240,127,163,.34);
   --lg-glow-cyan-soft: 0 12px 32px rgba(182,154,255,.24);
+  /* ═══ V2.9 补：本页引用了却从未定义的 Token（02 · 2.1.5 / 14 · 4.4.5）═══
+     实测：模块根上 getComputedStyle().getPropertyValue() 全部返回空 —— 即
+     语义色这类变量在「无兜底引用」写法下于计算值阶段整条失效，浏览器**静默丢弃**该声明，
+     静态扫描与对比度检查都看不到。本页 59 处 --lg-sem-* 引用因此全部落空：
+     反馈语义色（成功/注意/失败/中性/信息）等于不存在。
+     取值一律照抄 goodmom-ui/src/theme.css 的浅色档，不新造色。 */
+  --lg-sem-positive:#25715D; --lg-sem-info:#3261C1; --lg-sem-attention:#8D5A15;
+  --lg-sem-risk:#B72F42; --lg-sem-neutral:#5E6673; --lg-sem-special:#6A48DC;
+  --lg-glass-control:rgba(255,255,255,.35);
+  --lg-shadow-xl:0 24px 60px rgba(58,52,84,.16);
+  --rose-deep:#B23A63;
 }:root{
   background:
     radial-gradient(1200px 700px at 85% -10%, rgba(247,127,163,.20), transparent 65%),
@@ -801,17 +814,23 @@ details.gfold .gfb{padding:0 14px 12px;font-size:12px;color:var(--lg-text-second
 .c-r{color:#B72F42;background:rgba(239,106,123,.13);border-color:rgba(239,106,123,.3)}
 .c-n{color:#5E6673;background:rgba(88,98,115,.09);border-color:rgba(88,98,115,.18)}
 .c-p{color:#6A48DC;background:rgba(154,120,255,.14);border-color:rgba(154,120,255,.3)}
+/* MD-18-01：遮罩 250ms 淡入 + 面板 320ms（scale .98→1、下移 12px）。
+   旧值：面板 .26s / scale(.96) / 6px，遮罩**完全没有动效**（display:none↔flex 切不出过渡）。
+   改用 visibility 而非 display 才能让遮罩真的淡入（display 切换不会触发过渡）。 */
 .dmask{position:fixed;inset:0;z-index:90;background:rgba(255,255,255,.25);-webkit-backdrop-filter:blur(16px);backdrop-filter:blur(16px);
-  display:none;align-items:center;justify-content:center;padding:16px}
-.dmask.show{display:flex}
+  display:flex;align-items:center;justify-content:center;padding:16px;
+  visibility:hidden;opacity:0;transition:opacity 250ms ease,visibility 0s linear 250ms}
+.dmask.show{visibility:visible;opacity:1;transition:opacity 250ms ease}
 .dcard{width:min(400px,92vw);border-radius:22px;padding:22px;background:linear-gradient(160deg,rgba(255,255,255,.85),rgba(255,255,255,.6));
-  border:1px solid rgba(255,255,255,.95);box-shadow:var(--lg-shadow-xl);animation:popIn .26s var(--lg-ease-out)}
-@keyframes popIn{from{opacity:0;transform:scale(.96) translateY(6px)}to{opacity:1;transform:none}}
+  border:1px solid rgba(255,255,255,.95);box-shadow:var(--lg-shadow-xl);
+  animation:popIn 320ms var(--lg-ease-out,cubic-bezier(.22,1,.36,1)) both}
+@keyframes popIn{from{opacity:0;transform:scale(.98) translateY(12px)}to{opacity:1;transform:none}}
+@media (prefers-reduced-motion:reduce){.dmask,.dmask.show{transition:none}}
 .pcwrap{position:relative;display:inline-block}
 .pcbub{position:absolute;bottom:calc(100% + 10px);left:0;width:214px;border-radius:18px;padding:12px;z-index:30;
   background:linear-gradient(160deg,rgba(255,255,255,.96),rgba(255,255,255,.8));border:1px solid rgba(255,255,255,.95);
-  box-shadow:var(--lg-shadow-lg);opacity:0;pointer-events:none;transform:translateY(5px);
-  transition:opacity .2s var(--lg-ease-out),transform .2s var(--lg-ease-out)}
+  box-shadow:var(--lg-shadow-lg);opacity:0;pointer-events:none;transform:translateY(4px);
+  transition:opacity 180ms var(--lg-ease-out),transform 180ms var(--lg-ease-out)}
 .pcwrap.open .pcbub{opacity:1;transform:none;pointer-events:auto}
 .pcwrap .pcbub::after{content:"";position:absolute;top:100%;left:18px;border:6px solid transparent;border-top-color:rgba(255,255,255,.9)}
 .crum{display:flex;gap:8px;align-items:center;font-size:12px;color:var(--lg-text-tertiary);flex-wrap:wrap}
@@ -1618,11 +1637,11 @@ section.block:first-of-type{margin-top:8px}
         <h3><i></i>浮层与确认 Dialog · Popconfirm</h3>
         <p class="mh">点击体验：玻璃弹窗（Dialog）· 气泡确认（Popconfirm 危险操作）</p>
         <div class="bxrow" style="margin-bottom:6px">
-          <button class="bx bx-primary" id="dlgOpen">打开弹窗 Dialog</button>
+          <button class="bx bx-primary" id="dlgOpen" aria-haspopup="dialog" aria-expanded="false">打开弹窗 Dialog</button>
           <span class="pcwrap" id="pcWrap">
-            <button class="bx bx-outline st-danger" id="pcOpen">气泡确认 · 注销档案</button>
-            <div class="pcbub" id="pcBub">
-              <div style="font-size:13px;font-weight:600;margin-bottom:4px">确认注销该档案？</div>
+            <button class="bx bx-outline st-danger" id="pcOpen" aria-haspopup="dialog" aria-expanded="false">气泡确认 · 注销档案</button>
+            <div class="pcbub" id="pcBub" role="dialog" aria-labelledby="pcBubTitle">
+              <div id="pcBubTitle" style="font-size:13px;font-weight:600;margin-bottom:4px">确认注销该档案？</div>
               <div style="font-size:11.5px;color:var(--lg-text-secondary);margin-bottom:10px">注销后不可恢复，档案将进入“已注销”状态。</div>
               <div style="display:flex;gap:8px;justify-content:flex-end">
                 <button class="bx bx-text" id="pcNo">取消</button>
@@ -2088,7 +2107,6 @@ section.block:first-of-type{margin-top:8px}
   </footer>
 </div>
 
-<div class="copied" id="copied">已复制全部 Token</div>
 
 
 
@@ -2117,492 +2135,20 @@ section.block:first-of-type{margin-top:8px}
 
 
 
-<script>
-
-/* 合并入单一首页的作用域适配：本模块原先独占 <body>，动态节点与状态类都挂在 body 上；合并后 body 属于外壳，改挂模块根以保持与原页面等价的作用域。 */
-function MODROOT_preview_index(){return document.getElementById("gm-mod-preview-index")||document.documentElement;}
-/* 合并入单一首页的作用域适配：本模块原先独占 <body>，动态节点与状态类都挂在 body 上；合并后 body 属于外壳，改挂模块根以保持与原页面等价的作用域。 */
-function MODROOT_preview_index(){return document.getElementById("gm-mod-preview-index")||document.documentElement;}
-(function(){
-  var els=document.querySelectorAll('.ig');
-  var tip=document.getElementById('copied');
-  els.forEach(function(t){
-    t.addEventListener('click',function(){
-      var id=t.querySelector('.ig-id').textContent;
-      var svg=t.querySelector('svg');
-      var ta=document.createElement('textarea');
-      ta.value=svg.outerHTML;ta.style.position='fixed';ta.style.opacity='0';
-      document.body.appendChild(ta);ta.select();
-      try{document.execCommand('copy');}catch(e){}
-      document.body.removeChild(ta);
-      tip.textContent='已复制 ' + id;tip.classList.add('show');
-      clearTimeout(tip._h);tip._h=setTimeout(function(){tip.classList.remove('show')},1600);
-    });
-  });
-})();
-
-// copy tokens
-(function(){
-  var rootStyle = getComputedStyle(document.documentElement);
-  var names = ['--lg-warm-ivory','--lg-soft-beige','--lg-deep-slate','--lg-purple-600','--lg-purple-500','--lg-purple-300',
-    '--lg-cyan-600','--lg-cyan-500','--lg-cyan-300','--lg-blue-600','--lg-blue-500','--lg-blue-300',
-    '--lg-pink-500','--lg-pink-400','--lg-pink-300','--lg-peach-400',
-    '--lg-success-500','--lg-warning-500','--lg-danger-500','--lg-info-500',
-    '--lg-grad-primary','--lg-grad-cyan','--lg-grad-hero',
-    '--lg-radius-container','--lg-radius-card-lg','--lg-radius-card','--lg-radius-control','--lg-radius-btn','--lg-radius-chip',
-    '--lg-shadow-xs','--lg-shadow-sm','--lg-shadow-md','--lg-shadow-lg','--lg-glow-purple-soft','--lg-glow-cyan-soft'];
-  var lines = names.map(function(n){ return '  ' + n + ': ' + rootStyle.getPropertyValue(n).trim() + ';'; });
-  var css = ':root{\n' + lines.join('\n') + '\n}';
-  document.getElementById('copyBtn').addEventListener('click', function(){
-    var ta = document.createElement('textarea');
-    ta.value = css; ta.style.position = 'fixed'; ta.style.opacity = '0';
-    document.body.appendChild(ta); ta.select();
-    try{ document.execCommand('copy'); }catch(e){}
-    document.body.removeChild(ta);
-    var tip = document.getElementById('copied');
-    tip.classList.add('show');
-    setTimeout(function(){ tip.classList.remove('show'); }, 1600);
-  });
-})();
-
-/* ═══ 07 · 微交互运行时（入场 / 数字滚动 / 图表绘制 / 分段滑块 / 页签 / Toast） ═══ */
-(function(){
-  var doc = document.documentElement;
-  doc.classList.add('js');
-  var reduced = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-  var hasIO = 'IntersectionObserver' in window;
-
-  /* 1) 面板入场：淡入（只动 opacity） */
-  var reveals = [].slice.call(document.querySelectorAll('.panel,.kpi,.stage'));
-  function revealAll(){ reveals.forEach(function(el){ el.classList.add('in'); }); }
-  if (!reduced && hasIO) {
-    var rIO = new IntersectionObserver(function(es){
-      es.forEach(function(e){ if (e.isIntersecting){ e.target.classList.add('in'); rIO.unobserve(e.target); } });
-    }, { rootMargin:'0px 0px -4% 0px' });
-    reveals.forEach(function(el){ rIO.observe(el); });
-  } else { revealAll(); }
-
-  /* 2) 数据动效：折线绘制 / 面积淡入 / 条形生长 */
-  var draws = [].slice.call(document.querySelectorAll('.drawln'));
-  var fades = [].slice.call(document.querySelectorAll('.fadefill'));
-  var fills = [].slice.call(document.querySelectorAll('.fill'));
-  draws.forEach(function(p){
-    p.setAttribute('pathLength', 1);
-    p.style.strokeDasharray = '1';
-    p.style.strokeDashoffset = '1';
-  });
-  function dataEls(){ return draws.concat(fades, fills); }
-  function apply(el){ el.classList.add('in'); }
-  function applyVisible(){
-    dataEls().forEach(function(el){
-      var r = el.getBoundingClientRect();
-      if (r.top < innerHeight * .94 && r.bottom > 0) apply(el);
-    });
-  }
-  if (!reduced && hasIO) {
-    var dIO = new IntersectionObserver(function(es){
-      es.forEach(function(e){ if (e.isIntersecting) apply(e.target); });
-    }, { rootMargin:'0px 0px -6% 0px' });
-    dataEls().forEach(function(el){ dIO.observe(el); });
-  } else if (reduced) {
-    dataEls().forEach(apply);
-  } else {
-    applyVisible();
-  }
-
-  /* 3) KPI 数字滚动（900ms ease-out，等宽数字） */
-  var counts = [].slice.call(document.querySelectorAll('[data-count]'));
-  counts.forEach(function(el){
-    el.dataset.fmt = Number(el.getAttribute('data-count')).toLocaleString('en-US');
-    el.textContent = '0';
-  });
-  function countUp(el){
-    var target = Number(el.getAttribute('data-count')) || 0;
-    if (reduced){ el.textContent = el.dataset.fmt || '0'; return; }
-    var t0 = null;
-    function step(ts){
-      if (!t0) t0 = ts;
-      var p = Math.min(1, (ts - t0) / 900);
-      var ease = 1 - Math.pow(1 - p, 3);
-      el.textContent = Math.round(target * ease).toLocaleString('en-US');
-      if (p < 1) requestAnimationFrame(step);
-    }
-    requestAnimationFrame(step);
-  }
-  function maybeCount(){
-    counts.forEach(function(el){
-      if (el.dataset.done) return;
-      var r = el.getBoundingClientRect();
-      if (r.top < innerHeight * .94 && r.bottom > 0){ el.dataset.done = '1'; countUp(el); }
-    });
-  }
-  window.addEventListener('scroll', maybeCount, { passive:true });
-  maybeCount();
-
-  /* 4) 分段控件：玻璃滑块平移（宽度跟随激活项） */
-  function initSeg(seg){
-    var its = [].slice.call(seg.querySelectorAll('.seg-it'));
-    if (!its.length) return;
-    var thumb = document.createElement('div');
-    thumb.className = 'thumb';
-    seg.appendChild(thumb);
-    var active = -1;
-    its.forEach(function(it, i){ if (it.classList.contains('on')) active = i; });
-    if (active < 0){ active = 0; its[0].classList.add('on'); }
-    function place(i){
-      var pad = 4, left = pad;
-      for (var j = 0; j < i; j++) left += its[j].offsetWidth;
-      thumb.style.width = its[i].offsetWidth + 'px';
-      thumb.style.left = left + 'px';
-    }
-    place(active);
-    its.forEach(function(it, i){
-      it.addEventListener('click', function(){
-        its.forEach(function(x, j){ x.classList.toggle('on', i === j); });
-        place(i);
-      });
-    });
-    window.addEventListener('resize', function(){
-      var idx = its.reduce(function(a, x, i){ return x.classList.contains('on') ? i : a; }, -1);
-      if (idx < 0) idx = 0;
-      place(idx);
-    });
-  }
-  [].slice.call(document.querySelectorAll('.seg')).forEach(initSeg);
-
-  /* 5) 页签：指示条缩放切换 */
-  [].slice.call(document.querySelectorAll('.tabs')).forEach(function(ts){
-    var tabs = [].slice.call(ts.querySelectorAll('.tab'));
-    tabs.forEach(function(b){
-      b.addEventListener('click', function(){
-        tabs.forEach(function(x){ x.classList.toggle('on', x === b); });
-      });
-    });
-  });
-
-  /* 6) Toast + 重新演示数据动效 */
-  function showToast(msg){
-    var t = document.getElementById('toast');
-    if (!t){ t = document.createElement('div'); t.className = 'copied'; t.id = 'toast'; document.body.appendChild(t); }
-    t.textContent = msg;
-    t.classList.add('show');
-    clearTimeout(t._h);
-    t._h = setTimeout(function(){ t.classList.remove('show'); }, 2400);
-  }
-  var toastBtn = document.getElementById('toastBtn');
-  if (toastBtn) toastBtn.addEventListener('click', function(){ showToast('处置任务已下发 · 已进入实时流'); });
-
-  var replayBtn = document.getElementById('replayBtn');
-  if (replayBtn) replayBtn.addEventListener('click', function(){
-    draws.forEach(function(p){ p.classList.remove('in'); p.style.transition = 'none'; p.style.strokeDashoffset = '1'; });
-    fades.forEach(function(el){ el.classList.remove('in'); el.style.transition = 'none'; el.style.opacity = '0'; });
-    fills.forEach(function(el){ el.classList.remove('in'); el.style.transition = 'none'; el.style.width = '0'; });
-    counts.forEach(function(el){ el.dataset.done = ''; el.textContent = '0'; });
-    void document.documentElement.offsetWidth; /* 强制回流，去掉瞬态 */
-    draws.forEach(function(p){ p.style.transition = ''; });
-    fades.forEach(function(el){ el.style.transition = ''; });
-    fills.forEach(function(el){ el.style.transition = ''; });
-    requestAnimationFrame(function(){ applyVisible(); maybeCount(); });
-    showToast('已重置并重新播放数据动效');
-  });
-})();
-
-/* 组件全览交互：Slider / Stepper / Rate / Upload 删除 */
-(function(){
-  var sl=document.getElementById('sl1');
-  if(sl){var out=document.getElementById('sl1v');
-    function upd(){var v=sl.value; out.textContent=v+'%'; sl.style.setProperty('--v',v+'%');}
-    sl.addEventListener('input',upd); upd();}
-  var vEl=document.getElementById('stpVal');
-  if(vEl){var v=parseInt(vEl.textContent,10)||0;
-    var pm=document.querySelector('.stpm'), pp=document.querySelector('.stpp');
-    function set(x){v=Math.max(0,Math.min(99,x)); vEl.textContent=v;}
-    if(pm)pm.addEventListener('click',function(){set(v-1)});
-    if(pp)pp.addEventListener('click',function(){set(v+1)});}
-  var rate=document.getElementById('rate1');
-  if(rate){var stars=[].slice.call(rate.querySelectorAll('.rs'));
-    stars.forEach(function(s){s.addEventListener('click',function(){
-      var n=parseInt(s.getAttribute('data-v'),10)||0;
-      stars.forEach(function(x){x.classList.toggle('on',parseInt(x.getAttribute('data-v'),10)<=n)});
-    });});}
-  [].slice.call(document.querySelectorAll('.uprow .del')).forEach(function(d){
-    d.addEventListener('click',function(){var r=d.closest('.uprow'); if(r)r.remove();});
-  });
-})();
-
-/* 07 · 7.8 交互补全：全局反馈 Toast + 各组件操作绑定 */
-(function(){
-  var CHECK='<svg class="ni" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="m6 12.5 4 4L18 8"/></svg>';
-  var SPIN='<svg class="ld" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="8.5" fill="none" stroke="rgba(255,255,255,.4)" stroke-width="2.4"/><path d="M20.5 12A8.5 8.5 0 0 0 12 3.5" fill="none" stroke="#FFF" stroke-width="2.4" stroke-linecap="round"/></svg>';
-  function toast(m){
-    var el=document.getElementById('gtoast');
-    if(!el){el=document.createElement('div');el.className='copied';el.id='gtoast';document.body.appendChild(el);}
-    el.textContent=m; el.classList.add('show');
-    clearTimeout(el._h); el._h=setTimeout(function(){el.classList.remove('show');},1500);
-  }
-  window.toastG=toast;
-
-  /* 1) 按钮组 Group 切换 */
-  [].slice.call(document.querySelectorAll('.bgroup')).forEach(function(g){
-    [].slice.call(g.querySelectorAll('.bx')).forEach(function(b){
-      b.addEventListener('click',function(){
-        [].slice.call(g.querySelectorAll('.bx')).forEach(function(x){x.classList.remove('on');});
-        b.classList.add('on');
-        toast('视图切换：'+ (b.textContent.trim()||'图标'));
-      });
-    });
-  });
-
-  /* 2) Loading 模拟：点击 → 处理中 1.4s → 还原 */
-  var ldb=document.querySelector('.bx-loading');
-  if(ldb){
-    var back=ldb.innerHTML;
-    ldb.addEventListener('click',function(){
-      if(ldb.getAttribute('data-run'))return;
-      ldb.setAttribute('data-run','1');
-      ldb.innerHTML=SPIN+'处理中…';
-      toast('开始模拟保存（1.4s）');
-      setTimeout(function(){
-        ldb.innerHTML=back; ldb.removeAttribute('data-run');
-        toast('已保存完成');
-      },1400);
-    });
-  }
-
-  /* 3) 其余 .bx 通用反馈（排除组/loading） */
-  [].slice.call(document.querySelectorAll('button.bx:not(.disabled)')).forEach(function(b){
-    if(b.closest('.bgroup')||b.classList.contains('bx-loading'))return;
-    b.addEventListener('click',function(){
-      toast('操作：'+(b.textContent.trim()||'图标按钮'));
-    });
-  });
-
-  /* 4) Steps 推进 / 回退（全状态循环） */
-  var stWrap=document.querySelector('.steps');
-  if(stWrap){
-    var sts=[].slice.call(stWrap.querySelectorAll('.step'));
-    var cur=sts.reduce(function(a,x,i){return x.classList.contains('cur')?i:a;},-1);
-    function paint(i){
-      sts.forEach(function(x,j){
-        x.classList.remove('done','cur');
-        var sd=x.querySelector('.sd');
-        if(j<i){x.classList.add('done'); sd.innerHTML=CHECK;}
-        else if(j===i){x.classList.add('cur'); sd.innerHTML=''+(j+1);}
-        else { sd.innerHTML=''+(j+1);}
-      });
-    }
-    function label(i){var t=sts[i].querySelector('.st'); return t?t.textContent:'';}
-    document.getElementById('stPrev').addEventListener('click',function(){
-      if(cur<=0){toast('已是第一步：'+label(0));return;}
-      cur--; paint(cur); toast('回退到：'+label(cur));
-    });
-    document.getElementById('stNext').addEventListener('click',function(){
-      if(cur>=sts.length-1){toast('已到最后一步：'+label(cur)+'（可回退演示）');return;}
-      cur++; paint(cur); toast('推进到：'+label(cur));
-    });
-  }
-
-  /* 5) 表格 / 反馈面板操作按钮反馈 */
-  [].slice.call(document.querySelectorAll('.mtable .btn,.btn.act')).forEach(function(b){
-    b.addEventListener('click',function(){
-      toast('已执行：'+(b.textContent.trim()||'操作'));
-    });
-  });
-
-  /* 6) 手机框：TabBar / chips 切换 */
-  [].slice.call(document.querySelectorAll('.tabmini')).forEach(function(tb){
-    [].slice.call(tb.querySelectorAll('i')).forEach(function(it){
-      it.addEventListener('click',function(){
-        [].slice.call(tb.querySelectorAll('i')).forEach(function(x){x.classList.remove('on');});
-        it.classList.add('on');
-        toast('Tab：'+it.textContent.trim());
-      });
-    });
-  });
-  [].slice.call(document.querySelectorAll('.mchip')).forEach(function(c){
-    c.addEventListener('click',function(){
-      var p=c.parentNode;
-      if(p&&p.classList.contains('mchiprow')){
-        [].slice.call(p.children).forEach(function(x){x.classList.remove('on');});
-        c.classList.add('on');
-      }
-      toast('筛选：'+c.textContent.trim());
-    });
-  });
-})();
-
-(function(){
-  function toast(m){ if(window.toastG){window.toastG(m);} }
-  var dm=document.getElementById('dlgOpen');
-  if(dm){
-    var mask=document.createElement('div');mask.className='dmask';mask.id='dlgMask';
-    mask.innerHTML='<div class="dcard" role="dialog" aria-modal="true" aria-label="确认提交">'+
-      '<div style="display:flex;align-items:flex-start;gap:10px;margin-bottom:14px">'+
-      '<span style="width:40px;height:40px;border-radius:18px;background:rgba(247,127,163,.14);color:#B23A63;display:flex;align-items:center;justify-content:center;flex:none">'+
-      '<svg style="width:20px;height:20px;stroke:currentColor;fill:none;stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round" viewBox="0 0 24 24"><path d="M12 3.2 19 5.7v5.4c0 4.6-3 8.3-7 9.7-4-1.4-7-5.1-7-9.7V5.7z"/><path d="m9.2 11.9 2 2 3.6-3.9"/></svg></span>'+
-      '<div style="flex:1"><div style="font-size:16px;font-weight:600">提交筛查结果</div>'+
-      '<div style="font-size:12.5px;color:var(--lg-text-secondary);margin-top:4px;line-height:1.7">张女士 · 宫颈筛查（TCT）结果已录入，提交后进入“待复核”状态。</div></div></div>'+
-      '<div style="display:flex;gap:10px;justify-content:flex-end"><button class="bx bx-text" id="dlgNo">取消</button>'+
-      '<button class="bx bx-primary" style="height:36px;padding:0 20px;font-size:13px" id="dlgYes">确认提交</button></div></div>';
-    document.body.appendChild(mask);
-    function open(){mask.classList.add('show');}
-    function close(){mask.classList.remove('show');}
-    dm.addEventListener('click',open);
-    mask.addEventListener('click',function(e){if(e.target===mask)close();});
-    document.getElementById('dlgNo').addEventListener('click',function(){close();toast('已取消提交');});
-    document.getElementById('dlgYes').addEventListener('click',function(){close();toast('已提交 · 进入待复核');});
-  }
-  var pc=document.getElementById('pcWrap');
-  if(pc){
-    var bub=document.getElementById('pcBub');
-    document.getElementById('pcOpen').addEventListener('click',function(e){e.stopPropagation();pc.classList.add('open');});
-    document.getElementById('pcNo').addEventListener('click',function(){pc.classList.remove('open');});
-    document.getElementById('pcYes').addEventListener('click',function(){pc.classList.remove('open');toast('已注销档案（示例）');});
-    document.addEventListener('click',function(e){if(pc&&!pc.contains(e.target))pc.classList.remove('open');});
-  }
-  var pg=document.getElementById('pg1');
-  if(pg){[].slice.call(pg.querySelectorAll('.pgit:not(.gap)')).forEach(function(it){
-    it.addEventListener('click',function(){pg.querySelectorAll('.pgit:not(.gap)').forEach(function(x){x.classList.remove('on')});it.classList.add('on');});
-  });}
-  var s1=document.getElementById('sel1');
-  if(s1){[].slice.call(s1.querySelectorAll('.sel')).forEach(function(x){
-    x.addEventListener('click',function(){s1.querySelectorAll('.sel').forEach(function(y){y.classList.remove('on')});x.classList.add('on');toast('风险等级：'+x.textContent.trim());});
-  });}
-  var s2=document.getElementById('sel2');
-  if(s2){[].slice.call(s2.querySelectorAll('.sel')).forEach(function(x){
-    x.addEventListener('click',function(){x.classList.toggle('on');});
-  });}
-})();
-
-/* 儿童健康清单：状态切换演示 */
-(function(){
-  [].slice.call(document.querySelectorAll('.hrow .fkstate')).forEach(function(t){
-    t.addEventListener('click',function(){
-      var states=['正常','异常','待检'];
-      var map={'c-g':'正常','c-r':'异常','c-n':'待检'};
-      var next=(states.indexOf(map[Object.keys(map).find(function(k){return map[k]===t.textContent.trim();})]|| '正常')+1)%3;
-      // simpler: read current text
-      var cur=t.textContent.trim();
-      var i=(['正常','异常','待检'].indexOf(cur)+1)%3;
-      var cls=['c-g','c-r','c-n'][i];
-      var labs=['正常','异常','待检'];
-      t.className='tagc '+cls+' fkstate';
-      t.setAttribute('style','cursor:pointer');
-      t.textContent=labs[i];
-      if(window.toastG)window.toastG('状态 → '+labs[i]);
-    });
-  });
-})();
-
-(function(){
-  function toast(m){ if(window.toastG){window.toastG(m);} }
-  function copyText(t){
-    var ta=document.createElement('textarea');ta.value=t;ta.style.position='fixed';ta.style.opacity='0';
-    document.body.appendChild(ta);ta.select();
-    try{document.execCommand('copy');}catch(e){}
-    document.body.removeChild(ta);
-  }
-  function clearDim(){[].slice.call(document.querySelectorAll('.stmod .dim')).forEach(function(x){x.classList.remove('dim');});}
-  var tabs=[].slice.call(document.querySelectorAll('.sttab'));
-  var mods=[].slice.call(document.querySelectorAll('.stmod'));
-  function showMod(m){
-    mods.forEach(function(x){x.classList.toggle('off',x.getAttribute('data-mod')!==m);});
-    tabs.forEach(function(t){t.classList.toggle('on',t.getAttribute('data-mod')===m);});
-    clearDim();
-    [].slice.call(document.querySelectorAll('.stsem')).forEach(function(x){x.classList.remove('on');});
-  }
-  tabs.forEach(function(t){t.addEventListener('click',function(){showMod(t.getAttribute('data-mod'));});});
-  var sems=[].slice.call(document.querySelectorAll('.stsem'));
-  sems.forEach(function(sm){
-    sm.addEventListener('click',function(){
-      var c=sm.getAttribute('data-sem');
-      var active=sm.classList.contains('on');
-      sems.forEach(function(x){x.classList.remove('on');});
-      clearDim();
-      if(active)return;
-      sm.classList.add('on');
-      [].slice.call(document.querySelectorAll('.stmod:not(.off) .tpill, .stmod:not(.off) .tagc')).forEach(function(p){
-        p.classList.toggle('dim',p.getAttribute('data-sem')!==c);
-      });
-    });
-  });
-  [].slice.call(document.querySelectorAll('.stmod .tpill,.stmod .tagc')).forEach(function(p){
-    p.style.cursor='pointer';
-    p.addEventListener('click',function(){copyText(p.textContent.trim());toast('已复制状态：'+p.textContent.trim());});
-  });
-})();
-
-/* 专业分组菜单 */
-(function(){
-  var groups=[].slice.call(document.querySelectorAll('.topnav .ng'));
-  function closeAll(except){
-    groups.forEach(function(g){if(g!==except)g.classList.remove('open');});
-  }
-  groups.forEach(function(g){
-    var b=g.querySelector('.ngt');
-    b.addEventListener('click',function(e){
-      e.stopPropagation();
-      var isOpen=g.classList.contains('open');
-      closeAll(null);
-      if(!isOpen)g.classList.add('open');
-    });
-  });
-  document.addEventListener('click',function(e){
-    if(!e.target.closest('.topnav .ng'))closeAll(null);
-  });
-  [].slice.call(document.querySelectorAll('.ngdrop a')).forEach(function(a){
-    a.addEventListener('click',function(){closeAll(null);});
-  });
-})();
-
-/* 可视化图库交互：环形点选 + 雷达状态切换（美观版） */
-(function(){
-  var segs=[].slice.call(document.querySelectorAll('.dpick'));
-  var D=[[0.45,"45%","孕期","#F77FA3"],[0.29,"29%","婴儿","#FFC3A0"],[0.22,"22%","幼儿","#B69AFF"],[0.16,"16%","学龄前","#A9E3D4"]];
-  var circles={0:document.getElementById('dseg0'),1:document.getElementById('dseg1'),2:document.getElementById('dseg2'),3:document.getElementById('dseg3')};
-  var dzP=document.getElementById('dzP'),dzL=document.getElementById('dzL');
-  function dimAll(){for(var k in circles){circles[k].style.opacity='0.18';}}
-  function fullAll(){for(var k in circles){circles[k].style.opacity='1';}}
-  var curD=-1;
-  segs.forEach(function(el,i){el.addEventListener('click',function(){
-    if(curD===i){fullAll();curD=-1;dzP.textContent=D[0][1];dzL.textContent=D[0][2];return;}
-    dimAll();circles[i].style.opacity='1';curD=i;dzP.textContent=D[i][1];dzL.textContent=D[i][2];
-  });});
-  var CX=100,CY=70,R=54,ANG=[90,30,-30,-90,-150,150];
-  function vp(r,d){var a=d*Math.PI/180;return [CX+r*Math.cos(a),CY-r*Math.sin(a)];}
-  var OUT=ANG.map(function(d){return vp(R,d);});
-  var poly=document.getElementById('radPoly'),radState=document.getElementById('radState');
-  var SETS={good:[.95,.9,.92,.85,.9,.8],focus:[.95,.9,.92,.35,.9,.8],oral:[.92,.85,.9,.8,.9,.3],risk:[.7,.8,.6,.4,.7,.5]};
-  var NAME={good:'全部正常',focus:'视力待复查',oral:'口腔待检',risk:'高危示例'};
-  function render(vals,name){
-    var pts=vals.map(function(v,i){return (CX+(OUT[i][0]-CX)*v).toFixed(1)+','+(CY+(OUT[i][1]-CY)*v).toFixed(1);}).join(' ');
-    poly.setAttribute('points',pts);
-    var bad=vals.some(function(v){return v<0.5;});
-    var col=bad?'#EE5C70':'#F77FA3';
-    poly.setAttribute('stroke',col);
-    poly.setAttribute('fill',bad?'rgba(238,92,112,.14)':'rgba(247,127,163,.18)');
-    for(var i=0;i<6;i++){var d=document.getElementById('rp'+i);if(!d)continue;
-      d.setAttribute('cx',(CX+(OUT[i][0]-CX)*vals[i]).toFixed(1));
-      d.setAttribute('cy',(CY+(OUT[i][1]-CY)*vals[i]).toFixed(1));
-      d.setAttribute('r','3.2');d.setAttribute('stroke',col);}
-    if(radState)radState.textContent='六维健康雷达 · '+name+(bad?'（含异常维度，转珊瑚提示）':'');
-  }
-  [].slice.call(document.querySelectorAll('[data-rad]')).forEach(function(ch){
-    ch.addEventListener('click',function(){
-      [].slice.call(document.querySelectorAll('[data-rad]')).forEach(function(x){x.classList.remove('on');});
-      ch.classList.add('on');render(SETS[ch.getAttribute('data-rad')],NAME[ch.getAttribute('data-rad')]);
-    });
-  });
-  render(SETS.good,NAME.good);
-})();
-
-
-</script>
+<!-- 体例说明：本模块的脚本只有 @js 分段一段（构建时以它为唯一出处）。
+     历史上同一段脚本在 body 内联 script 里还留了一份逐行副本，构建会静默丢弃它
+     （drop_body_scripts），但两份并存极易改错一边 —— V2.9 已删除。 -->
 
 <!--@js-->
+/* ══════════════════════════════════════════════════════════════════════════
+   Part 18 · MD-18-01/04 —— 轻提示：本模块的 4 个调用点统一走外壳的
+   window.gmToast(msg, status)。位置（顶部偏上，避让吸顶导航）、时序
+   （320ms 入 / 驻留 2.4s / 240ms 出）、同类仅 1 条、role+aria-live
+   全部在外壳那**一份**实现里钉死，模块侧只给文案与语义。
+   ══════════════════════════════════════════════════════════════════════════ */
+
 (function(){
   var els=document.querySelectorAll('.ig');
-  var tip=document.getElementById('copied');
   els.forEach(function(t){
     t.addEventListener('click',function(){
       var id=t.querySelector('.ig-id').textContent;
@@ -2612,8 +2158,7 @@ function MODROOT_preview_index(){return document.getElementById("gm-mod-preview-
       document.body.appendChild(ta);ta.select();
       try{document.execCommand('copy');}catch(e){}
       document.body.removeChild(ta);
-      tip.textContent='已复制 ' + id;tip.classList.add('show');
-      clearTimeout(tip._h);tip._h=setTimeout(function(){tip.classList.remove('show')},1600);
+      gmToast('已复制 ' + id,'success');
     });
   });
 })();
@@ -2636,9 +2181,7 @@ function MODROOT_preview_index(){return document.getElementById("gm-mod-preview-
     document.body.appendChild(ta); ta.select();
     try{ document.execCommand('copy'); }catch(e){}
     document.body.removeChild(ta);
-    var tip = document.getElementById('copied');
-    tip.classList.add('show');
-    setTimeout(function(){ tip.classList.remove('show'); }, 1600);
+    gmToast('已复制全部 Token','success');
   });
 })();
 
@@ -2758,14 +2301,8 @@ function MODROOT_preview_index(){return document.getElementById("gm-mod-preview-
   });
 
   /* 6) Toast + 重新演示数据动效 */
-  function showToast(msg){
-    var t = document.getElementById('toast');
-    if (!t){ t = document.createElement('div'); t.className = 'copied'; t.id = 'toast'; document.body.appendChild(t); }
-    t.textContent = msg;
-    t.classList.add('show');
-    clearTimeout(t._h);
-    t._h = setTimeout(function(){ t.classList.remove('show'); }, 2400);
-  }
+  /* 收敛到全站唯一实现（原实现自带 2400ms 驻留，位置与语义仍不符规范） */
+  function showToast(msg){ gmToast(msg); }
   var toastBtn = document.getElementById('toastBtn');
   if (toastBtn) toastBtn.addEventListener('click', function(){ showToast('处置任务已下发 · 已进入实时流'); });
 
@@ -2811,12 +2348,8 @@ function MODROOT_preview_index(){return document.getElementById("gm-mod-preview-
 (function(){
   var CHECK='<svg class="ni" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="m6 12.5 4 4L18 8"/></svg>';
   var SPIN='<svg class="ld" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="8.5" fill="none" stroke="rgba(255,255,255,.4)" stroke-width="2.4"/><path d="M20.5 12A8.5 8.5 0 0 0 12 3.5" fill="none" stroke="#FFF" stroke-width="2.4" stroke-linecap="round"/></svg>';
-  function toast(m){
-    var el=document.getElementById('gtoast');
-    if(!el){el=document.createElement('div');el.className='copied';el.id='gtoast';document.body.appendChild(el);}
-    el.textContent=m; el.classList.add('show');
-    clearTimeout(el._h); el._h=setTimeout(function(){el.classList.remove('show');},1500);
-  }
+  /* 收敛到全站唯一实现（原实现驻留 1500ms，且位置在底部、无 role/aria-live） */
+  function toast(m,status){ gmToast(m,status); }
   window.toastG=toast;
 
   /* 1) 按钮组 Group 切换 */
@@ -2922,19 +2455,50 @@ function MODROOT_preview_index(){return document.getElementById("gm-mod-preview-
       '<div style="display:flex;gap:10px;justify-content:flex-end"><button class="bx bx-text" id="dlgNo">取消</button>'+
       '<button class="bx bx-primary" style="height:36px;padding:0 20px;font-size:13px" id="dlgYes">确认提交</button></div></div>';
     document.body.appendChild(mask);
-    function open(){mask.classList.add('show');}
-    function close(){mask.classList.remove('show');}
+    /* MD-18-02：打开锁定滚动、焦点进面板首元素；关闭归还触发点；ESC / 遮罩点击均可关闭。
+       旧实现只做了「遮罩点击关闭」，键盘用户既进不去也出不来（焦点留在地下的页面上）。 */
+    var prevOverflow='';
+    function open(){
+      mask.classList.add('show');
+      dm.setAttribute('aria-expanded','true');
+      prevOverflow=document.body.style.overflow;
+      document.body.style.overflow='hidden';
+      var f=mask.querySelector('button');
+      if(f)f.focus();
+    }
+    function close(){
+      mask.classList.remove('show');
+      document.body.style.overflow=prevOverflow;
+      dm.setAttribute('aria-expanded','false');
+      dm.focus();
+    }
     dm.addEventListener('click',open);
     mask.addEventListener('click',function(e){if(e.target===mask)close();});
-    document.getElementById('dlgNo').addEventListener('click',function(){close();toast('已取消提交');});
-    document.getElementById('dlgYes').addEventListener('click',function(){close();toast('已提交 · 进入待复核');});
+    mask.addEventListener('keydown',function(e){if(e.key==='Escape')close();});
+    document.getElementById('dlgNo').addEventListener('click',function(){close();toast('已取消提交','info');});
+    document.getElementById('dlgYes').addEventListener('click',function(){close();toast('已提交 · 进入待复核','success');});
   }
   var pc=document.getElementById('pcWrap');
   if(pc){
     var bub=document.getElementById('pcBub');
-    document.getElementById('pcOpen').addEventListener('click',function(e){e.stopPropagation();pc.classList.add('open');});
-    document.getElementById('pcNo').addEventListener('click',function(){pc.classList.remove('open');});
-    document.getElementById('pcYes').addEventListener('click',function(){pc.classList.remove('open');toast('已注销档案（示例）');});
+    /* MD-18-02：触发器要报出展开态；气泡本身是带交互内容的浮层 → role=dialog（非模态）。
+       旧实现三处都缺，键盘用户无法得知"是否已展开"。 */
+    var pcOpen=document.getElementById('pcOpen');
+    function pcOpenFn(){
+      pc.classList.add('open');
+      pcOpen.setAttribute('aria-expanded','true');
+      var f=bub.querySelector('button');
+      if(f)f.focus();
+    }
+    function pcCloseFn(){
+      pc.classList.remove('open');
+      pcOpen.setAttribute('aria-expanded','false');
+      pcOpen.focus();
+    }
+    pcOpen.addEventListener('click',function(e){e.stopPropagation();pcOpenFn();});
+    bub.addEventListener('keydown',function(e){if(e.key==='Escape'){e.stopPropagation();pcCloseFn();}});
+    document.getElementById('pcNo').addEventListener('click',function(){pcCloseFn();});
+    document.getElementById('pcYes').addEventListener('click',function(){pcCloseFn();toast('已注销档案（示例）','warning');});
     document.addEventListener('click',function(e){if(pc&&!pc.contains(e.target))pc.classList.remove('open');});
   }
   var pg=document.getElementById('pg1');

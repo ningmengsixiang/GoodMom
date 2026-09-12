@@ -2,9 +2,9 @@
   "date": "2026-09-12",
   "docs": 19,
   "components_spec_defined": 98,
-  "components_react": 18,
-  "components_vue": 18,
-  "components_code_implemented": 36,
+  "components_react": 19,
+  "components_vue": 19,
+  "components_code_implemented": 38,
   "component_names_react": [
     "GmAvatar",
     "GmButton",
@@ -23,6 +23,7 @@
     "GmStatusTag",
     "GmSteps",
     "GmTag",
+    "GmToast",
     "GmVirtualList"
   ],
   "component_names_vue": [
@@ -43,6 +44,7 @@
     "GmStatusTag",
     "GmSteps",
     "GmTag",
+    "GmToast",
     "GmVirtualList"
   ],
   "icons_sprite": 77,
