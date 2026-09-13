@@ -48,6 +48,10 @@ check("虚拟列表窗口化（只渲染窗口内项）",
   `${await page.locator(".gm-vlist__item").count()} 项 / 共 2000`);
 
 /* ── 2. 状态标签语义取色（15 章词库自动映射） ────────────────────── */
+/* ⚠️ 期望值是**实现值**（theme.css 的 --lg-sem-* 浅底档），不是 02 章旧表里的值：
+   本组断言曾长期为红 —— 它照抄了 V2.8「语义色板达 AA」之前的旧值（#B9771C 等），
+   深档化后没人同步，而它不在 CI 里所以一直没人发现（V2.9 修复并纳入 CI）。
+   现行口径由 `scripts/audit.py --only semantic-parity` 与 02 · 2.1.9 共同守住。 */
 /* 注意：只取 .gm-status-tag 且取 [data-gm-text] 的文本——
    两者混在一个选择器里会把 GmTag 的色误当成 GmStatusTag 的自动映射结果；
    取整个元素 textContent 会把 closable 的关闭按钮文案混进状态文案。 */
@@ -61,12 +65,12 @@ const fu = tagColors.find((t) => t.text === "待随访");
 const gao = tagColors.find((t) => t.text === "高危");
 const yang = tagColors.find((t) => t.text === "阳性");
 const yijian = tagColors.find((t) => t.text === "已建档");
-check("待随访 → attention 琥珀", fu?.color === "rgb(185, 119, 28)", fu?.color);
-check("高危 → risk 珊瑚", gao?.color === "rgb(211, 84, 102)", gao?.color);
-check("阳性 → risk 珊瑚", yang?.color === "rgb(211, 84, 102)", yang?.color);
-check("已建档 → info 蓝", yijian?.color === "rgb(74, 118, 208)", yijian?.color);
+check("待随访 → attention 琥珀 #8D5A15", fu?.color === "rgb(141, 90, 21)", fu?.color);
+check("高危 → risk 珊瑚 #B72F42", gao?.color === "rgb(183, 47, 66)", gao?.color);
+check("阳性 → risk 珊瑚 #B72F42", yang?.color === "rgb(183, 47, 66)", yang?.color);
+check("已建档 → info 蓝 #3261C1", yijian?.color === "rgb(50, 97, 193)", yijian?.color);
 const unknown = tagColors.find((t) => t.text.includes("未登记"));
-check("未登记文案回落 neutral 灰", unknown?.color === "rgb(117, 126, 142)", unknown?.color);
+check("未登记文案回落 neutral 灰 #5E6673", unknown?.color === "rgb(94, 102, 115)", unknown?.color);
 
 /* ── 3. 主行动按钮配色契约（D9：亮粉底必须深字） ─────────────────── */
 /* 只取 status=default 的 primary —— 主行动渐变是「类型默认档」，

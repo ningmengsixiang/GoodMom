@@ -37,6 +37,15 @@ def run_audit(only: str) -> tuple[int, str]:
 # (用例名, 目标门禁(--only 用), 目标文件, 查找串, 替换串, FAIL 里必须出现的关键词)
 CASES = [
     # ── feedback-spec ────────────────────────────────────────────────────
+    # ── semantic-parity ──────────────────────────────────────────────────
+    ("token/02 章语义色回退到 AA 之前的旧值", "semantic-parity", "02-Token规范.md",
+     "| `--lg-sem-positive` | `#25715D` |", "| `--lg-sem-positive` | `#2F8F76` |",
+     "语义色口径与实现不一致"),
+    ("token/14 章语义色回退", "semantic-parity", "14-命名与术语规范.md",
+     "`--lg-sem-risk`（`#B72F42`）", "`--lg-sem-risk`（`#D35466`）", "语义色口径与实现不一致"),
+    ("token/skill reference 语义色回退", "semantic-parity",
+     ".claude/skills/goodmom-frontend/reference/tokens.md",
+     "| `--lg-sem-info` | `#3261C1` |", "| `--lg-sem-info` | `#4A76D0` |", "语义色口径与实现不一致"),
     ("feedback/外壳 Toast 避让值写死", "feedback-spec", "scripts/build-site.py",
      "  --gm-toast-top:calc(var(--sh-nav-h,60px) + 16px);",
      "  --gm-toast-top:76px;", "必须写成 calc(var(--sh-nav-h"),

@@ -51,6 +51,11 @@
      实测 4.01:1 < 4.5，过不了 AA。 */
   --pm-link:#B23A63;
   --pm-rose-text:#B23A63;   /* 品牌色文字档（暗色翻浅，见下） */
+  /* 系统 Token 兜底：本模块用外壳的「数据呈现层」配方（.gm-fold），
+     而外壳读的是 --lg-text-secondary / --lg-divider。片段只有私有命名
+     （--text-2 / --pm-divider）时，暗色档会出现「页面翻了、折叠内容没翻」
+     的深底深字（data-present 门禁实测拦下）。故在本模块内把两者接上。 */
+  --lg-text-primary:#343A46; --lg-text-secondary:#4F5B6E; --lg-divider:rgba(58,52,84,.10);
   --pm-mask:rgba(255,255,255,.18);          /* 11.6.6 Mask */
   --pm-bg:
     radial-gradient(420px 260px at 88% -2%, rgba(247,127,163,.22), transparent 70%),
@@ -84,6 +89,7 @@
   --pm-ring:rgba(255,196,214,.7);
   --pm-link:#FFC4D6;
   --pm-rose-text:#FFC4D6;
+  --lg-text-primary:#F3EFEC; --lg-text-secondary:#C9C4CE; --lg-divider:rgba(255,255,255,.10);
   --pm-mask:rgba(0,0,0,.48);
   --shadow-card:0 10px 24px rgba(0,0,0,.42),0 2px 6px rgba(0,0,0,.32);
   --shadow-tab:0 -8px 26px rgba(0,0,0,.5);
@@ -525,6 +531,91 @@ svg.i{width:22px;height:22px;stroke:currentColor;fill:none;stroke-width:1.7;
 .pm-vnav.prev{left:10px}
 .pm-vnav.next{right:10px}
 
+/* ══════════════════════════════════════════════════════════════════════════
+   22b · 补齐 11 章缺的四个组件（IndexBar / Calendar / NumberKeyboard / WaterMark）
+   折叠不在这里重写：直接复用外壳的 `.gm-fold` 配方（details+summary+grid-rows
+   过渡 + 全站唯一的驱动 JS + page-qa 的 fold-* 四条契约）。
+   ══════════════════════════════════════════════════════════════════════════ */
+
+/* ── 22b.1 IndexBar 字母索引栏（11.2.3）──────────────────────────────── */
+.pm-idx{display:flex;gap:10px;align-items:stretch}
+.pm-idxlist{position:relative;flex:1;min-width:0;height:216px;overflow-y:auto;overscroll-behavior:contain;
+  touch-action:pan-y}
+.pm-idxgroup{position:sticky;top:0;z-index:2;margin:0 0 6px;padding:4px 12px;border-radius:18px;
+  font-size:12px;font-weight:600;color:var(--text-2);background:var(--pm-solid);
+  border:1px solid var(--pm-edge)}
+.pm-idxrow{display:flex;align-items:center;gap:10px;min-height:44px;margin:0 0 6px;padding:8px 12px;
+  border-radius:18px;font-size:14px;background:var(--pm-input);border:1px solid var(--pm-divider)}
+.pm-idxrow b{font-weight:500}
+.pm-idxrow span{margin-left:auto;font-size:12px;color:var(--text-3)}
+/* 索引轨：整体是一个**可拖拽的连续表面**（iOS 惯例），单个字母不是点击目标 ——
+   26 个字母若各自要求 44 热区，在 216px 高的轨里必然互相重叠（10.4 反例）。
+   键盘等价路径：轨聚焦后 ↑/↓ 切字母。 */
+.pm-idxrail{flex:none;width:44px;display:flex;flex-direction:column;border-radius:18px;
+  background:var(--pm-input);border:1px solid var(--pm-divider);touch-action:none;
+  user-select:none;overflow:hidden}
+.pm-idxrail span{flex:1;display:flex;align-items:center;justify-content:center;
+  font-size:10px;font-weight:600;color:var(--text-3);line-height:1}
+.pm-idxrail span.on{color:var(--pm-rose-text);font-size:12px}
+.pm-idxbadge{position:absolute;left:50%;top:50%;z-index:3;width:56px;height:56px;border-radius:50%;
+  display:flex;align-items:center;justify-content:center;pointer-events:none;
+  font-size:24px;font-weight:700;color:#B23A63;background:rgba(255,255,255,.88);
+  border:1px solid rgba(232,93,143,.3);box-shadow:0 8px 24px rgba(58,52,84,.18);
+  opacity:0;transform:translate(-50%,-50%) scale(.9);
+  transition:opacity .18s ease,transform .18s var(--spring)}
+[data-theme="dark"] .pm-idxbadge{background:rgba(35,34,42,.92);color:#FFC4D6}
+.pm-idxbadge.is-on{opacity:1;transform:translate(-50%,-50%) scale(1)}
+
+/* ── 22b.2 Calendar 月历（11.6.5）────────────────────────────────────── */
+.pm-cal{border-radius:20px;padding:12px;background:var(--pm-solid);border:1px solid var(--pm-edge)}
+.pm-calhead{display:flex;align-items:center;gap:6px;margin-bottom:6px}
+.pm-calhead b{flex:1;font-size:16px;font-weight:600;text-align:center}
+.pm-calhead button{width:44px;height:44px;border-radius:50%;display:flex;align-items:center;
+  justify-content:center;color:var(--text-2);flex:none}
+.pm-calhead button:active{transform:scale(.92);background:var(--pm-solid)}
+.pm-calwk,.pm-calgrid{display:grid;grid-template-columns:repeat(7,1fr)}
+.pm-calwk span{padding:4px 0;text-align:center;font-size:12px;color:var(--text-3)}
+/* 日期格：**按钮盒** = 44×44（热区达标），视觉芯片是里面的 36×36 —— 用内层承载底色，
+   这样既有格间距，又不会因为 margin 把实测热区压到 44 以下（10.4 实测坑）。 */
+.pm-calday{height:44px;display:flex;align-items:center;justify-content:center;border-radius:18px;
+  font-size:14px;color:var(--text);position:relative}
+.pm-calchip{width:36px;height:36px;border-radius:18px;display:flex;align-items:center;justify-content:center;
+  position:relative;font-variant-numeric:tabular-nums}
+.pm-calday.today .pm-calchip{background:var(--pm-solid);color:var(--pm-rose-text);font-weight:600;
+  border:1px solid var(--pm-edge)}
+.pm-calday.on .pm-calchip{background:var(--mmh-grad-action-hc);color:var(--text);font-weight:600}
+[data-theme="dark"] .pm-calday.on .pm-calchip{color:#1B1A21}
+.pm-calday.mute .pm-calchip{color:var(--text-3)}
+.pm-calday i{position:absolute;left:50%;bottom:2px;transform:translateX(-50%);display:flex;gap:2px}
+.pm-calday i b{width:4px;height:4px;border-radius:50%;background:var(--sem-special)}
+.pm-calday i b.v{background:var(--sem-positive)}
+.pm-calday i b.c{background:var(--sem-warn)}
+.pm-calagenda{margin-top:12px;padding-top:10px;border-top:1px solid var(--pm-divider)}
+.pm-calagenda b{font-size:12px;color:var(--text-3);font-weight:500}
+.pm-calagenda ul{margin:6px 0 0;padding-left:18px;font-size:14px;line-height:1.9}
+.pm-calfade{animation:pmFade .2s var(--ease)}
+
+/* ── 22b.3 NumberKeyboard 数字键盘（11.6.10）────────────────────────── */
+.pm-numdisp{display:flex;align-items:center;gap:10px;padding:12px 16px;border-radius:18px;
+  background:var(--pm-input);border:1px solid var(--pm-divider)}
+.pm-numdisp .lbl{font-size:12px;color:var(--text-3)}
+.pm-numdisp b{margin-left:auto;font-size:24px;font-weight:700;font-variant-numeric:tabular-nums}
+.pm-numkbd{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;padding:10px;border-radius:20px;
+  background:var(--pm-glass);border:1px solid var(--pm-edge)}
+.pm-numkey{min-height:48px;border-radius:18px;display:flex;align-items:center;justify-content:center;
+  font-size:18px;font-weight:600;color:var(--text);background:var(--pm-solid);
+  border:1px solid var(--pm-edge)}
+.pm-numkey:active{transform:scale(.97)}
+.pm-numkey.fn{font-size:15px;color:var(--text)}
+.pm-numkey.ok{background:var(--mmh-grad-action-hc);border-color:transparent;
+  box-shadow:0 1px 2px rgba(178,58,99,.22),0 8px 20px rgba(240,127,163,.30)}
+[data-theme="dark"] .pm-numkey.ok{color:#1B1A21}
+
+/* ── 22b.4 WaterMark 水印（11.6.13）──────────────────────────────────── */
+.pm-wmwrap{position:relative;border-radius:20px;overflow:hidden}
+.pm-wm{position:absolute;inset:0;width:100%;height:100%;pointer-events:none;opacity:.06}
+[data-theme="dark"] .pm-wm{opacity:.08}
+
 /* ── 19 · TabBar（10.3.2）────────────────────────────────────────────── */
 .tabbar{position:fixed;left:50%;bottom:calc(env(safe-area-inset-bottom) + 12px);transform:translateX(-50%);
   z-index:30;width:min(406px,calc(100% - 24px));display:flex;padding:6px;border-radius:22px;
@@ -961,6 +1052,45 @@ svg.i{width:22px;height:22px;stroke:currentColor;fill:none;stroke-width:1.7;
         </div>
       </div>
 
+<h2 class="sec">服务对象速查 <small>IndexBar 索引栏（11.2.3）</small></h2>
+      <div class="gcard" style="margin-bottom:14px">
+        <div class="pm-idx">
+          <div class="pm-idxlist" id="pmIdxList" role="list" aria-label="服务对象分组列表">
+            <div class="pm-idxbadge" id="pmIdxBadge" aria-hidden="true">A</div>
+          </div>
+          <div class="pm-idxrail" id="pmIdxRail" role="listbox" tabindex="0" aria-label="字母索引（↑/↓ 切换，或按住拖动）"></div>
+        </div>
+        <div style="margin-top:10px;font-size:12px;color:var(--text-3)">拖动右侧索引轨或按 ↑/↓ 跳组；分组标题吸顶；当前字母以 56px 玻璃圆浮标放大</div>
+      </div>
+
+      <h2 class="sec">队列筛选 <small>Collapse 折叠面板（11.2.6 · 复用外壳配方）</small></h2>
+      <div style="margin-bottom:14px">
+        <details class="gm-fold" data-fold-group="pmqueue" data-tone="attention">
+          <summary>
+            <span class="gm-fold__dot"></span>
+            随访类型
+            <svg class="gm-fold__arr" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg>
+          </summary>
+          <div class="gm-fold__body"><div><p>常规随访 · 高危随访 · 疫苗补种 · 营养门诊四类；筛选项与列表共用同一份状态。</p></div></div>
+        </details>
+        <details class="gm-fold" data-fold-group="pmqueue" data-tone="risk">
+          <summary>
+            <span class="gm-fold__dot"></span>
+            风险等级
+            <svg class="gm-fold__arr" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg>
+          </summary>
+          <div class="gm-fold__body"><div><p>绿/黄/橙/红/紫五色仅用于妊娠风险分级（02.10）；红级置顶且不可一键忽略（15.2）。</p></div></div>
+        </details>
+        <details class="gm-fold" data-fold-group="pmqueue" data-tone="info">
+          <summary>
+            <span class="gm-fold__dot"></span>
+            时间范围
+            <svg class="gm-fold__arr" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg>
+          </summary>
+          <div class="gm-fold__body"><div><p>今日 / 本周 / 本月 / 自定义；切换后队列排序保持「风险优先 → 逾期在前 → 到期日升序」。</p></div></div>
+        </details>
+      </div>
+
       <h2 class="sec">登记与随访 <small>Cell 单元行 · 分组卡</small></h2>
       <div class="pm-cellgroup" style="margin-bottom:14px">
         <button class="pm-cell" type="button" data-sheet="doctor">
@@ -1011,6 +1141,54 @@ svg.i{width:22px;height:22px;stroke:currentColor;fill:none;stroke-width:1.7;
           <span class="md"><b>产检备注</b><span>记录医生口头交代事项</span></span>
           <svg class="i ch" style="width:16px;height:16px" viewBox="0 0 24 24"><path d="m9 5 7 7-7 7"/></svg>
         </button>
+      </div>
+
+<h2 class="sec">产检与接种日历 <small>Calendar 月历（11.6.5）</small></h2>
+      <div class="pm-cal" id="pmCal" style="margin-bottom:14px">
+        <div class="pm-calhead">
+          <button type="button" id="pmCalPrev" aria-label="上个月">
+            <svg class="i" viewBox="0 0 24 24"><path d="M15 5.5 8.5 12l6.5 6.5"/></svg>
+          </button>
+          <b id="pmCalTitle" aria-live="polite">2026 年 9 月</b>
+          <button type="button" id="pmCalNext" aria-label="下个月">
+            <svg class="i" viewBox="0 0 24 24"><path d="m9 5.5 6.5 6.5L9 18.5"/></svg>
+          </button>
+        </div>
+        <div class="pm-calwk" aria-hidden="true">
+          <span>一</span><span>二</span><span>三</span><span>四</span><span>五</span><span>六</span><span>日</span>
+        </div>
+        <div class="pm-calgrid" id="pmCalGrid" role="grid" aria-label="产检与接种日历"></div>
+        <div class="pm-calagenda">
+          <b>当日安排（<span id="pmCalDay">—</span>）</b>
+          <ul id="pmCalList"></ul>
+        </div>
+      </div>
+
+      <h2 class="sec">报告预览 · 水印 <small>WaterMark（11.6.13）</small></h2>
+      <div class="pm-wmwrap gcard" style="margin-bottom:14px">
+        <svg class="pm-wm" aria-hidden="true">
+          <defs>
+            <pattern id="pmwm" width="200" height="132" patternUnits="userSpaceOnUse" patternTransform="rotate(-45)">
+              <text x="4" y="66" font-size="12" fill="#E85D8F">妈咪好 · 张敏 · MMH-2025-0102</text>
+            </pattern>
+          </defs>
+          <rect width="100%" height="100%" fill="url(#pmwm)"/>
+        </svg>
+        <div style="position:relative;z-index:1">
+          <div style="font-size:15px;font-weight:600;margin-bottom:6px">孕 28 周产检小结</div>
+          <div style="font-size:12px;color:var(--text-3);line-height:1.9">档案号 MMH-2025-0102 · 市妇幼保健院 儿保科<br>导出/预览类页面按 11.6.13 加浅色玫瑰 45° 水印（opacity .06–.08），不干扰可读性。</div>
+        </div>
+      </div>
+
+      <h2 class="sec">数值录入 <small>NumberKeyboard（11.6.10）</small></h2>
+      <div class="gcard" style="display:flex;flex-direction:column;gap:12px;margin-bottom:14px">
+        <button class="pm-numdisp" type="button" id="pmNumDisp" aria-label="身高，点击唤出数字键盘">
+          <span class="lbl">身高</span>
+          <b id="pmNumVal">—</b>
+          <span class="lbl">cm</span>
+        </button>
+        <div class="pm-numkbd" id="pmNumKbd" role="group" aria-label="数字键盘"></div>
+        <div style="font-size:12px;color:var(--text-3)">点输入条唤出；与系统键盘二选一（正式实现优先 <b>inputmode</b>，自绘仅用于统一观感）</div>
       </div>
 
       <h2 class="sec">随访分类 <small>Selector 选择卡（11.6.4）</small></h2>
@@ -1216,6 +1394,7 @@ svg.i{width:22px;height:22px;stroke:currentColor;fill:none;stroke-width:1.7;
     <li>Stepper · OTP · <code>11.2.11 / 11.2.14</code></li>
     <li>CapsuleTabs · Selector · <code>11.6.3 / 11.6.4</code></li>
     <li>Popup / Mask · SafeArea · Sticky · ErrorBlock · <code>11.6.6–11.6.9</code></li>
+    <li>IndexBar · Collapse · Calendar · NumberKeyboard · WaterMark · <code>11.2.3 / 11.2.6 / 11.6.5 / 11.6.10 / 11.6.13</code></li>
     <li>暗色档映射 · <code>02 · 2.1.9</code></li>
     <li>玻璃节点 ≤4/屏 · 热区 ≥44 · <code>10.8 / 10.4</code></li>
   </ul>
@@ -2096,6 +2275,200 @@ svg.i{width:22px;height:22px;stroke:currentColor;fill:none;stroke-width:1.7;
       }, 1400);
     });
   }
+
+/* ── ㉒ 补齐 11 章缺的组件：IndexBar / Calendar / NumberKeyboard（11.2.3 / 11.6.5 / 11.6.10）
+        折叠不在这里实现：`details.gm-fold` 由**外壳的全局驱动**接管（展开/收起、
+        grid-template-rows 过渡、aria-expanded、同组 >3 自动收起最早那组）。
+        模块侧只放标记 —— 一份配方一处实现，是本项目反复强调的纪律。 */
+  (function initIndexBar(){
+    const list = document.getElementById("pmIdxList"), rail = document.getElementById("pmIdxRail"),
+          badge = document.getElementById("pmIdxBadge");
+    if (!list || !rail || !badge) return;
+    /* 数据按拼音首字母分组（妇幼场景：档案/通讯录速查） */
+    const GROUPS = [
+      { k: "A", names: [["安琪", "孕 12 周"], ["敖小满", "6 月龄"]] },
+      { k: "B", names: [["白露", "孕 30 周"]] },
+      { k: "C", names: [["陈知夏", "18 月龄"], ["崔明月", "孕 8 周"]] },
+      { k: "L", names: [["李念", "12 月龄"]] },
+      { k: "W", names: [["王小雨", "18 月龄 · 高危"]] },
+      { k: "Z", names: [["张敏", "孕 28 周"], ["赵果果", "3 月龄"]] },
+      { k: "#", names: [["（未登记首字母）", "—"]] },
+    ];
+    const ALPHA = "ABCDEFGHIJKLMNOPQRSTUVWXYZ#".split("");
+    list.insertAdjacentHTML("beforeend", GROUPS.map(function(g){
+      /* 分组头用 `data-g` 而不是 id：构建会给 id 加模块前缀，而
+         `getElementById("pmIdxG" + letter)` 这种**拼接**写法逃过前缀改写 → 永远查不到
+         （本模块实测踩到：浮标动了、列表不滚）。data 属性不受改写影响。 */
+      return '<div class="pm-idxgroup" data-g="' + g.k + '" role="presentation">' + g.k + "</div>" +
+        g.names.map(function(n){
+          return '<div class="pm-idxrow"><b>' + n[0] + "</b><span>" + n[1] + "</span></div>";
+        }).join("");
+    }).join(""));
+    rail.innerHTML = ALPHA.map(function(c){
+      return '<span data-k="' + c + '"' + (GROUPS.some(function(g){ return g.k === c; }) ? "" : ' data-empty="1"') + ">" + c + "</span>";
+    }).join("");
+    const cells = Array.prototype.slice.call(rail.children);
+    let cur = "";
+    function go(letter, flash){
+      const cell = cells.find(function(c){ return c.getAttribute("data-k") === letter; });
+      if (!cell) return;
+      cells.forEach(function(c){ c.classList.toggle("on", c === cell); });
+      if (badge) badge.textContent = letter;
+      const g = list.querySelector('[data-g="' + letter + '"]');
+      if (g) {
+        /* 用 rect 差值而不是 offsetTop：吸顶标题的 offsetTop 语义易算偏，
+           且列表可能有别的定位祖先。差值法对两者都稳。 */
+        const lr = list.getBoundingClientRect(), gr = g.getBoundingClientRect();
+        list.scrollTop += (gr.top - lr.top) - 4;
+      }
+      if (letter !== cur) { announce("已跳到 " + letter + " 组"); cur = letter; }
+      if (flash && badge) {
+        badge.classList.add("is-on");
+        clearTimeout(badge._t);
+        badge._t = setTimeout(function(){ badge.classList.remove("is-on"); }, 700);
+      }
+    }
+    /* 索引轨 = 一个连续表面：按下/拖动按 Y 位置映射字母（iOS 惯例，不做 26 个独立小热区） */
+    function letterAt(clientY){
+      const r = rail.getBoundingClientRect();
+      const i = Math.floor(((clientY - r.top) / r.height) * cells.length);
+      return cells[Math.max(0, Math.min(cells.length - 1, i))].getAttribute("data-k");
+    }
+    let dragging = false;
+    rail.addEventListener("pointerdown", function(e){
+      dragging = true;
+      try { rail.setPointerCapture(e.pointerId); } catch (err) {}
+      go(letterAt(e.clientY), true);
+    });
+    rail.addEventListener("pointermove", function(e){ if (dragging) go(letterAt(e.clientY), true); });
+    /* ⚠️ 停止拖动必须**显式释放 pointer capture**：只把 dragging 置 false 不够 ——
+       指针在视口外抬起（或被系统手势打断）时 pointerup 收不到，capture 会一直挂在索引轨上，
+       此后页面上任何点击都会被劫持到它（表现为"折叠点不开、按钮没反应"）。
+       实测路径：从索引轨按下 → 移出视口 → 松开 → 再点别处，全部失效。 */
+    function stop(e){
+      dragging = false;
+      try {
+        if (e && e.pointerId != null && rail.hasPointerCapture && rail.hasPointerCapture(e.pointerId)) {
+          rail.releasePointerCapture(e.pointerId);
+        }
+      } catch (err) {}
+    }
+    rail.addEventListener("pointerup", stop);
+    rail.addEventListener("pointercancel", stop);
+    rail.addEventListener("lostpointercapture", function(){ dragging = false; });
+    rail.addEventListener("keydown", function(e){
+      const i = Math.max(0, ALPHA.indexOf(cur));
+      if (e.key === "ArrowDown") { e.preventDefault(); go(ALPHA[Math.min(ALPHA.length - 1, i + 1)], true); }
+      else if (e.key === "ArrowUp") { e.preventDefault(); go(ALPHA[Math.max(0, i - 1)], true); }
+      else if (e.key === "Home") { e.preventDefault(); go("A", true); }
+      else if (e.key === "End") { e.preventDefault(); go("#", true); }
+    });
+    /* 点字母（含空白字母）也可用：点击落在轨上同样按位置解析 */
+    rail.addEventListener("click", function(e){ go(letterAt(e.clientY), true); });
+    go("A");
+  })();
+
+  (function initCalendar(){
+    const grid = document.getElementById("pmCalGrid"), title = document.getElementById("pmCalTitle"),
+          dayLbl = document.getElementById("pmCalDay"), agenda = document.getElementById("pmCalList");
+    if (!grid || !title || !dayLbl || !agenda) return;
+    const WK = ["一","二","三","四","五","六","日"];
+    const TODAY = new Date(2026, 8, 13);            /* 示例「今天」固定，保证演示可复现 */
+    /* 事件点：产检 / 接种 / 儿保三类（11.6.5 每格 ≤3 个） */
+    const EVENTS = {
+      "2026-09-05": [["产检", "v"], ["接种", "c"]],
+      "2026-09-13": [["产检", ""], ["儿保", "v"], ["接种", "c"]],
+      "2026-09-20": [["儿保", "v"]],
+      "2026-09-27": [["产检", ""]],
+      "2026-10-04": [["接种", "c"]],
+    };
+    const AGENDA = {
+      "2026-09-13": ["09:30 产检 · 糖耐量试验（市妇幼 3 楼）", "14:00 儿保体检 · 3 月龄", "电话提醒 · 王小雨高危随访"],
+      "2026-09-05": ["10:00 产检 · 大排畸复查", "15:00 乙肝疫苗第 2 剂"],
+      "2026-09-20": ["11:00 儿保体检 · 18 月龄"],
+      "2026-09-27": ["09:00 产检 · 常规"],
+      "2026-10-04": ["10:30 流感疫苗接种"],
+    };
+    let view = { y: TODAY.getFullYear(), m: TODAY.getMonth() };
+    let sel = new Date(TODAY);
+    const key = (d) => d.getFullYear() + "-" + String(d.getMonth() + 1).padStart(2, "0") + "-" + String(d.getDate()).padStart(2, "0");
+    function render(fade){
+      const first = new Date(view.y, view.m, 1);
+      const startPad = (first.getDay() + 6) % 7;                 /* 周一为首列 */
+      const days = new Date(view.y, view.m + 1, 0).getDate();
+      title.textContent = view.y + " 年 " + (view.m + 1) + " 月";
+      let html = "";
+      for (let i = 0; i < startPad; i++) html += '<span class="pm-calday mute" aria-hidden="true"></span>';
+      for (let d = 1; d <= days; d++) {
+        const date = new Date(view.y, view.m, d), k = key(date);
+        const ev = EVENTS[k] || [];
+        const cls = ["pm-calday"];
+        if (k === key(TODAY)) cls.push("today");
+        if (k === key(sel)) cls.push("on");
+        html += '<button type="button" class="' + cls.join(" ") + '" role="gridcell" data-k="' + k + '"'
+          + ' aria-selected="' + (k === key(sel) ? "true" : "false") + '"'
+          + ' aria-label="' + (view.m + 1) + " 月 " + d + " 日" + (ev.length ? "，" + ev.length + " 项安排" : "") + '">'
+          + '<span class="pm-calchip">' + d + (ev.length ? '<i aria-hidden="true">' + ev.map(function(e){ return '<b class="' + e[1] + '"></b>'; }).join("") + "</i>" : "")
+          + "</span></button>";
+      }
+      grid.innerHTML = html;
+      if (fade) { grid.classList.remove("pm-calfade"); void grid.offsetWidth; grid.classList.add("pm-calfade"); }
+      grid.querySelectorAll("[data-k]").forEach(function(b){
+        b.addEventListener("click", function(){ sel = new Date(b.getAttribute("data-k")); render(false); });
+      });
+      const k = key(sel), list = AGENDA[k] || [];
+      dayLbl.textContent = (sel.getMonth() + 1) + " 月 " + sel.getDate() + " 日 · 周" + WK[(sel.getDay() + 6) % 7];
+      agenda.innerHTML = list.length
+        ? list.map(function(t){ return "<li>" + t + "</li>"; }).join("")
+        : '<li style="color:var(--text-3);list-style:none;margin-left:-18px">当天没有安排</li>';
+    }
+    const prev = document.getElementById("pmCalPrev"), next = document.getElementById("pmCalNext");
+    if (prev) prev.addEventListener("click", function(){
+      view = view.m === 0 ? { y: view.y - 1, m: 11 } : { y: view.y, m: view.m - 1 };
+      render(true);
+    });
+    if (next) next.addEventListener("click", function(){
+      view = view.m === 11 ? { y: view.y + 1, m: 0 } : { y: view.y, m: view.m + 1 };
+      render(true);
+    });
+    render(false);
+  })();
+
+  (function initNumPad(){
+    const disp = document.getElementById("pmNumDisp"), val = document.getElementById("pmNumVal"),
+          kbd = document.getElementById("pmNumKbd");
+    if (!disp || !val || !kbd) return;
+    const KEYS = ["1","2","3","4","5","6","7","8","9","del","0","ok"];
+    const LABEL = { del: "删除", ok: "完成" };
+    kbd.innerHTML = KEYS.map(function(k){
+      const cls = k === "ok" ? "pm-numkey ok" : k === "del" ? "pm-numkey fn" : "pm-numkey";
+      return '<button type="button" class="' + cls + '" data-k="' + k + '"' + '>' + (LABEL[k] || k) + "</button>";
+    }).join("");
+    let buf = "", shown = false;
+    function paint(){
+      val.textContent = buf ? buf : "—";
+    }
+    kbd.querySelectorAll("[data-k]").forEach(function(b){
+      b.addEventListener("click", function(){
+        const k = b.getAttribute("data-k");
+        if (k === "del") buf = buf.slice(0, -1);
+        else if (k === "ok") {
+          if (!buf) { toast("请先输入数值", "warning"); return; }
+          toast("已记录身高 " + buf + " cm");
+          announce("已记录身高 " + buf + " 厘米");
+          buf = ""; paint(); return;
+        } else if (buf.length < 5) buf += k;
+        paint();
+      });
+    });
+    disp.addEventListener("click", function(){
+      shown = !shown;
+      kbd.style.display = shown ? "" : "none";
+      if (shown) { toast("已唤出数字键盘（自绘，与系统键盘二选一）"); kbd.querySelector("button").focus(); }
+    });
+    kbd.style.display = "none";
+    paint();
+  })();
 
   /* ── ㉑ 首屏同步 ──────────────────────────────────────────────────── */
   showView("home");

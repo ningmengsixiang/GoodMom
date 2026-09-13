@@ -979,6 +979,13 @@ body{margin:0;font-family:var(--sh-font);color:var(--sh-t);line-height:1.7;-webk
 .gm-fold{border-radius:20px;overflow:hidden;
   background:linear-gradient(160deg,rgba(255,255,255,.62),rgba(255,255,255,.3));
   border:1px solid var(--lg-divider,rgba(58,52,84,.10))}
+/* ⚠️ 折叠面板原先只有**写死的浅玻璃底**，没有暗色档 —— 任何在暗色下使用
+   `details.gm-fold` 的模块都会得到"页面翻了、这块没翻"的浅板（实测：暗色模块里
+   折叠正文 1.39:1，基本不可读）。浅色档保持逐字不变（既有页面零影响），只补暗档。 */
+[data-theme="dark"] .gm-fold{
+  background:linear-gradient(160deg,rgba(255,255,255,.10),rgba(255,255,255,.06));
+  border-color:rgba(255,255,255,.14)}
+[data-theme="dark"] .gm-fold>summary:hover{background:rgba(255,255,255,.08)}
 .gm-fold+.gm-fold{margin-top:8px}
 .gm-fold>summary{display:flex;align-items:center;gap:10px;min-height:44px;
   padding:12px 16px;cursor:pointer;list-style:none;

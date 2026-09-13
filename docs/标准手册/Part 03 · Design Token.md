@@ -22,7 +22,7 @@
 
 ## 3 参考数值（只列已收敛核心，全表以 02 章为准）
 - 文本：primary `#343A46`／secondary `#4F5B6E`（D7）／tertiary `#9AA2B0`（仅大字号）。
-- 六语义 alias：positive #2F8F76 / info #4A76D0 / attention #B9771C / risk #D35466 / neutral #757E8E / special #7A5CE0。
+- 六语义 alias（浅底档）：positive #25715D / info #3261C1 / attention #8D5A15 / risk #B72F42 / neutral #5E6673 / special #6A48DC。
 - 白字 solid：positive #1E6B52 / attention #9A5A0E / danger #B04052 / info #385CB3 / special #6242B8。
 - 圆角（02.4）：容器 40／卡 lg28·卡 22／控件 20／按钮 26·22·18（底 ≥16）/chip 999。
 - 边框宽度（02.7.1）：hairline/0.5/1/1.5/2px 四档 + 焦点环（`--lg-ring-width:2px`/`--lg-ring-offset:2px`）；禁 3px 以上常规描边；**加粗不许吃布局**（用 `box-shadow`/`outline`，禁改 `border-width`）。

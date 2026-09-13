@@ -1,3 +1,69 @@
+## [V2.9] · 组件契约对齐（React 渲染级验收 + 六语义色口径收敛 + 补齐 5 个组件）
+
+> 依据：用户「优化组件，做未做的」。前两轮登记的未做项在本轮清掉两项、
+> 并挖出一个**红了很久没人知道**的测试与一层系统性口径漂移。
+
+### 一、React 组件库此前没有任何渲染级验收（Vue 有 37 项）
+| 事实 | 证据 |
+| --- | --- |
+| Vue 侧有 `goodmom-vue/playground/smoke.mjs`（37 项：DOM/语义色/键盘/暗色/响应式） | 但它**不在 CI 里** |
+| React 侧一项都没有 | `find goodmom-ui -name "*.test.*"` 为空；CI 只跑 typecheck + 构建 |
+| 后果 | 上轮实测的两个真缺陷（`GmProgress` 环形直径被 Arco 的 `size` 吃掉、`GmClientCard.actions` 契约与 `tags` 不一致）都属于"类型能过、渲染不对" |
+
+本轮新增 `goodmom-ui/playground/`（`index.html` + `main.tsx` + `build.mjs` + `smoke.mjs`，**56 项断言**）：
+用 **esbuild** 打包（本仓离线，根 node_modules 没有 `@vitejs/plugin-react` 也装不上；Vue 必须用 vite 是因为 SFC 需编译，React 只要 JSX）。
+覆盖：19 个组件全部渲染、虚拟列表窗口化（1284 条只渲染 14 项 / inner 66768px）、六语义色与业务字典映射、
+D9 按钮契约（亮粉底必配深字 + 尺寸类不得覆盖类型底色）、进度条 aria 与**环形直径 88/120 两档**、
+RiskPicker/Cascader 键盘（方向键、roving tabindex 每列恰好 1、Esc 归还焦点）、按容器宽度切形态（table/condensed/card）、
+暗色档**组件真的换档**（卡片渐变 + 语义色点翻浅档）、Toast role 分流、无控制台错误。
+
+### 二、Vue 的 37 项冒烟早就红了（32/37），根因是一层系统性口径漂移
+实测跑一遍：**5 条语义色断言失败**。它照抄的是 **V2.8「语义色板达 AA」之前**的值，而深档化后：
+
+| 载体 | 当时写的 | 实现 | 该值作文字的实测 |
+| --- | --- | --- | --- |
+| 02 · 2.1.9 映射表 B「浅底用」列 | `#2F8F76 / #4A76D0 / #B9771C / #D35466 / #757E8E / #7A5CE0` | `#25715D / #3261C1 / #8D5A15 / #B72F42 / #5E6673 / #6A48DC` | 旧值 **3.67–4.38:1（不达标）**；新值 **5.79–6.00:1** |
+
+同一批旧值还散落在 **8 份文档**（02 / 14 / 03 / skill reference / 标准手册 Part 03 / UIUX 手册 / 18 报告 / 问题清单）——
+其中 `docs/设计系统问题清单.md` 的 ❌ 对比度表**正是当年把它们深档化的证据**，而规范表格忘了跟。
+
+本轮处理（区分「规范性载体」与「历史留痕」，不涂改历史）：
+- **更新**：02 表 B（并补「浅底实测」列）、14 · 4.4.5、03、skill `reference/tokens.md`、标准手册 Part 03、UIUX 手册、18 报告；
+- **留痕不改写**：`docs/审查决策记录.md`（加补记：裁决不变、只是档位变）与 `docs/设计系统问题清单.md`（标注"已修为 …"）；
+- **修 Vue 冒烟**的 5 条期望值 → **37/37**；React 冒烟同源取值。
+- **新增门禁 `audit.py --only semantic-parity`**：六语义浅底档必须在 02 / 14 / skill reference 与 `theme.css` 之间一致
+  （历史文档不参与）。它上线当天就抓出我漏改的 4 处（neutral / special）。**负向测试 +3**。
+
+### 三、CI 补齐（这两支测试此前都不在 CI，所以都烂了）
+新增 `component-contract` job：React 契约 56 项 + Vue 契约 37 项；
+新增 `app-smoke` job：`scripts/app-smoke.mjs`（**26 项**）——产品工程的三端形态与四态。
+后者的价值已用注入验证：把上轮修掉的 StrictMode 缺陷（组件级 `alive` ref）写回去 → 冒烟立刻 FAIL。
+
+### 四、补齐 11 章缺的 5 个组件（预览页此前只有规范、没有演示）
+`IndexBar 11.2.3` · `Collapse 11.2.6` · `Calendar 11.6.5` · `NumberKeyboard 11.6.10` · `WaterMark 11.6.13`。
+折叠**不另写一份**：直接复用外壳的 `details.gm-fold` 配方 + 全站唯一驱动 + `page-qa` 的 fold-* 四条契约。
+
+补的时候踩到并修掉 4 个真实缺陷（每条都写了注释与门禁断言）：
+1. **索引轨不释放 pointer capture**：只把 `dragging=false` 不够 —— 指针在视口外抬起时 `pointerup` 收不到，
+   capture 一直挂在轨上，此后**页面任何点击都被劫持**（表现为"折叠点不开、按钮没反应"）。
+2. **拼接 id 逃过构建的前缀改写**：`getElementById("pmIdxG" + letter)` 不是字面量 → 查不到（浮标动了、列表不滚）。
+   改用 `data-g` 属性查找 + rect 差值滚动。
+3. **`.gm-fold` 只有写死的浅玻璃底，没有暗色档**（外壳级缺陷，影响所有暗色模块）：暗色下折叠正文实测 **1.39:1**。
+   已补暗档（浅档逐字未改）。
+4. **模块未声明外壳配方读的系统 Token**（`data-present` 门禁拦下）：暗色下会"页面翻了、折叠内容没翻"。已接 `--lg-text-primary/secondary`、`--lg-divider`。
+另修：索引轨当前字母（暗档 1.55:1）、数字键盘功能键（4.24:1）、月历今天格（写死浅底不翻档）。
+
+### 结果
+`audit.py` PASS（新增 semantic-parity）· `page-qa.mjs --ci` **P0–P2 = 0** · `a11y-dom` 0 ·
+`parity` 15/15 · `site-smoke` 48/48 · `mobile-smoke` **40 → 60**（含 20 条新组件断言）·
+React 契约 56/56 · Vue 契约 **32 → 37/37** · app-smoke 26/26 · 负向测试 **49 → 52** · 架构门禁 OK。
+
+### 仍未做（登记在案）
+- `childcare` / `vaccine` / `institution` / `account` 四个模块仍只有边界与占位页：
+  它们的**领域数据契约**（五健检查字段、免疫规划表、排班维度）属 13 章业务决策，需要业务/临床口径输入后再落页面，不宜自行发明。
+- 预览页长列表仍是「3+3 行」演示加载更多，未接真实窗口化（窗口化实现在「交互范式」模块的 VirtualList 与 `GmVirtualList`）。
+- 移动端 Cascader 的 picker 形态未在预览页演示（组件在代码库里，`GmCascader mode="picker"`）。
+
 ## [V2.9] · 产品前端工程总纲（19 章 · 七项决定落地）
 
 > 依据：用户点选的两项前提 —— 落点＝本仓 `frontend-app`；技术方向＝**React + Arco + `@goodmom/ui`**。

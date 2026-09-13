@@ -121,7 +121,17 @@ check("遮罩关闭后不再吃点击（透明层陷阱）", await page.evaluate
 /* ── 6. 手势区：下拉刷新 + 上拉加载 ──────────────────────────────────── */
 await page.locator(`${M}.tabbar .tab`).nth(1).click();
 await page.waitForTimeout(400);
+/* 切页会平滑滚回模块顶部；页面变长后固定 400ms 可能仍在滚动，
+   于是鼠标坐标失效、拖拽落空 —— 表现为"下拉刷新坏了"，实际是测量问题。
+   这里等滚动稳定，并**前置断言**拖拽起点确实在容器内，让错位能自曝。 */
+await page.evaluate(() => { window.scrollTo(0, 0); });
+await page.waitForTimeout(400);
 const gest = await page.locator(id("pmGest")).boundingBox();
+const gestureHit = await page.evaluate(([x, y]) => {
+  const el = document.elementFromPoint(x, y);
+  return !!(el && el.closest && el.closest('[id$="pmGest"]'));
+}, [gest.x + gest.width / 2, gest.y + 30]);
+check("下拉刷新起点落在手势区内（未被吸顶条遮挡）", gestureHit);
 const rows0 = await page.locator(`${id('pmGestList')} .pm-swipe`).count();
 await page.mouse.move(gest.x + gest.width / 2, gest.y + 30);
 await page.mouse.down();
@@ -256,6 +266,108 @@ const sticky = await page.evaluate(() => {
 });
 check("滚动后模块吸顶条不被外壳导航遮挡（--sh-nav-h 派生）",
   sticky.navY >= sticky.shellBottom, JSON.stringify(sticky));
+
+/* ── 13. 11 章补齐的 5 个组件（IndexBar / Collapse / Calendar / NumberKeyboard / WaterMark）
+       2026 年之前这些只在规范里、预览页没有；补进来时踩到 4 个真实缺陷，
+       每条断言都对应其中一处，删掉就会重新静默：
+         · 索引轨不释放 pointer capture → 后续点击全被劫持（"折叠点不开"）
+         · 拼接 id `getElementById("pmIdxG"+letter)` 逃过前缀改写 → 浮标动了、列表不滚
+         · 折叠面板只有浅玻璃底（外壳写死，无暗档）→ 暗色模块里 1.39:1
+         · 模块未声明外壳配方读的 --lg-text-* → 暗底深字（data-present 门禁拦下）
+   ───────────────────────────────────────────────────────────────────────── */
+await page.locator(`${M}.tabbar .tab`).nth(1).click();
+await page.waitForTimeout(450);
+
+check("IndexBar：A–Z+# 共 27 格", (await page.locator(`${M}.pm-idxrail span`).count()) === 27,
+  `${await page.locator(`${M}.pm-idxrail span`).count()} 格`);
+check("IndexBar：分组标题吸顶", await page.evaluate(() =>
+  getComputedStyle(document.querySelector("#gm-mod-preview-mobile .pm-idxgroup[data-g]")).position === "sticky"));
+await page.locator(`${M}.pm-idxrail`).scrollIntoViewIfNeeded();
+await page.waitForTimeout(300);
+const railBox = await page.locator(`${M}.pm-idxrail`).boundingBox();
+await page.mouse.move(railBox.x + 22, railBox.y + railBox.height * 0.94);
+await page.mouse.down();
+await page.mouse.up();
+await page.waitForTimeout(400);
+const idx = await page.evaluate(() => {
+  const b = document.querySelector("#gm-mod-preview-mobile [id$='pmIdxBadge']");
+  const l = document.querySelector("#gm-mod-preview-mobile [id$='pmIdxList']");
+  return { letter: b.textContent.trim(), on: b.classList.contains("is-on"), top: Math.round(l.scrollTop) };
+});
+check("IndexBar：拖动索引轨跳组（浮标 + 列表滚动）", idx.on && idx.top > 0, JSON.stringify(idx));
+/* 指针抬起必须释放 capture，否则页面后续点击全被索引轨吞掉 */
+await page.locator(`${M}.pm-idxrail`).focus();
+await page.keyboard.press("Home");
+await page.waitForTimeout(300);
+check("IndexBar：↑/↓/Home 键盘等效路径 + 释放 capture 后页面仍可点",
+  (await page.evaluate(() =>
+    document.querySelector("#gm-mod-preview-mobile [id$='pmIdxBadge']").textContent.trim())) === "A");
+
+const foldSummary = page.locator(`${M}details.gm-fold summary`).first();
+await foldSummary.scrollIntoViewIfNeeded();
+await page.waitForTimeout(300);
+check("Collapse：初始收起且 aria-expanded=false", await page.evaluate(() => {
+  const d = document.querySelector("#gm-mod-preview-mobile details.gm-fold");
+  return !d.open && d.querySelector("summary").getAttribute("aria-expanded") === "false";
+}));
+await foldSummary.click();
+await page.waitForTimeout(500);
+check("Collapse：点击展开（外壳驱动接管）", await page.evaluate(() => {
+  const d = document.querySelector("#gm-mod-preview-mobile details.gm-fold");
+  return d.open && d.querySelector("summary").getAttribute("aria-expanded") === "true";
+}));
+check("Collapse：高度过渡声明在 grid-template-rows（11.2.6）", await page.evaluate(() =>
+  getComputedStyle(document.querySelector("#gm-mod-preview-mobile .gm-fold__body"))
+    .transitionProperty.includes("grid-template-rows")));
+await foldSummary.click();
+await page.waitForTimeout(600);
+check("Collapse：收起后不占位", await page.evaluate(() => {
+  const d = document.querySelector("#gm-mod-preview-mobile details.gm-fold");
+  return !d.open && Math.round(d.querySelector(".gm-fold__body").getBoundingClientRect().height) === 0;
+}));
+
+await page.locator(`${M}.tabbar .tab`).nth(2).click();
+await page.waitForTimeout(450);
+check("Calendar：今天高亮 + 选中态唯一", (await page.locator(`${M}.pm-calday.today`).count()) === 1 &&
+  (await page.locator(`${M}.pm-calday[aria-selected="true"]`).count()) === 1);
+check("Calendar：日期格热区 ≥44（内层 36 芯片承载视觉）", await page.evaluate(() => {
+  const c = document.querySelector("#gm-mod-preview-mobile .pm-calday[data-k]");
+  const r = c.getBoundingClientRect();
+  return r.width >= 44 && r.height >= 44;
+}));
+const calTitle = await page.locator(`${M}[id$='pmCalTitle']`).textContent();
+await page.locator(`${M}[id$='pmCalNext']`).click();
+await page.waitForTimeout(400);
+check("Calendar：切月", (await page.locator(`${M}[id$='pmCalTitle']`).textContent()) !== calTitle);
+await page.locator(`${M}[id$='pmCalPrev']`).click();
+await page.waitForTimeout(400);
+check("Calendar：事件点 ≤3/格（11.6.5）", await page.evaluate(() =>
+  [...document.querySelectorAll("#gm-mod-preview-mobile .pm-calday i")].every((i) => i.children.length <= 3)));
+
+check("WaterMark：SVG pattern 引用已解析（build 改写 url(#id) 的回归位）", await page.evaluate(() => {
+  const rect = document.querySelector("#gm-mod-preview-mobile .pm-wm rect");
+  return !!rect && getComputedStyle(rect).fill.includes("url");
+}));
+check("WaterMark：透明不吃点击（11.6.13）", await page.evaluate(() =>
+  getComputedStyle(document.querySelector("#gm-mod-preview-mobile .pm-wm")).pointerEvents === "none"));
+
+check("NumberKeyboard：默认不常驻（聚焦才弹）",
+  !(await page.locator(`${M}[id$='pmNumKbd']`).isVisible()));
+await page.locator(`${M}[id$='pmNumDisp']`).click();
+await page.waitForTimeout(400);
+check("NumberKeyboard：唤起后 3×4 共 12 键", (await page.locator(`${M}.pm-numkey`).count()) === 12);
+check("NumberKeyboard：键热区 ≥48（主行动档）", await page.evaluate(() =>
+  document.querySelector("#gm-mod-preview-mobile .pm-numkey").getBoundingClientRect().height >= 48));
+for (const k of ["1", "0", "8"]) await page.locator(`${M}.pm-numkey[data-k="${k}"]`).click();
+await page.waitForTimeout(250);
+check("NumberKeyboard：回显到玻璃胶囊", (await page.locator(`${M}[id$='pmNumVal']`).textContent()) === "108",
+  await page.locator(`${M}[id$='pmNumVal']`).textContent());
+await page.locator(`${M}.pm-numkey[data-k="del"]`).click();
+await page.waitForTimeout(200);
+check("NumberKeyboard：退格", (await page.locator(`${M}[id$='pmNumVal']`).textContent()) === "10");
+
+await page.locator(`${M}.tabbar .tab`).first().click();
+await page.waitForTimeout(400);
 
 check("无控制台错误 / 未捕获异常", errors.length === 0, errors.slice(0, 2).join(" | "));
 

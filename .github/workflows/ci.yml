@@ -143,6 +143,69 @@ jobs:
       # 生产构建可用性：tsc 过不代表打得出来（别名、动态 import、CSS 引入都可能只有构建期报错）
       - run: npm run build
 
+  component-contract:
+    name: 组件库契约冒烟（React + Vue 渲染级）
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: npm
+          cache-dependency-path: package-lock.json
+      - run: npm ci || npm install
+      - run: npx --yes playwright install --with-deps chromium
+
+      # Vue 侧此前有 37 项渲染级冒烟，但**不在 CI 里**：V2.9 实测它早已是 32/37 ——
+      # 5 条语义色断言照抄了 V2.8 之前的旧值（深档化后没人同步）。
+      # React 侧则一项都没有，于是"类型能过、渲染不对"的缺陷（环形直径被 Arco 的 size
+      # 吃掉、actions 契约与 tags 不一致）长期存活。两侧现在都进 CI。
+      - name: React 组件契约（esbuild 打包 → 断言 56 项）
+        run: node goodmom-ui/playground/smoke.mjs
+
+      - name: Vue 组件契约（vite 验收台 → 断言 37 项）
+        run: |
+          set -euo pipefail
+          nohup npx vite --config goodmom-vue/playground/vite.config.ts >/tmp/vite-vue.log 2>&1 &
+          SRV=$!
+          trap 'kill $SRV 2>/dev/null || true' EXIT
+          for i in $(seq 1 30); do
+            if curl -fsS -o /dev/null http://localhost:5273/; then break; fi
+            if [ "$i" = "30" ]; then echo "::error::Vue 验收台未就绪"; cat /tmp/vite-vue.log; exit 1; fi
+            sleep 1
+          done
+          node goodmom-vue/playground/smoke.mjs
+
+  app-smoke:
+    name: 产品工程 UI 冒烟（frontend-app · 三端形态 + 四态）
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: frontend-app
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: npm
+          cache-dependency-path: frontend-app/package-lock.json
+      - run: npm ci || npm install
+      - run: npx --yes playwright install --with-deps chromium
+      # 起服务 / 跑脚本 / 关服务必须在同一个 run 块内（否则后台进程会被清掉，
+      # 报错变成 ERR_CONNECTION_REFUSED，与真实原因无关 —— 站点 job 已踩过这个坑）。
+      - name: 起 dev server → 跑冒烟 → 关服务
+        run: |
+          set -euo pipefail
+          nohup npx vite --port 3081 --strictPort >/tmp/vite-app.log 2>&1 &
+          SRV=$!
+          trap 'kill $SRV 2>/dev/null || true' EXIT
+          for i in $(seq 1 30); do
+            if curl -fsS -o /dev/null http://localhost:3081/; then break; fi
+            if [ "$i" = "30" ]; then echo "::error::应用 dev server 未就绪"; cat /tmp/vite-app.log; exit 1; fi
+            sleep 1
+          done
+          node ../scripts/app-smoke.mjs
+
   architecture-gate:
     name: 工程架构门禁（模块边界 / 分层方向 / 状态词登记 / 色值与配方）
     runs-on: ubuntu-latest

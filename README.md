@@ -183,7 +183,7 @@ node goodmom-vue/playground/smoke.mjs                    # 冒烟（组件契约
 2. **Figma 建库** → 按 [`02-Token规范.md`](02-Token规范.md) 建立样式 Token（颜色 / 字体 / 圆角 / 阴影 / 模糊）。
 3. **前端落地** → 复制 02 章末尾的 CSS 变量块，组件按 [`03-组件规范.md`](03-组件规范.md) 实现。
 4. **视觉对照** → 浏览器打开 [`site/index.html`](site/index.html#preview-index)「视觉规范」模块实时查看效果（含微交互演示，悬停、按压、开关、分段控件均可直接操作）。
-5. **移动端** → 规范见 [`10-移动端组件规范.md`](10-移动端组件规范.md)，预览 [`site/index.html#preview-mobile`](site/index.html#preview-mobile)：**≥1024 自动进入真机框**（框内滚动、浮层齐备），手机档全屏铺满；页内 4 个页面可点，列表可左滑、手势区可下拉刷新。
+5. **移动端** → 规范见 [`10-移动端组件规范.md`](10-移动端组件规范.md)，预览 [`site/index.html#preview-mobile`](site/index.html#preview-mobile)：**≥1024 自动进入真机框**（框内滚动、浮层齐备），手机档全屏铺满；页内 4 个页面可点，列表可左滑、手势区可下拉刷新；IndexBar / 折叠 / 月历 / 数字键盘 / 水印亦可直接操作。
 6. **完整示例页** → 打开 [`site/index.html#preview-examples`](site/index.html#preview-examples)，按“下一页”顺序走完 6 套常用页面。
 7. **交互范式** → 打开 [`site/index.html#preview-patterns`](site/index.html#preview-patterns)：链接全态、级联三形态、拖动容器宽度看响应式切换、1284 条虚拟长列表、暗黑模式与边框档。
 

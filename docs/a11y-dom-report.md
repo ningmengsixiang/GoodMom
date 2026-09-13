@@ -1,6 +1,6 @@
 # A11y DOM 实测报告（渲染级对比度）
 
-- 生成时间：`2026-09-13 15:54:23+0800`
+- 生成时间：`2026-09-13 16:14:58+0800`
 - 工具：`scripts/a11y-dom.py` v2.0.0（无头 Chrome 逐文本节点按 WCAG 公式实测）
 - 算法：前景/背景均**保留 alpha 并做 source-over 合成**（沿祖先链逐层叠加）；
   渐变与图片背景无法取样，标 INFO，不参与阈值。
@@ -13,13 +13,13 @@
 | site/index.html · site-index | 0 | 0 | 178 | &nbsp; |
 | site/index.html · preview-index | 0 | 0 | 1229 | &nbsp; |
 | site/index.html · preview-examples | 0 | 0 | 402 | &nbsp; |
-| site/index.html · preview-mobile | 0 | 0 | 299 | &nbsp; |
+| site/index.html · preview-mobile | 0 | 0 | 436 | &nbsp; |
 | site/index.html · preview-patterns | 0 | 0 | 163 | &nbsp; |
 | site/index.html · site-spec | 0 | 0 | 7619 | &nbsp; |
 | site/index.html · site-manual | 0 | 0 | 913 | &nbsp; |
 | site/index.html · site-docs | 0 | 0 | 68 | &nbsp; |
 | fuyouaicansai/goodmom-redesign.html | 0 | 0 | 246 | &nbsp; |
 
-**确证失败合计 0**（其中 0 项为渐变承载面的上界确证，0 项为实色承载面直接确证）；无法判定（渐变但上界达标）11118。
+**确证失败合计 0**（其中 0 项为渐变承载面的上界确证，0 项为实色承载面直接确证）；无法判定（渐变但上界达标）11255。
 
 阈值基线（`docs/a11y-dom-baseline.json`）：实色失败 ≤ 0（基线生成于 2026-09-12 11:04:13+0800）。

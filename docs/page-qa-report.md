@@ -1,6 +1,6 @@
 # 逐页规范质检报告（Page-level Spec QA）
 
-- 生成时间：`2026-09-13 07:54:03+0800`
+- 生成时间：`2026-09-13 08:11:40+0800`
 - 工具：`node scripts/page-qa.mjs`（Playwright 真实渲染；桌面 1440 / 移动 375 / 暗色档各测一遍）
 - 口径：每条 finding 都带**规范锚点 + 选择器 + 实测值**，可逐条复现与回归
 - 范围：真实页面 10 个（唯一首页 8 模块逐模块 · 打印手册 · 演示页）；重定向桩 7 个**单独统计**（服务端摘掉跳转脚本后测桩自身，避免测成目标模块而重复计数）
@@ -38,13 +38,13 @@
 | 15 | 25 | `site/index.html · site-index` `div.wrap>div.grid>div.card>h3` |
 | 34 | 23 | `site/index.html · preview-mobile` `body>main#gm-main>section#gm-mod-preview-mobile>div#preview-mobile--pmStage` |
 
-**字号不在层级**（type-scale，锚点 02 · 2.2.2，共 6188 处）
+**字号不在层级**（type-scale，锚点 02 · 2.2.2，共 6189 处）
 
 | 实测值 | 命中元素数 | 样例 |
 | --- | --- | --- |
 | 12.5 | 4709 | `site/index.html · site-index` `main#gm-main>section#gm-mod-site-index>div.wrap>pre.tree` |
 | 13.5 | 441 | `site/index.html · site-index` `div.secpad>div.tree2>div.gr>b` |
-| 11 | 380 | `site/index.html · site-index` `div.hero.glass>div.stat>span>i` |
+| 11 | 381 | `site/index.html · site-index` `div.hero.glass>div.stat>span>i` |
 | 13 | 241 | `site/index.html · site-index` `section#gm-mod-site-index>div.wrap>h2#site-index--start>span.secnum` |
 | 10 | 185 | `site/index.html · site-index` `section#gm-mod-site-index>div.wrap>h2#site-index--start>small` |
 | 10.5 | 64 | `site/index.html · preview-index` `div.stmods>div.stmod>div>span.tpill.c-g` |
@@ -99,7 +99,7 @@
 ### site/index.html · preview-mobile
 
 - 结构：标题 14 个 · 焦点样本 60 个（其中不可见 0）· emoji 0 处
-- 对比度（浅色档）：确证失败 0（渐变上界 0）· 无法判定 297
+- 对比度（浅色档）：确证失败 0（渐变上界 0）· 无法判定 433
 - 对比度（暗色档）：确证失败 0
 - 横向溢出：桌面 0px / 移动 0px
 - 移动端非行内热区受检 0 个

@@ -84,7 +84,7 @@
   | 层 | 含义 | 例 | 代码落点 |
   | --- | --- | --- | --- |
   | primitive | 基础刻度（色板 ramp/字号/圆角/间距刻度） | rose-500 `#F77FA3` | tokens/design.ts |
-  | alias | 语义别名（文本/状态/品牌位） | `--lg-sem-positive` `#2F8F76` | theme.css :root + status.ts |
+  | alias | 语义别名（文本/状态/品牌位） | `--lg-sem-positive` `#25715D` | theme.css :root + status.ts |
   | component | 组件配方 | 按钮渐变/玻璃档/焦点环 | theme.css `gm-*` 规则 |
 - **命名规范**：`--lg-*`（引擎通用）/`--mmh-*`（妈咪好品牌）+ `{scope}-{语义kebab}`；组件类名 `gm-*`；业务映射 `semanticOf`（business.ts 40+ 词条）。
 - **唯一代码源**：`goodmom-ui/src/tokens/{design,business,status}.ts` + `theme.css`；六进制只允许出现在 token 层与受控生成物（组件内魔法色已收敛：GmProgress/GmAvatar 引 DesignTokens）。
@@ -97,12 +97,12 @@
 - **六语义（alias 深色，14 · 4.4.5 权威）**
   | 语义 | 值 | 覆盖状态 |
   | --- | --- | --- |
-  | positive 正常/正向 | `--lg-sem-positive` `#2F8F76` | 正常/完成/通过/未见异常/阴性 |
-  | info 信息/进行 | `--lg-sem-info` `#4A76D0` | 已建档/筛查中/进行中 |
-  | attention 注意/待办 | `--lg-sem-attention` `#B9771C` | 待复查/待随访/待审核/即将到期 |
-  | risk 风险/异常 | `--lg-sem-risk` `#D35466` | 异常/阳性/失访/逾期 |
-  | neutral 中性/未动 | `--lg-sem-neutral` `#757E8E` | 未开始/草稿/已归档 |
-  | special 特殊/协作 | `--lg-sem-special` `#7A5CE0` | 转诊/会诊/重点管理 |
+  | positive 正常/正向 | `--lg-sem-positive` `#25715D` | 正常/完成/通过/未见异常/阴性 |
+  | info 信息/进行 | `--lg-sem-info` `#3261C1` | 已建档/筛查中/进行中 |
+  | attention 注意/待办 | `--lg-sem-attention` `#8D5A15` | 待复查/待随访/待审核/即将到期 |
+  | risk 风险/异常 | `--lg-sem-risk` `#B72F42` | 异常/阳性/失访/逾期 |
+  | neutral 中性/未动 | `--lg-sem-neutral` `#5E6673` | 未开始/草稿/已归档 |
+  | special 特殊/协作 | `--lg-sem-special` `#6A48DC` | 转诊/会诊/重点管理 |
   > 用法：alias 作色点/色块/图形/大标签；**作为小字正文请用主/次级文本色**，具体页面是否达 AA 以 `a11y-dom.py` 报告为准（勿臆测全量达标）。
 - **白字实底档（D5）**：`--mmh-solid-positive #1E6B52 / attention #9A5A0E / danger #B04052 / info #385CB3 / special #6242B8`（白字 4.7–7.0:1）；状态 chip 不得叠加顶部白高光层（实测会把白字拉到 2.5–2.9:1）。
 - **孕产妇五色**（`--mmh-m5-m1..m5` = #4CB98A/#F2C14E/#F0954A/#EE5C70/#8F6AE0）：仅妊娠风险分级语境（02.10/15.2.10），与六语义并行不冲突。

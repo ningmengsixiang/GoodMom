@@ -1266,6 +1266,61 @@ def svg_refs():
     return True
 
 
+def semantic_parity():
+    """六语义色的「浅底档」必须在规范载体与实现之间一致。
+
+    为什么需要：V2.8「语义色板达 AA」把 `--lg-sem-*` 深档化（例如 positive
+    `#2F8F76` → `#25715D`，旧值作文字仅 3.95:1 不达标），但**规范表格没跟着改**。
+    后果不是理论上的：照抄规范表写出来的 `goodmom-vue/playground/smoke.mjs`
+    5 条语义色断言长期是红的 —— 而它不在 CI 里，于是没人发现，
+    "两库 1:1 对齐"的结论也一直是靠人眼维持的。
+
+    口径：
+      · 唯一源 = `goodmom-ui/src/theme.css` 的 `:root` 段的 `--lg-sem-*`；
+      · 规范性载体 = 02 · 2.1.9 映射表 B、14 · 4.4.5、skill reference/tokens.md；
+      · **历史文档不参与**（`docs/审查决策记录.md`、`docs/设计系统问题清单.md`、
+        `18-视觉规范审计报告.md` 记的是当时的状态与整改证据，改写它们等于涂改留痕）。
+    """
+    import io as _io
+    src = "goodmom-ui/src/theme.css"
+    if not os.path.exists(src):
+        rec("FAIL", "semantic-parity", "缺少 %s" % src); return False
+    css = _io.open(src, encoding="utf-8").read()
+    light = css.split('[data-theme="dark"]')[0]          # 浅色段（:root）
+    truth = {m.group(1): m.group(2).upper()
+             for m in re.finditer(r"--lg-sem-(\w+):\s*(#[0-9A-Fa-f]{6})", light)}
+    if len(truth) != 6:
+        rec("FAIL", "semantic-parity", "theme.css 浅色段未解析出 6 个 --lg-sem-*（实际 %d）" % len(truth))
+        return False
+
+    carriers = [
+        ("02-Token规范.md", r"\| `--lg-sem-(\w+)` \| `(#[0-9A-Fa-f]{6})` \|"),
+        ("14-命名与术语规范.md", r"`--lg-sem-(\w+)`（`(#[0-9A-Fa-f]{6})`）"),
+        (".claude/skills/goodmom-frontend/reference/tokens.md", r"\| `--lg-sem-(\w+)` \| `(#[0-9A-Fa-f]{6})` \|"),
+    ]
+    bad = []
+    for path, pat in carriers:
+        if not os.path.exists(path):
+            bad.append("%s 缺失" % path); continue
+        text = _io.open(path, encoding="utf-8").read()
+        found = {m.group(1): m.group(2).upper() for m in re.finditer(pat, text)}
+        if not found:
+            bad.append("%s 未解析到语义色表（正则失效，需同步）" % path); continue
+        for k in sorted(truth):
+            if k not in found:
+                bad.append("%s 缺少 --lg-sem-%s" % (path, k))
+            elif found[k] != truth[k]:
+                bad.append("%s 的 --lg-sem-%s 写的是 %s，实现是 %s"
+                           % (path, k, found[k], truth[k]))
+    if bad:
+        rec("FAIL", "semantic-parity", "%d 处语义色口径与实现不一致：%s" % (len(bad), bad[:4]))
+        return False
+    rec("OK", "semantic-parity",
+        "六语义浅底档在 02 / 14 / skill reference 与 theme.css 之间完全一致（%s）"
+        % " · ".join("%s=%s" % (k, truth[k]) for k in sorted(truth)))
+    return True
+
+
 # 门禁登记表：名字 → 函数。集中登记是为了支持 `--only <名>`（负向测试要能
 # 精确地"只跑这一条"，否则注入缺陷后先被其它门禁拦下，反而证明不了目标门禁有效）。
 GATES = [
@@ -1276,7 +1331,7 @@ GATES = [
     ("exports", exports_check), ("logo-guard", logo_guard), ("loading-spec", loading_spec),
     ("css-syntax", css_syntax), ("feedback-spec", feedback_spec),
     ("undefined-token", undefined_tokens), ("data-present", data_present), ("growth-chart", growth_chart),
-    ("svg-refs", svg_refs),
+    ("svg-refs", svg_refs), ("semantic-parity", semantic_parity),
 ]
 
 

@@ -178,18 +178,25 @@ Figma:    LG / Color / Purple / 500
 
 **映射表 B · 状态与语义色（暗色文字档）**
 
-| 用途 | 浅底用（默认） | 暗底用（dark） | 暗底实测 |
-| --- | --- | --- | --- |
-| 成功 `--lg-success-300` | `#96E6CF`（浅填充） | `#96E6CF` 作文/图标 | 11.93:1 |
-| 警告 `--lg-warning-300` | `#FAE1B3` | `#FAE1B3` | 13.55:1 |
-| 危险 `--lg-danger-300` | `#FAC9D0` | `#FAC9D0` | 11.78:1 |
-| 信息 `--lg-info-500` 亮档 | `#6D9EFF` | `#9CAEFF`（Blue-300） | 8.15:1 |
-| `--lg-sem-positive` | `#2F8F76` | `#6FC9B4` | 8.79:1 |
-| `--lg-sem-info` | `#4A76D0` | `#9CAEFF` | 8.15:1 |
-| `--lg-sem-attention` | `#B9771C` | `#F2C14E` | 10.29:1 |
-| `--lg-sem-risk` | `#D35466` | `#F79AA8` | 8.34:1 |
-| `--lg-sem-neutral` | `#757E8E` | `#A6ADB9` | 7.65:1 |
-| `--lg-sem-special` | `#7A5CE0` | `#B9A0FF` | 7.84:1 |
+| 用途 | 浅底用（默认） | 浅底实测 | 暗底用（dark） | 暗底实测 |
+| --- | --- | --- | --- | --- |
+| 成功 `--lg-success-300` | `#96E6CF`（浅填充） | —（非文字） | `#96E6CF` 作文/图标 | 11.93:1 |
+| 警告 `--lg-warning-300` | `#FAE1B3` | —（非文字） | `#FAE1B3` | 13.55:1 |
+| 危险 `--lg-danger-300` | `#FAC9D0` | —（非文字） | `#FAC9D0` | 11.78:1 |
+| 信息 `--lg-info-500` 亮档 | `#6D9EFF` | —（非文字） | `#9CAEFF`（Blue-300） | 8.15:1 |
+| `--lg-sem-positive` | `#25715D` | 5.84:1 | `#6FC9B4` | 8.79:1 |
+| `--lg-sem-info` | `#3261C1` | 5.81:1 | `#9CAEFF` | 8.15:1 |
+| `--lg-sem-attention` | `#8D5A15` | 5.82:1 | `#F2C14E` | 10.29:1 |
+| `--lg-sem-risk` | `#B72F42` | 6.00:1 | `#F79AA8` | 8.34:1 |
+| `--lg-sem-neutral` | `#5E6673` | 5.79:1 | `#A6ADB9` | 7.65:1 |
+| `--lg-sem-special` | `#6A48DC` | 5.88:1 | `#B9A0FF` | 7.84:1 |
+
+> ⚠️ **浅底列口径修正（V2.9）**：本列原写 `positive #2F8F76 / info #4A76D0 / attention #B9771C /
+> risk #D35466 / neutral #757E8E / special #7A5CE0` —— 那是 V2.8「语义色板达 AA」**之前**的值，
+> 实测作文字只有 **3.67–4.38:1（不达标）**（证据留档在 `docs/设计系统问题清单.md` 的 ❌ 表），
+> 深档化之后本表漏改，且**照抄本表的 Vue 组件冒烟因此长期是红的**（不在 CI，没人发现）。
+> 现按实现值（`theme.css` / `tokens/status.ts`）对齐；浅底实测取**最亮玻璃承载面** `#FDF2EE`。
+> 门禁：`python3 scripts/audit.py --only semantic-parity` 核对本表 / 14 章 / skill reference 与 `theme.css`。
 
 **暗色下的三条落地纪律**
 
