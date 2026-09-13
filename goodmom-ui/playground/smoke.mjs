@@ -63,6 +63,43 @@ check("步骤条 4 步是 <ol>/<li> 有序列表", await page.evaluate(() => {
 }));
 check("步骤条当前步带 aria-current=step", (await page.locator('.gm-step[aria-current="step"]').count()) === 1);
 check("风险五色渲染 5 项 role=radio", (await page.locator('.gm-risk-it[role="radio"]').count()) === 5);
+
+/* V2.9 视觉契约：五色**只承载装饰**，文字走主文字色。
+   把亮色当文字用实测 1.57–2.19:1（GmStatusTag / GmRiskPicker 都踩过），
+   依据站点五色图例与标准手册 D6「亮渐变=装饰，文字承载=深档」。 */
+const fiveInk = await page.evaluate(() => {
+  const FIVE = ["rgb(76, 185, 138)", "rgb(242, 193, 78)", "rgb(240, 149, 74)", "rgb(238, 92, 112)", "rgb(143, 106, 224)"];
+  /* 必须挑**五色**标签（按住色点颜色认），别挑到语义标签 —— 第一版就挑错了，断言因此假失败 */
+  const tag = [...document.querySelectorAll(".gm-status-tag")].find((e) => {
+    const dot = e.querySelector(".gm-status-dot");
+    return dot && FIVE.includes(getComputedStyle(dot).backgroundColor);
+  });
+  const chip = document.querySelector(".gm-risk-it[role=radio]");
+  const cs = (el) => (el ? getComputedStyle(el) : null);
+  return {
+    tagText: cs(tag)?.color,
+    tagDot: cs(tag?.querySelector(".gm-status-dot"))?.backgroundColor,
+    chipText: cs(chip)?.color,
+    chipDot: cs(chip?.querySelector("i"))?.backgroundColor,
+  };
+});
+check("五色标签文字不用亮色（走主文字色）",
+  fiveInk.tagText === "rgb(52, 58, 70)", `实际 ${fiveInk.tagText}`);
+check("五色标签的**色点**仍承载五色（颜色不丢）",
+  /rgb\(76, 185, 138\)|rgb\(242, 193, 78\)|rgb\(240, 149, 74\)|rgb\(238, 92, 112\)|rgb\(143, 106, 224\)/.test(fiveInk.tagDot || ""),
+  `实际 ${fiveInk.tagDot}`);
+check("风险 chip 文字不用亮色（色点/描边承载五色）",
+  fiveInk.chipText === "rgb(52, 58, 70)" && !/rgb\(76, 185, 138\)/.test(fiveInk.chipText || ""),
+  `文字 ${fiveInk.chipText} · 色点 ${fiveInk.chipDot}`);
+
+/* 头像三档：浅底渐变 + 同色系深墨字（站点 .avt 同配方，三档实测 4.59–4.65:1） */
+const avatars = await page.evaluate(() =>
+  [...document.querySelectorAll(".gm-avatar")].slice(0, 3).map((e) => ({
+    bg: getComputedStyle(e).backgroundImage, ink: getComputedStyle(e).color })));
+check("头像三档都是浅底渐变 + 深墨字（非白字压亮粉）",
+  avatars.length >= 3 && avatars.every((a) => /rgb\(2[0-5][0-9], 2[0-5][0-9], 2[0-5][0-9]\)/.test(a.bg)) &&
+  avatars.every((a) => ["rgb(178, 58, 99)", "rgb(37, 113, 93)", "rgb(98, 66, 184)"].includes(a.ink)),
+  avatars.map((a) => a.ink).join(" / "));
 check("级联触发点渲染 ≥2", (await page.locator(".gm-cascader__trigger").count()) >= 2);
 check("级联 inline 面板常驻", (await page.locator(".gm-cascader--inline .gm-cascader__panel").count()) === 1);
 

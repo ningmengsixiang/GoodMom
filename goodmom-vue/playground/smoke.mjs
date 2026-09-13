@@ -42,6 +42,25 @@ check("骨架屏渲染", (await page.locator(".gm-skeleton i").count()) >= 3);
 check("步骤条渲染", (await page.locator(".gm-step").count()) === 4, `${await page.locator(".gm-step").count()} 步`);
 check("风险五色渲染", (await page.locator('.gm-risk-it[role="radio"]').count()) === 5)
 check("级联触发点渲染", (await page.locator(".gm-cascader__trigger").count()) >= 3);
+
+/* V2.9 视觉契约（与 React 侧同一口径）：五色**只承载装饰**，文字走主文字色。
+   亮色当文字实测 1.57–2.19:1；依据站点五色图例与手册 D6「亮渐变=装饰，文字承载=深档」。 */
+const fiveContract = await page.evaluate(() => {
+  const chip = document.querySelector(".gm-risk-it[role=radio]");
+  const avatar = document.querySelector(".gm-avatar");
+  return {
+    chipText: chip ? getComputedStyle(chip).color : null,
+    chipDot: chip?.querySelector("i") ? getComputedStyle(chip.querySelector("i")).backgroundColor : null,
+    avBg: avatar ? getComputedStyle(avatar).backgroundImage : "",
+    avInk: avatar ? getComputedStyle(avatar).color : null,
+  };
+});
+check("风险 chip 文字不用五色亮值（色点承载颜色）",
+  fiveContract.chipText === "rgb(52, 58, 70)" && fiveContract.chipDot === "rgb(76, 185, 138)",
+  `文字 ${fiveContract.chipText} · 色点 ${fiveContract.chipDot}`);
+check("头像为浅底渐变 + 深墨字（非白字压亮粉）",
+  /rgb\(255, 222, 232\)/.test(fiveContract.avBg) && fiveContract.avInk === "rgb(178, 58, 99)",
+  `${fiveContract.avInk} on ${fiveContract.avBg.slice(0, 60)}`);
 check("级联 inline 面板常驻", (await page.locator(".gm-cascader--inline .gm-cascader__panel").count()) === 1);
 check("虚拟列表窗口化（只渲染窗口内项）",
   (await page.locator(".gm-vlist__item").count()) > 0 && (await page.locator(".gm-vlist__item").count()) < 40,

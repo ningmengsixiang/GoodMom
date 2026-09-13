@@ -152,7 +152,8 @@
 .gm-card-head{display:flex;justify-content:space-between;align-items:center;gap:12px;margin-bottom:12px}
 .gm-card-head b{font-size:15px;color:var(--lg-text-primary);font-weight:600}
 .gm-card-head span{font-size:12px;color:var(--lg-text-secondary)}
-.gm-avatar{display:inline-flex;align-items:center;justify-content:center;color:var(--lg-text-on-accent,#343A46);font-weight:600;
+/* 墨色用**固定**色值：头像底是固定浅渐变，跟随暗色档翻浅会掉到 ~1.5:1（组件内按色调覆盖） */
+.gm-avatar{display:inline-flex;align-items:center;justify-content:center;color:#B23A63;font-weight:600;
   border-radius:50%;border:2px solid rgba(255,255,255,.9);box-shadow:var(--lg-shadow-sm);flex:none;line-height:1}
 
 /* ─────────────────────────────────────────────────────────────────────────

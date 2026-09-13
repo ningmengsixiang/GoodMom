@@ -125,8 +125,8 @@ node scripts/site-parity.mjs              # 合并保真度：各模块 vs 原�
 node scripts/page-qa.mjs --ci             # 逐页质检（P0–P2 必须为 0）
 node scripts/app-smoke.mjs                # 产品工程 37 项（三端形态/四态/**按真实渲染底采样**的对比度）
 python3 scripts/gate-negative-tests.py    # 58 条负向测试：给每条门禁注入真缺陷，必须 FAIL
-node goodmom-ui/playground/smoke.mjs      # React 组件契约 56 项（需先 node build.mjs）
-node goodmom-vue/playground/smoke.mjs     # Vue 组件契约 37 项（需先起 5273 预览台）
+node goodmom-ui/playground/smoke.mjs      # React 组件契约 60 项（需先 node build.mjs）
+node goodmom-vue/playground/smoke.mjs     # Vue 组件契约 39 项（需先起 5273 预览台）
 
 # 前端封装库（Vite + React + Arco）
 cd frontend-app

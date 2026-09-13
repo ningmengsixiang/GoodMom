@@ -29,11 +29,21 @@ const TONE: Record<"rose" | "mint" | "purple", string> = {
   purple: DesignTokens.gradPurple,
 };
 
+/* V2.9：墨色按色调给（浅底渐变 + 同色系深字，与站点 .avt / React 版同配方）。
+   此前统一用 --lg-text-on-inverse（白字），压在亮粉渐变上实测 2.81:1。
+   墨色用固定值：头像底是固定浅色，跟随暗色档翻浅会掉到 ~1.5:1。 */
+const TONE_INK: Record<"rose" | "mint" | "purple", string> = {
+  rose: DesignTokens.avatarInkRose,
+  mint: DesignTokens.avatarInkMint,
+  purple: DesignTokens.avatarInkPurple,
+};
+
 const style = computed(() => ({
   width: `${props.size}px`,
   height: `${props.size}px`,
   fontSize: `${Math.round(props.size * 0.42)}px`,
   background: TONE[props.tone],
+  color: TONE_INK[props.tone],
 }));
 
 const initial = computed(() => String(props.text ?? "").trim().slice(0, 1));

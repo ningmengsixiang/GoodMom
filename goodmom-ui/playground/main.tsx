@@ -11,6 +11,11 @@
  * 正是没有渲染级验收才让它们长期存活。
  */
 import React, { useState } from "react";
+const FIVE_LABEL: Record<string, string> = {
+  m1: "绿 · 低风险", m2: "黄 · 一般风险", m3: "橙 · 较高风险",
+  m4: "红 · 高风险", m5: "紫 · 合并传染病",
+};
+
 import { createRoot } from "react-dom/client";
 import {
   GmAvatar, GmButton, GmButtonGroup, GmCard, GmCascader, GmClientCard, GmEmpty,
@@ -78,6 +83,12 @@ function App() {
           <GmStatusTag semantic={semanticOf("已建档")}>已建档</GmStatusTag>
           <GmStatusTag semantic={semanticOf("这不是登记过的词")}>这不是登记过的词</GmStatusTag>
           <GmStatusTag semantic="risk" closable onClose={() => {}}>可关闭</GmStatusTag>
+        </div>
+        {/* 孕产妇五色（02 · 2.10 / 15.2.10）：色点承载颜色，文字走主文字色 */}
+        <div className="row" id="five-row">
+          {(["m1", "m2", "m3", "m4", "m5"] as const).map((k) => (
+            <GmStatusTag key={k} five={k}>{FIVE_LABEL[k]}</GmStatusTag>
+          ))}
         </div>
         <div className="row">
           {FIVES.map((f) => <GmStatusTag key={f} five={f}>{f}</GmStatusTag>)}
