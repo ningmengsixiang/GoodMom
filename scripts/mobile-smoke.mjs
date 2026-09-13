@@ -519,6 +519,77 @@ check("Cascader：Esc 关闭且已确定值不回滚", (await page.locator(cid("
 await page.locator(`${M}.tabbar .tab`).first().click();
 await page.waitForTimeout(400);
 
+/* ── 布局体检（V2.9）：用户报"移动端很多组件错位" ────────────────────────
+   当时的真因其实在**外壳 CSS**：一次补花括号补错位置，`@keyframes gmToastOut` 块从未闭合，
+   把其后**全部规则**吞进它的块里（括号计数仍然平衡），于是导航、表格、折叠、增长图开关、
+   以及移动端一大片规则在浏览器里静默失效 —— 观感就是"组件错位"。
+   修好结构之后，这里用**同容器范围**的判据把布局钉住（跨容器的同类差异是正常的，不算错位）：
+     ① 出框：模块内容不得超出手机框（横向滚动容器内的内容豁免）；
+     ② 文字溢出：不可滚动的文本容器不得 scrollWidth > clientWidth；
+     ③ 兄弟重叠：静态定位的兄弟不得大面积重叠；
+     ④ 纵向堆叠：同父同类的项左边缘必须一致（横向分布的行不适用）。 */
+const layout = await page.evaluate(() => {
+  const root = document.getElementById("gm-mod-preview-mobile");
+  const out = { frameOut: [], textClip: [], overlap: [], columnJitter: [] };
+  const vis = (e) => { const c = getComputedStyle(e); return c.display !== "none" && c.visibility !== "hidden" && parseFloat(c.opacity) !== 0; };
+  const frames = [...root.querySelectorAll(".phone,.pm-frame,.device,[class*=phone]")].filter(vis);
+  const frame = frames[0];
+  for (const e of root.querySelectorAll("*")) {
+    if (!vis(e)) continue;
+    const r = e.getBoundingClientRect();
+    if (r.width < 6 || r.height < 6) continue;
+    const cs = getComputedStyle(e);
+    if (frame && e !== frame) {
+      const fr = frame.getBoundingClientRect();
+      let sc = e.parentElement, scrollable = false;
+      while (sc && sc !== root) { if (["auto", "scroll"].includes(getComputedStyle(sc).overflowX)) { scrollable = true; break; } sc = sc.parentElement; }
+      if (!scrollable) {
+        const over = Math.max(fr.left - r.left, r.right - fr.right, fr.top - r.top, r.bottom - fr.bottom);
+        if (over > 2 && r.width < fr.width + 60)
+          out.frameOut.push(`${typeof e.className === "string" ? e.className.slice(0, 30) : e.tagName} 出框 ${over.toFixed(1)}px`);
+      }
+    }
+    /* 文本容器溢出（装饰性 × 徽章豁免：里面是图标字形不是文案） */
+    if (e.children.length === 0 && (e.textContent || "").trim() && cs.overflow === "visible" && cs.whiteSpace !== "nowrap"
+        && e.scrollWidth > e.clientWidth + 2 && !/\bdel\b/.test(e.className || ""))
+      out.textClip.push(`${String(e.className).slice(0, 28)}「${e.textContent.trim().slice(0, 10)}」溢出 ${e.scrollWidth - e.clientWidth}px`);
+    /* ⚠️ 排除 SVG 内部图元（path/circle/g 会天然互相交叠，它们是画图不是布局盒） */
+    if (!(e instanceof HTMLElement)) continue;
+    const p = e.parentElement;
+    if (p && p !== root && cs.position === "static") {
+      for (const sib of p.children) {
+        if (sib === e || !vis(sib) || getComputedStyle(sib).position !== "static") continue;
+        const sr = sib.getBoundingClientRect();
+        const ox = Math.min(r.right, sr.right) - Math.max(r.left, sr.left);
+        const oy = Math.min(r.bottom, sr.bottom) - Math.max(r.top, sr.top);
+        const pcs = getComputedStyle(p);
+        if (ox > 4 && oy > 4 && (!/grid|flex/.test(pcs.display) || pcs.flexDirection === "column"))
+          out.overlap.push(`${String(e.className).slice(0, 24)} ✕ ${String(sib.className).slice(0, 24)}`);
+      }
+    }
+  }
+  for (const p of root.querySelectorAll("*")) {
+    const pcs = getComputedStyle(p);
+    if (pcs.display.includes("flex") && pcs.flexDirection === "row") continue;   // 横向分布本就该不齐
+    if (pcs.display.includes("grid")) continue;
+    const kids = [...p.children].filter(vis);
+    if (kids.length < 3) continue;
+    const byCls = {};
+    for (const k of kids) { const key = typeof k.className === "string" ? k.className : ""; if (!key) continue; (byCls[key] = byCls[key] || []).push(k.getBoundingClientRect().left); }
+    for (const [k, lefts] of Object.entries(byCls)) {
+      if (lefts.length < 3) continue;
+      const spread = Math.max(...lefts) - Math.min(...lefts);
+      if (spread >= 3) out.columnJitter.push(`${String(p.className).slice(0, 18)} › ${k.slice(0, 24)} ×${lefts.length} 左差 ${spread.toFixed(1)}px`);
+    }
+  }
+  out.overlap = [...new Set(out.overlap)];
+  return out;
+});
+check("布局体检：模块内容不出手机框", layout.frameOut.length === 0, layout.frameOut.slice(0, 3).join(" | "));
+check("布局体检：文本容器不溢出", layout.textClip.length === 0, layout.textClip.slice(0, 3).join(" | "));
+check("布局体检：静态兄弟不重叠", layout.overlap.length === 0, layout.overlap.slice(0, 3).join(" | "));
+check("布局体检：纵向堆叠同父同类左边缘一致", layout.columnJitter.length === 0, layout.columnJitter.slice(0, 3).join(" | "));
+
 check("无控制台错误 / 未捕获异常", errors.length === 0, errors.slice(0, 2).join(" | "));
 
 await browser.close();

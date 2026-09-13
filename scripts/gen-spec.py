@@ -141,9 +141,11 @@ a{color:var(--rose-deep)}
 .top img{width:26px;height:26px;border-radius:50%;object-fit:cover}
 .top b{color:var(--rose-deep);font-size:14px;margin-right:10px}
 .gp{position:relative;display:inline-flex}
-.gp>button{font-family:inherit;border:1px solid transparent;background:none;border-radius:999px;padding:7px 12px;cursor:pointer;font-size:13px;font-weight:500;color:var(--t2)}
+.gp>button{font-family:inherit;border:1px solid transparent;background:none;border-radius:var(--lg-radius-pill,999px);min-height:26px;padding:7px 12px;cursor:pointer;font-size:13px;font-weight:500;color:var(--t2)}
 .gp>button::after{content:"▾";font-size:9px;margin-left:4px;opacity:.6}
 .gp:hover>button{background:#FFF;color:var(--rose-deep)}
+/* V2.9：阅读器工具栏/章节导航按钮原为 25px 直角 —— 尺寸落 26 档、圆角走胶囊档 */
+.top button,.chapnav button,.readtoggle{min-height:26px;border-radius:var(--lg-radius-pill,999px)}
 .drop{position:absolute;top:calc(100% + 10px);left:0;min-width:210px;z-index:100;padding:6px;border-radius:22px;background:#FFF;border:1px solid rgba(232,93,143,.2);box-shadow:0 16px 40px rgba(90,70,70,.15);opacity:0;pointer-events:none;transform:translateY(6px);transition:.2s}
 .gp:hover .drop{opacity:1;pointer-events:auto;transform:none}
 .gp::after{content:"";position:absolute;left:0;right:0;top:100%;height:12px}

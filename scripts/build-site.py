@@ -716,10 +716,10 @@ body{margin:0;font-family:var(--sh-font);color:var(--sh-t);line-height:1.7;-webk
   min-height:100vh}
 .sh-sr{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap;border:0}
 /* ── 唯一主导航 ── */
-.sh-topposition:sticky;top:0;z-index:200;padding:10px 16px;
+.sh-top{position:sticky;top:0;z-index:200;padding:10px 16px;
   background:linear-gradient(180deg,rgba(253,242,238,.92),rgba(253,242,238,.78));
   border-bottom:1px solid rgba(232,93,143,.16);
-  -webkit-backdrop-filter:blur(18px) saturate(1.2);backdrop-filter:blur(18px) saturate(1.2)background-origin:border-box}
+  -webkit-backdrop-filter:blur(18px) saturate(1.2);backdrop-filter:blur(18px) saturate(1.2);background-origin:border-box}
 .sh-top-in{max-width:1240px;margin:0 auto;display:flex;align-items:center;gap:10px;flex-wrap:wrap}
 .sh-brand{display:flex;align-items:center;gap:9px;font-size:15px;font-weight:700;color:var(--sh-rose-deep);
   text-decoration:none;margin-right:6px;flex:none}
@@ -732,18 +732,18 @@ body{margin:0;font-family:var(--sh-font);color:var(--sh-t);line-height:1.7;-webk
   border:1px solid transparent;background:none;border-radius:999px;padding:8px 14px;white-space:nowrap;
   transition:background .18s var(--sh-ease),color .18s var(--sh-ease)}
 .sh-tab:hover{background:rgba(255,255,255,.75);color:var(--sh-rose-deep)}
-.sh-tab[aria-selected="true"]background:var(--sh-grad-action);color:var(--sh-t);border-color:transparent;
-  box-shadow:0 6px 16px rgba(240,127,163,.3)background-origin:border-box}
+.sh-tab[aria-selected="true"]{background:var(--sh-grad-action);color:var(--sh-t);border-color:transparent;
+  box-shadow:0 6px 16px rgba(240,127,163,.3);background-origin:border-box}
 .sh-tab:focus-visible{outline:var(--sh-ring) solid rgba(232,93,143,.6);outline-offset:2px}
 .sh-ext{margin-left:auto;display:flex;gap:8px;align-items:center;flex:none}
 .sh-ext a{font-size:12.5px;font-weight:600;text-decoration:none;padding:8px 14px;border-radius:999px;
   color:var(--sh-rose-deep);background:#FFF;border:1px solid rgba(232,93,143,.3);white-space:nowrap}
-.sh-ext a.pribackground:var(--sh-grad-action);color:var(--sh-t);border-color:transparent;
-  box-shadow:0 6px 16px rgba(240,127,163,.3)background-origin:border-box}
+.sh-ext a.pri{background:var(--sh-grad-action);color:var(--sh-t);border-color:transparent;
+  box-shadow:0 6px 16px rgba(240,127,163,.3);background-origin:border-box}
 .sh-ext a:focus-visible{outline:var(--sh-ring) solid rgba(232,93,143,.6);outline-offset:2px}
 .sh-note{font-size:12.5px;font-weight:600;padding:8px 14px;border-radius:999px;white-space:nowrap;
   color:var(--sh-rose-deep);background:rgba(255,255,255,.6);border:1px solid rgba(232,93,143,.22)}
-/* ── 模块容器：同一时刻只显示一个（不做双渲染后隐藏）── */
+/* {── 模块容器：同一时刻只显示一个（不做双渲染后隐藏）── */
 .gm-mod{display:none}
 .gm-mod.is-on{display:block}
 /* 文档型模块（规范全文 / 标准手册）自带的固定侧栏改为模块内定位，避免溢出到外壳 */
@@ -768,7 +768,7 @@ body{margin:0;font-family:var(--sh-font);color:var(--sh-t);line-height:1.7;-webk
       进场靠 gmToastIn 的 both 填充、退场靠 gmToastOut 的 forwards 填充。
       改为 transition 时，取消动画那一瞬计算值先跳回静态态、过渡取不到起点 → 退场闪一下。
    ══════════════════════════════════════════════════════════════════════════ */
-.gm-toastposition:fixed;left:50%;top:var(--gm-toast-top,20px);z-index:250;
+.gm-toast{position:fixed;left:50%;top:var(--gm-toast-top,20px);z-index:250;
   display:inline-flex;align-items:center;gap:9px;max-width:min(84vw,420px);
   padding:10px 18px;border-radius:999px;pointer-events:none;
   background:linear-gradient(160deg,rgba(255,255,255,.97),rgba(255,255,255,.9));
@@ -776,7 +776,7 @@ body{margin:0;font-family:var(--sh-font);color:var(--sh-t);line-height:1.7;-webk
   color:var(--lg-text-primary,#343A46);
   font-family:var(--sh-font);font-size:13px;font-weight:600;line-height:1.6;
   box-shadow:0 1px 2px rgba(58,52,84,.06),0 12px 30px rgba(58,52,84,.14);
-  animation:gmToastIn 320ms cubic-bezier(.22,1,.36,1) bothbackground-origin:border-box}
+  animation:gmToastIn 320ms cubic-bezier(.22,1,.36,1) both;background-origin:border-box}
 .gm-toast.is-leaving{animation:gmToastOut 240ms ease-in forwards}
 @keyframes gmToastIn{from{opacity:0;transform:translate(-50%,-24px)}to{opacity:1;transform:translate(-50%,0)}}
 @keyframes gmToastOut{from{opacity:1;transform:translate(-50%,0)}to{opacity:0;transform:translate(-50%,-24px)}}
@@ -831,12 +831,12 @@ body{margin:0;font-family:var(--sh-font);color:var(--sh-t);line-height:1.7;-webk
 /* 一键 P3/P97 红线开关（13.2「一键 P3/P97 红线开关」） */
 .gm-growth__toggle{display:inline-flex;align-items:center;gap:6px;height:26px;padding:0 10px;
   font:inherit;font-size:12px;font-weight:500;color:var(--lg-text-secondary,#4F5B6E);cursor:pointer;
-  border-radius:16px;background:var(--lg-glass-control,rgba(255,255,255,.35));
+  border-radius:var(--lg-radius-pill,999px);background:var(--lg-glass-control,rgba(255,255,255,.35));
   border:1px solid var(--lg-divider,rgba(58,52,84,.10))}
 /* D9 二元规则：品牌亮粉底 → **深字 #343A46**（白字在亮粉上仅 2.9:1）。
    这里不能借 --lg-text-on-accent：个别页面把它定义成 #FFFFFF，实测白字压亮粉 2.46:1。 */
-.gm-growth__toggle[aria-pressed="true"]background:var(--mmh-grad-action-hc,#F77FA3);
-  color:#343A46;border-color:transparent;font-weight:600background-origin:border-box}
+.gm-growth__toggle[aria-pressed="true"]{background:var(--mmh-grad-action-hc,#F77FA3);
+  color:#343A46;border-color:transparent;font-weight:600;background-origin:border-box}
 .gm-growth__toggle:focus-visible{outline:var(--lg-ring-width,2px) solid var(--lg-ring-color);outline-offset:2px}
 .gm-growth__svg{display:block;width:100%;height:auto;overflow:visible;touch-action:pan-y}
 /* M 家长端形态（13.2）：嵌在手机模型里的小尺寸版，只有带 + 线 + 端点 */
@@ -980,15 +980,15 @@ body{margin:0;font-family:var(--sh-font);color:var(--sh-t);line-height:1.7;-webk
    `grid-template-rows: 0fr → 1fr` 而不是 max-height（后者要猜一个值，
    猜大了过渡提前结束、猜小了内容被截，且必然伴随布局抖动）。
    箭头 `lg-icon-chevron-down` 旋转 180° / 220ms；一屏同时展开 ≤3 组（由外壳脚本保证）。 */
-.gm-foldborder-radius:20px;overflow:hidden;
+.gm-fold{border-radius:20px;overflow:hidden;
   background:linear-gradient(160deg,rgba(255,255,255,.62),rgba(255,255,255,.3));
-  border:1px solid var(--lg-divider,rgba(58,52,84,.10))background-origin:border-box}
+  border:1px solid var(--lg-divider,rgba(58,52,84,.10));background-origin:border-box}
 /* ⚠️ 折叠面板原先只有**写死的浅玻璃底**，没有暗色档 —— 任何在暗色下使用
    `details.gm-fold` 的模块都会得到"页面翻了、这块没翻"的浅板（实测：暗色模块里
    折叠正文 1.39:1，基本不可读）。浅色档保持逐字不变（既有页面零影响），只补暗档。 */
 [data-theme="dark"] .gm-fold
-  background:linear-gradient(160deg,rgba(255,255,255,.10),rgba(255,255,255,.06));
-  border-color:rgba(255,255,255,.14)background-origin:border-box}
+  {background:linear-gradient(160deg,rgba(255,255,255,.10),rgba(255,255,255,.06));
+  border-color:rgba(255,255,255,.14);background-origin:border-box}
 [data-theme="dark"] .gm-fold>summary:hover{background:rgba(255,255,255,.08)}
 .gm-fold+.gm-fold{margin-top:8px}
 .gm-fold>summary{display:flex;align-items:center;gap:10px;min-height:44px;

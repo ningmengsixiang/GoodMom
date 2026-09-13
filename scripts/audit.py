@@ -563,7 +563,10 @@ def bg_origin():
     for f in sorted(set(files)):
         if not os.path.exists(f):
             continue
-        for sel, body in _brace_blocks(open(f, encoding="utf-8").read()):
+        # ⚠️ 先剥注释再配对：注释里写示例（如 `*{background-origin:border-box}`）会被当成**真规则** ——
+        #    实测在我的说明注释上误报过一次。
+        raw = re.sub(r"/\*.*?\*/", " ", open(f, encoding="utf-8").read(), flags=re.S)
+        for sel, body in _brace_blocks(raw):
             if re.search(r"background-origin\s*:", body) and re.fullmatch(r"\*[^{}]*", sel.strip()):
                 global_rule.append(f)
             if not (GRAD.search(body) and has_border(body)):
@@ -609,7 +612,9 @@ def btn_radius():
     for f in sorted(set(files)):
         if not os.path.exists(f):
             continue
-        for sel, body in _brace_blocks(open(f, encoding="utf-8").read()):
+        # ⚠️ 先剥注释：注释里写示例（如 `*{background-origin:border-box}`）会被当**真规则**配对
+        raw = re.sub(r"/\*.*?\*/", " ", open(f, encoding="utf-8").read(), flags=re.S)
+        for sel, body in _brace_blocks(raw):
             # 范围收口：只查**按钮族**（用户这次指的就是按钮），且
             #  ⚠️ `_brace_blocks` 不展开 @media —— 媒体块里的"选择器/规则体"会串行配对，
             #  不跳过就会拿 A 规则的高度配 B 规则的圆角（实测误报过 radius=40/height=13）。
@@ -1003,6 +1008,18 @@ def css_syntax():
         for m in re.finditer(r"<style\b[^>]*>(.*?)</style>", t, re.S):
             targets.append(("%s<style#%d>" % (f, m.start()), m.group(1)))
 
+    # ⚠️ V2.9 实测盲区：**外壳 CSS 在 `build-site.py` 的三引号里**，此前完全不在检查范围内。
+    #    我上一轮自动补丁把 `.sh-top{` 写成了 `.sh-topposition:sticky;`（花括号被吃），
+    #    导航菜单当场坏掉，而 build-site.py 照常编译、site-smoke 48/48 照样绿 ——
+    #    因为 DOM/aria 断言看不见"CSS 规则被浏览器整条丢弃"。
+    # ⚠️ 外壳模板是 **CSS + HTML + JS 混排**：整段统计括号会把 JS 的 {} 也算进去。
+    #    故只取 `<style>…</style>` 的内容（与上面独立页同一做法）。
+    _shell = _io.open("scripts/build-site.py", encoding="utf-8").read()
+    for m in re.finditer(r"<style\b[^>]*>(.*?)</style>", _shell, re.S):
+        seg = m.group(1)
+        if ".sh-top" in seg and "gradient" in seg:
+            targets.append(("scripts/build-site.py(外壳 <style>)", seg))
+
     for item in targets:
         if isinstance(item, tuple):
             f, css = item
@@ -1015,6 +1032,43 @@ def css_syntax():
         if stripped.count("{") != stripped.count("}"):
             bad.append("%s：花括号不平衡（{ %d vs } %d）"
                        % (f, stripped.count("{"), stripped.count("}")))
+        # 结构检查（V2.9 实测最隐蔽的一类）：括号**计数平衡**不等于结构正确 ——
+        # 我一次"补花括号"补错了位置（`@keyframes gmToastOut{` → `@keyframes{ gmToastOut{`），
+        # 计数依旧平衡，但该块**从未闭合**，把其后**全部外壳规则**吞进它的块里：
+        # 导航、表格、折叠、增长图开关、移动端一大片规则在浏览器里静默失效（观感就是"组件错位"）。
+        # 故这里查三件事：深度不得转负、结尾必须归零、非 at-rule 的规则体里不得再出现 `{`。
+        d, neg = 0, 0
+        for ch in stripped:
+            if ch == "{":
+                d += 1
+            elif ch == "}":
+                d -= 1
+                if d < 0:
+                    neg += 1; d = 0
+        if neg:
+            bad.append("%s：出现 %d 个多余的 `}`（有规则缺 `{` 或块未闭合）" % (f, neg))
+        elif d != 0:
+            bad.append("%s：结尾仍有 %d 个未闭合的 `{`（其后所有规则会被吞掉）" % (f, d))
+        # 损伤特征：**选择器里混进了属性声明**（`.gm-fold{border-radius:…}` 被写成 `.gm-foldborder-radius:…`）
+        # —— 比"数括号"准，因为这种损伤常常同时吃 `{`、又在别处多一个 `{`，计数照样平衡。
+        for seg in re.split(r"[{}]", stripped):
+            head = seg.split(";")[0].strip()
+            # 先剥掉伪类/伪元素（`:hover` / `::after` / `:not(...)` 本来就有冒号，不算损伤）
+            plain = re.sub(r"::?[a-z-]+(?:\([^)]*\))?", "", head)
+            if head.startswith((".", "#", "[")) and ":" in plain and len(head) < 120:
+                bad.append("%s：选择器里混进了属性声明（规则缺 `{`）：%r" % (f, head[:60]))
+                break
+        for mm in re.finditer(r"([^{}]*)\{([^{}]*)\{", stripped):
+            sel = mm.group(1).strip().split("\n")[-1].strip()
+            if sel and not sel.startswith("@") and not sel.startswith("/"):
+                bad.append("%s：非 at-rule 的规则体里又出现 `{`（%s）—— 后续规则会被静默吞掉" % (f, sel[:40]))
+                break
+        # 声明粘连（缺分号）：`…saturate(1.2)background-origin:border-box` 这种一行里挤两条声明，
+        # 浏览器会把整条声明判为无效 —— 括号仍然平衡，所以只有这一条能抓到。
+        glue = re.findall(r"\)\s*[a-zA-Z-]{3,}\s*:", stripped)
+        if glue:
+            bad.append("%s：声明粘连（缺分号）%d 处，例：%s"
+                       % (f, len(glue), re.findall(r"\S{0,28}\)\s*[a-zA-Z-]{3,}\s*:\S{0,14}", stripped)[:2]))
 
     if bad:
         for b in bad:

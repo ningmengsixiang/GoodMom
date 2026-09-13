@@ -54,6 +54,19 @@ CASES = [
      "`color-mix(in srgb, ${base} var(--lg-tint-pct,13%), transparent)`", "transparent 混色"),
     ("token/暗色档漏声明淡底透明度", "tint-base", "goodmom-ui/src/theme.css",
      "  --lg-tint-base:#23222A; --lg-tint-pct:8%;", "  --lg-tint-base:#23222A;", "应为 8%"),
+    # ── css-syntax 扩展（V2.9：我自己往外壳 CSS 里插规则时把导航写坏过）────────
+    ("css/外壳 CSS 被吃掉花括号（导航曾因此坏掉）", "css-syntax", "scripts/build-site.py",
+     ".gm-toast{position:fixed;left:50%;", ".gm-toastposition:fixed;left:50%;", "花括号不平衡"),
+    # 结构损伤（V2.9 实测最隐蔽的一类：计数平衡但结构坏了，后续规则被静默吞掉）
+    ("css/选择器里混进属性声明（规则缺花括号）", "css-syntax", "scripts/build-site.py",
+     ".gm-fold{border-radius:20px;", ".gm-foldborder-radius:20px;", "缺 `{`"),
+    ("css/keyframes 块未闭合（吞掉后续全部规则）", "css-syntax", "scripts/build-site.py",
+     "@keyframes gmToastOut{from{opacity:1;transform:translate(-50%,0)}to{opacity:0;transform:translate(-50%,-24px)}}",
+     "@keyframes gmToastOut{from{opacity:1;transform:translate(-50%,0)}to{opacity:0;transform:translate(-50%,-24px)}",
+     "花括号不平衡"),
+    ("css/外壳 CSS 声明粘连（缺分号）", "css-syntax", "scripts/build-site.py",
+     "backdrop-filter:blur(18px) saturate(1.2);background-origin:border-box}",
+     "backdrop-filter:blur(18px) saturate(1.2)background-origin:border-box}", "粘连"),
     # ── bg-origin / btn-radius（V2.9：用户报"主按钮头上缺一块、露出别的底色"）──
     ("a11y/渐变规则漏写背景原点", "bg-origin", "goodmom-ui/src/theme.css",
      "box-shadow:0 1px 2px rgba(178,58,99,.22),0 8px 20px rgba(240,127,163,.30);background-origin:border-box}",

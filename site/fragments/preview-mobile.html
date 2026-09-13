@@ -266,7 +266,10 @@ svg.i{width:22px;height:22px;stroke:currentColor;fill:none;stroke-width:1.7;
 .pm-row .ic{width:40px;height:40px;border-radius:18px;flex:none;display:flex;align-items:center;
   justify-content:center;background:var(--pm-solid);border:1px solid var(--pm-edge);color:var(--text-2)}
 .pm-row .md{flex:1;min-width:0}
-.pm-row .md b{display:block;font-size:15px;font-weight:500}
+/* V2.9：与 .rowitem .md 同口径补省略号三件套 —— 原来标题与副文案会溢出容器
+   （实测「本次儿保服务评分」溢出 7px、「未评分 · 键盘 ←/→ 可调」溢出 7px） */
+.pm-row .md b{display:block;font-size:15px;font-weight:500;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.pm-row .md>span{display:block;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .pm-row .md span{display:block;font-size:12px;color:var(--text-3);margin-top:2px}
 
 /* ── 9 · SearchBar / NoticeBar（11.2.1 / 11.2.8）─────────────────────── */
@@ -547,6 +550,8 @@ svg.i{width:22px;height:22px;stroke:currentColor;fill:none;stroke-width:1.7;
   padding:88px 0;overscroll-behavior:contain;touch-action:pan-y}
 .pm-wheel::-webkit-scrollbar{display:none}
 .pm-wo{display:flex;align-items:center;justify-content:center;width:100%;height:44px;font-size:16px;
+  /* V2.9：周龄片是有形状的控件，圆角走胶囊档（原为直角） */
+  border-radius:var(--lg-radius-pill,999px);
   color:var(--text-3);scroll-snap-align:center;font-variant-numeric:tabular-nums}
 .pm-wo[aria-selected="true"]{color:var(--text);font-weight:600}
 .pm-sheetfoot{display:flex;gap:10px;padding:8px 4px 0}
@@ -686,7 +691,9 @@ svg.i{width:22px;height:22px;stroke:currentColor;fill:none;stroke-width:1.7;
   border-radius:999px;background:var(--solid-danger);color:#FFF;font-size:10px;font-weight:600;line-height:16px}
 
 /* ── 20 · 主行动 CTA（03 · 3.2.4 配方）───────────────────────────────── */
-.cta{display:flex;align-items:center;justify-content:center;gap:8px;width:100%;height:50px;
+.cta{display:flex;align-items:center;justify-content:center;gap:8px;width:100%;height:48px;
+  /* V2.9：主行动按钮落到 48 尺寸档，圆角走胶囊档（18 对 h=48/50 都不是胶囊，声明≠渲染） */
+  border-radius:var(--lg-radius-pill,999px);
   border:1px solid transparent;border-radius:18px;font-family:var(--font);font-size:16px;font-weight:600;
   color:var(--text);background:var(--mmh-grad-action-hc);
   box-shadow:0 1px 2px rgba(178,58,99,.22),0 8px 20px rgba(240,127,163,.30);

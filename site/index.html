@@ -45,10 +45,10 @@ body{margin:0;font-family:var(--sh-font);color:var(--sh-t);line-height:1.7;-webk
   min-height:100vh}
 .sh-sr{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap;border:0}
 /* ── 唯一主导航 ── */
-.sh-topposition:sticky;top:0;z-index:200;padding:10px 16px;
+.sh-top{position:sticky;top:0;z-index:200;padding:10px 16px;
   background:linear-gradient(180deg,rgba(253,242,238,.92),rgba(253,242,238,.78));
   border-bottom:1px solid rgba(232,93,143,.16);
-  -webkit-backdrop-filter:blur(18px) saturate(1.2);backdrop-filter:blur(18px) saturate(1.2)background-origin:border-box}
+  -webkit-backdrop-filter:blur(18px) saturate(1.2);backdrop-filter:blur(18px) saturate(1.2);background-origin:border-box}
 .sh-top-in{max-width:1240px;margin:0 auto;display:flex;align-items:center;gap:10px;flex-wrap:wrap}
 .sh-brand{display:flex;align-items:center;gap:9px;font-size:15px;font-weight:700;color:var(--sh-rose-deep);
   text-decoration:none;margin-right:6px;flex:none}
@@ -61,18 +61,18 @@ body{margin:0;font-family:var(--sh-font);color:var(--sh-t);line-height:1.7;-webk
   border:1px solid transparent;background:none;border-radius:999px;padding:8px 14px;white-space:nowrap;
   transition:background .18s var(--sh-ease),color .18s var(--sh-ease)}
 .sh-tab:hover{background:rgba(255,255,255,.75);color:var(--sh-rose-deep)}
-.sh-tab[aria-selected="true"]background:var(--sh-grad-action);color:var(--sh-t);border-color:transparent;
-  box-shadow:0 6px 16px rgba(240,127,163,.3)background-origin:border-box}
+.sh-tab[aria-selected="true"]{background:var(--sh-grad-action);color:var(--sh-t);border-color:transparent;
+  box-shadow:0 6px 16px rgba(240,127,163,.3);background-origin:border-box}
 .sh-tab:focus-visible{outline:var(--sh-ring) solid rgba(232,93,143,.6);outline-offset:2px}
 .sh-ext{margin-left:auto;display:flex;gap:8px;align-items:center;flex:none}
 .sh-ext a{font-size:12.5px;font-weight:600;text-decoration:none;padding:8px 14px;border-radius:999px;
   color:var(--sh-rose-deep);background:#FFF;border:1px solid rgba(232,93,143,.3);white-space:nowrap}
-.sh-ext a.pribackground:var(--sh-grad-action);color:var(--sh-t);border-color:transparent;
-  box-shadow:0 6px 16px rgba(240,127,163,.3)background-origin:border-box}
+.sh-ext a.pri{background:var(--sh-grad-action);color:var(--sh-t);border-color:transparent;
+  box-shadow:0 6px 16px rgba(240,127,163,.3);background-origin:border-box}
 .sh-ext a:focus-visible{outline:var(--sh-ring) solid rgba(232,93,143,.6);outline-offset:2px}
 .sh-note{font-size:12.5px;font-weight:600;padding:8px 14px;border-radius:999px;white-space:nowrap;
   color:var(--sh-rose-deep);background:rgba(255,255,255,.6);border:1px solid rgba(232,93,143,.22)}
-/* ── 模块容器：同一时刻只显示一个（不做双渲染后隐藏）── */
+/* {── 模块容器：同一时刻只显示一个（不做双渲染后隐藏）── */
 .gm-mod{display:none}
 .gm-mod.is-on{display:block}
 /* 文档型模块（规范全文 / 标准手册）自带的固定侧栏改为模块内定位，避免溢出到外壳 */
@@ -97,7 +97,7 @@ body{margin:0;font-family:var(--sh-font);color:var(--sh-t);line-height:1.7;-webk
       进场靠 gmToastIn 的 both 填充、退场靠 gmToastOut 的 forwards 填充。
       改为 transition 时，取消动画那一瞬计算值先跳回静态态、过渡取不到起点 → 退场闪一下。
    ══════════════════════════════════════════════════════════════════════════ */
-.gm-toastposition:fixed;left:50%;top:var(--gm-toast-top,20px);z-index:250;
+.gm-toast{position:fixed;left:50%;top:var(--gm-toast-top,20px);z-index:250;
   display:inline-flex;align-items:center;gap:9px;max-width:min(84vw,420px);
   padding:10px 18px;border-radius:999px;pointer-events:none;
   background:linear-gradient(160deg,rgba(255,255,255,.97),rgba(255,255,255,.9));
@@ -105,7 +105,7 @@ body{margin:0;font-family:var(--sh-font);color:var(--sh-t);line-height:1.7;-webk
   color:var(--lg-text-primary,#343A46);
   font-family:var(--sh-font);font-size:13px;font-weight:600;line-height:1.6;
   box-shadow:0 1px 2px rgba(58,52,84,.06),0 12px 30px rgba(58,52,84,.14);
-  animation:gmToastIn 320ms cubic-bezier(.22,1,.36,1) bothbackground-origin:border-box}
+  animation:gmToastIn 320ms cubic-bezier(.22,1,.36,1) both;background-origin:border-box}
 .gm-toast.is-leaving{animation:gmToastOut 240ms ease-in forwards}
 @keyframes gmToastIn{from{opacity:0;transform:translate(-50%,-24px)}to{opacity:1;transform:translate(-50%,0)}}
 @keyframes gmToastOut{from{opacity:1;transform:translate(-50%,0)}to{opacity:0;transform:translate(-50%,-24px)}}
@@ -160,12 +160,12 @@ body{margin:0;font-family:var(--sh-font);color:var(--sh-t);line-height:1.7;-webk
 /* 一键 P3/P97 红线开关（13.2「一键 P3/P97 红线开关」） */
 .gm-growth__toggle{display:inline-flex;align-items:center;gap:6px;height:26px;padding:0 10px;
   font:inherit;font-size:12px;font-weight:500;color:var(--lg-text-secondary,#4F5B6E);cursor:pointer;
-  border-radius:16px;background:var(--lg-glass-control,rgba(255,255,255,.35));
+  border-radius:var(--lg-radius-pill,999px);background:var(--lg-glass-control,rgba(255,255,255,.35));
   border:1px solid var(--lg-divider,rgba(58,52,84,.10))}
 /* D9 二元规则：品牌亮粉底 → **深字 #343A46**（白字在亮粉上仅 2.9:1）。
    这里不能借 --lg-text-on-accent：个别页面把它定义成 #FFFFFF，实测白字压亮粉 2.46:1。 */
-.gm-growth__toggle[aria-pressed="true"]background:var(--mmh-grad-action-hc,#F77FA3);
-  color:#343A46;border-color:transparent;font-weight:600background-origin:border-box}
+.gm-growth__toggle[aria-pressed="true"]{background:var(--mmh-grad-action-hc,#F77FA3);
+  color:#343A46;border-color:transparent;font-weight:600;background-origin:border-box}
 .gm-growth__toggle:focus-visible{outline:var(--lg-ring-width,2px) solid var(--lg-ring-color);outline-offset:2px}
 .gm-growth__svg{display:block;width:100%;height:auto;overflow:visible;touch-action:pan-y}
 /* M 家长端形态（13.2）：嵌在手机模型里的小尺寸版，只有带 + 线 + 端点 */
@@ -309,15 +309,15 @@ body{margin:0;font-family:var(--sh-font);color:var(--sh-t);line-height:1.7;-webk
    `grid-template-rows: 0fr → 1fr` 而不是 max-height（后者要猜一个值，
    猜大了过渡提前结束、猜小了内容被截，且必然伴随布局抖动）。
    箭头 `lg-icon-chevron-down` 旋转 180° / 220ms；一屏同时展开 ≤3 组（由外壳脚本保证）。 */
-.gm-foldborder-radius:20px;overflow:hidden;
+.gm-fold{border-radius:20px;overflow:hidden;
   background:linear-gradient(160deg,rgba(255,255,255,.62),rgba(255,255,255,.3));
-  border:1px solid var(--lg-divider,rgba(58,52,84,.10))background-origin:border-box}
+  border:1px solid var(--lg-divider,rgba(58,52,84,.10));background-origin:border-box}
 /* ⚠️ 折叠面板原先只有**写死的浅玻璃底**，没有暗色档 —— 任何在暗色下使用
    `details.gm-fold` 的模块都会得到"页面翻了、这块没翻"的浅板（实测：暗色模块里
    折叠正文 1.39:1，基本不可读）。浅色档保持逐字不变（既有页面零影响），只补暗档。 */
 [data-theme="dark"] .gm-fold
-  background:linear-gradient(160deg,rgba(255,255,255,.10),rgba(255,255,255,.06));
-  border-color:rgba(255,255,255,.14)background-origin:border-box}
+  {background:linear-gradient(160deg,rgba(255,255,255,.10),rgba(255,255,255,.06));
+  border-color:rgba(255,255,255,.14);background-origin:border-box}
 [data-theme="dark"] .gm-fold>summary:hover{background:rgba(255,255,255,.08)}
 .gm-fold+.gm-fold{margin-top:8px}
 .gm-fold>summary{display:flex;align-items:center;gap:10px;min-height:44px;
@@ -437,7 +437,7 @@ body{margin:0;font-family:var(--sh-font);color:var(--sh-t);line-height:1.7;-webk
 .gm-mod--site-index .stat i{font-style:normal;font-size:11px;color:var(--t3)}
 .gm-mod--site-index .cta{display:flex;gap:10px;justify-content:center;flex-wrap:wrap;margin-top:22px}
 .gm-mod--site-index .btn{display:inline-flex;align-items:center;gap:8px;text-decoration:none;font-weight:600;font-size:14px;
-  padding:12px 22px;border-radius:999px;transition:.2s;border:1px solid transparent}
+  height:48px;padding:0 22px;border-radius:var(--lg-radius-pill,999px);transition:.2s;border:1px solid transparent}
 /* ── 03 · 3.2.4 按钮统一配方（V2.9）──
    ① 主按钮不套玻璃白描边/白内高光：那两层是 02 · 2.5 给**半透明玻璃面**的边光，
       落在 D9 后的浅粉实底上会「亮端看不见、暗端看得见」→ 描边错行；再叠 inset 白高光成双线发糊（脏）。
@@ -855,7 +855,7 @@ import { GmIcon } from "@goodmom/icons";
 .gm-mod--preview-index .demo-card.c2{right:6%;top:8%;width:180px}
 .gm-mod--preview-index .demo-card.c2 .ringwrap{display:flex;align-items:center;gap:12px}
 .gm-mod--preview-index .demo-card.c3{bottom:6%;right:16%;display:flex;gap:8px;align-items:center}
-.gm-mod--preview-index .demo-card.c3 .gbtn{padding:8px 16px;border-radius:18px;font-size:12px;font-weight:600;
+.gm-mod--preview-index .demo-card.c3 .gbtn{height:32px;padding:0 16px;border-radius:var(--lg-radius-pill,999px);font-size:12px;font-weight:600;
   background:var(--mmh-grad-action-hc,#F77FA3);color:#343A46;border:1px solid transparent;box-shadow:0 1px 2px rgba(178,58,99,.22),0 8px 20px rgba(240,127,163,.30);background-origin:border-box}   /* D9：品牌亮粉底必须配深字；白描边/白高光在浅粉上会造成边缘深浅不均，一并去掉 */
 .gm-mod--preview-index .demo-card.c3 .gbtn.gb2{background:linear-gradient(160deg,#E0F8F6,#A5F1EE);
   color:#1B3D33;border:none;box-shadow:0 1px 2px rgba(27,61,51,.18),0 8px 20px rgba(114,221,229,.30)}
@@ -1441,7 +1441,7 @@ import { GmIcon } from "@goodmom/icons";
 .gm-mod--preview-index .mdot.warn{background:#F2B25C;box-shadow:0 0 0 2.5px rgba(242,178,92,.16)}
 .gm-mod--preview-index .mdot.danger{background:#EF6A7B;box-shadow:0 0 0 2.5px rgba(239,106,123,.15)}
 .gm-mod--preview-index .mbtn{font-size:10.5px;font-weight:600;color:#343A46;background:var(--mmh-grad-action-hc,#F77FA3);
-  border-radius:18px;padding:8px 0;text-align:center;border:1px solid rgba(255,255,255,.6);box-shadow:0 1px 2px rgba(178,58,99,.22),0 8px 20px rgba(240,127,163,.30);background-origin:border-box}
+  border-radius:var(--lg-radius-pill,999px);height:32px;padding:0 12px;min-width:0;text-align:center;border:1px solid rgba(255,255,255,.6);box-shadow:0 1px 2px rgba(178,58,99,.22),0 8px 20px rgba(240,127,163,.30);background-origin:border-box}
 .gm-mod--preview-index .mprog{height:6px;border-radius:999px;background:rgba(58,52,84,.09);overflow:hidden}
 .gm-mod--preview-index .mprog i{display:block;height:100%;border-radius:999px;background:linear-gradient(90deg,#FFA3BE,#E85D8F)}
 /* 移动控件平铺清单 */
@@ -1458,13 +1458,14 @@ import { GmIcon } from "@goodmom/icons";
 
 
 /* ═══ 3.2.4 对齐 Arco · 按钮全谱 ═══ */
-.gm-mod--preview-index .bx{display:inline-flex;align-items:center;justify-content:center;gap:8px;border:1px solid transparent;border-radius:20px;
+.gm-mod--preview-index .bx{display:inline-flex;align-items:center;justify-content:center;gap:8px;border:1px solid transparent;border-radius:var(--lg-radius-pill,999px);
   font-weight:600;font-size:14px;font-family:var(--lg-font-sans);cursor:pointer;height:40px;padding:0 18px;
   position:relative;overflow:hidden;white-space:nowrap;
   transition:transform var(--lg-t-base) var(--lg-ease-out),box-shadow var(--lg-t-base) var(--lg-ease-out),background .25s ease,color .2s ease}
 .gm-mod--preview-index .bx:active{transform:scale(.96);transition-duration:var(--lg-t-fast)}
 .gm-mod--preview-index .bx svg{width:16px;height:16px;stroke:currentColor;fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round;flex:none}
-.gm-mod--preview-index .bx-mini{height:28px;font-size:12px;padding:0 13px;border-radius:18px}  /* 02 · 2.4 交互下限 16 */
+/* V2.9：尺寸档 26/32/40/48；圆角一律胶囊档（20/18 这类数字对 h=40/28 都不是胶囊，声明≠渲染） */
+.gm-mod--preview-index .bx-mini{height:26px;font-size:12px;padding:0 13px;border-radius:var(--lg-radius-pill,999px)}
 .gm-mod--preview-index .bx-sm{height:32px;font-size:13px;padding:0 15px;border-radius:18px}
 .gm-mod--preview-index .bx-lg{height:48px;font-size:15px;padding:0 24px;border-radius:22px}
 .gm-mod--preview-index .bx-default{background:linear-gradient(160deg,rgba(255,255,255,.94),rgba(255,255,255,.78));color:var(--lg-text-primary,#343A46);border:1px solid var(--lg-divider,rgba(58,52,84,.10));box-shadow:0 1px 2px rgba(58,52,84,.06),0 4px 12px rgba(58,52,84,.08);-webkit-backdrop-filter:blur(16px) saturate(1.2);backdrop-filter:blur(16px) saturate(1.2);background-origin:border-box}
@@ -1486,8 +1487,8 @@ import { GmIcon } from "@goodmom/icons";
 .gm-mod--preview-index .bx.cr svg{width:18px;height:18px}
 .gm-mod--preview-index .bx.disabled{opacity:.4;pointer-events:none}
 .gm-mod--preview-index .bx-long{width:100%}
-.gm-mod--preview-index .bgroup{display:inline-flex;border-radius:20px;overflow:hidden;border:1px solid rgba(255,255,255,.75);box-shadow:var(--lg-shadow-sm);background:rgba(255,255,255,.45)}
-.gm-mod--preview-index .bgroup .bx{border-radius:0;border:none;background:transparent;color:var(--lg-text-secondary);box-shadow:none;height:36px}
+.gm-mod--preview-index .bgroup{display:inline-flex;border-radius:var(--lg-radius-pill,999px);overflow:hidden;border:1px solid rgba(255,255,255,.75);box-shadow:var(--lg-shadow-sm);background:rgba(255,255,255,.45)}
+.gm-mod--preview-index .bgroup .bx{border-radius:0;border:none;background:transparent;color:var(--lg-text-secondary);box-shadow:none;height:32px}
 .gm-mod--preview-index .bgroup .bx.on{background:var(--mmh-grad-action-hc,#F77FA3);color:#343A46}
 .gm-mod--preview-index .bgroup .bx:not(.on):hover{background:rgba(255,255,255,.6)}
 .gm-mod--preview-index .bx .ld{animation:spinm .9s linear infinite}
@@ -2350,7 +2351,7 @@ import { GmIcon } from "@goodmom/icons";
               <div style="font-size:11.5px;color:var(--lg-text-secondary);margin-bottom:10px">注销后不可恢复，档案将进入“已注销”状态。</div>
               <div style="display:flex;gap:8px;justify-content:flex-end">
                 <button class="bx bx-text" id="preview-index--pcNo">取消</button>
-                <button class="bx bx-solid st-danger" style="height:34px;padding:0 16px;font-size:13px" id="preview-index--pcYes">确认注销</button>
+                <button class="bx bx-solid st-danger" style="height:32px;padding:0 16px;font-size:13px" id="preview-index--pcYes">确认注销</button>
               </div>
             </div>
           </span>
@@ -3698,7 +3699,7 @@ background:rgba(255,255,255,.5);border:1px solid var(--lg-divider,rgba(58,52,84,
   <div class="pcbar glass">
     <span class="logo"><i></i>妈咪好 · 机构管理端</span>
     <div class="search"><svg class="i"><circle cx="10.5" cy="10.5" r="6.5"/><path d="M15.4 15.4 21 21"/></svg><input placeholder="搜索服务对象 / 身份证 / 档案号" aria-label="搜索服务对象 / 身份证 / 档案号"></div>
-    <button class="btn pri" style="height:38px">新增建档 <svg class="i"><path d="M12 5.5v13M5.5 12h13"/></svg></button>
+    <button class="btn pri" style="height:40px">新增建档 <svg class="i"><path d="M12 5.5v13M5.5 12h13"/></svg></button>
     <span class="u">王</span>
   </div>
 
@@ -4517,7 +4518,10 @@ function MODROOT_preview_examples(){return document.getElementById("gm-mod-previ
 .gm-mod--preview-mobile .pm-row .ic{width:40px;height:40px;border-radius:18px;flex:none;display:flex;align-items:center;
   justify-content:center;background:var(--pm-solid);border:1px solid var(--pm-edge);color:var(--text-2)}
 .gm-mod--preview-mobile .pm-row .md{flex:1;min-width:0}
-.gm-mod--preview-mobile .pm-row .md b{display:block;font-size:15px;font-weight:500}
+/* V2.9：与 .rowitem .md 同口径补省略号三件套 —— 原来标题与副文案会溢出容器
+   （实测「本次儿保服务评分」溢出 7px、「未评分 · 键盘 ←/→ 可调」溢出 7px） */
+.gm-mod--preview-mobile .pm-row .md b{display:block;font-size:15px;font-weight:500;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.gm-mod--preview-mobile .pm-row .md>span{display:block;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .gm-mod--preview-mobile .pm-row .md span{display:block;font-size:12px;color:var(--text-3);margin-top:2px}
 
 /* ── 9 · SearchBar / NoticeBar（11.2.1 / 11.2.8）─────────────────────── */
@@ -4798,6 +4802,8 @@ function MODROOT_preview_examples(){return document.getElementById("gm-mod-previ
   padding:88px 0;overscroll-behavior:contain;touch-action:pan-y}
 .gm-mod--preview-mobile .pm-wheel::-webkit-scrollbar{display:none}
 .gm-mod--preview-mobile .pm-wo{display:flex;align-items:center;justify-content:center;width:100%;height:44px;font-size:16px;
+  /* V2.9：周龄片是有形状的控件，圆角走胶囊档（原为直角） */
+  border-radius:var(--lg-radius-pill,999px);
   color:var(--text-3);scroll-snap-align:center;font-variant-numeric:tabular-nums}
 .gm-mod--preview-mobile .pm-wo[aria-selected="true"]{color:var(--text);font-weight:600}
 .gm-mod--preview-mobile .pm-sheetfoot{display:flex;gap:10px;padding:8px 4px 0}
@@ -4937,7 +4943,9 @@ function MODROOT_preview_examples(){return document.getElementById("gm-mod-previ
   border-radius:999px;background:var(--solid-danger);color:#FFF;font-size:10px;font-weight:600;line-height:16px}
 
 /* ── 20 · 主行动 CTA（03 · 3.2.4 配方）───────────────────────────────── */
-.gm-mod--preview-mobile .cta{display:flex;align-items:center;justify-content:center;gap:8px;width:100%;height:50px;
+.gm-mod--preview-mobile .cta{display:flex;align-items:center;justify-content:center;gap:8px;width:100%;height:48px;
+  /* V2.9：主行动按钮落到 48 尺寸档，圆角走胶囊档（18 对 h=48/50 都不是胶囊，声明≠渲染） */
+  border-radius:var(--lg-radius-pill,999px);
   border:1px solid transparent;border-radius:18px;font-family:var(--font);font-size:16px;font-weight:600;
   color:var(--text);background:var(--mmh-grad-action-hc);
   box-shadow:0 1px 2px rgba(178,58,99,.22),0 8px 20px rgba(240,127,163,.30);
@@ -7631,9 +7639,11 @@ document.getElementById("preview-patterns--dk-toggle").addEventListener("click",
 .gm-mod--site-spec .top img{width:26px;height:26px;border-radius:50%;object-fit:cover}
 .gm-mod--site-spec .top b{color:var(--rose-deep);font-size:14px;margin-right:10px}
 .gm-mod--site-spec .gp{position:relative;display:inline-flex}
-.gm-mod--site-spec .gp>button{font-family:inherit;border:1px solid transparent;background:none;border-radius:999px;padding:7px 12px;cursor:pointer;font-size:13px;font-weight:500;color:var(--t2)}
+.gm-mod--site-spec .gp>button{font-family:inherit;border:1px solid transparent;background:none;border-radius:var(--lg-radius-pill,999px);min-height:26px;padding:7px 12px;cursor:pointer;font-size:13px;font-weight:500;color:var(--t2)}
 .gm-mod--site-spec .gp>button::after{content:"▾";font-size:9px;margin-left:4px;opacity:.6}
 .gm-mod--site-spec .gp:hover>button{background:#FFF;color:var(--rose-deep)}
+/* V2.9：阅读器工具栏/章节导航按钮原为 25px 直角 —— 尺寸落 26 档、圆角走胶囊档 */
+.gm-mod--site-spec .top button,.gm-mod--site-spec .chapnav button,.gm-mod--site-spec .readtoggle{min-height:26px;border-radius:var(--lg-radius-pill,999px)}
 .gm-mod--site-spec .drop{position:absolute;top:calc(100% + 10px);left:0;min-width:210px;z-index:100;padding:6px;border-radius:22px;background:#FFF;border:1px solid rgba(232,93,143,.2);box-shadow:0 16px 40px rgba(90,70,70,.15);opacity:0;pointer-events:none;transform:translateY(6px);transition:.2s}
 .gm-mod--site-spec .gp:hover .drop{opacity:1;pointer-events:auto;transform:none}
 .gm-mod--site-spec .gp::after{content:"";position:absolute;left:0;right:0;top:100%;height:12px}
@@ -9860,6 +9870,7 @@ button{display:inline-flex;align-items:center;justify-content:center;gap:8px}</p
 <p>应用侧此前只有 typecheck + 构建 + 架构门禁，<b>没有</b>任何渲染级无障碍检查。 新增的 <code>scripts/app-smoke.mjs</code> 对比度断言按<b>真实渲染底</b>采样（隐藏字形 → 截屏 → 页内 canvas 解码 → 取文字矩形内像素亮度 5/95 分位两侧上界，两侧都不达标才判失败），每页 4 个滚动步 × 浅/暗两档， 并自带自证（注入不可读文字必须被报出）。</p>
 <table><thead><tr><th>实测发现</th><th>数字</th><th>处置</th></tr></thead><tbody><tr><td>12px 文字用 <code>--lg-text-tertiary</code>（02 · 2.1.1 规定仅 ≥24px）</td><td><b>2.30:1</b></td><td>小字改 <code>--lg-text-secondary</code>（库 / 应用 / 站点）</td></tr><tr><td>头像首字白字压亮粉渐变（<code>--lg-text-on-inverse</code>）</td><td><b>2.81:1</b></td><td>改 <code>--lg-text-on-accent</code> 深墨字 → 4.6:1</td></tr><tr><td>语义淡底 <code>color-mix(…, transparent)</code> 透出卡片与品牌渐变</td><td><b>4.06:1</b></td><td>改混实底 <code>--lg-tint-base</code>（浅 13% → 4.86:1 ／ 暗 8% → 4.9:1）</td></tr><tr><td>站点把 <code>--lg-text-tertiary</code> 本地改写成 secondary 的值</td><td>71 处小字靠<b>改名</b>达标</td><td>按 02 · 2.1.1 收口并删除本地改写</td></tr><tr><td><code>page-qa.mjs</code> 的 <code>parseColor</code> 不认 <code>color(srgb …)</code></td><td><code>color-mix</code> 派生的底在门禁里<b>整层消失</b></td><td>补上解析（注入验证：旧 0 条 → 新 55 条）</td></tr><tr><td>五色亮值被当作标签/风险 chip 的<b>文字色</b>（<code>GmStatusTag</code> / <code>GmRiskPicker</code>）</td><td><b>1.57–2.19:1</b></td><td>文字走主文字色，颜色由色点承载（站点五色图例与手册 D6 同口径）</td></tr><tr><td>进度环百分比文字走 Arco 默认灰</td><td><b>2.90:1</b></td><td>改 <code>--lg-text-primary</code></td></tr><tr><td>步骤点勾选描边为白，压亮粉渐变</td><td><b>1.79:1</b>（1.4.11 需 3:1）</td><td>改 <code>--lg-text-on-accent</code> 深墨</td></tr><tr><td>三档头像渐变（深渐变 + 白字）</td><td><b>2.81:1</b>，深端配深墨更差（2.76–3.48）</td><td>按站点 <code>.avt</code> 配方改浅底渐变 + 同色系深墨（4.59–4.65:1）</td></tr><tr><td>品牌渐变较暗区上的链接色 <code>--lg-link</code></td><td><b>4.06:1</b>（浅底预算按最亮面算 5.2:1）</td><td><b>登记为遗留项</b>：需在"提亮渐变暗端"与"压深链接色"之间裁决</td></tr></tbody></table>
 <p>新门禁：<code>audit.py --only text-token-parity / tertiary-size / tint-base</code>（负向用例 +6，合计 58 条）。</p>
+<p><b>V2.9 追加（导航 / 按钮 / 移动端错位）</b>：一次"逐条插 <code>background-origin</code>"的脚本把外壳 CSS 写坏 6 处， 其中 <code>@keyframes gmToastOut{</code> 被写成 <code>@keyframes{ gmToastOut{</code> —— <b>块未闭合 → 其后全部外壳规则被吞掉</b>， 导航、表格、折叠、增长图开关与移动端一大片规则静默失效（观感即"组件错位"）， 而<b>括号计数仍然平衡</b>，当时的 <code>css-syntax</code> 照样绿。故门禁补两处盲区： ① 把在 Python 三引号里的<b>外壳 CSS 纳入检查</b>；② 除计数外新增<b>结构检查</b> （深度转负 / 结尾未闭合 / 非 at-rule 体内出现 <code>{</code> / 选择器里混进属性声明 / 声明粘连）。 另：<code>site-smoke</code> 增 5 条按钮标准渲染断言（252 个按钮 × 8 模块）、<code>mobile-smoke</code> 增 4 条布局体检； 按钮整改 12 类偏差，规范文档同步 §2.5.1（背景原点）与 §3.2.4.1（按钮三铁律）。</p>
 <h3>18.3 整改行动清单（按优先级）</h3>
 <pre>A1 页面暖色/手机壳等别名色 → 抽取 token（--mmh-bg-*、--gm-frame）
 A2 ✅ 已闭环（V2.5）：暗黑模式全量映射（02 · 2.1.9）+ theme.css/gm.css 暗色段 + tokens/design.ts dark + audit dark_contrast 守门

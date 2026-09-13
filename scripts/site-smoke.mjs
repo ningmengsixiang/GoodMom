@@ -29,6 +29,110 @@ page.on("pageerror", (e) => errors.push(String(e).split("\n")[0]));
 await page.goto(URL, { waitUntil: "networkidle" });
 await page.waitForTimeout(600);
 
+/* ── 0. 按钮族按 V2.9 标准（跨全部 8 个模块做渲染级测量）───────────────
+   用户报「视觉规范里所有没有按到的按钮要按最新标准整改、各组件页按钮要与刚优化的按钮同步」。
+   四条标准全部可测量，不靠肉眼：
+     ① 圆角：胶囊（≥900 / 50% / = 高度一半）或**分段控件的中间段**（父级有圆角且是中间子项）；
+     ② 亮粉渐变底 ⇒ 文字必须是深字（V2.9 实测白字只有 1.79–2.81:1，D9 禁白字）；
+     ③ 亮粉渐变底 ⇒ 不得叠白色内高光（那本是给半透明玻璃面的边光，落在浅粉上会错行）；
+     ④ 浅底不得用白描边（白边落浅底等于没有边，形状会糊掉）。
+   另：按钮族的尺寸档只允许 26 / 32 / 40 / 48（03 · 3.2.2）。 */
+const BTN_SEL = 'button, a[class*=btn], .btn, .bx, .gbtn, .mbtn, .cta, .demoBtn, [class*=Btn]';
+const PINK_RE = /247,\s*127,\s*163|255,\s*196,\s*214|255,\s*169,\s*194|255,\s*163,\s*190|240,\s*127,\s*163|232,\s*93,\s*143/;
+const buttonAudit = async () => {
+  const rows = await page.evaluate(([sel, pinkSrc]) => {
+    const PINK = new RegExp(pinkSrc);
+    const lum = (c) => { const m = c.match(/rgba?\((\d+),\s*(\d+),\s*(\d+)/);
+      return m ? (0.2126 * (+m[1] / 255) + 0.7152 * (+m[2] / 255) + 0.0722 * (+m[3] / 255)) : 0; };
+    const out = [];
+    for (const e of document.querySelectorAll(sel)) {
+      const r = e.getBoundingClientRect(), cs = getComputedStyle(e);
+      if (r.width < 20 || r.height < 16 || r.height > 120) continue;
+      if (cs.display === "none" || cs.visibility === "hidden" || cs.opacity === "0") continue;
+      const txt = (e.textContent || "").trim();
+      if (!txt) continue;                                   // 只看有文字标签的按钮（纯图标另论）
+      /* 只在"长得像按钮"的元素上判定：有底、有边，或类名是按钮族。
+         纯文字链接（.sh-brand / .go-link / 正文内链）不该被算成按钮 —— 否则全是噪声。 */
+      const opaqueBg = cs.backgroundColor !== "rgba(0, 0, 0, 0)" || cs.backgroundImage.includes("gradient");
+      const hasBorder = cs.borderTopWidth !== "0px" && cs.borderTopStyle !== "none";
+      const btnish = /(^|[-_ ])(btn|bx|gbtn|mbtn|cta|chip|tab|pgit|button)/i.test(String(e.className)) || e.tagName === "BUTTON";
+      if (!opaqueBg && !hasBorder && !btnish) continue;
+      const radius = parseFloat(cs.borderTopLeftRadius) || 0;
+      const pct = cs.borderTopLeftRadius.trim().endsWith("%");
+      const capsule = radius >= 900 || pct || Math.abs(radius - r.height / 2) <= 2;
+      /* 分段控件中间段：父级有圆角、自己是中间子项（首尾之外的兄弟） */
+      /* 两条有原则的豁免（都不是"看不见"，而是**另一个规范档在管**）：
+         ① 被"有圆角的裁剪祖先"裁掉的孩子：圆角由裁剪器给出（如滑动操作条被行容器裁成圆角）；
+         ② 卡片式列表行（11 章：行是卡片，圆角 18–20），不按按钮的胶囊口径要求。 */
+      let clippedByRadius = false;
+      for (let n2 = e.parentElement, up = 0; n2 && up < 4; up++, n2 = n2.parentElement) {
+        const c2 = getComputedStyle(n2);
+        if (c2.overflow !== "visible" && (parseFloat(c2.borderTopLeftRadius) || 0) > 0) { clippedByRadius = true; break; }
+      }
+      const cardRow = /(gcard|rowitem|listrow|\brow\b|card)/i.test(String(e.className));
+      let segmented = false;
+      if (radius === 0) {
+        let n = e.parentElement;
+        for (let up = 0; up < 3 && n; up++, n = n.parentElement) {
+          const pr = parseFloat(getComputedStyle(n).borderTopLeftRadius) || 0;
+          const sibs = [...n.children].filter((x) => x.className === e.className || x.tagName === e.tagName);
+          if (pr > 0 && sibs.length >= 2 && sibs.indexOf(e) > 0 && sibs.indexOf(e) < sibs.length - 1) { segmented = true; break; }
+        }
+      }
+      const fill = cs.backgroundImage.includes("gradient") ? cs.backgroundImage : cs.backgroundColor;
+      const isPink = PINK.test(fill);
+      const bm = cs.borderTopColor.match(/rgba?\((\d+),\s*(\d+),\s*(\d+)(?:,\s*([\d.]+))?/);
+      const borderOn = cs.borderTopWidth !== "0px" && cs.borderTopStyle !== "none";
+      out.push({
+        cls: (String(e.className) || e.tagName).slice(0, 36).replace(/\s+/g, "."),
+        clippedByRadius, cardRow,
+        filled: !!(cs.backgroundColor !== "rgba(0, 0, 0, 0)" || cs.backgroundImage.includes("gradient")),
+        bordered: borderOn,
+        text: txt.slice(0, 10).replace(/\s+/g, " "), h: Math.round(r.height), radius: Math.round(radius),
+        capsule, segmented, isPink, textLum: Math.round(lum(cs.color) * 100) / 100,
+        whiteBorder: !!(borderOn && bm && +bm[1] > 240 && +bm[2] > 240 && +bm[3] > 240 && (bm[4] === undefined || +bm[4] > 0.5)),
+        /* "白边等于没有边"只在**不透明**浅底上成立；半透明玻璃底 + 白边是 02 · 2.5 的规范配方 */
+        lightFill: (() => {
+          const bg = cs.backgroundColor.match(/rgba?\([^)]*\)/);
+          const alpha = bg && bg[0].includes(",") && bg[0].split(",").length >= 4 ? parseFloat(bg[0].split(",")[3]) : 1;
+          return bg && alpha >= 0.9 && lum(cs.backgroundColor) > 0.65;
+        })(),
+        innerWhiteHi: /inset/.test(cs.boxShadow) && /255,\s*255,\s*255/.test(cs.boxShadow),
+      });
+    }
+    return out;
+  }, [BTN_SEL, PINK_RE.source]);
+  return rows;
+};
+{
+  const bad = { radius: [], light: [], pinkText: [], pinkHi: [], size: [] };
+  let total = 0;
+  for (const mod of ["preview-index", "preview-examples", "preview-patterns", "preview-mobile",
+                     "site-spec", "site-manual", "site-docs", "site-index"]) {
+    await page.locator(`#shTabs .sh-tab[data-mod="${mod}"]`).click();
+    await page.waitForTimeout(300);
+    const rows = await buttonAudit();
+    total += rows.length;
+    for (const r of rows) {
+      const tag = `${mod} ${r.cls}「${r.text}」${r.h}px r=${r.radius}`;
+      /* 圆角只对"有形状"的控件成立：有底或有边。
+         扁平的下划线式标签页（03 · 3.6）、纯文字链接本来就没有形状，要求圆角是错的。 */
+      if (!r.capsule && !r.segmented && !r.clippedByRadius && !r.cardRow && (r.filled || r.bordered))
+        bad.radius.push(tag);
+      if (r.whiteBorder && r.lightFill && !r.isPink) bad.light.push(tag);
+      if (r.isPink && r.textLum > 0.55) bad.pinkText.push(tag);
+      if (r.isPink && r.innerWhiteHi) bad.pinkHi.push(tag);
+      if (/(^|\.)(btn|bx|gbtn|mbtn|cta)(\.|$)/.test(r.cls) && !r.cardRow && ![26, 32, 40, 48].includes(r.h))
+        bad.size.push(`${tag}（档位外）`);
+    }
+  }
+  check(`按钮圆角：胶囊或分段中间段（实测 ${total} 个按钮）`, bad.radius.length === 0, bad.radius.slice(0, 40).join(" | "));
+  check("按钮描边：浅底不用白描边", bad.light.length === 0, bad.light.slice(0, 4).join(" | "));
+  check("按钮配色：亮粉底配深字（禁白字）", bad.pinkText.length === 0, bad.pinkText.slice(0, 4).join(" | "));
+  check("按钮层次：亮粉底不叠白内高光", bad.pinkHi.length === 0, bad.pinkHi.slice(0, 4).join(" | "));
+  check("按钮尺寸档：26 / 32 / 40 / 48", bad.size.length === 0, bad.size.slice(0, 60).join(" | "));
+}
+
 /* ── 1. 外壳与唯一入口 ─────────────────────────────────────────── */
 const tabs = await page.locator("#shTabs .sh-tab").count();
 check("主导航存在且包含全部模块", tabs === 8, `${tabs} 个一级项`);

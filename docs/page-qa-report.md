@@ -1,6 +1,6 @@
 # 逐页规范质检报告（Page-level Spec QA）
 
-- 生成时间：`2026-09-13 11:21:46+0800`
+- 生成时间：`2026-09-13 14:46:08+0800`
 - 工具：`node scripts/page-qa.mjs`（Playwright 真实渲染；桌面 1440 / 移动 375 / 暗色档各测一遍）
 - 口径：每条 finding 都带**规范锚点 + 选择器 + 实测值**，可逐条复现与回归
 - 范围：真实页面 10 个（唯一首页 8 模块逐模块 · 打印手册 · 演示页）；重定向桩 7 个**单独统计**（服务端摘掉跳转脚本后测桩自身，避免测成目标模块而重复计数）
@@ -15,15 +15,15 @@
 
 ## 0b. 档位偏离分布（P3 · 聚合，非逐条）
 
-**偏离 4px 网格**（spacing-grid，锚点 02 · 2.3.1，共 34121 处）
+**偏离 4px 网格**（spacing-grid，锚点 02 · 2.3.1，共 34151 处）
 
 | 实测值 | 命中元素数 | 样例 |
 | --- | --- | --- |
 | 7 | 10102 | `site/index.html · preview-index` `div>span>div#preview-index--segNav>span.seg-it.on` |
 | 9 | 10068 | `site/index.html · preview-index` `div.panel.glass-l2>div>div>div` |
-| 1 | 3960 | `site/index.html · preview-index` `div.grid.g2>div.panel.glass-l2>div.field>input` |
-| 5 | 3563 | `site/index.html · preview-index` `div.wrap>header.hero.glass>div.hero-main>span.kicker` |
-| 14 | 1938 | `site/index.html · site-index` `div.wrap>div.hero.glass>div.stat>span` |
+| 1 | 3974 | `site/index.html · preview-index` `div.grid.g2>div.panel.glass-l2>div.field>input` |
+| 5 | 3577 | `site/index.html · preview-index` `div.wrap>header.hero.glass>div.hero-main>span.kicker` |
+| 14 | 1940 | `site/index.html · site-index` `div.wrap>div.hero.glass>div.stat>span` |
 | 6 | 1329 | `site/index.html · site-index` `section#gm-mod-site-index>div.wrap>div.hero.glass>div.stat` |
 | 10 | 893 | `site/index.html · site-index` `section#gm-mod-site-index>div.wrap>div.hero.glass>div.cta` |
 | 21.28 | 618 | `site/index.html · site-spec` `div.wrap>section#site-spec--ch-readme>div.md>h4` |
@@ -119,7 +119,7 @@
 ### site/index.html · site-spec
 
 - 结构：标题 478 个 · 焦点样本 32 个（其中不可见 0）· emoji 0 处
-- 对比度（浅色档）：确证失败 0（渐变上界 0）· 无法判定 7797
+- 对比度（浅色档）：确证失败 0（渐变上界 0）· 无法判定 7810
 - 横向溢出：桌面 0px / 移动 0px
 - 移动端非行内热区受检 0 个
 
