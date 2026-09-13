@@ -15,6 +15,20 @@
    · 组件规则层大量字面量，与 Vue 包（已完成 Token 化）漂移 12 处解析值。
      现全部改为引用 Token。
    ══════════════════════════════════════════════════════════════════════════ */
+/* ── 02 · 2.5 背景原点（V2.9 实测修复）─────────────────────────────
+   渐变底 + 透明/无边框的胶囊，必须让渐变按 **border-box** 定尺。
+   默认 `background-origin:padding-box`：渐变图按 padding-box 定尺，却要铺满 border-box，
+   多出来的一圈 1px 就**平铺取到渐变的另一端** —— 顶部一条暗缝、底部一条亮缝，
+   远看就是"胶囊缺了一角 / 露出别的底色"。
+   实测（应用主按钮 126×40 · 135deg 亮粉渐变）：修前顶部首行 rgb(250,154,183)，
+   比它下面那行 rgb(252,169,194) 暗 15；修后首行 rgb(252,170,195)，与填充连续。
+   全局声明（与 prefers-reduced-motion 全局块同一做法）：通用选择器特异性为 0，
+   组件规则若真需要 padding-box 仍可覆盖。 */
+/* ⚠️ 不要试图用全局 `*{background-origin:border-box}` 修渐变缝（V2.9 实测无效）：
+   `background:` **简写会把 background-origin 重置回 padding-box**，而简写所在的组件规则
+   比 `*` 更具体 —— 计算值仍是 padding-box。必须在**每条渐变+边框的规则里**显式写。
+   门禁：audit.py --only bg-origin（既查漏写，也禁止再加全局规则这种假防线）。 */
+
 :root{
   --primary-6:#E85D8F; --primary-5:#F77FA3; --primary-4:#FFA3BE; --primary-3:#FFC4D6;
   --primary-2:#FFDEE8; --primary-1:#FFF0F4; --primary-7:#B23A63;
@@ -71,7 +85,7 @@
 
 .gm-btn{
   display:inline-flex;align-items:center;justify-content:center;gap:8px;
-  height:40px;padding:0 20px;border-radius:22px;border:none;
+  height:40px;padding:0 20px;border-radius:var(--lg-radius-pill);border:none;
   font-family:var(--lg-font);font-size:14px;font-weight:600;line-height:1;
   cursor:pointer;white-space:nowrap;user-select:none;
   transition:transform var(--lg-t-base) var(--lg-ease-spring),
@@ -83,19 +97,20 @@
    ⚠️ 尺寸类必须叫 --sz-*，不能叫 --default/--small：那会与「类型」类同名同特异性
    （.gm-btn--default 既是"中性类型"又是"中号尺寸"），后写的规则会静默吃掉类型底色。
    实测踩过：type=primary 的按钮被尺寸规则覆盖成 --lg-surface 灰底。 */
-.gm-btn--sz-large{height:48px;padding:0 26px;border-radius:26px;font-size:16px}
-.gm-btn--sz-default{height:40px;padding:0 20px;border-radius:22px;font-size:14px}
-.gm-btn--sz-small{height:32px;padding:0 16px;border-radius:18px;font-size:13px}
-.gm-btn--sz-mini{height:26px;padding:0 12px;border-radius:16px;font-size:12px}
+.gm-btn--sz-large{height:48px;padding:0 26px;border-radius:var(--lg-radius-pill);font-size:16px}
+.gm-btn--sz-default{height:40px;padding:0 20px;border-radius:var(--lg-radius-pill);font-size:14px}
+.gm-btn--sz-small{height:32px;padding:0 16px;border-radius:var(--lg-radius-pill);font-size:13px}
+.gm-btn--sz-mini{height:26px;padding:0 12px;border-radius:var(--lg-radius-pill);font-size:12px}
 .gm-btn--long{width:100%}
-.gm-btn--circle{border-radius:999px;padding:0;aspect-ratio:1}
-.gm-btn--square{border-radius:10px}
+.gm-btn--circle{border-radius:var(--lg-radius-pill);padding:0;aspect-ratio:1}
+/* 方角按钮：取圆角档下限（02 · 2.4「交互组件圆角永不 <16」；原为 10px，已越界） */
+.gm-btn--square{border-radius:var(--lg-radius-btn-sm)}
 /* 类型 */
 /* 03 · 3.2.4 主按钮：不透明品牌粉底**不套玻璃白边/白内高光**（那是 02 · 2.5 给半透明
    玻璃面的边光，落在浅粉上会亮端看不见、暗端看得见 → 描边错行、双线发糊）。
    边缘清晰度改由**同族玫色接触影 + 辉光**承担（02 · 2.6：阴影色相统一）。 */
 .gm-btn--primary{background:var(--mmh-grad-action-hc);color:#343A46;border:var(--lg-border-1) solid transparent;
-  box-shadow:0 1px 2px rgba(178,58,99,.22),0 8px 20px rgba(240,127,163,.30)}
+  box-shadow:0 1px 2px rgba(178,58,99,.22),0 8px 20px rgba(240,127,163,.30);background-origin:border-box}
 .gm-btn--primary:hover{box-shadow:0 2px 4px rgba(178,58,99,.24),0 12px 26px rgba(240,127,163,.38)}
 /* 03 · 3.2.4 Default / Secondary 中性白玻璃按钮
    ⛔ 原边用 --lg-border-white-75（白 75%）：白边落在白/浅底上等于**没有边**，形状糊掉（"廉价"）。
@@ -104,7 +119,7 @@
 .gm-btn--secondary{background:linear-gradient(160deg,rgba(255,255,255,.94),rgba(255,255,255,.78));
   color:var(--lg-text-primary);border:var(--lg-border-1) solid var(--lg-divider);
   box-shadow:0 1px 2px rgba(58,52,84,.06),0 4px 12px rgba(58,52,84,.08);
-  -webkit-backdrop-filter:blur(16px) saturate(1.2);backdrop-filter:blur(16px) saturate(1.2)}
+  -webkit-backdrop-filter:blur(16px) saturate(1.2);backdrop-filter:blur(16px) saturate(1.2);background-origin:border-box}
 .gm-btn--secondary:hover{border-color:rgba(58,52,84,.16);
   box-shadow:0 2px 4px rgba(58,52,84,.07),0 8px 18px rgba(58,52,84,.10)}
 /* 03 · 3.2.4 描边按钮：透明底 + 1.5px 玫瑰描边 + 玫瑰字。
@@ -118,7 +133,7 @@
 .gm-btn--text{background:transparent;color:var(--mmh-rose-700,#B23A63);padding:0 8px;box-shadow:none;border:none}
 .gm-btn--default{background:linear-gradient(160deg,rgba(255,255,255,.94),rgba(255,255,255,.78));
   color:var(--lg-text-primary);border:var(--lg-border-1) solid var(--lg-divider);
-  box-shadow:0 1px 2px rgba(58,52,84,.06),0 4px 12px rgba(58,52,84,.08)}
+  box-shadow:0 1px 2px rgba(58,52,84,.06),0 4px 12px rgba(58,52,84,.08);background-origin:border-box}
 .gm-btn--default:hover{border-color:rgba(58,52,84,.16);
   box-shadow:0 2px 4px rgba(58,52,84,.07),0 8px 18px rgba(58,52,84,.10)}
 /* 状态色：实底一律走 D5 深档（小字号白字 AA 达标） */
@@ -155,9 +170,9 @@
 .gm-btn-group{display:inline-flex;align-items:stretch}
 .gm-btn-group>.gm-btn{border-radius:0}
 .gm-btn-group>.gm-btn:not(:first-child){margin-left:calc(-1 * var(--lg-border-1))}
-.gm-btn-group>.gm-btn:first-child{border-radius:22px 0 0 22px}
-.gm-btn-group>.gm-btn:last-child{border-radius:0 22px 22px 0}
-.gm-btn-group>.gm-btn:only-child{border-radius:22px}
+.gm-btn-group>.gm-btn:first-child{border-radius:var(--lg-radius-pill) 0 0 var(--lg-radius-pill)}
+.gm-btn-group>.gm-btn:last-child{border-radius:0 var(--lg-radius-pill) var(--lg-radius-pill) 0}
+.gm-btn-group>.gm-btn:only-child{border-radius:var(--lg-radius-pill)}
 .gm-btn-group>.gm-btn:hover,
 .gm-btn-group>.gm-btn:focus-visible,
 .gm-btn-group>.gm-btn[aria-pressed="true"]{position:relative;z-index:2}
@@ -168,7 +183,7 @@
 /* 分段控件 segmented：组内**有且只有一个**选中项，语义用 role=group + aria-pressed */
 .gm-btn-group--segmented{gap:2px;padding:2px;border-radius:24px;
   background:var(--lg-glass-control);border:var(--lg-border-1) solid var(--lg-divider)}
-.gm-btn-group--segmented>.gm-btn{margin-left:0;border-radius:22px;box-shadow:none}
+.gm-btn-group--segmented>.gm-btn{margin-left:0;box-shadow:none}
 .gm-btn-group--segmented>.gm-btn[aria-pressed="true"]{
   background:var(--mmh-grad-action-hc);color:var(--lg-text-on-accent)}
 .gm-btn-group--segmented>.gm-btn:not([aria-pressed="true"]){
@@ -189,14 +204,12 @@
   background:var(--mmh-grad-action-hc,#F77FA3) !important;
   color:var(--lg-text-on-accent) !important;
   border:var(--lg-border-1) solid transparent !important;
-  box-shadow:0 1px 2px rgba(178,58,99,.22),0 8px 20px rgba(240,127,163,.30);
-}
+  box-shadow:0 1px 2px rgba(178,58,99,.22),0 8px 20px rgba(240,127,163,.30);background-origin:border-box}
 .gm-btn.arco-btn-default,.gm-btn.arco-btn-secondary{
   background:linear-gradient(160deg,rgba(255,255,255,.94),rgba(255,255,255,.78)) !important;
   color:var(--lg-text-primary) !important;
   border:var(--lg-border-1) solid var(--lg-divider) !important;
-  box-shadow:0 1px 2px rgba(58,52,84,.06),0 4px 12px rgba(58,52,84,.08) !important;
-}
+  box-shadow:0 1px 2px rgba(58,52,84,.06),0 4px 12px rgba(58,52,84,.08) !important;background-origin:border-box}
 .gm-btn.arco-btn-outline{
   background:transparent !important;color:var(--mmh-rose-700,#B23A63) !important;
   border:var(--lg-border-2) solid rgba(232,93,143,.45) !important;box-shadow:0 1px 2px rgba(178,58,99,.06);
@@ -217,7 +230,7 @@
 
 /* —— gm-arco-ui 组件辅助样式 —— */
 .gm-card{background:linear-gradient(160deg,rgba(255,255,255,.62),rgba(255,255,255,.3));
-  border:var(--lg-border-1) solid var(--lg-border-white-70);box-shadow:var(--lg-shadow-md);padding:16px}
+  border:var(--lg-border-1) solid var(--lg-border-white-70);box-shadow:var(--lg-shadow-md);padding:16px;background-origin:border-box}
 .gm-card-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:12px}
 .gm-card-head b{font-size:15px;color:var(--lg-text-primary)}
 .gm-card-head span{font-size:12px;color:var(--lg-text-secondary)}
@@ -274,7 +287,7 @@
 .gm-step .gs-dot svg{width:13px;height:13px;stroke:var(--lg-text-on-accent,#343A46);/* V2.9：描边原为白（--lg-text-on-inverse），压在亮粉渐变上只有 1.79:1（WCAG 1.4.11 非文本需 3:1）；
    与头像同口径改深墨字 */fill:none;stroke-width:2.6;stroke-linecap:round;stroke-linejoin:round}
 .gm-step.finish::before{background:linear-gradient(90deg,#FFC4D6,#F77FA3)}
-.gm-step.finish .gs-dot{background:var(--mmh-grad-rose);color:var(--lg-text-on-inverse,#FFF);border-color:transparent}
+.gm-step.finish .gs-dot{background:var(--mmh-grad-rose);color:var(--lg-text-on-inverse,#FFF);border-color:transparent;background-origin:border-box}
 .gm-step.process .gs-dot{border:var(--lg-border-3) solid var(--mmh-rose-600);color:var(--mmh-rose-700);animation:pulse var(--lg-t-breathe) ease-in-out infinite}
 .gm-step.error .gs-dot{border:var(--lg-border-3) solid var(--mmh-danger);color:var(--lg-sem-risk)}
 .gm-step .gs-main b{display:block;font-size:13px;color:var(--lg-text-primary);line-height:1.4}
@@ -356,6 +369,10 @@
   --lg-glass-panel:rgba(255,255,255,.14); --lg-glass-card:rgba(255,255,255,.22);
   --lg-glass-control:rgba(255,255,255,.35); --lg-glass-popover:rgba(255,255,255,.60);
   --lg-border-white-70:rgba(255,255,255,.70); --lg-border-white-75:rgba(255,255,255,.75);
+  /* 胶囊圆角（V2.9）：按钮/分段控件端头/级联按钮一律用它。
+     旧写法 --lg-radius-btn-lg/btn/btn-sm = 26/22/18 对 h=48/40/32 **都超过高度一半**，
+     浏览器会把超出的圆角按比例缩放 —— 声明值 ≠ 渲染值，分段按钮的端头因此不是胶囊。 */
+  --lg-radius-pill:999px;
   --lg-radius-control:20px;
   --lg-shadow-md:0 8px 24px rgba(58,52,84,.08);
   --lg-shadow-sm:0 4px 12px rgba(58,52,84,.10);
@@ -477,11 +494,11 @@
 .gm-result--error .gm-result__t{color:var(--lg-sem-risk)}
 .gm-result__d{font-size:12px;color:var(--lg-text-secondary);line-height:1.7;max-width:34em}
 /* 动作通道：唯一主行动（03 · 3.2.4），走主按钮配方 */
-.gm-result__act{margin-top:6px;height:40px;padding:0 20px;border-radius:22px;cursor:pointer;
+.gm-result__act{margin-top:6px;height:40px;padding:0 20px;border-radius:var(--lg-radius-pill);cursor:pointer;
   font-family:var(--lg-font);font-size:14px;font-weight:600;border:var(--lg-border-1) solid transparent;
   background:var(--mmh-grad-action-hc,#F77FA3);color:var(--lg-text-on-accent);
   box-shadow:0 1px 2px rgba(178,58,99,.22),0 8px 20px rgba(240,127,163,.30);
-  transition:transform var(--lg-t-base) var(--lg-ease-spring),box-shadow var(--lg-t-base) ease}
+  transition:transform var(--lg-t-base) var(--lg-ease-spring),box-shadow var(--lg-t-base) ease;background-origin:border-box}
 .gm-result__act:hover{transform:translateY(-1px);box-shadow:0 2px 4px rgba(178,58,99,.24),0 12px 26px rgba(240,127,163,.38)}
 .gm-result__act:active{transform:scale(.96)}
 .gm-result__act:focus-visible{outline:var(--lg-ring-width) solid var(--lg-ring-color);outline-offset:var(--lg-ring-offset)}
@@ -508,7 +525,7 @@
   border:var(--lg-border-1) solid var(--lg-divider);
   box-shadow:0 1px 2px rgba(58,52,84,.06),0 12px 30px rgba(58,52,84,.14);
   color:var(--lg-text-primary);font-family:inherit;font-size:13px;font-weight:600;line-height:1.6;
-  animation:gmToastIn 320ms var(--lg-ease-out) both}
+  animation:gmToastIn 320ms var(--lg-ease-out) both;background-origin:border-box}
 .gm-toast.is-leaving{animation:gmToastOut 240ms ease-in forwards}
 @keyframes gmToastIn{from{opacity:0;transform:translate(-50%,-24px)}to{opacity:1;transform:translate(-50%,0)}}
 @keyframes gmToastOut{from{opacity:1;transform:translate(-50%,0)}to{opacity:0;transform:translate(-50%,-24px)}}

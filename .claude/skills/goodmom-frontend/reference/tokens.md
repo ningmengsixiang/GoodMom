@@ -78,6 +78,16 @@
 卡片 `22` · 中按钮 `22` · 大按钮 `26` · 小按钮 `18` · 小号按钮 `16` · 控件 `20` · 胶囊 `999`。
 **相互作用组件圆角下限 16。**
 
+
+**V2.9 实测铁律**：按钮一律 `--lg-radius-pill`（999）。`--lg-radius-btn-lg/btn/btn-sm`
+（26/22/18 对 h=48/40/32）**都超过高度一半**，浏览器会静默缩放（声明≠渲染）；
+分段控件端头复用同一个数字时就不是胶囊了。圆角严禁 > 高度一半（门禁 `audit.py --only btn-radius`）。
+
+**渐变 + 边框的规则必须自带 `background-origin:border-box`**：默认 padding-box 时，
+1px 边框环会平铺取到渐变另一端 → 顶部暗缝 / 底部亮缝（观感是「胶囊缺一角、露出别的底色」）。
+⛔ 全局 `*{background-origin:border-box}` 无效（`background:` 简写会重置 origin）；
+⛔ 也不要 `background-clip:padding-box`（那圈边框完全不画）。门禁 `audit.py --only bg-origin`。
+
 ## 边框宽度与焦点环（02.7.1）
 
 `--lg-border-hairline:1px` · `--lg-border-half:.5px` · `--lg-border-1:1px` · `--lg-border-2:1.5px` · `--lg-border-3:2px`

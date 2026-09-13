@@ -289,6 +289,61 @@ check(`组件演示页：无不可读文字（实底采样 ${DEMO.measured} 处�
   demoHard.length === 0, demoHard.slice(0, 3).join(" | ")
     + (demoOpen.length ? ` ｜登记项 ${demoOpen.length}：${demoOpen[0]}` : ""));
 
+/* ── F. 渐变胶囊的边框环不得出现异色缝（用户报「主按钮头上缺一块、露出别的底色」）──
+   原理：`background-origin` 默认 padding-box，而绘制区默认 border-box —— 渐变图按 padding-box
+   定尺却要铺满 border-box，多出的 1px 边框环会**平铺取到渐变另一端**，于是顶部一条暗缝、
+   底部一条亮缝。CSS 侧已有 `audit.py --only bg-origin` 守源，这里再守一次**渲染结果**：
+   测按钮跨上/下边界的逐像素跳变，任何一层"多出来的颜色"都会现形。
+   ⚠️ 全局 `*{background-origin:border-box}` 修不了它（`background:` 简写会重置 origin）。 */
+const SEAM_SRC = `
+return (arg) => new Promise((resolve) => {
+  const img = new Image();
+  img.onload = () => {
+    const cv = document.createElement("canvas"); cv.width = img.width; cv.height = img.height;
+    const ctx = cv.getContext("2d", { willReadFrequently: true }); ctx.drawImage(img, 0, 0);
+    const g = (x, y) => { const d = ctx.getImageData(x, y, 1, 1).data; return [d[0], d[1], d[2]]; };
+    const out = [];
+    for (const it of arg.items) {
+      const x0 = Math.round(it.x), y0 = Math.round(it.y), w = Math.round(it.w), h = Math.round(it.h);
+      if (w < 20 || h < 12) continue;
+      const xs = [Math.round(x0 + w * 0.2), Math.round(x0 + w * 0.5), Math.round(x0 + w * 0.8)];
+      const dev = (a, b) => Math.max(Math.abs(a[0] - b[0]), Math.abs(a[1] - b[1]), Math.abs(a[2] - b[2]));
+      let worst = 0;
+      for (const x of xs) {
+        worst = Math.max(worst, dev(g(x, y0), g(x, y0 + 1)));            // 顶部：第一行 vs 第二行
+        worst = Math.max(worst, dev(g(x, y0 + h - 1), g(x, y0 + h - 2))); // 底部：末行 vs 倒数第二行
+      }
+      out.push({ label: it.label, worst });
+    }
+    resolve(out);
+  };
+  img.src = 'data:image/png;base64,' + arg.b64;
+});`;
+const seamScan = async () => {
+  const items = await page.evaluate(() =>
+    [...document.querySelectorAll(".gm-btn--primary")].map((e) => {
+      const r = e.getBoundingClientRect();
+      return { label: String(e.className).slice(0, 40), x: r.left, y: r.top, w: r.width, h: r.height };
+    }).filter((it) => it.y > 4 && it.y + it.h < innerHeight - 4));
+  if (!items.length) return [];
+  const shot = await page.screenshot();
+  return runInPage(SEAM_SRC, { b64: shot.toString("base64"), items });
+};
+await page.goto(`${BASE}#/workbench`, { waitUntil: "domcontentloaded" });
+await page.waitForTimeout(800);
+const seams = await seamScan();
+check(`主按钮边框环无异色缝（跨上下边界跳变 ≤6，实测 ${seams.length} 个按钮）`,
+  seams.length > 0 && seams.every((r) => r.worst <= 6),
+  seams.filter((r) => r.worst > 6).slice(0, 2).map((r) => `${r.label} 跳变 ${r.worst}`).join(" | "));
+
+/* 自证：把 origin 改回 padding-box（就是原来的 bug），探针必须报出来 */
+await page.evaluate(() => document.querySelectorAll(".gm-btn--primary").forEach((e) => { e.style.backgroundOrigin = "padding-box"; }));
+await page.waitForTimeout(250);
+const seamsBad = await seamScan();
+await page.evaluate(() => document.querySelectorAll(".gm-btn--primary").forEach((e) => { e.style.backgroundOrigin = ""; }));
+check("缝隙探针自证：origin 退回 padding-box 必须被报出",
+  seamsBad.some((r) => r.worst > 6), seamsBad.map((r) => r.worst).join("/"));
+
 /* 探针自证：注入必然不可读的文字，探针必须报出来（否则这条门禁等于没写） */
 await page.goto(`${BASE}#/childcare`, { waitUntil: "domcontentloaded" });
 await page.waitForTimeout(900);

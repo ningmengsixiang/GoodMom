@@ -130,6 +130,10 @@ for fn in FILES:
     sections.append('<section class="chap" id="%s"><div class="chap-hd"><b>%s</b></div><div class="md">%s</div></section>'%(anchor(fn),html.escape(title),render_md(t)))
 
 css='''
+/* 02 · 2.5 背景原点（V2.9 实测修复）：渐变按 border-box 定尺。
+   默认 padding-box 时，渐变图按 padding-box 定尺却要铺满 border-box，
+   多出的 1px 边框环会平铺取到渐变**另一端** → 顶部一条暗缝、底部一条亮缝，
+   看起来像"胶囊缺了一角 / 露出别的底色"。全局声明，特异性 0，可被组件规则覆盖。 */
 :root{--t:#343A46;--t2:#4F5B6E;--t3:#4F5B6E;--rose:#E85D8F;--rose-deep:#B23A63;--bg:linear-gradient(165deg,#FDF2EE,#F6E2DB 55%,#E7D3CB)}
 *{box-sizing:border-box}body{margin:0;font-family:"PingFang SC","Inter","MiSans","Noto Sans SC",sans-serif;color:var(--t);background:var(--bg)}
 a{color:var(--rose-deep)}
@@ -146,9 +150,9 @@ a{color:var(--rose-deep)}
 .drop a{display:block;padding:8px 12px;border-radius:18px;font-size:13px;color:var(--t2);text-decoration:none;white-space:nowrap}
 .drop a:hover{background:rgba(247,127,163,.1);color:#B23A63}
 .top .ext{margin-left:auto;font-size:12.5px;font-weight:600;text-decoration:none;padding:7px 14px;border-radius:999px;background:#FFF;border:1px solid rgba(232,93,143,.3);color:var(--rose-deep)}
-.top .ext2{margin-left:8px;background:var(--mmh-grad-action-hc,linear-gradient(135deg,#FFC4D6 0%,#F77FA3 100%));color:#343A46;font-weight:600;text-decoration:none;font-size:12.5px;padding:7px 14px;border-radius:999px;border:var(--lg-border-1,1px) solid transparent;box-shadow:0 1px 2px rgba(178,58,99,.22),0 8px 20px rgba(240,127,163,.30)}   /* 03 · 3.2.4 主按钮配方 */
+.top .ext2{margin-left:8px;background:var(--mmh-grad-action-hc,linear-gradient(135deg,#FFC4D6 0%,#F77FA3 100%));color:#343A46;font-weight:600;text-decoration:none;font-size:12.5px;padding:7px 14px;border-radius:999px;border:var(--lg-border-1,1px) solid transparent;box-shadow:0 1px 2px rgba(178,58,99,.22),0 8px 20px rgba(240,127,163,.30);background-origin:border-box}   /* 03 · 3.2.4 主按钮配方 */
 .wrap{max-width:1080px;margin:0 auto;padding:20px 18px 80px}
-.chap{scroll-margin-top:70px;margin:0 0 34px;border-radius:22px;padding:22px 26px;background:linear-gradient(160deg,rgba(255,255,255,.72),rgba(255,255,255,.4));border:1px solid #F0D4CF;box-shadow:0 10px 26px rgba(90,70,70,.08)}
+.chap{scroll-margin-top:70px;margin:0 0 34px;border-radius:22px;padding:22px 26px;background:linear-gradient(160deg,rgba(255,255,255,.72),rgba(255,255,255,.4));border:1px solid #F0D4CF;box-shadow:0 10px 26px rgba(90,70,70,.08);background-origin:border-box}
 .chap-hd{font-size:20px;font-weight:700;color:var(--rose-deep);padding-bottom:10px;border-bottom:1px solid #F0D4CF;margin-bottom:12px}
 /* 02 · 2.2.4 字重上限 700：<b> 在 700 的父级下按 bolder 计算为 900，故显式回落 */
 .chap-hd b{font-weight:700}

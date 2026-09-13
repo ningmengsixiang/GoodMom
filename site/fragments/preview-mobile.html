@@ -1,4 +1,8 @@
 <!--@css-->
+/* 02 · 2.5 背景原点（V2.9 实测修复）：渐变按 border-box 定尺。
+   默认 padding-box 时，渐变图按 padding-box 定尺却要铺满 border-box，
+   多出的 1px 边框环会平铺取到渐变**另一端** → 顶部一条暗缝、底部一条亮缝，
+   看起来像"胶囊缺了一角 / 露出别的底色"。全局声明，特异性 0，可被组件规则覆盖。 */
 /* ══════════════════════════════════════════════════════════════════════════
    移动端模块 · 液态玻璃（妈咪好 GoodMom）
    规范锚点：10（移动端规范）· 11（移动端全量库）· 02 · 2.1.9（暗色映射）· 07（动效）
@@ -248,7 +252,7 @@ svg.i{width:22px;height:22px;stroke:currentColor;fill:none;stroke-width:1.7;
   background:#FFF;box-shadow:0 2px 6px rgba(58,52,84,.22);transition:left .3s var(--spring)}
 [data-theme="dark"] .switch::after{background:#F3EFEC}
 .switch[aria-checked="true"]{background:var(--mmh-grad-action-hc);border-color:transparent;
-  box-shadow:0 1px 2px rgba(178,58,99,.22),0 8px 20px rgba(240,127,163,.30)}
+  box-shadow:0 1px 2px rgba(178,58,99,.22),0 8px 20px rgba(240,127,163,.30);background-origin:border-box}
 .switch[aria-checked="true"]::after{left:21px}
 .switch:active::after{width:26px}
 
@@ -291,7 +295,7 @@ svg.i{width:22px;height:22px;stroke:currentColor;fill:none;stroke-width:1.7;
   background:var(--pm-input);border:1px solid var(--pm-divider);transition:background .25s ease,color .25s ease}
 .chip:active{transform:scale(.97)}
 .chip.on{background:var(--mmh-grad-action-hc);color:var(--text);font-weight:600;border-color:transparent;
-  box-shadow:0 1px 2px rgba(178,58,99,.22),0 8px 20px rgba(240,127,163,.30)}
+  box-shadow:0 1px 2px rgba(178,58,99,.22),0 8px 20px rgba(240,127,163,.30);background-origin:border-box}
 [data-theme="dark"] .chip.on{color:#1B1A21}
 .seg2{display:flex;gap:4px;padding:4px;border-radius:18px;background:var(--pm-input);
   border:1px solid var(--pm-edge);overflow-x:auto;scrollbar-width:none}
@@ -550,7 +554,9 @@ svg.i{width:22px;height:22px;stroke:currentColor;fill:none;stroke-width:1.7;
   display:flex;align-items:center;justify-content:center}
 .pm-ghost{background:var(--pm-input);border:1px solid var(--pm-edge);color:var(--text)}
 .pm-primary{background:var(--mmh-grad-action-hc);color:var(--text);border:1px solid transparent;
-  box-shadow:0 1px 2px rgba(178,58,99,.22),0 8px 20px rgba(240,127,163,.30)}
+  /* V2.9：主按钮圆角统一走胶囊档（原 18px 对 44px 高不是胶囊，声明≠渲染） */
+  border-radius:var(--lg-radius-pill,999px);
+  box-shadow:0 1px 2px rgba(178,58,99,.22),0 8px 20px rgba(240,127,163,.30);background-origin:border-box}
 [data-theme="dark"] .pm-primary{color:#1B1A21}
 .pm-primary:active,.pm-ghost:active{transform:scale(.97)}
 /* 图片预览（11.2.9） */
@@ -654,7 +660,7 @@ svg.i{width:22px;height:22px;stroke:currentColor;fill:none;stroke-width:1.7;
 .pm-numkey:active{transform:scale(.97)}
 .pm-numkey.fn{font-size:15px;color:var(--text)}
 .pm-numkey.ok{background:var(--mmh-grad-action-hc);border-color:transparent;
-  box-shadow:0 1px 2px rgba(178,58,99,.22),0 8px 20px rgba(240,127,163,.30)}
+  box-shadow:0 1px 2px rgba(178,58,99,.22),0 8px 20px rgba(240,127,163,.30);background-origin:border-box}
 [data-theme="dark"] .pm-numkey.ok{color:#1B1A21}
 
 /* ── 22b.4 WaterMark 水印（11.6.13）──────────────────────────────────── */
@@ -684,7 +690,7 @@ svg.i{width:22px;height:22px;stroke:currentColor;fill:none;stroke-width:1.7;
   border:1px solid transparent;border-radius:18px;font-family:var(--font);font-size:16px;font-weight:600;
   color:var(--text);background:var(--mmh-grad-action-hc);
   box-shadow:0 1px 2px rgba(178,58,99,.22),0 8px 20px rgba(240,127,163,.30);
-  transition:transform .12s ease;margin:6px 0 4px}
+  transition:transform .12s ease;margin:6px 0 4px;background-origin:border-box}
 .cta:active{transform:scale(.97)}
 [data-theme="dark"] .cta{color:#1B1A21}
 
@@ -712,8 +718,8 @@ svg.i{width:22px;height:22px;stroke:currentColor;fill:none;stroke-width:1.7;
 .mbb-text{background:none;color:#B23A63;padding:0 8px}
 .mbb-danger.mbb-outline{background:transparent;color:var(--sem-danger);border:1.5px solid rgba(183,47,66,.45)}
 [data-theme="dark"] .mbb-outline,[data-theme="dark"] .mbb-dashed,[data-theme="dark"] .mbb-text{color:#FFC4D6}
-.mbb-xs{height:28px;font-size:12px;padding:0 14px;border-radius:18px}
-.mbb-sm{height:32px;font-size:13px;padding:0 16px;border-radius:18px}
+.mbb-xs{height:28px;font-size:12px;padding:0 14px;border-radius:var(--lg-radius-pill,999px)}
+.mbb-sm{height:32px;font-size:13px;padding:0 16px;border-radius:var(--lg-radius-pill,999px)}
 .mbb-lg{height:48px;font-size:16px;padding:0 26px;border-radius:22px}
 .mbb.round{border-radius:999px;height:48px}
 .mbb.cr{border-radius:50%;width:44px;height:44px;padding:0}

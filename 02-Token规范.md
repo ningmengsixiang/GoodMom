@@ -310,13 +310,41 @@ CSS：
 | `--lg-radius-card-lg` | 28 | 大型面板 / 主 KPI 卡 |
 | `--lg-radius-card` | 22 | 常规卡片 |
 | `--lg-radius-control` | 20 | 输入框、下拉、搜索 |
-| `--lg-radius-btn-lg` | 26 | 大按钮（h=48） |
-| `--lg-radius-btn` | 22 | 中按钮（h=40） |
-| `--lg-radius-btn-sm` | 18 | 小按钮（h=32） |
+| `--lg-radius-pill` | 999 | **按钮一律用它**（含分段控件端头、级联按钮、结果页动作按钮） |
+| `--lg-radius-btn-lg` | 26 | 备用圆角档（h=48）；**注意**：26 > 48/2，浏览器会缩放到 24 |
+| `--lg-radius-btn` | 22 | 备用圆角档（h=40）；22 > 40/2，会缩放到 20 |
+| `--lg-radius-btn-sm` | 18 | 备用圆角档（h=32）；**也是"方角按钮"档**（`.gm-btn--square` 取它，原为 10px 已越界） |
 | `--lg-radius-chip` | 999 | 徽章 / 标签 / 开关 |
 | `--lg-radius-round` | 50% | 圆形图标按钮、头像 |
 
+> ⚠️ **圆角必须"声明值 = 渲染值"（V2.9 实测修订）**：上表 `--lg-radius-btn*`（26/22/18 对 h=48/40/32）
+> **三个都超过高度的一半**（24/20/16）。浏览器遇到相邻圆角之和超出盒子时会**按比例缩放**，
+> 于是长期存在"声明 26、渲染 24"。单看一个按钮没观感问题，**但复用同一个值时就会错**：
+> `.gm-btn-group` 的端头当年写死 22px，48px 高的分组端头因此不是胶囊（角上有平段）。
+> 现口径：**按钮一律 `--lg-radius-pill`（999）**；确需圆角矩形时取 ≤ 高度一半的档位。
+> 门禁：`audit.py --only btn-radius`（按钮族规则里，声明了 height 的不得出现"圆角 > 半高"的数字，
+> 且胶囊档 token 必须 ≥900px —— 被改小/删掉会让按钮静默退回方角）。
+
 ---
+
+
+### 2.5.1 背景原点：渐变 + 边框的规则必须自带 `background-origin:border-box`
+
+**一句话：`background-origin` 默认 `padding-box`，而绘制区默认 `border-box`。**
+
+渐变图按 padding-box 定尺、却要铺满 border-box，多出来的那一圈 1px 边框环只好**平铺取到渐变的另一端**：
+顶部一条暗缝、底部一条亮缝 —— 观感就是"胶囊缺了一角 / 露出别的底色"。
+实测（应用主按钮 126×40 · `135deg` 亮粉渐变 · 1px 透明边框）：修前顶部首行 `rgb(250,154,183)`，
+比它下一行 `rgb(252,169,194)` 暗 15；逐条声明后首行 `rgb(252,170,195)`，与填充连续。
+
+**必须逐条规则声明**，⛔ 不能靠全局 `*{background-origin:border-box}` ——
+`background:` **简写会把 origin 重置回 padding-box**，而简写所在的组件规则比 `*` 更具体，
+实测计算值仍是 `padding-box`（探针报"样式表里有这条规则、元素却没生效"）。那是"看着在守、其实没守"的假防线。
+
+另一半：⛔ 渐变**不得**与 `background-clip:padding-box` 同用 —— 那圈边框会**完全不画**、
+直接透出层下卡片色（实测 `rgb(251,242,245)`），即"露出其他颜色的底色"。
+
+门禁：`audit.py --only bg-origin`（逐条规则查漏写 / 禁止再加全局假防线 / 禁止 padding-box 组合）。
 
 ## 2.5 玻璃材质 Token（Glass）
 
@@ -351,7 +379,7 @@ CSS：
   backdrop-filter: blur(48px) saturate(1.2);
   border: 1px solid rgba(255,255,255,0.45);
   box-shadow: inset 0 1px 0 rgba(255,255,255,0.60), var(--lg-shadow-md);
-  border-radius: var(--lg-radius-container);
+  border-radius: var(--lg-radius-container);  background-origin: border-box;
 }
 ```
 
@@ -488,7 +516,8 @@ CSS：
 
   /* ── 圆角 ──────────────────────────────── */
   --lg-radius-container: 40px; --lg-radius-card-lg: 28px; --lg-radius-card: 22px;
-  --lg-radius-control: 20px; --lg-radius-btn-lg: 26px; --lg-radius-btn: 22px;
+  --lg-radius-control: 20px; --lg-radius-pill: 999px;
+  --lg-radius-btn-lg: 26px; --lg-radius-btn: 22px;   /* 备用档；按钮实际一律用 --lg-radius-pill */
   --lg-radius-btn-sm: 18px; --lg-radius-chip: 999px; --lg-radius-round: 50%;
 
   /* ── 边框宽度 / 焦点环（2.7.1） ─────────── */

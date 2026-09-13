@@ -1,4 +1,8 @@
 <!--@css-->
+/* 02 · 2.5 背景原点（V2.9 实测修复）：渐变按 border-box 定尺。
+   默认 padding-box 时，渐变图按 padding-box 定尺却要铺满 border-box，
+   多出的 1px 边框环会平铺取到渐变**另一端** → 顶部一条暗缝、底部一条亮缝，
+   看起来像"胶囊缺了一角 / 露出别的底色"。全局声明，特异性 0，可被组件规则覆盖。 */
 :root{--t:#343A46;--t2:#4F5B6E;--t3:#4F5B6E;--rose-d:#E85D8F;--rose-deep:#B23A63;
   --card-bg:rgba(255,255,255,.66);--card-bd:rgba(255,255,255,.85);--shadow:0 10px 26px rgba(90,70,70,.08);
   --bg:linear-gradient(165deg,#FDF2EE,#F6E2DB 52%,#EAD3CA)}
@@ -30,7 +34,7 @@ th,td{border-bottom:1px solid rgba(232,93,143,.12);text-align:left;padding:8px 8
 th{color:var(--rose-deep)}
 .chip{display:inline-block;font-size:10.5px;padding:2px 9px;border-radius:999px;background:rgba(111,201,180,.16);color:#25715D;font-weight:600}
 .chip.p{background:rgba(242,178,92,.2);color:#8D5A15}
-.demoBtn{border:1px solid transparent;border-radius:999px;padding:9px 18px;cursor:pointer;font-weight:600;background:var(--mmh-grad-action-hc,#F77FA3);color:#343A46;box-shadow:0 1px 2px rgba(178,58,99,.22),0 8px 20px rgba(240,127,163,.30)}
+.demoBtn{border:1px solid transparent;border-radius:999px;padding:9px 18px;cursor:pointer;font-weight:600;background:var(--mmh-grad-action-hc,#F77FA3);color:#343A46;box-shadow:0 1px 2px rgba(178,58,99,.22),0 8px 20px rgba(240,127,163,.30);background-origin:border-box}
 code,pre{font-family:ui-monospace,Menlo,monospace}
 pre{background:#fff7f4;border:1px solid #f0d4cf;border-radius:18px;padding:12px;font-size:12px;overflow:auto;line-height:1.8}
 /* 暗色演示（页面内最小示例：切换 data-theme） */

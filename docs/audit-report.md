@@ -1,7 +1,36 @@
 # 规范审计报告（自动）
 
 - 命令：`python3 scripts/audit.py`
-- 时间：2026-09-13 18:59
-- 结论：❌ 存在硬性失败
+- 时间：2026-09-13 19:23
+- 结论：✅ 通过
 
-- **FAIL** `css-syntax`：site/fragments/preview-patterns.html：注释不闭合（/* 26 个 vs */ 25 个）—— 未闭合的 /* 会吞掉其后所有规则
+- **OK** `md-links`：全部内链有效
+- **OK** `chapters`：00–19 编号连续（20 份）
+- **OK** `icons`：77 图标唯一且命名合法，与 registry 同步
+- **OK** `html-md`：HTML 页面无 .md 链接（含片段与根目录）
+- **OK** `stale`：无旧称/旧定位残留
+- **WARN** `color-html`：site/index.html 非白名单色 8 个（低风险别名）
+- **OK** `color-css`：代码/Tokem 层无硬编码色（严格层）
+- **OK** `color-banned`：无历史近似色回归
+- **WARN** `bp`：非收敛断点 [('site/index.html', 1023)]
+- **OK** `spec`：合并产物 site-spec 模块 章节=60 阅读器在；旧入口为重定向
+- **OK** `hex-case`：hex 色值全仓统一大写（14.1.1）
+- **OK** `mirror`：应用侧 gm-arco-ui 与设计系统源逐字节一致（含 theme.css ↔ gm.css），且无缺失选择器
+- **OK** `dark`：暗色段完整；10 项文字/语义色在最坏合成面 #36353C 上全部 ≥4.5:1
+- **OK** `exports`：全部组件已在两包 index.ts 导出
+- **OK** `logo-ref`：logo 引用 28 处全部指向正式 logo 的派生档（brand/logo-512.png / brand/logo-192.png），零断链、无退役 SVG
+- **OK** `logo-guard`：正式 logo 真源 2032×2032（未压缩）+ 派生档 512 / 192；渲染圆角 10 处与白名单一致
+- **OK** `loading-spec`：状态与加载族符合 08 · 8.2.5/8.2.15 与 EL-19-02/03：骨架＝胶囊+1.6s 呼吸（无扫光）· Spin 0.9s 且下限 18 · 进度条 3/6/10 · GmResult 三通道齐备
+- **OK** `css-syntax`：全部 CSS（两库样式表 + 站点片段样式段）注释与花括号平衡（未闭合注释会静默吞掉规则，是本轮实际踩过的坑）
+- **OK** `feedback-spec`：反馈与提示族符合 Part 18 · MD-18-01/02/04：Toast 顶部偏上（外壳给出 --gm-toast-top 避让吸顶导航）· 320ms 入 / 驻留 2.4s / 240ms 出 · 同类仅 1 条 · error→alert、其余→status+aria-live · 无白描边；Modal 有 role=dialog + aria-modal + ESC + 焦点归还
+- **OK** `undefined-token`：站点片段里 var(--x) 的无兜底引用全部有定义（未定义 + 无兜底 = 整条声明被静默丢弃，是 V2.9 实测到的缺陷类）
+- **OK** `data-present`：数据呈现层符合 03 · 3.7 / 08 · 8.2.11+8.2.13 / 11 · 11.2.6 / TB-15-01/02：表格 body-sm 14+600 次级表头 · tabular-nums · 行高算术 44–52 · 操作列右对齐；描述列表 caption key + body-sm value + 单行省略；折叠 44 热区 + 300ms grid-rows + 220ms 箭头；外壳与独立页两份配方逐项相等，页面侧零私有实现
+- **OK** `growth-chart`：生长曲线·百分位带符合 13 · 13.2 与 04 · 4.2–4.3.2：参考带 alpha .12（.10–.14）+ 细白描边上界 · 主曲线 Rose-500 2.5px + 端点白芯粉描边 · P3/P97 虚线 1.5px 三级色（可一键开关）· 网格 --lg-divider 1px · 刻度 caption 12px 等宽 · 入场 0.6s · 白玻璃 Tooltip · role=img + 隐藏数据表 + 中位数锚定的百分位读数
+- **OK** `svg-refs`：全部 7 处 url(#id) 画刷引用均可解析（跨模块 id 前缀未断链）
+- **OK** `semantic-parity`：六语义浅底档在 02 / 14 / skill reference 与 theme.css 之间完全一致（attention=#8D5A15 · info=#3261C1 · neutral=#5E6673 · positive=#25715D · risk=#B72F42 · special=#6A48DC）
+- **OK** `icon-mirror`：应用侧雪碧图与真源逐字节一致（22815 字节）
+- **OK** `text-token-parity`：文字 token 无本地改写（5 个 token × 浅/暗档均等于 theme.css 真值）
+- **OK** `tertiary-size`：tertiary 未用于 <24px 文字（占位符豁免）
+- **OK** `tint-base`：淡底一律混实底（浅 13% ／ 暗 8%），且两档 token 在位
+- **OK** `bg-origin`：渐变+边框的规则均逐条声明 background-origin:border-box；无全局假防线与 padding-box 组合
+- **OK** `btn-radius`：按钮一律胶囊档（--lg-radius-pill=999px）；无"圆角大于半高"的声明

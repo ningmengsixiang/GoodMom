@@ -391,7 +391,7 @@ def _theme_text_truth():
     light, dark = {}, {}
     for sel, body in _brace_blocks(css):
         tgt = dark if "data-theme" in sel else light
-        for m in re.finditer(r"(--lg-text-[\w-]+|--lg-tint-[\w-]+)\s*:\s*([^;}]+)", body):
+        for m in re.finditer(r"(--lg-text-[\w-]+|--lg-tint-[\w-]+|--lg-radius-[\w-]+)\s*:\s*([^;}]+)", body):
             tgt[m.group(1)] = m.group(2).strip()
     return light, dark
 
@@ -519,6 +519,143 @@ def tint_base():
     if ok:
         rec("OK", "tint-base", "淡底一律混实底（浅 13% ／ 暗 8%），且两档 token 在位")
     return ok   # ⚠️ 曾写成 return True：门禁打印 FAIL 却 exit=0，负向测试当场抓出
+
+
+def bg_origin():
+    """渐变底 + 边框的规则，必须**自己**声明 `background-origin:border-box`。
+
+    背景（V2.9，用户报"主按钮头上缺一块、还露出别的底色"）：
+    `background-origin` 默认 padding-box，而绘制区默认 border-box ——
+    渐变图按 padding-box 定尺却要铺满 border-box，多出的那一圈 1px 只好**平铺取到另一端**：
+    顶部一条暗缝、底部一条亮缝。实测应用主按钮（126×40 · 135deg 亮粉渐变 1px 透明边）：
+    修前顶部首行 rgb(250,154,183)（比下一行暗 15），逐条声明后 rgb(252,170,195)，与填充连续。
+
+    ⚠️ 两个反直觉点，都踩过且都必须由本规则守住：
+    1. **全局 `*{background-origin:border-box}` 无效**：`background:` 简写会把 origin 重置回
+       padding-box，而简写所在组件规则比 `*` 更具体 —— 实测计算值仍是 padding-box
+       （探针报"样式表里有这条规则、元素却没生效"）。所以本规则要求**逐条规则**声明，
+       并**禁止**再加全局规则（那是"看着在守、其实没守"的假防线）。
+    2. 判定"有渐变"不能只找字面 `gradient`：本仓大量写 `background:var(--mmh-grad-action-hc)`，
+       渐变藏在 token 里 —— 旧判据对真实用法完全空转（负向测试当场揭发）。
+    另一半：`background-clip:padding-box` 会让那圈边框**完全不画**、直接透出层下底色，
+    就是"露出其他颜色的底色"，同样禁止。
+    """
+    GRAD = re.compile(r"gradient|--[\w-]*grad[\w-]*")
+    PROP = re.compile(r"(?<![-\w])(border(?:-(?:top|right|bottom|left))?(?:-width|-style|-color)?)\s*:\s*([^;}]+)")
+    SKIP = ("border-radius", "border-collapse", "border-spacing", "border-image")
+
+    def has_border(body):
+        for m in PROP.finditer(body):
+            prop, val = m.group(1), m.group(2).replace("!important", "").strip()
+            if any(prop.startswith(x) for x in SKIP):
+                continue
+            if val in ("none", "0", "0px", "initial", "unset"):
+                continue
+            return True
+        return False
+
+    # ⚠️ 不要扫 `scripts/build-site.py`：那是 Python 源码，`_brace_blocks` 会把 dict/字符串里的
+    #    花括号当成 CSS 规则，拿 A 处的 "gradient" 配 B 处的 "border"（实测误报过）。外壳 CSS 的
+    #    真身就在产物 `site/index.html` 里，而 `build-site.py --check` 保证产物==源。
+    files = CSS_SCAN + ["goodmom-vue/src/styles/components.css", "frontend-app/src/styles/layout.css",
+                        "site/index.html"] + sorted(glob.glob("site/fragments/*.html"))
+    missing, global_rule, clip_bad = [], [], []
+    for f in sorted(set(files)):
+        if not os.path.exists(f):
+            continue
+        for sel, body in _brace_blocks(open(f, encoding="utf-8").read()):
+            if re.search(r"background-origin\s*:", body) and re.fullmatch(r"\*[^{}]*", sel.strip()):
+                global_rule.append(f)
+            if not (GRAD.search(body) and has_border(body)):
+                continue
+            # 空白容忍：文档示例里写的是 `background-origin: border-box`（带空格），
+            # 用字符串精确匹配会把"已经写对"的示例判成缺（实测踩过）
+            if not re.search(r"background-origin\s*:\s*border-box", body):
+                missing.append("%s %s" % (f, sel.strip().split("\n")[-1][:38]))
+            if re.search(r"background-clip\s*:\s*padding-box", body):
+                clip_bad.append("%s %s" % (f, sel.strip().split("\n")[-1][:38]))
+    ok = True
+    if global_rule:
+        rec("FAIL", "bg-origin", "出现全局 `*{background-origin:…}`（%s）—— 对 `background:` 简写无效，"
+            "属假防线；请在每条渐变+边框的规则里声明" % global_rule[:2]); ok = False
+    if missing:
+        rec("FAIL", "bg-origin", "渐变+边框的规则缺 background-origin:border-box %d 处（会有 1px 异色缝）：%s"
+            % (len(missing), missing[:3])); ok = False
+    if clip_bad:
+        rec("FAIL", "bg-origin", "渐变与 background-clip:padding-box 同用 %d 处（露出层下底色）：%s"
+            % (len(clip_bad), clip_bad[:3])); ok = False
+    if ok:
+        rec("OK", "bg-origin", "渐变+边框的规则均逐条声明 background-origin:border-box；无全局假防线与 padding-box 组合")
+    return ok
+
+
+BUTTON_SEL = re.compile(
+    r"\.gm-btn|\.gm-result__act|\.gm-cascader__btn|\.[\w-]*btn[\w-]*|"
+    r"\.pm-primary|\.mbb-|\.chip|\.sh-tab|\.app-navlink|\.app-tabbar\b")
+
+
+def btn_radius():
+    """声明了 `height` 的规则里，圆角不得大于高度的一半（否则声明值 ≠ 渲染值）。
+
+    背景：02 · 2.4 原写 `--lg-radius-btn-lg/btn/btn-sm = 26/22/18` 对应 h=48/40/32 ——
+    **三个都超过高度的一半**（24/20/16）。浏览器遇到超出的相邻圆角会按比例缩放，
+    所以"声明 26、渲染 24"长期并存；单看一个按钮没事，但**复用同一个值时就会错**：
+    `.gm-btn-group` 的端头固定写 22px，48px 高的分组端头因此不是胶囊（角上有平段）。
+    现按钮一律走 `--lg-radius-pill`（999），本规则防止再写回"大于半高"的数字。
+    """
+    pill = _theme_text_truth()[0].get("--lg-radius-pill", "").strip()
+    bad = []
+    files = CSS_SCAN + ["goodmom-vue/src/styles/components.css"] + sorted(glob.glob("site/fragments/*.html"))
+    for f in sorted(set(files)):
+        if not os.path.exists(f):
+            continue
+        for sel, body in _brace_blocks(open(f, encoding="utf-8").read()):
+            # 范围收口：只查**按钮族**（用户这次指的就是按钮），且
+            #  ⚠️ `_brace_blocks` 不展开 @media —— 媒体块里的"选择器/规则体"会串行配对，
+            #  不跳过就会拿 A 规则的高度配 B 规则的圆角（实测误报过 radius=40/height=13）。
+            if "@media" in sel or "@supports" in sel or "@keyframes" in sel:
+                continue
+            if not BUTTON_SEL.search(sel):
+                continue
+            mh = re.search(r"(?<![-\w])height\s*:\s*([\d.]+)px", body)
+            mr = re.search(r"border-radius\s*:\s*([^;}]+)", body)
+            if not (mh and mr):
+                continue
+            h = float(mh.group(1))
+            if h < 8:            # 2px 指示条之类：AA 级别，无视觉意义
+                continue
+            for part in mr.group(1).split():
+                q = part.strip()
+                if q.endswith("%") or q in ("0",):
+                    continue
+                mv = re.match(r"var\(\s*--[\w-]+\s*,\s*([\d.]+)px\s*\)", q)
+                if mv:
+                    q = mv.group(1)
+                elif q.startswith("var("):
+                    continue          # 引用了无法解析的变量：不误判
+                else:
+                    q = re.sub(r"px$", "", q)
+                try:
+                    v = float(q)
+                except ValueError:
+                    continue
+                if v >= 900:
+                    continue          # 胶囊档
+                if v > h / 2 + 0.01:
+                    bad.append("%s %s radius=%gpx > height/2=%gpx" % (f, sel[:36], v, h / 2))
+    # 胶囊档本身也要守：被改小/删掉时，按钮会静默退回方角（文件全绿、观感全变）
+    try:
+        pv = float(re.sub(r"px$", "", pill))
+    except ValueError:
+        pv = -1
+    if pv < 900:
+        rec("FAIL", "btn-radius", "--lg-radius-pill 必须是胶囊档（≥900px），实际 %r" % (pill or "缺失"))
+        return False
+    if bad:
+        rec("FAIL", "btn-radius", "圆角大于半高（声明值会被缩放，声明≠渲染）%d 处：%s" % (len(bad), bad[:3]))
+        return False
+    rec("OK", "btn-radius", "按钮一律胶囊档（--lg-radius-pill=%s）；无\"圆角大于半高\"的声明" % pill)
+    return True
 
 
 def mirror_sync():
@@ -1538,6 +1675,7 @@ GATES = [
     ("undefined-token", undefined_tokens), ("data-present", data_present), ("growth-chart", growth_chart),
     ("svg-refs", svg_refs), ("semantic-parity", semantic_parity), ("icon-mirror", icon_mirror),
     ("text-token-parity", text_token_parity), ("tertiary-size", tertiary_size), ("tint-base", tint_base),
+    ("bg-origin", bg_origin), ("btn-radius", btn_radius),
 ]
 
 

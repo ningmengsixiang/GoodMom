@@ -55,6 +55,10 @@
   --lg-glass-panel:rgba(255,255,255,.14); --lg-glass-card:rgba(255,255,255,.22);
   --lg-glass-control:rgba(255,255,255,.35); --lg-glass-popover:rgba(255,255,255,.60);
   --lg-border-white-70:rgba(255,255,255,.70); --lg-border-white-75:rgba(255,255,255,.75);
+  /* 胶囊圆角（V2.9）：按钮/分段控件端头/级联按钮一律用它。
+     旧写法 --lg-radius-btn-lg/btn/btn-sm = 26/22/18 对 h=48/40/32 **都超过高度一半**，
+     浏览器会把超出的圆角按比例缩放 —— 声明值 ≠ 渲染值，分段按钮的端头因此不是胶囊。 */
+  --lg-radius-pill:999px;
   --lg-radius-control:20px;
   --lg-shadow-md:0 8px 24px rgba(58,52,84,.08);
   --lg-shadow-sm:0 4px 12px rgba(58,52,84,.10);

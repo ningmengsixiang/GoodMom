@@ -1,4 +1,8 @@
 <!--@css-->
+/* 02 · 2.5 背景原点（V2.9 实测修复）：渐变按 border-box 定尺。
+   默认 padding-box 时，渐变图按 padding-box 定尺却要铺满 border-box，
+   多出的 1px 边框环会平铺取到渐变**另一端** → 顶部一条暗缝、底部一条亮缝，
+   看起来像"胶囊缺了一角 / 露出别的底色"。全局声明，特异性 0，可被组件规则覆盖。 */
 /* ═══ GoodMom Tokens（精简，同 02/12）═══ */
 :root{
   --text:#343A46;--t2:#4F5B6E;--t3:#4F5B6E;--line:rgba(58,52,84,.09);
@@ -21,14 +25,14 @@
 svg.i{width:16px;height:16px;stroke:currentColor;fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round;vertical-align:-3px;flex:none}
 .glass{border-radius:20px;background:linear-gradient(160deg,rgba(255,255,255,.55),rgba(255,255,255,.24) 55%,rgba(255,255,255,.32));
   border:1px solid rgba(255,255,255,.7);box-shadow:inset 0 1px 0 rgba(255,255,255,.8),var(--sh);
-  -webkit-backdrop-filter:blur(32px);backdrop-filter:blur(32px)}
+  -webkit-backdrop-filter:blur(32px);backdrop-filter:blur(32px);background-origin:border-box}
 .card{border-radius:18px;background:linear-gradient(160deg,rgba(255,255,255,.62),rgba(255,255,255,.3));
-  border:1px solid rgba(255,255,255,.75);box-shadow:inset 0 1px 0 rgba(255,255,255,.8),0 8px 20px rgba(58,52,84,.06)}
+  border:1px solid rgba(255,255,255,.75);box-shadow:inset 0 1px 0 rgba(255,255,255,.8),0 8px 20px rgba(58,52,84,.06);background-origin:border-box}
 /* Hub 切换条 */
 .hub{position:sticky;top:12px;z-index:60;max-width:1180px;margin:14px auto;padding:10px 16px;border-radius:999px;
   display:flex;gap:8px;align-items:center;flex-wrap:wrap;
   background:linear-gradient(160deg,rgba(255,255,255,.7),rgba(255,255,255,.42));
-  border:1px solid rgba(255,255,255,.85);box-shadow:var(--sh);-webkit-backdrop-filter:blur(20px);backdrop-filter:blur(20px)}
+  border:1px solid rgba(255,255,255,.85);box-shadow:var(--sh);-webkit-backdrop-filter:blur(20px);backdrop-filter:blur(20px);background-origin:border-box}
 .hub b{font-size:14px;color:var(--rose-deep);display:flex;align-items:center;gap:8px;margin-right:6px}
 .hub b i{width:14px;height:14px;border-radius:50%;background:var(--grad-p);display:inline-block}
 .hub a{font-size:12px;color:var(--t2);text-decoration:none;padding:6px 14px;border-radius:999px}
@@ -63,14 +67,14 @@ background:rgba(255,255,255,.5);border:1px solid var(--lg-divider,rgba(58,52,84,
       边缘清晰度改由同族玫色「接触影 + 辉光」承担（02 · 2.6 色相统一）。
    ② 白底按钮的边不再用白色（白边在白/浅底上等于没有边 → 廉价），改用 02 · 2.7.1 同源的
       暖中性 hairline `--lg-divider`（暗色档自动翻白）+ 02 · 2.6 双层柔影。 */
-.btn.pri{background:var(--mmh-grad-action-hc,#F77FA3);color:#343A46;border:1px solid transparent;box-shadow:0 1px 2px rgba(178,58,99,.22),0 8px 20px rgba(240,127,163,.30)}
+.btn.pri{background:var(--mmh-grad-action-hc,#F77FA3);color:#343A46;border:1px solid transparent;box-shadow:0 1px 2px rgba(178,58,99,.22),0 8px 20px rgba(240,127,163,.30);background-origin:border-box}
 .btn.pri:hover{box-shadow:0 2px 4px rgba(178,58,99,.24),0 12px 26px rgba(240,127,163,.38)}
 .btn.mint{background:linear-gradient(135deg,#C25064,#B04052);color:#FFF}  /* 见下行：实底统一走 D5 深档 */
 .btn.gho{background:transparent;color:var(--rose-deep)}
 .btn.line{background:transparent;color:var(--mmh-rose-700,#B23A63);border:1.5px solid rgba(232,93,143,.45);box-shadow:0 1px 2px rgba(178,58,99,.06)}
 .btn.line:hover{border-color:rgba(232,93,143,.75);background:rgba(247,127,163,.07)}
 .btn.danger{background:linear-gradient(135deg,#C25064,#B04052);color:#FFF}
-.btn.mini{height:26px;font-size:12px;padding:0 12px;border-radius:16px}   /* 03 · 3.2.4：mini 26 高（原 30 不在档上） */
+.btn.mini{height:26px;font-size:12px;padding:0 12px;border-radius:var(--lg-radius-pill,999px)}   /* 03 · 3.2.4：mini 26 高（原 30 不在档上） */
 /* PC 顶栏 */
 .pcbar{position:relative;max-width:1180px;margin:14px auto 0;padding:8px 12px;border-radius:999px;display:flex;align-items:center;gap:12px}
 .pcbar .logo{font-weight:700;color:var(--rose-deep);display:flex;align-items:center;gap:8px;font-size:15px}
@@ -113,7 +117,7 @@ background:rgba(255,255,255,.5);border:1px solid var(--lg-divider,rgba(58,52,84,
 .lc{flex:1;text-align:center;position:relative;font-size:10.5px;color:var(--t2)}
 .lc .d{width:22px;height:22px;border-radius:50%;margin:0 auto 4px;display:flex;align-items:center;justify-content:center;
   background:rgba(255,255,255,.85);border:1px solid rgba(255,255,255,.9);color:var(--t3);font-size:10px;font-weight:600}
-.lc.done .d{background:var(--mmh-grad-action-hc,#F77FA3);color:#343A46;border-color:transparent}
+.lc.done .d{background:var(--mmh-grad-action-hc,#F77FA3);color:#343A46;border-color:transparent;background-origin:border-box}
 .lc.cur .d{background:#FFF;border:2px solid var(--rose-d);color:var(--rose-deep)}
 .lc::before{content:"";position:absolute;top:10px;left:calc(50% + 14px);width:calc(100% - 28px);height:2px;background:var(--line)}
 .lc.done::before{background:linear-gradient(90deg,#FFC4D6,#F77FA3)}
@@ -198,7 +202,7 @@ footer.note a{color:var(--rose-deep);text-decoration:none}
 .tg.pill-sel{outline:2px solid currentColor;outline-offset:1px;font-weight:600}
 .mwrap{padding-bottom:120px}
 .lc{white-space:nowrap}
-.btn.lg{height:48px;padding:0 30px;font-size:16px;border-radius:26px}   /* 03 · 3.2.4：large 48 / 圆角 26（原 50 / 18 不在档上） */
+.btn.lg{height:48px;padding:0 30px;font-size:16px;border-radius:var(--lg-radius-pill,999px)}   /* 03 · 3.2.4：large 48 / 圆角 26（原 50 / 18 不在档上） */
 .btnrow{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
 .btn:hover{filter:brightness(.97)}
 .mobottom{display:flex;gap:8px;padding:10px;border-radius:24px}
@@ -282,13 +286,13 @@ textarea.note{width:100%;min-height:84px;border-radius:18px;border:1px solid rgb
 .btn.lg svg,.b1.lg svg,.btn-lg svg,.b1.lg svg,.large svg{width:18px!important;height:18px!important}:root{--mmh-grad-action-hc:linear-gradient(135deg,#FFC4D6 0%,#F77FA3 100%)}
 /* 按钮类型色 规范化（03 · 3.2.4 + D5/D6） */
 .btn.pri,.b1.pri{background:var(--mmh-grad-action-hc,#F77FA3)!important;color:#343A46!important;border:1px solid transparent!important;
-  box-shadow:0 1px 2px rgba(178,58,99,.22),0 8px 20px rgba(240,127,163,.30)!important}
+  box-shadow:0 1px 2px rgba(178,58,99,.22),0 8px 20px rgba(240,127,163,.30)!important;background-origin:border-box}
 .btn.mint,.btn.success,.b1.mint,.b1.success{background:#1E6B52!important;color:#FFF!important;border:1px solid transparent!important;
   box-shadow:0 1px 2px rgba(30,107,82,.22),0 8px 20px rgba(47,143,118,.28)!important}
 .btn.danger,.btn.risk,.b1.danger,.b1.risk{background:#B04052!important;color:#FFF!important;border:1px solid transparent!important;
   box-shadow:0 1px 2px rgba(176,64,82,.24),0 8px 20px rgba(208,90,110,.28)!important}
 .btn.warning,.b1.warning{background:#9A5A0E!important;color:#FFF!important;border:1px solid transparent!important}:root{--mmh-grad-action-hc:linear-gradient(135deg,#FFC4D6 0%,#F77FA3 100%)}
-.chip.on{background:var(--mmh-grad-action-hc,#F77FA3)!important;color:#343A46!important;border:1px solid transparent!important}
+.chip.on{background:var(--mmh-grad-action-hc,#F77FA3)!important;color:#343A46!important;border:1px solid transparent!important;background-origin:border-box}
 
 <!--@body-->
 <div class="hub">

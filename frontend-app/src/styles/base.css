@@ -22,6 +22,10 @@ body{
 :focus-visible{outline:var(--lg-ring-width,2px) solid var(--lg-ring-color,rgba(232,93,143,.6));
   outline-offset:var(--lg-ring-offset,2px)}
 /* 动效降级（07 · 7.5）：应用侧自写动画也必须跟上 */
+/* 02 · 2.5 背景原点（V2.9）：渐变一律按 border-box 定尺。
+   默认 padding-box 时，多出的 1px 边框环会平铺取到渐变另一端 → 顶部暗缝/底部亮缝，
+   看起来像"胶囊缺了一角、露出别的底色"。全局声明，特异性 0，组件规则可覆盖。 */
+
 @media (prefers-reduced-motion:reduce){
   *,*::before,*::after{animation-duration:.01ms!important;transition-duration:.01ms!important}
 }

@@ -1,4 +1,8 @@
 <!--@css-->
+/* 02 · 2.5 背景原点（V2.9 实测修复）：渐变按 border-box 定尺。
+   默认 padding-box 时，渐变图按 padding-box 定尺却要铺满 border-box，
+   多出的 1px 边框环会平铺取到渐变**另一端** → 顶部一条暗缝、底部一条亮缝，
+   看起来像"胶囊缺了一角 / 露出别的底色"。全局声明，特异性 0，可被组件规则覆盖。 */
 :root{--t:#343A46;--t2:#4F5B6E;--t3:#4F5B6E;--rose:#E85D8F;--rose-deep:#B23A63;--bg:linear-gradient(165deg,#FDF2EE,#F6E2DB 55%,#E7D3CB)}
 *{box-sizing:border-box}body{margin:0;font-family:"PingFang SC","Inter","MiSans","Noto Sans SC",sans-serif;color:var(--t);background:var(--bg)}
 a{color:var(--rose-deep)}
@@ -15,9 +19,9 @@ a{color:var(--rose-deep)}
 .drop a{display:block;padding:8px 12px;border-radius:18px;font-size:13px;color:var(--t2);text-decoration:none;white-space:nowrap}
 .drop a:hover{background:rgba(247,127,163,.1);color:#B23A63}
 .top .ext{margin-left:auto;font-size:12.5px;font-weight:600;text-decoration:none;padding:7px 14px;border-radius:999px;background:#FFF;border:1px solid rgba(232,93,143,.3);color:var(--rose-deep)}
-.top .ext2{margin-left:8px;background:var(--mmh-grad-action-hc,linear-gradient(135deg,#FFC4D6 0%,#F77FA3 100%));color:#343A46;font-weight:600;text-decoration:none;font-size:12.5px;padding:7px 14px;border-radius:999px;border:var(--lg-border-1,1px) solid transparent;box-shadow:0 1px 2px rgba(178,58,99,.22),0 8px 20px rgba(240,127,163,.30)}   /* 03 · 3.2.4 主按钮配方 */
+.top .ext2{margin-left:8px;background:var(--mmh-grad-action-hc,linear-gradient(135deg,#FFC4D6 0%,#F77FA3 100%));color:#343A46;font-weight:600;text-decoration:none;font-size:12.5px;padding:7px 14px;border-radius:999px;border:var(--lg-border-1,1px) solid transparent;box-shadow:0 1px 2px rgba(178,58,99,.22),0 8px 20px rgba(240,127,163,.30);background-origin:border-box}   /* 03 · 3.2.4 主按钮配方 */
 .wrap{max-width:1080px;margin:0 auto;padding:20px 18px 80px}
-.chap{scroll-margin-top:70px;margin:0 0 34px;border-radius:22px;padding:22px 26px;background:linear-gradient(160deg,rgba(255,255,255,.72),rgba(255,255,255,.4));border:1px solid #F0D4CF;box-shadow:0 10px 26px rgba(90,70,70,.08)}
+.chap{scroll-margin-top:70px;margin:0 0 34px;border-radius:22px;padding:22px 26px;background:linear-gradient(160deg,rgba(255,255,255,.72),rgba(255,255,255,.4));border:1px solid #F0D4CF;box-shadow:0 10px 26px rgba(90,70,70,.08);background-origin:border-box}
 .chap-hd{font-size:20px;font-weight:700;color:var(--rose-deep);padding-bottom:10px;border-bottom:1px solid #F0D4CF;margin-bottom:12px}
 /* 02 · 2.2.4 字重上限 700：<b> 在 700 的父级下按 bolder 计算为 900，故显式回落 */
 .chap-hd b{font-weight:700}
@@ -336,8 +340,15 @@ Figma:    LG / Color / Purple / 500
 <hr>
 <h3>2.4 圆角 Token</h3>
 <p><b>总原则：一切皆圆；层级越高圆角可略小，但永不出现 &lt;16px 的交互组件圆角。</b></p>
-<table><thead><tr><th>Token</th><th>值</th><th>对象</th></tr></thead><tbody><tr><td><code>--lg-radius-container</code></td><td>40</td><td>页面主玻璃容器 / 大屏整体外框</td></tr><tr><td><code>--lg-radius-card-lg</code></td><td>28</td><td>大型面板 / 主 KPI 卡</td></tr><tr><td><code>--lg-radius-card</code></td><td>22</td><td>常规卡片</td></tr><tr><td><code>--lg-radius-control</code></td><td>20</td><td>输入框、下拉、搜索</td></tr><tr><td><code>--lg-radius-btn-lg</code></td><td>26</td><td>大按钮（h=48）</td></tr><tr><td><code>--lg-radius-btn</code></td><td>22</td><td>中按钮（h=40）</td></tr><tr><td><code>--lg-radius-btn-sm</code></td><td>18</td><td>小按钮（h=32）</td></tr><tr><td><code>--lg-radius-chip</code></td><td>999</td><td>徽章 / 标签 / 开关</td></tr><tr><td><code>--lg-radius-round</code></td><td>50%</td><td>圆形图标按钮、头像</td></tr></tbody></table>
+<table><thead><tr><th>Token</th><th>值</th><th>对象</th></tr></thead><tbody><tr><td><code>--lg-radius-container</code></td><td>40</td><td>页面主玻璃容器 / 大屏整体外框</td></tr><tr><td><code>--lg-radius-card-lg</code></td><td>28</td><td>大型面板 / 主 KPI 卡</td></tr><tr><td><code>--lg-radius-card</code></td><td>22</td><td>常规卡片</td></tr><tr><td><code>--lg-radius-control</code></td><td>20</td><td>输入框、下拉、搜索</td></tr><tr><td><code>--lg-radius-pill</code></td><td>999</td><td><b>按钮一律用它</b>（含分段控件端头、级联按钮、结果页动作按钮）</td></tr><tr><td><code>--lg-radius-btn-lg</code></td><td>26</td><td>备用圆角档（h=48）；<b>注意</b>：26 &gt; 48/2，浏览器会缩放到 24</td></tr><tr><td><code>--lg-radius-btn</code></td><td>22</td><td>备用圆角档（h=40）；22 &gt; 40/2，会缩放到 20</td></tr><tr><td><code>--lg-radius-btn-sm</code></td><td>18</td><td>备用圆角档（h=32）；<b>也是"方角按钮"档</b>（<code>.gm-btn--square</code> 取它，原为 10px 已越界）</td></tr><tr><td><code>--lg-radius-chip</code></td><td>999</td><td>徽章 / 标签 / 开关</td></tr><tr><td><code>--lg-radius-round</code></td><td>50%</td><td>圆形图标按钮、头像</td></tr></tbody></table>
+<blockquote>⚠️ <b>圆角必须"声明值 = 渲染值"（V2.9 实测修订）</b>：上表 <code>--lg-radius-btn*</code>（26/22/18 对 h=48/40/32）<br><b>三个都超过高度的一半</b>（24/20/16）。浏览器遇到相邻圆角之和超出盒子时会<b>按比例缩放</b>，<br>于是长期存在"声明 26、渲染 24"。单看一个按钮没观感问题，<b>但复用同一个值时就会错</b>：<br><code>.gm-btn-group</code> 的端头当年写死 22px，48px 高的分组端头因此不是胶囊（角上有平段）。<br>现口径：<b>按钮一律 <code>--lg-radius-pill</code>（999）</b>；确需圆角矩形时取 ≤ 高度一半的档位。<br>门禁：<code>audit.py --only btn-radius</code>（按钮族规则里，声明了 height 的不得出现"圆角 &gt; 半高"的数字，<br>且胶囊档 token 必须 ≥900px —— 被改小/删掉会让按钮静默退回方角）。</blockquote>
 <hr>
+<h4>2.5.1 背景原点：渐变 + 边框的规则必须自带 <code>background-origin:border-box</code></h4>
+<p><b>一句话：<code>background-origin</code> 默认 <code>padding-box</code>，而绘制区默认 <code>border-box</code>。</b></p>
+<p>渐变图按 padding-box 定尺、却要铺满 border-box，多出来的那一圈 1px 边框环只好<b>平铺取到渐变的另一端</b>： 顶部一条暗缝、底部一条亮缝 —— 观感就是"胶囊缺了一角 / 露出别的底色"。 实测（应用主按钮 126×40 · <code>135deg</code> 亮粉渐变 · 1px 透明边框）：修前顶部首行 <code>rgb(250,154,183)</code>， 比它下一行 <code>rgb(252,169,194)</code> 暗 15；逐条声明后首行 <code>rgb(252,170,195)</code>，与填充连续。</p>
+<p><b>必须逐条规则声明</b>，⛔ 不能靠全局 <code>*{background-origin:border-box}</code> —— <code>background:</code> <b>简写会把 origin 重置回 padding-box</b>，而简写所在的组件规则比 <code>*</code> 更具体， 实测计算值仍是 <code>padding-box</code>（探针报"样式表里有这条规则、元素却没生效"）。那是"看着在守、其实没守"的假防线。</p>
+<p>另一半：⛔ 渐变<b>不得</b>与 <code>background-clip:padding-box</code> 同用 —— 那圈边框会<b>完全不画</b>、 直接透出层下卡片色（实测 <code>rgb(251,242,245)</code>），即"露出其他颜色的底色"。</p>
+<p>门禁：<code>audit.py --only bg-origin</code>（逐条规则查漏写 / 禁止再加全局假防线 / 禁止 padding-box 组合）。</p>
 <h3>2.5 玻璃材质 Token（Glass）</h3>
 <p>玻璃 = <code>半透明白填充 + backdrop 模糊 + 1px 白色描边 + 顶部内侧高光 + 色相阴影</code>。用「层级不透明度」区分空间深度：</p>
 <table><thead><tr><th>Token</th><th>填充</th><th>Blur</th><th>描边</th><th>用途（对应层级）</th></tr></thead><tbody><tr><td><code>--lg-glass-backdrop</code></td><td>—</td><td>—</td><td>—</td><td>页面环境层（暖底+光斑）</td></tr><tr><td><code>--lg-glass-panel</code></td><td><code>rgba(255,255,255,0.14)</code></td><td>48px</td><td><code>rgba(255,255,255,0.45)</code></td><td>L1 主玻璃面板</td></tr><tr><td><code>--lg-glass-card</code></td><td><code>rgba(255,255,255,0.22)</code></td><td>32px</td><td><code>rgba(255,255,255,0.55)</code></td><td>L2 卡片 / 图表面板</td></tr><tr><td><code>--lg-glass-control</code></td><td><code>rgba(255,255,255,0.35)</code></td><td>20px</td><td><code>rgba(255,255,255,0.70)</code></td><td>L3 按钮 / 输入 / 开关</td></tr><tr><td><code>--lg-glass-popover</code></td><td><code>rgba(255,255,255,0.60)</code></td><td>40px</td><td><code>rgba(255,255,255,0.85)</code></td><td>L4 弹层 / 侧栏 / 顶部导航</td></tr></tbody></table>
@@ -356,7 +367,7 @@ Figma:    LG / Color / Purple / 500
   backdrop-filter: blur(48px) saturate(1.2);
   border: 1px solid rgba(255,255,255,0.45);
   box-shadow: inset 0 1px 0 rgba(255,255,255,0.60), var(--lg-shadow-md);
-  border-radius: var(--lg-radius-container);
+  border-radius: var(--lg-radius-container);  background-origin: border-box;
 }</pre>
 <blockquote>落地细节：浅色底上的玻璃模糊几乎不可见时，<b>保留 2–4% 的彩色光斑在面板之下</b>（<code>--lg-glow-*</code>），模糊才有意义；必要时给面板加 3–5% 的紫色调折射染色提升质感。</blockquote>
 <hr>
@@ -444,7 +455,8 @@ Figma:    LG / Color / Purple / 500
 
   /* ── 圆角 ──────────────────────────────── */
   --lg-radius-container: 40px; --lg-radius-card-lg: 28px; --lg-radius-card: 22px;
-  --lg-radius-control: 20px; --lg-radius-btn-lg: 26px; --lg-radius-btn: 22px;
+  --lg-radius-control: 20px; --lg-radius-pill: 999px;
+  --lg-radius-btn-lg: 26px; --lg-radius-btn: 22px;   /* 备用档；按钮实际一律用 --lg-radius-pill */
   --lg-radius-btn-sm: 18px; --lg-radius-chip: 999px; --lg-radius-round: 50%;
 
   /* ── 边框宽度 / 焦点环（2.7.1） ─────────── */
@@ -595,17 +607,23 @@ Figma:    LG / Color / Purple / 500
 <h3>3.2 按钮 Button</h3>
 <h4>3.2.1 变体（Variants）</h4>
 <blockquote>V2 命名对齐 [14](#ch-14)：下表为通用引擎旧谱（Tertiary → 现名 Default、Ghost → 现名 Text），完整类型/状态/尺寸/形状谱见 3.2.4。</blockquote>
-<table><thead><tr><th>变体</th><th>视觉构成</th><th>用途</th><th>状态色 / 辉光</th></tr></thead><tbody><tr><td><b>Primary · 紫玻璃主按钮</b></td><td>紫液态渐变底 + 顶部白色高光 + 白色半透明描边</td><td>页面/面板唯一主行动（CTA、确定）</td><td>hover 提亮并加 <code>--lg-glow-purple-soft</code></td></tr><tr><td><b>Secondary · 青玻璃次按钮</b></td><td>青液态渐变底 + 高光描边</td><td>次行动、正向操作、开始运行</td><td><code>--lg-glow-cyan-soft</code></td></tr><tr><td><b>Tertiary · 磨砂透明按钮</b></td><td><code>--lg-glass-control</code> 玻璃底 + 深灰紫文字</td><td>辅助行动、取消、更多</td><td>hover 底透明度提升</td></tr><tr><td><b>Ghost · 纯透明按钮</b></td><td>无底、仅文字/图标 + hover 淡洗色</td><td>文字级操作、导航动作</td><td>hover <code>rgba(154,120,255,0.10)</code></td></tr></tbody></table>
+<table><thead><tr><th>变体</th><th>视觉构成</th><th>用途</th><th>状态色 / 辉光</th></tr></thead><tbody><tr><td><b>Primary · 亮粉主按钮</b></td><td><code>--mmh-grad-action-hc</code> 亮粉渐变底 + <b>深字</b> <code>--lg-text-on-accent</code>；<b>不套白描边、不套白内高光</b></td><td>页面/面板唯一主行动（CTA、确定）</td><td>玫色接触影 + 辉光（<code>0 1px 2px rgba(178,58,99,.22), 0 8px 20px rgba(240,127,163,.30)</code>）</td></tr><tr><td><b>Secondary · 中性白玻璃次按钮</b></td><td>半透明白玻璃底（<code>--lg-glass-card</code> 档）+ <code>--lg-divider</code> hairline 描边 + <code>--lg-text-primary</code> 文字</td><td>次行动、正向操作</td><td>双层柔影；边界靠 hairline，不用白边（白边落浅底等于没有边）</td></tr><tr><td><b>Tertiary · 磨砂透明按钮</b></td><td><code>--lg-glass-control</code> 玻璃底 + 深灰紫文字</td><td>辅助行动、取消、更多</td><td>hover 底透明度提升</td></tr><tr><td><b>Ghost · 纯透明按钮</b></td><td>无底、仅文字/图标 + hover 淡洗色</td><td>文字级操作、导航动作</td><td>hover <code>rgba(154,120,255,0.10)</code></td></tr></tbody></table>
 <p>实现（Primary 示意）：</p>
-<pre>.btn-primary {
-  background: linear-gradient(160deg, rgba(255,255,255,0.35), transparent 40%),
-              var(--lg-grad-primary);
-  border: 1px solid rgba(255,255,255,0.55);
-  color: #FFF; font-weight: 600;
-  box-shadow: inset 0 1px 0 rgba(255,255,255,0.45), var(--lg-shadow-md);
+<pre>/* V2.9 与实现对齐（D9）：亮粉底配深字；透明 1px 边只为几何一致，
+   但必须自带 background-origin: border-box —— 否则那圈边框会平铺取到渐变另一端，
+   顶部留一条暗缝（观感&quot;胶囊缺一角、露出别的底色&quot;）。
+   圆角一律 --lg-radius-pill：26/22/18 对 h=48/40/32 都超过高度一半，会被浏览器缩放。 */
+.btn-primary {
+  height: 40px; padding: 0 20px;
+  border-radius: var(--lg-radius-pill);
+  background: var(--mmh-grad-action-hc);
+  border: 1px solid transparent;
+  background-origin: border-box;
+  color: var(--lg-text-on-accent); font-weight: 600;
+  box-shadow: 0 1px 2px rgba(178,58,99,.22), 0 8px 20px rgba(240,127,163,.30);
 }
 .btn-primary:hover {
-  box-shadow: inset 0 1px 0 rgba(255,255,255,0.55), var(--lg-glow-purple-soft);
+  box-shadow: 0 2px 4px rgba(178,58,99,.24), 0 12px 26px rgba(240,127,163,.38);
   transform: translateY(-1px);
 }</pre>
 <h4>3.2.2 尺寸</h4>
@@ -822,6 +840,13 @@ gm-btn__spinner | gm-btn__icon</pre>
 <table><thead><tr><th>形态</th><th>端</th><th>结构</th><th>何时用</th></tr></thead><tbody><tr><td>弹层级联 <code>popup</code></td><td>PC</td><td>触发条 + 浮层多列（每级一列）</td><td>表单内选行政区/科室，默认形态</td></tr><tr><td>内联级联 <code>inline</code></td><td>PC</td><td>直接铺开多列、无弹层</td><td>设置页/筛选页，需一屏看全层级</td></tr><tr><td>底部多列 <code>picker</code></td><td>M</td><td>遮罩 + 底部弹层多列滚轮</td><td>移动端表单（[10 · 10.11.3](#ch-10)）</td></tr></tbody></table>
 <p><b>规格</b></p>
 <ul><li>触发条：与输入框同族（高 40 / 圆角 20 / 玻璃 control 底），展示 <code>省 / 市 / 区</code> 全路径 + 尾部箭头；超宽时中间层级省略（<code>省 … 区</code>），<code>title</code> 给全路径；<code>allowClear</code> 清空按钮在有值时出现。</li><li>列：每列 168×240（≥4 级时列宽收至 148），列间 <code>--lg-divider</code> 竖线；选项行高 34，hover 淡白底，当前层级高亮，选中路径左侧加 2px 品牌粉指示条（<code>--lg-border-3</code>）。</li><li>交互：hover 选项 120ms 后展开下一级（防抖）；<code>changeOnSelect=false</code>（默认）时<b>只有叶子可提交</b>，点击即回填并关闭；<code>true</code> 时任意层级可提交（「不限」场景）。</li><li>键盘：触发条 <code>Enter/↓</code> 打开 → <code>←/→</code> 跨列、<code>↑/↓</code> 列内移动、<code>Enter</code> 选中、<code>Esc</code> 关闭并把焦点归还触发条；语义 <code>aria-haspopup="listbox"</code> + <code>aria-expanded</code>，列 <code>role="listbox"</code> / 选项 <code>role="option"</code>（[07 · 7.9](#ch-07)）。</li><li>空态与加载：某列无子级显示「暂无可选项」；列数据加载中显示骨架行（高度与终态一致，防跳动）。</li><li>校验：未选到叶子按「未完成」处理，错误文案统一「请选择完整的{字段名}」（[14 · 14.3.5](#ch-14) 禁用词表）。</li><li>反模式：✘ 用三个 Select 串联层级；✘ 单列超过 12 汉字的层级塞进级联（换下钻页）；✘ 移动端沿用桌面横滑多列面板（改 Picker）。</li></ul>
+<hr>
+<h4>3.2.4.1 按钮的三个实测铁律（V2.9）</h4>
+<ol><li><b>圆角一律胶囊档</b> <code>--lg-radius-pill</code>（999）。不要写 26/22/18 这类数字：</li></ol>
+<p>它们对 h=48/40/32 <b>都超过高度一半</b>，浏览器会静默缩放（声明≠渲染）， 而分段控件端头复用同一个数字时就不是胶囊了（48px 分组端头曾因此有平段）。</p>
+<ol><li><b>渐变 + 边框的规则必须自带 <code>background-origin:border-box</code></b>（详见 [02 · 2.5.1](#ch-02)）。</li></ol>
+<p>否则 1px 边框环会平铺取到渐变另一端 → 顶部一条暗缝、底部一条亮缝， 观感是"胶囊缺了一角、露出别的底色"。</p>
+<ol><li><b>亮粉底配深字</b>：<code>--lg-text-on-accent</code>（浅色档 <code>#343A46</code>）。白字压亮粉只有 1.79–2.81:1。</li></ol>
 <hr>
 <h3>3.6 徽章与状态徽标 Badge / Status</h3>
 <table><thead><tr><th>类型</th><th>视觉</th><th>场景</th></tr></thead><tbody><tr><td>状态点</td><td>6–8px 圆点，用状态色 + 同色 0.2 辉光（online 绿可带轻微呼吸光）</td><td>节点、服务、实例状态</td></tr><tr><td>文本徽章</td><td>白玻璃 chip + 状态色文字（caption），或状态色 100 洗色底</td><td>运行中 / 成功 / 危险 / 新</td></tr><tr><td>数值徽标</td><td>白玻璃底 + 紫字，最小 18×18</td><td>侧栏未读数、通知</td></tr><tr><td>灯条（大屏）</td><td>状态点 + caption 标签成组</td><td>大屏状态总览</td></tr></tbody></table>
@@ -1528,7 +1553,8 @@ xl 32–40px  大屏状态图标      stroke 1.8</pre>
   display:flex;border-radius:24px;padding:6px;
   background:linear-gradient(160deg,rgba(255,255,255,.72),rgba(255,255,255,.45));
   -webkit-backdrop-filter:blur(32px) saturate(1.2);backdrop-filter:blur(32px) saturate(1.2);
-  border:1px solid rgba(255,255,255,.75);box-shadow:var(--lg-glass-highlight),var(--lg-shadow-lg);}
+  border:1px solid rgba(255,255,255,.75);box-shadow:var(--lg-glass-highlight),var(--lg-shadow-lg);  background-origin: border-box;
+}
 .tab-item{flex:1;height:56px;display:flex;flex-direction:column;gap:2px;align-items:center;justify-content:center;
   border-radius:18px;color:var(--lg-text-secondary);font-size:10px;transition:.26s var(--lg-ease-out)}   /* V2.9：10px 用 secondary；tertiary（#9AA2B0）在玻璃底上只有 2.30:1 */
 .tab-item.on{background:var(--mmh-grad-action-hc,#F77FA3);color:#343A46;box-shadow:0 1px 2px rgba(178,58,99,.22),0 8px 20px rgba(240,127,163,.30);transform:translateY(-4px)}   /* V2.9：辉光统一为 03 · 3.2.4.1 配方 */</pre>

@@ -1,4 +1,8 @@
 <!--@css-->
+/* 02 · 2.5 背景原点（V2.9 实测修复）：渐变按 border-box 定尺。
+   默认 padding-box 时，渐变图按 padding-box 定尺却要铺满 border-box，
+   多出的 1px 边框环会平铺取到渐变**另一端** → 顶部一条暗缝、底部一条亮缝，
+   看起来像"胶囊缺了一角 / 露出别的底色"。全局声明，特异性 0，可被组件规则覆盖。 */
 /* ═══ GoodMom Tokens（精简，同 02/12；暗色档同 02 · 2.1.9）═══ */
 :root{
   --text:#343A46;--t2:#4F5B6E;--t3:#8A92A3;--line:rgba(58,52,84,.09);
@@ -29,7 +33,7 @@
 .hub{position:sticky;top:12px;z-index:60;margin:14px 0;padding:10px 16px;border-radius:999px;
   display:flex;gap:8px;align-items:center;flex-wrap:wrap;
   background:linear-gradient(160deg,rgba(255,255,255,.7),rgba(255,255,255,.42));
-  border:1px solid rgba(255,255,255,.85);box-shadow:var(--sh);-webkit-backdrop-filter:blur(20px);backdrop-filter:blur(20px)}
+  border:1px solid rgba(255,255,255,.85);box-shadow:var(--sh);-webkit-backdrop-filter:blur(20px);backdrop-filter:blur(20px);background-origin:border-box}
 .hub b{font-size:14px;color:var(--rose-deep);display:flex;align-items:center;gap:8px;margin-right:6px}
 .hub b i{width:14px;height:14px;border-radius:50%;background:var(--grad-p);display:inline-block}
 .hub a{font-size:12px;color:var(--t2);text-decoration:none;padding:6px 14px;border-radius:999px}
@@ -44,7 +48,7 @@
 .sec-head span{font-size:12px;color:var(--t2)}
 .glass{border-radius:20px;background:linear-gradient(160deg,rgba(255,255,255,.55),rgba(255,255,255,.24) 55%,rgba(255,255,255,.32));
   border:1px solid rgba(255,255,255,.7);box-shadow:inset 0 1px 0 rgba(255,255,255,.8),var(--sh);
-  -webkit-backdrop-filter:blur(32px);backdrop-filter:blur(32px);padding:18px}
+  -webkit-backdrop-filter:blur(32px);backdrop-filter:blur(32px);padding:18px;background-origin:border-box}
 .row{display:flex;gap:14px;flex-wrap:wrap;align-items:center}
 .col{display:flex;flex-direction:column;gap:10px}
 .lbl{font-size:11px;color:var(--t2);margin-bottom:2px}
@@ -95,7 +99,7 @@
 .cas-foot{display:flex;gap:12px;margin-top:12px}
 .cas-btn{flex:1;height:46px;border-radius:22px;border:var(--bw-1) solid var(--lg-divider,rgba(58,52,84,.10));background:rgba(255,255,255,.5);
   font-family:inherit;font-size:15px;font-weight:600;color:var(--text);cursor:pointer}
-.cas-btn.pri{background:var(--mmh-grad-action-hc);border:1px solid transparent;color:var(--text)}
+.cas-btn.pri{background:var(--mmh-grad-action-hc);border:1px solid transparent;color:var(--text);background-origin:border-box}
 .cas-btn[disabled]{opacity:.5;cursor:not-allowed}
 .cas-btn:focus-visible{outline:var(--bw-3) solid var(--ring);outline-offset:2px}
 /* ── 10.11.1 响应式容器 ── */
@@ -182,9 +186,9 @@
 html[data-theme="dark"] body{background:#1B1A21;color:#F3EFEC;
   background:radial-gradient(1100px 620px at 90% -8%,rgba(154,120,255,.22),transparent 65%),
   radial-gradient(900px 560px at -6% 24%,rgba(114,221,229,.16),transparent 65%),#1B1A21}
-[data-theme="dark"] .hub{background:linear-gradient(160deg,rgba(255,255,255,.09),rgba(255,255,255,.06));border-color:rgba(255,255,255,.14)}
+[data-theme="dark"] .hub{background:linear-gradient(160deg,rgba(255,255,255,.09),rgba(255,255,255,.06));border-color:rgba(255,255,255,.14);background-origin:border-box}
 [data-theme="dark"] .glass{background:linear-gradient(160deg,rgba(255,255,255,.09),rgba(255,255,255,.06));border-color:rgba(255,255,255,.14);
-  box-shadow:inset 0 1px 0 rgba(255,255,255,.16),0 18px 44px rgba(0,0,0,.5);color:#F3EFEC}
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.16),0 18px 44px rgba(0,0,0,.5);color:#F3EFEC;background-origin:border-box}
 /* ⚠️ Token 翻档必须同时挂在**模块根**上，不能只挂在 `.glass` 内：
    `.rv-box`（响应式适配演示容器）不是 `.glass`，里面的表格拿不到翻档后的 Token ——
    于是「暗底 + 浅色档深字」：实测表头 1.61:1 / 正文 1.50:1（page-qa 暗色对比度抓到 12 条）。
@@ -216,9 +220,9 @@ html[data-theme="dark"] body{background:#1B1A21;color:#F3EFEC;
 html[data-theme="dark"] body{background:#1B1A21;color:#F3EFEC;
   background:radial-gradient(1100px 620px at 90% -8%,rgba(154,120,255,.22),transparent 65%),
   radial-gradient(900px 560px at -6% 24%,rgba(114,221,229,.16),transparent 65%),#1B1A21}
-[data-theme="dark"] .hub{background:linear-gradient(160deg,rgba(255,255,255,.09),rgba(255,255,255,.06));border-color:rgba(255,255,255,.14)}
+[data-theme="dark"] .hub{background:linear-gradient(160deg,rgba(255,255,255,.09),rgba(255,255,255,.06));border-color:rgba(255,255,255,.14);background-origin:border-box}
 [data-theme="dark"] .glass{background:linear-gradient(160deg,rgba(255,255,255,.09),rgba(255,255,255,.06));border-color:rgba(255,255,255,.14);
-  box-shadow:inset 0 1px 0 rgba(255,255,255,.16),0 18px 44px rgba(0,0,0,.5);color:#F3EFEC}
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.16),0 18px 44px rgba(0,0,0,.5);color:#F3EFEC;background-origin:border-box}
 /* ⚠️ Token 翻档必须同时挂在**模块根**上，不能只挂在 `.glass` 内：
    `.rv-box`（响应式适配演示容器）不是 `.glass`，里面的表格拿不到翻档后的 Token ——
    于是「暗底 + 浅色档深字」：实测表头 1.61:1 / 正文 1.50:1（page-qa 暗色对比度抓到 12 条）。
@@ -634,7 +638,7 @@ function vlBoot(){ window.gmVirtualList(document.getElementById("vl-vp"), {
   },
   onRange: function(a, b){ vCount.textContent = (b - a); vIdx.textContent = a; },
   onEndReached: function(n){ vEnd.textContent = n; }
-}); }
+});}
 if(document.readyState === "loading") document.addEventListener("DOMContentLoaded", vlBoot); else vlBoot();
 
 /* ── 暗黑模式：整体切换 data-theme="dark"（示例页简化版，仅覆盖本页 Token） ── */
