@@ -1,5 +1,5 @@
 import React from "react";
-import { GmFive, FIVE_COLOR, FIVE_VAR, GmSemantic, SEMANTIC_VAR } from "../tokens/status";
+import { GmFive, FIVE_COLOR, FIVE_VAR, GmSemantic, SEMANTIC_VAR, semTintFill, semTintBorder } from "../tokens/status";
 
 /** GmTag —— 状态/分类标签（自包含样式，基于主题 token；对应 03 · 3.6 / 15.5）
  *
@@ -31,8 +31,8 @@ const GmTag = ({ children, semantic, five, color, dot = true, size = "small" }: 
       className={"gm-tag" + (size === "default" ? " lg" : "")}
       style={{
         color: base,
-        background: `color-mix(in srgb, ${base} 13%, transparent)`,
-        borderColor: `color-mix(in srgb, ${base} 32%, transparent)`,
+        background: semTintFill(base),
+        borderColor: semTintBorder(base),
       }}
       data-semantic={color || five ? undefined : (semantic || "neutral")}
     >

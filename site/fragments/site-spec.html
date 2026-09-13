@@ -120,8 +120,13 @@ python3 scripts/build-site.py            # 生成唯一首页
 python3 scripts/build-site.py --check     # 校验产物与构建结果一致（CI）
 python3 scripts/redirect-legacy.py --check # 校验旧入口仍为重定向
 node scripts/site-smoke.mjs               # 48 项冒烟（需先起静态服务）
-node scripts/mobile-smoke.mjs             # 40 项移动端真机验收（交互/热区/模糊预算/暗色）
+node scripts/mobile-smoke.mjs             # 82 项移动端真机验收（交互/热区/模糊预算/暗色/长列表/级联）
 node scripts/site-parity.mjs              # 合并保真度：各模块 vs 原页面
+node scripts/page-qa.mjs --ci             # 逐页质检（P0–P2 必须为 0）
+node scripts/app-smoke.mjs                # 产品工程 37 项（三端形态/四态/**按真实渲染底采样**的对比度）
+python3 scripts/gate-negative-tests.py    # 58 条负向测试：给每条门禁注入真缺陷，必须 FAIL
+node goodmom-ui/playground/smoke.mjs      # React 组件契约 56 项（需先 node build.mjs）
+node goodmom-vue/playground/smoke.mjs     # Vue 组件契约 37 项（需先起 5273 预览台）
 
 # 前端封装库（Vite + React + Arco）
 cd frontend-app
@@ -296,7 +301,7 @@ Figma:    LG / Color / Purple / 500
 <table><thead><tr><th>语义 Token</th><th>浅色（默认）</th><th>暗色（<code>[data-theme="dark"]</code>）</th><th>暗底实测对比度</th></tr></thead><tbody><tr><td><code>--lg-page-bg</code></td><td><code>#E6D9D0</code> Warm Ivory</td><td><code>#1B1A21</code> Night-900</td><td>— （页面底）</td></tr><tr><td><code>--lg-surface</code></td><td><code>#F4F0EC</code> Warm White</td><td><code>#23222A</code> Night-800</td><td>— （次级面/实底浮层底）</td></tr><tr><td><code>--lg-text-primary</code></td><td><code>#343A46</code></td><td><code>#F3EFEC</code></td><td>15.10:1（面 13.77）</td></tr><tr><td><code>--lg-text-secondary</code></td><td><code>#4F5B6E</code></td><td><code>#C9C4CE</code></td><td>10.09:1（面 9.20）</td></tr><tr><td><code>--lg-text-tertiary</code></td><td><code>#9AA2B0</code></td><td><code>#A6ADB9</code></td><td>7.65:1（最浅玻璃合成面 ≥5.6）</td></tr><tr><td><code>--lg-text-placeholder</code></td><td><code>rgba(88,98,115,0.5)</code></td><td><code>rgba(255,255,255,0.42)</code></td><td>仅占位符，不接受为正文</td></tr><tr><td><code>--lg-text-disabled</code></td><td><code>rgba(88,98,115,0.4)</code></td><td><code>rgba(255,255,255,0.34)</code></td><td>—</td></tr><tr><td><code>--lg-divider</code></td><td><code>rgba(58,52,84,0.10)</code></td><td><code>rgba(255,255,255,0.10)</code></td><td>暗色分隔线用白，不用黑</td></tr><tr><td><code>--lg-link</code></td><td><code>#B23A63</code></td><td><code>#FFC4D6</code></td><td>11.61:1（03 · 3.10）</td></tr><tr><td>主行动底（<code>--mmh-grad-action-hc</code>）</td><td>Rose-300→Rose-500</td><td><b>不变</b></td><td>品牌亮粉底在暗色下更突出</td></tr><tr><td><code>--lg-text-on-accent</code></td><td><code>#343A46</code>（亮粉底深字）</td><td><code>#1B1A21</code></td><td>7.00:1（Rose-500 端）～11.61:1（Rose-300 端）</td></tr><tr><td><code>--lg-glass-panel</code></td><td><code>rgba(255,255,255,0.14)</code></td><td><code>rgba(255,255,255,0.06)</code></td><td>—</td></tr><tr><td><code>--lg-glass-card</code></td><td><code>rgba(255,255,255,0.22)</code></td><td><code>rgba(255,255,255,0.09)</code></td><td>—</td></tr><tr><td><code>--lg-glass-control</code></td><td><code>rgba(255,255,255,0.35)</code></td><td><code>rgba(255,255,255,0.12)</code></td><td>—</td></tr><tr><td><code>--lg-glass-popover</code></td><td><code>rgba(255,255,255,0.60)</code></td><td><code>rgba(38,36,46,0.92)</code>（实底为主，模糊为辅）</td><td>暗色浮层优先可读性</td></tr><tr><td><code>--lg-glass-highlight</code></td><td><code>inset 0 1px 0 rgba(255,255,255,0.6)</code></td><td><code>inset 0 1px 0 rgba(255,255,255,0.16)</code></td><td>仅顶部 1px</td></tr><tr><td><code>--lg-border-white-70</code>（玻璃边）</td><td><code>rgba(255,255,255,0.70)</code></td><td><code>rgba(255,255,255,0.14)</code></td><td>—</td></tr><tr><td><code>--lg-border-hairline</code></td><td><code>1px</code>（<b>长度</b>）</td><td>同（宽度档不随主题变化）</td><td>玻璃内部细分隔<b>宽度</b></td></tr><tr><td><code>--lg-divider-hairline</code></td><td><code>rgba(58,52,84,.10)</code>（<b>颜色</b>）</td><td><code>rgba(255,255,255,.10)</code></td><td>与上一项配对使用的分隔<b>颜色</b></td></tr><tr><td><code>--lg-shadow-sm/md/lg/xl</code></td><td>蓝紫调 <code>rgba(58,52,84,.06–.16)</code></td><td><code>rgba(0,0,0,.35 / .42 / .50 / .58)</code></td><td>暗色阴影＝「加深 + 边缘光」</td></tr><tr><td><code>--lg-glow-purple-soft</code></td><td><code>0 12px 32px rgba(154,120,255,0.28)</code></td><td><code>0 12px 32px rgba(154,120,255,0.22)</code></td><td>暗底辉光略降，避免糊成一片</td></tr></tbody></table>
 <p><b>映射表 B · 状态与语义色（暗色文字档）</b></p>
 <table><thead><tr><th>用途</th><th>浅底用（默认）</th><th>浅底实测</th><th>暗底用（dark）</th><th>暗底实测</th></tr></thead><tbody><tr><td>成功 <code>--lg-success-300</code></td><td><code>#96E6CF</code>（浅填充）</td><td>—（非文字）</td><td><code>#96E6CF</code> 作文/图标</td><td>11.93:1</td></tr><tr><td>警告 <code>--lg-warning-300</code></td><td><code>#FAE1B3</code></td><td>—（非文字）</td><td><code>#FAE1B3</code></td><td>13.55:1</td></tr><tr><td>危险 <code>--lg-danger-300</code></td><td><code>#FAC9D0</code></td><td>—（非文字）</td><td><code>#FAC9D0</code></td><td>11.78:1</td></tr><tr><td>信息 <code>--lg-info-500</code> 亮档</td><td><code>#6D9EFF</code></td><td>—（非文字）</td><td><code>#9CAEFF</code>（Blue-300）</td><td>8.15:1</td></tr><tr><td><code>--lg-sem-positive</code></td><td><code>#25715D</code></td><td>5.84:1</td><td><code>#6FC9B4</code></td><td>8.79:1</td></tr><tr><td><code>--lg-sem-info</code></td><td><code>#3261C1</code></td><td>5.81:1</td><td><code>#9CAEFF</code></td><td>8.15:1</td></tr><tr><td><code>--lg-sem-attention</code></td><td><code>#8D5A15</code></td><td>5.82:1</td><td><code>#F2C14E</code></td><td>10.29:1</td></tr><tr><td><code>--lg-sem-risk</code></td><td><code>#B72F42</code></td><td>6.00:1</td><td><code>#F79AA8</code></td><td>8.34:1</td></tr><tr><td><code>--lg-sem-neutral</code></td><td><code>#5E6673</code></td><td>5.79:1</td><td><code>#A6ADB9</code></td><td>7.65:1</td></tr><tr><td><code>--lg-sem-special</code></td><td><code>#6A48DC</code></td><td>5.88:1</td><td><code>#B9A0FF</code></td><td>7.84:1</td></tr></tbody></table>
-<blockquote>⚠️ <b>浅底列口径修正（V2.9）</b>：本列原写 `positive #2F8F76 / info #4A76D0 / attention #B9771C /<br>risk #D35466 / neutral #757E8E / special #7A5CE0` —— 那是 V2.8「语义色板达 AA」<b>之前</b>的值，<br>实测作文字只有 <b>3.67–4.38:1（不达标）</b>（证据留档在 <code>docs/设计系统问题清单.md</code> 的 ❌ 表），<br>深档化之后本表漏改，且<b>照抄本表的 Vue 组件冒烟因此长期是红的</b>（不在 CI，没人发现）。<br>现按实现值（<code>theme.css</code> / <code>tokens/status.ts</code>）对齐；浅底实测取<b>最亮玻璃承载面</b> <code>#FDF2EE</code>。<br>门禁：<code>python3 scripts/audit.py --only semantic-parity</code> 核对本表 / 14 章 / skill reference 与 <code>theme.css</code>。</blockquote>
+<blockquote>⚠️ <b>淡底口径（V2.9 新增）</b>：上表「浅底实测」取的是<b>最亮玻璃承载面 <code>#FDF2EE</code></b>。<br>实际渲染里，语义文字若压在同色系<b>淡底</b>上，底色由淡底决定：<br><code>color-mix(in srgb, 语义色 13%, transparent)</code> 会把玻璃卡与品牌渐变透出来，<br>12px 语义字实测只剩 <b>4.06:1（浅/暗两档皆然，不达 AA）</b>。<br>故淡底一律改混<b>实底</b> <code>--lg-tint-base</code>（浅 <code>#FFFFFF</code> ／ 暗 <code>#23222A</code>），<br>透明度由 <code>--lg-tint-pct</code> 按档位给（浅 13% ／ 暗 8%）→ 实测 4.86:1 ／ 4.9:1。<br>门禁：<code>audit.py --only tint-base</code>（禁止 <code>color-mix(…, transparent)</code>，并断言两档 token 在位）；<br>渲染级实测：<code>node scripts/app-smoke.mjs</code> 的「实底采样」（隐藏字形后按像素取底）。<br><br>⚠️ <b>浅底列口径修正（V2.9）</b>：本列原写 `positive #2F8F76 / info #4A76D0 / attention #B9771C /<br>risk #D35466 / neutral #757E8E / special #7A5CE0` —— 那是 V2.8「语义色板达 AA」<b>之前</b>的值，<br>实测作文字只有 <b>3.67–4.38:1（不达标）</b>（证据留档在 <code>docs/设计系统问题清单.md</code> 的 ❌ 表），<br>深档化之后本表漏改，且<b>照抄本表的 Vue 组件冒烟因此长期是红的</b>（不在 CI，没人发现）。<br>现按实现值（<code>theme.css</code> / <code>tokens/status.ts</code>）对齐；浅底实测取<b>最亮玻璃承载面</b> <code>#FDF2EE</code>。<br>门禁：<code>python3 scripts/audit.py --only semantic-parity</code> 核对本表 / 14 章 / skill reference 与 <code>theme.css</code>。</blockquote>
 <p><b>暗色下的三条落地纪律</b></p>
 <ul><li><b>环境光</b>：光斑透明度维持 16–22%，半径放大 1.2×（暗底吃光）；<code>--lg-glow-white</code> 降到 0.06，否则暗底白光发灰。</li><li><b>数据可视化</b>：色序 1–8 顺序不变；折线/柱保持 <code>-500</code> 档（暗底足够亮），网格线用 <code>rgba(255,255,255,0.08)</code>，坐标文字用 <code>--lg-text-secondary</code>；面积图填充透明度由 0.28 提到 0.34。</li><li><b>禁用与遮罩</b>：遮罩沿用 <code>--lg-opacity-overlay</code> 白色口径会「亮瞎」，暗色改为 <code>rgba(0,0,0,0.48)</code>；禁用态整体透明度由 0.4 提到 0.5（暗底本就低对比）。</li></ul>
 <blockquote>实测口径：上表对比度按 WCAG 2.2 相对亮度公式计算（<code>scripts/audit.py</code> 的 <code>dark_contrast</code> 守门，正文项 &lt;4.5:1 即 FAIL）；最坏情形取「12% 白玻璃合成面」，正文/次级/三级全部 ≥4.5:1。</blockquote>
@@ -390,6 +395,8 @@ Figma:    LG / Color / Purple / 500
   --lg-text-placeholder: rgba(88, 98, 115, .5);
   --lg-text-disabled: rgba(88, 98, 115, .4);
   --lg-text-on-accent: #343A46;   /* D9：亮粉底配深字（全尺寸 ≥4.89:1） */
+  /* 语义淡底的混色基与透明度（V2.9）：混实底才可预测，透出卡片会让 12px 语义字掉到 4.06:1 */
+  --lg-tint-base: #FFFFFF;  --lg-tint-pct: 13%;
   /* D5 小字号白字实底填充（AA 达标档）；完整品牌组见 §2.9 */
   --mmh-solid-positive:#1E6B52; --mmh-solid-attention:#9A5A0E; --mmh-solid-danger:#B04052;
   --mmh-solid-info:#385CB3; --mmh-solid-special:#6242B8;
@@ -482,6 +489,8 @@ Figma:    LG / Color / Purple / 500
   --lg-text-placeholder: rgba(255,255,255,.42);
   --lg-text-disabled: rgba(255,255,255,.34);
   --lg-text-on-accent: #1B1A21;   --lg-divider: rgba(255,255,255,.10);
+  /* 暗色档淡底：混暗色 surface，透明度压到 8%（13% 会把底抬亮到 4.3:1） */
+  --lg-tint-base: #23222A;  --lg-tint-pct: 8%;
   --lg-link: #FFC4D6;
   /* 玻璃（降白、只留顶部边光） */
   --lg-glass-panel: rgba(255,255,255,.06);
@@ -780,6 +789,7 @@ gm-btn__spinner | gm-btn__icon</pre>
 <ul><li>收起态：仅图标；展开态 232–260px。</li><li>选中项=紫玻璃芯片 <code>--lg-grad-primary</code> + <code>--lg-glow-purple-soft</code>，绝对不做左边框粗条（禁传统 Dashboard 风格）。</li><li>徽标（未读数）用白玻璃底 + 紫字，圆角 chip。</li></ul>
 <h4>3.4.2 顶部栏（Top Bar）</h4>
 <ul><li>玻璃条悬浮顶部（<code>--lg-glass-panel</code> 更实版），含：面包屑 / 页面标题（左）、全局搜索（中）、状态与用户（右）。</li><li>搜索框：玻璃输入形态（见 3.5），宽度 280–360。</li><li>用户头像：玻璃圆 + 白描边 + 柔影；在线状态用小绿点。</li></ul>
+<p><b>首字颜色用 <code>--lg-text-on-accent</code></b>（浅色档 <code>#343A46</code>、暗色档 <code>#1B1A21</code>）。 曾用 <code>--lg-text-on-inverse</code>（白字），压在亮粉渐变上实测只有 <b>2.81:1</b>， 与全系统「亮粉底配深字」的既有口径相反；改深字后 4.6:1。</p>
 <h4>3.4.3 分段控件 / 页签 / 面包屑</h4>
 <ul><li><b>分段控件 Segmented</b>：整块玻璃底 + 内部选中项为白色玻璃滑块（或紫渐变），圆角 20。</li><li><b>页签 Tabs</b>：选中项下方 2–3px 紫渐变圆角小条（非硬线），未选中用次级文字。</li><li><b>面包屑</b>：<code>首页 / 工作空间 / 项目</code>，分隔符 <code>/</code> 用三级色，末级为主文字。</li></ul>
 <hr>
@@ -816,6 +826,7 @@ gm-btn__spinner | gm-btn__icon</pre>
 <h3>3.6 徽章与状态徽标 Badge / Status</h3>
 <table><thead><tr><th>类型</th><th>视觉</th><th>场景</th></tr></thead><tbody><tr><td>状态点</td><td>6–8px 圆点，用状态色 + 同色 0.2 辉光（online 绿可带轻微呼吸光）</td><td>节点、服务、实例状态</td></tr><tr><td>文本徽章</td><td>白玻璃 chip + 状态色文字（caption），或状态色 100 洗色底</td><td>运行中 / 成功 / 危险 / 新</td></tr><tr><td>数值徽标</td><td>白玻璃底 + 紫字，最小 18×18</td><td>侧栏未读数、通知</td></tr><tr><td>灯条（大屏）</td><td>状态点 + caption 标签成组</td><td>大屏状态总览</td></tr></tbody></table>
 <blockquote>状态语义色严格使用 [02 · 2.1.5](#ch-02) 状态色 Token；呼吸动画 alpha 0.6→1，周期 2.4s，仅限真正需要关注的实时状态，避免大面积闪烁。</blockquote>
+<p><b>淡底配方（V2.9 实测修订）</b>：同色系淡底 = <code>color-mix(in srgb, 语义色 var(--lg-tint-pct), var(--lg-tint-base))</code>， 浅色档 13% 混 <code>#FFFFFF</code>、暗色档 8% 混 <code>#23222A</code>，描边同法取 32%。 禁止写成 <code>color-mix(…, transparent)</code>：底会随底下那张玻璃卡与品牌渐变浮动， 12px 语义字实测只剩 4.06:1；混实底后浅色档 4.86:1、暗色档 4.9:1。</p>
 <hr>
 <h3>3.7 数据表格（玻璃表格）</h3>
 <ul><li>容器：玻璃卡（<code>--lg-glass-card</code>）。</li><li>表头：<code>body-sm</code> 600 字重，次级色；行高 44–52，hover 行淡白玻璃底。</li><li>行分隔 <code>--lg-border-hairline</code>（或 0.5px 白线），禁止黑色实线。</li><li>状态列用状态徽章；关键数字 <code>tabular-nums</code>，主序列值用紫 600。</li><li>首列可加玻璃头像/Logo，圆角 12。</li></ul>
@@ -1430,7 +1441,7 @@ lg 24px   空状态、卡片头部     stroke 1.7
 xl 32–40px  大屏状态图标      stroke 1.8</pre>
 <h4>颜色规则</h4>
 <pre>/* 默认继承文字色： */
-.lg-icon{ color: var(--lg-text-tertiary); }
+.lg-icon{ color: var(--lg-text-secondary); }
 .lg-icon:hover{ color: var(--lg-purple-600); }
 /* 语义状态：直接用状态 Token 包一层 color */
 .icon-danger{ color: var(--lg-danger-500); }</pre>
@@ -1518,7 +1529,7 @@ xl 32–40px  大屏状态图标      stroke 1.8</pre>
   -webkit-backdrop-filter:blur(32px) saturate(1.2);backdrop-filter:blur(32px) saturate(1.2);
   border:1px solid rgba(255,255,255,.75);box-shadow:var(--lg-glass-highlight),var(--lg-shadow-lg);}
 .tab-item{flex:1;height:56px;display:flex;flex-direction:column;gap:2px;align-items:center;justify-content:center;
-  border-radius:18px;color:var(--lg-text-tertiary);font-size:10px;transition:.26s var(--lg-ease-out)}
+  border-radius:18px;color:var(--lg-text-secondary);font-size:10px;transition:.26s var(--lg-ease-out)}   /* V2.9：10px 用 secondary；tertiary（#9AA2B0）在玻璃底上只有 2.30:1 */
 .tab-item.on{background:var(--mmh-grad-action-hc,#F77FA3);color:#343A46;box-shadow:0 1px 2px rgba(178,58,99,.22),0 8px 20px rgba(240,127,163,.30);transform:translateY(-4px)}   /* V2.9：辉光统一为 03 · 3.2.4.1 配方 */</pre>
 <h4>10.3.3 布局规则</h4>
 <pre>- 单列为主；双列仅用于等值卡片对（如两个 KPI），列表一律单列。
@@ -1701,10 +1712,14 @@ Token/字号      → 02 + 10.2
 预览            → site/index.html#preview-mobile（10 章示例 · 4 页可交互）
                   · 已演示：SearchBar NoticeBar Chips Segmented Upload Rate Progress Steps
                     CapsuleTabs Selector Stepper OTP Cell Footer SafeArea Sticky ErrorBlock
-                    SwipeAction PullToRefresh LoadMore ActionSheet Picker ImageViewer
-                    **IndexBar(11.2.3) Collapse(11.2.6·复用外壳配方) Calendar(11.6.5)
-                    NumberKeyboard(11.6.10) WaterMark(11.6.13)**
-                  · 未演示：Cascader(移动 multi-column picker 形态在代码库 GmCascader)</pre>
+                    SwipeAction PullToRefresh ActionSheet Picker ImageViewer
+                    IndexBar(11.2.3) Collapse(11.2.6·复用外壳配方) Calendar(11.6.5)
+                    NumberKeyboard(11.6.10) WaterMark(11.6.13)
+                    **VirtualList(11.2.16·真窗口化 1284 条 · 与 10.11.2 同一套外壳渲染器)**
+                    **LoadMore(11.2.16·距底 4 行触发) Cascader 移动多列 Picker(11.2.17)**
+                  · 组合顺序照 11.2.16 落地：PullRefresh → Sticky → VirtualList → SwipeAction → LoadMore
+                    （同一容器内五件套齐全，左滑改为**容器委托**——窗口化会整批重建行，
+                     逐行绑定的实现会在滚动后静默失效）</pre>
 <hr>
 <h3>11.6 对齐 Arco Mobile（移动组件库补齐）</h3>
 <blockquote>参考 [Arco Design Mobile](https://arco.design/mobile/react/arco-design/pc/#/components/button) 组件体系，<br>① 移动按钮全谱（按 Arco Mobile Button 的类型/状态/尺寸/形状）② 其移动组件目录与我库的对齐矩阵 ③ 新增组件细则（11.6.2 起）。</blockquote>
@@ -2046,7 +2061,9 @@ with amber badges, premium medical dashboard, clean minimal, 16:9
 检查项目 · 检查结果 · 检查异常 · 风险等级 · 风险评估 · 异常管理
 干预措施 · 随访计划 · 随访记录 · 转诊记录 · 复查记录 · 结案记录</pre>
 <h4>15.3.4 数据大屏核心指标词（驾驶舱）</h4>
-<table><thead><tr><th>通用</th><th>孕产妇</th><th>儿童</th><th>两癌</th></tr></thead><tbody><tr><td>管理总人数 / 本月新增 / 今日新增</td><td>孕产妇建档数 / 早孕建档率</td><td>儿童建档数 / 新生儿人数</td><td>宫颈癌筛查 / 乳腺癌筛查</td></tr><tr><td>筛查人数 / 筛查完成率</td><td>产检人数 / 高危孕产妇</td><td>儿童体检人数</td><td>筛查覆盖率 / 异常检出率</td></tr><tr><td>异常人数 / 异常率</td><td>高危管理率 / 产后访视率</td><td>生长发育异常 / 营养不良</td><td>高风险人数 / 阳性人数</td></tr><tr><td>高风险人数 / 随访人数 / 随访完成率</td><td>—</td><td>高危儿 / 视力异常 / 听力异常</td><td>复查率 / 转诊率 / 随访完成率 / 结案率</td></tr><tr><td>转诊人数 / 转诊完成率 / 结案人数 / 失访人数</td><td>—</td><td>—</td><td>—</td></tr></tbody></table>
+<table><thead><tr><th>通用</th><th>孕产妇</th><th>儿童</th><th>两癌</th></tr></thead><tbody><tr><td>管理总人数 / 本月新增 / 今日新增</td><td>孕产妇建档数 / 早孕建档率</td><td>儿童建档数 / 新生儿人数 · <b>疫苗应种率 / 疫苗全程率</b></td><td>宫颈癌筛查 / 乳腺癌筛查</td></tr></tbody></table>
+<blockquote><b>补登记（V2.9）</b>：<code>疫苗应种率</code> / <code>疫苗全程率</code> 原未逐字登记，但站点移动端预览、<code>dashboard</code> 与 <code>vaccine</code> 模块都在使用（属已在流通的词）—— 按 14 · 4.4.5「词库为唯一源」补入本表。含义：应种率 = 已种剂次 / 应种剂次（机构维度）；全程率 = 完成全部应种剂次的儿童占比。</blockquote>
+<p>| 筛查人数 / 筛查完成率 | 产检人数 / 高危孕产妇 | 儿童体检人数 | 筛查覆盖率 / 异常检出率 | | 异常人数 / 异常率 | 高危管理率 / 产后访视率 | 生长发育异常 / 营养不良 | 高风险人数 / 阳性人数 | | 高风险人数 / 随访人数 / 随访完成率 | — | 高危儿 / 视力异常 / 听力异常 | 复查率 / 转诊率 / 随访完成率 / 结案率 | | 转诊人数 / 转诊完成率 / 结案人数 / 失访人数 | — | — | — |</p>
 <blockquote>大屏色：正向=薄荷、异常/高危/阳性=珊瑚、注意=琥珀、进行=蓝、转诊/特殊=淡紫；遵循 04 数据色序与 12.3。</blockquote>
 <hr>
 <h3>15.4 PC / iPad / 手机端操作规范（三级按钮体系）</h3>
@@ -2193,6 +2210,10 @@ button{display:inline-flex;align-items:center;justify-content:center;gap:8px}</p
 <h4>18.2.7 无障碍与动效</h4>
 <ul><li>focus-visible 焦点环 ✅（07.8 + theme.css）；press 缩放 ✅</li><li>prefers-reduced-motion ✅；呼吸点周期 ≥2.4s ✅</li><li>✅ 键盘/焦点走查自动化已实施：<code>scripts/a11y.py</code>（静态断言：outline:none 必须有 focus-visible 兜底、禁 span+onClick 交互等）并入 CI（2026-09 审查 R5）；完整 axe 需 DOM 环境，列入长期。</li></ul>
 <hr>
+<h4>18.2.8 应用侧渲染级无障碍（V2.9 新增，一上线就抓出三处真缺陷）</h4>
+<p>应用侧此前只有 typecheck + 构建 + 架构门禁，<b>没有</b>任何渲染级无障碍检查。 新增的 <code>scripts/app-smoke.mjs</code> 对比度断言按<b>真实渲染底</b>采样（隐藏字形 → 截屏 → 页内 canvas 解码 → 取文字矩形内像素亮度 5/95 分位两侧上界，两侧都不达标才判失败），每页 4 个滚动步 × 浅/暗两档， 并自带自证（注入不可读文字必须被报出）。</p>
+<table><thead><tr><th>实测发现</th><th>数字</th><th>处置</th></tr></thead><tbody><tr><td>12px 文字用 <code>--lg-text-tertiary</code>（02 · 2.1.1 规定仅 ≥24px）</td><td><b>2.30:1</b></td><td>小字改 <code>--lg-text-secondary</code>（库 / 应用 / 站点）</td></tr><tr><td>头像首字白字压亮粉渐变（<code>--lg-text-on-inverse</code>）</td><td><b>2.81:1</b></td><td>改 <code>--lg-text-on-accent</code> 深墨字 → 4.6:1</td></tr><tr><td>语义淡底 <code>color-mix(…, transparent)</code> 透出卡片与品牌渐变</td><td><b>4.06:1</b></td><td>改混实底 <code>--lg-tint-base</code>（浅 13% → 4.86:1 ／ 暗 8% → 4.9:1）</td></tr><tr><td>站点把 <code>--lg-text-tertiary</code> 本地改写成 secondary 的值</td><td>71 处小字靠<b>改名</b>达标</td><td>按 02 · 2.1.1 收口并删除本地改写</td></tr><tr><td><code>page-qa.mjs</code> 的 <code>parseColor</code> 不认 <code>color(srgb …)</code></td><td><code>color-mix</code> 派生的底在门禁里<b>整层消失</b></td><td>补上解析（注入验证：旧 0 条 → 新 55 条）</td></tr></tbody></table>
+<p>新门禁：<code>audit.py --only text-token-parity / tertiary-size / tint-base</code>（负向用例 +6，合计 58 条）。</p>
 <h3>18.3 整改行动清单（按优先级）</h3>
 <pre>A1 页面暖色/手机壳等别名色 → 抽取 token（--mmh-bg-*、--gm-frame）
 A2 ✅ 已闭环（V2.5）：暗黑模式全量映射（02 · 2.1.9）+ theme.css/gm.css 暗色段 + tokens/design.ts dark + audit dark_contrast 守门

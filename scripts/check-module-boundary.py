@@ -45,6 +45,51 @@ THEME_CSS = [os.path.join(ROOT, "goodmom-ui", "src", "theme.css"),
 problems: list[tuple[str, str]] = []
 
 
+def css_var_blocks(path):
+    """按**括号配对**解析 CSS 顶层块 → [(选择器, {变量: 值})]。
+
+    ⚠️ 不要再用 `css.split('[data-theme="dark"]')[0]` 取"浅色段"：
+    theme.css 的**注释里**先出现过这个字符串，split 会在注释处把文件截断，
+    于是 335 行之后的 --lg-text-* 全被排除（实测只解析出 6 个语义变量，
+    这条门禁因此对 text/divider/track 一律空转 —— 注入违规也不报，正是"假门禁"）。
+    """
+    import re as _re
+    s = io.open(path, encoding="utf-8").read()
+    blocks, i, n = [], 0, len(s)
+    while i < n:
+        b = s.find("{", i)
+        if b < 0:
+            break
+        sel = s[i:b].strip()
+        # 选择器里可能夹着注释：去掉后再判断
+        sel_clean = _re.sub(r"/\*.*?\*/", " ", sel, flags=_re.S).strip().split("\n")[-1].strip()
+        depth, j = 1, b + 1
+        while j < n and depth:
+            if s[j] == "{":
+                depth += 1
+            elif s[j] == "}":
+                depth -= 1
+            j += 1
+        body = s[b + 1 : j - 1]
+        vs = {}
+        for m in _re.finditer(r"(--[\w-]+)\s*:\s*([^;]+);", body):
+            vs[m.group(1)] = m.group(2).strip()
+        if vs:
+            blocks.append((sel_clean, vs))
+        i = j
+    return blocks
+
+
+def theme_var_truth(path):
+    """Token 真源：非暗色块的变量取值（浅色档）。同名的以**最后一个非暗色块**为准。"""
+    truth = {}
+    for sel, vs in css_var_blocks(path):
+        if "data-theme" in sel:
+            continue
+        truth.update(vs)
+    return truth
+
+
 def bad(rule: str, msg: str) -> None:
     problems.append((rule, msg))
 
@@ -244,6 +289,40 @@ def check_no_raw_style() -> None:
                 bad("B8", f"{r}:{i} 内联玻璃配方（gradient/阴影/rgba 底）—— 配方只允许在组件库或 styles/*.css 定义一次")
 
 
+# ── B10：var() 兜底值必须与 Token 真源一致 ──────────────────────────────
+VARFB_RE = re.compile(r"var\((--lg-[\w-]+)\s*,\s*(#[0-9A-Fa-f]{6})\)")
+THEME = os.path.join(ROOT, "goodmom-ui", "src", "theme.css")
+
+
+def check_var_fallbacks() -> None:
+    """`var(--lg-x, #HEX)` 里的兜底值必须等于 `theme.css` 给 `--lg-x` 的真实值。
+
+    为什么值得一条门禁：兜底值平时**不生效**（Token 有定义），所以错了也没人看得见；
+    但它会长期留在代码里，成为"下一个人抄这个数值"的来源 —— 本仓已经因为
+    「文档抄了旧色值」付出过代价（02 章表 B / Vue 冒烟红了很久）。
+    实测：这条规则上线当天就抓到 4 处凭空写的近似值（含我自己早先写的 `#B9771C`，
+    正是那张旧表里的过期值）。
+    """
+    if not os.path.exists(THEME):
+        bad("B10", "找不到 Token 真源 %s" % THEME); return
+    raw = theme_var_truth(THEME)
+    truth = {k: v.upper() for k, v in raw.items()
+             if re.fullmatch(r"#[0-9A-Fa-f]{6}", v)}
+    if len(truth) < 20:
+        bad("B10", "theme.css 只解析出 %d 个十六进制 Token（预期 ≥20）——解析器失效，本条会空转" % len(truth))
+        return
+    for f in walk((".ts", ".tsx")):
+        text = io.open(f, encoding="utf-8").read()
+        for i, line in enumerate(text.splitlines(), 1):
+            if line.strip().startswith(("*", "/*", "//")):
+                continue
+            for m in VARFB_RE.finditer(line):
+                tok, fb = m.group(1), m.group(2).upper()
+                if tok in truth and truth[tok] != fb:
+                    bad("B10", f"{rel(f)}:{i} var({tok}, {fb}) 的兜底值与真源不符（theme.css 为 {truth[tok]}）——"
+                               f"兜底值不生效却会被后人照抄，属于'凭空写数值'")
+
+
 # ── B9：CSS 变量可解析 ──────────────────────────────────────────────────
 VAR_RE = re.compile(r"var\(\s*(--[\w-]+)\s*([^)]*)\)")
 
@@ -268,6 +347,7 @@ CHECKS = {
     "B1": check_imports, "B2": check_imports, "B3": check_imports, "B4": check_imports,
     "B5": check_module_shape, "B6": check_status_words,
     "B7": check_no_raw_style, "B8": check_no_raw_style, "B9": check_css_vars,
+    "B10": check_var_fallbacks,
 }
 
 

@@ -129,11 +129,26 @@ const PROBE = (spec) => {
 
   // ── 颜色工具（保留 alpha，按 source-over 合成；渐变取色标上界）──────────
   const parseColor = (t) => {
-    const m = String(t).match(/rgba?\(([^)]+)\)/);
-    if (!m) return null;
-    const p = m[1].split(/[,\s/]+/).filter((x) => x !== '').map(Number);
-    if (p.length < 3 || p.some((x) => Number.isNaN(x))) return null;
-    return [p[0], p[1], p[2], p.length >= 4 ? p[3] : 1];
+    const s = String(t);
+    const m = s.match(/rgba?\(([^)]+)\)/);
+    if (m) {
+      const p = m[1].split(/[,\s/]+/).filter((x) => x !== '').map(Number);
+      if (p.length < 3 || p.some((x) => Number.isNaN(x))) return null;
+      return [p[0], p[1], p[2], p.length >= 4 ? p[3] : 1];
+    }
+    /* ⚠️ 旧实现只认 rgba()，于是 `color(srgb r g b / a)` 一律返回 null，
+       而浏览器对 color-mix() / 相对色语法的**计算值**就序列化成这种形式 ——
+       凡是"从变量派生的淡底"（正是 V2.8 起语义淡底的标准写法）在门禁里
+       **整层消失**，对比度按更亮的底算，结论偏乐观。V2.9 实测确认后补上。
+       组件以 0–1 给分量，且可能超出区间（相对色混色），故夹紧到 0–255。 */
+    const c = s.match(/color\(srgb\s+([^)]+)\)/i);
+    if (c) {
+      const p = c[1].split(/[\s/]+/).filter((x) => x !== '').map(Number);
+      if (p.length < 3 || p.slice(0, 3).some((x) => Number.isNaN(x))) return null;
+      return [p[0] * 255, p[1] * 255, p[2] * 255, p.length >= 4 ? p[3] : 1].map((x, i) =>
+        i === 3 ? Math.min(1, Math.max(0, x)) : Math.min(255, Math.max(0, x)));
+    }
+    return null;
   };
   const over = (fg, bg) => {
     const a = fg[3] + bg[3] * (1 - fg[3]);

@@ -118,12 +118,14 @@ check("Esc 关闭并把焦点归还触发点", await page.evaluate(() =>
 check("遮罩关闭后不再吃点击（透明层陷阱）", await page.evaluate(() =>
   getComputedStyle(document.querySelector('[id="preview-mobile--pmMask"]')).pointerEvents === "none"));
 
-/* ── 6. 手势区：下拉刷新 + 上拉加载 ──────────────────────────────────── */
+/* ── 6. 随访队列：窗口化长列表 + 下拉刷新 + 上拉加载（10.11.2 / 11.2.16）────
+   本区原先是「3 行 + 加载更多」的假演示；现改为**真窗口化**（1284 条上限、每页 40、
+   行高 52、overscan 4），窗口算法取外壳唯一实现 window.gmVirtualList。
+   断言随之改写为窗口化语义（"渲染行数远少于数据量"才是这套实现的存在意义）。 */
 await page.locator(`${M}.tabbar .tab`).nth(1).click();
 await page.waitForTimeout(400);
 /* 切页会平滑滚回模块顶部；页面变长后固定 400ms 可能仍在滚动，
-   于是鼠标坐标失效、拖拽落空 —— 表现为"下拉刷新坏了"，实际是测量问题。
-   这里等滚动稳定，并**前置断言**拖拽起点确实在容器内，让错位能自曝。 */
+   于是鼠标坐标失效、拖拽落空 —— 表现为"下拉刷新坏了"，实际是测量问题。 */
 await page.evaluate(() => { window.scrollTo(0, 0); });
 await page.waitForTimeout(400);
 const gest = await page.locator(id("pmGest")).boundingBox();
@@ -131,28 +133,122 @@ const gestureHit = await page.evaluate(([x, y]) => {
   const el = document.elementFromPoint(x, y);
   return !!(el && el.closest && el.closest('[id$="pmGest"]'));
 }, [gest.x + gest.width / 2, gest.y + 30]);
-check("下拉刷新起点落在手势区内（未被吸顶条遮挡）", gestureHit);
-const rows0 = await page.locator(`${id('pmGestList')} .pm-swipe`).count();
-await page.mouse.move(gest.x + gest.width / 2, gest.y + 30);
-await page.mouse.down();
-for (let i = 1; i <= 12; i++) await page.mouse.move(gest.x + gest.width / 2, gest.y + 30 + i * 10);
-const pullTx = await page.evaluate(() =>
-  getComputedStyle(document.querySelector('[id="preview-mobile--pmPullBody"]')).transform);
-await page.mouse.up();
-await page.waitForTimeout(1800);
-check("下拉刷新有跟手位移", pullTx !== "none" && !/matrix\(1, 0, 0, 1, 0, 0\)/.test(pullTx), pullTx);
-check("下拉刷新回到列表并新增一行",
-  (await page.locator(`${id('pmGestList')} .pm-swipe`).count()) === rows0 + 1);
-await page.evaluate(() => {
-  const g = document.querySelector('[id="preview-mobile--pmGest"]');
-  g.scrollTop = g.scrollHeight;
-  g.dispatchEvent(new Event("scroll"));
+check("下拉刷新起点落在列表视口内（未被吸顶条遮挡）", gestureHit);
+
+const vlInfo = () => page.evaluate(() => {
+  const vp = document.querySelector('#gm-mod-preview-mobile [id$="pmGest"]');
+  const inner = document.querySelector('#gm-mod-preview-mobile [id$="pmGestList"]');
+  const rows = [...vp.querySelectorAll('[role="listitem"]')];
+  return {
+    rendered: rows.length,
+    innerH: Math.round(inner.getBoundingClientRect().height),
+    role: vp.getAttribute("role"),
+    setsize: rows[0] ? rows[0].getAttribute("aria-setsize") : null,
+    firstPos: rows[0] ? rows[0].getAttribute("aria-posinset") : null,
+  };
 });
-await page.waitForTimeout(1400);
-check("上拉加载更多（一次一批）",
-  (await page.locator(`${id('pmGestList')} .pm-swipe`).count()) === rows0 + 4);
-check("到底显示「没有更多了」",
-  (await page.locator(`${id('pmMore')} span`).textContent()).includes("没有更多"));
+const vl0 = await vlInfo();
+check("VirtualList：窗口内只渲染可见行（远少于整页 40）", vl0.rendered > 0 && vl0.rendered < 40,
+  `窗口内 ${vl0.rendered} 行`);
+check("VirtualList：inner 撑满首屏一页（40×52）", vl0.innerH === 40 * 52, `${vl0.innerH}px`);
+check("VirtualList：viewport role=list + 行报 aria-posinset/setsize",
+  vl0.role === "list" && vl0.setsize === "40" && vl0.firstPos === "1", JSON.stringify(vl0));
+
+const scrollVl = (top) => page.evaluate((t) => {
+  const vp = document.querySelector('#gm-mod-preview-mobile [id$="pmGest"]');
+  vp.scrollTop = t;
+  vp.dispatchEvent(new Event("scroll"));
+}, top);
+await scrollVl(52 * 20);
+await page.waitForTimeout(350);
+const vl1 = await vlInfo();
+check("VirtualList：滚动后窗口位移（行被回收重排）", vl1.firstPos !== vl0.firstPos,
+  `首行 ${vl0.firstPos} → ${vl1.firstPos}`);
+
+await page.locator(id("pmGest")).focus();
+await page.keyboard.press("End");
+await page.waitForTimeout(700);
+const vl2 = await vlInfo();
+check("VirtualList：键盘 End 到底并触发 onEndReached（加载第 2 页 → 80×52）",
+  vl2.innerH === 80 * 52, `${vl2.innerH}px`);
+
+/* 左滑必须走**容器委托**：窗口化后行会被整批重建，逐行绑定会静默失效 */
+await scrollVl(0);
+await page.waitForTimeout(350);
+const vrow = page.locator(`${M}.pm-vlrow`).nth(2);
+const vbox = await vrow.boundingBox();
+const rowHit = await page.evaluate(([x, y]) => {
+  const el = document.elementFromPoint(x, y);
+  return !!(el && el.closest && el.closest(".pm-swipe"));
+}, [vbox.x + 40, vbox.y + vbox.height / 2]);
+check("VirtualList 行左滑起点在行上", rowHit);
+await page.mouse.move(vbox.x + 40, vbox.y + vbox.height / 2);
+await page.mouse.down();
+for (let i = 1; i <= 8; i++) await page.mouse.move(vbox.x + 40 - i * 16, vbox.y + vbox.height / 2);
+await page.mouse.up();
+await page.waitForTimeout(450);
+check("窗口化行左滑生效（委托绑定，滚动重建后仍可用）", await page.evaluate(() =>
+  [...document.querySelectorAll("#gm-mod-preview-mobile .pm-swipe")]
+    .some((r) => r.getAttribute("data-open") === "1")));
+/* 记下这一行的编号，后面用它验证"删除后不复活"（不能假设删的是第 1 行） */
+const swipedLabel = await page.evaluate(() => {
+  const r = document.querySelector('#gm-mod-preview-mobile .pm-swipe[data-open="1"]');
+  const b = r ? r.querySelector(".pm-vlrow b") : null;
+  return b ? b.textContent : "";
+});
+
+/* ⚠️ 这三条对应实测挖到的整条缺陷链：滑动手势收尾时浏览器会补发 click、并把焦点移走，
+   释放点还常在行外（合成 click 落在**视口**上）——三个来源各自都会把行"偷关掉"，
+   表现是"滑开就自动合上、操作钮永远点不到"。旧断言只在 mouse.up 后立刻采样，全部漏过。 */
+await page.waitForTimeout(500);
+check("左滑松手后行仍保持展开（合成 click / 失焦不得关掉它）", await page.evaluate(() =>
+  [...document.querySelectorAll("#gm-mod-preview-mobile .pm-swipe")]
+    .some((r) => r.getAttribute("data-open") === "1")));
+check("左滑操作钮宽度 ≥64（11.2.5）", await page.evaluate(() =>
+  [...document.querySelectorAll("#gm-mod-preview-mobile .pm-vl-wrap .pm-sa")]
+    .every((b) => b.getBoundingClientRect().width >= 64)),
+  await page.evaluate(() =>
+    [...new Set([...document.querySelectorAll("#gm-mod-preview-mobile .pm-vl-wrap .pm-sa")]
+      .map((b) => Math.round(b.getBoundingClientRect().width)))].join("/")));
+
+/* 操作闭环：左滑 → 点删除 → 二次确认 → 数据模型收缩（窗口化下只删 DOM 会在重排时复活）。
+   基准高度必须在**点删除之前**取，否则测到的是"已经删完"的状态（探针第一版就是这么错的）。 */
+const innerH = () => page.evaluate(() =>
+  Math.round(document.querySelector('#gm-mod-preview-mobile [id$="pmGestList"]').getBoundingClientRect().height));
+const hBefore = await innerH();
+/* 必须点**已展开那一行**的操作钮：未展开的行被行体盖住，点了也会落在行体上 */
+const delBtn = page.locator(`${M}.pm-swipe[data-open="1"] .pm-sa--del`).first();
+await delBtn.click();
+await page.waitForTimeout(450);
+check("点删除弹出二次确认（底部操作表）", await page.evaluate(() =>
+  document.querySelector('#gm-mod-preview-mobile [id$="pmSheet"]').classList.contains("is-open")));
+await page.locator(`${M}[id$="pmSheetBody"] .pm-sheetitem`).first().click();
+await page.waitForTimeout(800);
+check("确认后数据模型收缩（少一条 = 52px）", (await innerH()) === hBefore - 52,
+  `${hBefore}px → ${await innerH()}px（被删「${swipedLabel}」）`);
+await scrollVl(52 * 20);
+await page.waitForTimeout(400);
+await scrollVl(0);
+await page.waitForTimeout(400);
+const stillThere = await page.evaluate((label) =>
+  [...document.querySelectorAll("#gm-mod-preview-mobile .pm-vl-wrap .pm-vlrow b")]
+    .some((b) => b.textContent === label), swipedLabel);
+check("滚动重排后被删行不复活（列表以数据模型为准）", swipedLabel !== "" && !stillThere,
+  `被删「${swipedLabel}」是否仍在窗口内：${stillThere}`);
+check("重排后总高不变（数据模型为准）", (await innerH()) === hBefore - 52, `${await innerH()}px`);
+
+/* 下拉刷新：回弹 + 回到第一页 */
+await scrollVl(0);
+await page.waitForTimeout(300);
+await page.mouse.move(gest.x + gest.width / 2, gest.y + 20);
+await page.mouse.down();
+for (let i = 1; i <= 10; i++) await page.mouse.move(gest.x + gest.width / 2, gest.y + 20 + i * 10);
+const pullTx = await page.evaluate(() =>
+  getComputedStyle(document.querySelector('#gm-mod-preview-mobile [id$="pmPullBody"]')).transform);
+await page.mouse.up();
+await page.waitForTimeout(1500);
+check("下拉刷新有跟手位移", pullTx !== "none" && !/matrix\(1, 0, 0, 1, 0, 0\)/.test(pullTx), pullTx);
+check("下拉刷新后回到第一页（40×52）", (await vlInfo()).innerH === 40 * 52, `${(await vlInfo()).innerH}px`);
 
 /* ── 7. 列表状态：骨架 / 空 / 错 / 有数据 ─────────────────────────────── */
 await page.locator(`${id('pmStateSeg')} .s2[data-state="loading"]`).click();
@@ -366,6 +462,60 @@ await page.locator(`${M}.pm-numkey[data-k="del"]`).click();
 await page.waitForTimeout(200);
 check("NumberKeyboard：退格", (await page.locator(`${M}[id$='pmNumVal']`).textContent()) === "10");
 
+await page.locator(`${M}.tabbar .tab`).first().click();
+await page.waitForTimeout(400);
+
+/* ── 14. Cascader 移动版多列 Picker（11.2.17）────────────────────────── */
+await page.locator(`${M}.tabbar .tab`).nth(2).click();
+await page.waitForTimeout(450);
+const cid = (n) => `${M}[id="preview-mobile--${n}"]`;
+await page.locator(cid("pmCascOpen")).scrollIntoViewIfNeeded();
+await page.waitForTimeout(300);
+await page.locator(cid("pmCascOpen")).click();
+await page.waitForTimeout(500);
+check("Cascader：浮层 role=dialog + aria-modal", await page.evaluate(() => {
+  const d = document.querySelector('#gm-mod-preview-mobile [id$="pmCasc"]');
+  return d.classList.contains("is-open") && d.getAttribute("role") === "dialog" &&
+    d.getAttribute("aria-modal") === "true";
+}));
+check("Cascader：初始只展开第 1 列（未预选）", (await page.locator(`${M}.pm-casc-col`).count()) === 1);
+check("Cascader：列高 268 / 单列宽 ≥112", await page.evaluate(() => {
+  const r = document.querySelector("#gm-mod-preview-mobile .pm-casc-col").getBoundingClientRect();
+  return Math.abs(r.height - 268) < 2 && r.width >= 112;
+}));
+check("Cascader：未选到叶子时「确定」禁用", await page.locator(cid("pmCascOk")).isDisabled());
+await page.locator(`${M}.pm-casc-it`).first().click();
+await page.waitForTimeout(350);
+check("Cascader：选父级后展开下一列 + 列头显示已选层级",
+  (await page.locator(`${M}.pm-casc-col`).count()) === 2 &&
+  (await page.locator(`${M}.pm-casc-hd`).nth(1).textContent()).includes("山东省"));
+await page.locator(`${M}.pm-casc-col[data-col="1"] .pm-casc-it`).first().click();
+await page.waitForTimeout(350);
+check("Cascader：下钻到第 3 列且仅当前列高亮",
+  (await page.locator(`${M}.pm-casc-col`).count()) === 3 &&
+  (await page.locator(`${M}.pm-casc-col.on`).count()) === 1);
+await page.locator(`${M}.pm-casc-col[data-col="2"] .pm-casc-it`).first().click();
+await page.waitForTimeout(350);
+check("Cascader：选到叶子后「确定」可用", !(await page.locator(cid("pmCascOk")).isDisabled()));
+await page.locator(`${M}.pm-casc-col.on`).press("ArrowLeft");
+await page.waitForTimeout(250);
+check("Cascader：键盘 ←/→ 跨列", await page.evaluate(() =>
+  document.querySelector("#gm-mod-preview-mobile .pm-casc-col.on").getAttribute("data-col") === "1"));
+await page.locator(`${M}.pm-casc-col.on`).press("ArrowDown");
+await page.waitForTimeout(250);
+check("Cascader：键盘 ↑/↓ 列内移动选中", await page.evaluate(() => {
+  const col = document.querySelector("#gm-mod-preview-mobile .pm-casc-col.on");
+  return [...col.querySelectorAll(".pm-casc-it")].some((b) => b.getAttribute("aria-selected") === "true");
+}));
+await page.locator(cid("pmCascOk")).click();
+await page.waitForTimeout(500);
+check("Cascader：确定写回触发条并关闭", (await page.locator(cid("pmCascVal")).textContent()) !== "未选择" &&
+  !(await page.evaluate(() => document.querySelector('#gm-mod-preview-mobile [id$="pmCasc"]').classList.contains("is-open"))));
+await page.locator(cid("pmCascOpen")).click();
+await page.waitForTimeout(400);
+await page.keyboard.press("Escape");
+await page.waitForTimeout(400);
+check("Cascader：Esc 关闭且已确定值不回滚", (await page.locator(cid("pmCascVal")).textContent()) !== "未选择");
 await page.locator(`${M}.tabbar .tab`).first().click();
 await page.waitForTimeout(400);
 

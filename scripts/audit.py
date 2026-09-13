@@ -64,6 +64,33 @@ def icons():
     rec("OK", "icons", "%d 图标唯一且命名合法，与 registry 同步" % len(ids))
     return True
 
+def icon_mirror():
+    """应用侧图标雪碧图必须与仓库根真源逐字节一致。
+
+    背景：应用用 `<use href="/icons/lg-icons.svg#lg-icon-x">` 取图标，而 Vite 只能从
+    `public/` 提供静态资源 —— 于是产生了**第二份** sprite。这正是 D10（两库镜像）那一课：
+    同一份资产有两处副本时，早晚会有一处忘了同步，而且是"图标少了一个/改了形状"这种
+    只有肉眼才发现的表现。故与 `mirror_sync` 同口径：要么逐字节一致，要么这门禁红。
+
+    真源：`icons/lg-icons.svg`（09 章 + `audit.py icons` 已校验其命名与 registry 同步）。
+    """
+    src = "icons/lg-icons.svg"
+    dsts = ["frontend-app/public/icons/lg-icons.svg"]
+    for dst in dsts:
+        if not os.path.exists(dst):
+            rec("WARN", "icon-mirror", "%s 不存在（应用若不用 sprite 可忽略）" % dst)
+            continue
+        if not os.path.exists(src):
+            rec("FAIL", "icon-mirror", "缺少真源 %s" % src); return False
+        a = open(src, "rb").read(); b = open(dst, "rb").read()
+        if a != b:
+            rec("FAIL", "icon-mirror",
+                "%s 与真源 %s 不一致（%d vs %d 字节）—— 应用侧图标会与规范漂移" % (dst, src, len(b), len(a)))
+            return False
+        rec("OK", "icon-mirror", "应用侧雪碧图与真源逐字节一致（%d 字节）" % len(a))
+    return True
+
+
 def html_no_md():
     """HTML 里不得出现指向 .md 的链接（浏览器会打开未渲染的源码）。
 
@@ -332,6 +359,165 @@ def exports_check():
     if ok:
         rec("OK", "exports", "全部组件已在两包 index.ts 导出")
     return ok
+
+def _brace_blocks(css):
+    """按括号配对返回 [(选择器, 块内容)]；注释里的 `[data-theme="dark"]` 不会截断文件。"""
+    out, i, n = [], 0, len(css)
+    while i < n:
+        b = css.find("{", i)
+        if b < 0:
+            break
+        sel = re.sub(r"/\*.*?\*/", " ", css[i:b], flags=re.S).strip().split("\n")[-1].strip()
+        depth, j = 1, b + 1
+        while j < n and depth:
+            if css[j] == "{":
+                depth += 1
+            elif css[j] == "}":
+                depth -= 1
+            j += 1
+        out.append((sel, css[b + 1 : j - 1]))
+        i = j
+    return out
+
+
+def _theme_text_truth():
+    """`--lg-text-*` 与淡底 token 的真值：唯一源 goodmom-ui/src/theme.css。"""
+    src = "goodmom-ui/src/theme.css"
+    if not os.path.exists(src):
+        return {}, {}
+    css = open(src, encoding="utf-8").read()
+    light, dark = {}, {}
+    for sel, body in _brace_blocks(css):
+        tgt = dark if "data-theme" in sel else light
+        for m in re.finditer(r"(--lg-text-[\w-]+|--lg-tint-[\w-]+)\s*:\s*([^;}]+)", body):
+            tgt[m.group(1)] = m.group(2).strip()
+    return light, dark
+
+
+CSS_SCAN = [
+    "goodmom-ui/src/theme.css", "frontend-app/packages/gm-arco-ui/src/gm.css",
+    "goodmom-vue/src/styles/base.css", "goodmom-vue/src/styles/components.css",
+    "frontend-app/src/styles/base.css", "frontend-app/src/styles/layout.css",
+]
+TS_SCAN = [
+    "goodmom-ui/src/tokens/status.ts", "goodmom-ui/src/components/GmTag.tsx",
+    "goodmom-ui/src/components/GmStatusTag.tsx", "goodmom-vue/src/tokens/status.ts",
+    "goodmom-vue/src/components/GmTag.vue", "goodmom-vue/src/components/GmStatusTag.vue",
+]
+
+
+def text_token_parity():
+    """`--lg-text-*` 的**本地定义**必须等于真值 —— 不许用"改名"绕过无障碍口径。
+
+    背景（V2.9 实测）：`site/fragments/preview-index.html` 曾把 `--lg-text-tertiary`
+    本地改写成 `#4F5B6E`（正好是 secondary 的值）。于是该模块 71 处 10–12px 小字
+    "看起来达标"，而 02 · 2.1.1 与 theme.css 的真值 `#9AA2B0` 在 12px 下只有 **2.30:1**。
+    用改名把违规盖住比违规本身更糟：门禁、规范、真源从此各说各话。
+    故本规则做**值级**比对（02 · 2.1.1 的 5 个文字 token，浅/暗两档任一皆可）。
+    """
+    light, dark = _theme_text_truth()
+    names = ["--lg-text-primary", "--lg-text-secondary", "--lg-text-tertiary",
+             "--lg-text-on-accent", "--lg-text-on-inverse"]
+    if not all(k in light for k in names[:3]):
+        rec("FAIL", "text-token-parity", "theme.css 未解析出 --lg-text-* 真值（%d 个）" % len(light))
+        return False
+    allow = {k: {light.get(k), dark.get(k)} for k in names}
+    # 只扫源：成品 site/index.html 是 fragments 的副本，且含内联 JS（会把对象字面量当 CSS 规则误判）。
+    files = CSS_SCAN + sorted(glob.glob("site/fragments/*.html"))
+    bad = []
+    for f in files:
+        if not os.path.exists(f):
+            continue
+        t = open(f, encoding="utf-8").read()
+        for m in re.finditer(r"(--lg-text-[\w-]+)\s*:\s*(#[0-9A-Fa-f]{3,8})", t):
+            name, val = m.group(1), m.group(2).upper()
+            if name in allow and val not in {v.upper() for v in allow[name] if v}:
+                bad.append("%s %s=%s（真值 %s）" % (f, name, val, "/".join(sorted(v for v in allow[name] if v))))
+    if bad:
+        rec("FAIL", "text-token-parity", "文字 token 被本地改写 %d 处：%s" % (len(bad), bad[:3]))
+        return False
+    rec("OK", "text-token-parity", "文字 token 无本地改写（5 个 token × 浅/暗档均等于 theme.css 真值）")
+    return True
+
+
+def tertiary_size():
+    """`--lg-text-tertiary` 只允许用于 ≥24px 文字（02 · 2.1.1）。
+
+    真值 #9AA2B0 在浅色档玻璃卡上实测 ≈2.3:1 —— 只有大字号才够。占位符例外：
+    02 另有 `--lg-text-placeholder`，且占位符不承载内容信息，故选择器名含
+    `placeholder` / `__ph` 时放行（这条豁免写在门禁里，不靠人记）。
+    """
+    files = CSS_SCAN + sorted(glob.glob("site/fragments/*.html"))
+    bad = []
+    for f in files:
+        if not os.path.exists(f):
+            continue
+        t = open(f, encoding="utf-8").read()
+        for m in re.finditer(r"var\(\s*--lg-text-tertiary", t):
+            idx = m.start()
+            b = t.rfind("{", 0, idx)
+            if b < 0:
+                continue
+            e = t.find("}", idx)
+            rule = t[b : e if e > 0 else len(t)]
+            sel = re.sub(r"/\*.*?\*/", " ", t[max(0, t.rfind("}", 0, b)) + 1 : b], flags=re.S)
+            # 与 page-qa / 站点同一口径：占位符（02 另有 --lg-text-placeholder）与
+            # **禁用态**（WCAG 1.4.3 明文豁免）不参与本规则。
+            if "placeholder" in sel or "__ph" in sel:
+                continue
+            if re.search(r"\.dis\b|disabled|not-allowed|aria-disabled", sel):
+                continue
+            fs = re.search(r"font-size\s*:\s*([\d.]+)px", rule)
+            if not fs or float(fs.group(1)) < 24:
+                bad.append("%s %s（font-size=%s）" % (f, sel.strip().split("\n")[-1][:40], fs.group(1) if fs else "未声明"))
+    if bad:
+        rec("FAIL", "tertiary-size", "tertiary 被用于 <24px 文字 %d 处：%s" % (len(bad), bad[:3]))
+        return False
+    rec("OK", "tertiary-size", "tertiary 未用于 <24px 文字（占位符豁免）")
+    return True
+
+
+def tint_base():
+    """语义淡底必须混入实底 `--lg-tint-base`，不得与 `transparent` 混色。
+
+    背景（V2.9 实测）：`color-mix(in srgb, 语义色 13%, transparent)` 会把玻璃卡与品牌
+    渐变透出来，12px 语义字在真实渲染底上只有 **4.06:1**（浅/暗两档皆然），
+    而 status.ts 里"13% 淡色片 ≥4.85:1"那句是**按纯白底**算的 —— 实现与文档的测量条件不一致。
+    改混实底后：浅色档 13% = 4.86:1、暗色档 8% = 4.9:1（scripts/app-smoke.mjs 实底采样）。
+
+    同时断言两档的淡底 token 都在位：暗色档若漏声明 `--lg-tint-pct`，
+    会静默回落到浅色档的 13%，对比度悄悄掉回 4.3 —— 这种失败必须由门禁喊出来。
+    """
+    ok = True
+    bad = []
+    for f in CSS_SCAN + TS_SCAN:
+        if not os.path.exists(f):
+            continue
+        t = open(f, encoding="utf-8").read()
+        for m in re.finditer(r"color-mix\(", t):
+            i, depth = m.end(), 1
+            while i < len(t) and depth:
+                if t[i] == "(":
+                    depth += 1
+                elif t[i] == ")":
+                    depth -= 1
+                i += 1
+            inner = t[m.end() : i - 1]
+            if re.search(r"\btransparent\b", inner):
+                bad.append("%s %s" % (f, inner.strip()[:48]))
+    if bad:
+        rec("FAIL", "tint-base", "淡底与 transparent 混色 %d 处：%s" % (len(bad), bad[:3])); ok = False
+    light, dark = _theme_text_truth()
+    for label, blk, need_pct in (("浅色档", light, "13%"), ("暗色档", dark, "8%")):
+        if "--lg-tint-base" not in blk:
+            rec("FAIL", "tint-base", "%s 缺 --lg-tint-base（淡底会回落到 #FFFFFF）" % label); ok = False
+        if blk.get("--lg-tint-pct") != need_pct:
+            rec("FAIL", "tint-base", "%s 的 --lg-tint-pct 应为 %s，实际 %s"
+                % (label, need_pct, blk.get("--lg-tint-pct", "缺失"))); ok = False
+    if ok:
+        rec("OK", "tint-base", "淡底一律混实底（浅 13% ／ 暗 8%），且两档 token 在位")
+    return ok   # ⚠️ 曾写成 return True：门禁打印 FAIL 却 exit=0，负向测试当场抓出
+
 
 def mirror_sync():
     """双包镜像一致性（D10）：应用侧 gm-arco-ui 必须与设计系统源 goodmom-ui 逐字节一致。
@@ -1286,9 +1472,26 @@ def semantic_parity():
     if not os.path.exists(src):
         rec("FAIL", "semantic-parity", "缺少 %s" % src); return False
     css = _io.open(src, encoding="utf-8").read()
-    light = css.split('[data-theme="dark"]')[0]          # 浅色段（:root）
-    truth = {m.group(1): m.group(2).upper()
-             for m in re.finditer(r"--lg-sem-(\w+):\s*(#[0-9A-Fa-f]{6})", light)}
+    # ⚠️ 不能按 `split('[data-theme="dark"]')` 取浅色段：注释里先出现过该字符串，
+    #    会把文件截断（check-module-boundary.py 的 B10 就因此空转过）。按括号配对取非暗色块。
+    truth = {}
+    i, n = 0, len(css)
+    while i < n:
+        b = css.find("{", i)
+        if b < 0:
+            break
+        sel = re.sub(r"/\*.*?\*/", " ", css[i:b], flags=re.S).strip().split("\n")[-1].strip()
+        depth, j = 1, b + 1
+        while j < n and depth:
+            if css[j] == "{":
+                depth += 1
+            elif css[j] == "}":
+                depth -= 1
+            j += 1
+        if "data-theme" not in sel:
+            for m in re.finditer(r"--lg-sem-(\w+):\s*(#[0-9A-Fa-f]{6})", css[b + 1 : j - 1]):
+                truth[m.group(1)] = m.group(2).upper()
+        i = j
     if len(truth) != 6:
         rec("FAIL", "semantic-parity", "theme.css 浅色段未解析出 6 个 --lg-sem-*（实际 %d）" % len(truth))
         return False
@@ -1331,7 +1534,8 @@ GATES = [
     ("exports", exports_check), ("logo-guard", logo_guard), ("loading-spec", loading_spec),
     ("css-syntax", css_syntax), ("feedback-spec", feedback_spec),
     ("undefined-token", undefined_tokens), ("data-present", data_present), ("growth-chart", growth_chart),
-    ("svg-refs", svg_refs), ("semantic-parity", semantic_parity),
+    ("svg-refs", svg_refs), ("semantic-parity", semantic_parity), ("icon-mirror", icon_mirror),
+    ("text-token-parity", text_token_parity), ("tertiary-size", tertiary_size), ("tint-base", tint_base),
 ]
 
 

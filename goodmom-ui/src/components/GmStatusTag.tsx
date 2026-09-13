@@ -1,5 +1,5 @@
 import React from "react";
-import { GmFive, GmSemantic, SEMANTIC_LABEL, SEMANTIC_VAR, FIVE_COLOR, FIVE_VAR } from "../tokens/status";
+import { GmFive, GmSemantic, SEMANTIC_LABEL, SEMANTIC_VAR, FIVE_COLOR, FIVE_VAR, semTintFill, semTintBorder } from "../tokens/status";
 
 /**
  * GmStatusTag —— 状态标签（六语义 + 孕产妇五色）
@@ -36,8 +36,6 @@ export interface GmStatusTagProps {
   onClose?: () => void;
 }
 
-const TINT_PCT = 13;
-const BORDER_PCT = 32;
 
 const GmStatusTag = ({ children, semantic = "neutral", five, color, size = "small", closable, onClose }: GmStatusTagProps) => {
   /* 取色优先级：显式 color > 五色 > 语义。
@@ -50,8 +48,8 @@ const GmStatusTag = ({ children, semantic = "neutral", five, color, size = "smal
 
   const style: React.CSSProperties = {
     color: base,
-    background: `color-mix(in srgb, ${base} ${TINT_PCT}%, transparent)`,
-    borderColor: `color-mix(in srgb, ${base} ${BORDER_PCT}%, transparent)`,
+    background: semTintFill(base),
+    borderColor: semTintBorder(base),
   };
 
   const sizeCls = size === "large" ? " lg" : "";

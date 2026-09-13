@@ -8,7 +8,7 @@ export function SectionCard({
     <section style={{ marginBottom: 18 }}>
       <div style={{ display: "flex", alignItems: "baseline", gap: 8, margin: "0 2px 10px" }}>
         <h2 style={{ fontSize: 17, lineHeight: "24px", fontWeight: 600, margin: 0 }}>{title}</h2>
-        {desc ? <span style={{ fontSize: 12, color: "var(--lg-text-tertiary,#5E6673)" }}>{desc}</span> : null}
+        {desc ? <span style={{ fontSize: 12, color: "var(--lg-text-secondary,#4F5B6E)" }}>{desc}</span> : null}
         <span style={{ marginLeft: "auto" }}>{extra}</span>
       </div>
       {children}

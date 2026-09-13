@@ -6,4 +6,4 @@
  */
 export * from "./model";
 export { endpoints } from "./api";
-/* 页面待排期：本模块当前只交付边界与契约（见 README） */
+export { default as InstitutionOverviewPage } from "./pages/InstitutionOverviewPage";

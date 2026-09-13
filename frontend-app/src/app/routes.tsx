@@ -18,7 +18,10 @@ import { ArchiveListPage, ArchiveDetailPage } from "@/modules/archive";
 import { FollowupQueuePage } from "@/modules/followup";
 import { PregnancyHomePage } from "@/modules/pregnancy";
 import { DashboardPage } from "@/modules/dashboard";
-import { ModulePlaceholderPage } from "@/modules/account";
+import { ChildcareVisitPage } from "@/modules/childcare";
+import { VaccinePlanPage } from "@/modules/vaccine";
+import { InstitutionOverviewPage } from "@/modules/institution";
+import { AccountSessionPage } from "@/modules/account";
 import ComponentPreview from "@/dev/ComponentPreview";
 
 export interface RouteDef {
@@ -45,38 +48,14 @@ export const ROUTES: RouteDef[] = [
     render: () => <PregnancyHomePage /> },
   { path: "/dev/preview", module: "dev", title: "组件演示", sub: "开发期页面 · 不进入生产导航",
     render: () => <ComponentPreview /> },
-  { path: "/account", module: "account", title: "账号与权限", sub: "机构 · 角色 · 会话",
-    render: () => (
-      <ModulePlaceholderPage
-        title="账号与权限"
-        owns={["机构信息", "登录会话", "角色与权限点"]}
-        next="接入统一登录（SSO）后由 account 模块提供 AuthProvider 的真实实现"
-      />
-    ) },
-  { path: "/childcare", module: "childcare", title: "儿童保健",
-    render: () => (
-      <ModulePlaceholderPage
-        title="儿童保健"
-        owns={["月龄与体检计划", "五健检查（视力/口腔/听力/心理/体格）", "儿保结论"]}
-        next="等 13 章五健组件定稿后实现"
-      />
-    ) },
-  { path: "/vaccine", module: "vaccine", title: "疫苗接种",
-    render: () => (
-      <ModulePlaceholderPage
-        title="疫苗接种"
-        owns={["免疫规划计划", "接种记录", "逾期召回"]}
-        next="等疫苗计划表与接种凭证的数据契约定稿后实现"
-      />
-    ) },
-  { path: "/institution", module: "institution", title: "机构运营", role: "admin",
-    render: () => (
-      <ModulePlaceholderPage
-        title="机构运营"
-        owns={["机构与科室", "医生排班", "服务量统计"]}
-        next="等机构侧数据接口定稿后实现"
-      />
-    ) },
+  { path: "/account", module: "account", title: "账号与权限", sub: "机构 · 角色 · 权限矩阵",
+    render: () => <AccountSessionPage /> },
+  { path: "/childcare", module: "childcare", title: "儿童保健", sub: "月龄节点轴 · 六项保健清单",
+    render: () => <ChildcareVisitPage /> },
+  { path: "/vaccine", module: "vaccine", title: "疫苗接种", sub: "按月龄时间线 · 到期未种召回",
+    render: () => <VaccinePlanPage /> },
+  { path: "/institution", module: "institution", title: "机构运营", sub: "科室 · 排班 · 服务量", role: "admin",
+    render: () => <InstitutionOverviewPage /> },
 ];
 
 /** 命中当前 hash 的路由（精确优先，其次带参路由） */

@@ -63,7 +63,7 @@ export default function ArchiveDetailPage({ id }: { id: string }) {
 function Desc({ k, v }: { k: string; v: string }) {
   return (
     <div style={{ display: "grid", gridTemplateColumns: "88px 1fr", gap: 12, padding: "8px 0" }}>
-      <span style={{ fontSize: 12, color: "var(--lg-text-tertiary,#5E6673)" }}>{k}</span>
+      <span style={{ fontSize: 12, color: "var(--lg-text-secondary,#4F5B6E)" }}>{k}</span>
       <span style={{ fontSize: 14, whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>{v}</span>
     </div>
   );

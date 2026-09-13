@@ -9,7 +9,7 @@ export function SideNav({ orgName, userName }: { orgName: string; userName: stri
       <div className="app-side__card">
         <div style={{ padding: "4px 12px 10px" }}>
           <b style={{ display: "block", fontSize: 15 }}>妈咪好 GoodMom</b>
-          <span style={{ fontSize: 12, color: "var(--lg-text-tertiary,#5E6673)" }}>{orgName}</span>
+          <span style={{ fontSize: 12, color: "var(--lg-text-secondary,#4F5B6E)" }}>{orgName}</span>
         </div>
         <nav style={{ display: "flex", flexDirection: "column", gap: 2 }}>
           {NAV.map((n) => (

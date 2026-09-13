@@ -6,5 +6,6 @@
  * 离线演示期由 `shared/api/mock.ts` 供数；配置 `VITE_API_BASE` 后自动走真实网关。
  */
 export const endpoints = {
+  /** 疫苗计划页：按月龄时间线 + 机构端覆盖率与到期未种名单（13.3.3） */
   vaccine_plan: "/vaccine/plan",
 } as const;

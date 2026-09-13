@@ -40,6 +40,8 @@
 | `--lg-text-primary` | `#343A46` | `#F3EFEC` |
 | `--lg-text-secondary` | `#4F5B6E` | `#C9C4CE` |
 | `--lg-text-tertiary` | `#9AA2B0` | `#A6ADB9` |
+| `--lg-tint-base` | `#FFFFFF` | `#23222A` |
+| `--lg-tint-pct` | `13%` | `8%` |
 | `--lg-text-disabled` | `rgba(88,98,115,.4)` | `rgba(255,255,255,.34)` |
 | `--lg-text-on-accent` | `#343A46` | `#1B1A21` |
 | `--lg-divider` | `rgba(58,52,84,.10)` | `rgba(255,255,255,.10)` |
@@ -101,3 +103,19 @@
 ```
 
 **禁止**为暗色单独写组件样式分支 —— 变量已全部覆盖；写了就会出现两套真相。
+
+## 两条实测铁律（V2.9：都是踩过的坑，门禁已固化）
+
+1. **`--lg-text-tertiary` 只能用于 ≥24px 文字**（02 · 2.1.1）。真值 `#9AA2B0` 压在玻璃卡上
+   12px 实测 **2.30:1**；小字一律用 `--lg-text-secondary`。
+   占位符用 `--lg-text-placeholder`，禁用态（WCAG 1.4.3 豁免）可用 tertiary。
+   门禁：`audit.py --only tertiary-size`。
+   历史坑：`site/fragments/preview-index.html` 曾把 tertiary **本地改写成 secondary 的值**
+   （`#4F5B6E`）来"达标" —— 改名掩盖违规，门禁/规范/真源从此各说各话。
+   门禁：`audit.py --only text-token-parity`。
+
+2. **语义淡底必须混实底**：`color-mix(in srgb, 语义色 var(--lg-tint-pct), var(--lg-tint-base))`。
+   写成 `color-mix(…, transparent)` 会把玻璃卡与品牌渐变透出来，
+   12px 语义字实测只剩 **4.06:1**（浅/暗两档皆然）；混实底后浅色档 4.86:1、暗色档 4.9:1。
+   暗色档透明度必须降到 8%：浅色墨混进暗底会把底抬亮，13% 只有 4.3:1。
+   门禁：`audit.py --only tint-base`（同时断言两档 token 都在位）。

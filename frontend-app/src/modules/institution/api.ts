@@ -6,5 +6,6 @@
  * 离线演示期由 `shared/api/mock.ts` 供数；配置 `VITE_API_BASE` 后自动走真实网关。
  */
 export const endpoints = {
-  institution_shifts: "/institution/shifts",
+  /** 机构运营页：科室与人员 + 医生排班 + 服务量统计（机构维度聚合） */
+  institution_overview: "/institution/overview",
 } as const;

@@ -4,8 +4,11 @@
   /* Neutral */
   --lg-warm-white:#F4F0EC; --lg-warm-ivory:#E6D9D0; --lg-soft-beige:#D7C5BC;
   --lg-cool-gray:#4F5B6E; --lg-deep-slate:#343A46;
-  --lg-text-primary:#343A46; --lg-text-secondary:#4F5B6E; --lg-text-tertiary:#4F5B6E;
-  --lg-text-on-accent:#FFFFFF; --lg-divider:rgba(58,52,84,.10);
+  --lg-text-primary:#343A46; --lg-text-secondary:#4F5B6E;
+  /* V2.9：此处曾把 --lg-text-tertiary 本地改写成 #4F5B6E（= secondary 的值），
+     相当于用改名把"12px 文字不达 AA"这件事盖住。现已按 02 · 2.1.1 把 71 处小字改用
+     --lg-text-secondary，本地改写随之删除，模块与 02/theme.css 的口径重新一致。 */
+  --lg-text-on-accent:#343A46; --lg-divider:rgba(58,52,84,.10);   /* 真值见 02 · 2.1.1：亮粉底配深字 */
   /* Accent */
   --lg-purple-600:#8066F0; --lg-purple-500:#9A78FF; --lg-purple-300:#B69AFF;
   --lg-purple-200:#D9CBFE; --lg-purple-100:#EDE7FE;
@@ -73,7 +76,7 @@
 section.block{margin-top:26px}
 .sec-head{display:flex;align-items:baseline;gap:14px;padding:6px 6px 14px}
 .sec-head h2{font-size:22px;font-weight:600;letter-spacing:-.01em}
-.sec-head .en{font-size:12px;color:var(--lg-text-tertiary);font-weight:500}
+.sec-head .en{font-size:12px;color:var(--lg-text-secondary);font-weight:500}
 
 /* sticky top nav */
 .topnav{position:sticky;top:16px;z-index:60;display:flex;gap:6px;align-items:center;
@@ -179,7 +182,7 @@ section.block{margin-top:26px}
 .panel{border-radius:var(--lg-radius-card-lg);padding:26px}
 .panel h3{font-size:16px;font-weight:600;margin-bottom:16px;display:flex;align-items:center;gap:8px}
 .panel h3 i{width:8px;height:8px;border-radius:50%;background:var(--lg-grad-primary);display:inline-block}
-.panel .note{font-size:12px;color:var(--lg-text-tertiary);margin-top:12px}
+.panel .note{font-size:12px;color:var(--lg-text-secondary);margin-top:12px}
 
 /* color swatches */
 .sw-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(96px,1fr));gap:10px}
@@ -188,13 +191,13 @@ section.block{margin-top:26px}
 .sw .chip{height:56px}
 .sw .meta{padding:6px 8px;background:rgba(255,255,255,.55);-webkit-backdrop-filter:blur(16px);backdrop-filter:blur(16px)}
 .sw .meta b{display:block;font-size:11px;font-weight:600;color:var(--lg-text-primary);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.sw .meta span{font-size:10px;color:var(--lg-text-tertiary);font-family:ui-monospace,Menlo,monospace}
+.sw .meta span{font-size:10px;color:var(--lg-text-secondary);font-family:ui-monospace,Menlo,monospace}
 .grad-bar{height:44px;border-radius:18px;margin-bottom:10px;border:1px solid rgba(255,255,255,.55);box-shadow:var(--lg-glass-highlight)}
-.gradbar-label{display:flex;justify-content:space-between;font-size:11px;color:var(--lg-text-tertiary);margin:2px 2px 12px}
+.gradbar-label{display:flex;justify-content:space-between;font-size:11px;color:var(--lg-text-secondary);margin:2px 2px 12px}
 
 /* typography */
 .type-row{display:flex;align-items:baseline;gap:20px;padding:10px 2px;border-bottom:1px solid rgba(58,52,84,.07)}
-.type-row .meta{width:190px;flex:none;font-size:11px;color:var(--lg-text-tertiary);line-height:1.6}
+.type-row .meta{width:190px;flex:none;font-size:11px;color:var(--lg-text-secondary);line-height:1.6}
 .type-row .meta b{color:var(--lg-text-secondary);font-weight:600}
 .type-row .demo{flex:1}
 .t-display-lg{font-size:40px;font-weight:600;letter-spacing:-.02em;line-height:1.2}
@@ -203,7 +206,7 @@ section.block{margin-top:26px}
 .t-section{font-size:18px;font-weight:600;line-height:1.4}
 .t-body{font-size:15px;font-weight:400}
 .t-body-sm{font-size:14px;color:var(--lg-text-secondary)}
-.t-caption{font-size:12px;color:var(--lg-text-tertiary)}
+.t-caption{font-size:12px;color:var(--lg-text-secondary)}
 .tnum-demo{display:flex;gap:28px;flex-wrap:wrap;margin-top:6px}
 .tnum-demo .t{font-variant-numeric:tabular-nums;font-weight:600}
 .t1{font-size:56px;line-height:1.1;color:var(--lg-sem-special)}
@@ -238,16 +241,16 @@ section.block{margin-top:26px}
 
 /* spacing scale */
 .sp-row{display:flex;align-items:center;gap:14px;padding:5px 0;min-width:0}
-.sp-row .lab{width:120px;font-size:12px;color:var(--lg-text-tertiary);font-family:ui-monospace,Menlo,monospace;flex:none}
+.sp-row .lab{width:120px;font-size:12px;color:var(--lg-text-secondary);font-family:ui-monospace,Menlo,monospace;flex:none}
 .sp-row .bar{height:18px;border-radius:8px;background:linear-gradient(90deg,var(--lg-purple-500),var(--lg-cyan-500));
   box-shadow:0 4px 10px rgba(154,120,255,.25)}
 .rd-row{display:flex;flex-wrap:wrap;gap:14px;align-items:flex-end}
 .rd{width:64px;height:64px;background:linear-gradient(160deg,rgba(255,255,255,.7),rgba(255,255,255,.3));
   border:1px solid rgba(255,255,255,.75);box-shadow:var(--lg-shadow-md);text-align:center;
   display:flex;align-items:flex-end;justify-content:center;padding-bottom:4px}
-.rd span{font-size:10px;color:var(--lg-text-tertiary)}
+.rd span{font-size:10px;color:var(--lg-text-secondary)}
 .rd-wrap{display:flex;flex-direction:column;align-items:center;gap:6px}
-.rd-wrap .lbl{font-size:11px;color:var(--lg-text-tertiary)}
+.rd-wrap .lbl{font-size:11px;color:var(--lg-text-secondary)}
 
 /* shadows */
 .sh-row{display:flex;align-items:center;gap:16px;padding:8px 0}
@@ -290,7 +293,7 @@ section.block{margin-top:26px}
   border-radius:var(--lg-radius-control);box-shadow:inset 0 1px 2px rgba(58,52,84,.06),inset 0 0 0 .5px rgba(255,255,255,.4);
   padding:0 14px;height:40px;transition:.25s}
 .field:focus-within{box-shadow:0 0 0 4px rgba(154,120,255,.15),inset 0 1px 2px rgba(58,52,84,.04)}
-.field svg{width:16px;height:16px;stroke:var(--lg-text-tertiary);fill:none;stroke-width:1.8;stroke-linecap:round;flex:none}
+.field svg{width:16px;height:16px;stroke:var(--lg-text-secondary);fill:none;stroke-width:1.8;stroke-linecap:round;flex:none}
 .field input{border:none;outline:none;background:transparent;flex:1;font-family:var(--lg-font-sans);
   font-size:14px;color:var(--lg-text-primary)}
 .field input::placeholder{color:var(--lg-sem-neutral,#5E6673)}
@@ -327,7 +330,7 @@ section.block{margin-top:26px}
 .dot.running{background:var(--lg-purple-500);box-shadow:0 0 0 3px rgba(154,120,255,.2);animation:pulse 2.4s infinite}
 @keyframes pulse{0%,100%{opacity:1}50%{opacity:.55}}
 .badge.status{background:rgba(255,255,255,.55)}
-.badge .t{font-size:11px;color:var(--lg-text-tertiary)}
+.badge .t{font-size:11px;color:var(--lg-text-secondary)}
 
 /* KPI cards */
 .kpi{border-radius:var(--lg-radius-card);padding:20px;position:relative;overflow:hidden}
@@ -339,7 +342,7 @@ section.block{margin-top:26px}
 .kpi .k-delta{display:flex;align-items:center;gap:6px;margin-top:10px;font-size:12px}
 .kpi .k-delta .up{color:var(--lg-sem-positive);font-weight:600}
 .kpi .k-delta .down{color:var(--lg-sem-risk);font-weight:600}
-.kpi .k-delta .src{color:var(--lg-text-tertiary)}
+.kpi .k-delta .src{color:var(--lg-text-secondary)}
 .kpi .spark{position:absolute;right:14px;bottom:14px;opacity:.9}
 
 /* charts */
@@ -373,7 +376,7 @@ section.block{margin-top:26px}
 @media(max-width:640px){.chart-cards{grid-template-columns:1fr}}
 .cchart{min-height:170px;position:relative}
 .cc-title{font-size:13px;font-weight:600;margin-bottom:6px}
-.cc-sub{font-size:11px;color:var(--lg-text-tertiary);margin-bottom:10px}
+.cc-sub{font-size:11px;color:var(--lg-text-secondary);margin-bottom:10px}
 .legend{display:flex;gap:14px;font-size:11px;color:var(--lg-text-secondary);margin-top:10px;flex-wrap:wrap}
 .legend i{display:inline-block;width:9px;height:9px;border-radius:3px;margin-right:5px;vertical-align:-1px}
 
@@ -387,7 +390,7 @@ section.block{margin-top:26px}
   border-color:transparent;   /* 不透明实底不套玻璃白边（与主按钮同一条纪律） */
   box-shadow:0 1px 2px rgba(178,58,99,.22),0 8px 20px rgba(240,127,163,.30)}
 .t-node .nlab{font-size:11px;color:var(--lg-text-secondary)}
-.t-node .nst{font-size:10px;color:var(--lg-text-tertiary);display:flex;align-items:center;gap:4px}
+.t-node .nst{font-size:10px;color:var(--lg-text-secondary);display:flex;align-items:center;gap:4px}
 .t-link{width:56px;height:2px;position:relative;border-radius:2px;background:rgba(154,120,255,.3);overflow:visible;flex:none}
 .t-link::after{content:"";position:absolute;top:-1.5px;left:-4px;width:5px;height:5px;border-radius:50%;
   background:#FFF;border:1.5px solid var(--lg-purple-500);animation:flow 1.6s linear infinite}
@@ -404,9 +407,9 @@ section.block{margin-top:26px}
    三种位置 / 四种驻留时长。模块侧只调用 window.gmToast(msg, status)。 */
 
 /* footer */
-footer{margin-top:40px;text-align:center;font-size:12px;color:var(--lg-text-tertiary);line-height:2}
+footer{margin-top:40px;text-align:center;font-size:12px;color:var(--lg-text-secondary);line-height:2}
 footer a{color:var(--lg-sem-special);text-decoration:none;font-weight:500}
-.section-note{font-size:12px;color:var(--lg-text-tertiary);padding:2px 8px 0}
+.section-note{font-size:12px;color:var(--lg-text-secondary);padding:2px 8px 0}
 
 /* ═══════════════ 07 · 交互动效与微交互 (Motion & Micro-interactions) ═══════════════ */
 :root{
@@ -509,7 +512,7 @@ footer a{color:var(--lg-sem-special);text-decoration:none;font-weight:500}
 .mtok{font-size:11px;font-family:ui-monospace,Menlo,monospace;color:var(--lg-text-secondary);
   background:rgba(255,255,255,.55);border:1px solid rgba(255,255,255,.7);padding:4px 10px;border-radius:8px}
 .mtok b{color:var(--lg-deep-slate);font-weight:600}
-.mi-hint{font-size:11px;color:var(--lg-text-tertiary);margin:2px 0 10px;line-height:1.8}
+.mi-hint{font-size:11px;color:var(--lg-text-secondary);margin:2px 0 10px;line-height:1.8}
 
 /* 液态玻璃线性图标（替代 Emoji，stroke 继承 currentColor） */
 .ni{width:15px;height:15px;flex:none;stroke:currentColor;fill:none;stroke-width:1.7;
@@ -525,7 +528,7 @@ footer a{color:var(--lg-sem-special);text-decoration:none;font-weight:500}
 .ic-cat{margin-bottom:22px}
 .ic-cat h3{font-size:13px;font-weight:600;color:var(--lg-text-secondary);
   margin:0 2px 10px;display:flex;align-items:center;gap:8px}
-.ic-cat h3 .n{font-size:10px;color:var(--lg-text-tertiary);font-weight:500;
+.ic-cat h3 .n{font-size:10px;color:var(--lg-text-secondary);font-weight:500;
   background:rgba(255,255,255,.55);border:1px solid rgba(255,255,255,.7);
   padding:1px 8px;border-radius:999px}
 .ic-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(118px,1fr));gap:10px}
@@ -538,10 +541,10 @@ footer a{color:var(--lg-sem-special);text-decoration:none;font-weight:500}
 .ig svg{width:24px;height:24px;stroke:currentColor;fill:none;stroke-width:1.7;
   stroke-linecap:round;stroke-linejoin:round;display:block;color:var(--lg-deep-slate)}
 .ig:hover svg{color:var(--lg-sem-special)}
-.ig .ig-id{font-size:10px;color:var(--lg-text-tertiary);font-family:ui-monospace,Menlo,monospace;line-height:1.4;text-align:center}
+.ig .ig-id{font-size:10px;color:var(--lg-text-secondary);font-family:ui-monospace,Menlo,monospace;line-height:1.4;text-align:center}
 .ig .ig-cn{font-size:11px;color:var(--lg-text-secondary)}
 .ig.sem svg{color:var(--lg-sem-risk)}
-.ig-grid-legend{display:flex;gap:18px;flex-wrap:wrap;font-size:11px;color:var(--lg-text-tertiary);margin:2px 2px 14px}
+.ig-grid-legend{display:flex;gap:18px;flex-wrap:wrap;font-size:11px;color:var(--lg-text-secondary);margin:2px 2px 14px}
 .ig-grid-legend i{display:inline-block;width:12px;height:12px;vertical-align:-2px;margin-right:5px;border-radius:3px}
 
 /* ═══ 12 · 妈咪好 GoodMom 品牌换肤（默认主题：蜜桃粉主色 + 淡紫柔光）═══ */
@@ -585,7 +588,7 @@ footer a{color:var(--lg-sem-special);text-decoration:none;font-weight:500}
 }
 
 /* ═══ 组件库全览（03/08/13 扩展展示）═══ */
-.mh{font-size:11px;color:var(--lg-text-tertiary);font-weight:500;margin:-6px 2px 12px}
+.mh{font-size:11px;color:var(--lg-text-secondary);font-weight:500;margin:-6px 2px 12px}
 .prog{display:flex;align-items:center;gap:10px;margin:10px 0}
 .prog .pl{width:88px;font-size:12px;color:var(--lg-text-secondary);flex:none}
 .prog .track{flex:1;height:8px;border-radius:999px;background:rgba(58,52,84,.08);overflow:hidden}
@@ -605,12 +608,12 @@ footer a{color:var(--lg-sem-special);text-decoration:none;font-weight:500}
 .step.cur .st{color:var(--mmh-rose-700,#B23A63);font-weight:600}
 .ringrow{display:flex;gap:26px;align-items:center;flex-wrap:wrap}
 .ringbox{display:flex;flex-direction:column;align-items:center;gap:6px}
-.ringbox .rl{font-size:11px;color:var(--lg-text-tertiary)}
+.ringbox .rl{font-size:11px;color:var(--lg-text-secondary)}
 .ringbox svg{width:86px;height:86px}
 .skelrow{display:flex;flex-direction:column;gap:8px;margin-top:6px}
 .sk{height:12px;border-radius:999px;background:rgba(255,255,255,.55);animation:skpulse 1.6s ease-in-out infinite}   /* 08 · 8.2.15：圆角胶囊 + 规范底色；白描边在白底上等于没有边，去掉 */
 @keyframes skpulse{0%,100%{opacity:1}50%{opacity:.55}}
-.emptybox{display:flex;flex-direction:column;align-items:center;gap:10px;padding:18px 0;color:var(--lg-text-tertiary)}
+.emptybox{display:flex;flex-direction:column;align-items:center;gap:10px;padding:18px 0;color:var(--lg-text-secondary)}
 /* ── 结果页三通道 + 进度条（V2.9 新增演示；数值镜像 theme.css 的 .gm-result / .gm-progress，
    对应 Part 19 · EL-19-03 与 08 · 8.2.5。改这里请同步改组件库，否则演示会与库漂移）── */
 .rst{display:flex;gap:12px;flex-wrap:wrap;align-items:stretch}
@@ -651,7 +654,7 @@ input[type=range].lgs::-webkit-slider-thumb{-webkit-appearance:none;width:20px;h
 .uprow .fi{width:34px;height:34px;border-radius:18px;display:flex;align-items:center;justify-content:center;background:var(--mmh-rose-100,#FFF0F4);color:var(--mmh-rose-700,#B23A63);flex:none}
 .uprow .fn{width:150px;font-size:12px;font-weight:500;color:var(--lg-text-primary);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;flex:none}
 .uprow .prog{flex:1;margin:0}
-.uprow .del{width:26px;height:26px;border-radius:50%;border:none;background:transparent;color:var(--lg-text-tertiary);cursor:pointer;font-size:14px;flex:none}
+.uprow .del{width:26px;height:26px;border-radius:50%;border:none;background:transparent;color:var(--lg-text-secondary);cursor:pointer;font-size:14px;flex:none}
 .uprow .del:hover{color:var(--lg-sem-risk);background:rgba(239,106,123,.10)}
 .banner{display:flex;align-items:flex-start;gap:10px;padding:12px 14px;border-radius:18px;font-size:13px;margin:8px 0;background:rgba(255,255,255,.5);border:1px solid rgba(255,255,255,.75);box-shadow:var(--lg-shadow-xs)}
 .banner svg{width:17px;height:17px;flex:none;margin-top:1px}
@@ -661,7 +664,7 @@ input[type=range].lgs::-webkit-slider-thumb{-webkit-appearance:none;width:20px;h
 .banner.danger svg{color:var(--lg-sem-risk)}
 .banner.info svg{color:var(--lg-sem-info)}
 .descrow{display:grid;grid-template-columns:repeat(3,1fr);gap:10px 18px;margin-top:8px}
-.descrow .it b{display:block;font-size:11px;color:var(--lg-text-tertiary);font-weight:500;margin-bottom:3px}
+.descrow .it b{display:block;font-size:11px;color:var(--lg-text-secondary);font-weight:500;margin-bottom:3px}
 .descrow .it span{font-size:14px;color:var(--lg-text-primary);font-weight:600;font-variant-numeric:tabular-nums}
 /* 折叠：配方在**外壳**（.gm-fold）。旧实现（已删）实测四处不符 11 · 11.2.6：
    ① 没有任何高度过渡（`transition: 0s / all` —— 写着过渡其实没过渡，因为原生
@@ -702,7 +705,7 @@ input[type=range].lgs::-webkit-slider-thumb{-webkit-appearance:none;width:20px;h
   border-radius:18px;color:var(--lg-text-secondary);font-size:11px;font-style:normal}
 .phone .tabmini i.on{background:var(--mmh-grad-action-hc,#F77FA3);color:#343A46;font-weight:600}
 .phone .tabmini i svg{width:15px;height:15px}
-.ph-cap{text-align:center;font-size:11px;color:var(--lg-text-tertiary);margin-top:8px;line-height:1.7}
+.ph-cap{text-align:center;font-size:11px;color:var(--lg-text-secondary);margin-top:8px;line-height:1.7}
 .ph-cap b{color:var(--lg-text-secondary);font-weight:600}
 .mglass{border-radius:18px;background:linear-gradient(160deg,rgba(255,255,255,.6),rgba(255,255,255,.26) 60%,rgba(255,255,255,.38));
   border:1px solid rgba(255,255,255,.75);box-shadow:inset 0 1px 0 rgba(255,255,255,.85),0 6px 14px rgba(58,52,84,.07)}
@@ -710,7 +713,7 @@ input[type=range].lgs::-webkit-slider-thumb{-webkit-appearance:none;width:20px;h
 .mnav svg{width:14px;height:14px;flex:none;stroke:currentColor;fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
 .mnav .mt{flex:1;text-align:center;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .mkpi{padding:10px 11px;display:flex;flex-direction:column;gap:5px}
-.mkpi .l{font-size:9.5px;color:var(--lg-text-tertiary)}
+.mkpi .l{font-size:9.5px;color:var(--lg-text-secondary)}
 .mkpi .v{font-size:26px;font-weight:700;line-height:1;letter-spacing:-.02em;color:var(--mmh-rose-700,#B23A63);font-variant-numeric:tabular-nums}
 .mchiprow{display:flex;gap:6px;flex-wrap:wrap}
 .mchip{font-size:9.5px;padding:4px 10px;border-radius:999px;color:var(--lg-text-2,var(--lg-text-secondary));background:rgba(255,255,255,.55);border:1px solid rgba(255,255,255,.75)}
@@ -718,7 +721,7 @@ input[type=range].lgs::-webkit-slider-thumb{-webkit-appearance:none;width:20px;h
 .mrow2{display:flex;align-items:center;gap:8px;padding:7px 9px;font-size:10px;color:var(--lg-text-secondary)}
 .mrow2 .md2{flex:1;min-width:0}
 .mrow2 .md2 b{display:block;font-size:10.5px;color:var(--lg-text-primary);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.mrow2 .md2 span{font-size:8.5px;color:var(--lg-text-tertiary)}
+.mrow2 .md2 span{font-size:8.5px;color:var(--lg-text-secondary)}
 .mdot{width:7px;height:7px;border-radius:50%;flex:none}
 .mdot.ok{background:#42C7A1;box-shadow:0 0 0 2.5px rgba(66,199,161,.16)}
 .mdot.warn{background:#F2B25C;box-shadow:0 0 0 2.5px rgba(242,178,92,.16)}
@@ -735,7 +738,7 @@ input[type=range].lgs::-webkit-slider-thumb{-webkit-appearance:none;width:20px;h
 .mc:hover{transform:translateY(-2px)}
 .mc b{font-size:12.5px;color:var(--lg-text-primary);display:flex;align-items:center;gap:7px}
 .mc b .n{font-size:9px;color:#FFF;font-weight:600;background:var(--mmh-rose-500,#F77FA3);border-radius:999px;padding:1px 7px}
-.mc span{display:block;font-size:10.5px;color:var(--lg-text-tertiary);margin-top:4px;line-height:1.6}
+.mc span{display:block;font-size:10.5px;color:var(--lg-text-secondary);margin-top:4px;line-height:1.6}
 .go-link{font-size:12px;font-weight:600;color:var(--mmh-rose-700,#B23A63);text-decoration:none;margin-left:auto}
 .go-link:hover{opacity:.8}
 
@@ -776,7 +779,7 @@ input[type=range].lgs::-webkit-slider-thumb{-webkit-appearance:none;width:20px;h
 .bx .ld{animation:spinm .9s linear infinite}
 @keyframes spinm{to{transform:rotate(360deg)}}
 .bxrow{display:flex;flex-wrap:wrap;gap:10px;align-items:center;min-height:38px}
-.bxlab{font-size:11px;color:var(--lg-text-tertiary);font-weight:500;width:120px;flex:none}
+.bxlab{font-size:11px;color:var(--lg-text-secondary);font-weight:500;width:120px;flex:none}
 
 
 /* ═══ 交互补全（07 · 7.8）：焦点环 + 步骤控制器 ═══ */
@@ -792,7 +795,7 @@ input[type=range].lgs::-webkit-slider-thumb{-webkit-appearance:none;width:20px;h
   background:linear-gradient(160deg,rgba(255,255,255,.94),rgba(255,255,255,.78));color:var(--lg-text-primary,#343A46);border:1px solid var(--lg-divider,rgba(58,52,84,.10));box-shadow:0 1px 2px rgba(58,52,84,.06),0 4px 12px rgba(58,52,84,.08);color:var(--lg-text-secondary);transition:transform .15s var(--lg-ease-out),background .2s}
 .stepctl .sbtn:hover{background:#FFF;color:var(--mmh-rose-700,#B23A63)}
 .stepctl .sbtn:active{transform:scale(.95)}
-.stepctl .hint{font-size:11px;color:var(--lg-text-tertiary)}
+.stepctl .hint{font-size:11px;color:var(--lg-text-secondary)}
 
 
 /* ═══ 状态样式库（14/15）═══ */
@@ -801,7 +804,7 @@ input[type=range].lgs::-webkit-slider-thumb{-webkit-appearance:none;width:20px;h
 .sem .c{height:34px;border-radius:18px;margin-bottom:8px;border:1px solid rgba(255,255,255,.6)}
 .sem b{font-size:12.5px;display:flex;align-items:center;gap:6px}
 .sem b i{width:9px;height:9px;border-radius:50%;background:currentColor}
-.sem span{font-size:10px;color:var(--lg-text-tertiary);display:block;margin-top:3px;line-height:1.6}
+.sem span{font-size:10px;color:var(--lg-text-secondary);display:block;margin-top:3px;line-height:1.6}
 .tagc{display:inline-flex;align-items:center;gap:6px;padding:5px 13px;border-radius:999px;font-size:12px;font-weight:500;
   background:rgba(255,255,255,.55);border:1px solid rgba(255,255,255,.8);color:var(--lg-text-secondary)}
 .tagc i{width:7px;height:7px;border-radius:50%;background:currentColor;opacity:.95}
@@ -835,7 +838,7 @@ input[type=range].lgs::-webkit-slider-thumb{-webkit-appearance:none;width:20px;h
   transition:opacity 180ms var(--lg-ease-out),transform 180ms var(--lg-ease-out)}
 .pcwrap.open .pcbub{opacity:1;transform:none;pointer-events:auto}
 .pcwrap .pcbub::after{content:"";position:absolute;top:100%;left:18px;border:6px solid transparent;border-top-color:rgba(255,255,255,.9)}
-.crum{display:flex;gap:8px;align-items:center;font-size:12px;color:var(--lg-text-tertiary);flex-wrap:wrap}
+.crum{display:flex;gap:8px;align-items:center;font-size:12px;color:var(--lg-text-secondary);flex-wrap:wrap}
 .crum b{color:var(--lg-text-primary);font-weight:600}
 .pg{display:flex;gap:6px;align-items:center;flex-wrap:wrap}
 .pgit{width:30px;height:30px;border-radius:18px;display:flex;align-items:center;justify-content:center;font-size:12px;color:var(--lg-text-secondary);
@@ -863,8 +866,8 @@ input[type=range].lgs::-webkit-slider-thumb{-webkit-appearance:none;width:20px;h
 .m5 .hd{display:flex;gap:8px;align-items:center;margin-bottom:6px}
 .m5 .hd i{width:13px;height:13px;border-radius:50%;flex:none}
 .m5 .hd b{font-size:12.5px}
-.m5 p{font-size:10.5px;color:var(--lg-text-tertiary);line-height:1.7;margin:0}
-.m5 .tk{font-size:9.5px;color:var(--lg-text-tertiary);font-family:ui-monospace,Menlo,monospace;display:block;margin-top:6px}
+.m5 p{font-size:10.5px;color:var(--lg-text-secondary);line-height:1.7;margin:0}
+.m5 .tk{font-size:9.5px;color:var(--lg-text-secondary);font-family:ui-monospace,Menlo,monospace;display:block;margin-top:6px}
 .c-y{color:#7A5F0D;background:rgba(242,193,78,.2);border-color:rgba(242,193,78,.35)}
 
 
@@ -894,7 +897,7 @@ input[type=range].lgs::-webkit-slider-thumb{-webkit-appearance:none;width:20px;h
 .stmod.off{display:none}
 .sthead2{display:flex;align-items:center;gap:10px;margin:6px 2px 8px;flex-wrap:wrap}
 .sthead2 b{font-size:13px;color:var(--lg-text-primary)}
-.sthead2 span{font-size:11px;color:var(--lg-text-tertiary)}
+.sthead2 span{font-size:11px;color:var(--lg-text-secondary)}
 .dim{opacity:.16;filter:grayscale(.5);transition:opacity .18s}
 
 
@@ -906,7 +909,7 @@ input[type=range].lgs::-webkit-slider-thumb{-webkit-appearance:none;width:20px;h
 .excard .no{width:34px;height:34px;border-radius:18px;display:flex;align-items:center;justify-content:center;
   font-weight:700;color:#343A46;background:var(--mmh-grad-action-hc,#F77FA3);font-size:15px;box-shadow:0 1px 2px rgba(178,58,99,.22),0 8px 20px rgba(240,127,163,.30)}
 .excard h3{font-size:15.5px;margin-top:2px}
-.excard p{font-size:12px;color:var(--lg-text-tertiary);line-height:1.8;flex:1}
+.excard p{font-size:12px;color:var(--lg-text-secondary);line-height:1.8;flex:1}
 .excard .go{font-size:12px;font-weight:600;color:var(--mmh-rose-700,#B23A63);display:flex;align-items:center;gap:6px}
 .excard .go svg{width:14px;height:14px;stroke:currentColor;fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
 .excard .ends{display:flex;gap:6px;flex-wrap:wrap}
@@ -1065,7 +1068,7 @@ section.block:first-of-type{margin-top:8px}
             <text x="40" y="37" text-anchor="middle" font-size="15" font-weight="600" fill="#343A46" class="num">86%</text>
             <text x="40" y="51" text-anchor="middle" font-size="8" fill="#4F5B6E">随访达标率</text>
           </svg>
-          <span style="font-size:11px;color:var(--lg-text-tertiary)">等级<br><b style="color:var(--lg-sem-positive);font-size:13px">优</b></span>
+          <span style="font-size:11px;color:var(--lg-text-secondary)">等级<br><b style="color:var(--lg-sem-positive);font-size:13px">优</b></span>
         </div>
       </div>
       <div class="demo-card c3 glass-l3">
@@ -1326,7 +1329,7 @@ section.block:first-of-type{margin-top:8px}
         <div class="bxrow"><span class="bxlab">状态 Status</span><button class="bx bx-solid st-success">Success 已完成</button><button class="bx bx-solid st-warning">Warning 提醒补种</button><button class="bx bx-solid st-danger">Danger 停用档案</button><button class="bx bx-outline st-danger">Outline · 删除</button><button class="bx bx-text st-danger">Text · 移除</button></div>
         <div class="bxrow"><span class="bxlab">尺寸 Size</span><button class="bx bx-mini bx-primary">mini</button><button class="bx bx-sm bx-primary">small</button><button class="bx bx-primary">default</button><button class="bx bx-lg bx-primary">large</button></div>
         <div class="bxrow"><span class="bxlab">形状 / 圆形</span><button class="bx bx-primary round bx-md" style="height:40px">胶囊 Round · 立即随访</button><button class="bx bx-primary cr" aria-label="添加记录" title="圆形图标钮"><svg viewBox="0 0 24 24"><path d="M12 5.5v13M5.5 12h13"/></svg></button><button class="bx bx-outline cr" aria-label="更多" title="Outline 圆形"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="1.15" fill="currentColor" stroke="none"/><circle cx="5.5" cy="12" r="1.15" fill="currentColor" stroke="none"/><circle cx="18.5" cy="12" r="1.15" fill="currentColor" stroke="none"/></svg></button></div>
-        <div class="bxrow"><span class="bxlab">按钮组 Group</span><div class="bgroup"><button class="bx on">今日</button><button class="bx">本周</button><button class="bx">本月</button><button class="bx">自定义</button></div><span style="font-size:11px;color:var(--lg-text-tertiary)">组内激活项=蜜桃渐变（同分段语义）</span></div>
+        <div class="bxrow"><span class="bxlab">按钮组 Group</span><div class="bgroup"><button class="bx on">今日</button><button class="bx">本周</button><button class="bx">本月</button><button class="bx">自定义</button></div><span style="font-size:11px;color:var(--lg-text-secondary)">组内激活项=蜜桃渐变（同分段语义）</span></div>
         <div class="bxrow"><span class="bxlab">Loading / 禁用 / 图标</span><button class="bx bx-primary bx-loading"><svg class="ld" viewBox="0 0 24 24"><circle cx="12" cy="12" r="8.5" fill="none" stroke="rgba(255,255,255,.4)" stroke-width="2.4"/><path d="M20.5 12A8.5 8.5 0 0 0 12 3.5" fill="none" stroke="#FFF" stroke-width="2.4" stroke-linecap="round"/></svg>同步中…</button><button class="bx bx-primary disabled">Disabled</button><button class="bx bx-secondary"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 7v5.2l3.4 2"/></svg>记一条记录</button></div>
         <div style="height:12px"></div>
         <button class="bx bx-primary bx-long">长按钮 Long · 保存并预约下次随访</button>
@@ -1382,21 +1385,21 @@ section.block:first-of-type{margin-top:8px}
           <div style="font-size:13px;color:var(--lg-text-secondary);padding:9px 12px;display:flex;gap:8px;align-items:center"><span style="display:inline-flex;align-items:center;gap:8px"><svg class="ni" viewBox="0 0 24 24" aria-hidden="true"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><path d="M8.6 13.5l6.8 4M15.4 6.5l-6.8 4"/></svg>产检计划</span> <span style="margin-left:auto;font-size:10px;background:rgba(154,120,255,.14);color:var(--lg-sem-special);border-radius:999px;padding:1px 8px;font-weight:600">8</span></div>
           <div style="font-size:13px;color:var(--lg-text-secondary);padding:9px 12px;display:flex;gap:8px;align-items:center"><span style="display:inline-flex;align-items:center;gap:8px"><svg class="ni" viewBox="0 0 24 24" aria-hidden="true"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg>胎动记录</span></div>
           <div style="font-size:13px;color:var(--lg-text-secondary);padding:9px 12px;display:flex;gap:8px;align-items:center"><span style="display:inline-flex;align-items:center;gap:8px"><svg class="ni" viewBox="0 0 24 24" aria-hidden="true"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6"/></svg>疫苗计划</span></div>
-          <div style="font-size:11px;color:var(--lg-text-tertiary);padding:14px 12px 4px;letter-spacing:.1em">MAM</div>
+          <div style="font-size:11px;color:var(--lg-text-secondary);padding:14px 12px 4px;letter-spacing:.1em">MAM</div>
           <div style="font-size:13px;color:var(--lg-text-secondary);padding:9px 12px;display:flex;gap:8px;align-items:center"><span style="display:inline-flex;align-items:center;gap:8px"><svg class="ni" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 21v-7M4 10V3M12 21v-9M12 8V3M20 21v-5M20 12V3"/><path d="M1 14h6M9 8h6M17 16h6"/></svg>妈妈设置</span></div>
         </div>
         <div style="display:flex;flex-direction:column;gap:10px">
           <div style="display:flex;align-items:center;gap:10px;padding:10px 14px;border-radius:18px;
             background:linear-gradient(160deg,rgba(255,255,255,.5),rgba(255,255,255,.22));border:1px solid rgba(255,255,255,.65);
             -webkit-backdrop-filter:blur(16px);backdrop-filter:blur(16px);box-shadow:var(--lg-shadow-sm);font-size:13px">
-            <span style="font-weight:600">妇幼档案 / 工作台</span><span style="color:var(--lg-text-tertiary)">儿童保健科 · 云同步</span>
+            <span style="font-weight:600">妇幼档案 / 工作台</span><span style="color:var(--lg-text-secondary)">儿童保健科 · 云同步</span>
             <span style="margin-left:auto;display:flex">
               <div class="seg" id="segNav" style="align-self:center">
                 <span class="seg-it on">日</span><span class="seg-it">周</span><span class="seg-it">月</span>
               </div>
             </span>
           </div>
-          <div style="flex:1;display:flex;align-items:center;justify-content:center;border:1px dashed rgba(58,52,84,.14);border-radius:18px;color:var(--lg-text-tertiary);font-size:12px;min-height:110px">玻璃顶部栏 · 搜索「宝宝 / 孕周 / 疫苗」 · 分段（周 / 月 / 年）—— 医护工作台导航范式</div>
+          <div style="flex:1;display:flex;align-items:center;justify-content:center;border:1px dashed rgba(58,52,84,.14);border-radius:18px;color:var(--lg-text-secondary);font-size:12px;min-height:110px">玻璃顶部栏 · 搜索「宝宝 / 孕周 / 疫苗」 · 分段（周 / 月 / 年）—— 医护工作台导航范式</div>
         </div>
       </div>
     </div>
@@ -1442,7 +1445,7 @@ section.block:first-of-type{margin-top:8px}
               Spin · 细环紫粉 0.9s/圈
             </div>
             <div class="skelrow"><div class="sk" style="width:96%"></div><div class="sk" style="width:70%"></div><div class="sk" style="width:82%"></div></div>
-            <span style="font-size:11px;color:var(--lg-text-tertiary)">Skeleton · 呼吸 1.6s（禁左右扫光）</span>
+            <span style="font-size:11px;color:var(--lg-text-secondary)">Skeleton · 呼吸 1.6s（禁左右扫光）</span>
           </div>
         </div>
         <div style="height:8px"></div>
@@ -1527,7 +1530,7 @@ section.block:first-of-type{margin-top:8px}
           <span class="mini-av" style="width:52px;height:52px;font-size:22px;border-radius:50%">朵</span>
           <div style="flex:1">
             <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap"><b style="font-size:16px">朵朵 · 女</b><span class="badge status"><span class="dot success"></span>生长正常</span><span class="badge" style="font-size:10px;padding:2px 9px;background:var(--mmh-mint-100,#E2F6F0);color:#25715D">疫苗齐全</span></div>
-            <div style="font-size:12px;color:var(--lg-text-tertiary);margin-top:4px">档案 MMB-2024-0318 · 儿童保健科 · 王医生</div>
+            <div style="font-size:12px;color:var(--lg-text-secondary);margin-top:4px">档案 MMB-2024-0318 · 儿童保健科 · 王医生</div>
           </div>
         </div>
         <div class="descrow">
@@ -1573,13 +1576,13 @@ section.block:first-of-type{margin-top:8px}
         <p class="mh">月龄节点时间线：薄荷=完成 · 蜜桃=可接种 · 琥珀=提醒 · 白=待排期</p>
         <div style="display:flex;flex-direction:column;gap:4px">
           <div style="display:flex;gap:12px;align-items:center;padding:9px 4px;border-bottom:1px solid rgba(58,52,84,.07)">
-            <span class="dot success"></span><span class="badge" style="font-size:10px;padding:2px 9px">出生</span><span style="font-size:13px;flex:1">乙肝疫苗 ①</span><span style="font-size:11px;color:var(--lg-text-tertiary)">已接种 · 无异常</span></div>
+            <span class="dot success"></span><span class="badge" style="font-size:10px;padding:2px 9px">出生</span><span style="font-size:13px;flex:1">乙肝疫苗 ①</span><span style="font-size:11px;color:var(--lg-text-secondary)">已接种 · 无异常</span></div>
           <div style="display:flex;gap:12px;align-items:center;padding:9px 4px;border-bottom:1px solid rgba(58,52,84,.07)">
-            <span class="dot success"></span><span class="badge" style="font-size:10px;padding:2px 9px">2 月龄</span><span style="font-size:13px;flex:1">脊灰 ① · 百白破 ①</span><span style="font-size:11px;color:var(--lg-text-tertiary)">已接种</span></div>
+            <span class="dot success"></span><span class="badge" style="font-size:10px;padding:2px 9px">2 月龄</span><span style="font-size:13px;flex:1">脊灰 ① · 百白破 ①</span><span style="font-size:11px;color:var(--lg-text-secondary)">已接种</span></div>
           <div style="display:flex;gap:12px;align-items:center;padding:9px 4px;border-bottom:1px solid rgba(58,52,84,.07)">
             <span class="dot running"></span><span class="badge" style="font-size:10px;padding:2px 9px;color:var(--mmh-rose-700,#B23A63);background:var(--mmh-rose-100,#FFF0F4)">12 月龄</span><span style="font-size:13px;flex:1">麻腮风</span><button class="btn btn-primary btn-sm">预约接种</button></div>
           <div style="display:flex;gap:12px;align-items:center;padding:9px 4px">
-            <span class="dot warning"></span><span class="badge" style="font-size:10px;padding:2px 9px">18 月龄</span><span style="font-size:13px;flex:1">百白破 ④ · 甲肝</span><span style="font-size:11px;color:var(--lg-text-tertiary)">剩余 26 天</span></div>
+            <span class="dot warning"></span><span class="badge" style="font-size:10px;padding:2px 9px">18 月龄</span><span style="font-size:13px;flex:1">百白破 ④ · 甲肝</span><span style="font-size:11px;color:var(--lg-text-secondary)">剩余 26 天</span></div>
         </div>
         <div style="height:6px"></div>
         <div class="badges">
@@ -1597,7 +1600,7 @@ section.block:first-of-type{margin-top:8px}
     <div class="sec-head"><h2>状态样式库 Styles &amp; States</h2><span class="en">六语义筛选 · 12 个模块页签 · 点击任意状态复制标签（14 · 4.4.5 / 15.2）</span></div>
     <div class="panel glass-l2">
       <h3><i></i>六语义筛选（点选仅高亮该类状态）</h3>
-      <div style="display:flex;gap:8px;flex-wrap:wrap;align-items:center"><span class="stsem" data-sem="g" title="正向 · 正常"><i style="background:#25715D"></i>正向 · 正常</span><span class="stsem" data-sem="b" title="信息 · 进行"><i style="background:#3261C1"></i>信息 · 进行</span><span class="stsem" data-sem="o" title="注意 · 待办"><i style="background:#8D5A15"></i>注意 · 待办</span><span class="stsem" data-sem="r" title="风险 · 异常"><i style="background:#B72F42"></i>风险 · 异常</span><span class="stsem" data-sem="n" title="中性 · 未动"><i style="background:#8A92A3"></i>中性 · 未动</span><span class="stsem" data-sem="p" title="特殊 · 协作"><i style="background:#6A48DC"></i>特殊 · 协作</span><span class="stsem" data-sem="y" title="五色 · 管理"><i style="background:#B98D1F"></i>五色 · 管理</span><span style="font-size:11px;color:var(--lg-text-tertiary)">再次点击取消筛选 · 状态永远颜色+文字双通道</span></div>
+      <div style="display:flex;gap:8px;flex-wrap:wrap;align-items:center"><span class="stsem" data-sem="g" title="正向 · 正常"><i style="background:#25715D"></i>正向 · 正常</span><span class="stsem" data-sem="b" title="信息 · 进行"><i style="background:#3261C1"></i>信息 · 进行</span><span class="stsem" data-sem="o" title="注意 · 待办"><i style="background:#8D5A15"></i>注意 · 待办</span><span class="stsem" data-sem="r" title="风险 · 异常"><i style="background:#B72F42"></i>风险 · 异常</span><span class="stsem" data-sem="n" title="中性 · 未动"><i style="background:#8A92A3"></i>中性 · 未动</span><span class="stsem" data-sem="p" title="特殊 · 协作"><i style="background:#6A48DC"></i>特殊 · 协作</span><span class="stsem" data-sem="y" title="五色 · 管理"><i style="background:#B98D1F"></i>五色 · 管理</span><span style="font-size:11px;color:var(--lg-text-secondary)">再次点击取消筛选 · 状态永远颜色+文字双通道</span></div>
     </div>
     <div style="height:16px"></div>
     <div class="panel glass-l2">
@@ -1649,7 +1652,7 @@ section.block:first-of-type{margin-top:8px}
         <div style="height:14px"></div>
         <div class="pg" id="pg1"><span class="pgit on">1</span><span class="pgit">2</span><span class="pgit">3</span><span class="pgit">4</span><span class="pgit gap">…</span><span class="pgit">18</span></div>
         <div style="height:14px"></div>
-        <div class="avts"><span class="avt s">张</span><span class="avt m mint">李</span><span class="avt l purp">王</span><span style="font-size:11px;color:var(--lg-text-tertiary)">头像 · s / m / l</span></div>
+        <div class="avts"><span class="avt s">张</span><span class="avt m mint">李</span><span class="avt l purp">王</span><span style="font-size:11px;color:var(--lg-text-secondary)">头像 · s / m / l</span></div>
         <div style="height:10px"></div>
         <div class="setlab">Selector 单选（风险等级）</div>
         <div style="display:flex;gap:8px;flex-wrap:wrap" id="sel1"><span class="sel">正常</span><span class="sel on">关注</span><span class="sel">高危</span></div>
@@ -1667,12 +1670,12 @@ section.block:first-of-type{margin-top:8px}
       <div class="panel glass-l2">
         <h3><i></i>保健清单（0–6 岁 · 综合儿保）</h3>
         <p class="mh">每项 = H 图标 + 项目名 + 口径说明 + 状态标签（15.2.1/15.5 语义色）</p>
-      <div class="hrow" data-states="正常|异常|待检"><span class="fico"><svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="8.6" cy="6.9" r="2.1"/><path d="M8.6 9.1v3.4"/><path d="M6.9 10.9l1.7.7M10.3 10.9l-1.7.7"/><path d="M8.6 12.5 7.5 15.2M8.6 12.5l1.1 2.7"/><path d="M16.6 5v12"/><path d="M15.2 7.3 16.6 5l1.4 2.3"/><path d="M15.2 14.7 16.6 17l1.4-2.3"/></svg></span><span style="flex:1;min-width:0"><b style="display:block;font-size:13.5px">生长发育</b><span style="font-size:11px;color:var(--lg-text-tertiary)">身高体重测量 · 生长曲线 P3–P97</span></span><span class="tagc c-g fkstate" style="cursor:pointer" title="点击切换状态">正常</span></div>
-      <div class="hrow" data-states="正常|异常|待检"><span class="fico"><svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="11.8" cy="14.6" r="5.4"/><path d="M11.8 9.5c.3-1.9 1.2-3.1 2.9-3.8"/><path d="M14.5 6.1c1.7-.7 3.1-.5 4 .4"/></svg></span><span style="flex:1;min-width:0"><b style="display:block;font-size:13.5px">营养喂养</b><span style="font-size:11px;color:var(--lg-text-tertiary)">营养评估 · 喂养指导</span></span><span class="tagc c-g fkstate" style="cursor:pointer" title="点击切换状态">正常</span></div>
-      <div class="hrow" data-states="正常|异常|待检"><span class="fico"><svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12.2" r="6.4"/><circle cx="9.8" cy="11" r=".95" fill="currentColor" stroke="none"/><circle cx="14.2" cy="11" r=".95" fill="currentColor" stroke="none"/><path d="M9.5 14.3c1.5 1.2 3.5 1.2 5 0"/><path d="M18.6 4.8l.8 2 2 .8-2 .8-.8 2-.8-2-2-.8 2-.8z"/><path d="M4.8 5.6l.6 1.5 1.5.6-1.5.6-.6 1.5-.6-1.5-1.5-.6 1.5-.6z"/></svg></span><span style="flex:1;min-width:0"><b style="display:block;font-size:13.5px">心理行为发育</b><span style="font-size:11px;color:var(--lg-text-tertiary)">发育筛查 · 心理行为评估</span></span><span class="tagc c-n fkstate" style="cursor:pointer" title="点击切换状态">待检</span></div>
-      <div class="hrow" data-states="正常|异常|待检"><span class="fico"><svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M3.6 13.2s3-6.2 8.4-6.2 8.4 6.2 8.4 6.2-3 6.2-8.4 6.2S3.6 13.2 3.6 13.2z"/><circle cx="12" cy="13.2" r="3.1"/><path d="M15.8 3.8h4.6M15.8 3.8V8.4M15.8 5.3h3.2M15.8 6.9h4.6"/></svg></span><span style="flex:1;min-width:0"><b style="display:block;font-size:13.5px">视力保健</b><span style="font-size:11px;color:var(--lg-text-tertiary)">眼保健 · 视力筛查</span></span><span class="tagc c-r fkstate" style="cursor:pointer" title="点击切换状态">异常</span></div>
-      <div class="hrow" data-states="正常|异常|待检"><span class="fico"><svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M4.4 12.8a7.6 7.6 0 0 1 15.2 0"/><rect x="2.2" y="11.8" width="4.2" height="6" rx="1.9"/><rect x="17.6" y="11.8" width="4.2" height="6" rx="1.9"/><path d="M8.6 8.2a3.4 3.4 0 0 1 6.8 0"/></svg></span><span style="flex:1;min-width:0"><b style="display:block;font-size:13.5px">听力保健</b><span style="font-size:11px;color:var(--lg-text-tertiary)">听力筛查 · 耳保健</span></span><span class="tagc c-g fkstate" style="cursor:pointer" title="点击切换状态">正常</span></div>
-      <div class="hrow" data-states="正常|异常|待检"><span class="fico"><svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M17.2 4.6c-1.6 0-2.6.8-3.5 1.8a3 3 0 0 1-3.4 0C9.4 5.4 8.4 4.6 6.8 4.6c-2.1 0-3.7 1.7-3.7 3.8 0 1.6.7 2.8 1.7 3.8 1.3 1.5 2.3 3.2 2.5 5.3.1 1.3.9 2.1 1.9 2.1.9 0 1.3-.6 1.6-1.6.5-1.2.9-2.5 1.9-2.5 1 0 1.5 1.2 2 2.4.3 1 .7 1.7 1.6 1.7 1 0 1.8-.8 1.9-2.1.2-2 1-3.7 2.3-5.1 1-1.1 1.7-2.4 1.7-3.9 0-2.1-1.6-3.9-3.7-3.9z"/></svg></span><span style="flex:1;min-width:0"><b style="display:block;font-size:13.5px">口腔保健</b><span style="font-size:11px;color:var(--lg-text-tertiary)">口腔检查 · 龋齿防治（涂氟）</span></span><span class="tagc c-n fkstate" style="cursor:pointer" title="点击切换状态">待检</span></div>
+      <div class="hrow" data-states="正常|异常|待检"><span class="fico"><svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="8.6" cy="6.9" r="2.1"/><path d="M8.6 9.1v3.4"/><path d="M6.9 10.9l1.7.7M10.3 10.9l-1.7.7"/><path d="M8.6 12.5 7.5 15.2M8.6 12.5l1.1 2.7"/><path d="M16.6 5v12"/><path d="M15.2 7.3 16.6 5l1.4 2.3"/><path d="M15.2 14.7 16.6 17l1.4-2.3"/></svg></span><span style="flex:1;min-width:0"><b style="display:block;font-size:13.5px">生长发育</b><span style="font-size:11px;color:var(--lg-text-secondary)">身高体重测量 · 生长曲线 P3–P97</span></span><span class="tagc c-g fkstate" style="cursor:pointer" title="点击切换状态">正常</span></div>
+      <div class="hrow" data-states="正常|异常|待检"><span class="fico"><svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="11.8" cy="14.6" r="5.4"/><path d="M11.8 9.5c.3-1.9 1.2-3.1 2.9-3.8"/><path d="M14.5 6.1c1.7-.7 3.1-.5 4 .4"/></svg></span><span style="flex:1;min-width:0"><b style="display:block;font-size:13.5px">营养喂养</b><span style="font-size:11px;color:var(--lg-text-secondary)">营养评估 · 喂养指导</span></span><span class="tagc c-g fkstate" style="cursor:pointer" title="点击切换状态">正常</span></div>
+      <div class="hrow" data-states="正常|异常|待检"><span class="fico"><svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12.2" r="6.4"/><circle cx="9.8" cy="11" r=".95" fill="currentColor" stroke="none"/><circle cx="14.2" cy="11" r=".95" fill="currentColor" stroke="none"/><path d="M9.5 14.3c1.5 1.2 3.5 1.2 5 0"/><path d="M18.6 4.8l.8 2 2 .8-2 .8-.8 2-.8-2-2-.8 2-.8z"/><path d="M4.8 5.6l.6 1.5 1.5.6-1.5.6-.6 1.5-.6-1.5-1.5-.6 1.5-.6z"/></svg></span><span style="flex:1;min-width:0"><b style="display:block;font-size:13.5px">心理行为发育</b><span style="font-size:11px;color:var(--lg-text-secondary)">发育筛查 · 心理行为评估</span></span><span class="tagc c-n fkstate" style="cursor:pointer" title="点击切换状态">待检</span></div>
+      <div class="hrow" data-states="正常|异常|待检"><span class="fico"><svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M3.6 13.2s3-6.2 8.4-6.2 8.4 6.2 8.4 6.2-3 6.2-8.4 6.2S3.6 13.2 3.6 13.2z"/><circle cx="12" cy="13.2" r="3.1"/><path d="M15.8 3.8h4.6M15.8 3.8V8.4M15.8 5.3h3.2M15.8 6.9h4.6"/></svg></span><span style="flex:1;min-width:0"><b style="display:block;font-size:13.5px">视力保健</b><span style="font-size:11px;color:var(--lg-text-secondary)">眼保健 · 视力筛查</span></span><span class="tagc c-r fkstate" style="cursor:pointer" title="点击切换状态">异常</span></div>
+      <div class="hrow" data-states="正常|异常|待检"><span class="fico"><svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M4.4 12.8a7.6 7.6 0 0 1 15.2 0"/><rect x="2.2" y="11.8" width="4.2" height="6" rx="1.9"/><rect x="17.6" y="11.8" width="4.2" height="6" rx="1.9"/><path d="M8.6 8.2a3.4 3.4 0 0 1 6.8 0"/></svg></span><span style="flex:1;min-width:0"><b style="display:block;font-size:13.5px">听力保健</b><span style="font-size:11px;color:var(--lg-text-secondary)">听力筛查 · 耳保健</span></span><span class="tagc c-g fkstate" style="cursor:pointer" title="点击切换状态">正常</span></div>
+      <div class="hrow" data-states="正常|异常|待检"><span class="fico"><svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M17.2 4.6c-1.6 0-2.6.8-3.5 1.8a3 3 0 0 1-3.4 0C9.4 5.4 8.4 4.6 6.8 4.6c-2.1 0-3.7 1.7-3.7 3.8 0 1.6.7 2.8 1.7 3.8 1.3 1.5 2.3 3.2 2.5 5.3.1 1.3.9 2.1 1.9 2.1.9 0 1.3-.6 1.6-1.6.5-1.2.9-2.5 1.9-2.5 1 0 1.5 1.2 2 2.4.3 1 .7 1.7 1.6 1.7 1 0 1.8-.8 1.9-2.1.2-2 1-3.7 2.3-5.1 1-1.1 1.7-2.4 1.7-3.9 0-2.1-1.6-3.9-3.7-3.9z"/></svg></span><span style="flex:1;min-width:0"><b style="display:block;font-size:13.5px">口腔保健</b><span style="font-size:11px;color:var(--lg-text-secondary)">口腔检查 · 龋齿防治（涂氟）</span></span><span class="tagc c-n fkstate" style="cursor:pointer" title="点击切换状态">待检</span></div>
         <p class="note">状态：<span class="dot success"></span>正常=薄荷 · <span class="dot danger"></span>异常=珊瑚 · <span class="dot neutral" style="background:var(--lg-sem-neutral)"></span>待检=中性灰；颜色+文字双通道（14）。</p>
       </div>
       <div class="panel glass-l2">
@@ -1741,7 +1744,7 @@ section.block:first-of-type{margin-top:8px}
     <div class="panel glass-l2">
       <div style="display:flex;align-items:center;flex-wrap:wrap;gap:8px;margin-bottom:12px">
         <h3 style="margin:0"><i></i>移动控件平铺清单</h3>
-        <span class="ph-cap" style="margin:0;color:var(--lg-text-tertiary)">14 项移动端独有/变体组件，细则见 10/11 章</span>
+        <span class="ph-cap" style="margin:0;color:var(--lg-text-secondary)">14 项移动端独有/变体组件，细则见 10/11 章</span>
       </div>
       <div class="mcgrid">          <div class="mc"><b>NavBar</b><span>10.3.1 · 返回/标题/操作，滚动显现</span></div>
           <div class="mc"><b>TabBar</b><span>10.3.2 · 底部玻璃胶囊 + 激活紫粉渐变</span></div>
@@ -1765,14 +1768,14 @@ section.block:first-of-type{margin-top:8px}
     <div class="sec-head"><h2>数据可视化 · 模块化图库</h2><span class="en">8 大图表模块 · 数据最亮 · 无伪 3D · 无霓虹 · 数据色序见 04/12.3（妇幼指标示例）</span></div>
     <div class="grid g2">
       <div class="panel glass-l2 cchart">
-        <h3 style="margin-bottom:2px">KPI · 指标卡</h3><span class="ph-cap" style="margin:0 0 6px;color:var(--lg-text-tertiary)">模块 1 · 数值聚焦 · 04 · 4.3.1</span><div style="display:flex;gap:12px;flex-wrap:wrap">
+        <h3 style="margin-bottom:2px">KPI · 指标卡</h3><span class="ph-cap" style="margin:0 0 6px;color:var(--lg-text-secondary)">模块 1 · 数值聚焦 · 04 · 4.3.1</span><div style="display:flex;gap:12px;flex-wrap:wrap">
 <div class="kpi glass-l2" style="flex:1;min-width:130px"><div class="k-lab" style="font-size:12px">管理对象</div><div class="k-val num" style="font-size:26px;color:var(--mmh-rose-700,#B23A63)">12,849</div><div class="k-delta" style="font-size:11px;margin-top:2px"><span class="up" style="color:var(--lg-sem-positive)">↑320 本月</span></div></div>
 <div class="kpi glass-l2" style="flex:1;min-width:130px"><div class="k-lab" style="font-size:12px">筛查完成率</div><div class="k-val num" style="font-size:26px;color:var(--lg-sem-positive,#25715D)">82%</div><div class="k-delta" style="font-size:11px;margin-top:2px"><span class="up" style="color:var(--lg-sem-positive)">达标</span></div></div>
-<div class="kpi glass-l2" style="flex:1;min-width:130px"><div class="k-lab" style="font-size:12px">高危随访闭环</div><div class="k-val num" style="font-size:26px;color:var(--lg-sem-attention)">68%</div><div class="k-delta" style="font-size:11px;margin-top:2px"><span style="color:var(--lg-text-tertiary)">待跟进 23</span></div></div>
+<div class="kpi glass-l2" style="flex:1;min-width:130px"><div class="k-lab" style="font-size:12px">高危随访闭环</div><div class="k-val num" style="font-size:26px;color:var(--lg-sem-attention)">68%</div><div class="k-delta" style="font-size:11px;margin-top:2px"><span style="color:var(--lg-text-secondary)">待跟进 23</span></div></div>
 </div><p class="note" style="margin-top:6px">大数字 tabular-nums + 单位/口径 caption 并列；状态语义色。</p>
       </div>
       <div class="panel glass-l2 cchart">
-        <h3 style="margin-bottom:2px">趋势 · 折线/面积</h3><span class="ph-cap" style="margin:0 0 6px;color:var(--lg-text-tertiary)">模块 2 · 主序列蜜桃粉 · 04 · 4.3.2</span><svg width="100%" height="84" viewBox="0 0 300 84" preserveAspectRatio="none">
+        <h3 style="margin-bottom:2px">趋势 · 折线/面积</h3><span class="ph-cap" style="margin:0 0 6px;color:var(--lg-text-secondary)">模块 2 · 主序列蜜桃粉 · 04 · 4.3.2</span><svg width="100%" height="84" viewBox="0 0 300 84" preserveAspectRatio="none">
 <defs><linearGradient id="ch2" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#F77FA3" stop-opacity=".3"/><stop offset="1" stop-color="#F77FA3" stop-opacity="0"/></linearGradient></defs>
 <path d="M0,62 L25,56 L50,58 L75,48 L100,50 L125,40 L150,42 L175,32 L200,34 L225,24 L250,26 L275,17 L300,18 L300,84 L0,84 Z" fill="url(#ch2)"/>
 <path d="M0,62 L25,56 L50,58 L75,48 L100,50 L125,40 L150,42 L175,32 L200,34 L225,24 L250,26 L275,17 L300,18" fill="none" stroke="#F77FA3" stroke-width="2.4" stroke-linecap="round"/>
@@ -1780,14 +1783,14 @@ section.block:first-of-type{margin-top:8px}
 </svg><p class="note" style="margin-top:6px">随访完成趋势（实线）· 目标/预测（淡紫虚线）· 网格 6% 退后。</p>
       </div>
       <div class="panel glass-l2 cchart">
-        <h3 style="margin-bottom:2px">比较 · 柱/条形</h3><span class="ph-cap" style="margin:0 0 6px;color:var(--lg-text-tertiary)">模块 3 · 顶部圆角 · 04 · 4.3.3</span><div style="display:flex;flex-direction:column;gap:7px">
+        <h3 style="margin-bottom:2px">比较 · 柱/条形</h3><span class="ph-cap" style="margin:0 0 6px;color:var(--lg-text-secondary)">模块 3 · 顶部圆角 · 04 · 4.3.3</span><div style="display:flex;flex-direction:column;gap:7px">
 <div style="display:flex;justify-content:space-between;font-size:11px;margin-bottom:1px"><span style="color:var(--lg-text-secondary)">儿童保健随访</span><b class="num" style="color:var(--mmh-rose-700,#B23A63)">412</b></div><div class="prog" style="margin:0"><div class="track"><div class="pf" style="width:82%;background:linear-gradient(90deg,#FFA3BE,#E85D8F)"></div></div></div>
 <div style="display:flex;justify-content:space-between;font-size:11px;margin-bottom:1px"><span style="color:var(--lg-text-secondary)">两癌筛查</span><b class="num" style="color:var(--lg-sem-attention,#8D5A15)">356</b></div><div class="prog" style="margin:0"><div class="track"><div class="pf" style="width:71%;background:linear-gradient(90deg,#FFDCC7,#F6A97E)"></div></div></div>
 <div style="display:flex;justify-content:space-between;font-size:11px;margin-bottom:1px"><span style="color:var(--lg-text-secondary)">孕产妇管理</span><b class="num" style="color:var(--lg-sem-special)">288</b></div><div class="prog" style="margin:0"><div class="track"><div class="pf" style="width:58%;background:linear-gradient(90deg,#B9A0FF,#9A78FF)"></div></div></div>
 </div><p class="note" style="margin-top:6px">横向条便于读数；数值在条右；堆叠 ≤3。</p>
       </div>
       <div class="panel glass-l2 cchart">
-        <h3 style="margin-bottom:2px">构成 · 环形图</h3><span class="ph-cap" style="margin:0 0 6px;color:var(--lg-text-tertiary)">模块 4 · 主段粉起 · 04 · 4.3.4</span><div style="display:flex;gap:12px;align-items:center">
+        <h3 style="margin-bottom:2px">构成 · 环形图</h3><span class="ph-cap" style="margin:0 0 6px;color:var(--lg-text-secondary)">模块 4 · 主段粉起 · 04 · 4.3.4</span><div style="display:flex;gap:12px;align-items:center">
 <svg width="104" height="104" viewBox="0 0 80 80"><circle cx="40" cy="40" r="29" fill="none" stroke="rgba(58,52,84,.08)" stroke-width="13"/><circle id="dseg0" cx="40" cy="40" r="29" fill="none" stroke="#F77FA3" stroke-width="13" stroke-dasharray="92 182" transform="rotate(-90 40 40)"/><circle id="dseg1" cx="40" cy="40" r="29" fill="none" stroke="#FFC3A0" stroke-width="13" stroke-dasharray="60 182" stroke-dashoffset="-98" transform="rotate(-90 40 40)"/><circle id="dseg2" cx="40" cy="40" r="29" fill="none" stroke="#B69AFF" stroke-width="13" stroke-dasharray="45 182" stroke-dashoffset="-164" transform="rotate(-90 40 40)"/><circle id="dseg3" cx="40" cy="40" r="29" fill="none" stroke="#A9E3D4" stroke-width="13" stroke-dasharray="32 182" stroke-dashoffset="-215" transform="rotate(-90 40 40)"/><text id="dzP" x="40" y="36" text-anchor="middle" font-size="14" font-weight="600" fill="#343A46" class="num">45%</text><text id="dzL" x="40" y="49" text-anchor="middle" font-size="7" fill="#4F5B6E">孕期</text></svg>
 <div style="font-size:11px;color:var(--lg-text-secondary);line-height:2"><div class="dpick" data-idx="0" style="cursor:pointer"><i style="display:inline-block;width:9px;height:9px;border-radius:3px;background:#F77FA3;margin-right:5px"></i>孕期 45%</div><div class="dpick" data-idx="1" style="cursor:pointer"><i style="display:inline-block;width:9px;height:9px;border-radius:3px;background:#FFC3A0;margin-right:5px"></i>婴儿 29%</div><div class="dpick" data-idx="2" style="cursor:pointer"><i style="display:inline-block;width:9px;height:9px;border-radius:3px;background:#B69AFF;margin-right:5px"></i>幼儿 22%</div><div class="dpick" data-idx="3" style="cursor:pointer"><i style="display:inline-block;width:9px;height:9px;border-radius:3px;background:#A9E3D4;margin-right:5px"></i>学龄前 16%</div></div></div><p class="note" style="margin-top:6px">档案阶段构成（示例占比）· 段 ≤5，其余并“其他”。</p>
       </div>
@@ -1796,13 +1799,13 @@ section.block:first-of-type{margin-top:8px}
     <div class="grid g2">
       <div class="panel glass-l2 cchart">
         <h3 style="margin-bottom:2px">分布 · 雷达（健康维度）</h3>
-        <span class="ph-cap" style="margin:0 0 6px;color:var(--lg-text-tertiary)">模块 5 · 六维健康评估 · 参考带 0.33/0.66 · 04 · 4.3.5</span>
+        <span class="ph-cap" style="margin:0 0 6px;color:var(--lg-text-secondary)">模块 5 · 六维健康评估 · 参考带 0.33/0.66 · 04 · 4.3.5</span>
         <div style="display:flex;gap:6px;flex-wrap:wrap;align-items:center;margin-bottom:8px">
           <span class="chip on" data-rad="good" style="padding:4px 12px;font-size:11px">全部正常</span>
           <span class="chip" data-rad="focus" style="padding:4px 12px;font-size:11px">视力待复查</span>
           <span class="chip" data-rad="oral" style="padding:4px 12px;font-size:11px">口腔待检</span>
           <span class="chip" data-rad="risk" style="padding:4px 12px;font-size:11px">高危示例</span>
-          <span id="radState" style="font-size:11px;color:var(--lg-text-tertiary)">点击预设切换形态</span>
+          <span id="radState" style="font-size:11px;color:var(--lg-text-secondary)">点击预设切换形态</span>
         </div>
         <div style="display:flex;gap:16px;align-items:center;flex-wrap:wrap">
           <svg width="230" height="150" viewBox="0 0 200 140" style="flex:none;display:block">
@@ -1832,7 +1835,7 @@ section.block:first-of-type{margin-top:8px}
         <p class="note" style="margin-top:8px">六维=生长/营养/心理/视力/听力/口腔：维度低于 0.5 自动转珊瑚提示；右侧为最近评估快照，预设仅演示形态。</p>
       </div>
       <div class="panel glass-l2 cchart">
-        <h3 style="margin-bottom:2px">关系 · 拓扑</h3><span class="ph-cap" style="margin:0 0 6px;color:var(--lg-text-tertiary)">模块 6 · 玻璃节点 · 活动线≤2 · 04 · 4.3.7</span><div style="display:flex;align-items:center;justify-content:center;gap:12px;padding:6px 0">
+        <h3 style="margin-bottom:2px">关系 · 拓扑</h3><span class="ph-cap" style="margin:0 0 6px;color:var(--lg-text-secondary)">模块 6 · 玻璃节点 · 活动线≤2 · 04 · 4.3.7</span><div style="display:flex;align-items:center;justify-content:center;gap:12px;padding:6px 0">
 <span class="t-node"><span class="core" style="font-size:13px">妈</span></span>
 <span class="t-link"></span>
 <span class="t-node center"><span class="core" style="font-size:12px">宝</span></span>
@@ -1842,14 +1845,14 @@ section.block:first-of-type{margin-top:8px}
 </div><p class="note" style="margin-top:6px">家庭-医护-档案关系（示意）；数据流白芯+紫光点。</p>
       </div>
       <div class="panel glass-l2 cchart">
-        <h3 style="margin-bottom:2px">流程 · 筛查→结案</h3><span class="ph-cap" style="margin:0 0 6px;color:var(--lg-text-tertiary)">模块 7 · 状态链 · 15.2.2/5</span><div style="display:flex;align-items:center;gap:4px;flex-wrap:wrap;font-size:10.5px">
-<span class="tg g">待筛查</span><span style="color:var(--lg-text-tertiary)">→</span><span class="tg b">筛查中</span><span style="color:var(--lg-text-tertiary)">→</span><span class="tg r">检查异常</span><span style="color:var(--lg-text-tertiary)">→</span><span class="tg o">待复查</span><span style="color:var(--lg-text-tertiary)">→</span><span class="tg p">已转诊</span><span style="color:var(--lg-text-tertiary)">→</span><span class="tg g">已结案</span>
+        <h3 style="margin-bottom:2px">流程 · 筛查→结案</h3><span class="ph-cap" style="margin:0 0 6px;color:var(--lg-text-secondary)">模块 7 · 状态链 · 15.2.2/5</span><div style="display:flex;align-items:center;gap:4px;flex-wrap:wrap;font-size:10.5px">
+<span class="tg g">待筛查</span><span style="color:var(--lg-text-secondary)">→</span><span class="tg b">筛查中</span><span style="color:var(--lg-text-secondary)">→</span><span class="tg r">检查异常</span><span style="color:var(--lg-text-secondary)">→</span><span class="tg o">待复查</span><span style="color:var(--lg-text-secondary)">→</span><span class="tg p">已转诊</span><span style="color:var(--lg-text-secondary)">→</span><span class="tg g">已结案</span>
 </div><p class="note" style="margin-top:6px">两癌/随访链路：步骤条+状态 Tag 双通道；异常可分支转诊。</p>
       </div>
       <div class="panel glass-l2 cchart">
-        <h3 style="margin-bottom:2px">进度 · 环形水位</h3><span class="ph-cap" style="margin:0 0 6px;color:var(--lg-text-tertiary)">模块 8 · 08 · 8.2.5 / 13</span><div style="display:flex;gap:14px;flex-wrap:wrap">
-<div style="display:flex;flex-direction:column;align-items:center"><svg width="64" height="64" viewBox="0 0 80 80"><circle cx="40" cy="40" r="31" fill="none" stroke="rgba(58,52,84,.08)" stroke-width="9"/><circle cx="40" cy="40" r="31" fill="none" stroke="#4FB59C" stroke-width="9" stroke-linecap="round" stroke-dasharray="175 195" transform="rotate(-90 40 40)"/><text x="40" y="36" text-anchor="middle" font-size="12" font-weight="600" fill="#25715D" class="num">96%</text><text x="40" y="49" text-anchor="middle" font-size="6.5" fill="#4F5B6E">疫苗全程</text></svg><span style="font-size:10px;color:var(--lg-text-tertiary)">薄荷·正向</span></div>
-<div style="display:flex;flex-direction:column;align-items:center"><svg width="64" height="64" viewBox="0 0 80 80"><circle cx="40" cy="40" r="31" fill="none" stroke="rgba(58,52,84,.08)" stroke-width="9"/><circle cx="40" cy="40" r="31" fill="none" stroke="#EFAF55" stroke-width="9" stroke-linecap="round" stroke-dasharray="123 195" transform="rotate(-90 40 40)"/><text x="40" y="36" text-anchor="middle" font-size="12" font-weight="600" fill="#8D5A15" class="num">68%</text><text x="40" y="49" text-anchor="middle" font-size="6.5" fill="#4F5B6E">高危闭环</text></svg><span style="font-size:10px;color:var(--lg-text-tertiary)">琥珀·注意</span></div>
+        <h3 style="margin-bottom:2px">进度 · 环形水位</h3><span class="ph-cap" style="margin:0 0 6px;color:var(--lg-text-secondary)">模块 8 · 08 · 8.2.5 / 13</span><div style="display:flex;gap:14px;flex-wrap:wrap">
+<div style="display:flex;flex-direction:column;align-items:center"><svg width="64" height="64" viewBox="0 0 80 80"><circle cx="40" cy="40" r="31" fill="none" stroke="rgba(58,52,84,.08)" stroke-width="9"/><circle cx="40" cy="40" r="31" fill="none" stroke="#4FB59C" stroke-width="9" stroke-linecap="round" stroke-dasharray="175 195" transform="rotate(-90 40 40)"/><text x="40" y="36" text-anchor="middle" font-size="12" font-weight="600" fill="#25715D" class="num">96%</text><text x="40" y="49" text-anchor="middle" font-size="6.5" fill="#4F5B6E">疫苗全程</text></svg><span style="font-size:10px;color:var(--lg-text-secondary)">薄荷·正向</span></div>
+<div style="display:flex;flex-direction:column;align-items:center"><svg width="64" height="64" viewBox="0 0 80 80"><circle cx="40" cy="40" r="31" fill="none" stroke="rgba(58,52,84,.08)" stroke-width="9"/><circle cx="40" cy="40" r="31" fill="none" stroke="#EFAF55" stroke-width="9" stroke-linecap="round" stroke-dasharray="123 195" transform="rotate(-90 40 40)"/><text x="40" y="36" text-anchor="middle" font-size="12" font-weight="600" fill="#8D5A15" class="num">68%</text><text x="40" y="49" text-anchor="middle" font-size="6.5" fill="#4F5B6E">高危闭环</text></svg><span style="font-size:10px;color:var(--lg-text-secondary)">琥珀·注意</span></div>
 </div><p class="note" style="margin-top:6px">进度=状态语义色（薄荷正向/琥珀待跟进），非装饰。</p>
       </div>
     </div>
@@ -2066,7 +2069,7 @@ section.block:first-of-type{margin-top:8px}
       <a class="excard glass-l2" href="preview/patterns.html"><span style="display:flex;align-items:center;gap:10px"><span class="no">7</span><h3 style="margin:0">新增能力示例（V2.5）</h3></span><p>Link 链接全态 · Cascader 级联三形态 · 响应式适配容器（拖动容器宽度实测切换）· 1284 条虚拟长列表 · 暗黑模式 · 边框宽度档</p><span class="ends"><i>P</i><i>C</i><i>+</i><i>M</i></span><span class="go">打开示例 <svg viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span></a>
       <a class="btn btn-primary btn-md" href="preview/examples.html">打开示例中心（按顺序浏览 1→6）· <a href="preview/patterns.html" style="color:inherit;text-decoration:underline">新增能力示例（7）</a>
         <svg viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
-      <span style="font-size:12px;color:var(--lg-text-tertiary)">页面模板口径见 11.3 / 13 / 15.4；状态与五色见 15.2 / 02.10；iPad 分层见 10.1.1。</span>
+      <span style="font-size:12px;color:var(--lg-text-secondary)">页面模板口径见 11.3 / 13 / 15.4；状态与五色见 15.2 / 02.10；iPad 分层见 10.1.1。</span>
     </div>
   </section>
 
@@ -2076,7 +2079,7 @@ section.block:first-of-type{margin-top:8px}
     <div class="panel glass-l2 copybox">
       <div>
         <h3 style="margin-bottom:6px"><i></i>CSS Variables :root</h3>
-        <p style="font-size:12px;color:var(--lg-text-tertiary)">点击复制后粘贴到项目 <code style="background:rgba(255,255,255,.6);padding:2px 6px;border-radius:6px">:root</code>，并给玻璃件加 <code style="background:rgba(255,255,255,.6);padding:2px 6px;border-radius:6px">backdrop-filter</code>（记得 <code style="background:rgba(255,255,255,.6);padding:2px 6px;border-radius:6px">-webkit-</code> 前缀）。</p>
+        <p style="font-size:12px;color:var(--lg-text-secondary)">点击复制后粘贴到项目 <code style="background:rgba(255,255,255,.6);padding:2px 6px;border-radius:6px">:root</code>，并给玻璃件加 <code style="background:rgba(255,255,255,.6);padding:2px 6px;border-radius:6px">backdrop-filter</code>（记得 <code style="background:rgba(255,255,255,.6);padding:2px 6px;border-radius:6px">-webkit-</code> 前缀）。</p>
       </div>
       <button class="btn btn-primary btn-md" id="copyBtn">复制全部 Token
         <svg viewBox="0 0 24 24"><rect x="9" y="9" width="12" height="12" rx="3"/><path d="M5 15V6a2 2 0 0 1 2-2h9"/></svg></button>

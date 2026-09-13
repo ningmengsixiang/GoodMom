@@ -1254,6 +1254,62 @@ __MODULES__
 })();
 
 /* ══════════════════════════════════════════════════════════════════════════
+   10 · 10.11.2 / 11 · 11.2.16 虚拟长列表 —— window.gmVirtualList(el, cfg)
+   为什么放外壳：窗口化算法原先只存在于「交互范式」模块里，移动端要接同一套能力
+   （11.2.16 的组合顺序：PullRefresh → Sticky → VirtualList → SwipeAction → LoadMore）
+   就得再抄一遍。抄第二遍的那天就是两份算法开始漂移的那天，故提到外壳做成唯一实现，
+   两个模块以配置取用（行类名/行高/渲染函数都由调用方给，DOM 由本函数统一产出）。
+   配置：{ total, rowHeight, overscan, innerClass, rowClass, render(i), onRange(a,b),
+           onEndReached(), endThreshold(px) }
+   ══════════════════════════════════════════════════════════════════════════ */
+window.gmVirtualList = function(vp, cfg){
+  if(!vp) return null;
+  var H = cfg.rowHeight || 52, OS = cfg.overscan == null ? 4 : cfg.overscan, N = cfg.total || 0;
+  var inner = vp.querySelector('.' + (cfg.innerClass || 'vl-in'));
+  if(!inner) return null;
+  var rowCls = cfg.rowClass || 'vl-it';
+  inner.style.height = (N * H) + 'px';
+  var lastA = -1, lastB = -1, lastEnd = -1, endFired = 0;
+  function render(){
+    var top = vp.scrollTop, h = vp.clientHeight || 260;
+    var a = Math.max(0, Math.floor(top / H) - OS);
+    var b = Math.min(N, Math.ceil((top + h) / H) + OS);
+    if(a === lastA && b === lastB) return;
+    lastA = a; lastB = b;
+    var html = '';
+    for(var i = a; i < b; i++){
+      html += '<div class="' + rowCls + '" role="listitem" aria-posinset="' + (i + 1) + '"'
+            + ' aria-setsize="' + N + '" style="height:' + H + 'px;position:absolute;left:0;right:0;top:' + (i * H) + 'px">'
+            + cfg.render(i) + '</div>';
+    }
+    inner.innerHTML = html;
+    if(cfg.onRange) cfg.onRange(a, b);
+    /* 距底 endThreshold px 触发一次（默认 4 行，11.2.16 的「距底 4 项触发一次」） */
+    var th = cfg.endThreshold == null ? 4 * H : cfg.endThreshold;
+    if(cfg.onEndReached && N * H - (top + h) <= th){
+      if(lastEnd !== a){ lastEnd = a; endFired++; cfg.onEndReached(endFired); }
+    } else { lastEnd = -1; }
+  }
+  vp.addEventListener('scroll', render, { passive: true });
+  window.addEventListener('resize', render, { passive: true });
+  /* 键盘：翻屏与首尾（11.2.16 明确要求 PageUp/PageDown/Home/End） */
+  vp.addEventListener('keydown', function(e){
+    var h = vp.clientHeight || 260;
+    if(e.key === 'PageDown'){ vp.scrollTop += h; e.preventDefault(); }
+    else if(e.key === 'PageUp'){ vp.scrollTop -= h; e.preventDefault(); }
+    else if(e.key === 'Home'){ vp.scrollTop = 0; e.preventDefault(); }
+    else if(e.key === 'End'){ vp.scrollTop = N * H; e.preventDefault(); }
+  });
+  render();
+  return {
+    refresh: render,
+    /* 数据变了（如加载更多）：重算总高并重渲染 */
+    setTotal: function(n){ N = n; inner.style.height = (N * H) + 'px'; lastA = -1; lastB = -1; render(); },
+    get total(){ return N; }
+  };
+};
+
+/* ══════════════════════════════════════════════════════════════════════════
    13 · 13.2 生长曲线（百分位带）—— window.gmGrowth(el, data)
    全站唯一实现：页面只给数据（X 轴节点 / P3 / P97 / 实测值 / 数据源版本），
    图形与交互都在这里，避免"每页各画一遍静态 SVG"（实测三处各画一遍，

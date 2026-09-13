@@ -36,12 +36,12 @@ export default function WorkbenchTodayPage() {
         <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 12 }}>
           {state.data ? (
             <>
-              <Kpi label="待处理" value={state.data.pending} tone="var(--lg-sem-attention,#B9771C)" />
+              <Kpi label="待处理" value={state.data.pending} tone="var(--lg-sem-attention,#8D5A15)" />
               <Kpi label="已逾期" value={state.data.overdue} tone="var(--lg-sem-risk,#B72F42)" />
             </>
           ) : (
             <>
-              <Kpi label="待处理" value={0} tone="var(--lg-sem-attention,#B9771C)" loading />
+              <Kpi label="待处理" value={0} tone="var(--lg-sem-attention,#8D5A15)" loading />
               <Kpi label="已逾期" value={0} tone="var(--lg-sem-risk,#B72F42)" loading />
             </>
           )}
@@ -97,7 +97,7 @@ function Kpi({ label, value, tone, loading }: { label: string; value: number; to
       <div style={{ fontSize: 12, color: "var(--lg-text-secondary,#4F5B6E)", marginBottom: 6 }}>{label}</div>
       <div
         className="num"
-        style={{ fontSize: 32, fontWeight: 700, lineHeight: 1.1, color: loading ? "var(--lg-text-tertiary,#5E6673)" : tone }}
+        style={{ fontSize: 32, fontWeight: 700, lineHeight: 1.1, color: loading ? "var(--lg-text-tertiary,#9AA2B0)" : tone }}
       >
         {loading ? "—" : num(value)}
       </div>

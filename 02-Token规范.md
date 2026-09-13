@@ -191,6 +191,15 @@ Figma:    LG / Color / Purple / 500
 | `--lg-sem-neutral` | `#5E6673` | 5.79:1 | `#A6ADB9` | 7.65:1 |
 | `--lg-sem-special` | `#6A48DC` | 5.88:1 | `#B9A0FF` | 7.84:1 |
 
+> ⚠️ **淡底口径（V2.9 新增）**：上表「浅底实测」取的是**最亮玻璃承载面 `#FDF2EE`**。
+> 实际渲染里，语义文字若压在同色系**淡底**上，底色由淡底决定：
+> `color-mix(in srgb, 语义色 13%, transparent)` 会把玻璃卡与品牌渐变透出来，
+> 12px 语义字实测只剩 **4.06:1（浅/暗两档皆然，不达 AA）**。
+> 故淡底一律改混**实底** `--lg-tint-base`（浅 `#FFFFFF` ／ 暗 `#23222A`），
+> 透明度由 `--lg-tint-pct` 按档位给（浅 13% ／ 暗 8%）→ 实测 4.86:1 ／ 4.9:1。
+> 门禁：`audit.py --only tint-base`（禁止 `color-mix(…, transparent)`，并断言两档 token 在位）；
+> 渲染级实测：`node scripts/app-smoke.mjs` 的「实底采样」（隐藏字形后按像素取底）。
+>
 > ⚠️ **浅底列口径修正（V2.9）**：本列原写 `positive #2F8F76 / info #4A76D0 / attention #B9771C /
 > risk #D35466 / neutral #757E8E / special #7A5CE0` —— 那是 V2.8「语义色板达 AA」**之前**的值，
 > 实测作文字只有 **3.67–4.38:1（不达标）**（证据留档在 `docs/设计系统问题清单.md` 的 ❌ 表），
@@ -430,6 +439,8 @@ CSS：
   --lg-text-placeholder: rgba(88, 98, 115, .5);
   --lg-text-disabled: rgba(88, 98, 115, .4);
   --lg-text-on-accent: #343A46;   /* D9：亮粉底配深字（全尺寸 ≥4.89:1） */
+  /* 语义淡底的混色基与透明度（V2.9）：混实底才可预测，透出卡片会让 12px 语义字掉到 4.06:1 */
+  --lg-tint-base: #FFFFFF;  --lg-tint-pct: 13%;
   /* D5 小字号白字实底填充（AA 达标档）；完整品牌组见 §2.9 */
   --mmh-solid-positive:#1E6B52; --mmh-solid-attention:#9A5A0E; --mmh-solid-danger:#B04052;
   --mmh-solid-info:#385CB3; --mmh-solid-special:#6242B8;
@@ -522,6 +533,8 @@ CSS：
   --lg-text-placeholder: rgba(255,255,255,.42);
   --lg-text-disabled: rgba(255,255,255,.34);
   --lg-text-on-accent: #1B1A21;   --lg-divider: rgba(255,255,255,.10);
+  /* 暗色档淡底：混暗色 surface，透明度压到 8%（13% 会把底抬亮到 4.3:1） */
+  --lg-tint-base: #23222A;  --lg-tint-pct: 8%;
   --lg-link: #FFC4D6;
   /* 玻璃（降白、只留顶部边光） */
   --lg-glass-panel: rgba(255,255,255,.06);

@@ -6,5 +6,6 @@
  * 离线演示期由 `shared/api/mock.ts` 供数；配置 `VITE_API_BASE` 后自动走真实网关。
  */
 export const endpoints = {
+  /** 儿保体检页：月龄节点轴 + 六项保健清单（13.3.4 / 13.3.8） */
   childcare_visits: "/childcare/visits",
 } as const;

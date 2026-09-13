@@ -6,5 +6,6 @@
  * 离线演示期由 `shared/api/mock.ts` 供数；配置 `VITE_API_BASE` 后自动走真实网关。
  */
 export const endpoints = {
+  /** 会话与机构科室（权限矩阵不入接口 —— 它是 model.ts 里的契约表，见 19.5） */
   account_session: "/account/session",
 } as const;

@@ -216,8 +216,13 @@ svg.i{width:22px;height:22px;stroke:currentColor;fill:none;stroke-width:1.7;
 .pm-sa{width:64px;display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:600;
   color:var(--text);background:var(--pm-solid)}
 .pm-sa+.pm-sa{border-left:1px solid var(--pm-divider)}
-.pm-sa.warn{color:var(--sem-warn)}
-.pm-sa.del{color:#FFF;background:var(--solid-danger)}
+/* ⚠️ 修饰类必须带命名空间（`pm-sa--*`）：直接写 `pm-sa del` 会撞上**上传缩略图的删除角标**
+   `.del`（24×24 圆形角标，规则更靠后）—— 实测左滑的「删除」被压成 24×24 圆点、
+   文字溢出，而 page-qa 因为 `.del::before` 补了 44 热区一直判它"合规"。
+   11.2.5 要求操作按钮 **≥64 宽**，故加了断言（mobile-smoke）防复发。 */
+.pm-sa--warn{color:var(--sem-warn)}
+.pm-sa--del{color:#FFF;background:var(--solid-danger)}
+.pm-sa--ok{color:var(--text)}
 .pm-sa:active{transform:scale(.97)}
 .rowitem{display:flex;align-items:center;gap:12px;padding:14px;border-radius:18px;min-height:52px}
 .rowitem .ic{width:40px;height:40px;border-radius:18px;flex:none;display:flex;align-items:center;
@@ -402,6 +407,47 @@ svg.i{width:22px;height:22px;stroke:currentColor;fill:none;stroke-width:1.7;
 .pm-more span{font-size:12px;color:var(--text-3);padding:6px 14px;border-radius:999px;
   background:var(--pm-input);border:1px solid var(--pm-divider)}
 .pm-more.is-loading span{color:var(--pm-link)}
+
+/* ── 14b · 虚拟长列表（10.11.2 / 11.2.16）：窗口化容器 + 吸顶分组 + 左滑行 ──
+   窗口算法在外壳（window.gmVirtualList），本模块只给"长什么样"。
+   行高 52（10.11.2 固定行高）、overscan 4、距底 4 行触发 onEndReached。 */
+.pm-vl{position:relative;height:280px;overflow-y:auto;overscroll-behavior:contain;
+  -webkit-overflow-scrolling:touch;touch-action:pan-y;padding:0 12px}
+.pm-vl:focus-visible{outline:2px solid var(--pm-ring);outline-offset:-2px;border-radius:18px}
+.pm-vl-in{position:relative}
+.pm-vlgrid{position:sticky;top:0;z-index:2;display:flex;align-items:center;gap:8px;padding:8px 12px;
+  border-radius:18px;font-size:12px;font-weight:600;color:var(--text-2);
+  background:var(--pm-solid);border:1px solid var(--pm-edge);margin-bottom:8px}
+.pm-vlgrid span{margin-left:auto;font-weight:400;color:var(--text-3)}
+.pm-vlrow{display:flex;align-items:center;gap:12px;height:52px;padding:0 12px;border-radius:18px;
+  background:var(--pm-input);border:1px solid var(--pm-divider);box-sizing:border-box;overflow:hidden}
+/* 暗色档：行**不再叠加白**，改用暗内嵌底。
+   原因：行底 = 卡片玻璃（9–10% 白）+ --pm-input（12% 白）叠起来约 20% 白，
+   比 02 · 2.1.9 给语义 alias 定的最坏合成面更亮 —— 实测行内语义文字（--sem-danger 等）
+   只有 4.40:1，差 0.1 不过 AA。压暗承载体即可，不必去动语义色 Token（那会连带改暗色映射表）。 */
+[data-theme="dark"] .pm-vlrow{background:rgba(0,0,0,.20)}
+.pm-vlrow b{display:block;font-size:14px;font-weight:500;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.pm-vlrow i{display:block;font-style:normal;font-size:12px;color:var(--text-3)}
+.pm-vlend{padding:10px 0 4px;text-align:center}
+.pm-vlend span{font-size:12px;color:var(--text-3);padding:6px 14px;border-radius:999px;
+  background:var(--pm-input);border:1px solid var(--pm-divider)}
+.pm-vlend.is-loading span{color:var(--pm-link)}
+
+/* ── 14c · Cascader 移动版多列 Picker（11.2.17）──────────────────────── */
+.pm-casc-cols{display:flex;gap:4px;height:268px}
+.pm-casc-col{flex:1;min-width:112px;overflow-y:auto;overscroll-behavior:contain;scrollbar-width:none;
+  padding:8px 0;background:var(--pm-input);border-radius:18px;border:1px solid var(--pm-divider)}
+.pm-casc-col::-webkit-scrollbar{display:none}
+.pm-casc-col.on{border-color:rgba(232,93,143,.45)}
+.pm-casc-hd{position:sticky;top:0;z-index:2;padding:6px 10px;font-size:12px;font-weight:600;
+  color:var(--text-3);background:var(--pm-solid);border-bottom:1px solid var(--pm-divider)}
+.pm-casc-it{display:flex;align-items:center;gap:6px;width:100%;min-height:48px;padding:8px 12px;
+  font-size:14px;color:var(--text);text-align:left}
+.pm-casc-it.on{color:var(--text);font-weight:600}
+.pm-casc-it.on::after{content:"✓";color:var(--pm-rose-text);font-weight:700}
+.pm-casc-it .ck{margin-left:auto;color:var(--pm-rose-text);display:none}
+.pm-casc-it.on .ck{display:block}
+.pm-casc-empty{padding:16px 12px;font-size:12px;color:var(--text-3);text-align:center}
 
 /* ── 15 · 列表状态：骨架 / 空 / 错（8.2.15 · 8.2.12 · 11.6.9）────────── */
 .pm-sk{display:flex;flex-direction:column;gap:12px}
@@ -795,9 +841,9 @@ svg.i{width:22px;height:22px;stroke:currentColor;fill:none;stroke-width:1.7;
             <span class="rv bad">随访</span>
           </button>
           <div class="pm-swipeacts">
-            <button class="pm-sa ok" type="button" data-act="随访" data-row="risk">随访</button>
-            <button class="pm-sa warn" type="button" data-act="改期" data-row="risk">改期</button>
-            <button class="pm-sa del" type="button" data-act="删除" data-row="risk">删除</button>
+            <button class="pm-sa pm-sa--ok" type="button" data-act="随访" data-row="risk">随访</button>
+            <button class="pm-sa pm-sa--warn" type="button" data-act="改期" data-row="risk">改期</button>
+            <button class="pm-sa pm-sa--del" type="button" data-act="删除" data-row="risk">删除</button>
           </div>
         </div>
         <div class="pm-swipe" data-row="vac">
@@ -807,9 +853,9 @@ svg.i{width:22px;height:22px;stroke:currentColor;fill:none;stroke-width:1.7;
             <span class="rv" style="color:var(--sem-warn)">预约</span>
           </button>
           <div class="pm-swipeacts">
-            <button class="pm-sa ok" type="button" data-act="预约" data-row="vac">预约</button>
-            <button class="pm-sa warn" type="button" data-act="改期" data-row="vac">改期</button>
-            <button class="pm-sa del" type="button" data-act="删除" data-row="vac">删除</button>
+            <button class="pm-sa pm-sa--ok" type="button" data-act="预约" data-row="vac">预约</button>
+            <button class="pm-sa pm-sa--warn" type="button" data-act="改期" data-row="vac">改期</button>
+            <button class="pm-sa pm-sa--del" type="button" data-act="删除" data-row="vac">删除</button>
           </div>
         </div>
         <div class="pm-swipe" data-row="ai">
@@ -819,8 +865,8 @@ svg.i{width:22px;height:22px;stroke:currentColor;fill:none;stroke-width:1.7;
             <span class="rv good">查看</span>
           </button>
           <div class="pm-swipeacts">
-            <button class="pm-sa ok" type="button" data-act="查看" data-row="ai">查看</button>
-            <button class="pm-sa warn" type="button" data-act="忽略" data-row="ai">忽略</button>
+            <button class="pm-sa pm-sa--ok" type="button" data-act="查看" data-row="ai">查看</button>
+            <button class="pm-sa pm-sa--warn" type="button" data-act="忽略" data-row="ai">忽略</button>
           </div>
         </div>
       </div>
@@ -965,51 +1011,17 @@ svg.i{width:22px;height:22px;stroke:currentColor;fill:none;stroke-width:1.7;
 
     <!-- ══ 视图 2 · 提醒（手势 + 列表状态）════════════════════════════ -->
     <section class="pm-view" data-view="alerts" id="pmViewAlerts" role="tabpanel" aria-labelledby="pmTabAlerts" tabindex="-1">
-      <h2 class="sec">手势实验室 <small>下拉刷新 · 左滑操作 · 上滑加载更多</small></h2>
+      <h2 class="sec">随访队列 <small>VirtualList 窗口化 · PullRefresh · Sticky · SwipeAction · LoadMore（11.2.16）</small></h2>
       <div class="pm-lab">
         <div class="pm-labbar">
           <svg class="i" style="width:16px;height:16px" viewBox="0 0 24 24"><path d="M12 3.8 21.4 19.7a1.5 1.5 0 0 1-1.3 2.2H3.9a1.5 1.5 0 0 1-1.3-2.2z"/><path d="M12 10.2v4.6"/></svg>
-          <b>待随访队列</b><span id="pmLabCount">3 条</span>
+          <b>随访队列</b><span id="pmLabCount">共 1284 条 · 窗口内渲染</span>
         </div>
-        <div class="pm-labscroll" id="pmGest" tabindex="0" role="group" aria-label="待随访队列，可下拉刷新、左滑操作、上滑加载更多">
-          <div class="pm-pullbody" id="pmPullBody">
-            <div class="pm-ptr" id="pmPtr" aria-hidden="true"><span class="pm-ring"></span><b id="pmPtrText">下拉刷新</b></div>
-            <div class="lst" id="pmGestList" style="padding-top:12px">
-              <div class="pm-swipe" data-row="g1">
-                <button class="pm-swipebody gcard rowitem" type="button" data-detail="王小雨 · 生长低于 P3">
-                  <span class="ic" style="color:var(--sem-danger)"><svg class="i" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="m9.4 9.4 5.2 5.2M14.6 9.4l-5.2 5.2"/></svg></span>
-                  <span class="md"><b>王小雨 · 生长低于 P3</b><span>18 月龄 · 今日到期</span></span>
-                  <span class="rv bad">随访</span>
-                </button>
-                <div class="pm-swipeacts">
-                  <button class="pm-sa ok" type="button" data-act="随访" data-row="g1">随访</button>
-                  <button class="pm-sa del" type="button" data-act="删除" data-row="g1">删除</button>
-                </div>
-              </div>
-              <div class="pm-swipe" data-row="g2">
-                <button class="pm-swipebody gcard rowitem" type="button" data-detail="李念 · 疫苗逾期 3 天">
-                  <span class="ic" style="color:var(--sem-warn)"><svg class="i" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 7v5.2l3.4 2"/></svg></span>
-                  <span class="md"><b>李念 · 疫苗逾期 3 天</b><span>12 月龄 · 需电话召回</span></span>
-                  <span class="rv">提醒</span>
-                </button>
-                <div class="pm-swipeacts">
-                  <button class="pm-sa ok" type="button" data-act="提醒" data-row="g2">提醒</button>
-                  <button class="pm-sa del" type="button" data-act="删除" data-row="g2">删除</button>
-                </div>
-              </div>
-              <div class="pm-swipe" data-row="g3">
-                <button class="pm-swipebody gcard rowitem" type="button" data-detail="赵果果 · 儿保已完成">
-                  <span class="ic" style="color:var(--sem-positive)"><svg class="i" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="m8.2 12.4 2.6 2.6 5-5.6"/></svg></span>
-                  <span class="md"><b>赵果果 · 儿保已完成</b><span>3 月龄 · 待录入结论</span></span>
-                  <span class="rv good">录入</span>
-                </button>
-                <div class="pm-swipeacts">
-                  <button class="pm-sa ok" type="button" data-act="录入" data-row="g3">录入</button>
-                  <button class="pm-sa del" type="button" data-act="删除" data-row="g3">删除</button>
-                </div>
-              </div>
-            </div>
-            <div class="pm-more" id="pmMore"><span>上滑加载更多</span></div>
+        <div class="pm-pullbody" id="pmPullBody">
+          <div class="pm-ptr" id="pmPtr" aria-hidden="true"><span class="pm-ring"></span><b id="pmPtrText">下拉刷新</b></div>
+          <div class="pm-vl" id="pmGest" tabindex="0" role="list" aria-label="随访队列长列表，可下拉刷新、左滑操作、上滑加载更多">
+            <div class="pm-vl-in" id="pmGestList"></div>
+            <div class="pm-vlend" id="pmMore"><span>上滑加载更多</span></div>
           </div>
         </div>
       </div>
@@ -1191,6 +1203,16 @@ svg.i{width:22px;height:22px;stroke:currentColor;fill:none;stroke-width:1.7;
         <div style="font-size:12px;color:var(--text-3)">点输入条唤出；与系统键盘二选一（正式实现优先 <b>inputmode</b>，自绘仅用于统一观感）</div>
       </div>
 
+      <h2 class="sec">服务机构 <small>Cascader 移动版多列 Picker（11.2.17）</small></h2>
+      <div class="pm-cellgroup" style="margin-bottom:14px">
+        <button class="pm-cell" type="button" id="pmCascOpen">
+          <span class="ic"><svg class="i" style="width:18px;height:18px" viewBox="0 0 24 24"><path d="M12 21s6.5-5.2 6.5-10a6.5 6.5 0 1 0-13 0C5.5 15.8 12 21 12 21z"/><circle cx="12" cy="11" r="2.4"/></svg></span>
+          <span class="md"><b>所在地区</b><span>用于匹配辖区内的服务机构与随访归属</span></span>
+          <span class="rv" id="pmCascVal">未选择</span>
+          <svg class="i ch" style="width:16px;height:16px" viewBox="0 0 24 24"><path d="m9 5 7 7-7 7"/></svg>
+        </button>
+      </div>
+
       <h2 class="sec">随访分类 <small>Selector 选择卡（11.6.4）</small></h2>
       <div class="pm-selects" id="pmSelects" role="radiogroup" aria-label="随访分类" style="margin-bottom:14px">
         <button class="pm-select" type="button" role="radio" aria-checked="true"><b>常规随访</b><span>按月龄计划</span><span class="pm-ck">✓</span></button>
@@ -1363,6 +1385,17 @@ svg.i{width:22px;height:22px;stroke:currentColor;fill:none;stroke-width:1.7;
       <div class="pm-sheetfoot">
         <button class="pm-ghost" type="button" id="pmPickerCancel">取消</button>
         <button class="pm-primary" type="button" id="pmPickerOk">确定</button>
+      </div>
+    </div>
+
+    <!-- 级联多列 Picker（11.2.17）：列高 268 / 单列 ≥112 / 选中列高亮 / 列头显示已选层级 -->
+    <div class="pm-sheet" id="pmCasc" role="dialog" aria-modal="true" aria-labelledby="pmCascTitle">
+      <div class="pm-grab"></div>
+      <h2 id="pmCascTitle">选择所在地区</h2>
+      <div class="pm-casc-cols" id="pmCascCols"></div>
+      <div class="pm-sheetfoot">
+        <button class="pm-ghost" type="button" id="pmCascCancel">取消</button>
+        <button class="pm-primary" type="button" id="pmCascOk" disabled>确定</button>
       </div>
     </div>
 
@@ -1723,6 +1756,16 @@ svg.i{width:22px;height:22px;stroke:currentColor;fill:none;stroke-width:1.7;
       var host = target.parentNode;
       target.style.transition = "opacity .2s ease,transform .2s ease";
       target.style.opacity = "0"; target.style.transform = "scale(.96)";
+      /* 数据模型同步收缩：窗口化列表的真相是 vlItems，只删 DOM 的话
+         下一次滚动重排就会把这条"复活"（本模块实测踩到）。 */
+      var rk = target.getAttribute("data-row") || "";
+      if (rk.charAt(0) === "v") {
+        var no = rk.slice(1);
+        for (var k = 0; k < vlItems.length; k++) {
+          if (vlItems[k].no === no) { vlItems.splice(k, 1); break; }
+        }
+        if (vl) vl.setTotal(vlItems.length);
+      }
       setTimeout(function(){ if (host) host.removeChild(target); }, 200);
     }
     layerClose();
@@ -1736,7 +1779,10 @@ svg.i{width:22px;height:22px;stroke:currentColor;fill:none;stroke-width:1.7;
   var mbLong = document.getElementById("mbLong");
   if (mbLong) mbLong.addEventListener("click", function(){ openSheet("cta"); });
 
-  /* ── ⑧ SwipeAction（11.2.5）：左滑 300ms 贴靠；键盘 Tab 到操作钮自动展开 ─ */
+  /* ── ⑧ SwipeAction（11.2.5）：**容器委托**式左滑 ──────────────────────
+     为什么必须委托：11.2.16 的队列是窗口化渲染的，滚动时行会被整批重建 ——
+     逐行 addEventListener 的实现会在滚动后静默失效（老实现即如此，只是当时列表很短）。
+     委托后：手势挂在容器上，行随渲染更替，绑定不用重做。 */
   function actsWidth(row){
     var a = qIn(row, ".pm-swipeacts");
     return a ? a.getBoundingClientRect().width : 0;
@@ -1747,91 +1793,189 @@ svg.i{width:22px;height:22px;stroke:currentColor;fill:none;stroke-width:1.7;
     body.style.transition = animate ? "" : "none";
     body.style.transform = x ? "translateX(" + x + "px)" : "";
     row.setAttribute("data-open", x < -4 ? "1" : "0");
+    /* ⚠️ 展开态必须**写回数据模型**：窗口化列表的 DOM 会被反复重建，
+       只存在 DOM 上的状态会在下一次重排时消失 —— 表现为"刚滑开的行自己合上了"、
+       更糟的是"操作钮点不到"（重建后行体又盖住了操作钮）。虚拟列表的真相是数据。 */
+    var key = row.getAttribute("data-row") || "";
+    if (key.charAt(0) === "v") {
+      var no = key.slice(1);
+      for (var i = 0; i < vlItems.length; i++) {
+        if (vlItems[i].no === no) { vlItems[i].open = x < -4; vlItems[i].tx = x < -4 ? x : 0; break; }
+      }
+    }
   }
-  function wireSwipe(row){
-    if (!qIn(row, ":scope > .pm-swipebody")) return;
-    var x0 = null, y0 = null, axis = null, base = 0, cur = 0;
-    row.addEventListener("pointerdown", function(e){
-      if (e.target.closest(".pm-sa")) return;
-      x0 = e.clientX; y0 = e.clientY; axis = null;
-      base = row.getAttribute("data-open") === "1" ? -actsWidth(row) : 0;
+  function rowOf(target, sel){ return target && target.closest ? target.closest(sel) : null; }
+  /* 拖动结束后浏览器会**补发一个 click**：若把它当普通点击处理，"点主体=收起"会立刻
+     把刚滑开的行合上（实测：松手瞬间 data-open 1→0，操作钮永远点不到）。
+     故记一个"刚刚拖动过"的标记，由紧随其后的那次 click 消费掉。 */
+  var pmSwipedAt = 0;
+  /* 手势窗口护栏：拖动收尾的合成 click / 失焦都不该改变展开态。
+     注意**不要"消费"这个时间戳**：点击事件会依次经过容器处理器与 document 处理器，
+     谁先消费掉，另一个就会把行关掉（实测第三个把行偷关的来源正是 document 那个）。 */
+  function inSwipeWindow(){ return Date.now() - pmSwipedAt < 350; }
+  function initSwipe(container, rowSel){
+    if (!container) return;
+    var row = null, x0 = null, y0 = null, axis = null, base = 0, cur = 0, pid = null;
+    container.addEventListener("pointerdown", function(e){
+      var r = rowOf(e.target, rowSel);
+      if (!r || e.target.closest(".pm-sa")) return;
+      row = r; x0 = e.clientX; y0 = e.clientY; axis = null; pid = e.pointerId;
+      base = r.getAttribute("data-open") === "1" ? -actsWidth(r) : 0;
       cur = base;
     });
-    row.addEventListener("pointermove", function(e){
-      if (x0 === null) return;
+    container.addEventListener("pointermove", function(e){
+      if (x0 === null || !row) return;
       var dx = e.clientX - x0, dy = e.clientY - y0;
       if (!axis) {
         if (Math.abs(dx) < 8 && Math.abs(dy) < 8) return;
         axis = Math.abs(dx) > Math.abs(dy) ? "x" : "y";
-        if (axis === "y") { x0 = null; return; }        /* 纵向手势让给页面滚动 */
+        if (axis === "y") { x0 = null; row = null; return; }   /* 纵向手势让给列表滚动 */
         row.classList.add("is-drag");
-        try { row.setPointerCapture(e.pointerId); } catch (err) {}
+        try { container.setPointerCapture(pid); } catch (err) {}
       }
       cur = Math.max(-actsWidth(row), Math.min(0, base + dx));
       setOpen(row, cur, false);
     });
-    function settle(e){
-      if (x0 === null && axis !== "x") return;
-      if (axis === "x") {
+    function settle(){
+      if (row && axis === "x") {
+        pmSwipedAt = Date.now();
         var w = actsWidth(row);
         setOpen(row, Math.abs(cur) > w * 0.4 ? -w : 0, true);
-        try { if (e && e.pointerId != null) row.releasePointerCapture(e.pointerId); } catch (err) {}
+        try { if (pid != null && container.hasPointerCapture && container.hasPointerCapture(pid)) container.releasePointerCapture(pid); } catch (err) {}
       }
-      row.classList.remove("is-drag");
-      x0 = null; axis = null;
+      if (row) row.classList.remove("is-drag");
+      row = null; x0 = null; axis = null; pid = null;
     }
-    row.addEventListener("pointerup", settle);
-    row.addEventListener("pointercancel", settle);
-    /* 键盘等价路径：操作钮（或主体）获得焦点即展开/收起该行 */
-    row.addEventListener("focusin", function(e){ if (e.target.closest(".pm-sa")) setOpen(row, -actsWidth(row), true); });
-    row.addEventListener("focusout", function(e){ if (!row.contains(e.relatedTarget)) setOpen(row, 0, true); });
+    container.addEventListener("pointerup", settle);
+    container.addEventListener("pointercancel", settle);
+    container.addEventListener("lostpointercapture", settle);
+    /* 键盘等价路径：操作钮获得焦点即展开该行（手势不是唯一入口） */
+    container.addEventListener("focusin", function(e){
+      var r = rowOf(e.target, rowSel);
+      if (r && e.target.closest(".pm-sa")) setOpen(r, -actsWidth(r), true);
+    });
+    container.addEventListener("focusout", function(e){
+      /* 手势窗口内不处理失焦：拖动收尾时浏览器会把焦点移走（点击落在容器上），
+         于是 focusout 把刚滑开的行合上 —— 这是第二个把行"偷关掉"的来源。 */
+      if (inSwipeWindow()) return;
+      var r = rowOf(e.target, rowSel);
+      if (r && !r.contains(e.relatedTarget)) setOpen(r, 0, true);
+    });
   }
-  qaIn(ROOT, ".pm-swipe").forEach(wireSwipe);
+  initSwipe(document.getElementById("pmHomeList"), ".pm-swipe");
+  initSwipe(document.getElementById("pmGest"), ".pm-swipe");
 
-  function findRow(key){ var r = null; qaIn(ROOT, ".pm-swipe").forEach(function(x){ if (x.getAttribute("data-row") === key) r = x; }); return r; }
+  /* 行点击与操作钮点击也走**容器委托**（窗口化下逐行绑定会随重建失效）。
+     ⚠️ 这段在重写 ⑧ 时曾被整段丢掉过：表现为"左滑能开、点删除没反应"，
+     而当时的冒烟只验到"能左滑"就停了 —— 故 mobile-smoke 现补了操作闭环断言。 */
+  [document.getElementById("pmHomeList"), document.getElementById("pmGest")].forEach(function(container){
+    if (!container) return;
+    container.addEventListener("click", function(e){
+      /* 拖动结束的合成 click：忽略一次，别把刚滑开的行收起来（见 pmSwipedAt 注释） */
+      if (inSwipeWindow()) { e.preventDefault(); return; }
+      var body = e.target.closest(".pm-swipebody");
+      if (body) {
+        var row = rowOf(body, ".pm-swipe");
+        if (row && row.getAttribute("data-open") === "1") { setOpen(row, 0, true); return; }   /* 展开态下点主体 = 收起 */
+        var d = body.getAttribute("data-detail");
+        if (d) { toast("打开详情：" + d); announce("已打开 " + d + " 详情"); }
+        return;
+      }
+      var b = e.target.closest(".pm-sa");
+      if (b) {
+        var act = b.getAttribute("data-act"), r2 = rowOf(b, ".pm-swipe");
+        if (act === "删除" && r2) { pendingDel = r2; openSheet("deliver"); return; }   /* 破坏性操作二次确认（11.2.5） */
+        if (r2) setOpen(r2, 0, true);
+        toast("已" + act);
+        announce("已" + act);
+      }
+    });
+  });
+  /* 点空白收起所有已展开的行 */
   document.addEventListener("click", function(e){
-    var body = e.target.closest(".pm-swipebody");
-    if (body) {
-      var row = body.closest(".pm-swipe");
-      if (row && row.getAttribute("data-open") === "1") { setOpen(row, 0, true); return; }
-      var d = body.getAttribute("data-detail");
-      if (d) { toast("打开详情：" + d); announce("已打开 " + d + " 详情"); }
-      return;
-    }
-    var b = e.target.closest(".pm-sa");
-    if (b) {
-      var act = b.getAttribute("data-act"), row2 = findRow(b.getAttribute("data-row"));
-      if (act === "删除" && row2) { pendingDel = row2; openSheet("deliver"); return; }
-      if (row2) setOpen(row2, 0, true);
-      toast("已" + act);
-      announce("已" + act);
-      return;
-    }
-    /* 点空白收起所有已展开的行 */
-    qaIn(ROOT, '.pm-swipe[data-open="1"]').forEach(function(row3){ if (!row3.contains(e.target)) setOpen(row3, 0, true); });
+    /* 手势收尾的合成 click 常常落在**行外**（指针拖到行外才松手，target 变成视口），
+       这条"点空白收起"就会把刚滑开的行关掉 —— 与容器处理器共用同一个手势窗口护栏。 */
+    if (inSwipeWindow()) return;
+    if (e.target.closest(".pm-swipe")) return;
+    qaIn(ROOT, '.pm-swipe[data-open="1"]').forEach(function(r){ if (!r.contains(e.target)) setOpen(r, 0, true); });
   });
 
-  /* ── ⑨ 手势区：下拉刷新 + 加载更多（10.4.1 / 11.2.16 组合顺序）─────── */
-  var gest = document.getElementById("pmGest"), pullBody = document.getElementById("pmPullBody"), ptrText = document.getElementById("pmPtrText"), more = document.getElementById("pmMore"),
-      gestList = document.getElementById("pmGestList"), labCount = document.getElementById("pmLabCount");
-  var THRESHOLD = 64, MAXPULL = 96;
-  if (gest && pullBody) {
-    var gy0 = null, gdy = 0, refreshing = false;
-    gest.addEventListener("pointerdown", function(e){
-      if (refreshing) return;
-      /* 只排除行内操作钮（.pm-sa）。列表行主体也是 <button>，若一律按
-         "落在按钮上就不下拉"，真机上最常见的姿势（从行上开始下拉）会完全没反应——
-         这是本模块实测踩到的：鼠标从行上拖拽，位移恒为 0。 */
-      if (e.target.closest(".pm-sa")) return;
-      if (gest.scrollTop > 0) return;
-      gy0 = e.clientY; gdy = 0;
-      pullBody.style.transition = "none";
+  /* ── ⑨ 虚拟长列表 + 下拉刷新 + 上滑加载更多（10.11.2 / 11.2.16）─────────
+     组合顺序照 11.2.16：PullRefresh → Sticky → VirtualList → SwipeAction → LoadMore。
+     窗口算法取外壳唯一实现 window.gmVirtualList；本模块只给行长什么样。 */
+  var vlVp = document.getElementById("pmGest"), vlInner = document.getElementById("pmGestList"),
+      more = document.getElementById("pmMore"), labCount = document.getElementById("pmLabCount"),
+      pullBody = document.getElementById("pmPullBody"), ptrText = document.getElementById("pmPtrText");
+  var VL_TOTAL = 1284, VL_PAGE = 40, VL_H = 52, vl = null;
+  /* ⚠️ 必须持有**数据模型**，不能只按索引现生成 HTML：
+     窗口化下 innerHTML 会被反复重建，若渲染函数是"从下标现编"，那么被删掉的行
+     会在下一次滚动时原地复活（本模块实测踩到）。列表的真相是 vlItems，渲染只是投影。 */
+  var vlItems = [];
+  function vlMake(from, count){
+    for (var i = from; i < from + count && i < VL_TOTAL; i++) {
+      var hot = i % 7 === 0, warn = i % 3 === 0;
+      vlItems.push({
+        no: String(i + 1).padStart(4, "0"),
+        sub: hot ? "生长低于 P3 · 今日到期" : warn ? "疫苗逾期召回 · 需电话" : "常规随访 · 本周内",
+        act: hot ? "随访" : warn ? "提醒" : "录入",
+        tone: hot ? "bad" : warn ? "" : "good",
+        color: hot ? "var(--sem-danger)" : warn ? "var(--sem-warn)" : "var(--sem-positive)"
+      });
+    }
+  }
+  function vlRowHtml(it){
+    var openCls = it.open ? ' data-open="1"' : '';
+    var openTx = it.open && it.tx ? ' style="transform:translateX(' + it.tx + 'px)"' : '';
+    return '<div class="pm-swipe"' + openCls + ' data-row="v' + it.no + '">'
+      + '<button class="pm-swipebody pm-vlrow" type="button"' + openTx + ' data-detail="随访对象 #' + it.no + '">'
+      + '<span style="flex:1;min-width:0"><b>随访对象 #' + it.no + '</b><i>' + it.sub + '</i></span>'
+      + '<span class="rv ' + it.tone + '" style="font-size:14px;font-weight:600;color:' + it.color + '">'
+      + it.act + '</span></button>'
+      + '<div class="pm-swipeacts">'
+      + '<button class="pm-sa pm-sa--ok" type="button" data-act="随访" data-row="v' + it.no + '">随访</button>'
+      + '<button class="pm-sa pm-sa--del" type="button" data-act="删除" data-row="v' + it.no + '">删除</button>'
+      + '</div></div>';
+  }
+  vlMake(0, VL_PAGE);
+  function vlBoot(){
+    if (!window.gmVirtualList || !vlVp) return;
+    vl = window.gmVirtualList(vlVp, {
+      total: vlItems.length, rowHeight: VL_H, overscan: 4,
+      innerClass: "pm-vl-in", rowClass: "pm-vl-wrap",
+      render: function(i){ var it = vlItems[i]; return it ? vlRowHtml(it) : ""; },
+      onRange: function(a, b){ if (labCount) labCount.textContent = "共 " + vlItems.length + " / " + VL_TOTAL + " 条 · 窗口内 " + (b - a) + " 行"; },
+      onEndReached: function(){
+        if (vlItems.length >= VL_TOTAL) return;
+        if (more) { more.classList.add("is-loading"); qIn(more, "span").textContent = "加载中…"; }
+        announce("正在加载更多");
+        setTimeout(function(){
+          var from = vlItems.length;
+          vlMake(from, VL_PAGE);
+          if (vl) vl.setTotal(vlItems.length);
+          if (more) {
+            more.classList.remove("is-loading");
+            qIn(more, "span").textContent = vlItems.length >= VL_TOTAL ? "没有更多了" : "上滑加载更多";
+          }
+          toast("已加载 " + VL_PAGE + " 条（共 " + vlItems.length + " 条）");
+        }, 600);
+      }
     });
-    gest.addEventListener("pointermove", function(e){
+  }
+  if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", vlBoot); else vlBoot();
+
+  /* 下拉刷新：视口在顶部时向下拖，跟手位移 → 松手回弹（10.4.1） */
+  if (vlVp && pullBody) {
+    var gy0 = null, gdy = 0, refreshing = false, THRESHOLD = 64, MAXPULL = 96;
+    vlVp.addEventListener("pointerdown", function(e){
+      if (refreshing || vlVp.scrollTop > 0) return;
+      if (e.target.closest(".pm-sa")) return;
+      gy0 = e.clientY; gdy = 0; pullBody.style.transition = "none";
+    });
+    vlVp.addEventListener("pointermove", function(e){
       if (gy0 === null) return;
       var dy = e.clientY - gy0;
       if (dy <= 0) { gdy = 0; pullBody.style.transform = ""; return; }
-      gdy = Math.min(MAXPULL, dy * 0.5);                 /* 阻尼 0.5，上限 96 */
+      gdy = Math.min(MAXPULL, dy * 0.5);
       pullBody.style.transform = "translateY(" + gdy + "px)";
       if (ptrText) ptrText.textContent = gdy >= THRESHOLD * 0.5 ? "松手刷新" : "下拉刷新";
     });
@@ -1842,75 +1986,24 @@ svg.i{width:22px;height:22px;stroke:currentColor;fill:none;stroke-width:1.7;
       pullBody.style.transition = "";
       pullBody.style.transform = fire ? "translateY(56px)" : "";
       if (!fire) { if (ptrText) ptrText.textContent = "下拉刷新"; return; }
-      refreshing = true;
-      gest.classList.add("pm-refreshing");
+      refreshing = true; vlVp.classList.add("pm-refreshing");
       if (ptrText) ptrText.textContent = "正在刷新…";
       announce("正在刷新队列");
       setTimeout(function(){
-        var n = gestList ? gestList.children.length : 0;
-        if (gestList) {
-          var row = document.createElement("div");
-          row.className = "pm-swipe";
-          row.setAttribute("data-row", "new" + n);
-          row.innerHTML = '<button class="pm-swipebody gcard rowitem" type="button" data-detail="新分配 · 高危随访">'
-            + '<span class="ic" style="color:var(--sem-special)"><svg class="i" viewBox="0 0 24 24"><path d="M12 3.4l2.1 5.2 5.2 2.1-5.2 2.1-2.1 5.2-2.1-5.2-5.2-2.1 5.2-2.1z"/></svg></span>'
-            + '<span class="md"><b>新分配 · 高危随访</b><span>刚刚 · 系统自动指派</span></span>'
-            + '<span class="rv bad">随访</span></button>'
-            + '<div class="pm-swipeacts"><button class="pm-sa ok" type="button" data-act="随访" data-row="new' + n + '">随访</button>'
-            + '<button class="pm-sa del" type="button" data-act="删除" data-row="new' + n + '">删除</button></div>';
-          gestList.insertBefore(row, gestList.firstChild);
-          wireSwipe(row);
-          if (labCount) labCount.textContent = gestList.children.length + " 条";
-        }
+        vlItems.length = 0;                /* 刷新 = 回到第一页（服务端重排） */
+        vlMake(0, VL_PAGE);
+        if (vl) vl.setTotal(vlItems.length);
+        if (more) qIn(more, "span").textContent = "上滑加载更多";
         pullBody.style.transform = "";
-        gest.classList.remove("pm-refreshing");
+        vlVp.classList.remove("pm-refreshing");
         if (ptrText) ptrText.textContent = "下拉刷新";
         refreshing = false;
-        toast("已刷新 · 新增 1 条待随访");
-        announce("刷新完成，新增 1 条待随访");
-      }, 1200);
+        toast("已刷新队列");
+        announce("刷新完成");
+      }, 1100);
     }
-    gest.addEventListener("pointerup", endPull);
-    gest.addEventListener("pointercancel", endPull);
-    if (more) {
-      var moreTxt = qIn(more, "span"), batches = 0, MAX_BATCH = 1;
-      gest.addEventListener("scroll", function(){
-        if (!gestList) return;
-        if (gest.scrollTop + gest.clientHeight < gest.scrollHeight - 60) return;
-        if (more.getAttribute("data-done") === "1" || more.getAttribute("data-loading") === "1") return;
-        more.setAttribute("data-loading", "1");
-        more.classList.add("is-loading");
-        if (moreTxt) moreTxt.textContent = "加载中…";
-        announce("正在加载更多");
-        setTimeout(function(){
-          var add = batches < MAX_BATCH ? 3 : 0;   /* 批次上限固定为 1 页：到底提示必须可预期 */
-          var n = gestList.children.length;
-          for (var i = 0; i < add; i++) {
-            var r2 = document.createElement("div");
-            r2.className = "pm-swipe";
-            r2.setAttribute("data-row", "q" + (n + i));
-            r2.innerHTML = '<button class="pm-swipebody gcard rowitem" type="button" data-detail="排队中 · ' + (n + i + 1) + ' 号">'
-              + '<span class="ic"><svg class="i" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 7v5.2l3.4 2"/></svg></span>'
-              + '<span class="md"><b>排队中 · ' + (n + i + 1) + ' 号</b><span>预计今日完成</span></span>'
-              + '<span class="rv">等待</span></button>'
-              + '<div class="pm-swipeacts"><button class="pm-sa ok" type="button" data-act="随访" data-row="q' + (n + i) + '">随访</button>'
-              + '<button class="pm-sa del" type="button" data-act="删除" data-row="q' + (n + i) + '">删除</button></div>';
-            gestList.appendChild(r2);
-            wireSwipe(r2);
-          }
-          batches++;
-          more.removeAttribute("data-loading");
-          more.classList.remove("is-loading");
-          if (batches >= MAX_BATCH) {
-            more.setAttribute("data-done", "1");
-            if (moreTxt) moreTxt.textContent = "没有更多了";
-          }
-          if (labCount) labCount.textContent = gestList.children.length + " 条";
-          toast(add ? "已加载更多" : "已到底");
-          announce(add ? ("已加载更多，当前 " + gestList.children.length + " 条") : "已到底，没有更多了");
-        }, 900);
-      }, { passive:true });
-    }
+    vlVp.addEventListener("pointerup", endPull);
+    vlVp.addEventListener("pointercancel", endPull);
   }
 
   /* ── ⑩ 列表状态：骨架 / 空 / 错 / 有数据（8.2.15 · 11.6.9）───────── */
@@ -2468,6 +2561,145 @@ svg.i{width:22px;height:22px;stroke:currentColor;fill:none;stroke-width:1.7;
     });
     kbd.style.display = "none";
     paint();
+  })();
+
+/* ── ㉓ Cascader 移动版多列 Picker（11.2.17）───────────────────────────
+     口径：列高 268 · 单列宽 ≥112 · 选中列高亮 · 列头显示已选层级 ·
+     底部「取消/确定」常驻、未选到叶子时「确定」禁用 · 层级 ≤4 ·
+     键盘 ←/→ 跨列、↑/↓ 列内、Enter 选中、Esc 关闭（与读屏语义 role=listbox/option 配套）。 */
+  (function initCascader(){
+    var openBtn = document.getElementById("pmCascOpen"), sheetEl = document.getElementById("pmCasc"),
+        colsEl = document.getElementById("pmCascCols"), okBtn = document.getElementById("pmCascOk"),
+        cancelBtn = document.getElementById("pmCascCancel"), valEl = document.getElementById("pmCascVal");
+    if (!openBtn || !sheetEl || !colsEl) return;
+    /* 三级示例（≤4 层）：省 → 市 → 区 */
+    var TREE = [
+      { label: "山东省", children: [
+        { label: "青岛市", children: [{ label: "市南区" }, { label: "市北区" }, { label: "李沧区" }] },
+        { label: "济南市", children: [{ label: "历下区" }, { label: "市中区" }] } ] },
+      { label: "江苏省", children: [
+        { label: "南京市", children: [{ label: "鼓楼区" }, { label: "玄武区" }] },
+        { label: "苏州市", children: [{ label: "姑苏区" }] } ] },
+    ];
+    var LEVEL_NAME = ["省", "市", "区"];
+    /* 初始**什么都不选**（-1）：11.2.17 要求"未选到叶子时「确定」禁用"，
+       若默认填 [0,0,0] 会一开就三级全选、确定可用，等于把这条口径架空（实测被自己的验收抓到）。 */
+    var pick = [-1, -1, -1];     /* 每层选中下标；-1 = 未选 */
+    var active = 0;              /* 当前列 */
+    var committed = null;
+
+    function levels(){
+      /* 返回 [{name, options, sel}...]：已选到的层 + 下一层（若父层已选） */
+      var out = [], opts = TREE, i = 0;
+      while (opts && opts.length) {
+        out.push({ name: LEVEL_NAME[i] || ("第 " + (i + 1) + " 级"), options: opts, sel: pick[i] });
+        var selIdx = pick[i];
+        if (selIdx == null || selIdx < 0 || !opts[selIdx] || !opts[selIdx].children) break;
+        opts = opts[selIdx].children; i++;
+        if (i > 3) break;         /* 层级 ≤4 */
+      }
+      return out;
+    }
+    function chosen(){
+      var labels = [], opts = TREE;
+      for (var i = 0; i < LEVEL_NAME.length; i++) {
+        var k = pick[i];
+        if (k == null || k < 0 || !opts || !opts[k]) return null;
+        labels.push(opts[k].label);
+        opts = opts[k].children;
+        if (!opts) return { labels: labels, leaf: true };
+      }
+      return { labels: labels, leaf: !!opts };
+    }
+    function render(focusNew){
+      var ls = levels(), html = "";
+      ls.forEach(function(L, ci){
+        var hd = L.name + (ci > 0 && pick[ci - 1] >= 0
+          ? " · " + ls[ci - 1].options[pick[ci - 1]].label : "");
+        html += '<div class="pm-casc-col' + (ci === active ? " on" : "") + '" role="listbox"'
+          + ' aria-label="' + L.name + '" data-col="' + ci + '" tabindex="' + (ci === active ? "0" : "-1") + '">'
+          + '<div class="pm-casc-hd">' + hd + "</div>";
+        if (!L.options.length) {
+          html += '<div class="pm-casc-empty">暂无可选项</div>';
+        } else {
+          L.options.forEach(function(o, oi){
+            html += '<button type="button" class="pm-casc-it' + (oi === L.sel ? " on" : "") + '"'
+              + ' role="option" aria-selected="' + (oi === L.sel ? "true" : "false") + '"'
+              + ' data-col="' + ci + '" data-i="' + oi + '" tabindex="-1">' + o.label
+              + '<svg class="i ck" style="width:14px;height:14px" viewBox="0 0 24 24"><path d="M5 13l5 5L20 7"/></svg></button>';
+          });
+        }
+        html += "</div>";
+      });
+      colsEl.innerHTML = html;
+      var c = chosen();
+      if (okBtn) {
+        okBtn.disabled = !(c && c.leaf);
+        okBtn.setAttribute("aria-disabled", okBtn.disabled ? "true" : "false");
+      }
+      colsEl.querySelectorAll("[data-col]").forEach(function(el){
+        if (el.classList.contains("pm-casc-it")) return;
+      });
+      /* 每列一个 Tab 停靠点（roving） */
+      var cols = Array.prototype.slice.call(colsEl.children);
+      cols.forEach(function(col, ci){ col.tabIndex = ci === active ? 0 : -1; });
+      if (focusNew) {
+        var t = colsEl.querySelector('.pm-casc-col[data-col="' + active + '"]');
+        if (t) t.focus({ preventScroll: true });
+      }
+    }
+    function choose(colIdx, itemIdx){
+      pick[colIdx] = itemIdx;
+      /* 下一层**不预选**：11.2.17 的「未选到叶子时确定禁用」要真的能观察到 ——
+         若自动选中下一层首项，确定会立刻可用，这条口径就成了摆设（实测被验收抓到两次）。 */
+      for (var k = colIdx + 1; k < pick.length; k++) pick[k] = -1;
+      var ls = levels();
+      if (colIdx + 1 < ls.length && ls[colIdx + 1].options.length) active = colIdx + 1;
+      render(true);
+      var c = chosen();
+      announce(c ? ("已选 " + c.labels.join(" / ")) : "已展开下一级");
+    }
+    colsEl.addEventListener("click", function(e){
+      var it = e.target.closest(".pm-casc-it");
+      if (!it) return;
+      active = parseInt(it.getAttribute("data-col"), 10);
+      choose(active, parseInt(it.getAttribute("data-i"), 10));
+    });
+    colsEl.addEventListener("keydown", function(e){
+      var ls = levels(), L = ls[active];
+      if (!L) return;
+      var i = pick[active] == null ? 0 : pick[active], moved = true;
+      if (e.key === "ArrowDown") i = Math.min(L.options.length - 1, i + 1);
+      else if (e.key === "ArrowUp") i = Math.max(0, i - 1);
+      else if (e.key === "ArrowRight") { if (active < ls.length - 1) { active++; render(true); return; } moved = false; }
+      else if (e.key === "ArrowLeft") { if (active > 0) { active--; render(true); return; } moved = false; }
+      else if (e.key === "Enter" || e.key === " ") { moved = false; }
+      else moved = false;
+      if (!moved) { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); choose(active, i); } return; }
+      e.preventDefault();
+      pick[active] = i;
+      render(false);
+    });
+    openBtn.addEventListener("click", function(){
+      committed = committed || null;
+      if (!committed) { pick = [-1, -1, -1]; }
+      active = 0;
+      render(false);
+      layerOpen(sheetEl, colsEl.querySelector(".pm-casc-col"));
+    });
+    if (cancelBtn) cancelBtn.addEventListener("click", function(){
+      if (committed) pick = committed.pick.slice();     /* 取消 = 回滚到上次确定 */
+      layerClose();
+    });
+    if (okBtn) okBtn.addEventListener("click", function(){
+      var c = chosen();
+      if (!c || !c.leaf) return;
+      committed = { pick: pick.slice(), labels: c.labels };
+      if (valEl) valEl.textContent = c.labels.join(" / ");
+      layerClose();
+      toast("已选择 " + c.labels.join(" / "));
+      announce("已选择 " + c.labels.join(" / "));
+    });
   })();
 
   /* ── ㉑ 首屏同步 ──────────────────────────────────────────────────── */

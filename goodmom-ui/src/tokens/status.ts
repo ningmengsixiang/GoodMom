@@ -15,7 +15,10 @@ export type GmSemantic = "positive" | "info" | "attention" | "risk" | "neutral" 
  * 六语义色（浅底文字/色点/描边）。
  *
  * P1-1：原值在近白底上 5/6 不达 WCAG AA（3.67–4.38:1）。
- * 现取"保持色相、压暗"至实测：近白 ≥5.79:1 ／ 13% 淡色片 ≥4.85:1 ／ 18% 淡色片 ≥4.50:1。
+ * 现取"保持色相、压暗"至实测：近白 ≥5.79:1 ／ 13% 淡色片（压在**近白**上）≥4.86:1 ／ 18% ≥4.50:1。
+ * ⚠️ 上列淡色片数字的前提是「混入近白」。若与 transparent 混色，透出的玻璃卡+品牌渐变
+ *    会把底压到 lum≈0.74，同样的 13% 只剩 4.06:1（V2.9 由 scripts/app-smoke.mjs 实底采样实测）。
+ *    因此淡底一律经 `semTint()` 与 `--lg-tint-base`（浅色 #FFFFFF ／ 暗色 #23222A，即暗色档 surface）混色，不再用 transparent。
  * 该组值同时定义在 `theme.css` / `gm.css` / `base.css` 的 `--lg-sem-*`，四处必须同号。
  * 注意：**白字压在实底**上请改用 `SEMANTIC_SOLID`（D5 达标档），不要拿本表的色做填充底色。
  */
@@ -93,6 +96,20 @@ export const varOf = (name: string, fallback: string): string => `var(${name},${
 /**
  * 语义色淡底/描边。用 `color-mix` **从 CSS 变量派生**，因此天然跟随
  * 暗色档与业务侧覆盖；旧实现用"hex → rgba"在 JS 里算，只能得到静态浅色档。
+ *
+ * V2.9：混色基从 `transparent` 改为 `--lg-tint-base`。透明基让卡片与品牌渐变透出来，
+ * 12px 标签字实测只剩 4.06:1；混入实底后浅/暗两档都回到 AA 之上。
  */
 export const semTint = (sem: GmSemantic, pct: number): string =>
-  `color-mix(in srgb, var(${SEMANTIC_VAR[sem]}) ${pct}%, transparent)`;
+  `color-mix(in srgb, var(${SEMANTIC_VAR[sem]}) ${pct}%, var(--lg-tint-base,#FFFFFF))`;
+
+/**
+ * 淡底填充：透明度交给 `--lg-tint-pct` 按档位给（浅 13% ／ 暗 8%）。
+ * 为什么要按档位：同色系浅墨混进暗底会把底抬亮，13% 时 12px 语义字只剩 4.3:1。
+ */
+export const semTintFill = (base: string): string =>
+  `color-mix(in srgb, ${base} var(--lg-tint-pct,13%), var(--lg-tint-base,#FFFFFF))`;
+
+/** 淡底描边：不承载文字对比度，固定 32% */
+export const semTintBorder = (base: string): string =>
+  `color-mix(in srgb, ${base} 32%, var(--lg-tint-base,#FFFFFF))`;

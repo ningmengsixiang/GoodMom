@@ -618,37 +618,24 @@ document.querySelectorAll("[data-rv]").forEach(function(b){
 });
 renderRv();
 
-/* ── 虚拟长列表：固定行高 + overscan 4 ── */
-var VL_TOTAL = 1284, VL_H = 52, VL_OVERSCAN = 4;
-var vp = document.getElementById("vl-vp"), vin = document.getElementById("vl-in");
+/* ── 虚拟长列表：固定行高 + overscan 4 ──
+   窗口化算法来自**外壳的唯一实现** window.gmVirtualList（见 scripts/build-site.py）：
+   本模块只给"长什么样"，不再自己算窗口 —— 移动端 11.2.16 的同一套能力也取用它。 */
+var VL_TOTAL = 1284, VL_H = 52;
 var vCount = document.getElementById("vl-count"), vIdx = document.getElementById("vl-idx"), vEnd = document.getElementById("vl-end");
-var endFired = 0, lastEnd = -1;
-vin.style.height = (VL_TOTAL * VL_H) + "px";
-function vlRender(){
-  var top = vp.scrollTop, h = vp.clientHeight;
-  var start = Math.max(0, Math.floor(top / VL_H) - VL_OVERSCAN);
-  var end = Math.min(VL_TOTAL, Math.ceil((top + h) / VL_H) + VL_OVERSCAN);
-  var html = "";
-  for (var i = start; i < end; i++){
-    html += '<div class="vl-it" role="listitem" aria-posinset="' + (i+1) + '" aria-setsize="' + VL_TOTAL + '" style="height:' + VL_H + 'px;position:absolute;left:0;right:0;top:' + (i*VL_H) + 'px">' +
-      '<span style="width:26px;height:26px;border-radius:50%;background:var(--mmh-grad-action-hc);flex:none"></span>' +
+/* ⚠️ 必须等 DOMContentLoaded：模块脚本在文档里位于**外壳脚本之前**，
+   外壳的 window.gmVirtualList 此刻还没定义（与 13.2 生长曲线同一个坑）。 */
+function vlBoot(){ window.gmVirtualList(document.getElementById("vl-vp"), {
+  total: VL_TOTAL, rowHeight: VL_H, overscan: 4,
+  render: function(i){
+    return '<span style="width:26px;height:26px;border-radius:50%;background:var(--mmh-grad-action-hc);flex:none"></span>' +
       '<span style="flex:1">随访对象 #' + String(i+1).padStart(4,"0") + ' · 第 ' + (i+1) + ' 条</span>' +
-      '<span class="tg ' + (i % 7 === 0 ? "r" : i % 3 === 0 ? "o" : "g") + '"><i></i>' + (i % 7 === 0 ? "逾期" : i % 3 === 0 ? "待随访" : "已完成") + '</span></div>';
-  }
-  vin.innerHTML = html;
-  vCount.textContent = (end - start);
-  vIdx.textContent = start;
-  if (VL_TOTAL - (top + h) / VL_H <= 4 && lastEnd !== start){ lastEnd = start; endFired++; vEnd.textContent = endFired; }
-  if (VL_TOTAL - (top + h) / VL_H > 4){ lastEnd = -1; }
-}
-vp.addEventListener("scroll", vlRender);
-vp.addEventListener("keydown", function(e){
-  if (e.key === "PageDown"){ vp.scrollTop += vp.clientHeight; e.preventDefault(); }
-  if (e.key === "PageUp"){ vp.scrollTop -= vp.clientHeight; e.preventDefault(); }
-  if (e.key === "Home"){ vp.scrollTop = 0; e.preventDefault(); }
-  if (e.key === "End"){ vp.scrollTop = vin.clientHeight; e.preventDefault(); }
-});
-vlRender();
+      '<span class="tg ' + (i % 7 === 0 ? "r" : i % 3 === 0 ? "o" : "g") + '"><i></i>' + (i % 7 === 0 ? "逾期" : i % 3 === 0 ? "待随访" : "已完成") + '</span>';
+  },
+  onRange: function(a, b){ vCount.textContent = (b - a); vIdx.textContent = a; },
+  onEndReached: function(n){ vEnd.textContent = n; }
+}); }
+if(document.readyState === "loading") document.addEventListener("DOMContentLoaded", vlBoot); else vlBoot();
 
 /* ── 暗黑模式：整体切换 data-theme="dark"（示例页简化版，仅覆盖本页 Token） ── */
 document.getElementById("dk-toggle").addEventListener("click", function(){

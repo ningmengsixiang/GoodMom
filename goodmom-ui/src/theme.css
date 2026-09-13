@@ -220,15 +220,15 @@
   border:var(--lg-border-1) solid var(--lg-border-white-70);box-shadow:var(--lg-shadow-md);padding:16px}
 .gm-card-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:12px}
 .gm-card-head b{font-size:15px;color:var(--lg-text-primary)}
-.gm-card-head span{font-size:12px;color:var(--lg-text-tertiary)}
-.gm-avatar{display:inline-flex;align-items:center;justify-content:center;color:var(--lg-text-on-inverse,#FFF);font-weight:600;
+.gm-card-head span{font-size:12px;color:var(--lg-text-secondary)}
+.gm-avatar{display:inline-flex;align-items:center;justify-content:center;color:var(--lg-text-on-accent,#343A46);font-weight:600;
   border-radius:50%;border:var(--lg-border-3) solid rgba(255,255,255,.9);box-shadow:var(--lg-shadow-sm);flex:none;line-height:1}
 .gm-client{display:flex;align-items:center;gap:12px;padding:14px;border-radius:16px;background:var(--lg-glass-card);
   border:var(--lg-border-1) solid var(--lg-border-white-75)}
 .gm-client-main{flex:1;min-width:0}
 .gm-client-name{display:flex;align-items:center;gap:6px;flex-wrap:wrap}
 .gm-client-name b{font-size:14px}
-.gm-client-sub{font-size:12px;color:var(--lg-text-tertiary);margin-top:3px}
+.gm-client-sub{font-size:12px;color:var(--lg-text-secondary);margin-top:3px}
 .gm-client-ops{display:flex;gap:6px;flex-wrap:wrap}
 .gm-risk{display:flex;gap:8px;flex-wrap:wrap}
 /* 移动端热区 ≥44px（P1-11：原先仅 ≈27px） */
@@ -276,7 +276,7 @@
 .gm-step.process .gs-dot{border:var(--lg-border-3) solid var(--mmh-rose-600);color:var(--mmh-rose-700);animation:pulse var(--lg-t-breathe) ease-in-out infinite}
 .gm-step.error .gs-dot{border:var(--lg-border-3) solid var(--mmh-danger);color:var(--lg-sem-risk)}
 .gm-step .gs-main b{display:block;font-size:13px;color:var(--lg-text-primary);line-height:1.4}
-.gm-step .gs-main span{font-size:11px;color:var(--lg-text-tertiary)}
+.gm-step .gs-main span{font-size:11px;color:var(--lg-text-secondary)}
 .gm-steps.sm .gs-dot{width:24px;height:24px;font-size:10px}
 @keyframes pulse{0%,100%{opacity:1}50%{opacity:.6}}
 
@@ -333,6 +333,11 @@
 :root{
   --lg-page-bg:#E6D9D0; --lg-surface:#F4F0EC;
   --lg-text-primary:#343A46; --lg-text-secondary:#4F5B6E; --lg-text-tertiary:#9AA2B0;
+  /* 语义淡底的混色基：浅色档近白、暗色档近黑。
+     淡底若与 transparent 混色，卡片与品牌渐变会透出来，实测 13% 淡色片上的 12px 语义字只剩 4.06:1；
+     混入实底后底色可预测：浅色档 13%（实测 4.86:1）、暗色档 8%（实测 4.9:1）。
+     暗色档取 8% 而非 13%：同色系浅墨会把暗底抬高，13% 只有 4.3:1。 */
+  --lg-tint-base:#FFFFFF; --lg-tint-pct:13%;
   --lg-text-placeholder:rgba(88,98,115,.5); --lg-text-disabled:rgba(88,98,115,.4);
   /* P1-17：主行动按钮文字的唯一来源。此前浅色档**未定义**，而在 9 条规则里硬编码 #343A46，
      于是"改 Token 完全没有效果"。现按 D9 定为 #343A46，9 处硬编码全部改为 var()。 */
@@ -375,6 +380,7 @@
 [data-theme="dark"]{
   --lg-page-bg:#1B1A21; --lg-surface:#23222A;
   --lg-text-primary:#F3EFEC; --lg-text-secondary:#C9C4CE; --lg-text-tertiary:#A6ADB9;
+  --lg-tint-base:#23222A; --lg-tint-pct:8%;
   --lg-text-placeholder:rgba(255,255,255,.42); --lg-text-disabled:rgba(255,255,255,.34);
   --lg-text-on-accent:#1B1A21; --lg-divider:rgba(255,255,255,.10); --lg-track:rgba(255,255,255,.12);
   --lg-divider-hairline:rgba(255,255,255,.10);
@@ -558,9 +564,9 @@
   cursor:pointer;transition:box-shadow var(--lg-t-base) ease,border-color var(--lg-t-base) ease}
 .gm-cascader__trigger:focus-visible{outline:var(--lg-ring-width) solid var(--lg-ring-color);outline-offset:var(--lg-ring-offset)}
 .gm-cascader__trigger[aria-expanded="true"]{border-color:var(--lg-link)}
-.gm-cascader__ph{color:var(--lg-text-tertiary)}
+.gm-cascader__ph{color:var(--lg-text-placeholder)}
 .gm-cascader__val{flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-.gm-cascader__clear{flex:none;border:none;background:none;color:var(--lg-text-tertiary);cursor:pointer;font-size:12px;line-height:1;padding:4px;border-radius:999px}
+.gm-cascader__clear{flex:none;border:none;background:none;color:var(--lg-text-secondary);cursor:pointer;font-size:12px;line-height:1;padding:4px;border-radius:999px}
 .gm-cascader__clear:hover{color:var(--lg-link)}
 .gm-cascader__arrow{flex:none;display:inline-flex;color:var(--lg-text-secondary);transition:transform var(--lg-t-base) ease}
 .gm-cascader.is-open .gm-cascader__arrow{transform:rotate(180deg)}
@@ -578,7 +584,7 @@
 .gm-cascader__opt.is-selected{color:var(--lg-link);font-weight:600;box-shadow:inset 2px 0 0 var(--lg-link)}
 .gm-cascader__opt.is-disabled{color:var(--lg-text-disabled);cursor:not-allowed}
 .gm-cascader__opt:focus-visible{outline:var(--lg-ring-width) solid var(--lg-ring-color);outline-offset:-2px}
-.gm-cascader__empty{width:168px;padding:14px 10px;font-size:12px;color:var(--lg-text-tertiary);text-align:center}
+.gm-cascader__empty{width:168px;padding:14px 10px;font-size:12px;color:var(--lg-text-secondary);text-align:center}
 /* 移动 / 底部多列 Picker 形态 */
 .gm-cascader--picker .gm-cascader__mask{position:fixed;inset:0;z-index:40;background:rgba(0,0,0,.35);animation:gmFade var(--lg-t-slow) ease}
 .gm-cascader--picker .gm-cascader__sheet{position:fixed;left:0;right:0;bottom:0;z-index:41;padding:14px 14px calc(14px + env(safe-area-inset-bottom));

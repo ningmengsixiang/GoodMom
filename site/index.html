@@ -725,8 +725,11 @@ import { GmIcon } from "@goodmom/icons";
   /* Neutral */
   --lg-warm-white:#F4F0EC; --lg-warm-ivory:#E6D9D0; --lg-soft-beige:#D7C5BC;
   --lg-cool-gray:#4F5B6E; --lg-deep-slate:#343A46;
-  --lg-text-primary:#343A46; --lg-text-secondary:#4F5B6E; --lg-text-tertiary:#4F5B6E;
-  --lg-text-on-accent:#FFFFFF; --lg-divider:rgba(58,52,84,.10);
+  --lg-text-primary:#343A46; --lg-text-secondary:#4F5B6E;
+  /* V2.9：此处曾把 --lg-text-tertiary 本地改写成 #4F5B6E（= secondary 的值），
+     相当于用改名把"12px 文字不达 AA"这件事盖住。现已按 02 · 2.1.1 把 71 处小字改用
+     --lg-text-secondary，本地改写随之删除，模块与 02/theme.css 的口径重新一致。 */
+  --lg-text-on-accent:#343A46; --lg-divider:rgba(58,52,84,.10);   /* 真值见 02 · 2.1.1：亮粉底配深字 */
   /* Accent */
   --lg-purple-600:#8066F0; --lg-purple-500:#9A78FF; --lg-purple-300:#B69AFF;
   --lg-purple-200:#D9CBFE; --lg-purple-100:#EDE7FE;
@@ -794,7 +797,7 @@ import { GmIcon } from "@goodmom/icons";
 .gm-mod--preview-index section.block{margin-top:26px}
 .gm-mod--preview-index .sec-head{display:flex;align-items:baseline;gap:14px;padding:6px 6px 14px}
 .gm-mod--preview-index .sec-head h2{font-size:22px;font-weight:600;letter-spacing:-.01em}
-.gm-mod--preview-index .sec-head .en{font-size:12px;color:var(--lg-text-tertiary);font-weight:500}
+.gm-mod--preview-index .sec-head .en{font-size:12px;color:var(--lg-text-secondary);font-weight:500}
 
 /* sticky top nav */
 .gm-mod--preview-index .topnav{position:sticky;top:16px;z-index:60;display:flex;gap:6px;align-items:center;
@@ -891,7 +894,7 @@ import { GmIcon } from "@goodmom/icons";
 .gm-mod--preview-index .panel{border-radius:var(--lg-radius-card-lg);padding:26px}
 .gm-mod--preview-index .panel h3{font-size:16px;font-weight:600;margin-bottom:16px;display:flex;align-items:center;gap:8px}
 .gm-mod--preview-index .panel h3 i{width:8px;height:8px;border-radius:50%;background:var(--lg-grad-primary);display:inline-block}
-.gm-mod--preview-index .panel .note{font-size:12px;color:var(--lg-text-tertiary);margin-top:12px}
+.gm-mod--preview-index .panel .note{font-size:12px;color:var(--lg-text-secondary);margin-top:12px}
 
 /* color swatches */
 .gm-mod--preview-index .sw-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(96px,1fr));gap:10px}
@@ -900,13 +903,13 @@ import { GmIcon } from "@goodmom/icons";
 .gm-mod--preview-index .sw .chip{height:56px}
 .gm-mod--preview-index .sw .meta{padding:6px 8px;background:rgba(255,255,255,.55);-webkit-backdrop-filter:blur(16px);backdrop-filter:blur(16px)}
 .gm-mod--preview-index .sw .meta b{display:block;font-size:11px;font-weight:600;color:var(--lg-text-primary);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.gm-mod--preview-index .sw .meta span{font-size:10px;color:var(--lg-text-tertiary);font-family:ui-monospace,Menlo,monospace}
+.gm-mod--preview-index .sw .meta span{font-size:10px;color:var(--lg-text-secondary);font-family:ui-monospace,Menlo,monospace}
 .gm-mod--preview-index .grad-bar{height:44px;border-radius:18px;margin-bottom:10px;border:1px solid rgba(255,255,255,.55);box-shadow:var(--lg-glass-highlight)}
-.gm-mod--preview-index .gradbar-label{display:flex;justify-content:space-between;font-size:11px;color:var(--lg-text-tertiary);margin:2px 2px 12px}
+.gm-mod--preview-index .gradbar-label{display:flex;justify-content:space-between;font-size:11px;color:var(--lg-text-secondary);margin:2px 2px 12px}
 
 /* typography */
 .gm-mod--preview-index .type-row{display:flex;align-items:baseline;gap:20px;padding:10px 2px;border-bottom:1px solid rgba(58,52,84,.07)}
-.gm-mod--preview-index .type-row .meta{width:190px;flex:none;font-size:11px;color:var(--lg-text-tertiary);line-height:1.6}
+.gm-mod--preview-index .type-row .meta{width:190px;flex:none;font-size:11px;color:var(--lg-text-secondary);line-height:1.6}
 .gm-mod--preview-index .type-row .meta b{color:var(--lg-text-secondary);font-weight:600}
 .gm-mod--preview-index .type-row .demo{flex:1}
 .gm-mod--preview-index .t-display-lg{font-size:40px;font-weight:600;letter-spacing:-.02em;line-height:1.2}
@@ -915,7 +918,7 @@ import { GmIcon } from "@goodmom/icons";
 .gm-mod--preview-index .t-section{font-size:18px;font-weight:600;line-height:1.4}
 .gm-mod--preview-index .t-body{font-size:15px;font-weight:400}
 .gm-mod--preview-index .t-body-sm{font-size:14px;color:var(--lg-text-secondary)}
-.gm-mod--preview-index .t-caption{font-size:12px;color:var(--lg-text-tertiary)}
+.gm-mod--preview-index .t-caption{font-size:12px;color:var(--lg-text-secondary)}
 .gm-mod--preview-index .tnum-demo{display:flex;gap:28px;flex-wrap:wrap;margin-top:6px}
 .gm-mod--preview-index .tnum-demo .t{font-variant-numeric:tabular-nums;font-weight:600}
 .gm-mod--preview-index .t1{font-size:56px;line-height:1.1;color:var(--lg-sem-special)}
@@ -950,16 +953,16 @@ import { GmIcon } from "@goodmom/icons";
 
 /* spacing scale */
 .gm-mod--preview-index .sp-row{display:flex;align-items:center;gap:14px;padding:5px 0;min-width:0}
-.gm-mod--preview-index .sp-row .lab{width:120px;font-size:12px;color:var(--lg-text-tertiary);font-family:ui-monospace,Menlo,monospace;flex:none}
+.gm-mod--preview-index .sp-row .lab{width:120px;font-size:12px;color:var(--lg-text-secondary);font-family:ui-monospace,Menlo,monospace;flex:none}
 .gm-mod--preview-index .sp-row .bar{height:18px;border-radius:8px;background:linear-gradient(90deg,var(--lg-purple-500),var(--lg-cyan-500));
   box-shadow:0 4px 10px rgba(154,120,255,.25)}
 .gm-mod--preview-index .rd-row{display:flex;flex-wrap:wrap;gap:14px;align-items:flex-end}
 .gm-mod--preview-index .rd{width:64px;height:64px;background:linear-gradient(160deg,rgba(255,255,255,.7),rgba(255,255,255,.3));
   border:1px solid rgba(255,255,255,.75);box-shadow:var(--lg-shadow-md);text-align:center;
   display:flex;align-items:flex-end;justify-content:center;padding-bottom:4px}
-.gm-mod--preview-index .rd span{font-size:10px;color:var(--lg-text-tertiary)}
+.gm-mod--preview-index .rd span{font-size:10px;color:var(--lg-text-secondary)}
 .gm-mod--preview-index .rd-wrap{display:flex;flex-direction:column;align-items:center;gap:6px}
-.gm-mod--preview-index .rd-wrap .lbl{font-size:11px;color:var(--lg-text-tertiary)}
+.gm-mod--preview-index .rd-wrap .lbl{font-size:11px;color:var(--lg-text-secondary)}
 
 /* shadows */
 .gm-mod--preview-index .sh-row{display:flex;align-items:center;gap:16px;padding:8px 0}
@@ -1002,7 +1005,7 @@ import { GmIcon } from "@goodmom/icons";
   border-radius:var(--lg-radius-control);box-shadow:inset 0 1px 2px rgba(58,52,84,.06),inset 0 0 0 .5px rgba(255,255,255,.4);
   padding:0 14px;height:40px;transition:.25s}
 .gm-mod--preview-index .field:focus-within{box-shadow:0 0 0 4px rgba(154,120,255,.15),inset 0 1px 2px rgba(58,52,84,.04)}
-.gm-mod--preview-index .field svg{width:16px;height:16px;stroke:var(--lg-text-tertiary);fill:none;stroke-width:1.8;stroke-linecap:round;flex:none}
+.gm-mod--preview-index .field svg{width:16px;height:16px;stroke:var(--lg-text-secondary);fill:none;stroke-width:1.8;stroke-linecap:round;flex:none}
 .gm-mod--preview-index .field input{border:none;outline:none;background:transparent;flex:1;font-family:var(--lg-font-sans);
   font-size:14px;color:var(--lg-text-primary)}
 .gm-mod--preview-index .field input::placeholder{color:var(--lg-sem-neutral,#5E6673)}
@@ -1039,7 +1042,7 @@ import { GmIcon } from "@goodmom/icons";
 .gm-mod--preview-index .dot.running{background:var(--lg-purple-500);box-shadow:0 0 0 3px rgba(154,120,255,.2);animation:pulse 2.4s infinite}
 @keyframes pulse{0%,100%{opacity:1}50%{opacity:.55}}
 .gm-mod--preview-index .badge.status{background:rgba(255,255,255,.55)}
-.gm-mod--preview-index .badge .t{font-size:11px;color:var(--lg-text-tertiary)}
+.gm-mod--preview-index .badge .t{font-size:11px;color:var(--lg-text-secondary)}
 
 /* KPI cards */
 .gm-mod--preview-index .kpi{border-radius:var(--lg-radius-card);padding:20px;position:relative;overflow:hidden}
@@ -1051,7 +1054,7 @@ import { GmIcon } from "@goodmom/icons";
 .gm-mod--preview-index .kpi .k-delta{display:flex;align-items:center;gap:6px;margin-top:10px;font-size:12px}
 .gm-mod--preview-index .kpi .k-delta .up{color:var(--lg-sem-positive);font-weight:600}
 .gm-mod--preview-index .kpi .k-delta .down{color:var(--lg-sem-risk);font-weight:600}
-.gm-mod--preview-index .kpi .k-delta .src{color:var(--lg-text-tertiary)}
+.gm-mod--preview-index .kpi .k-delta .src{color:var(--lg-text-secondary)}
 .gm-mod--preview-index .kpi .spark{position:absolute;right:14px;bottom:14px;opacity:.9}
 
 /* charts */
@@ -1076,7 +1079,7 @@ import { GmIcon } from "@goodmom/icons";
 @media(max-width:640px){.gm-mod--preview-index .chart-cards{grid-template-columns:1fr}}
 .gm-mod--preview-index .cchart{min-height:170px;position:relative}
 .gm-mod--preview-index .cc-title{font-size:13px;font-weight:600;margin-bottom:6px}
-.gm-mod--preview-index .cc-sub{font-size:11px;color:var(--lg-text-tertiary);margin-bottom:10px}
+.gm-mod--preview-index .cc-sub{font-size:11px;color:var(--lg-text-secondary);margin-bottom:10px}
 .gm-mod--preview-index .legend{display:flex;gap:14px;font-size:11px;color:var(--lg-text-secondary);margin-top:10px;flex-wrap:wrap}
 .gm-mod--preview-index .legend i{display:inline-block;width:9px;height:9px;border-radius:3px;margin-right:5px;vertical-align:-1px}
 
@@ -1090,7 +1093,7 @@ import { GmIcon } from "@goodmom/icons";
   border-color:transparent;   /* 不透明实底不套玻璃白边（与主按钮同一条纪律） */
   box-shadow:0 1px 2px rgba(178,58,99,.22),0 8px 20px rgba(240,127,163,.30)}
 .gm-mod--preview-index .t-node .nlab{font-size:11px;color:var(--lg-text-secondary)}
-.gm-mod--preview-index .t-node .nst{font-size:10px;color:var(--lg-text-tertiary);display:flex;align-items:center;gap:4px}
+.gm-mod--preview-index .t-node .nst{font-size:10px;color:var(--lg-text-secondary);display:flex;align-items:center;gap:4px}
 .gm-mod--preview-index .t-link{width:56px;height:2px;position:relative;border-radius:2px;background:rgba(154,120,255,.3);overflow:visible;flex:none}
 .gm-mod--preview-index .t-link::after{content:"";position:absolute;top:-1.5px;left:-4px;width:5px;height:5px;border-radius:50%;
   background:#FFF;border:1.5px solid var(--lg-purple-500);animation:flow 1.6s linear infinite}
@@ -1107,9 +1110,9 @@ import { GmIcon } from "@goodmom/icons";
    三种位置 / 四种驻留时长。模块侧只调用 window.gmToast(msg, status)。 */
 
 /* footer */
-.gm-mod--preview-index footer{margin-top:40px;text-align:center;font-size:12px;color:var(--lg-text-tertiary);line-height:2}
+.gm-mod--preview-index footer{margin-top:40px;text-align:center;font-size:12px;color:var(--lg-text-secondary);line-height:2}
 .gm-mod--preview-index footer a{color:var(--lg-sem-special);text-decoration:none;font-weight:500}
-.gm-mod--preview-index .section-note{font-size:12px;color:var(--lg-text-tertiary);padding:2px 8px 0}
+.gm-mod--preview-index .section-note{font-size:12px;color:var(--lg-text-secondary);padding:2px 8px 0}
 
 /* ═══════════════ 07 · 交互动效与微交互 (Motion & Micro-interactions) ═══════════════ */
 .gm-mod--preview-index{
@@ -1212,7 +1215,7 @@ import { GmIcon } from "@goodmom/icons";
 .gm-mod--preview-index .mtok{font-size:11px;font-family:ui-monospace,Menlo,monospace;color:var(--lg-text-secondary);
   background:rgba(255,255,255,.55);border:1px solid rgba(255,255,255,.7);padding:4px 10px;border-radius:8px}
 .gm-mod--preview-index .mtok b{color:var(--lg-deep-slate);font-weight:600}
-.gm-mod--preview-index .mi-hint{font-size:11px;color:var(--lg-text-tertiary);margin:2px 0 10px;line-height:1.8}
+.gm-mod--preview-index .mi-hint{font-size:11px;color:var(--lg-text-secondary);margin:2px 0 10px;line-height:1.8}
 
 /* 液态玻璃线性图标（替代 Emoji，stroke 继承 currentColor） */
 .gm-mod--preview-index .ni{width:15px;height:15px;flex:none;stroke:currentColor;fill:none;stroke-width:1.7;
@@ -1228,7 +1231,7 @@ import { GmIcon } from "@goodmom/icons";
 .gm-mod--preview-index .ic-cat{margin-bottom:22px}
 .gm-mod--preview-index .ic-cat h3{font-size:13px;font-weight:600;color:var(--lg-text-secondary);
   margin:0 2px 10px;display:flex;align-items:center;gap:8px}
-.gm-mod--preview-index .ic-cat h3 .n{font-size:10px;color:var(--lg-text-tertiary);font-weight:500;
+.gm-mod--preview-index .ic-cat h3 .n{font-size:10px;color:var(--lg-text-secondary);font-weight:500;
   background:rgba(255,255,255,.55);border:1px solid rgba(255,255,255,.7);
   padding:1px 8px;border-radius:999px}
 .gm-mod--preview-index .ic-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(118px,1fr));gap:10px}
@@ -1241,10 +1244,10 @@ import { GmIcon } from "@goodmom/icons";
 .gm-mod--preview-index .ig svg{width:24px;height:24px;stroke:currentColor;fill:none;stroke-width:1.7;
   stroke-linecap:round;stroke-linejoin:round;display:block;color:var(--lg-deep-slate)}
 .gm-mod--preview-index .ig:hover svg{color:var(--lg-sem-special)}
-.gm-mod--preview-index .ig .ig-id{font-size:10px;color:var(--lg-text-tertiary);font-family:ui-monospace,Menlo,monospace;line-height:1.4;text-align:center}
+.gm-mod--preview-index .ig .ig-id{font-size:10px;color:var(--lg-text-secondary);font-family:ui-monospace,Menlo,monospace;line-height:1.4;text-align:center}
 .gm-mod--preview-index .ig .ig-cn{font-size:11px;color:var(--lg-text-secondary)}
 .gm-mod--preview-index .ig.sem svg{color:var(--lg-sem-risk)}
-.gm-mod--preview-index .ig-grid-legend{display:flex;gap:18px;flex-wrap:wrap;font-size:11px;color:var(--lg-text-tertiary);margin:2px 2px 14px}
+.gm-mod--preview-index .ig-grid-legend{display:flex;gap:18px;flex-wrap:wrap;font-size:11px;color:var(--lg-text-secondary);margin:2px 2px 14px}
 .gm-mod--preview-index .ig-grid-legend i{display:inline-block;width:12px;height:12px;vertical-align:-2px;margin-right:5px;border-radius:3px}
 
 /* ═══ 12 · 妈咪好 GoodMom 品牌换肤（默认主题：蜜桃粉主色 + 淡紫柔光）═══ */
@@ -1288,7 +1291,7 @@ import { GmIcon } from "@goodmom/icons";
 }
 
 /* ═══ 组件库全览（03/08/13 扩展展示）═══ */
-.gm-mod--preview-index .mh{font-size:11px;color:var(--lg-text-tertiary);font-weight:500;margin:-6px 2px 12px}
+.gm-mod--preview-index .mh{font-size:11px;color:var(--lg-text-secondary);font-weight:500;margin:-6px 2px 12px}
 .gm-mod--preview-index .prog{display:flex;align-items:center;gap:10px;margin:10px 0}
 .gm-mod--preview-index .prog .pl{width:88px;font-size:12px;color:var(--lg-text-secondary);flex:none}
 .gm-mod--preview-index .prog .track{flex:1;height:8px;border-radius:999px;background:rgba(58,52,84,.08);overflow:hidden}
@@ -1308,12 +1311,12 @@ import { GmIcon } from "@goodmom/icons";
 .gm-mod--preview-index .step.cur .st{color:var(--mmh-rose-700,#B23A63);font-weight:600}
 .gm-mod--preview-index .ringrow{display:flex;gap:26px;align-items:center;flex-wrap:wrap}
 .gm-mod--preview-index .ringbox{display:flex;flex-direction:column;align-items:center;gap:6px}
-.gm-mod--preview-index .ringbox .rl{font-size:11px;color:var(--lg-text-tertiary)}
+.gm-mod--preview-index .ringbox .rl{font-size:11px;color:var(--lg-text-secondary)}
 .gm-mod--preview-index .ringbox svg{width:86px;height:86px}
 .gm-mod--preview-index .skelrow{display:flex;flex-direction:column;gap:8px;margin-top:6px}
 .gm-mod--preview-index .sk{height:12px;border-radius:999px;background:rgba(255,255,255,.55);animation:skpulse 1.6s ease-in-out infinite}   /* 08 · 8.2.15：圆角胶囊 + 规范底色；白描边在白底上等于没有边，去掉 */
 @keyframes skpulse{0%,100%{opacity:1}50%{opacity:.55}}
-.gm-mod--preview-index .emptybox{display:flex;flex-direction:column;align-items:center;gap:10px;padding:18px 0;color:var(--lg-text-tertiary)}
+.gm-mod--preview-index .emptybox{display:flex;flex-direction:column;align-items:center;gap:10px;padding:18px 0;color:var(--lg-text-secondary)}
 /* ── 结果页三通道 + 进度条（V2.9 新增演示；数值镜像 theme.css 的 .gm-result / .gm-progress，
    对应 Part 19 · EL-19-03 与 08 · 8.2.5。改这里请同步改组件库，否则演示会与库漂移）── */
 .gm-mod--preview-index .rst{display:flex;gap:12px;flex-wrap:wrap;align-items:stretch}
@@ -1354,7 +1357,7 @@ import { GmIcon } from "@goodmom/icons";
 .gm-mod--preview-index .uprow .fi{width:34px;height:34px;border-radius:18px;display:flex;align-items:center;justify-content:center;background:var(--mmh-rose-100,#FFF0F4);color:var(--mmh-rose-700,#B23A63);flex:none}
 .gm-mod--preview-index .uprow .fn{width:150px;font-size:12px;font-weight:500;color:var(--lg-text-primary);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;flex:none}
 .gm-mod--preview-index .uprow .prog{flex:1;margin:0}
-.gm-mod--preview-index .uprow .del{width:26px;height:26px;border-radius:50%;border:none;background:transparent;color:var(--lg-text-tertiary);cursor:pointer;font-size:14px;flex:none}
+.gm-mod--preview-index .uprow .del{width:26px;height:26px;border-radius:50%;border:none;background:transparent;color:var(--lg-text-secondary);cursor:pointer;font-size:14px;flex:none}
 .gm-mod--preview-index .uprow .del:hover{color:var(--lg-sem-risk);background:rgba(239,106,123,.10)}
 .gm-mod--preview-index .banner{display:flex;align-items:flex-start;gap:10px;padding:12px 14px;border-radius:18px;font-size:13px;margin:8px 0;background:rgba(255,255,255,.5);border:1px solid rgba(255,255,255,.75);box-shadow:var(--lg-shadow-xs)}
 .gm-mod--preview-index .banner svg{width:17px;height:17px;flex:none;margin-top:1px}
@@ -1364,7 +1367,7 @@ import { GmIcon } from "@goodmom/icons";
 .gm-mod--preview-index .banner.danger svg{color:var(--lg-sem-risk)}
 .gm-mod--preview-index .banner.info svg{color:var(--lg-sem-info)}
 .gm-mod--preview-index .descrow{display:grid;grid-template-columns:repeat(3,1fr);gap:10px 18px;margin-top:8px}
-.gm-mod--preview-index .descrow .it b{display:block;font-size:11px;color:var(--lg-text-tertiary);font-weight:500;margin-bottom:3px}
+.gm-mod--preview-index .descrow .it b{display:block;font-size:11px;color:var(--lg-text-secondary);font-weight:500;margin-bottom:3px}
 .gm-mod--preview-index .descrow .it span{font-size:14px;color:var(--lg-text-primary);font-weight:600;font-variant-numeric:tabular-nums}
 /* 折叠：配方在**外壳**（.gm-fold）。旧实现（已删）实测四处不符 11 · 11.2.6：
    ① 没有任何高度过渡（`transition: 0s / all` —— 写着过渡其实没过渡，因为原生
@@ -1405,7 +1408,7 @@ import { GmIcon } from "@goodmom/icons";
   border-radius:18px;color:var(--lg-text-secondary);font-size:11px;font-style:normal}
 .gm-mod--preview-index .phone .tabmini i.on{background:var(--mmh-grad-action-hc,#F77FA3);color:#343A46;font-weight:600}
 .gm-mod--preview-index .phone .tabmini i svg{width:15px;height:15px}
-.gm-mod--preview-index .ph-cap{text-align:center;font-size:11px;color:var(--lg-text-tertiary);margin-top:8px;line-height:1.7}
+.gm-mod--preview-index .ph-cap{text-align:center;font-size:11px;color:var(--lg-text-secondary);margin-top:8px;line-height:1.7}
 .gm-mod--preview-index .ph-cap b{color:var(--lg-text-secondary);font-weight:600}
 .gm-mod--preview-index .mglass{border-radius:18px;background:linear-gradient(160deg,rgba(255,255,255,.6),rgba(255,255,255,.26) 60%,rgba(255,255,255,.38));
   border:1px solid rgba(255,255,255,.75);box-shadow:inset 0 1px 0 rgba(255,255,255,.85),0 6px 14px rgba(58,52,84,.07)}
@@ -1413,7 +1416,7 @@ import { GmIcon } from "@goodmom/icons";
 .gm-mod--preview-index .mnav svg{width:14px;height:14px;flex:none;stroke:currentColor;fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
 .gm-mod--preview-index .mnav .mt{flex:1;text-align:center;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .gm-mod--preview-index .mkpi{padding:10px 11px;display:flex;flex-direction:column;gap:5px}
-.gm-mod--preview-index .mkpi .l{font-size:9.5px;color:var(--lg-text-tertiary)}
+.gm-mod--preview-index .mkpi .l{font-size:9.5px;color:var(--lg-text-secondary)}
 .gm-mod--preview-index .mkpi .v{font-size:26px;font-weight:700;line-height:1;letter-spacing:-.02em;color:var(--mmh-rose-700,#B23A63);font-variant-numeric:tabular-nums}
 .gm-mod--preview-index .mchiprow{display:flex;gap:6px;flex-wrap:wrap}
 .gm-mod--preview-index .mchip{font-size:9.5px;padding:4px 10px;border-radius:999px;color:var(--lg-text-2,var(--lg-text-secondary));background:rgba(255,255,255,.55);border:1px solid rgba(255,255,255,.75)}
@@ -1421,7 +1424,7 @@ import { GmIcon } from "@goodmom/icons";
 .gm-mod--preview-index .mrow2{display:flex;align-items:center;gap:8px;padding:7px 9px;font-size:10px;color:var(--lg-text-secondary)}
 .gm-mod--preview-index .mrow2 .md2{flex:1;min-width:0}
 .gm-mod--preview-index .mrow2 .md2 b{display:block;font-size:10.5px;color:var(--lg-text-primary);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.gm-mod--preview-index .mrow2 .md2 span{font-size:8.5px;color:var(--lg-text-tertiary)}
+.gm-mod--preview-index .mrow2 .md2 span{font-size:8.5px;color:var(--lg-text-secondary)}
 .gm-mod--preview-index .mdot{width:7px;height:7px;border-radius:50%;flex:none}
 .gm-mod--preview-index .mdot.ok{background:#42C7A1;box-shadow:0 0 0 2.5px rgba(66,199,161,.16)}
 .gm-mod--preview-index .mdot.warn{background:#F2B25C;box-shadow:0 0 0 2.5px rgba(242,178,92,.16)}
@@ -1438,7 +1441,7 @@ import { GmIcon } from "@goodmom/icons";
 .gm-mod--preview-index .mc:hover{transform:translateY(-2px)}
 .gm-mod--preview-index .mc b{font-size:12.5px;color:var(--lg-text-primary);display:flex;align-items:center;gap:7px}
 .gm-mod--preview-index .mc b .n{font-size:9px;color:#FFF;font-weight:600;background:var(--mmh-rose-500,#F77FA3);border-radius:999px;padding:1px 7px}
-.gm-mod--preview-index .mc span{display:block;font-size:10.5px;color:var(--lg-text-tertiary);margin-top:4px;line-height:1.6}
+.gm-mod--preview-index .mc span{display:block;font-size:10.5px;color:var(--lg-text-secondary);margin-top:4px;line-height:1.6}
 .gm-mod--preview-index .go-link{font-size:12px;font-weight:600;color:var(--mmh-rose-700,#B23A63);text-decoration:none;margin-left:auto}
 .gm-mod--preview-index .go-link:hover{opacity:.8}
 
@@ -1479,7 +1482,7 @@ import { GmIcon } from "@goodmom/icons";
 .gm-mod--preview-index .bx .ld{animation:spinm .9s linear infinite}
 @keyframes spinm{to{transform:rotate(360deg)}}
 .gm-mod--preview-index .bxrow{display:flex;flex-wrap:wrap;gap:10px;align-items:center;min-height:38px}
-.gm-mod--preview-index .bxlab{font-size:11px;color:var(--lg-text-tertiary);font-weight:500;width:120px;flex:none}
+.gm-mod--preview-index .bxlab{font-size:11px;color:var(--lg-text-secondary);font-weight:500;width:120px;flex:none}
 
 
 /* ═══ 交互补全（07 · 7.8）：焦点环 + 步骤控制器 ═══ */
@@ -1495,7 +1498,7 @@ import { GmIcon } from "@goodmom/icons";
   background:linear-gradient(160deg,rgba(255,255,255,.94),rgba(255,255,255,.78));color:var(--lg-text-primary,#343A46);border:1px solid var(--lg-divider,rgba(58,52,84,.10));box-shadow:0 1px 2px rgba(58,52,84,.06),0 4px 12px rgba(58,52,84,.08);color:var(--lg-text-secondary);transition:transform .15s var(--lg-ease-out),background .2s}
 .gm-mod--preview-index .stepctl .sbtn:hover{background:#FFF;color:var(--mmh-rose-700,#B23A63)}
 .gm-mod--preview-index .stepctl .sbtn:active{transform:scale(.95)}
-.gm-mod--preview-index .stepctl .hint{font-size:11px;color:var(--lg-text-tertiary)}
+.gm-mod--preview-index .stepctl .hint{font-size:11px;color:var(--lg-text-secondary)}
 
 
 /* ═══ 状态样式库（14/15）═══ */
@@ -1504,7 +1507,7 @@ import { GmIcon } from "@goodmom/icons";
 .gm-mod--preview-index .sem .c{height:34px;border-radius:18px;margin-bottom:8px;border:1px solid rgba(255,255,255,.6)}
 .gm-mod--preview-index .sem b{font-size:12.5px;display:flex;align-items:center;gap:6px}
 .gm-mod--preview-index .sem b i{width:9px;height:9px;border-radius:50%;background:currentColor}
-.gm-mod--preview-index .sem span{font-size:10px;color:var(--lg-text-tertiary);display:block;margin-top:3px;line-height:1.6}
+.gm-mod--preview-index .sem span{font-size:10px;color:var(--lg-text-secondary);display:block;margin-top:3px;line-height:1.6}
 .gm-mod--preview-index .tagc{display:inline-flex;align-items:center;gap:6px;padding:5px 13px;border-radius:999px;font-size:12px;font-weight:500;
   background:rgba(255,255,255,.55);border:1px solid rgba(255,255,255,.8);color:var(--lg-text-secondary)}
 .gm-mod--preview-index .tagc i{width:7px;height:7px;border-radius:50%;background:currentColor;opacity:.95}
@@ -1538,7 +1541,7 @@ import { GmIcon } from "@goodmom/icons";
   transition:opacity 180ms var(--lg-ease-out),transform 180ms var(--lg-ease-out)}
 .gm-mod--preview-index .pcwrap.open .pcbub{opacity:1;transform:none;pointer-events:auto}
 .gm-mod--preview-index .pcwrap .pcbub::after{content:"";position:absolute;top:100%;left:18px;border:6px solid transparent;border-top-color:rgba(255,255,255,.9)}
-.gm-mod--preview-index .crum{display:flex;gap:8px;align-items:center;font-size:12px;color:var(--lg-text-tertiary);flex-wrap:wrap}
+.gm-mod--preview-index .crum{display:flex;gap:8px;align-items:center;font-size:12px;color:var(--lg-text-secondary);flex-wrap:wrap}
 .gm-mod--preview-index .crum b{color:var(--lg-text-primary);font-weight:600}
 .gm-mod--preview-index .pg{display:flex;gap:6px;align-items:center;flex-wrap:wrap}
 .gm-mod--preview-index .pgit{width:30px;height:30px;border-radius:18px;display:flex;align-items:center;justify-content:center;font-size:12px;color:var(--lg-text-secondary);
@@ -1566,8 +1569,8 @@ import { GmIcon } from "@goodmom/icons";
 .gm-mod--preview-index .m5 .hd{display:flex;gap:8px;align-items:center;margin-bottom:6px}
 .gm-mod--preview-index .m5 .hd i{width:13px;height:13px;border-radius:50%;flex:none}
 .gm-mod--preview-index .m5 .hd b{font-size:12.5px}
-.gm-mod--preview-index .m5 p{font-size:10.5px;color:var(--lg-text-tertiary);line-height:1.7;margin:0}
-.gm-mod--preview-index .m5 .tk{font-size:9.5px;color:var(--lg-text-tertiary);font-family:ui-monospace,Menlo,monospace;display:block;margin-top:6px}
+.gm-mod--preview-index .m5 p{font-size:10.5px;color:var(--lg-text-secondary);line-height:1.7;margin:0}
+.gm-mod--preview-index .m5 .tk{font-size:9.5px;color:var(--lg-text-secondary);font-family:ui-monospace,Menlo,monospace;display:block;margin-top:6px}
 .gm-mod--preview-index .c-y{color:#7A5F0D;background:rgba(242,193,78,.2);border-color:rgba(242,193,78,.35)}
 
 
@@ -1597,7 +1600,7 @@ import { GmIcon } from "@goodmom/icons";
 .gm-mod--preview-index .stmod.off{display:none}
 .gm-mod--preview-index .sthead2{display:flex;align-items:center;gap:10px;margin:6px 2px 8px;flex-wrap:wrap}
 .gm-mod--preview-index .sthead2 b{font-size:13px;color:var(--lg-text-primary)}
-.gm-mod--preview-index .sthead2 span{font-size:11px;color:var(--lg-text-tertiary)}
+.gm-mod--preview-index .sthead2 span{font-size:11px;color:var(--lg-text-secondary)}
 .gm-mod--preview-index .dim{opacity:.16;filter:grayscale(.5);transition:opacity .18s}
 
 
@@ -1609,7 +1612,7 @@ import { GmIcon } from "@goodmom/icons";
 .gm-mod--preview-index .excard .no{width:34px;height:34px;border-radius:18px;display:flex;align-items:center;justify-content:center;
   font-weight:700;color:#343A46;background:var(--mmh-grad-action-hc,#F77FA3);font-size:15px;box-shadow:0 1px 2px rgba(178,58,99,.22),0 8px 20px rgba(240,127,163,.30)}
 .gm-mod--preview-index .excard h3{font-size:15.5px;margin-top:2px}
-.gm-mod--preview-index .excard p{font-size:12px;color:var(--lg-text-tertiary);line-height:1.8;flex:1}
+.gm-mod--preview-index .excard p{font-size:12px;color:var(--lg-text-secondary);line-height:1.8;flex:1}
 .gm-mod--preview-index .excard .go{font-size:12px;font-weight:600;color:var(--mmh-rose-700,#B23A63);display:flex;align-items:center;gap:6px}
 .gm-mod--preview-index .excard .go svg{width:14px;height:14px;stroke:currentColor;fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
 .gm-mod--preview-index .excard .ends{display:flex;gap:6px;flex-wrap:wrap}
@@ -1766,7 +1769,7 @@ import { GmIcon } from "@goodmom/icons";
             <text x="40" y="37" text-anchor="middle" font-size="15" font-weight="600" fill="#343A46" class="num">86%</text>
             <text x="40" y="51" text-anchor="middle" font-size="8" fill="#4F5B6E">随访达标率</text>
           </svg>
-          <span style="font-size:11px;color:var(--lg-text-tertiary)">等级<br><b style="color:var(--lg-sem-positive);font-size:13px">优</b></span>
+          <span style="font-size:11px;color:var(--lg-text-secondary)">等级<br><b style="color:var(--lg-sem-positive);font-size:13px">优</b></span>
         </div>
       </div>
       <div class="demo-card c3 glass-l3">
@@ -2027,7 +2030,7 @@ import { GmIcon } from "@goodmom/icons";
         <div class="bxrow"><span class="bxlab">状态 Status</span><button class="bx bx-solid st-success">Success 已完成</button><button class="bx bx-solid st-warning">Warning 提醒补种</button><button class="bx bx-solid st-danger">Danger 停用档案</button><button class="bx bx-outline st-danger">Outline · 删除</button><button class="bx bx-text st-danger">Text · 移除</button></div>
         <div class="bxrow"><span class="bxlab">尺寸 Size</span><button class="bx bx-mini bx-primary">mini</button><button class="bx bx-sm bx-primary">small</button><button class="bx bx-primary">default</button><button class="bx bx-lg bx-primary">large</button></div>
         <div class="bxrow"><span class="bxlab">形状 / 圆形</span><button class="bx bx-primary round bx-md" style="height:40px">胶囊 Round · 立即随访</button><button class="bx bx-primary cr" aria-label="添加记录" title="圆形图标钮"><svg viewBox="0 0 24 24"><path d="M12 5.5v13M5.5 12h13"/></svg></button><button class="bx bx-outline cr" aria-label="更多" title="Outline 圆形"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="1.15" fill="currentColor" stroke="none"/><circle cx="5.5" cy="12" r="1.15" fill="currentColor" stroke="none"/><circle cx="18.5" cy="12" r="1.15" fill="currentColor" stroke="none"/></svg></button></div>
-        <div class="bxrow"><span class="bxlab">按钮组 Group</span><div class="bgroup"><button class="bx on">今日</button><button class="bx">本周</button><button class="bx">本月</button><button class="bx">自定义</button></div><span style="font-size:11px;color:var(--lg-text-tertiary)">组内激活项=蜜桃渐变（同分段语义）</span></div>
+        <div class="bxrow"><span class="bxlab">按钮组 Group</span><div class="bgroup"><button class="bx on">今日</button><button class="bx">本周</button><button class="bx">本月</button><button class="bx">自定义</button></div><span style="font-size:11px;color:var(--lg-text-secondary)">组内激活项=蜜桃渐变（同分段语义）</span></div>
         <div class="bxrow"><span class="bxlab">Loading / 禁用 / 图标</span><button class="bx bx-primary bx-loading"><svg class="ld" viewBox="0 0 24 24"><circle cx="12" cy="12" r="8.5" fill="none" stroke="rgba(255,255,255,.4)" stroke-width="2.4"/><path d="M20.5 12A8.5 8.5 0 0 0 12 3.5" fill="none" stroke="#FFF" stroke-width="2.4" stroke-linecap="round"/></svg>同步中…</button><button class="bx bx-primary disabled">Disabled</button><button class="bx bx-secondary"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 7v5.2l3.4 2"/></svg>记一条记录</button></div>
         <div style="height:12px"></div>
         <button class="bx bx-primary bx-long">长按钮 Long · 保存并预约下次随访</button>
@@ -2083,21 +2086,21 @@ import { GmIcon } from "@goodmom/icons";
           <div style="font-size:13px;color:var(--lg-text-secondary);padding:9px 12px;display:flex;gap:8px;align-items:center"><span style="display:inline-flex;align-items:center;gap:8px"><svg class="ni" viewBox="0 0 24 24" aria-hidden="true"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><path d="M8.6 13.5l6.8 4M15.4 6.5l-6.8 4"/></svg>产检计划</span> <span style="margin-left:auto;font-size:10px;background:rgba(154,120,255,.14);color:var(--lg-sem-special);border-radius:999px;padding:1px 8px;font-weight:600">8</span></div>
           <div style="font-size:13px;color:var(--lg-text-secondary);padding:9px 12px;display:flex;gap:8px;align-items:center"><span style="display:inline-flex;align-items:center;gap:8px"><svg class="ni" viewBox="0 0 24 24" aria-hidden="true"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg>胎动记录</span></div>
           <div style="font-size:13px;color:var(--lg-text-secondary);padding:9px 12px;display:flex;gap:8px;align-items:center"><span style="display:inline-flex;align-items:center;gap:8px"><svg class="ni" viewBox="0 0 24 24" aria-hidden="true"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6"/></svg>疫苗计划</span></div>
-          <div style="font-size:11px;color:var(--lg-text-tertiary);padding:14px 12px 4px;letter-spacing:.1em">MAM</div>
+          <div style="font-size:11px;color:var(--lg-text-secondary);padding:14px 12px 4px;letter-spacing:.1em">MAM</div>
           <div style="font-size:13px;color:var(--lg-text-secondary);padding:9px 12px;display:flex;gap:8px;align-items:center"><span style="display:inline-flex;align-items:center;gap:8px"><svg class="ni" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 21v-7M4 10V3M12 21v-9M12 8V3M20 21v-5M20 12V3"/><path d="M1 14h6M9 8h6M17 16h6"/></svg>妈妈设置</span></div>
         </div>
         <div style="display:flex;flex-direction:column;gap:10px">
           <div style="display:flex;align-items:center;gap:10px;padding:10px 14px;border-radius:18px;
             background:linear-gradient(160deg,rgba(255,255,255,.5),rgba(255,255,255,.22));border:1px solid rgba(255,255,255,.65);
             -webkit-backdrop-filter:blur(16px);backdrop-filter:blur(16px);box-shadow:var(--lg-shadow-sm);font-size:13px">
-            <span style="font-weight:600">妇幼档案 / 工作台</span><span style="color:var(--lg-text-tertiary)">儿童保健科 · 云同步</span>
+            <span style="font-weight:600">妇幼档案 / 工作台</span><span style="color:var(--lg-text-secondary)">儿童保健科 · 云同步</span>
             <span style="margin-left:auto;display:flex">
               <div class="seg" id="preview-index--segNav" style="align-self:center">
                 <span class="seg-it on">日</span><span class="seg-it">周</span><span class="seg-it">月</span>
               </div>
             </span>
           </div>
-          <div style="flex:1;display:flex;align-items:center;justify-content:center;border:1px dashed rgba(58,52,84,.14);border-radius:18px;color:var(--lg-text-tertiary);font-size:12px;min-height:110px">玻璃顶部栏 · 搜索「宝宝 / 孕周 / 疫苗」 · 分段（周 / 月 / 年）—— 医护工作台导航范式</div>
+          <div style="flex:1;display:flex;align-items:center;justify-content:center;border:1px dashed rgba(58,52,84,.14);border-radius:18px;color:var(--lg-text-secondary);font-size:12px;min-height:110px">玻璃顶部栏 · 搜索「宝宝 / 孕周 / 疫苗」 · 分段（周 / 月 / 年）—— 医护工作台导航范式</div>
         </div>
       </div>
     </div>
@@ -2143,7 +2146,7 @@ import { GmIcon } from "@goodmom/icons";
               Spin · 细环紫粉 0.9s/圈
             </div>
             <div class="skelrow"><div class="sk" style="width:96%"></div><div class="sk" style="width:70%"></div><div class="sk" style="width:82%"></div></div>
-            <span style="font-size:11px;color:var(--lg-text-tertiary)">Skeleton · 呼吸 1.6s（禁左右扫光）</span>
+            <span style="font-size:11px;color:var(--lg-text-secondary)">Skeleton · 呼吸 1.6s（禁左右扫光）</span>
           </div>
         </div>
         <div style="height:8px"></div>
@@ -2228,7 +2231,7 @@ import { GmIcon } from "@goodmom/icons";
           <span class="mini-av" style="width:52px;height:52px;font-size:22px;border-radius:50%">朵</span>
           <div style="flex:1">
             <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap"><b style="font-size:16px">朵朵 · 女</b><span class="badge status"><span class="dot success"></span>生长正常</span><span class="badge" style="font-size:10px;padding:2px 9px;background:var(--mmh-mint-100,#E2F6F0);color:#25715D">疫苗齐全</span></div>
-            <div style="font-size:12px;color:var(--lg-text-tertiary);margin-top:4px">档案 MMB-2024-0318 · 儿童保健科 · 王医生</div>
+            <div style="font-size:12px;color:var(--lg-text-secondary);margin-top:4px">档案 MMB-2024-0318 · 儿童保健科 · 王医生</div>
           </div>
         </div>
         <div class="descrow">
@@ -2274,13 +2277,13 @@ import { GmIcon } from "@goodmom/icons";
         <p class="mh">月龄节点时间线：薄荷=完成 · 蜜桃=可接种 · 琥珀=提醒 · 白=待排期</p>
         <div style="display:flex;flex-direction:column;gap:4px">
           <div style="display:flex;gap:12px;align-items:center;padding:9px 4px;border-bottom:1px solid rgba(58,52,84,.07)">
-            <span class="dot success"></span><span class="badge" style="font-size:10px;padding:2px 9px">出生</span><span style="font-size:13px;flex:1">乙肝疫苗 ①</span><span style="font-size:11px;color:var(--lg-text-tertiary)">已接种 · 无异常</span></div>
+            <span class="dot success"></span><span class="badge" style="font-size:10px;padding:2px 9px">出生</span><span style="font-size:13px;flex:1">乙肝疫苗 ①</span><span style="font-size:11px;color:var(--lg-text-secondary)">已接种 · 无异常</span></div>
           <div style="display:flex;gap:12px;align-items:center;padding:9px 4px;border-bottom:1px solid rgba(58,52,84,.07)">
-            <span class="dot success"></span><span class="badge" style="font-size:10px;padding:2px 9px">2 月龄</span><span style="font-size:13px;flex:1">脊灰 ① · 百白破 ①</span><span style="font-size:11px;color:var(--lg-text-tertiary)">已接种</span></div>
+            <span class="dot success"></span><span class="badge" style="font-size:10px;padding:2px 9px">2 月龄</span><span style="font-size:13px;flex:1">脊灰 ① · 百白破 ①</span><span style="font-size:11px;color:var(--lg-text-secondary)">已接种</span></div>
           <div style="display:flex;gap:12px;align-items:center;padding:9px 4px;border-bottom:1px solid rgba(58,52,84,.07)">
             <span class="dot running"></span><span class="badge" style="font-size:10px;padding:2px 9px;color:var(--mmh-rose-700,#B23A63);background:var(--mmh-rose-100,#FFF0F4)">12 月龄</span><span style="font-size:13px;flex:1">麻腮风</span><button class="btn btn-primary btn-sm">预约接种</button></div>
           <div style="display:flex;gap:12px;align-items:center;padding:9px 4px">
-            <span class="dot warning"></span><span class="badge" style="font-size:10px;padding:2px 9px">18 月龄</span><span style="font-size:13px;flex:1">百白破 ④ · 甲肝</span><span style="font-size:11px;color:var(--lg-text-tertiary)">剩余 26 天</span></div>
+            <span class="dot warning"></span><span class="badge" style="font-size:10px;padding:2px 9px">18 月龄</span><span style="font-size:13px;flex:1">百白破 ④ · 甲肝</span><span style="font-size:11px;color:var(--lg-text-secondary)">剩余 26 天</span></div>
         </div>
         <div style="height:6px"></div>
         <div class="badges">
@@ -2298,7 +2301,7 @@ import { GmIcon } from "@goodmom/icons";
     <div class="sec-head"><h2>状态样式库 Styles &amp; States</h2><span class="en">六语义筛选 · 12 个模块页签 · 点击任意状态复制标签（14 · 4.4.5 / 15.2）</span></div>
     <div class="panel glass-l2">
       <h3><i></i>六语义筛选（点选仅高亮该类状态）</h3>
-      <div style="display:flex;gap:8px;flex-wrap:wrap;align-items:center"><span class="stsem" data-sem="g" title="正向 · 正常"><i style="background:#25715D"></i>正向 · 正常</span><span class="stsem" data-sem="b" title="信息 · 进行"><i style="background:#3261C1"></i>信息 · 进行</span><span class="stsem" data-sem="o" title="注意 · 待办"><i style="background:#8D5A15"></i>注意 · 待办</span><span class="stsem" data-sem="r" title="风险 · 异常"><i style="background:#B72F42"></i>风险 · 异常</span><span class="stsem" data-sem="n" title="中性 · 未动"><i style="background:#8A92A3"></i>中性 · 未动</span><span class="stsem" data-sem="p" title="特殊 · 协作"><i style="background:#6A48DC"></i>特殊 · 协作</span><span class="stsem" data-sem="y" title="五色 · 管理"><i style="background:#B98D1F"></i>五色 · 管理</span><span style="font-size:11px;color:var(--lg-text-tertiary)">再次点击取消筛选 · 状态永远颜色+文字双通道</span></div>
+      <div style="display:flex;gap:8px;flex-wrap:wrap;align-items:center"><span class="stsem" data-sem="g" title="正向 · 正常"><i style="background:#25715D"></i>正向 · 正常</span><span class="stsem" data-sem="b" title="信息 · 进行"><i style="background:#3261C1"></i>信息 · 进行</span><span class="stsem" data-sem="o" title="注意 · 待办"><i style="background:#8D5A15"></i>注意 · 待办</span><span class="stsem" data-sem="r" title="风险 · 异常"><i style="background:#B72F42"></i>风险 · 异常</span><span class="stsem" data-sem="n" title="中性 · 未动"><i style="background:#8A92A3"></i>中性 · 未动</span><span class="stsem" data-sem="p" title="特殊 · 协作"><i style="background:#6A48DC"></i>特殊 · 协作</span><span class="stsem" data-sem="y" title="五色 · 管理"><i style="background:#B98D1F"></i>五色 · 管理</span><span style="font-size:11px;color:var(--lg-text-secondary)">再次点击取消筛选 · 状态永远颜色+文字双通道</span></div>
     </div>
     <div style="height:16px"></div>
     <div class="panel glass-l2">
@@ -2350,7 +2353,7 @@ import { GmIcon } from "@goodmom/icons";
         <div style="height:14px"></div>
         <div class="pg" id="preview-index--pg1"><span class="pgit on">1</span><span class="pgit">2</span><span class="pgit">3</span><span class="pgit">4</span><span class="pgit gap">…</span><span class="pgit">18</span></div>
         <div style="height:14px"></div>
-        <div class="avts"><span class="avt s">张</span><span class="avt m mint">李</span><span class="avt l purp">王</span><span style="font-size:11px;color:var(--lg-text-tertiary)">头像 · s / m / l</span></div>
+        <div class="avts"><span class="avt s">张</span><span class="avt m mint">李</span><span class="avt l purp">王</span><span style="font-size:11px;color:var(--lg-text-secondary)">头像 · s / m / l</span></div>
         <div style="height:10px"></div>
         <div class="setlab">Selector 单选（风险等级）</div>
         <div style="display:flex;gap:8px;flex-wrap:wrap" id="preview-index--sel1"><span class="sel">正常</span><span class="sel on">关注</span><span class="sel">高危</span></div>
@@ -2368,12 +2371,12 @@ import { GmIcon } from "@goodmom/icons";
       <div class="panel glass-l2">
         <h3><i></i>保健清单（0–6 岁 · 综合儿保）</h3>
         <p class="mh">每项 = H 图标 + 项目名 + 口径说明 + 状态标签（15.2.1/15.5 语义色）</p>
-      <div class="hrow" data-states="正常|异常|待检"><span class="fico"><svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="8.6" cy="6.9" r="2.1"/><path d="M8.6 9.1v3.4"/><path d="M6.9 10.9l1.7.7M10.3 10.9l-1.7.7"/><path d="M8.6 12.5 7.5 15.2M8.6 12.5l1.1 2.7"/><path d="M16.6 5v12"/><path d="M15.2 7.3 16.6 5l1.4 2.3"/><path d="M15.2 14.7 16.6 17l1.4-2.3"/></svg></span><span style="flex:1;min-width:0"><b style="display:block;font-size:13.5px">生长发育</b><span style="font-size:11px;color:var(--lg-text-tertiary)">身高体重测量 · 生长曲线 P3–P97</span></span><span class="tagc c-g fkstate" style="cursor:pointer" title="点击切换状态">正常</span></div>
-      <div class="hrow" data-states="正常|异常|待检"><span class="fico"><svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="11.8" cy="14.6" r="5.4"/><path d="M11.8 9.5c.3-1.9 1.2-3.1 2.9-3.8"/><path d="M14.5 6.1c1.7-.7 3.1-.5 4 .4"/></svg></span><span style="flex:1;min-width:0"><b style="display:block;font-size:13.5px">营养喂养</b><span style="font-size:11px;color:var(--lg-text-tertiary)">营养评估 · 喂养指导</span></span><span class="tagc c-g fkstate" style="cursor:pointer" title="点击切换状态">正常</span></div>
-      <div class="hrow" data-states="正常|异常|待检"><span class="fico"><svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12.2" r="6.4"/><circle cx="9.8" cy="11" r=".95" fill="currentColor" stroke="none"/><circle cx="14.2" cy="11" r=".95" fill="currentColor" stroke="none"/><path d="M9.5 14.3c1.5 1.2 3.5 1.2 5 0"/><path d="M18.6 4.8l.8 2 2 .8-2 .8-.8 2-.8-2-2-.8 2-.8z"/><path d="M4.8 5.6l.6 1.5 1.5.6-1.5.6-.6 1.5-.6-1.5-1.5-.6 1.5-.6z"/></svg></span><span style="flex:1;min-width:0"><b style="display:block;font-size:13.5px">心理行为发育</b><span style="font-size:11px;color:var(--lg-text-tertiary)">发育筛查 · 心理行为评估</span></span><span class="tagc c-n fkstate" style="cursor:pointer" title="点击切换状态">待检</span></div>
-      <div class="hrow" data-states="正常|异常|待检"><span class="fico"><svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M3.6 13.2s3-6.2 8.4-6.2 8.4 6.2 8.4 6.2-3 6.2-8.4 6.2S3.6 13.2 3.6 13.2z"/><circle cx="12" cy="13.2" r="3.1"/><path d="M15.8 3.8h4.6M15.8 3.8V8.4M15.8 5.3h3.2M15.8 6.9h4.6"/></svg></span><span style="flex:1;min-width:0"><b style="display:block;font-size:13.5px">视力保健</b><span style="font-size:11px;color:var(--lg-text-tertiary)">眼保健 · 视力筛查</span></span><span class="tagc c-r fkstate" style="cursor:pointer" title="点击切换状态">异常</span></div>
-      <div class="hrow" data-states="正常|异常|待检"><span class="fico"><svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M4.4 12.8a7.6 7.6 0 0 1 15.2 0"/><rect x="2.2" y="11.8" width="4.2" height="6" rx="1.9"/><rect x="17.6" y="11.8" width="4.2" height="6" rx="1.9"/><path d="M8.6 8.2a3.4 3.4 0 0 1 6.8 0"/></svg></span><span style="flex:1;min-width:0"><b style="display:block;font-size:13.5px">听力保健</b><span style="font-size:11px;color:var(--lg-text-tertiary)">听力筛查 · 耳保健</span></span><span class="tagc c-g fkstate" style="cursor:pointer" title="点击切换状态">正常</span></div>
-      <div class="hrow" data-states="正常|异常|待检"><span class="fico"><svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M17.2 4.6c-1.6 0-2.6.8-3.5 1.8a3 3 0 0 1-3.4 0C9.4 5.4 8.4 4.6 6.8 4.6c-2.1 0-3.7 1.7-3.7 3.8 0 1.6.7 2.8 1.7 3.8 1.3 1.5 2.3 3.2 2.5 5.3.1 1.3.9 2.1 1.9 2.1.9 0 1.3-.6 1.6-1.6.5-1.2.9-2.5 1.9-2.5 1 0 1.5 1.2 2 2.4.3 1 .7 1.7 1.6 1.7 1 0 1.8-.8 1.9-2.1.2-2 1-3.7 2.3-5.1 1-1.1 1.7-2.4 1.7-3.9 0-2.1-1.6-3.9-3.7-3.9z"/></svg></span><span style="flex:1;min-width:0"><b style="display:block;font-size:13.5px">口腔保健</b><span style="font-size:11px;color:var(--lg-text-tertiary)">口腔检查 · 龋齿防治（涂氟）</span></span><span class="tagc c-n fkstate" style="cursor:pointer" title="点击切换状态">待检</span></div>
+      <div class="hrow" data-states="正常|异常|待检"><span class="fico"><svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="8.6" cy="6.9" r="2.1"/><path d="M8.6 9.1v3.4"/><path d="M6.9 10.9l1.7.7M10.3 10.9l-1.7.7"/><path d="M8.6 12.5 7.5 15.2M8.6 12.5l1.1 2.7"/><path d="M16.6 5v12"/><path d="M15.2 7.3 16.6 5l1.4 2.3"/><path d="M15.2 14.7 16.6 17l1.4-2.3"/></svg></span><span style="flex:1;min-width:0"><b style="display:block;font-size:13.5px">生长发育</b><span style="font-size:11px;color:var(--lg-text-secondary)">身高体重测量 · 生长曲线 P3–P97</span></span><span class="tagc c-g fkstate" style="cursor:pointer" title="点击切换状态">正常</span></div>
+      <div class="hrow" data-states="正常|异常|待检"><span class="fico"><svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="11.8" cy="14.6" r="5.4"/><path d="M11.8 9.5c.3-1.9 1.2-3.1 2.9-3.8"/><path d="M14.5 6.1c1.7-.7 3.1-.5 4 .4"/></svg></span><span style="flex:1;min-width:0"><b style="display:block;font-size:13.5px">营养喂养</b><span style="font-size:11px;color:var(--lg-text-secondary)">营养评估 · 喂养指导</span></span><span class="tagc c-g fkstate" style="cursor:pointer" title="点击切换状态">正常</span></div>
+      <div class="hrow" data-states="正常|异常|待检"><span class="fico"><svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12.2" r="6.4"/><circle cx="9.8" cy="11" r=".95" fill="currentColor" stroke="none"/><circle cx="14.2" cy="11" r=".95" fill="currentColor" stroke="none"/><path d="M9.5 14.3c1.5 1.2 3.5 1.2 5 0"/><path d="M18.6 4.8l.8 2 2 .8-2 .8-.8 2-.8-2-2-.8 2-.8z"/><path d="M4.8 5.6l.6 1.5 1.5.6-1.5.6-.6 1.5-.6-1.5-1.5-.6 1.5-.6z"/></svg></span><span style="flex:1;min-width:0"><b style="display:block;font-size:13.5px">心理行为发育</b><span style="font-size:11px;color:var(--lg-text-secondary)">发育筛查 · 心理行为评估</span></span><span class="tagc c-n fkstate" style="cursor:pointer" title="点击切换状态">待检</span></div>
+      <div class="hrow" data-states="正常|异常|待检"><span class="fico"><svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M3.6 13.2s3-6.2 8.4-6.2 8.4 6.2 8.4 6.2-3 6.2-8.4 6.2S3.6 13.2 3.6 13.2z"/><circle cx="12" cy="13.2" r="3.1"/><path d="M15.8 3.8h4.6M15.8 3.8V8.4M15.8 5.3h3.2M15.8 6.9h4.6"/></svg></span><span style="flex:1;min-width:0"><b style="display:block;font-size:13.5px">视力保健</b><span style="font-size:11px;color:var(--lg-text-secondary)">眼保健 · 视力筛查</span></span><span class="tagc c-r fkstate" style="cursor:pointer" title="点击切换状态">异常</span></div>
+      <div class="hrow" data-states="正常|异常|待检"><span class="fico"><svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M4.4 12.8a7.6 7.6 0 0 1 15.2 0"/><rect x="2.2" y="11.8" width="4.2" height="6" rx="1.9"/><rect x="17.6" y="11.8" width="4.2" height="6" rx="1.9"/><path d="M8.6 8.2a3.4 3.4 0 0 1 6.8 0"/></svg></span><span style="flex:1;min-width:0"><b style="display:block;font-size:13.5px">听力保健</b><span style="font-size:11px;color:var(--lg-text-secondary)">听力筛查 · 耳保健</span></span><span class="tagc c-g fkstate" style="cursor:pointer" title="点击切换状态">正常</span></div>
+      <div class="hrow" data-states="正常|异常|待检"><span class="fico"><svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M17.2 4.6c-1.6 0-2.6.8-3.5 1.8a3 3 0 0 1-3.4 0C9.4 5.4 8.4 4.6 6.8 4.6c-2.1 0-3.7 1.7-3.7 3.8 0 1.6.7 2.8 1.7 3.8 1.3 1.5 2.3 3.2 2.5 5.3.1 1.3.9 2.1 1.9 2.1.9 0 1.3-.6 1.6-1.6.5-1.2.9-2.5 1.9-2.5 1 0 1.5 1.2 2 2.4.3 1 .7 1.7 1.6 1.7 1 0 1.8-.8 1.9-2.1.2-2 1-3.7 2.3-5.1 1-1.1 1.7-2.4 1.7-3.9 0-2.1-1.6-3.9-3.7-3.9z"/></svg></span><span style="flex:1;min-width:0"><b style="display:block;font-size:13.5px">口腔保健</b><span style="font-size:11px;color:var(--lg-text-secondary)">口腔检查 · 龋齿防治（涂氟）</span></span><span class="tagc c-n fkstate" style="cursor:pointer" title="点击切换状态">待检</span></div>
         <p class="note">状态：<span class="dot success"></span>正常=薄荷 · <span class="dot danger"></span>异常=珊瑚 · <span class="dot neutral" style="background:var(--lg-sem-neutral)"></span>待检=中性灰；颜色+文字双通道（14）。</p>
       </div>
       <div class="panel glass-l2">
@@ -2442,7 +2445,7 @@ import { GmIcon } from "@goodmom/icons";
     <div class="panel glass-l2">
       <div style="display:flex;align-items:center;flex-wrap:wrap;gap:8px;margin-bottom:12px">
         <h3 style="margin:0"><i></i>移动控件平铺清单</h3>
-        <span class="ph-cap" style="margin:0;color:var(--lg-text-tertiary)">14 项移动端独有/变体组件，细则见 10/11 章</span>
+        <span class="ph-cap" style="margin:0;color:var(--lg-text-secondary)">14 项移动端独有/变体组件，细则见 10/11 章</span>
       </div>
       <div class="mcgrid">          <div class="mc"><b>NavBar</b><span>10.3.1 · 返回/标题/操作，滚动显现</span></div>
           <div class="mc"><b>TabBar</b><span>10.3.2 · 底部玻璃胶囊 + 激活紫粉渐变</span></div>
@@ -2466,14 +2469,14 @@ import { GmIcon } from "@goodmom/icons";
     <div class="sec-head"><h2>数据可视化 · 模块化图库</h2><span class="en">8 大图表模块 · 数据最亮 · 无伪 3D · 无霓虹 · 数据色序见 04/12.3（妇幼指标示例）</span></div>
     <div class="grid g2">
       <div class="panel glass-l2 cchart">
-        <h3 style="margin-bottom:2px">KPI · 指标卡</h3><span class="ph-cap" style="margin:0 0 6px;color:var(--lg-text-tertiary)">模块 1 · 数值聚焦 · 04 · 4.3.1</span><div style="display:flex;gap:12px;flex-wrap:wrap">
+        <h3 style="margin-bottom:2px">KPI · 指标卡</h3><span class="ph-cap" style="margin:0 0 6px;color:var(--lg-text-secondary)">模块 1 · 数值聚焦 · 04 · 4.3.1</span><div style="display:flex;gap:12px;flex-wrap:wrap">
 <div class="kpi glass-l2" style="flex:1;min-width:130px"><div class="k-lab" style="font-size:12px">管理对象</div><div class="k-val num" style="font-size:26px;color:var(--mmh-rose-700,#B23A63)">12,849</div><div class="k-delta" style="font-size:11px;margin-top:2px"><span class="up" style="color:var(--lg-sem-positive)">↑320 本月</span></div></div>
 <div class="kpi glass-l2" style="flex:1;min-width:130px"><div class="k-lab" style="font-size:12px">筛查完成率</div><div class="k-val num" style="font-size:26px;color:var(--lg-sem-positive,#25715D)">82%</div><div class="k-delta" style="font-size:11px;margin-top:2px"><span class="up" style="color:var(--lg-sem-positive)">达标</span></div></div>
-<div class="kpi glass-l2" style="flex:1;min-width:130px"><div class="k-lab" style="font-size:12px">高危随访闭环</div><div class="k-val num" style="font-size:26px;color:var(--lg-sem-attention)">68%</div><div class="k-delta" style="font-size:11px;margin-top:2px"><span style="color:var(--lg-text-tertiary)">待跟进 23</span></div></div>
+<div class="kpi glass-l2" style="flex:1;min-width:130px"><div class="k-lab" style="font-size:12px">高危随访闭环</div><div class="k-val num" style="font-size:26px;color:var(--lg-sem-attention)">68%</div><div class="k-delta" style="font-size:11px;margin-top:2px"><span style="color:var(--lg-text-secondary)">待跟进 23</span></div></div>
 </div><p class="note" style="margin-top:6px">大数字 tabular-nums + 单位/口径 caption 并列；状态语义色。</p>
       </div>
       <div class="panel glass-l2 cchart">
-        <h3 style="margin-bottom:2px">趋势 · 折线/面积</h3><span class="ph-cap" style="margin:0 0 6px;color:var(--lg-text-tertiary)">模块 2 · 主序列蜜桃粉 · 04 · 4.3.2</span><svg width="100%" height="84" viewBox="0 0 300 84" preserveAspectRatio="none">
+        <h3 style="margin-bottom:2px">趋势 · 折线/面积</h3><span class="ph-cap" style="margin:0 0 6px;color:var(--lg-text-secondary)">模块 2 · 主序列蜜桃粉 · 04 · 4.3.2</span><svg width="100%" height="84" viewBox="0 0 300 84" preserveAspectRatio="none">
 <defs><linearGradient id="preview-index--ch2" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#F77FA3" stop-opacity=".3"/><stop offset="1" stop-color="#F77FA3" stop-opacity="0"/></linearGradient></defs>
 <path d="M0,62 L25,56 L50,58 L75,48 L100,50 L125,40 L150,42 L175,32 L200,34 L225,24 L250,26 L275,17 L300,18 L300,84 L0,84 Z" fill="url(#preview-index--ch2)"/>
 <path d="M0,62 L25,56 L50,58 L75,48 L100,50 L125,40 L150,42 L175,32 L200,34 L225,24 L250,26 L275,17 L300,18" fill="none" stroke="#F77FA3" stroke-width="2.4" stroke-linecap="round"/>
@@ -2481,14 +2484,14 @@ import { GmIcon } from "@goodmom/icons";
 </svg><p class="note" style="margin-top:6px">随访完成趋势（实线）· 目标/预测（淡紫虚线）· 网格 6% 退后。</p>
       </div>
       <div class="panel glass-l2 cchart">
-        <h3 style="margin-bottom:2px">比较 · 柱/条形</h3><span class="ph-cap" style="margin:0 0 6px;color:var(--lg-text-tertiary)">模块 3 · 顶部圆角 · 04 · 4.3.3</span><div style="display:flex;flex-direction:column;gap:7px">
+        <h3 style="margin-bottom:2px">比较 · 柱/条形</h3><span class="ph-cap" style="margin:0 0 6px;color:var(--lg-text-secondary)">模块 3 · 顶部圆角 · 04 · 4.3.3</span><div style="display:flex;flex-direction:column;gap:7px">
 <div style="display:flex;justify-content:space-between;font-size:11px;margin-bottom:1px"><span style="color:var(--lg-text-secondary)">儿童保健随访</span><b class="num" style="color:var(--mmh-rose-700,#B23A63)">412</b></div><div class="prog" style="margin:0"><div class="track"><div class="pf" style="width:82%;background:linear-gradient(90deg,#FFA3BE,#E85D8F)"></div></div></div>
 <div style="display:flex;justify-content:space-between;font-size:11px;margin-bottom:1px"><span style="color:var(--lg-text-secondary)">两癌筛查</span><b class="num" style="color:var(--lg-sem-attention,#8D5A15)">356</b></div><div class="prog" style="margin:0"><div class="track"><div class="pf" style="width:71%;background:linear-gradient(90deg,#FFDCC7,#F6A97E)"></div></div></div>
 <div style="display:flex;justify-content:space-between;font-size:11px;margin-bottom:1px"><span style="color:var(--lg-text-secondary)">孕产妇管理</span><b class="num" style="color:var(--lg-sem-special)">288</b></div><div class="prog" style="margin:0"><div class="track"><div class="pf" style="width:58%;background:linear-gradient(90deg,#B9A0FF,#9A78FF)"></div></div></div>
 </div><p class="note" style="margin-top:6px">横向条便于读数；数值在条右；堆叠 ≤3。</p>
       </div>
       <div class="panel glass-l2 cchart">
-        <h3 style="margin-bottom:2px">构成 · 环形图</h3><span class="ph-cap" style="margin:0 0 6px;color:var(--lg-text-tertiary)">模块 4 · 主段粉起 · 04 · 4.3.4</span><div style="display:flex;gap:12px;align-items:center">
+        <h3 style="margin-bottom:2px">构成 · 环形图</h3><span class="ph-cap" style="margin:0 0 6px;color:var(--lg-text-secondary)">模块 4 · 主段粉起 · 04 · 4.3.4</span><div style="display:flex;gap:12px;align-items:center">
 <svg width="104" height="104" viewBox="0 0 80 80"><circle cx="40" cy="40" r="29" fill="none" stroke="rgba(58,52,84,.08)" stroke-width="13"/><circle id="preview-index--dseg0" cx="40" cy="40" r="29" fill="none" stroke="#F77FA3" stroke-width="13" stroke-dasharray="92 182" transform="rotate(-90 40 40)"/><circle id="preview-index--dseg1" cx="40" cy="40" r="29" fill="none" stroke="#FFC3A0" stroke-width="13" stroke-dasharray="60 182" stroke-dashoffset="-98" transform="rotate(-90 40 40)"/><circle id="preview-index--dseg2" cx="40" cy="40" r="29" fill="none" stroke="#B69AFF" stroke-width="13" stroke-dasharray="45 182" stroke-dashoffset="-164" transform="rotate(-90 40 40)"/><circle id="preview-index--dseg3" cx="40" cy="40" r="29" fill="none" stroke="#A9E3D4" stroke-width="13" stroke-dasharray="32 182" stroke-dashoffset="-215" transform="rotate(-90 40 40)"/><text id="preview-index--dzP" x="40" y="36" text-anchor="middle" font-size="14" font-weight="600" fill="#343A46" class="num">45%</text><text id="preview-index--dzL" x="40" y="49" text-anchor="middle" font-size="7" fill="#4F5B6E">孕期</text></svg>
 <div style="font-size:11px;color:var(--lg-text-secondary);line-height:2"><div class="dpick" data-idx="0" style="cursor:pointer"><i style="display:inline-block;width:9px;height:9px;border-radius:3px;background:#F77FA3;margin-right:5px"></i>孕期 45%</div><div class="dpick" data-idx="1" style="cursor:pointer"><i style="display:inline-block;width:9px;height:9px;border-radius:3px;background:#FFC3A0;margin-right:5px"></i>婴儿 29%</div><div class="dpick" data-idx="2" style="cursor:pointer"><i style="display:inline-block;width:9px;height:9px;border-radius:3px;background:#B69AFF;margin-right:5px"></i>幼儿 22%</div><div class="dpick" data-idx="3" style="cursor:pointer"><i style="display:inline-block;width:9px;height:9px;border-radius:3px;background:#A9E3D4;margin-right:5px"></i>学龄前 16%</div></div></div><p class="note" style="margin-top:6px">档案阶段构成（示例占比）· 段 ≤5，其余并“其他”。</p>
       </div>
@@ -2497,13 +2500,13 @@ import { GmIcon } from "@goodmom/icons";
     <div class="grid g2">
       <div class="panel glass-l2 cchart">
         <h3 style="margin-bottom:2px">分布 · 雷达（健康维度）</h3>
-        <span class="ph-cap" style="margin:0 0 6px;color:var(--lg-text-tertiary)">模块 5 · 六维健康评估 · 参考带 0.33/0.66 · 04 · 4.3.5</span>
+        <span class="ph-cap" style="margin:0 0 6px;color:var(--lg-text-secondary)">模块 5 · 六维健康评估 · 参考带 0.33/0.66 · 04 · 4.3.5</span>
         <div style="display:flex;gap:6px;flex-wrap:wrap;align-items:center;margin-bottom:8px">
           <span class="chip on" data-rad="good" style="padding:4px 12px;font-size:11px">全部正常</span>
           <span class="chip" data-rad="focus" style="padding:4px 12px;font-size:11px">视力待复查</span>
           <span class="chip" data-rad="oral" style="padding:4px 12px;font-size:11px">口腔待检</span>
           <span class="chip" data-rad="risk" style="padding:4px 12px;font-size:11px">高危示例</span>
-          <span id="preview-index--radState" style="font-size:11px;color:var(--lg-text-tertiary)">点击预设切换形态</span>
+          <span id="preview-index--radState" style="font-size:11px;color:var(--lg-text-secondary)">点击预设切换形态</span>
         </div>
         <div style="display:flex;gap:16px;align-items:center;flex-wrap:wrap">
           <svg width="230" height="150" viewBox="0 0 200 140" style="flex:none;display:block">
@@ -2533,7 +2536,7 @@ import { GmIcon } from "@goodmom/icons";
         <p class="note" style="margin-top:8px">六维=生长/营养/心理/视力/听力/口腔：维度低于 0.5 自动转珊瑚提示；右侧为最近评估快照，预设仅演示形态。</p>
       </div>
       <div class="panel glass-l2 cchart">
-        <h3 style="margin-bottom:2px">关系 · 拓扑</h3><span class="ph-cap" style="margin:0 0 6px;color:var(--lg-text-tertiary)">模块 6 · 玻璃节点 · 活动线≤2 · 04 · 4.3.7</span><div style="display:flex;align-items:center;justify-content:center;gap:12px;padding:6px 0">
+        <h3 style="margin-bottom:2px">关系 · 拓扑</h3><span class="ph-cap" style="margin:0 0 6px;color:var(--lg-text-secondary)">模块 6 · 玻璃节点 · 活动线≤2 · 04 · 4.3.7</span><div style="display:flex;align-items:center;justify-content:center;gap:12px;padding:6px 0">
 <span class="t-node"><span class="core" style="font-size:13px">妈</span></span>
 <span class="t-link"></span>
 <span class="t-node center"><span class="core" style="font-size:12px">宝</span></span>
@@ -2543,14 +2546,14 @@ import { GmIcon } from "@goodmom/icons";
 </div><p class="note" style="margin-top:6px">家庭-医护-档案关系（示意）；数据流白芯+紫光点。</p>
       </div>
       <div class="panel glass-l2 cchart">
-        <h3 style="margin-bottom:2px">流程 · 筛查→结案</h3><span class="ph-cap" style="margin:0 0 6px;color:var(--lg-text-tertiary)">模块 7 · 状态链 · 15.2.2/5</span><div style="display:flex;align-items:center;gap:4px;flex-wrap:wrap;font-size:10.5px">
-<span class="tg g">待筛查</span><span style="color:var(--lg-text-tertiary)">→</span><span class="tg b">筛查中</span><span style="color:var(--lg-text-tertiary)">→</span><span class="tg r">检查异常</span><span style="color:var(--lg-text-tertiary)">→</span><span class="tg o">待复查</span><span style="color:var(--lg-text-tertiary)">→</span><span class="tg p">已转诊</span><span style="color:var(--lg-text-tertiary)">→</span><span class="tg g">已结案</span>
+        <h3 style="margin-bottom:2px">流程 · 筛查→结案</h3><span class="ph-cap" style="margin:0 0 6px;color:var(--lg-text-secondary)">模块 7 · 状态链 · 15.2.2/5</span><div style="display:flex;align-items:center;gap:4px;flex-wrap:wrap;font-size:10.5px">
+<span class="tg g">待筛查</span><span style="color:var(--lg-text-secondary)">→</span><span class="tg b">筛查中</span><span style="color:var(--lg-text-secondary)">→</span><span class="tg r">检查异常</span><span style="color:var(--lg-text-secondary)">→</span><span class="tg o">待复查</span><span style="color:var(--lg-text-secondary)">→</span><span class="tg p">已转诊</span><span style="color:var(--lg-text-secondary)">→</span><span class="tg g">已结案</span>
 </div><p class="note" style="margin-top:6px">两癌/随访链路：步骤条+状态 Tag 双通道；异常可分支转诊。</p>
       </div>
       <div class="panel glass-l2 cchart">
-        <h3 style="margin-bottom:2px">进度 · 环形水位</h3><span class="ph-cap" style="margin:0 0 6px;color:var(--lg-text-tertiary)">模块 8 · 08 · 8.2.5 / 13</span><div style="display:flex;gap:14px;flex-wrap:wrap">
-<div style="display:flex;flex-direction:column;align-items:center"><svg width="64" height="64" viewBox="0 0 80 80"><circle cx="40" cy="40" r="31" fill="none" stroke="rgba(58,52,84,.08)" stroke-width="9"/><circle cx="40" cy="40" r="31" fill="none" stroke="#4FB59C" stroke-width="9" stroke-linecap="round" stroke-dasharray="175 195" transform="rotate(-90 40 40)"/><text x="40" y="36" text-anchor="middle" font-size="12" font-weight="600" fill="#25715D" class="num">96%</text><text x="40" y="49" text-anchor="middle" font-size="6.5" fill="#4F5B6E">疫苗全程</text></svg><span style="font-size:10px;color:var(--lg-text-tertiary)">薄荷·正向</span></div>
-<div style="display:flex;flex-direction:column;align-items:center"><svg width="64" height="64" viewBox="0 0 80 80"><circle cx="40" cy="40" r="31" fill="none" stroke="rgba(58,52,84,.08)" stroke-width="9"/><circle cx="40" cy="40" r="31" fill="none" stroke="#EFAF55" stroke-width="9" stroke-linecap="round" stroke-dasharray="123 195" transform="rotate(-90 40 40)"/><text x="40" y="36" text-anchor="middle" font-size="12" font-weight="600" fill="#8D5A15" class="num">68%</text><text x="40" y="49" text-anchor="middle" font-size="6.5" fill="#4F5B6E">高危闭环</text></svg><span style="font-size:10px;color:var(--lg-text-tertiary)">琥珀·注意</span></div>
+        <h3 style="margin-bottom:2px">进度 · 环形水位</h3><span class="ph-cap" style="margin:0 0 6px;color:var(--lg-text-secondary)">模块 8 · 08 · 8.2.5 / 13</span><div style="display:flex;gap:14px;flex-wrap:wrap">
+<div style="display:flex;flex-direction:column;align-items:center"><svg width="64" height="64" viewBox="0 0 80 80"><circle cx="40" cy="40" r="31" fill="none" stroke="rgba(58,52,84,.08)" stroke-width="9"/><circle cx="40" cy="40" r="31" fill="none" stroke="#4FB59C" stroke-width="9" stroke-linecap="round" stroke-dasharray="175 195" transform="rotate(-90 40 40)"/><text x="40" y="36" text-anchor="middle" font-size="12" font-weight="600" fill="#25715D" class="num">96%</text><text x="40" y="49" text-anchor="middle" font-size="6.5" fill="#4F5B6E">疫苗全程</text></svg><span style="font-size:10px;color:var(--lg-text-secondary)">薄荷·正向</span></div>
+<div style="display:flex;flex-direction:column;align-items:center"><svg width="64" height="64" viewBox="0 0 80 80"><circle cx="40" cy="40" r="31" fill="none" stroke="rgba(58,52,84,.08)" stroke-width="9"/><circle cx="40" cy="40" r="31" fill="none" stroke="#EFAF55" stroke-width="9" stroke-linecap="round" stroke-dasharray="123 195" transform="rotate(-90 40 40)"/><text x="40" y="36" text-anchor="middle" font-size="12" font-weight="600" fill="#8D5A15" class="num">68%</text><text x="40" y="49" text-anchor="middle" font-size="6.5" fill="#4F5B6E">高危闭环</text></svg><span style="font-size:10px;color:var(--lg-text-secondary)">琥珀·注意</span></div>
 </div><p class="note" style="margin-top:6px">进度=状态语义色（薄荷正向/琥珀待跟进），非装饰。</p>
       </div>
     </div>
@@ -2767,7 +2770,7 @@ import { GmIcon } from "@goodmom/icons";
       <a class="excard glass-l2" href="#gm-mod-preview-patterns" data-mod="preview-patterns""><span style="display:flex;align-items:center;gap:10px"><span class="no">7</span><h3 style="margin:0">新增能力示例（V2.5）</h3></span><p>Link 链接全态 · Cascader 级联三形态 · 响应式适配容器（拖动容器宽度实测切换）· 1284 条虚拟长列表 · 暗黑模式 · 边框宽度档</p><span class="ends"><i>P</i><i>C</i><i>+</i><i>M</i></span><span class="go">打开示例 <svg viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span></a>
       <a class="btn btn-primary btn-md" href="#gm-mod-preview-examples" data-mod="preview-examples"">打开示例中心（按顺序浏览 1→6）· <a href="#gm-mod-preview-patterns" data-mod="preview-patterns"" style="color:inherit;text-decoration:underline">新增能力示例（7）</a>
         <svg viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
-      <span style="font-size:12px;color:var(--lg-text-tertiary)">页面模板口径见 11.3 / 13 / 15.4；状态与五色见 15.2 / 02.10；iPad 分层见 10.1.1。</span>
+      <span style="font-size:12px;color:var(--lg-text-secondary)">页面模板口径见 11.3 / 13 / 15.4；状态与五色见 15.2 / 02.10；iPad 分层见 10.1.1。</span>
     </div>
   </section>
 
@@ -2777,7 +2780,7 @@ import { GmIcon } from "@goodmom/icons";
     <div class="panel glass-l2 copybox">
       <div>
         <h3 style="margin-bottom:6px"><i></i>CSS Variables :root</h3>
-        <p style="font-size:12px;color:var(--lg-text-tertiary)">点击复制后粘贴到项目 <code style="background:rgba(255,255,255,.6);padding:2px 6px;border-radius:6px">:root</code>，并给玻璃件加 <code style="background:rgba(255,255,255,.6);padding:2px 6px;border-radius:6px">backdrop-filter</code>（记得 <code style="background:rgba(255,255,255,.6);padding:2px 6px;border-radius:6px">-webkit-</code> 前缀）。</p>
+        <p style="font-size:12px;color:var(--lg-text-secondary)">点击复制后粘贴到项目 <code style="background:rgba(255,255,255,.6);padding:2px 6px;border-radius:6px">:root</code>，并给玻璃件加 <code style="background:rgba(255,255,255,.6);padding:2px 6px;border-radius:6px">backdrop-filter</code>（记得 <code style="background:rgba(255,255,255,.6);padding:2px 6px;border-radius:6px">-webkit-</code> 前缀）。</p>
       </div>
       <button class="btn btn-primary btn-md" id="preview-index--copyBtn">复制全部 Token
         <svg viewBox="0 0 24 24"><rect x="9" y="9" width="12" height="12" rx="3"/><path d="M5 15V6a2 2 0 0 1 2-2h9"/></svg></button>
@@ -4449,8 +4452,13 @@ function MODROOT_preview_examples(){return document.getElementById("gm-mod-previ
 .gm-mod--preview-mobile .pm-sa{width:64px;display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:600;
   color:var(--text);background:var(--pm-solid)}
 .gm-mod--preview-mobile .pm-sa+.pm-sa{border-left:1px solid var(--pm-divider)}
-.gm-mod--preview-mobile .pm-sa.warn{color:var(--sem-warn)}
-.gm-mod--preview-mobile .pm-sa.del{color:#FFF;background:var(--solid-danger)}
+/* ⚠️ 修饰类必须带命名空间（`pm-sa--*`）：直接写 `pm-sa del` 会撞上**上传缩略图的删除角标**
+   `.del`（24×24 圆形角标，规则更靠后）—— 实测左滑的「删除」被压成 24×24 圆点、
+   文字溢出，而 page-qa 因为 `.del::before` 补了 44 热区一直判它"合规"。
+   11.2.5 要求操作按钮 **≥64 宽**，故加了断言（mobile-smoke）防复发。 */
+.gm-mod--preview-mobile .pm-sa--warn{color:var(--sem-warn)}
+.gm-mod--preview-mobile .pm-sa--del{color:#FFF;background:var(--solid-danger)}
+.gm-mod--preview-mobile .pm-sa--ok{color:var(--text)}
 .gm-mod--preview-mobile .pm-sa:active{transform:scale(.97)}
 .gm-mod--preview-mobile .rowitem{display:flex;align-items:center;gap:12px;padding:14px;border-radius:18px;min-height:52px}
 .gm-mod--preview-mobile .rowitem .ic{width:40px;height:40px;border-radius:18px;flex:none;display:flex;align-items:center;
@@ -4635,6 +4643,47 @@ function MODROOT_preview_examples(){return document.getElementById("gm-mod-previ
 .gm-mod--preview-mobile .pm-more span{font-size:12px;color:var(--text-3);padding:6px 14px;border-radius:999px;
   background:var(--pm-input);border:1px solid var(--pm-divider)}
 .gm-mod--preview-mobile .pm-more.is-loading span{color:var(--pm-link)}
+
+/* ── 14b · 虚拟长列表（10.11.2 / 11.2.16）：窗口化容器 + 吸顶分组 + 左滑行 ──
+   窗口算法在外壳（window.gmVirtualList），本模块只给"长什么样"。
+   行高 52（10.11.2 固定行高）、overscan 4、距底 4 行触发 onEndReached。 */
+.gm-mod--preview-mobile .pm-vl{position:relative;height:280px;overflow-y:auto;overscroll-behavior:contain;
+  -webkit-overflow-scrolling:touch;touch-action:pan-y;padding:0 12px}
+.gm-mod--preview-mobile .pm-vl:focus-visible{outline:2px solid var(--pm-ring);outline-offset:-2px;border-radius:18px}
+.gm-mod--preview-mobile .pm-vl-in{position:relative}
+.gm-mod--preview-mobile .pm-vlgrid{position:sticky;top:0;z-index:2;display:flex;align-items:center;gap:8px;padding:8px 12px;
+  border-radius:18px;font-size:12px;font-weight:600;color:var(--text-2);
+  background:var(--pm-solid);border:1px solid var(--pm-edge);margin-bottom:8px}
+.gm-mod--preview-mobile .pm-vlgrid span{margin-left:auto;font-weight:400;color:var(--text-3)}
+.gm-mod--preview-mobile .pm-vlrow{display:flex;align-items:center;gap:12px;height:52px;padding:0 12px;border-radius:18px;
+  background:var(--pm-input);border:1px solid var(--pm-divider);box-sizing:border-box;overflow:hidden}
+/* 暗色档：行**不再叠加白**，改用暗内嵌底。
+   原因：行底 = 卡片玻璃（9–10% 白）+ --pm-input（12% 白）叠起来约 20% 白，
+   比 02 · 2.1.9 给语义 alias 定的最坏合成面更亮 —— 实测行内语义文字（--sem-danger 等）
+   只有 4.40:1，差 0.1 不过 AA。压暗承载体即可，不必去动语义色 Token（那会连带改暗色映射表）。 */
+.gm-mod--preview-mobile[data-theme="dark"] .pm-vlrow{background:rgba(0,0,0,.20)}
+.gm-mod--preview-mobile .pm-vlrow b{display:block;font-size:14px;font-weight:500;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.gm-mod--preview-mobile .pm-vlrow i{display:block;font-style:normal;font-size:12px;color:var(--text-3)}
+.gm-mod--preview-mobile .pm-vlend{padding:10px 0 4px;text-align:center}
+.gm-mod--preview-mobile .pm-vlend span{font-size:12px;color:var(--text-3);padding:6px 14px;border-radius:999px;
+  background:var(--pm-input);border:1px solid var(--pm-divider)}
+.gm-mod--preview-mobile .pm-vlend.is-loading span{color:var(--pm-link)}
+
+/* ── 14c · Cascader 移动版多列 Picker（11.2.17）──────────────────────── */
+.gm-mod--preview-mobile .pm-casc-cols{display:flex;gap:4px;height:268px}
+.gm-mod--preview-mobile .pm-casc-col{flex:1;min-width:112px;overflow-y:auto;overscroll-behavior:contain;scrollbar-width:none;
+  padding:8px 0;background:var(--pm-input);border-radius:18px;border:1px solid var(--pm-divider)}
+.gm-mod--preview-mobile .pm-casc-col::-webkit-scrollbar{display:none}
+.gm-mod--preview-mobile .pm-casc-col.on{border-color:rgba(232,93,143,.45)}
+.gm-mod--preview-mobile .pm-casc-hd{position:sticky;top:0;z-index:2;padding:6px 10px;font-size:12px;font-weight:600;
+  color:var(--text-3);background:var(--pm-solid);border-bottom:1px solid var(--pm-divider)}
+.gm-mod--preview-mobile .pm-casc-it{display:flex;align-items:center;gap:6px;width:100%;min-height:48px;padding:8px 12px;
+  font-size:14px;color:var(--text);text-align:left}
+.gm-mod--preview-mobile .pm-casc-it.on{color:var(--text);font-weight:600}
+.gm-mod--preview-mobile .pm-casc-it.on::after{content:"✓";color:var(--pm-rose-text);font-weight:700}
+.gm-mod--preview-mobile .pm-casc-it .ck{margin-left:auto;color:var(--pm-rose-text);display:none}
+.gm-mod--preview-mobile .pm-casc-it.on .ck{display:block}
+.gm-mod--preview-mobile .pm-casc-empty{padding:16px 12px;font-size:12px;color:var(--text-3);text-align:center}
 
 /* ── 15 · 列表状态：骨架 / 空 / 错（8.2.15 · 8.2.12 · 11.6.9）────────── */
 .gm-mod--preview-mobile .pm-sk{display:flex;flex-direction:column;gap:12px}
@@ -5025,9 +5074,9 @@ function MODROOT_preview_examples(){return document.getElementById("gm-mod-previ
             <span class="rv bad">随访</span>
           </button>
           <div class="pm-swipeacts">
-            <button class="pm-sa ok" type="button" data-act="随访" data-row="risk">随访</button>
-            <button class="pm-sa warn" type="button" data-act="改期" data-row="risk">改期</button>
-            <button class="pm-sa del" type="button" data-act="删除" data-row="risk">删除</button>
+            <button class="pm-sa pm-sa--ok" type="button" data-act="随访" data-row="risk">随访</button>
+            <button class="pm-sa pm-sa--warn" type="button" data-act="改期" data-row="risk">改期</button>
+            <button class="pm-sa pm-sa--del" type="button" data-act="删除" data-row="risk">删除</button>
           </div>
         </div>
         <div class="pm-swipe" data-row="vac">
@@ -5037,9 +5086,9 @@ function MODROOT_preview_examples(){return document.getElementById("gm-mod-previ
             <span class="rv" style="color:var(--sem-warn)">预约</span>
           </button>
           <div class="pm-swipeacts">
-            <button class="pm-sa ok" type="button" data-act="预约" data-row="vac">预约</button>
-            <button class="pm-sa warn" type="button" data-act="改期" data-row="vac">改期</button>
-            <button class="pm-sa del" type="button" data-act="删除" data-row="vac">删除</button>
+            <button class="pm-sa pm-sa--ok" type="button" data-act="预约" data-row="vac">预约</button>
+            <button class="pm-sa pm-sa--warn" type="button" data-act="改期" data-row="vac">改期</button>
+            <button class="pm-sa pm-sa--del" type="button" data-act="删除" data-row="vac">删除</button>
           </div>
         </div>
         <div class="pm-swipe" data-row="ai">
@@ -5049,8 +5098,8 @@ function MODROOT_preview_examples(){return document.getElementById("gm-mod-previ
             <span class="rv good">查看</span>
           </button>
           <div class="pm-swipeacts">
-            <button class="pm-sa ok" type="button" data-act="查看" data-row="ai">查看</button>
-            <button class="pm-sa warn" type="button" data-act="忽略" data-row="ai">忽略</button>
+            <button class="pm-sa pm-sa--ok" type="button" data-act="查看" data-row="ai">查看</button>
+            <button class="pm-sa pm-sa--warn" type="button" data-act="忽略" data-row="ai">忽略</button>
           </div>
         </div>
       </div>
@@ -5195,51 +5244,17 @@ function MODROOT_preview_examples(){return document.getElementById("gm-mod-previ
 
     <!-- ══ 视图 2 · 提醒（手势 + 列表状态）════════════════════════════ -->
     <section class="pm-view" data-view="alerts" id="preview-mobile--pmViewAlerts" role="tabpanel" aria-labelledby="preview-mobile--pmTabAlerts" tabindex="-1">
-      <h2 class="sec">手势实验室 <small>下拉刷新 · 左滑操作 · 上滑加载更多</small></h2>
+      <h2 class="sec">随访队列 <small>VirtualList 窗口化 · PullRefresh · Sticky · SwipeAction · LoadMore（11.2.16）</small></h2>
       <div class="pm-lab">
         <div class="pm-labbar">
           <svg class="i" style="width:16px;height:16px" viewBox="0 0 24 24"><path d="M12 3.8 21.4 19.7a1.5 1.5 0 0 1-1.3 2.2H3.9a1.5 1.5 0 0 1-1.3-2.2z"/><path d="M12 10.2v4.6"/></svg>
-          <b>待随访队列</b><span id="preview-mobile--pmLabCount">3 条</span>
+          <b>随访队列</b><span id="preview-mobile--pmLabCount">共 1284 条 · 窗口内渲染</span>
         </div>
-        <div class="pm-labscroll" id="preview-mobile--pmGest" tabindex="0" role="group" aria-label="待随访队列，可下拉刷新、左滑操作、上滑加载更多">
-          <div class="pm-pullbody" id="preview-mobile--pmPullBody">
-            <div class="pm-ptr" id="preview-mobile--pmPtr" aria-hidden="true"><span class="pm-ring"></span><b id="preview-mobile--pmPtrText">下拉刷新</b></div>
-            <div class="lst" id="preview-mobile--pmGestList" style="padding-top:12px">
-              <div class="pm-swipe" data-row="g1">
-                <button class="pm-swipebody gcard rowitem" type="button" data-detail="王小雨 · 生长低于 P3">
-                  <span class="ic" style="color:var(--sem-danger)"><svg class="i" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="m9.4 9.4 5.2 5.2M14.6 9.4l-5.2 5.2"/></svg></span>
-                  <span class="md"><b>王小雨 · 生长低于 P3</b><span>18 月龄 · 今日到期</span></span>
-                  <span class="rv bad">随访</span>
-                </button>
-                <div class="pm-swipeacts">
-                  <button class="pm-sa ok" type="button" data-act="随访" data-row="g1">随访</button>
-                  <button class="pm-sa del" type="button" data-act="删除" data-row="g1">删除</button>
-                </div>
-              </div>
-              <div class="pm-swipe" data-row="g2">
-                <button class="pm-swipebody gcard rowitem" type="button" data-detail="李念 · 疫苗逾期 3 天">
-                  <span class="ic" style="color:var(--sem-warn)"><svg class="i" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 7v5.2l3.4 2"/></svg></span>
-                  <span class="md"><b>李念 · 疫苗逾期 3 天</b><span>12 月龄 · 需电话召回</span></span>
-                  <span class="rv">提醒</span>
-                </button>
-                <div class="pm-swipeacts">
-                  <button class="pm-sa ok" type="button" data-act="提醒" data-row="g2">提醒</button>
-                  <button class="pm-sa del" type="button" data-act="删除" data-row="g2">删除</button>
-                </div>
-              </div>
-              <div class="pm-swipe" data-row="g3">
-                <button class="pm-swipebody gcard rowitem" type="button" data-detail="赵果果 · 儿保已完成">
-                  <span class="ic" style="color:var(--sem-positive)"><svg class="i" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="m8.2 12.4 2.6 2.6 5-5.6"/></svg></span>
-                  <span class="md"><b>赵果果 · 儿保已完成</b><span>3 月龄 · 待录入结论</span></span>
-                  <span class="rv good">录入</span>
-                </button>
-                <div class="pm-swipeacts">
-                  <button class="pm-sa ok" type="button" data-act="录入" data-row="g3">录入</button>
-                  <button class="pm-sa del" type="button" data-act="删除" data-row="g3">删除</button>
-                </div>
-              </div>
-            </div>
-            <div class="pm-more" id="preview-mobile--pmMore"><span>上滑加载更多</span></div>
+        <div class="pm-pullbody" id="preview-mobile--pmPullBody">
+          <div class="pm-ptr" id="preview-mobile--pmPtr" aria-hidden="true"><span class="pm-ring"></span><b id="preview-mobile--pmPtrText">下拉刷新</b></div>
+          <div class="pm-vl" id="preview-mobile--pmGest" tabindex="0" role="list" aria-label="随访队列长列表，可下拉刷新、左滑操作、上滑加载更多">
+            <div class="pm-vl-in" id="preview-mobile--pmGestList"></div>
+            <div class="pm-vlend" id="preview-mobile--pmMore"><span>上滑加载更多</span></div>
           </div>
         </div>
       </div>
@@ -5421,6 +5436,16 @@ function MODROOT_preview_examples(){return document.getElementById("gm-mod-previ
         <div style="font-size:12px;color:var(--text-3)">点输入条唤出；与系统键盘二选一（正式实现优先 <b>inputmode</b>，自绘仅用于统一观感）</div>
       </div>
 
+      <h2 class="sec">服务机构 <small>Cascader 移动版多列 Picker（11.2.17）</small></h2>
+      <div class="pm-cellgroup" style="margin-bottom:14px">
+        <button class="pm-cell" type="button" id="preview-mobile--pmCascOpen">
+          <span class="ic"><svg class="i" style="width:18px;height:18px" viewBox="0 0 24 24"><path d="M12 21s6.5-5.2 6.5-10a6.5 6.5 0 1 0-13 0C5.5 15.8 12 21 12 21z"/><circle cx="12" cy="11" r="2.4"/></svg></span>
+          <span class="md"><b>所在地区</b><span>用于匹配辖区内的服务机构与随访归属</span></span>
+          <span class="rv" id="preview-mobile--pmCascVal">未选择</span>
+          <svg class="i ch" style="width:16px;height:16px" viewBox="0 0 24 24"><path d="m9 5 7 7-7 7"/></svg>
+        </button>
+      </div>
+
       <h2 class="sec">随访分类 <small>Selector 选择卡（11.6.4）</small></h2>
       <div class="pm-selects" id="preview-mobile--pmSelects" role="radiogroup" aria-label="随访分类" style="margin-bottom:14px">
         <button class="pm-select" type="button" role="radio" aria-checked="true"><b>常规随访</b><span>按月龄计划</span><span class="pm-ck">✓</span></button>
@@ -5593,6 +5618,17 @@ function MODROOT_preview_examples(){return document.getElementById("gm-mod-previ
       <div class="pm-sheetfoot">
         <button class="pm-ghost" type="button" id="preview-mobile--pmPickerCancel">取消</button>
         <button class="pm-primary" type="button" id="preview-mobile--pmPickerOk">确定</button>
+      </div>
+    </div>
+
+    <!-- 级联多列 Picker（11.2.17）：列高 268 / 单列 ≥112 / 选中列高亮 / 列头显示已选层级 -->
+    <div class="pm-sheet" id="preview-mobile--pmCasc" role="dialog" aria-modal="true" aria-labelledby="preview-mobile--pmCascTitle">
+      <div class="pm-grab"></div>
+      <h2 id="preview-mobile--pmCascTitle">选择所在地区</h2>
+      <div class="pm-casc-cols" id="preview-mobile--pmCascCols"></div>
+      <div class="pm-sheetfoot">
+        <button class="pm-ghost" type="button" id="preview-mobile--pmCascCancel">取消</button>
+        <button class="pm-primary" type="button" id="preview-mobile--pmCascOk" disabled>确定</button>
       </div>
     </div>
 
@@ -5956,6 +5992,16 @@ function MODROOT_preview_mobile(){return document.getElementById("gm-mod-preview
       var host = target.parentNode;
       target.style.transition = "opacity .2s ease,transform .2s ease";
       target.style.opacity = "0"; target.style.transform = "scale(.96)";
+      /* 数据模型同步收缩：窗口化列表的真相是 vlItems，只删 DOM 的话
+         下一次滚动重排就会把这条"复活"（本模块实测踩到）。 */
+      var rk = target.getAttribute("data-row") || "";
+      if (rk.charAt(0) === "v") {
+        var no = rk.slice(1);
+        for (var k = 0; k < vlItems.length; k++) {
+          if (vlItems[k].no === no) { vlItems.splice(k, 1); break; }
+        }
+        if (vl) vl.setTotal(vlItems.length);
+      }
       setTimeout(function(){ if (host) host.removeChild(target); }, 200);
     }
     layerClose();
@@ -5969,7 +6015,10 @@ function MODROOT_preview_mobile(){return document.getElementById("gm-mod-preview
   var mbLong = document.getElementById("preview-mobile--mbLong");
   if (mbLong) mbLong.addEventListener("click", function(){ openSheet("cta"); });
 
-  /* ── ⑧ SwipeAction（11.2.5）：左滑 300ms 贴靠；键盘 Tab 到操作钮自动展开 ─ */
+  /* ── ⑧ SwipeAction（11.2.5）：**容器委托**式左滑 ──────────────────────
+     为什么必须委托：11.2.16 的队列是窗口化渲染的，滚动时行会被整批重建 ——
+     逐行 addEventListener 的实现会在滚动后静默失效（老实现即如此，只是当时列表很短）。
+     委托后：手势挂在容器上，行随渲染更替，绑定不用重做。 */
   function actsWidth(row){
     var a = qIn(row, ".pm-swipeacts");
     return a ? a.getBoundingClientRect().width : 0;
@@ -5980,91 +6029,189 @@ function MODROOT_preview_mobile(){return document.getElementById("gm-mod-preview
     body.style.transition = animate ? "" : "none";
     body.style.transform = x ? "translateX(" + x + "px)" : "";
     row.setAttribute("data-open", x < -4 ? "1" : "0");
+    /* ⚠️ 展开态必须**写回数据模型**：窗口化列表的 DOM 会被反复重建，
+       只存在 DOM 上的状态会在下一次重排时消失 —— 表现为"刚滑开的行自己合上了"、
+       更糟的是"操作钮点不到"（重建后行体又盖住了操作钮）。虚拟列表的真相是数据。 */
+    var key = row.getAttribute("data-row") || "";
+    if (key.charAt(0) === "v") {
+      var no = key.slice(1);
+      for (var i = 0; i < vlItems.length; i++) {
+        if (vlItems[i].no === no) { vlItems[i].open = x < -4; vlItems[i].tx = x < -4 ? x : 0; break; }
+      }
+    }
   }
-  function wireSwipe(row){
-    if (!qIn(row, ":scope > .pm-swipebody")) return;
-    var x0 = null, y0 = null, axis = null, base = 0, cur = 0;
-    row.addEventListener("pointerdown", function(e){
-      if (e.target.closest(".pm-sa")) return;
-      x0 = e.clientX; y0 = e.clientY; axis = null;
-      base = row.getAttribute("data-open") === "1" ? -actsWidth(row) : 0;
+  function rowOf(target, sel){ return target && target.closest ? target.closest(sel) : null; }
+  /* 拖动结束后浏览器会**补发一个 click**：若把它当普通点击处理，"点主体=收起"会立刻
+     把刚滑开的行合上（实测：松手瞬间 data-open 1→0，操作钮永远点不到）。
+     故记一个"刚刚拖动过"的标记，由紧随其后的那次 click 消费掉。 */
+  var pmSwipedAt = 0;
+  /* 手势窗口护栏：拖动收尾的合成 click / 失焦都不该改变展开态。
+     注意**不要"消费"这个时间戳**：点击事件会依次经过容器处理器与 document 处理器，
+     谁先消费掉，另一个就会把行关掉（实测第三个把行偷关的来源正是 document 那个）。 */
+  function inSwipeWindow(){ return Date.now() - pmSwipedAt < 350; }
+  function initSwipe(container, rowSel){
+    if (!container) return;
+    var row = null, x0 = null, y0 = null, axis = null, base = 0, cur = 0, pid = null;
+    container.addEventListener("pointerdown", function(e){
+      var r = rowOf(e.target, rowSel);
+      if (!r || e.target.closest(".pm-sa")) return;
+      row = r; x0 = e.clientX; y0 = e.clientY; axis = null; pid = e.pointerId;
+      base = r.getAttribute("data-open") === "1" ? -actsWidth(r) : 0;
       cur = base;
     });
-    row.addEventListener("pointermove", function(e){
-      if (x0 === null) return;
+    container.addEventListener("pointermove", function(e){
+      if (x0 === null || !row) return;
       var dx = e.clientX - x0, dy = e.clientY - y0;
       if (!axis) {
         if (Math.abs(dx) < 8 && Math.abs(dy) < 8) return;
         axis = Math.abs(dx) > Math.abs(dy) ? "x" : "y";
-        if (axis === "y") { x0 = null; return; }        /* 纵向手势让给页面滚动 */
+        if (axis === "y") { x0 = null; row = null; return; }   /* 纵向手势让给列表滚动 */
         row.classList.add("is-drag");
-        try { row.setPointerCapture(e.pointerId); } catch (err) {}
+        try { container.setPointerCapture(pid); } catch (err) {}
       }
       cur = Math.max(-actsWidth(row), Math.min(0, base + dx));
       setOpen(row, cur, false);
     });
-    function settle(e){
-      if (x0 === null && axis !== "x") return;
-      if (axis === "x") {
+    function settle(){
+      if (row && axis === "x") {
+        pmSwipedAt = Date.now();
         var w = actsWidth(row);
         setOpen(row, Math.abs(cur) > w * 0.4 ? -w : 0, true);
-        try { if (e && e.pointerId != null) row.releasePointerCapture(e.pointerId); } catch (err) {}
+        try { if (pid != null && container.hasPointerCapture && container.hasPointerCapture(pid)) container.releasePointerCapture(pid); } catch (err) {}
       }
-      row.classList.remove("is-drag");
-      x0 = null; axis = null;
+      if (row) row.classList.remove("is-drag");
+      row = null; x0 = null; axis = null; pid = null;
     }
-    row.addEventListener("pointerup", settle);
-    row.addEventListener("pointercancel", settle);
-    /* 键盘等价路径：操作钮（或主体）获得焦点即展开/收起该行 */
-    row.addEventListener("focusin", function(e){ if (e.target.closest(".pm-sa")) setOpen(row, -actsWidth(row), true); });
-    row.addEventListener("focusout", function(e){ if (!row.contains(e.relatedTarget)) setOpen(row, 0, true); });
+    container.addEventListener("pointerup", settle);
+    container.addEventListener("pointercancel", settle);
+    container.addEventListener("lostpointercapture", settle);
+    /* 键盘等价路径：操作钮获得焦点即展开该行（手势不是唯一入口） */
+    container.addEventListener("focusin", function(e){
+      var r = rowOf(e.target, rowSel);
+      if (r && e.target.closest(".pm-sa")) setOpen(r, -actsWidth(r), true);
+    });
+    container.addEventListener("focusout", function(e){
+      /* 手势窗口内不处理失焦：拖动收尾时浏览器会把焦点移走（点击落在容器上），
+         于是 focusout 把刚滑开的行合上 —— 这是第二个把行"偷关掉"的来源。 */
+      if (inSwipeWindow()) return;
+      var r = rowOf(e.target, rowSel);
+      if (r && !r.contains(e.relatedTarget)) setOpen(r, 0, true);
+    });
   }
-  qaIn(ROOT, ".pm-swipe").forEach(wireSwipe);
+  initSwipe(document.getElementById("preview-mobile--pmHomeList"), ".pm-swipe");
+  initSwipe(document.getElementById("preview-mobile--pmGest"), ".pm-swipe");
 
-  function findRow(key){ var r = null; qaIn(ROOT, ".pm-swipe").forEach(function(x){ if (x.getAttribute("data-row") === key) r = x; }); return r; }
+  /* 行点击与操作钮点击也走**容器委托**（窗口化下逐行绑定会随重建失效）。
+     ⚠️ 这段在重写 ⑧ 时曾被整段丢掉过：表现为"左滑能开、点删除没反应"，
+     而当时的冒烟只验到"能左滑"就停了 —— 故 mobile-smoke 现补了操作闭环断言。 */
+  [document.getElementById("preview-mobile--pmHomeList"), document.getElementById("preview-mobile--pmGest")].forEach(function(container){
+    if (!container) return;
+    container.addEventListener("click", function(e){
+      /* 拖动结束的合成 click：忽略一次，别把刚滑开的行收起来（见 pmSwipedAt 注释） */
+      if (inSwipeWindow()) { e.preventDefault(); return; }
+      var body = e.target.closest(".pm-swipebody");
+      if (body) {
+        var row = rowOf(body, ".pm-swipe");
+        if (row && row.getAttribute("data-open") === "1") { setOpen(row, 0, true); return; }   /* 展开态下点主体 = 收起 */
+        var d = body.getAttribute("data-detail");
+        if (d) { toast("打开详情：" + d); announce("已打开 " + d + " 详情"); }
+        return;
+      }
+      var b = e.target.closest(".pm-sa");
+      if (b) {
+        var act = b.getAttribute("data-act"), r2 = rowOf(b, ".pm-swipe");
+        if (act === "删除" && r2) { pendingDel = r2; openSheet("deliver"); return; }   /* 破坏性操作二次确认（11.2.5） */
+        if (r2) setOpen(r2, 0, true);
+        toast("已" + act);
+        announce("已" + act);
+      }
+    });
+  });
+  /* 点空白收起所有已展开的行 */
   document.addEventListener("click", function(e){
-    var body = e.target.closest(".pm-swipebody");
-    if (body) {
-      var row = body.closest(".pm-swipe");
-      if (row && row.getAttribute("data-open") === "1") { setOpen(row, 0, true); return; }
-      var d = body.getAttribute("data-detail");
-      if (d) { toast("打开详情：" + d); announce("已打开 " + d + " 详情"); }
-      return;
-    }
-    var b = e.target.closest(".pm-sa");
-    if (b) {
-      var act = b.getAttribute("data-act"), row2 = findRow(b.getAttribute("data-row"));
-      if (act === "删除" && row2) { pendingDel = row2; openSheet("deliver"); return; }
-      if (row2) setOpen(row2, 0, true);
-      toast("已" + act);
-      announce("已" + act);
-      return;
-    }
-    /* 点空白收起所有已展开的行 */
-    qaIn(ROOT, '.pm-swipe[data-open="1"]').forEach(function(row3){ if (!row3.contains(e.target)) setOpen(row3, 0, true); });
+    /* 手势收尾的合成 click 常常落在**行外**（指针拖到行外才松手，target 变成视口），
+       这条"点空白收起"就会把刚滑开的行关掉 —— 与容器处理器共用同一个手势窗口护栏。 */
+    if (inSwipeWindow()) return;
+    if (e.target.closest(".pm-swipe")) return;
+    qaIn(ROOT, '.pm-swipe[data-open="1"]').forEach(function(r){ if (!r.contains(e.target)) setOpen(r, 0, true); });
   });
 
-  /* ── ⑨ 手势区：下拉刷新 + 加载更多（10.4.1 / 11.2.16 组合顺序）─────── */
-  var gest = document.getElementById("preview-mobile--pmGest"), pullBody = document.getElementById("preview-mobile--pmPullBody"), ptrText = document.getElementById("preview-mobile--pmPtrText"), more = document.getElementById("preview-mobile--pmMore"),
-      gestList = document.getElementById("preview-mobile--pmGestList"), labCount = document.getElementById("preview-mobile--pmLabCount");
-  var THRESHOLD = 64, MAXPULL = 96;
-  if (gest && pullBody) {
-    var gy0 = null, gdy = 0, refreshing = false;
-    gest.addEventListener("pointerdown", function(e){
-      if (refreshing) return;
-      /* 只排除行内操作钮（.pm-sa）。列表行主体也是 <button>，若一律按
-         "落在按钮上就不下拉"，真机上最常见的姿势（从行上开始下拉）会完全没反应——
-         这是本模块实测踩到的：鼠标从行上拖拽，位移恒为 0。 */
-      if (e.target.closest(".pm-sa")) return;
-      if (gest.scrollTop > 0) return;
-      gy0 = e.clientY; gdy = 0;
-      pullBody.style.transition = "none";
+  /* ── ⑨ 虚拟长列表 + 下拉刷新 + 上滑加载更多（10.11.2 / 11.2.16）─────────
+     组合顺序照 11.2.16：PullRefresh → Sticky → VirtualList → SwipeAction → LoadMore。
+     窗口算法取外壳唯一实现 window.gmVirtualList；本模块只给行长什么样。 */
+  var vlVp = document.getElementById("preview-mobile--pmGest"), vlInner = document.getElementById("preview-mobile--pmGestList"),
+      more = document.getElementById("preview-mobile--pmMore"), labCount = document.getElementById("preview-mobile--pmLabCount"),
+      pullBody = document.getElementById("preview-mobile--pmPullBody"), ptrText = document.getElementById("preview-mobile--pmPtrText");
+  var VL_TOTAL = 1284, VL_PAGE = 40, VL_H = 52, vl = null;
+  /* ⚠️ 必须持有**数据模型**，不能只按索引现生成 HTML：
+     窗口化下 innerHTML 会被反复重建，若渲染函数是"从下标现编"，那么被删掉的行
+     会在下一次滚动时原地复活（本模块实测踩到）。列表的真相是 vlItems，渲染只是投影。 */
+  var vlItems = [];
+  function vlMake(from, count){
+    for (var i = from; i < from + count && i < VL_TOTAL; i++) {
+      var hot = i % 7 === 0, warn = i % 3 === 0;
+      vlItems.push({
+        no: String(i + 1).padStart(4, "0"),
+        sub: hot ? "生长低于 P3 · 今日到期" : warn ? "疫苗逾期召回 · 需电话" : "常规随访 · 本周内",
+        act: hot ? "随访" : warn ? "提醒" : "录入",
+        tone: hot ? "bad" : warn ? "" : "good",
+        color: hot ? "var(--sem-danger)" : warn ? "var(--sem-warn)" : "var(--sem-positive)"
+      });
+    }
+  }
+  function vlRowHtml(it){
+    var openCls = it.open ? ' data-open="1"' : '';
+    var openTx = it.open && it.tx ? ' style="transform:translateX(' + it.tx + 'px)"' : '';
+    return '<div class="pm-swipe"' + openCls + ' data-row="v' + it.no + '">'
+      + '<button class="pm-swipebody pm-vlrow" type="button"' + openTx + ' data-detail="随访对象 #' + it.no + '">'
+      + '<span style="flex:1;min-width:0"><b>随访对象 #' + it.no + '</b><i>' + it.sub + '</i></span>'
+      + '<span class="rv ' + it.tone + '" style="font-size:14px;font-weight:600;color:' + it.color + '">'
+      + it.act + '</span></button>'
+      + '<div class="pm-swipeacts">'
+      + '<button class="pm-sa pm-sa--ok" type="button" data-act="随访" data-row="v' + it.no + '">随访</button>'
+      + '<button class="pm-sa pm-sa--del" type="button" data-act="删除" data-row="v' + it.no + '">删除</button>'
+      + '</div></div>';
+  }
+  vlMake(0, VL_PAGE);
+  function vlBoot(){
+    if (!window.gmVirtualList || !vlVp) return;
+    vl = window.gmVirtualList(vlVp, {
+      total: vlItems.length, rowHeight: VL_H, overscan: 4,
+      innerClass: "pm-vl-in", rowClass: "pm-vl-wrap",
+      render: function(i){ var it = vlItems[i]; return it ? vlRowHtml(it) : ""; },
+      onRange: function(a, b){ if (labCount) labCount.textContent = "共 " + vlItems.length + " / " + VL_TOTAL + " 条 · 窗口内 " + (b - a) + " 行"; },
+      onEndReached: function(){
+        if (vlItems.length >= VL_TOTAL) return;
+        if (more) { more.classList.add("is-loading"); qIn(more, "span").textContent = "加载中…"; }
+        announce("正在加载更多");
+        setTimeout(function(){
+          var from = vlItems.length;
+          vlMake(from, VL_PAGE);
+          if (vl) vl.setTotal(vlItems.length);
+          if (more) {
+            more.classList.remove("is-loading");
+            qIn(more, "span").textContent = vlItems.length >= VL_TOTAL ? "没有更多了" : "上滑加载更多";
+          }
+          toast("已加载 " + VL_PAGE + " 条（共 " + vlItems.length + " 条）");
+        }, 600);
+      }
     });
-    gest.addEventListener("pointermove", function(e){
+  }
+  if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", vlBoot); else vlBoot();
+
+  /* 下拉刷新：视口在顶部时向下拖，跟手位移 → 松手回弹（10.4.1） */
+  if (vlVp && pullBody) {
+    var gy0 = null, gdy = 0, refreshing = false, THRESHOLD = 64, MAXPULL = 96;
+    vlVp.addEventListener("pointerdown", function(e){
+      if (refreshing || vlVp.scrollTop > 0) return;
+      if (e.target.closest(".pm-sa")) return;
+      gy0 = e.clientY; gdy = 0; pullBody.style.transition = "none";
+    });
+    vlVp.addEventListener("pointermove", function(e){
       if (gy0 === null) return;
       var dy = e.clientY - gy0;
       if (dy <= 0) { gdy = 0; pullBody.style.transform = ""; return; }
-      gdy = Math.min(MAXPULL, dy * 0.5);                 /* 阻尼 0.5，上限 96 */
+      gdy = Math.min(MAXPULL, dy * 0.5);
       pullBody.style.transform = "translateY(" + gdy + "px)";
       if (ptrText) ptrText.textContent = gdy >= THRESHOLD * 0.5 ? "松手刷新" : "下拉刷新";
     });
@@ -6075,75 +6222,24 @@ function MODROOT_preview_mobile(){return document.getElementById("gm-mod-preview
       pullBody.style.transition = "";
       pullBody.style.transform = fire ? "translateY(56px)" : "";
       if (!fire) { if (ptrText) ptrText.textContent = "下拉刷新"; return; }
-      refreshing = true;
-      gest.classList.add("pm-refreshing");
+      refreshing = true; vlVp.classList.add("pm-refreshing");
       if (ptrText) ptrText.textContent = "正在刷新…";
       announce("正在刷新队列");
       setTimeout(function(){
-        var n = gestList ? gestList.children.length : 0;
-        if (gestList) {
-          var row = document.createElement("div");
-          row.className = "pm-swipe";
-          row.setAttribute("data-row", "new" + n);
-          row.innerHTML = '<button class="pm-swipebody gcard rowitem" type="button" data-detail="新分配 · 高危随访">'
-            + '<span class="ic" style="color:var(--sem-special)"><svg class="i" viewBox="0 0 24 24"><path d="M12 3.4l2.1 5.2 5.2 2.1-5.2 2.1-2.1 5.2-2.1-5.2-5.2-2.1 5.2-2.1z"/></svg></span>'
-            + '<span class="md"><b>新分配 · 高危随访</b><span>刚刚 · 系统自动指派</span></span>'
-            + '<span class="rv bad">随访</span></button>'
-            + '<div class="pm-swipeacts"><button class="pm-sa ok" type="button" data-act="随访" data-row="new' + n + '">随访</button>'
-            + '<button class="pm-sa del" type="button" data-act="删除" data-row="new' + n + '">删除</button></div>';
-          gestList.insertBefore(row, gestList.firstChild);
-          wireSwipe(row);
-          if (labCount) labCount.textContent = gestList.children.length + " 条";
-        }
+        vlItems.length = 0;                /* 刷新 = 回到第一页（服务端重排） */
+        vlMake(0, VL_PAGE);
+        if (vl) vl.setTotal(vlItems.length);
+        if (more) qIn(more, "span").textContent = "上滑加载更多";
         pullBody.style.transform = "";
-        gest.classList.remove("pm-refreshing");
+        vlVp.classList.remove("pm-refreshing");
         if (ptrText) ptrText.textContent = "下拉刷新";
         refreshing = false;
-        toast("已刷新 · 新增 1 条待随访");
-        announce("刷新完成，新增 1 条待随访");
-      }, 1200);
+        toast("已刷新队列");
+        announce("刷新完成");
+      }, 1100);
     }
-    gest.addEventListener("pointerup", endPull);
-    gest.addEventListener("pointercancel", endPull);
-    if (more) {
-      var moreTxt = qIn(more, "span"), batches = 0, MAX_BATCH = 1;
-      gest.addEventListener("scroll", function(){
-        if (!gestList) return;
-        if (gest.scrollTop + gest.clientHeight < gest.scrollHeight - 60) return;
-        if (more.getAttribute("data-done") === "1" || more.getAttribute("data-loading") === "1") return;
-        more.setAttribute("data-loading", "1");
-        more.classList.add("is-loading");
-        if (moreTxt) moreTxt.textContent = "加载中…";
-        announce("正在加载更多");
-        setTimeout(function(){
-          var add = batches < MAX_BATCH ? 3 : 0;   /* 批次上限固定为 1 页：到底提示必须可预期 */
-          var n = gestList.children.length;
-          for (var i = 0; i < add; i++) {
-            var r2 = document.createElement("div");
-            r2.className = "pm-swipe";
-            r2.setAttribute("data-row", "q" + (n + i));
-            r2.innerHTML = '<button class="pm-swipebody gcard rowitem" type="button" data-detail="排队中 · ' + (n + i + 1) + ' 号">'
-              + '<span class="ic"><svg class="i" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 7v5.2l3.4 2"/></svg></span>'
-              + '<span class="md"><b>排队中 · ' + (n + i + 1) + ' 号</b><span>预计今日完成</span></span>'
-              + '<span class="rv">等待</span></button>'
-              + '<div class="pm-swipeacts"><button class="pm-sa ok" type="button" data-act="随访" data-row="q' + (n + i) + '">随访</button>'
-              + '<button class="pm-sa del" type="button" data-act="删除" data-row="q' + (n + i) + '">删除</button></div>';
-            gestList.appendChild(r2);
-            wireSwipe(r2);
-          }
-          batches++;
-          more.removeAttribute("data-loading");
-          more.classList.remove("is-loading");
-          if (batches >= MAX_BATCH) {
-            more.setAttribute("data-done", "1");
-            if (moreTxt) moreTxt.textContent = "没有更多了";
-          }
-          if (labCount) labCount.textContent = gestList.children.length + " 条";
-          toast(add ? "已加载更多" : "已到底");
-          announce(add ? ("已加载更多，当前 " + gestList.children.length + " 条") : "已到底，没有更多了");
-        }, 900);
-      }, { passive:true });
-    }
+    vlVp.addEventListener("pointerup", endPull);
+    vlVp.addEventListener("pointercancel", endPull);
   }
 
   /* ── ⑩ 列表状态：骨架 / 空 / 错 / 有数据（8.2.15 · 11.6.9）───────── */
@@ -6701,6 +6797,145 @@ function MODROOT_preview_mobile(){return document.getElementById("gm-mod-preview
     });
     kbd.style.display = "none";
     paint();
+  })();
+
+/* ── ㉓ Cascader 移动版多列 Picker（11.2.17）───────────────────────────
+     口径：列高 268 · 单列宽 ≥112 · 选中列高亮 · 列头显示已选层级 ·
+     底部「取消/确定」常驻、未选到叶子时「确定」禁用 · 层级 ≤4 ·
+     键盘 ←/→ 跨列、↑/↓ 列内、Enter 选中、Esc 关闭（与读屏语义 role=listbox/option 配套）。 */
+  (function initCascader(){
+    var openBtn = document.getElementById("preview-mobile--pmCascOpen"), sheetEl = document.getElementById("preview-mobile--pmCasc"),
+        colsEl = document.getElementById("preview-mobile--pmCascCols"), okBtn = document.getElementById("preview-mobile--pmCascOk"),
+        cancelBtn = document.getElementById("preview-mobile--pmCascCancel"), valEl = document.getElementById("preview-mobile--pmCascVal");
+    if (!openBtn || !sheetEl || !colsEl) return;
+    /* 三级示例（≤4 层）：省 → 市 → 区 */
+    var TREE = [
+      { label: "山东省", children: [
+        { label: "青岛市", children: [{ label: "市南区" }, { label: "市北区" }, { label: "李沧区" }] },
+        { label: "济南市", children: [{ label: "历下区" }, { label: "市中区" }] } ] },
+      { label: "江苏省", children: [
+        { label: "南京市", children: [{ label: "鼓楼区" }, { label: "玄武区" }] },
+        { label: "苏州市", children: [{ label: "姑苏区" }] } ] },
+    ];
+    var LEVEL_NAME = ["省", "市", "区"];
+    /* 初始**什么都不选**（-1）：11.2.17 要求"未选到叶子时「确定」禁用"，
+       若默认填 [0,0,0] 会一开就三级全选、确定可用，等于把这条口径架空（实测被自己的验收抓到）。 */
+    var pick = [-1, -1, -1];     /* 每层选中下标；-1 = 未选 */
+    var active = 0;              /* 当前列 */
+    var committed = null;
+
+    function levels(){
+      /* 返回 [{name, options, sel}...]：已选到的层 + 下一层（若父层已选） */
+      var out = [], opts = TREE, i = 0;
+      while (opts && opts.length) {
+        out.push({ name: LEVEL_NAME[i] || ("第 " + (i + 1) + " 级"), options: opts, sel: pick[i] });
+        var selIdx = pick[i];
+        if (selIdx == null || selIdx < 0 || !opts[selIdx] || !opts[selIdx].children) break;
+        opts = opts[selIdx].children; i++;
+        if (i > 3) break;         /* 层级 ≤4 */
+      }
+      return out;
+    }
+    function chosen(){
+      var labels = [], opts = TREE;
+      for (var i = 0; i < LEVEL_NAME.length; i++) {
+        var k = pick[i];
+        if (k == null || k < 0 || !opts || !opts[k]) return null;
+        labels.push(opts[k].label);
+        opts = opts[k].children;
+        if (!opts) return { labels: labels, leaf: true };
+      }
+      return { labels: labels, leaf: !!opts };
+    }
+    function render(focusNew){
+      var ls = levels(), html = "";
+      ls.forEach(function(L, ci){
+        var hd = L.name + (ci > 0 && pick[ci - 1] >= 0
+          ? " · " + ls[ci - 1].options[pick[ci - 1]].label : "");
+        html += '<div class="pm-casc-col' + (ci === active ? " on" : "") + '" role="listbox"'
+          + ' aria-label="' + L.name + '" data-col="' + ci + '" tabindex="' + (ci === active ? "0" : "-1") + '">'
+          + '<div class="pm-casc-hd">' + hd + "</div>";
+        if (!L.options.length) {
+          html += '<div class="pm-casc-empty">暂无可选项</div>';
+        } else {
+          L.options.forEach(function(o, oi){
+            html += '<button type="button" class="pm-casc-it' + (oi === L.sel ? " on" : "") + '"'
+              + ' role="option" aria-selected="' + (oi === L.sel ? "true" : "false") + '"'
+              + ' data-col="' + ci + '" data-i="' + oi + '" tabindex="-1">' + o.label
+              + '<svg class="i ck" style="width:14px;height:14px" viewBox="0 0 24 24"><path d="M5 13l5 5L20 7"/></svg></button>';
+          });
+        }
+        html += "</div>";
+      });
+      colsEl.innerHTML = html;
+      var c = chosen();
+      if (okBtn) {
+        okBtn.disabled = !(c && c.leaf);
+        okBtn.setAttribute("aria-disabled", okBtn.disabled ? "true" : "false");
+      }
+      colsEl.querySelectorAll("[data-col]").forEach(function(el){
+        if (el.classList.contains("pm-casc-it")) return;
+      });
+      /* 每列一个 Tab 停靠点（roving） */
+      var cols = Array.prototype.slice.call(colsEl.children);
+      cols.forEach(function(col, ci){ col.tabIndex = ci === active ? 0 : -1; });
+      if (focusNew) {
+        var t = colsEl.querySelector('.pm-casc-col[data-col="' + active + '"]');
+        if (t) t.focus({ preventScroll: true });
+      }
+    }
+    function choose(colIdx, itemIdx){
+      pick[colIdx] = itemIdx;
+      /* 下一层**不预选**：11.2.17 的「未选到叶子时确定禁用」要真的能观察到 ——
+         若自动选中下一层首项，确定会立刻可用，这条口径就成了摆设（实测被验收抓到两次）。 */
+      for (var k = colIdx + 1; k < pick.length; k++) pick[k] = -1;
+      var ls = levels();
+      if (colIdx + 1 < ls.length && ls[colIdx + 1].options.length) active = colIdx + 1;
+      render(true);
+      var c = chosen();
+      announce(c ? ("已选 " + c.labels.join(" / ")) : "已展开下一级");
+    }
+    colsEl.addEventListener("click", function(e){
+      var it = e.target.closest(".pm-casc-it");
+      if (!it) return;
+      active = parseInt(it.getAttribute("data-col"), 10);
+      choose(active, parseInt(it.getAttribute("data-i"), 10));
+    });
+    colsEl.addEventListener("keydown", function(e){
+      var ls = levels(), L = ls[active];
+      if (!L) return;
+      var i = pick[active] == null ? 0 : pick[active], moved = true;
+      if (e.key === "ArrowDown") i = Math.min(L.options.length - 1, i + 1);
+      else if (e.key === "ArrowUp") i = Math.max(0, i - 1);
+      else if (e.key === "ArrowRight") { if (active < ls.length - 1) { active++; render(true); return; } moved = false; }
+      else if (e.key === "ArrowLeft") { if (active > 0) { active--; render(true); return; } moved = false; }
+      else if (e.key === "Enter" || e.key === " ") { moved = false; }
+      else moved = false;
+      if (!moved) { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); choose(active, i); } return; }
+      e.preventDefault();
+      pick[active] = i;
+      render(false);
+    });
+    openBtn.addEventListener("click", function(){
+      committed = committed || null;
+      if (!committed) { pick = [-1, -1, -1]; }
+      active = 0;
+      render(false);
+      layerOpen(sheetEl, colsEl.querySelector("#gm-mod-preview-mobile .pm-casc-col"));
+    });
+    if (cancelBtn) cancelBtn.addEventListener("click", function(){
+      if (committed) pick = committed.pick.slice();     /* 取消 = 回滚到上次确定 */
+      layerClose();
+    });
+    if (okBtn) okBtn.addEventListener("click", function(){
+      var c = chosen();
+      if (!c || !c.leaf) return;
+      committed = { pick: pick.slice(), labels: c.labels };
+      if (valEl) valEl.textContent = c.labels.join(" / ");
+      layerClose();
+      toast("已选择 " + c.labels.join(" / "));
+      announce("已选择 " + c.labels.join(" / "));
+    });
   })();
 
   /* ── ㉑ 首屏同步 ──────────────────────────────────────────────────── */
@@ -7331,37 +7566,24 @@ document.querySelectorAll("[data-rv]").forEach(function(b){
 });
 renderRv();
 
-/* ── 虚拟长列表：固定行高 + overscan 4 ── */
-var VL_TOTAL = 1284, VL_H = 52, VL_OVERSCAN = 4;
-var vp = document.getElementById("preview-patterns--vl-vp"), vin = document.getElementById("preview-patterns--vl-in");
+/* ── 虚拟长列表：固定行高 + overscan 4 ──
+   窗口化算法来自**外壳的唯一实现** window.gmVirtualList（见 scripts/build-site.py）：
+   本模块只给"长什么样"，不再自己算窗口 —— 移动端 11.2.16 的同一套能力也取用它。 */
+var VL_TOTAL = 1284, VL_H = 52;
 var vCount = document.getElementById("preview-patterns--vl-count"), vIdx = document.getElementById("preview-patterns--vl-idx"), vEnd = document.getElementById("preview-patterns--vl-end");
-var endFired = 0, lastEnd = -1;
-vin.style.height = (VL_TOTAL * VL_H) + "px";
-function vlRender(){
-  var top = vp.scrollTop, h = vp.clientHeight;
-  var start = Math.max(0, Math.floor(top / VL_H) - VL_OVERSCAN);
-  var end = Math.min(VL_TOTAL, Math.ceil((top + h) / VL_H) + VL_OVERSCAN);
-  var html = "";
-  for (var i = start; i < end; i++){
-    html += '<div class="vl-it" role="listitem" aria-posinset="' + (i+1) + '" aria-setsize="' + VL_TOTAL + '" style="height:' + VL_H + 'px;position:absolute;left:0;right:0;top:' + (i*VL_H) + 'px">' +
-      '<span style="width:26px;height:26px;border-radius:50%;background:var(--mmh-grad-action-hc);flex:none"></span>' +
+/* ⚠️ 必须等 DOMContentLoaded：模块脚本在文档里位于**外壳脚本之前**，
+   外壳的 window.gmVirtualList 此刻还没定义（与 13.2 生长曲线同一个坑）。 */
+function vlBoot(){ window.gmVirtualList(document.getElementById("preview-patterns--vl-vp"), {
+  total: VL_TOTAL, rowHeight: VL_H, overscan: 4,
+  render: function(i){
+    return '<span style="width:26px;height:26px;border-radius:50%;background:var(--mmh-grad-action-hc);flex:none"></span>' +
       '<span style="flex:1">随访对象 #' + String(i+1).padStart(4,"0") + ' · 第 ' + (i+1) + ' 条</span>' +
-      '<span class="tg ' + (i % 7 === 0 ? "r" : i % 3 === 0 ? "o" : "g") + '"><i></i>' + (i % 7 === 0 ? "逾期" : i % 3 === 0 ? "待随访" : "已完成") + '</span></div>';
-  }
-  vin.innerHTML = html;
-  vCount.textContent = (end - start);
-  vIdx.textContent = start;
-  if (VL_TOTAL - (top + h) / VL_H <= 4 && lastEnd !== start){ lastEnd = start; endFired++; vEnd.textContent = endFired; }
-  if (VL_TOTAL - (top + h) / VL_H > 4){ lastEnd = -1; }
-}
-vp.addEventListener("scroll", vlRender);
-vp.addEventListener("keydown", function(e){
-  if (e.key === "PageDown"){ vp.scrollTop += vp.clientHeight; e.preventDefault(); }
-  if (e.key === "PageUp"){ vp.scrollTop -= vp.clientHeight; e.preventDefault(); }
-  if (e.key === "Home"){ vp.scrollTop = 0; e.preventDefault(); }
-  if (e.key === "End"){ vp.scrollTop = vin.clientHeight; e.preventDefault(); }
-});
-vlRender();
+      '<span class="tg ' + (i % 7 === 0 ? "r" : i % 3 === 0 ? "o" : "g") + '"><i></i>' + (i % 7 === 0 ? "逾期" : i % 3 === 0 ? "待随访" : "已完成") + '</span>';
+  },
+  onRange: function(a, b){ vCount.textContent = (b - a); vIdx.textContent = a; },
+  onEndReached: function(n){ vEnd.textContent = n; }
+}); }
+if(document.readyState === "loading") document.addEventListener("DOMContentLoaded", vlBoot); else vlBoot();
 
 /* ── 暗黑模式：整体切换 data-theme="dark"（示例页简化版，仅覆盖本页 Token） ── */
 document.getElementById("preview-patterns--dk-toggle").addEventListener("click", function(){
@@ -7492,8 +7714,13 @@ python3 scripts/build-site.py            # 生成唯一首页
 python3 scripts/build-site.py --check     # 校验产物与构建结果一致（CI）
 python3 scripts/redirect-legacy.py --check # 校验旧入口仍为重定向
 node scripts/site-smoke.mjs               # 48 项冒烟（需先起静态服务）
-node scripts/mobile-smoke.mjs             # 40 项移动端真机验收（交互/热区/模糊预算/暗色）
+node scripts/mobile-smoke.mjs             # 82 项移动端真机验收（交互/热区/模糊预算/暗色/长列表/级联）
 node scripts/site-parity.mjs              # 合并保真度：各模块 vs 原页面
+node scripts/page-qa.mjs --ci             # 逐页质检（P0–P2 必须为 0）
+node scripts/app-smoke.mjs                # 产品工程 37 项（三端形态/四态/**按真实渲染底采样**的对比度）
+python3 scripts/gate-negative-tests.py    # 58 条负向测试：给每条门禁注入真缺陷，必须 FAIL
+node goodmom-ui/playground/smoke.mjs      # React 组件契约 56 项（需先 node build.mjs）
+node goodmom-vue/playground/smoke.mjs     # Vue 组件契约 37 项（需先起 5273 预览台）
 
 # 前端封装库（Vite + React + Arco）
 cd frontend-app
@@ -7668,7 +7895,7 @@ Figma:    LG / Color / Purple / 500
 <table><thead><tr><th>语义 Token</th><th>浅色（默认）</th><th>暗色（<code>[data-theme="dark"]</code>）</th><th>暗底实测对比度</th></tr></thead><tbody><tr><td><code>--lg-page-bg</code></td><td><code>#E6D9D0</code> Warm Ivory</td><td><code>#1B1A21</code> Night-900</td><td>— （页面底）</td></tr><tr><td><code>--lg-surface</code></td><td><code>#F4F0EC</code> Warm White</td><td><code>#23222A</code> Night-800</td><td>— （次级面/实底浮层底）</td></tr><tr><td><code>--lg-text-primary</code></td><td><code>#343A46</code></td><td><code>#F3EFEC</code></td><td>15.10:1（面 13.77）</td></tr><tr><td><code>--lg-text-secondary</code></td><td><code>#4F5B6E</code></td><td><code>#C9C4CE</code></td><td>10.09:1（面 9.20）</td></tr><tr><td><code>--lg-text-tertiary</code></td><td><code>#9AA2B0</code></td><td><code>#A6ADB9</code></td><td>7.65:1（最浅玻璃合成面 ≥5.6）</td></tr><tr><td><code>--lg-text-placeholder</code></td><td><code>rgba(88,98,115,0.5)</code></td><td><code>rgba(255,255,255,0.42)</code></td><td>仅占位符，不接受为正文</td></tr><tr><td><code>--lg-text-disabled</code></td><td><code>rgba(88,98,115,0.4)</code></td><td><code>rgba(255,255,255,0.34)</code></td><td>—</td></tr><tr><td><code>--lg-divider</code></td><td><code>rgba(58,52,84,0.10)</code></td><td><code>rgba(255,255,255,0.10)</code></td><td>暗色分隔线用白，不用黑</td></tr><tr><td><code>--lg-link</code></td><td><code>#B23A63</code></td><td><code>#FFC4D6</code></td><td>11.61:1（03 · 3.10）</td></tr><tr><td>主行动底（<code>--mmh-grad-action-hc</code>）</td><td>Rose-300→Rose-500</td><td><b>不变</b></td><td>品牌亮粉底在暗色下更突出</td></tr><tr><td><code>--lg-text-on-accent</code></td><td><code>#343A46</code>（亮粉底深字）</td><td><code>#1B1A21</code></td><td>7.00:1（Rose-500 端）～11.61:1（Rose-300 端）</td></tr><tr><td><code>--lg-glass-panel</code></td><td><code>rgba(255,255,255,0.14)</code></td><td><code>rgba(255,255,255,0.06)</code></td><td>—</td></tr><tr><td><code>--lg-glass-card</code></td><td><code>rgba(255,255,255,0.22)</code></td><td><code>rgba(255,255,255,0.09)</code></td><td>—</td></tr><tr><td><code>--lg-glass-control</code></td><td><code>rgba(255,255,255,0.35)</code></td><td><code>rgba(255,255,255,0.12)</code></td><td>—</td></tr><tr><td><code>--lg-glass-popover</code></td><td><code>rgba(255,255,255,0.60)</code></td><td><code>rgba(38,36,46,0.92)</code>（实底为主，模糊为辅）</td><td>暗色浮层优先可读性</td></tr><tr><td><code>--lg-glass-highlight</code></td><td><code>inset 0 1px 0 rgba(255,255,255,0.6)</code></td><td><code>inset 0 1px 0 rgba(255,255,255,0.16)</code></td><td>仅顶部 1px</td></tr><tr><td><code>--lg-border-white-70</code>（玻璃边）</td><td><code>rgba(255,255,255,0.70)</code></td><td><code>rgba(255,255,255,0.14)</code></td><td>—</td></tr><tr><td><code>--lg-border-hairline</code></td><td><code>1px</code>（<b>长度</b>）</td><td>同（宽度档不随主题变化）</td><td>玻璃内部细分隔<b>宽度</b></td></tr><tr><td><code>--lg-divider-hairline</code></td><td><code>rgba(58,52,84,.10)</code>（<b>颜色</b>）</td><td><code>rgba(255,255,255,.10)</code></td><td>与上一项配对使用的分隔<b>颜色</b></td></tr><tr><td><code>--lg-shadow-sm/md/lg/xl</code></td><td>蓝紫调 <code>rgba(58,52,84,.06–.16)</code></td><td><code>rgba(0,0,0,.35 / .42 / .50 / .58)</code></td><td>暗色阴影＝「加深 + 边缘光」</td></tr><tr><td><code>--lg-glow-purple-soft</code></td><td><code>0 12px 32px rgba(154,120,255,0.28)</code></td><td><code>0 12px 32px rgba(154,120,255,0.22)</code></td><td>暗底辉光略降，避免糊成一片</td></tr></tbody></table>
 <p><b>映射表 B · 状态与语义色（暗色文字档）</b></p>
 <table><thead><tr><th>用途</th><th>浅底用（默认）</th><th>浅底实测</th><th>暗底用（dark）</th><th>暗底实测</th></tr></thead><tbody><tr><td>成功 <code>--lg-success-300</code></td><td><code>#96E6CF</code>（浅填充）</td><td>—（非文字）</td><td><code>#96E6CF</code> 作文/图标</td><td>11.93:1</td></tr><tr><td>警告 <code>--lg-warning-300</code></td><td><code>#FAE1B3</code></td><td>—（非文字）</td><td><code>#FAE1B3</code></td><td>13.55:1</td></tr><tr><td>危险 <code>--lg-danger-300</code></td><td><code>#FAC9D0</code></td><td>—（非文字）</td><td><code>#FAC9D0</code></td><td>11.78:1</td></tr><tr><td>信息 <code>--lg-info-500</code> 亮档</td><td><code>#6D9EFF</code></td><td>—（非文字）</td><td><code>#9CAEFF</code>（Blue-300）</td><td>8.15:1</td></tr><tr><td><code>--lg-sem-positive</code></td><td><code>#25715D</code></td><td>5.84:1</td><td><code>#6FC9B4</code></td><td>8.79:1</td></tr><tr><td><code>--lg-sem-info</code></td><td><code>#3261C1</code></td><td>5.81:1</td><td><code>#9CAEFF</code></td><td>8.15:1</td></tr><tr><td><code>--lg-sem-attention</code></td><td><code>#8D5A15</code></td><td>5.82:1</td><td><code>#F2C14E</code></td><td>10.29:1</td></tr><tr><td><code>--lg-sem-risk</code></td><td><code>#B72F42</code></td><td>6.00:1</td><td><code>#F79AA8</code></td><td>8.34:1</td></tr><tr><td><code>--lg-sem-neutral</code></td><td><code>#5E6673</code></td><td>5.79:1</td><td><code>#A6ADB9</code></td><td>7.65:1</td></tr><tr><td><code>--lg-sem-special</code></td><td><code>#6A48DC</code></td><td>5.88:1</td><td><code>#B9A0FF</code></td><td>7.84:1</td></tr></tbody></table>
-<blockquote>⚠️ <b>浅底列口径修正（V2.9）</b>：本列原写 `positive #2F8F76 / info #4A76D0 / attention #B9771C /<br>risk #D35466 / neutral #757E8E / special #7A5CE0` —— 那是 V2.8「语义色板达 AA」<b>之前</b>的值，<br>实测作文字只有 <b>3.67–4.38:1（不达标）</b>（证据留档在 <code>docs/设计系统问题清单.md</code> 的 ❌ 表），<br>深档化之后本表漏改，且<b>照抄本表的 Vue 组件冒烟因此长期是红的</b>（不在 CI，没人发现）。<br>现按实现值（<code>theme.css</code> / <code>tokens/status.ts</code>）对齐；浅底实测取<b>最亮玻璃承载面</b> <code>#FDF2EE</code>。<br>门禁：<code>python3 scripts/audit.py --only semantic-parity</code> 核对本表 / 14 章 / skill reference 与 <code>theme.css</code>。</blockquote>
+<blockquote>⚠️ <b>淡底口径（V2.9 新增）</b>：上表「浅底实测」取的是<b>最亮玻璃承载面 <code>#FDF2EE</code></b>。<br>实际渲染里，语义文字若压在同色系<b>淡底</b>上，底色由淡底决定：<br><code>color-mix(in srgb, 语义色 13%, transparent)</code> 会把玻璃卡与品牌渐变透出来，<br>12px 语义字实测只剩 <b>4.06:1（浅/暗两档皆然，不达 AA）</b>。<br>故淡底一律改混<b>实底</b> <code>--lg-tint-base</code>（浅 <code>#FFFFFF</code> ／ 暗 <code>#23222A</code>），<br>透明度由 <code>--lg-tint-pct</code> 按档位给（浅 13% ／ 暗 8%）→ 实测 4.86:1 ／ 4.9:1。<br>门禁：<code>audit.py --only tint-base</code>（禁止 <code>color-mix(…, transparent)</code>，并断言两档 token 在位）；<br>渲染级实测：<code>node scripts/app-smoke.mjs</code> 的「实底采样」（隐藏字形后按像素取底）。<br><br>⚠️ <b>浅底列口径修正（V2.9）</b>：本列原写 `positive #2F8F76 / info #4A76D0 / attention #B9771C /<br>risk #D35466 / neutral #757E8E / special #7A5CE0` —— 那是 V2.8「语义色板达 AA」<b>之前</b>的值，<br>实测作文字只有 <b>3.67–4.38:1（不达标）</b>（证据留档在 <code>docs/设计系统问题清单.md</code> 的 ❌ 表），<br>深档化之后本表漏改，且<b>照抄本表的 Vue 组件冒烟因此长期是红的</b>（不在 CI，没人发现）。<br>现按实现值（<code>theme.css</code> / <code>tokens/status.ts</code>）对齐；浅底实测取<b>最亮玻璃承载面</b> <code>#FDF2EE</code>。<br>门禁：<code>python3 scripts/audit.py --only semantic-parity</code> 核对本表 / 14 章 / skill reference 与 <code>theme.css</code>。</blockquote>
 <p><b>暗色下的三条落地纪律</b></p>
 <ul><li><b>环境光</b>：光斑透明度维持 16–22%，半径放大 1.2×（暗底吃光）；<code>--lg-glow-white</code> 降到 0.06，否则暗底白光发灰。</li><li><b>数据可视化</b>：色序 1–8 顺序不变；折线/柱保持 <code>-500</code> 档（暗底足够亮），网格线用 <code>rgba(255,255,255,0.08)</code>，坐标文字用 <code>--lg-text-secondary</code>；面积图填充透明度由 0.28 提到 0.34。</li><li><b>禁用与遮罩</b>：遮罩沿用 <code>--lg-opacity-overlay</code> 白色口径会「亮瞎」，暗色改为 <code>rgba(0,0,0,0.48)</code>；禁用态整体透明度由 0.4 提到 0.5（暗底本就低对比）。</li></ul>
 <blockquote>实测口径：上表对比度按 WCAG 2.2 相对亮度公式计算（<code>scripts/audit.py</code> 的 <code>dark_contrast</code> 守门，正文项 &lt;4.5:1 即 FAIL）；最坏情形取「12% 白玻璃合成面」，正文/次级/三级全部 ≥4.5:1。</blockquote>
@@ -7762,6 +7989,8 @@ Figma:    LG / Color / Purple / 500
   --lg-text-placeholder: rgba(88, 98, 115, .5);
   --lg-text-disabled: rgba(88, 98, 115, .4);
   --lg-text-on-accent: #343A46;   /* D9：亮粉底配深字（全尺寸 ≥4.89:1） */
+  /* 语义淡底的混色基与透明度（V2.9）：混实底才可预测，透出卡片会让 12px 语义字掉到 4.06:1 */
+  --lg-tint-base: #FFFFFF;  --lg-tint-pct: 13%;
   /* D5 小字号白字实底填充（AA 达标档）；完整品牌组见 §2.9 */
   --mmh-solid-positive:#1E6B52; --mmh-solid-attention:#9A5A0E; --mmh-solid-danger:#B04052;
   --mmh-solid-info:#385CB3; --mmh-solid-special:#6242B8;
@@ -7854,6 +8083,8 @@ Figma:    LG / Color / Purple / 500
   --lg-text-placeholder: rgba(255,255,255,.42);
   --lg-text-disabled: rgba(255,255,255,.34);
   --lg-text-on-accent: #1B1A21;   --lg-divider: rgba(255,255,255,.10);
+  /* 暗色档淡底：混暗色 surface，透明度压到 8%（13% 会把底抬亮到 4.3:1） */
+  --lg-tint-base: #23222A;  --lg-tint-pct: 8%;
   --lg-link: #FFC4D6;
   /* 玻璃（降白、只留顶部边光） */
   --lg-glass-panel: rgba(255,255,255,.06);
@@ -8152,6 +8383,7 @@ gm-btn__spinner | gm-btn__icon</pre>
 <ul><li>收起态：仅图标；展开态 232–260px。</li><li>选中项=紫玻璃芯片 <code>--lg-grad-primary</code> + <code>--lg-glow-purple-soft</code>，绝对不做左边框粗条（禁传统 Dashboard 风格）。</li><li>徽标（未读数）用白玻璃底 + 紫字，圆角 chip。</li></ul>
 <h4>3.4.2 顶部栏（Top Bar）</h4>
 <ul><li>玻璃条悬浮顶部（<code>--lg-glass-panel</code> 更实版），含：面包屑 / 页面标题（左）、全局搜索（中）、状态与用户（右）。</li><li>搜索框：玻璃输入形态（见 3.5），宽度 280–360。</li><li>用户头像：玻璃圆 + 白描边 + 柔影；在线状态用小绿点。</li></ul>
+<p><b>首字颜色用 <code>--lg-text-on-accent</code></b>（浅色档 <code>#343A46</code>、暗色档 <code>#1B1A21</code>）。 曾用 <code>--lg-text-on-inverse</code>（白字），压在亮粉渐变上实测只有 <b>2.81:1</b>， 与全系统「亮粉底配深字」的既有口径相反；改深字后 4.6:1。</p>
 <h4>3.4.3 分段控件 / 页签 / 面包屑</h4>
 <ul><li><b>分段控件 Segmented</b>：整块玻璃底 + 内部选中项为白色玻璃滑块（或紫渐变），圆角 20。</li><li><b>页签 Tabs</b>：选中项下方 2–3px 紫渐变圆角小条（非硬线），未选中用次级文字。</li><li><b>面包屑</b>：<code>首页 / 工作空间 / 项目</code>，分隔符 <code>/</code> 用三级色，末级为主文字。</li></ul>
 <hr>
@@ -8188,6 +8420,7 @@ gm-btn__spinner | gm-btn__icon</pre>
 <h3>3.6 徽章与状态徽标 Badge / Status</h3>
 <table><thead><tr><th>类型</th><th>视觉</th><th>场景</th></tr></thead><tbody><tr><td>状态点</td><td>6–8px 圆点，用状态色 + 同色 0.2 辉光（online 绿可带轻微呼吸光）</td><td>节点、服务、实例状态</td></tr><tr><td>文本徽章</td><td>白玻璃 chip + 状态色文字（caption），或状态色 100 洗色底</td><td>运行中 / 成功 / 危险 / 新</td></tr><tr><td>数值徽标</td><td>白玻璃底 + 紫字，最小 18×18</td><td>侧栏未读数、通知</td></tr><tr><td>灯条（大屏）</td><td>状态点 + caption 标签成组</td><td>大屏状态总览</td></tr></tbody></table>
 <blockquote>状态语义色严格使用 [02 · 2.1.5](#ch-02) 状态色 Token；呼吸动画 alpha 0.6→1，周期 2.4s，仅限真正需要关注的实时状态，避免大面积闪烁。</blockquote>
+<p><b>淡底配方（V2.9 实测修订）</b>：同色系淡底 = <code>color-mix(in srgb, 语义色 var(--lg-tint-pct), var(--lg-tint-base))</code>， 浅色档 13% 混 <code>#FFFFFF</code>、暗色档 8% 混 <code>#23222A</code>，描边同法取 32%。 禁止写成 <code>color-mix(…, transparent)</code>：底会随底下那张玻璃卡与品牌渐变浮动， 12px 语义字实测只剩 4.06:1；混实底后浅色档 4.86:1、暗色档 4.9:1。</p>
 <hr>
 <h3>3.7 数据表格（玻璃表格）</h3>
 <ul><li>容器：玻璃卡（<code>--lg-glass-card</code>）。</li><li>表头：<code>body-sm</code> 600 字重，次级色；行高 44–52，hover 行淡白玻璃底。</li><li>行分隔 <code>--lg-border-hairline</code>（或 0.5px 白线），禁止黑色实线。</li><li>状态列用状态徽章；关键数字 <code>tabular-nums</code>，主序列值用紫 600。</li><li>首列可加玻璃头像/Logo，圆角 12。</li></ul>
@@ -8802,7 +9035,7 @@ lg 24px   空状态、卡片头部     stroke 1.7
 xl 32–40px  大屏状态图标      stroke 1.8</pre>
 <h4>颜色规则</h4>
 <pre>/* 默认继承文字色： */
-.lg-icon{ color: var(--lg-text-tertiary); }
+.lg-icon{ color: var(--lg-text-secondary); }
 .lg-icon:hover{ color: var(--lg-purple-600); }
 /* 语义状态：直接用状态 Token 包一层 color */
 .icon-danger{ color: var(--lg-danger-500); }</pre>
@@ -8890,7 +9123,7 @@ xl 32–40px  大屏状态图标      stroke 1.8</pre>
   -webkit-backdrop-filter:blur(32px) saturate(1.2);backdrop-filter:blur(32px) saturate(1.2);
   border:1px solid rgba(255,255,255,.75);box-shadow:var(--lg-glass-highlight),var(--lg-shadow-lg);}
 .tab-item{flex:1;height:56px;display:flex;flex-direction:column;gap:2px;align-items:center;justify-content:center;
-  border-radius:18px;color:var(--lg-text-tertiary);font-size:10px;transition:.26s var(--lg-ease-out)}
+  border-radius:18px;color:var(--lg-text-secondary);font-size:10px;transition:.26s var(--lg-ease-out)}   /* V2.9：10px 用 secondary；tertiary（#9AA2B0）在玻璃底上只有 2.30:1 */
 .tab-item.on{background:var(--mmh-grad-action-hc,#F77FA3);color:#343A46;box-shadow:0 1px 2px rgba(178,58,99,.22),0 8px 20px rgba(240,127,163,.30);transform:translateY(-4px)}   /* V2.9：辉光统一为 03 · 3.2.4.1 配方 */</pre>
 <h4>10.3.3 布局规则</h4>
 <pre>- 单列为主；双列仅用于等值卡片对（如两个 KPI），列表一律单列。
@@ -9073,10 +9306,14 @@ Token/字号      → 02 + 10.2
 预览            → site/index.html#preview-mobile（10 章示例 · 4 页可交互）
                   · 已演示：SearchBar NoticeBar Chips Segmented Upload Rate Progress Steps
                     CapsuleTabs Selector Stepper OTP Cell Footer SafeArea Sticky ErrorBlock
-                    SwipeAction PullToRefresh LoadMore ActionSheet Picker ImageViewer
-                    **IndexBar(11.2.3) Collapse(11.2.6·复用外壳配方) Calendar(11.6.5)
-                    NumberKeyboard(11.6.10) WaterMark(11.6.13)**
-                  · 未演示：Cascader(移动 multi-column picker 形态在代码库 GmCascader)</pre>
+                    SwipeAction PullToRefresh ActionSheet Picker ImageViewer
+                    IndexBar(11.2.3) Collapse(11.2.6·复用外壳配方) Calendar(11.6.5)
+                    NumberKeyboard(11.6.10) WaterMark(11.6.13)
+                    **VirtualList(11.2.16·真窗口化 1284 条 · 与 10.11.2 同一套外壳渲染器)**
+                    **LoadMore(11.2.16·距底 4 行触发) Cascader 移动多列 Picker(11.2.17)**
+                  · 组合顺序照 11.2.16 落地：PullRefresh → Sticky → VirtualList → SwipeAction → LoadMore
+                    （同一容器内五件套齐全，左滑改为**容器委托**——窗口化会整批重建行，
+                     逐行绑定的实现会在滚动后静默失效）</pre>
 <hr>
 <h3>11.6 对齐 Arco Mobile（移动组件库补齐）</h3>
 <blockquote>参考 [Arco Design Mobile](https://arco.design/mobile/react/arco-design/pc/#/components/button) 组件体系，<br>① 移动按钮全谱（按 Arco Mobile Button 的类型/状态/尺寸/形状）② 其移动组件目录与我库的对齐矩阵 ③ 新增组件细则（11.6.2 起）。</blockquote>
@@ -9418,7 +9655,9 @@ with amber badges, premium medical dashboard, clean minimal, 16:9
 检查项目 · 检查结果 · 检查异常 · 风险等级 · 风险评估 · 异常管理
 干预措施 · 随访计划 · 随访记录 · 转诊记录 · 复查记录 · 结案记录</pre>
 <h4>15.3.4 数据大屏核心指标词（驾驶舱）</h4>
-<table><thead><tr><th>通用</th><th>孕产妇</th><th>儿童</th><th>两癌</th></tr></thead><tbody><tr><td>管理总人数 / 本月新增 / 今日新增</td><td>孕产妇建档数 / 早孕建档率</td><td>儿童建档数 / 新生儿人数</td><td>宫颈癌筛查 / 乳腺癌筛查</td></tr><tr><td>筛查人数 / 筛查完成率</td><td>产检人数 / 高危孕产妇</td><td>儿童体检人数</td><td>筛查覆盖率 / 异常检出率</td></tr><tr><td>异常人数 / 异常率</td><td>高危管理率 / 产后访视率</td><td>生长发育异常 / 营养不良</td><td>高风险人数 / 阳性人数</td></tr><tr><td>高风险人数 / 随访人数 / 随访完成率</td><td>—</td><td>高危儿 / 视力异常 / 听力异常</td><td>复查率 / 转诊率 / 随访完成率 / 结案率</td></tr><tr><td>转诊人数 / 转诊完成率 / 结案人数 / 失访人数</td><td>—</td><td>—</td><td>—</td></tr></tbody></table>
+<table><thead><tr><th>通用</th><th>孕产妇</th><th>儿童</th><th>两癌</th></tr></thead><tbody><tr><td>管理总人数 / 本月新增 / 今日新增</td><td>孕产妇建档数 / 早孕建档率</td><td>儿童建档数 / 新生儿人数 · <b>疫苗应种率 / 疫苗全程率</b></td><td>宫颈癌筛查 / 乳腺癌筛查</td></tr></tbody></table>
+<blockquote><b>补登记（V2.9）</b>：<code>疫苗应种率</code> / <code>疫苗全程率</code> 原未逐字登记，但站点移动端预览、<code>dashboard</code> 与 <code>vaccine</code> 模块都在使用（属已在流通的词）—— 按 14 · 4.4.5「词库为唯一源」补入本表。含义：应种率 = 已种剂次 / 应种剂次（机构维度）；全程率 = 完成全部应种剂次的儿童占比。</blockquote>
+<p>| 筛查人数 / 筛查完成率 | 产检人数 / 高危孕产妇 | 儿童体检人数 | 筛查覆盖率 / 异常检出率 | | 异常人数 / 异常率 | 高危管理率 / 产后访视率 | 生长发育异常 / 营养不良 | 高风险人数 / 阳性人数 | | 高风险人数 / 随访人数 / 随访完成率 | — | 高危儿 / 视力异常 / 听力异常 | 复查率 / 转诊率 / 随访完成率 / 结案率 | | 转诊人数 / 转诊完成率 / 结案人数 / 失访人数 | — | — | — |</p>
 <blockquote>大屏色：正向=薄荷、异常/高危/阳性=珊瑚、注意=琥珀、进行=蓝、转诊/特殊=淡紫；遵循 04 数据色序与 12.3。</blockquote>
 <hr>
 <h3>15.4 PC / iPad / 手机端操作规范（三级按钮体系）</h3>
@@ -9565,6 +9804,10 @@ button{display:inline-flex;align-items:center;justify-content:center;gap:8px}</p
 <h4>18.2.7 无障碍与动效</h4>
 <ul><li>focus-visible 焦点环 ✅（07.8 + theme.css）；press 缩放 ✅</li><li>prefers-reduced-motion ✅；呼吸点周期 ≥2.4s ✅</li><li>✅ 键盘/焦点走查自动化已实施：<code>scripts/a11y.py</code>（静态断言：outline:none 必须有 focus-visible 兜底、禁 span+onClick 交互等）并入 CI（2026-09 审查 R5）；完整 axe 需 DOM 环境，列入长期。</li></ul>
 <hr>
+<h4>18.2.8 应用侧渲染级无障碍（V2.9 新增，一上线就抓出三处真缺陷）</h4>
+<p>应用侧此前只有 typecheck + 构建 + 架构门禁，<b>没有</b>任何渲染级无障碍检查。 新增的 <code>scripts/app-smoke.mjs</code> 对比度断言按<b>真实渲染底</b>采样（隐藏字形 → 截屏 → 页内 canvas 解码 → 取文字矩形内像素亮度 5/95 分位两侧上界，两侧都不达标才判失败），每页 4 个滚动步 × 浅/暗两档， 并自带自证（注入不可读文字必须被报出）。</p>
+<table><thead><tr><th>实测发现</th><th>数字</th><th>处置</th></tr></thead><tbody><tr><td>12px 文字用 <code>--lg-text-tertiary</code>（02 · 2.1.1 规定仅 ≥24px）</td><td><b>2.30:1</b></td><td>小字改 <code>--lg-text-secondary</code>（库 / 应用 / 站点）</td></tr><tr><td>头像首字白字压亮粉渐变（<code>--lg-text-on-inverse</code>）</td><td><b>2.81:1</b></td><td>改 <code>--lg-text-on-accent</code> 深墨字 → 4.6:1</td></tr><tr><td>语义淡底 <code>color-mix(…, transparent)</code> 透出卡片与品牌渐变</td><td><b>4.06:1</b></td><td>改混实底 <code>--lg-tint-base</code>（浅 13% → 4.86:1 ／ 暗 8% → 4.9:1）</td></tr><tr><td>站点把 <code>--lg-text-tertiary</code> 本地改写成 secondary 的值</td><td>71 处小字靠<b>改名</b>达标</td><td>按 02 · 2.1.1 收口并删除本地改写</td></tr><tr><td><code>page-qa.mjs</code> 的 <code>parseColor</code> 不认 <code>color(srgb …)</code></td><td><code>color-mix</code> 派生的底在门禁里<b>整层消失</b></td><td>补上解析（注入验证：旧 0 条 → 新 55 条）</td></tr></tbody></table>
+<p>新门禁：<code>audit.py --only text-token-parity / tertiary-size / tint-base</code>（负向用例 +6，合计 58 条）。</p>
 <h3>18.3 整改行动清单（按优先级）</h3>
 <pre>A1 页面暖色/手机壳等别名色 → 抽取 token（--mmh-bg-*、--gm-frame）
 A2 ✅ 已闭环（V2.5）：暗黑模式全量映射（02 · 2.1.9）+ theme.css/gm.css 暗色段 + tokens/design.ts dark + audit dark_contrast 守门
@@ -10159,6 +10402,62 @@ function MODROOT_site_docs(){return document.getElementById("gm-mod-site-docs")|
     /* 键盘：Enter/Space 由原生 summary 触发 click，无需另处理 */
   });
 })();
+
+/* ══════════════════════════════════════════════════════════════════════════
+   10 · 10.11.2 / 11 · 11.2.16 虚拟长列表 —— window.gmVirtualList(el, cfg)
+   为什么放外壳：窗口化算法原先只存在于「交互范式」模块里，移动端要接同一套能力
+   （11.2.16 的组合顺序：PullRefresh → Sticky → VirtualList → SwipeAction → LoadMore）
+   就得再抄一遍。抄第二遍的那天就是两份算法开始漂移的那天，故提到外壳做成唯一实现，
+   两个模块以配置取用（行类名/行高/渲染函数都由调用方给，DOM 由本函数统一产出）。
+   配置：{ total, rowHeight, overscan, innerClass, rowClass, render(i), onRange(a,b),
+           onEndReached(), endThreshold(px) }
+   ══════════════════════════════════════════════════════════════════════════ */
+window.gmVirtualList = function(vp, cfg){
+  if(!vp) return null;
+  var H = cfg.rowHeight || 52, OS = cfg.overscan == null ? 4 : cfg.overscan, N = cfg.total || 0;
+  var inner = vp.querySelector('.' + (cfg.innerClass || 'vl-in'));
+  if(!inner) return null;
+  var rowCls = cfg.rowClass || 'vl-it';
+  inner.style.height = (N * H) + 'px';
+  var lastA = -1, lastB = -1, lastEnd = -1, endFired = 0;
+  function render(){
+    var top = vp.scrollTop, h = vp.clientHeight || 260;
+    var a = Math.max(0, Math.floor(top / H) - OS);
+    var b = Math.min(N, Math.ceil((top + h) / H) + OS);
+    if(a === lastA && b === lastB) return;
+    lastA = a; lastB = b;
+    var html = '';
+    for(var i = a; i < b; i++){
+      html += '<div class="' + rowCls + '" role="listitem" aria-posinset="' + (i + 1) + '"'
+            + ' aria-setsize="' + N + '" style="height:' + H + 'px;position:absolute;left:0;right:0;top:' + (i * H) + 'px">'
+            + cfg.render(i) + '</div>';
+    }
+    inner.innerHTML = html;
+    if(cfg.onRange) cfg.onRange(a, b);
+    /* 距底 endThreshold px 触发一次（默认 4 行，11.2.16 的「距底 4 项触发一次」） */
+    var th = cfg.endThreshold == null ? 4 * H : cfg.endThreshold;
+    if(cfg.onEndReached && N * H - (top + h) <= th){
+      if(lastEnd !== a){ lastEnd = a; endFired++; cfg.onEndReached(endFired); }
+    } else { lastEnd = -1; }
+  }
+  vp.addEventListener('scroll', render, { passive: true });
+  window.addEventListener('resize', render, { passive: true });
+  /* 键盘：翻屏与首尾（11.2.16 明确要求 PageUp/PageDown/Home/End） */
+  vp.addEventListener('keydown', function(e){
+    var h = vp.clientHeight || 260;
+    if(e.key === 'PageDown'){ vp.scrollTop += h; e.preventDefault(); }
+    else if(e.key === 'PageUp'){ vp.scrollTop -= h; e.preventDefault(); }
+    else if(e.key === 'Home'){ vp.scrollTop = 0; e.preventDefault(); }
+    else if(e.key === 'End'){ vp.scrollTop = N * H; e.preventDefault(); }
+  });
+  render();
+  return {
+    refresh: render,
+    /* 数据变了（如加载更多）：重算总高并重渲染 */
+    setTotal: function(n){ N = n; inner.style.height = (N * H) + 'px'; lastA = -1; lastB = -1; render(); },
+    get total(){ return N; }
+  };
+};
 
 /* ══════════════════════════════════════════════════════════════════════════
    13 · 13.2 生长曲线（百分位带）—— window.gmGrowth(el, data)

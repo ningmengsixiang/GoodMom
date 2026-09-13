@@ -37,6 +37,26 @@ def run_audit(only: str) -> tuple[int, str]:
 # (用例名, 目标门禁(--only 用), 目标文件, 查找串, 替换串, FAIL 里必须出现的关键词)
 CASES = [
     # ── feedback-spec ────────────────────────────────────────────────────
+    # ── text-token-parity / tertiary-size / tint-base（V2.9 新增）──────────
+    # 这三条守的是"用改名或调透明度把无障碍违规盖住"这一类：站点曾把 tertiary
+    # 本地改写成 secondary 的值，组件库曾把语义淡底混进 transparent（实测 4.06:1）。
+    ("token/preview-index 本地改写 tertiary", "text-token-parity", "site/fragments/preview-index.html",
+     "  --lg-text-primary:#343A46; --lg-text-secondary:#4F5B6E;",
+     "  --lg-text-primary:#343A46; --lg-text-secondary:#4F5B6E; --lg-text-tertiary:#4F5B6E;",
+     "被本地改写"),
+    ("token/站点把 on-accent 写成白字", "text-token-parity", "site/fragments/site-spec.html",
+     "  --lg-text-on-accent: #343A46;", "  --lg-text-on-accent: #FFFFFF;", "被本地改写"),
+    ("a11y/12px 小字回退到 tertiary", "tertiary-size", "goodmom-ui/src/theme.css",
+     ".gm-client-sub{font-size:12px;color:var(--lg-text-secondary);margin-top:3px}",
+     ".gm-client-sub{font-size:12px;color:var(--lg-text-tertiary);margin-top:3px}", "tertiary 被用于 <24px"),
+    ("a11y/淡底又混回 transparent", "tint-base", "goodmom-ui/src/tokens/status.ts",
+     "`color-mix(in srgb, ${base} var(--lg-tint-pct,13%), var(--lg-tint-base,#FFFFFF))`",
+     "`color-mix(in srgb, ${base} var(--lg-tint-pct,13%), transparent)`", "transparent 混色"),
+    ("token/暗色档漏声明淡底透明度", "tint-base", "goodmom-ui/src/theme.css",
+     "  --lg-tint-base:#23222A; --lg-tint-pct:8%;", "  --lg-tint-base:#23222A;", "应为 8%"),
+    # ── icon-mirror ──────────────────────────────────────────────────────
+    ("icons/应用侧雪碧图与真源漂移", "icon-mirror", "frontend-app/public/icons/lg-icons.svg",
+     "</svg>", "</svg>\n", "与真源"),
     # ── semantic-parity ──────────────────────────────────────────────────
     ("token/02 章语义色回退到 AA 之前的旧值", "semantic-parity", "02-Token规范.md",
      "| `--lg-sem-positive` | `#25715D` |", "| `--lg-sem-positive` | `#2F8F76` |",

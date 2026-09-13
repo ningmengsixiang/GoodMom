@@ -55,7 +55,7 @@ defineSlots<{
 .gm-client-extra {
   flex: none;
   font-size: 12px;
-  color: var(--lg-text-tertiary);
+  color: var(--lg-text-secondary);
   text-align: right;
 }
 </style>

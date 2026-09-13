@@ -6,4 +6,6 @@
  */
 export * from "./model";
 export { endpoints } from "./api";
-export { default as ModulePlaceholderPage } from "./pages/ModulePlaceholderPage";
+export { default as AccountSessionPage } from "./pages/AccountSessionPage";
+/* 注：`pages/ModulePlaceholderPage.tsx` 保留在模块内，作为后续新模块的交付脚手架
+   （它不属于 account 的契约面，故不从公共出口导出；四个待排期模块本次均已落成真实页面）。 */

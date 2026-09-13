@@ -9,7 +9,7 @@
  * `<GmStatusTag>`（自动查 15 章词库），本组件的 color 仅用于「非状态类」分类着色。
  */
 import { computed } from "vue";
-import { FIVE_COLOR, FIVE_VAR, SEMANTIC_VAR, type GmFive, type GmSemantic } from "../tokens/status";
+import { FIVE_COLOR, FIVE_VAR, SEMANTIC_VAR, semTintFill, semTintBorder, type GmFive, type GmSemantic } from "../tokens/status";
 import { cx } from "../utils";
 
 const props = withDefaults(
@@ -42,8 +42,8 @@ const resolved = computed(
 
 const style = computed(() => ({
   color: resolved.value,
-  background: `color-mix(in srgb, ${resolved.value} 13%, transparent)`,
-  borderColor: `color-mix(in srgb, ${resolved.value} 32%, transparent)`,
+  background: semTintFill(resolved.value),
+  borderColor: semTintBorder(resolved.value),
 }));
 </script>
 

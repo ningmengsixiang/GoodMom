@@ -228,8 +228,13 @@ python3 scripts/build-site.py            # 生成唯一首页
 python3 scripts/build-site.py --check     # 校验产物与构建结果一致（CI）
 python3 scripts/redirect-legacy.py --check # 校验旧入口仍为重定向
 node scripts/site-smoke.mjs               # 48 项冒烟（需先起静态服务）
-node scripts/mobile-smoke.mjs             # 40 项移动端真机验收（交互/热区/模糊预算/暗色）
+node scripts/mobile-smoke.mjs             # 82 项移动端真机验收（交互/热区/模糊预算/暗色/长列表/级联）
 node scripts/site-parity.mjs              # 合并保真度：各模块 vs 原页面
+node scripts/page-qa.mjs --ci             # 逐页质检（P0–P2 必须为 0）
+node scripts/app-smoke.mjs                # 产品工程 37 项（三端形态/四态/**按真实渲染底采样**的对比度）
+python3 scripts/gate-negative-tests.py    # 58 条负向测试：给每条门禁注入真缺陷，必须 FAIL
+node goodmom-ui/playground/smoke.mjs      # React 组件契约 56 项（需先 node build.mjs）
+node goodmom-vue/playground/smoke.mjs     # Vue 组件契约 37 项（需先起 5273 预览台）
 
 # 前端封装库（Vite + React + Arco）
 cd frontend-app

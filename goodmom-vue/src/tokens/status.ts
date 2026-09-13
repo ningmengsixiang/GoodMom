@@ -81,4 +81,12 @@ export const SEMANTIC_CSS_SUFFIX = "gm-sem";
  * 旧实现用"hex → rgba"在 JS 里算，只能得到静态浅色档（暗色模式下颜色不切换）。
  */
 export const semTint = (sem: GmSemantic, pct: number): string =>
-  `color-mix(in srgb, var(${SEMANTIC_VAR[sem]}) ${pct}%, transparent)`;
+  `color-mix(in srgb, var(${SEMANTIC_VAR[sem]}) ${pct}%, var(--lg-tint-base,#FFFFFF))`;
+
+/** 淡底填充：透明度交给 `--lg-tint-pct` 按档位给（浅 13% ／ 暗 8%） */
+export const semTintFill = (base: string): string =>
+  `color-mix(in srgb, ${base} var(--lg-tint-pct,13%), var(--lg-tint-base,#FFFFFF))`;
+
+/** 淡底描边：不承载文字对比度，固定 32% */
+export const semTintBorder = (base: string): string =>
+  `color-mix(in srgb, ${base} 32%, var(--lg-tint-base,#FFFFFF))`;

@@ -1,7 +1,7 @@
 # 规范审计报告（自动）
 
 - 命令：`python3 scripts/audit.py`
-- 时间：2026-09-13 16:16
+- 时间：2026-09-13 17:25
 - 结论：✅ 通过
 
 - **OK** `md-links`：全部内链有效
@@ -28,3 +28,7 @@
 - **OK** `growth-chart`：生长曲线·百分位带符合 13 · 13.2 与 04 · 4.2–4.3.2：参考带 alpha .12（.10–.14）+ 细白描边上界 · 主曲线 Rose-500 2.5px + 端点白芯粉描边 · P3/P97 虚线 1.5px 三级色（可一键开关）· 网格 --lg-divider 1px · 刻度 caption 12px 等宽 · 入场 0.6s · 白玻璃 Tooltip · role=img + 隐藏数据表 + 中位数锚定的百分位读数
 - **OK** `svg-refs`：全部 7 处 url(#id) 画刷引用均可解析（跨模块 id 前缀未断链）
 - **OK** `semantic-parity`：六语义浅底档在 02 / 14 / skill reference 与 theme.css 之间完全一致（attention=#8D5A15 · info=#3261C1 · neutral=#5E6673 · positive=#25715D · risk=#B72F42 · special=#6A48DC）
+- **OK** `icon-mirror`：应用侧雪碧图与真源逐字节一致（22815 字节）
+- **OK** `text-token-parity`：文字 token 无本地改写（5 个 token × 浅/暗档均等于 theme.css 真值）
+- **OK** `tertiary-size`：tertiary 未用于 <24px 文字（占位符豁免）
+- **OK** `tint-base`：淡底一律混实底（浅 13% ／ 暗 8%），且两档 token 在位

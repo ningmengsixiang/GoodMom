@@ -16,7 +16,7 @@
  * ② 挂载后用 DOM textContent 校正（覆盖任意自定义插槽结构，最可靠）。
  */
 import { computed, onMounted, ref, Fragment, Text, type VNode } from "vue";
-import { FIVE_COLOR, FIVE_VAR, SEMANTIC_LABEL, SEMANTIC_VAR, type GmFive, type GmSemantic } from "../tokens/status";
+import { FIVE_COLOR, FIVE_VAR, SEMANTIC_LABEL, SEMANTIC_VAR, semTintFill, semTintBorder, type GmFive, type GmSemantic } from "../tokens/status";
 import { semanticOf } from "../tokens/business";
 import { cx } from "../utils";
 
@@ -95,8 +95,8 @@ const resolved = computed(
  */
 const style = computed(() => ({
   color: resolved.value,
-  background: `color-mix(in srgb, ${resolved.value} 13%, transparent)`,
-  borderColor: `color-mix(in srgb, ${resolved.value} 32%, transparent)`,
+  background: semTintFill(resolved.value),
+  borderColor: semTintBorder(resolved.value),
 }));
 
 /**

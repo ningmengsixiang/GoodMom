@@ -45,6 +45,8 @@
   /* —— 语义层（02 · 2.8）：组件样式全部引用这些变量 —— */
   --lg-page-bg:#E6D9D0; --lg-surface:#F4F0EC;
   --lg-text-primary:#343A46; --lg-text-secondary:#4F5B6E; --lg-text-tertiary:#9AA2B0;
+  /* 语义淡底的混色基：浅色档近白、暗色档近黑（见 goodmom-ui/src/tokens/status.ts）。 */
+  --lg-tint-base:#FFFFFF;
   --lg-text-placeholder:rgba(88,98,115,.5); --lg-text-disabled:rgba(88,98,115,.4);
   --lg-text-on-accent:#343A46;
   --lg-divider:rgba(58,52,84,.10);
@@ -82,6 +84,7 @@
 [data-theme="dark"]{
   --lg-page-bg:#1B1A21; --lg-surface:#23222A;
   --lg-text-primary:#F3EFEC; --lg-text-secondary:#C9C4CE; --lg-text-tertiary:#A6ADB9;
+  --lg-tint-base:#000000;
   --lg-text-placeholder:rgba(255,255,255,.42); --lg-text-disabled:rgba(255,255,255,.34);
   --lg-text-on-accent:#1B1A21; --lg-divider:rgba(255,255,255,.10); --lg-track:rgba(255,255,255,.12);
   --lg-link:#FFC4D6; --lg-link-hover:#FFA9C2;
