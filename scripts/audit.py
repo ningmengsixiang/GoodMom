@@ -39,13 +39,13 @@ def md_links():
 def chapter_seq():
     files = sorted(glob.glob("[0-9][0-9]-*.md"))
     nums = [int(re.match(r"(\d\d)-", os.path.basename(f)).group(1)) for f in files]
-    expect = list(range(0, 19))
+    expect = list(range(0, 20))
     missing = [n for n in expect if n not in nums]
     dup = len(nums) != len(set(nums))
     if missing or dup:
         rec("FAIL", "chapters", "缺失 %s / 重复 %s" % (missing, dup))
         return False
-    rec("OK", "chapters", "00–18 编号连续（%d 份）" % len(files))
+    rec("OK", "chapters", "00–19 编号连续（%d 份）" % len(files))
     return True
 
 def icons():

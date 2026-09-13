@@ -13,7 +13,8 @@
     "baseUrl": ".",
     "paths": {
       "@goodmom/gm-arco-ui": ["packages/gm-arco-ui/src/index.ts"],
-      "@gm/*": ["packages/gm-arco-ui/src/*"]
+      "@gm/*": ["packages/gm-arco-ui/src/*"],
+      "@/*": ["src/*"]
     }
   },
   "include": ["src", "packages/gm-arco-ui/src"]

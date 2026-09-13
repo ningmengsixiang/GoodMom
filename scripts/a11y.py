@@ -67,8 +67,15 @@ def check_outline() -> list:
     problems = []
     # 必须排除 node_modules：那是第三方源码（Arco 自带 `*{outline:none}`），
     # 不该由本仓库的静态规则来判定，否则门禁永远红、最终被关掉。
+    #
+    # ⚠️ 同样必须排除**构建产物**：`npm run build` 会把 Arco 的整份 CSS 打成
+    # `frontend-app/dist/assets/index-*.css`，里面同样有 `*{outline:none}` ——
+    # 实测只要跑过一次构建，本门禁立刻报 16 处"焦点环缺口"（全是第三方样式），
+    # 而它跟源码质量毫无关系（dist 已在 .gitignore 里，不属于交付物）。
+    # 与 audit.py 的跳过清单（dist / storybook-static / .vite / .npm-cache）保持同一口径。
+    SKIP_DIRS = ("node_modules/", "/dist/", "storybook-static/", "/.vite/", ".npm-cache/")
     files = {p for g in css_globs for p in glob.glob(g, recursive=True)
-             if "node_modules" not in p.replace(os.sep, "/")}
+             if not any(d in ("/" + p.replace(os.sep, "/")) for d in SKIP_DIRS)}
     for f in sorted(files):
         text = io.open(f, encoding="utf-8").read()
         suppressed, recovery = set(), set()

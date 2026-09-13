@@ -7,7 +7,7 @@ import GmAvatar from "./GmAvatar";
  */
 export interface GmClientCardProps {
   name: string; sub?: string; avatar?: string; tone?: "rose" | "mint" | "purple";
-  tags?: ReactNode | ReactNode[]; extra?: ReactNode; actions?: ReactNode[];
+  tags?: ReactNode | ReactNode[]; extra?: ReactNode; actions?: ReactNode | ReactNode[];
 }
 const GmClientCard = ({ name, sub, avatar, tone, tags = [], extra, actions = [] }: GmClientCardProps) => (
   <div className="gm-client">
@@ -20,7 +20,11 @@ const GmClientCard = ({ name, sub, avatar, tone, tags = [], extra, actions = [] 
       {sub && <div className="gm-client-sub">{sub}</div>}
     </div>
     {extra && <div className="gm-client-extra">{extra}</div>}
-    {actions.length > 0 && <div className="gm-client-ops">{actions.map((a, i) => <React.Fragment key={i}>{a}</React.Fragment>)}</div>}
+    {(Array.isArray(actions) ? actions : actions ? [actions] : []).length > 0 && (
+      <div className="gm-client-ops">
+        {(Array.isArray(actions) ? actions : [actions]).map((a, i) => <React.Fragment key={i}>{a}</React.Fragment>)}
+      </div>
+    )}
   </div>
 );
 export default GmClientCard;

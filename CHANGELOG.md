@@ -1,3 +1,87 @@
+## [V2.9] · 产品前端工程总纲（19 章 · 七项决定落地）
+
+> 依据：用户点选的两项前提 —— 落点＝本仓 `frontend-app`；技术方向＝**React + Arco + `@goodmom/ui`**。
+> 决策留档：`docs/审查决策记录.md` **D21–D27**。
+
+### 接入前基线：两处 typecheck 全红，且应用侧根本不在 CI 里
+| 缺陷 | 实测 |
+| --- | --- |
+| `GmProgress` 的环形直径被静默丢弃 | 像素直径塞进 Arco 的 `size`（枚举，只有 mini/small/default/large，且只作用线性条；Arco 原文要求 circle 用数字 `width`）→ `diameter` 形同不存在；类型上也是错的 |
+| `GmClientCard.actions` 与 `tags` 契约不一致 | `tags: ReactNode \| ReactNode[]` 而 `actions: ReactNode[]` → 调用方传 fragment 即报错 |
+| 应用侧无门禁 | CI 只跑 `gm:typecheck`（封装层）与根 `typecheck`（三个开源包），**`frontend-app/src` 从没被检查过** |
+
+三处已修：直径改走 `width`（两包 + 镜像同步）、`actions` 与 `tags` 统一契约、
+CI 新增「应用 typecheck + 生产构建」与「工程架构门禁」两个 job。修复后：
+根 typecheck ✓ · `gm:typecheck` ✓ · 应用 `tsc --noEmit` **0 错误** · `vite build` ✓。
+
+### 19 章 · 七项决定（一页速查，正文 19.1–19.7）
+1. **视觉风格**：基调不变（液态玻璃 / 暖底 / 蜜桃粉 / 医疗克制），按端分密度：家长端 Low ·
+   医护工作台 Medium · 机构运营 Medium · 数据大屏 High。
+2. **技术方案**：React 18.3.1 + TS 5.9.3 + Vite 5.4.21 + Arco 2.66.16 + dayjs 1.11.23；
+   路由/请求/全局状态走**最小自研**（离线可构建的硬约束），升级路径逐条写明（换 react-router /
+   react-query / zustand 只改 `shared/` 一个文件）。
+3. **组件库选型**：三层 ③领域 → ②`Gm*` → ①Arco 原生；页面禁改 `Gm*` 视觉、禁自建第二套；
+   Arco 直用仅限复杂交互件，唯一逃生口是 `ArcoButton`。
+4. **目录结构**：`src/{app,modules,shared,styles,dev}` 五层 + `@/*` 别名；
+   `packages/gm-arco-ui` 列为镜像禁改。
+5. **模块边界**：**9 个模块**（account/archive/pregnancy/childcare/vaccine/followup/institution/workbench/dashboard），
+   各自拥有数据与状态机；依赖方向 **app → modules → shared**，跨模块只走公共出口且必须在 README 声明。
+6. **复用规则**：Token → 平台能力 → 通用组件（≥2 个模块才抽）→ 模块组件；
+   "抽象三问"挡住过度抽象；同视觉在第 2 个模块出现即必须提为组件库组件。
+7. **样式系统**：`gm.css` 是 Token 与皮肤唯一源；应用只写布局；暗色档靠 `data-theme` 换 Token，
+   **页面零暗色规则**；业务代码禁裸 hex 与内联玻璃配方。
+
+### 落地为工程（frontend-app）
+- **五层目录**真实建立：`app/`（routes + providers + layout + guards）· `shared/`（router · session ·
+  feedback · api(client/useRequest/cache/mock) · domain · components · hooks · utils · constants）·
+  `modules/`（9 个，各含 index.ts / model.ts / api.ts / README.md）· `styles/` · `dev/`（组件演示）。
+- **9 个模块的边界写在代码里**：`model.ts` 声明拥有域 + 状态词 + 路由；README 声明拥有/依赖/契约/硬规则。
+  其中 5 个模块有真实页面（工作台 / 档案列表 / 档案详情 / 随访队列 / 孕期首页 + 数据中心），
+  其余 4 个给出可访问的占位页（说明拥有什么、下一步做什么），不留 404。
+- **四态可被确定性演出来**：`PageState`（骨架/空/错/有数据）+ 离线 mock（180–420ms 延迟）+
+  开发期 QA 开关 `window.__GM_MOCK.{setDelay,fail,empty,clearCache}`。
+- **移动端一体**：≤1023 顶栏 + 底部 TabBar（3–5 项、玫瑰渐变胶囊、安全区），≥1024 玻璃侧栏；
+  档案页按断点切「行卡片 ↔ 玻璃表格」（10.5.3 同一份数据）。
+
+### 落地过程中修掉的三个真实缺陷（都会静默）
+1. **`useRequest` 在 StrictMode 下永久停在骨架**：为防卸载后 setState 加的组件级 `alive` ref，
+   在开发期 mount→cleanup→再 mount 后没人复位 → 所有 `.then` 被拦下，**控制台无错、就是没数据**。
+   （StrictMode 只在开发期双调用 → 这类缺陷只在 dev 复现、生产正常，最容易带病上线。）
+2. **mock 的空态一律返回 `[]`**：对象接口（`/workbench/today`）的空态把 `[]` 交给
+   `isEmpty: d => d.tasks.length === 0` → 直接抛 "Cannot read properties of undefined"。
+   现按接口形状返回 `emptyValue`，页面的 `isEmpty` 也加了防御。
+3. **`modules/*` 反向依赖 `app/`**：初版让模块直接 import `@/app/router` 与 `@/app/providers/*`；
+   已把「路由 / 会话 / 反馈」下沉到 `shared/`（平台能力），app 只负责挂 Provider —— 依赖方向恢复单向。
+
+### 新增门禁：`scripts/check-module-boundary.py`（B1–B9，已入 CI）
+| 规则 | 检查 | 违反后果 |
+| --- | --- | --- |
+| B1 | 跨模块只走公共出口 | 模块重构变成全仓改 |
+| B2 | 跨模块依赖必须在 README 声明 | 边界图永远过期 |
+| B3 | 分层方向单向 app → modules → shared | shared 反向依赖业务 → 无法复用 |
+| B4 | `dev/` 只允许被 app 装配 | 开发期页面进生产链路 |
+| B5 | 模块具备 index/model/README 且四行齐全 | 边界只在某人脑子里 |
+| B6 | 状态词必须在 15 章登记 | **静默**回落灰色（「高危显示成灰」） |
+| B7 | 业务代码禁裸 hex（`var()` 兜底值不算） | 暗色失效、改色全仓找 |
+| B8 | 业务代码禁内联玻璃配方 | 同一张卡十种写法 |
+| B9 | `var()` 引用要么有定义、要么有兜底 | 整条声明被静默丢弃 |
+
+**九条都做了负向验证**：把跨模块深链、未声明依赖、shared 反向依赖、未登记状态词、裸色值、
+内联配方、未定义无兜底变量逐条注入源码 → 门禁必须 FAIL 并指出文件与行号（实测 7/7 命中）。
+
+### 结果
+`audit.py` PASS（章节门禁扩到 00–19）· `check-module-boundary.py` OK · 根 `typecheck` ✓ ·
+`gm:typecheck` ✓ · 应用 `tsc --noEmit` 0 错误 · `vite build` ✓ ·
+浏览器验收 **21 条**（路由/三端形态/列表与表格降级/暗色/权限守卫/环形直径=96·72/无控制台错误）+
+**10 条**四态与守卫的确定性验收（加载/空/错/重试/QA 开关）全绿。
+
+### 仍未做（登记在案）
+- 4 个模块（childcare / vaccine / institution / account）只有边界与占位页，页面待排期。
+- 路由/请求/状态仍是自研薄壳：按 19.2.5 的触发条件再换库（当前需求未触发）。
+- 站点侧 `mobile-smoke.mjs` 守的是设计系统站内的移动端模块，与应用（`frontend-app`）的
+  UI 冒烟是两件事；应用侧目前靠 typecheck + build + 架构门禁 + 人工验收，尚未接入无头浏览器门禁
+  （需要 CI 里起 dev server，列入下一轮）。
+
 ## [V2.9] · 移动端组件（真机交互 · 无障碍 · 暗色档）
 
 > 依据：10（移动端规范）/ 11（移动端全量库）/ 02 · 2.1.9（暗色映射）/ 07（动效）/ Part 23（无障碍）。

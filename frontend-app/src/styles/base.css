@@ -1,0 +1,30 @@
+/* 基础层：只做 reset 与排版基线，颜色全部走 Token（--lg-* 由 gm.css 提供） */
+html,body,#root{min-height:100%}
+body{
+  margin:0;
+  font-family:var(--lg-font-sans,"Inter","PingFang SC","MiSans","Noto Sans SC",sans-serif);
+  /* 品牌暖底 + 光斑：02 · 2.1.4 / 12.3，与站点外壳同源 */
+  color:var(--lg-text-primary,#343A46);
+  background:
+    radial-gradient(1000px 600px at 88% -8%,rgba(247,127,163,.18),transparent 65%),
+    radial-gradient(900px 560px at -6% 24%,rgba(182,154,255,.13),transparent 65%),
+    linear-gradient(165deg,#FDF2EE,#F6E2DB 55%,#E6CFC6);
+  background-attachment:fixed;
+}
+/* 暗色档：只换 Token 变量，不重写布局（02 · 2.1.9 夜间暖石板） */
+[data-theme="dark"] body{
+  background:
+    radial-gradient(1200px 720px at 88% -8%,rgba(247,127,163,.16),transparent 65%),
+    radial-gradient(1080px 672px at -6% 24%,rgba(182,154,255,.13),transparent 65%),
+    linear-gradient(165deg,#1B1A21,#23222A 55%,#1B1A21);
+}
+*{box-sizing:border-box}
+:focus-visible{outline:var(--lg-ring-width,2px) solid var(--lg-ring-color,rgba(232,93,143,.6));
+  outline-offset:var(--lg-ring-offset,2px)}
+/* 动效降级（07 · 7.5）：应用侧自写动画也必须跟上 */
+@media (prefers-reduced-motion:reduce){
+  *,*::before,*::after{animation-duration:.01ms!important;transition-duration:.01ms!important}
+}
+/* 读屏专用文本 */
+.sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;
+  clip:rect(0 0 0 0);white-space:nowrap;border:0}

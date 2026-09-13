@@ -25,6 +25,12 @@ import { Progress } from "@arco-design/web-react";
  * 5. **无障碍**：`role="progressbar"` + `aria-valuemin/max/now` + `aria-label`；
  *    100% 时补 `aria-valuetext="已完成"`。
  * 6. **100% 一次白扫光**：规范「达到 100% 一次白扫光提示」—— 原实现没有，现按 `.is-done` 加。
+ *
+ * ## 环形直径必须走 `width`（V2.9 修复）
+ * Arco 的 `Progress.size` 只有 `'mini'|'small'|'default'|'large'` 四档、且只作用线性条；
+ * 把像素直径塞进 `size` 会被忽略 —— 即 `diameter` 形同不存在，而类型签名也对不上
+ * （number 不在该 union 内，`npm run typecheck` 与 `npm run gm:typecheck` 两处门禁都是红的）。
+ * Arco 原文：「circle 类型的进度条仅支持数字类型的 width」。Vue 版自绘 SVG 环路，无此问题。
  */
 export interface GmProgressProps {
   /** 进度百分比 0–100（超界夹紧）；`indeterminate` 时可省略 */
@@ -99,7 +105,7 @@ const GmProgress = ({
       className={`gm-progress gm-progress--${size} gm-progress--${tone}${done ? " is-done" : ""}`}
       percent={pct}
       type={type}
-      size={type === "circle" ? diameter ?? RING[size] : undefined}
+      width={type === "circle" ? (diameter ?? RING[size]) : undefined}
       showText={text || type === "circle"}
       color={fill}
       style={style}

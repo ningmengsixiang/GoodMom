@@ -1,0 +1,12 @@
+/* 应用样式入口（19.7 样式系统）
+ *
+ * 顺序即优先级，不可调换：
+ *   ① Arco 原生样式（main.tsx 引入，提供组件基线）
+ *   ② @goodmom/gm-arco-ui/gm.css —— **Token 与组件皮肤的唯一源**（02 章落地）
+ *   ③ 本目录的 base.css / layout.css —— 只写页面壳与布局，**不写色值**
+ *
+ * 应用侧禁止：裸 hex、新造 Token、复制组件皮肤。需要新数值 → 先改
+ * goodmom-ui/src/tokens/design.ts + theme.css（并同步镜像与 02 章），再回来用变量。
+ */
+@import "./base.css";
+@import "./layout.css";

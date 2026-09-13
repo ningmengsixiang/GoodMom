@@ -136,6 +136,20 @@ jobs:
           cache-dependency-path: frontend-app/package-lock.json
       - run: npm ci || npm install
       - run: npm run gm:typecheck
+      # 应用侧此前**不在 CI 里**：`gm:typecheck` 只检查封装层，根 typecheck 只检查三个开源包，
+      # 于是 `frontend-app/src/App.tsx` 的类型错误长期存在而无人拦下
+      # （V2.9 实测：接入时应用侧 tsc 有 2 处错误、封装层 typecheck 也是红的）。
+      - run: npx tsc --noEmit -p tsconfig.json
+      # 生产构建可用性：tsc 过不代表打得出来（别名、动态 import、CSS 引入都可能只有构建期报错）
+      - run: npm run build
+
+  architecture-gate:
+    name: 工程架构门禁（模块边界 / 分层方向 / 状态词登记 / 色值与配方）
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      # 纯静态扫描，不需要 node_modules：读 import 图、模块 README、状态词字典、样式文件
+      - run: python3 scripts/check-module-boundary.py
 
   open-pkg-typecheck:
     name: 开源包 typecheck + build（@goodmom/ui + @goodmom/icons + @goodmom/vue）
