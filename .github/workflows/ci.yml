@@ -208,6 +208,10 @@ jobs:
           done
           node scripts/site-parity.mjs
           node scripts/site-smoke.mjs
+          # 移动端模块是"可触摸的真机演示"（4 页 / 左滑 / 下拉刷新 / 上拉加载 / 浮层焦点管理 /
+          # 暗色档）。site-smoke 对它只断言"`.tab` 存在且点了会选中"—— 交互被改坏它照样全绿，
+          # 故单独一支：40 条断言全部对应用户能感知的行为与几何。
+          node scripts/mobile-smoke.mjs
 
       - name: 逐页规范质检（结构 / 对比度 / 焦点 / 触控 / 溢出 / Token 档位）
         # 与既有守门的分工：a11y.py 是静态断言、a11y-dom.py 只测对比度；

@@ -14,4 +14,4 @@
 - MB-22-08 应：级联选择在移动端用底部多列 Picker（10 · 10.11.3），不得铺开桌面式横向多列面板。
 - MB-22-05 应：反馈 Toast 居中偏上；底部抽屉/弹层常用；FAB 抬升于 TabBar 之上（08.2.1）。
 - MB-22-06 应：安全区 env()，TabBar 不压内容（11 章验收）。
-- 预览：preview/mobile.html；断点 ≤767。
+- 预览：site/index.html#preview-mobile；断点 ≤767。

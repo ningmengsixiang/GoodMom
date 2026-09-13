@@ -771,11 +771,15 @@ def feedback_spec():
         bad.append("%s 不存在" % SHELL)
     else:
         sh = _io.open(SHELL, encoding="utf-8").read()
-        if "--gm-toast-top:76px" not in sh:
-            bad.append("%s：外壳未给出 --gm-toast-top（桌面须避让 60px 吸顶导航；"
-                       "否则 Toast 会被整条盖住，且任何静态检查都发现不了）" % SHELL)
-        if "--gm-toast-top:160px" not in sh:
-            bad.append("%s：移动端须把 --gm-toast-top 抬到 160px（吸顶导航实测 144px）" % SHELL)
+        # Toast 避让值必须**派生**自实测导航高度，不许写死。
+        # 旧断言写死 "桌面 76 / 移动 160"：手机档导航从 144 收敛到 53 之后，
+        # Toast 被顶到半屏以下，而这条断言还把过期值焊死了 —— 门禁本身成了回归源。
+        if not re.search(r"--gm-toast-top:\s*calc\(\s*var\(--sh-nav-h", sh):
+            bad.append("%s：--gm-toast-top 必须写成 calc(var(--sh-nav-h…) + N)，"
+                       "读外壳实测的导航高度；写死数值会在导航换档后失效" % SHELL)
+        if "--sh-nav-h" not in sh or "ResizeObserver" not in sh:
+            bad.append("%s：外壳未实测吸顶导航高度（--sh-nav-h 应由 ResizeObserver 写入），"
+                       "模块锚点留白与 Toast 避让都依赖它" % SHELL)
         if not re.search(r"window\.gmToast\s*=", sh):
             bad.append("%s：外壳缺少全局 window.gmToast —— 站点侧必须只有一份实现" % SHELL)
         if not re.search(r"DWELL\s*=\s*2400", sh):
@@ -1229,6 +1233,39 @@ def growth_chart():
     return True
 
 
+def svg_refs():
+    """SVG/CSS 画刷引用必须能解析到**同一文件内**的 id。
+
+    `url(#x)`（fill / stroke / clip-path / mask / filter / marker-* 与 CSS 同类写法）
+    指向不存在的 id 时**不报错、控制台无痕**，浏览器直接不画那个元素 —— 属于
+    "页面少了一块、但所有门禁都 PASS"的静默缺陷类。
+
+    实测 V2.9 产物：build 的 prefix_ids 只给 `id=` 加了模块前缀、没改引用侧，
+    于是 6 处画刷全断（视觉规范的渐变柱/环形/雷达/径向底 + 移动端趋势图面积渐变）。
+    本门禁与 build-site.py 里 rurl 的改写互为回归位：改坏任何一侧都会在这里失败。
+    """
+    bad, checked = [], 0
+    targets = dict.fromkeys(["site/index.html"] + sorted(glob.glob("site/*.html"))
+                            + sorted(glob.glob("preview/*.html")))
+    for f in targets:
+        if not os.path.exists(f):
+            continue
+        t = open(f, encoding="utf-8").read()
+        if "页面已合并" in t or "url(#" not in t:
+            continue
+        ids = set(re.findall(r'\bid\s*=\s*"([^"]+)"', t))
+        for m in re.finditer(r"url\(\s*['\"]?#([\w.-]+)", t):
+            checked += 1
+            if m.group(1) not in ids:
+                bad.append("%s → #%s" % (f, m.group(1)))
+    if bad:
+        rec("FAIL", "svg-refs", "%d 处画刷引用指向不存在的 id（元素会整块不渲染）：%s"
+            % (len(bad), sorted(set(bad))[:4]))
+        return False
+    rec("OK", "svg-refs", "全部 %d 处 url(#id) 画刷引用均可解析（跨模块 id 前缀未断链）" % checked)
+    return True
+
+
 # 门禁登记表：名字 → 函数。集中登记是为了支持 `--only <名>`（负向测试要能
 # 精确地"只跑这一条"，否则注入缺陷后先被其它门禁拦下，反而证明不了目标门禁有效）。
 GATES = [
@@ -1239,6 +1276,7 @@ GATES = [
     ("exports", exports_check), ("logo-guard", logo_guard), ("loading-spec", loading_spec),
     ("css-syntax", css_syntax), ("feedback-spec", feedback_spec),
     ("undefined-token", undefined_tokens), ("data-present", data_present), ("growth-chart", growth_chart),
+    ("svg-refs", svg_refs),
 ]
 
 

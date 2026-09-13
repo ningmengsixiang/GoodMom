@@ -182,7 +182,7 @@ node goodmom-vue/playground/smoke.mjs                    # 冒烟（组件契约
 2. **Figma 建库** → 按 [`02-Token规范.md`](02-Token规范.md) 建立样式 Token（颜色 / 字体 / 圆角 / 阴影 / 模糊）。
 3. **前端落地** → 复制 02 章末尾的 CSS 变量块，组件按 [`03-组件规范.md`](03-组件规范.md) 实现。
 4. **视觉对照** → 浏览器打开 [`site/index.html`](site/index.html#preview-index)「视觉规范」模块实时查看效果（含微交互演示，悬停、按压、开关、分段控件均可直接操作）。
-5. **移动端** → 规范见 [`10-移动端组件规范.md`](10-移动端组件规范.md)，预览 [`site/index.html#preview-mobile`](site/index.html#preview-mobile)（建议浏览器设备模式）。
+5. **移动端** → 规范见 [`10-移动端组件规范.md`](10-移动端组件规范.md)，预览 [`site/index.html#preview-mobile`](site/index.html#preview-mobile)：**≥1024 自动进入真机框**（框内滚动、浮层齐备），手机档全屏铺满；页内 4 个页面可点，列表可左滑、手势区可下拉刷新。
 6. **完整示例页** → 打开 [`site/index.html#preview-examples`](site/index.html#preview-examples)，按“下一页”顺序走完 6 套常用页面。
 7. **交互范式** → 打开 [`site/index.html#preview-patterns`](site/index.html#preview-patterns)：链接全态、级联三形态、拖动容器宽度看响应式切换、1284 条虚拟长列表、暗黑模式与边框档。
 
@@ -226,7 +226,8 @@ open site/index.html   # 唯一入口：顶部导航切换 8 个模块（原 8 �
 python3 scripts/build-site.py            # 生成唯一首页
 python3 scripts/build-site.py --check     # 校验产物与构建结果一致（CI）
 python3 scripts/redirect-legacy.py --check # 校验旧入口仍为重定向
-node scripts/site-smoke.mjs               # 41 项冒烟（需先起静态服务）
+node scripts/site-smoke.mjs               # 48 项冒烟（需先起静态服务）
+node scripts/mobile-smoke.mjs             # 40 项移动端真机验收（交互/热区/模糊预算/暗色）
 node scripts/site-parity.mjs              # 合并保真度：各模块 vs 原页面
 
 # 前端封装库（Vite + React + Arco）

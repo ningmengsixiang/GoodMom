@@ -409,6 +409,21 @@ def prefix_ids(html: str, mod: str) -> str:
 
     for a in idref:
         html = re.sub(r'(\b%s\s*=\s*["\'])([^"\']+)(["\'])' % a, ridref, html)
+
+    # SVG 画刷引用 `url(#id)`（fill / stroke / clip-path / mask / filter / marker-*，
+    # 以及 CSS 里的同类写法）：**只改 `id=` 不改引用侧 = 静默断链**。
+    #
+    # 未解析的 paint server 不会报错、控制台也不留痕 —— 浏览器直接不画那个元素。
+    # 实测 V2.9 产物 6 处全断：url(#sp1)/(#rg1)/(#rr1)/(#ch2)/(#radBg)（视觉规范模块的
+    # 渐变柱/环形/雷达/径向底）与 url(#mg)（移动端趋势图面积渐变）——
+    # 规范站上那一块整体消失，而 build / parity / smoke 全部 PASS。
+    def rurl(m: re.Match) -> str:
+        v = m.group(2)
+        if v.startswith(pid) or v.startswith("#"):
+            return m.group(0)
+        return m.group(1) + pid + v
+
+    html = re.sub(r"(url\(\s*['\"]?#)([\w-]+)", rurl, html)
     return html
 
 
@@ -678,7 +693,11 @@ SHELL = """<!DOCTYPE html>
      模块内的 Toast 若沿用独立页的 top:20px，会被这条导航整条盖住——
      实测：节点存在于 20px 处、样式全部生效，但**视觉完全不可见**（无任何静态检查能发现）。
      故由外壳统一给出避让值，模块侧只读 --gm-toast-top（缺省 20px，供未套外壳的独立页）。 */
-  --gm-toast-top:76px;
+  /* ⚠️ **派生**，不写死：--sh-nav-h 是外壳脚本实测的吸顶导航高度（桌面 ~60 / 手机换档后 53）。
+     历史教训：这里原是两个写死的数（桌面 76 / 移动 160），手机档导航从 144 收敛到 53 之后
+     Toast 被顶到半屏以下，而门禁里那条"移动端须把 --gm-toast-top 抬到 160px"的断言
+     反而把过期值焊死了 —— 写死的值一定会过期，所以改成算出来的。 */
+  --gm-toast-top:calc(var(--sh-nav-h,60px) + 16px);
   /* 13 · 13.2 图表**导引件**（网格 / 坐标 / 警戒虚线）的专用令牌。
      为什么不直接用 --lg-text-tertiary：页面把它当"次级文字"用（多处 11–12px 正文），
      个别页面甚至把 tertiary 别名成了次级色 —— 拿它画警戒线会让虚线跟文字一样重，
@@ -729,8 +748,13 @@ body{margin:0;font-family:var(--sh-font);color:var(--sh-t);line-height:1.7;-webk
 .gm-mod.is-on{display:block}
 /* 文档型模块（规范全文 / 标准手册）自带的固定侧栏改为模块内定位，避免溢出到外壳 */
 .gm-mod--site-spec aside,.gm-mod--site-manual aside{position:sticky;top:70px}
-/* 模块内的锚点跳转留出吸顶导航高度 */
-.gm-mod [id]{scroll-margin-top:78px}
+/* 模块内的锚点跳转留出吸顶导航高度。
+   ⚠️ 两条都要：`.gm-mod [id]` 只命中**后代**，模块根自身不在其中 —— 点主导航落到
+   `#gm-mod-x` 时模块根的 scroll-margin-top 实测为 0px，于是模块顶部被吸顶导航整条盖住
+   （手机实测盖 144px，桌面 60px）。高度不写死：由外壳脚本实测写入 --sh-nav-h，
+   横竖屏/字号放大/页签换档后仍然准确。 */
+.gm-mod[id]{scroll-margin-top:calc(var(--sh-nav-h,60px) + 8px)}
+.gm-mod [id]{scroll-margin-top:calc(var(--sh-nav-h,60px) + 8px)}
 /* ══════════════════════════════════════════════════════════════════════════
    Part 18 · MD-18-01/04 —— 全局反馈层：Toast（唯一一份实现，属于外壳而非某个模块）
    为什么放外壳：Toast 是**跨模块的浮层**。若每个模块各写一份，
@@ -983,16 +1007,22 @@ body{margin:0;font-family:var(--sh-font);color:var(--sh-t);line-height:1.7;-webk
   .gm-fold__body,.gm-fold .gm-fold__arr{transition:none}
 }
 /* 折叠同理：底走 Token（模块没做暗色档时保持浅玻璃，文字仍是深档 → 仍可读） */
-/* ── 移动端：导航横向滚动，不换行挤压 ── */
+/* ── 移动端：导航压成单行，横向滚动不换行挤压 ──
+   原实现是**三行**（品牌行 + 页签行 + 外链行），实测 375×812 上吸顶导航高 144px ——
+   占屏高 17.7%，且模块内容被整体下推；把外链行收进页签滚动条后为 ~58px，
+   手机上多出 86px 内容高度（约 10.6%）。外链里的「规范全文」在页签里已有入口，
+   品牌副标题在手机上也读不全，故这两项在手机档不显示（`.sh-ext` 桌面档保留）。 */
 @media (max-width:767px){
-  .sh-top-in{gap:8px}
-  .sh-tabs{order:3;width:100%;overflow-x:auto;flex-wrap:nowrap;padding-bottom:2px;
+  .sh-top{padding:8px 12px}
+  .sh-top-in{flex-wrap:nowrap;gap:8px}
+  .sh-brand{order:1;margin-right:0}
+  .sh-brand small{display:none}
+  .sh-brand span{font-size:14px;white-space:nowrap}
+  .sh-ext{display:none}
+  .sh-tabs{order:2;flex:1 1 auto;min-width:0;width:auto;overflow-x:auto;flex-wrap:nowrap;
     -webkit-overflow-scrolling:touch;scrollbar-width:none}
   .sh-tabs::-webkit-scrollbar{display:none}
-  .sh-ext{margin-left:0;order:2}
-  .sh-brand{order:1}
-  /* 移动端吸顶导航换成两行（实测 144px），Toast 的避让值随之抬高 */
-  :root{--gm-toast-top:160px}
+  .sh-tab{padding:8px 12px}
 }
 @media (prefers-reduced-motion: reduce){
   .sh-tab{transition:none}
@@ -1018,6 +1048,22 @@ body{margin:0;font-family:var(--sh-font);color:var(--sh-t);line-height:1.7;-webk
 __MODULES__
 </main>
 <script>
+/* 吸顶导航的**实测**高度 → --sh-nav-h。
+   用途：① 模块锚点留白（`scroll-margin-top`）② 移动端模块内吸顶条的避让。
+   为什么不写死 60/144：手机档页签换行/横竖屏/系统字号放大都会改变这个高度，
+   写死的那一份必然是错的（历史事故：写死 78px 的锚点留白在手机上让模块顶部被盖住 66px）。 */
+(function(){
+  var top = document.querySelector('.sh-top');
+  if(!top) return;
+  function sync(){
+    var h = Math.round(top.getBoundingClientRect().height);
+    if(h > 0) document.documentElement.style.setProperty('--sh-nav-h', h + 'px');
+  }
+  sync();
+  window.addEventListener('resize', sync, {passive:true});
+  window.addEventListener('orientationchange', sync, {passive:true});
+  if(window.ResizeObserver){ try{ new ResizeObserver(sync).observe(top); }catch(e){} }
+})();
 /* 单一外壳逻辑：只在模块之间切换显示，不重复渲染。
    用 display 切换（而非 hidden 属性）——模块内已有大量 display/grid 规则，
    hidden 会被这些规则压过，导致"隐藏"失效。 */

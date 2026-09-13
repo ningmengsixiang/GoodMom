@@ -263,7 +263,7 @@
 - **表格/列表**：→卡片列表或横滑窄表；分页改「上滑加载更多 + 到底提示」。
 - **反馈位置**：Toast 居中偏上（避免遮挡 TabBar）；底部抽屉/底部弹层常用；FAB 在 TabBar 之上抬升（08.2.1）。
 - **横竖屏与安全区**：横屏转 iPad 逻辑（Part 21）；刘海/底部指示条 `env()` 处理，TabBar 不压内容（11 章验收项）。
-- 预览页：preview/mobile.html（实机边框复刻）；断点 ≤767。
+- 预览页：site/index.html#preview-mobile（真机框，框内滚动）；断点 ≤767。
 
 ## Part 23 · Accessibility 规范
 - **对比度（WCAG 2.2 AA）**：正文/控件 ≥4.5:1，大字（≥24px 常规/≥18.66px 加粗）≥3:1；token 已收敛：主 #343A46(≥7)、次级 #4F5B6E(白 6.88/暖 4.98)、白字实底档 --mmh-solid-*（D5/D7）。页面实测以 `a11y-dom.py` 报告为准（渐变/长尾清单见 docs/a11y-dom-report.md 与 D7b）。

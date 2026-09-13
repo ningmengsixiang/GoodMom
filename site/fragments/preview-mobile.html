@@ -1,530 +1,2103 @@
 <!--@css-->
-/* ── LG Tokens（精简，同 02；移动增量见 10-移动端组件规范.md）── */
+/* ══════════════════════════════════════════════════════════════════════════
+   移动端模块 · 液态玻璃（妈咪好 GoodMom）
+   规范锚点：10（移动端规范）· 11（移动端全量库）· 02 · 2.1.9（暗色映射）· 07（动效）
+
+   本模块是"可触摸的移动端演示"，不是静态图：TabBar 真切页、列表可左滑、
+   手势区内下拉刷新、底部操作表/滚轮选择器/图片预览均为真实浮层与真实焦点管理。
+   演示到的组件与规范锚点见页脚 desk-note（≥1024 显示）。
+
+   ⚠️ 移动端两条硬约束（10.8 / 11.4），本模块按它们设计：
+     ① backdrop-filter 节点全屏 ≤4 —— 只给 NavBar / TabBar / Mask / 底部面板 / 图片预览
+        五个候选（声明 6 处，其中两张面板互斥）。同屏最坏组合＝
+        NavBar + TabBar + Mask + 面板 = 4，恰好达线；图片预览打开时 TabBar 被遮住，
+        实际 3。其余"玻璃"一律用半透明白实色近似（视觉差 <10%，iOS 上省掉逐帧重绘）。
+     ② 热区 ≥44×44（主行动 ≥48）。用小热区控件（开关 48×28、分段 40 高）时，
+        一律用 **::before** 补热区；⚠️ 绝不能用 ::after —— 开关的滑块就是 ::after，
+        历史缺陷：≤767 的热区规则给滑块加了 min-height:44px，48×28 的轨道里
+        塞进一个 46×44 白块，开关的"开/关"彻底看不出来（真机实测截图）。
+   ══════════════════════════════════════════════════════════════════════════ */
+
+/* ── 1 · Token（02 精简 + 10.2 移动增量 + 02 · 2.1.9 暗色档）────────────── */
 :root{
-  /* V2.9 补：本页 3 处无兜底引用 --sem-special，但它从未定义 ——
-     浏览器会在计算值阶段静默丢弃这些声明（.navbar 图标按下态 / notice 图标 / 搜索按钮全都会
-     退化成继承色）。取值照抄 02 · 2.1.5 的文字专用深档 alias，不新造色。 */
-  --sem-special:#6A48DC;
+  --text:#343A46; --text-2:#4F5B6E; --text-3:#5E6673;
   --warm-ivory:#E6D9D0; --soft-beige:#D7C5BC;
-  --text:#343A46; --text-2:#4F5B6E; --text-3:#4F5B6E;
   --purple:#B69AFF; --purple-d:#9A78FF; --cyan:#72DDE5;
   --rose-600:#E85D8F; --rose-500:#F77FA3; --rose-100:#FFF0F4; --mint-500:#6FC9B4;
   --success:#42C7A1; --warning:#F2B25C; --danger:#EF6A7B;
   /* 文字专用深档 alias（02 · 2.1.5 / 14 · 4.4.5）；--success/-warning/-danger 是填充档 */
-  --sem-positive:#25715D; --sem-warn:#8D5A15; --sem-danger:#B72F42;
-  --solid-danger:#B04052; /* D5 白字实底档（白字 5.67:1） */
+  --sem-positive:#25715D; --sem-warn:#8D5A15; --sem-danger:#B72F42; --sem-special:#6A48DC;
+  --solid-danger:#B04052;
   --grad-p:linear-gradient(135deg,#FFA9C2,#F77FA3 45%,#E85D8F);
+  --mmh-grad-action-hc:linear-gradient(135deg,#FFC4D6 0%,#F77FA3 100%);
   --font:"Inter","SF Pro Display",-apple-system,BlinkMacSystemFont,"PingFang SC","MiSans","Noto Sans SC",sans-serif;
   --ease:cubic-bezier(.22,1,.36,1); --spring:cubic-bezier(.34,1.56,.64,1);
-  --shadow-card:0 10px 24px rgba(58,52,84,.10),0 2px 6px rgba(58,52,84,.05);
+  --shadow-card:0 8px 20px rgba(58,52,84,.10),0 2px 6px rgba(58,52,84,.05);
   --shadow-tab:0 -6px 24px rgba(58,52,84,.10),0 2px 6px rgba(58,52,84,.04);
-}
-
-.gm-mod--preview-mobile,:root{height:100%}:root{
-  font-family:var(--font);color:var(--text);background:var(--soft-beige);
-  -webkit-font-smoothing:antialiased;
-}
-/* 页面舞台：暖底 + 光斑 */
-.stage{
-  position:relative;max-width:430px;min-height:100dvh;margin:0 auto;
-  padding:calc(env(safe-area-inset-top) + 8px) 0 calc(env(safe-area-inset-bottom) + 132px);
-  background:
+  /* 10.2 移动增量 */
+  --lg-m-gutter-page:16px; --lg-m-gap-card:12px; --lg-m-pad-card:16px;
+  --lg-m-radius-card:20px; --lg-m-radius-control:16px; --lg-m-radius-btn:18px;
+  --lg-m-touch:44px; --lg-m-touch-critical:48px;
+  /* 本模块语义别名（暗色档整体换档，不换色相） */
+  --pm-glass:linear-gradient(160deg,rgba(255,255,255,.56),rgba(255,255,255,.26) 55%,rgba(255,255,255,.36));
+  --pm-solid:rgba(255,255,255,.46);
+  --pm-edge:rgba(255,255,255,.66);
+  --pm-divider:rgba(58,52,84,.10);
+  --pm-input:rgba(255,255,255,.40);
+  --pm-shadow-black:rgba(58,52,84,.18);
+  --pm-ring:rgba(232,93,143,.6);
+  /* 文字型行动 / 行内链接色：浅色 #B23A63、暗色 #FFC4D6（02 · 2.1.9 的 --lg-link 档）。
+     不借 --sem-special：语义不同（紫=特殊协作/AI），且暗档 #B9A0FF 在卡片合成面上
+     实测 4.01:1 < 4.5，过不了 AA。 */
+  --pm-link:#B23A63;
+  --pm-rose-text:#B23A63;   /* 品牌色文字档（暗色翻浅，见下） */
+  --pm-mask:rgba(255,255,255,.18);          /* 11.6.6 Mask */
+  --pm-bg:
     radial-gradient(420px 260px at 88% -2%, rgba(247,127,163,.22), transparent 70%),
     radial-gradient(380px 240px at -8% 24%, rgba(182,154,255,.16), transparent 70%),
     radial-gradient(300px 220px at 60% 104%, rgba(255,214,226,.22), transparent 70%),
     radial-gradient(520px 300px at 20% -6%, rgba(255,255,255,.7), transparent 75%),
     linear-gradient(165deg,#FDF2EE 0%,#F6E2DB 48%,#E9D2C9 100%);
-  background-attachment:fixed;
+  /* 外壳吸顶导航实测高度（build-site 外壳写入）；模块内吸顶条据此避让 */
+  --pm-shell-nav:var(--sh-nav-h,0px);
 }
-.wrap{padding:0 16px}
+/* 暗色档 · 夜间暖石板（02 · 2.1.9 映射表 A/B）：底色 #1B1A21，字 #F3EFEC，
+   玻璃由 14–60% 降到 6–16%，边缘光只留顶部 1px，阴影加深、语义色换浅档。
+   场景：夜奶/夜间查房——这是妇幼场景里最需要暗色的一屏。 */
+[data-theme="dark"]{
+  /* 模块根自身给不透明暗底（与「交互范式」模块同一写法）：暗色档的模块必须自成一体 ——
+     否则页面壳的浅色底纹会从半透明层下面透上来，既脏，也让人分不清这块到底暗没暗。
+     实测口径：对比度工具会沿祖先链取"最亮可能承载面"，没有这层兜底时，
+     .stage 里 10% 的粉色光斑会被判为压在**浅色页面底**上（283 处假失败）。 */
+  background:#1B1A21; color:#F3EFEC;
+  --text:#F3EFEC; --text-2:#C9C4CE;
+  /* 三级字在暗档并入二级档：02 · 2.1.9 给的 #A6ADB9 在最坏合成面（暗玻璃卡 68,67,73）
+     上实测 4.31:1 < 4.5；#C9C4CE 在同一面上 5.62:1。层级改由字号/字重承担。 */
+  --text-3:#C9C4CE;
+  --sem-positive:#6FC9B4; --sem-warn:#F2C14E; --sem-danger:#F79AA8; --sem-special:#B9A0FF;
+  --pm-glass:linear-gradient(160deg,rgba(255,255,255,.10),rgba(255,255,255,.06) 55%,rgba(255,255,255,.08));
+  --pm-solid:rgba(255,255,255,.09);
+  --pm-edge:rgba(255,255,255,.14);
+  --pm-divider:rgba(255,255,255,.10);
+  --pm-input:rgba(255,255,255,.12);
+  --pm-shadow-black:rgba(0,0,0,.42);
+  --pm-ring:rgba(255,196,214,.7);
+  --pm-link:#FFC4D6;
+  --pm-rose-text:#FFC4D6;
+  --pm-mask:rgba(0,0,0,.48);
+  --shadow-card:0 10px 24px rgba(0,0,0,.42),0 2px 6px rgba(0,0,0,.32);
+  --shadow-tab:0 -8px 26px rgba(0,0,0,.5);
+  --pm-bg:
+    radial-gradient(500px 312px at 88% -2%, rgba(247,127,163,.16), transparent 70%),
+    radial-gradient(456px 288px at -8% 24%, rgba(182,154,255,.13), transparent 70%),
+    radial-gradient(360px 264px at 60% 104%, rgba(255,214,226,.10), transparent 70%),
+    linear-gradient(165deg,#1B1A21 0%,#23222A 52%,#1B1A21 100%);
+}
+
+.gm-mod--preview-mobile{height:100%;font-family:var(--font);color:var(--text);
+  -webkit-font-smoothing:antialiased;font-size:16px;line-height:1.6}
+.gm-mod--preview-mobile button{font-family:inherit;font-size:inherit;color:inherit;background:none;
+  border:none;padding:0;cursor:pointer;text-align:left}
+/* 02 · 2.7.1 焦点环：全模块统一一处给，禁止裸 outline:none */
+.gm-mod--preview-mobile :focus-visible{outline:2px solid var(--pm-ring);outline-offset:2px;border-radius:18px}
+
+/* ── 2 · 应用外壳（手机面 / 桌面档的真机框）────────────────────────────── */
+.stage{
+  position:relative;max-width:430px;min-height:100dvh;margin:0 auto;
+  padding:calc(env(safe-area-inset-top) + 8px) 0 calc(env(safe-area-inset-bottom) + 132px);
+  background:var(--pm-bg);color:var(--text);
+}
+.wrap{padding:0 var(--lg-m-gutter-page)}
 .num{font-variant-numeric:tabular-nums}
 svg.i{width:22px;height:22px;stroke:currentColor;fill:none;stroke-width:1.7;
   stroke-linecap:round;stroke-linejoin:round;display:block;flex:none}
+.pm-sr{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;
+  clip:rect(0 0 0 0);white-space:nowrap;border:0}
 
-/* ── 顶部 NavBar（玻璃条，滚动显现用 shadow 区分即可）── */
-.navbar{position:sticky;top:calc(env(safe-area-inset-top) + 8px);z-index:20;
-  display:flex;align-items:center;gap:6px;margin:0 12px 14px;padding:6px;
-  border-radius:22px;
-  background:linear-gradient(160deg,rgba(255,255,255,.72),rgba(255,255,255,.42));
+/* 真机状态条：只在桌面档显示（真机上系统状态条已经在，重复画一条是错的） */
+.pm-status{display:none}
+
+/* ── 3 · NavBar（10.3.1）/ 搜索面板（11.2.1）──────────────────────────── */
+.navbar{
+  position:sticky;top:calc(var(--pm-shell-nav) + env(safe-area-inset-top) + 8px);z-index:20;
+  display:flex;align-items:center;gap:6px;margin:0 12px 14px;padding:6px;border-radius:22px;
+  background:var(--pm-glass);
   -webkit-backdrop-filter:blur(32px) saturate(1.2);backdrop-filter:blur(32px) saturate(1.2);
-  border:1px solid rgba(255,255,255,.8);
-  box-shadow:inset 0 1px 0 rgba(255,255,255,.85),var(--shadow-card)}
+  border:1px solid var(--pm-edge);
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.55),var(--shadow-card);
+  transition:box-shadow .24s var(--ease),background .24s var(--ease)}
+/* 10.3.1 滚动沉浸：内容上滑 120px 后玻璃条加深（240ms 淡入） */
+.pm-scrolled .navbar{background:var(--pm-solid);box-shadow:inset 0 1px 0 rgba(255,255,255,.55),0 12px 28px rgba(58,52,84,.16)}
+[data-theme="dark"] .pm-scrolled .navbar{box-shadow:inset 0 1px 0 rgba(255,255,255,.16),0 12px 28px rgba(0,0,0,.5)}
 .navbar .back{width:44px;height:44px;border-radius:50%;display:flex;align-items:center;justify-content:center;
   color:var(--text-2);flex:none;transition:transform .12s ease}
 .navbar .back:active{transform:scale(.9)}
-.navbar h1{flex:1;font-size:18px;font-weight:600;letter-spacing:-.01em;text-align:center;
+/* 根页无返回键（10.3.1）：整键移除而非置灰——置灰的按钮键盘不可聚焦，
+   会同时触发"焦点不可见"与"禁用无理由"两条无障碍问题 */
+.pm-at-root .navbar .back{display:none}
+.navbar img{width:24px;height:24px;border-radius:8px;flex:none}
+.navbar h1{flex:1;min-width:0;font-size:18px;font-weight:600;letter-spacing:-.01em;text-align:center;
   white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.navbar .ops{display:flex;gap:2px}
-.navbar .ops .o{width:44px;height:44px;border-radius:50%;display:flex;align-items:center;justify-content:center;
-  color:var(--text-2);transition:transform .12s ease}
+.navbar .ops{display:flex;gap:2px;flex:none}
+.navbar .ops .o{position:relative;width:44px;height:44px;border-radius:50%;display:flex;align-items:center;
+  justify-content:center;color:var(--text-2);transition:transform .12s ease}
 .navbar .ops .o:active{transform:scale(.9);color:var(--sem-special)}
+.navbar .ops .o[aria-expanded="true"]{background:var(--pm-input);color:var(--sem-special)}
+.pm-badge{position:absolute;top:5px;right:5px;min-width:18px;height:18px;padding:0 4px;border-radius:999px;
+  background:var(--solid-danger);color:#FFF;font-size:11px;font-weight:600;line-height:18px;text-align:center}
 
-/* 玻璃卡（L2 移动档：blur 28） */
-.gcard{border-radius:20px;padding:16px;
-  background:linear-gradient(160deg,rgba(255,255,255,.5),rgba(255,255,255,.2) 55%,rgba(255,255,255,.3));
-  -webkit-backdrop-filter:blur(32px) saturate(1.15);backdrop-filter:blur(32px) saturate(1.15);
-  border:1px solid rgba(255,255,255,.6);
-  box-shadow:inset 0 1px 0 rgba(255,255,255,.7),var(--shadow-card);
-  transition:transform .16s var(--ease)}
-.gcard:active{transform:scale(.985)}
+/* 搜索面板：NavBar 下方展开（11.2.1）。输入字号 16 → 规避 iOS 聚焦缩放（10.6.2） */
+.pm-searchp{display:none;margin:-6px 12px 14px;padding:12px;border-radius:22px;
+  background:var(--pm-solid);border:1px solid var(--pm-edge);box-shadow:var(--shadow-card)}
+.pm-searchp.is-open{display:block;animation:pmFade .24s var(--ease)}
+/* ⚠️ 1px 描边必须用 inset 阴影而不是 border：border-box 下 44 高的容器里
+   1px 上下边框会把 input 的实测盒高压到 42 —— 低于 10.4 要求的 44 热区
+   （实测被 page-qa 的 touch-target 判 P1）。改用 inset 阴影画同一根 hairline，
+   容器与输入同高 44，视觉不变、热区达标。 */
+.pm-searchrow{display:flex;align-items:center;gap:8px;height:var(--lg-m-touch);padding:0 8px 0 14px;
+  border-radius:18px;background:var(--pm-input);
+  box-shadow:inset 0 0 0 1px var(--pm-divider)}
+.pm-searchrow svg{color:var(--text-3)}
+.pm-searchrow input{flex:1;min-width:0;height:var(--lg-m-touch);border:none;outline:none;background:transparent;
+  font-family:var(--font);font-size:16px;color:var(--text)}
+.pm-searchrow input::placeholder{color:var(--text-3)}
+.pm-searchrow input:focus-visible{outline:2px solid var(--pm-ring);outline-offset:2px;border-radius:18px}
+.pm-searchrow .pm-clear{width:44px;height:44px;border-radius:50%;display:none;align-items:center;
+  justify-content:center;color:var(--text-3);flex:none}
+.pm-searchrow .pm-clear.is-on{display:flex}
+.pm-sugg{display:flex;flex-wrap:wrap;gap:8px;margin-top:10px}
+.pm-sugg button{min-height:44px;padding:0 14px;border-radius:999px;font-size:14px;color:var(--text-2);
+  background:var(--pm-input);border:1px solid var(--pm-divider)}
+.pm-sugg button:active{transform:scale(.97)}
 
-/* KPI 对排卡 */
-.kpis{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:14px}
-.kpi h2{font-size:13px;color:var(--text-2);font-weight:500;margin-bottom:8px;display:flex;align-items:center;gap:6px}
-.kpi .v{font-size:34px;font-weight:700;line-height:1;letter-spacing:-.02em}
+/* ── 4 · 卡 / 区块 / 版式（10.3.3）────────────────────────────────────── */
+/* 10.8：只有 NavBar / TabBar / 浮层用 backdrop-filter，卡一律半透明白实色近似 */
+.gcard{border-radius:var(--lg-m-radius-card);padding:var(--lg-m-pad-card);
+  background:var(--pm-glass);border:1px solid var(--pm-edge);
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.5),var(--shadow-card)}
+.sec{margin:18px 0 10px;padding:0 4px;font-size:17px;line-height:24px;font-weight:600;
+  letter-spacing:-.01em;display:flex;align-items:baseline;gap:8px;flex-wrap:wrap}
+.sec small{font-size:12px;line-height:16px;color:var(--text-3);font-weight:400}
+.footnote{font-size:12px;line-height:1.9;color:var(--text-3);padding:10px 6px 6px;text-align:center}
+.footnote b{color:var(--text-2)}
+
+/* 视图（4 个 TabBar 页面） */
+.pm-view{display:none}
+.pm-view.is-on{display:block;animation:pmViewIn .3s var(--ease)}   /* 10.7 根 Tab 切换淡入 */
+@keyframes pmViewIn{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+@keyframes pmFade{from{opacity:0}to{opacity:1}}
+
+/* ── 5 · KPI / 区块卡 ─────────────────────────────────────────────────── */
+.kpis{display:grid;grid-template-columns:1fr 1fr;gap:var(--lg-m-gap-card);margin-bottom:14px}
+.kpi h2{font-size:12px;line-height:16px;color:var(--text-2);font-weight:500;margin-bottom:8px;
+  display:flex;align-items:center;gap:6px}
+.kpi h2 svg{flex:none}
+.kpi .v{font-size:32px;font-weight:700;line-height:1.1;letter-spacing:-.02em}
 .kpi .d{font-size:12px;margin-top:8px;color:var(--text-3);display:flex;align-items:center;gap:6px}
 .kpi .d b.up{color:var(--sem-positive);font-weight:600}
-.kpi .d b.down{color:var(--danger);font-weight:600}
+.kpi .d b.down{color:var(--sem-danger);font-weight:600}
 
-/* 区块 */
-.sec{margin:18px 0 10px;padding:0 4px;font-size:17px;font-weight:600;letter-spacing:-.01em;
-  display:flex;align-items:baseline;gap:8px}
-.sec small{font-size:12px;color:var(--text-3);font-weight:400}
-
-/* 状态行列表 */
+/* ── 6 · 列表行 + SwipeAction（11.2.5）────────────────────────────────── */
 .lst{display:flex;flex-direction:column;gap:10px;margin-bottom:14px}
-.rowitem{display:flex;align-items:center;gap:12px;padding:14px 14px;border-radius:18px}
-.rowitem .ic{width:40px;height:40px;border-radius:18px;flex:none;display:flex;align-items:center;justify-content:center;
-  background:rgba(255,255,255,.55);border:1px solid rgba(255,255,255,.75);color:var(--text-2)}
+.pm-swipe{position:relative;border-radius:18px;overflow:hidden;touch-action:pan-y}
+/* 行主体是 <button>：手势（左滑）之外必须留一条键盘/读屏路径，
+   否则"只能滑出来"的操作对键盘用户等于不存在（10.9 / 11.4 明确要求无 hover/手势唯一依赖）。 */
+.pm-swipebody{position:relative;z-index:2;width:100%;text-align:left;color:inherit;
+  transition:transform .3s var(--ease)}
+.pm-swipe.is-drag .pm-swipebody{transition:none}
+.pm-swipeacts{position:absolute;top:0;right:0;bottom:0;z-index:1;display:flex;align-items:stretch}
+/* 操作按钮 ≥64 宽（11.2.5） */
+.pm-sa{width:64px;display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:600;
+  color:var(--text);background:var(--pm-solid)}
+.pm-sa+.pm-sa{border-left:1px solid var(--pm-divider)}
+.pm-sa.warn{color:var(--sem-warn)}
+.pm-sa.del{color:#FFF;background:var(--solid-danger)}
+.pm-sa:active{transform:scale(.97)}
+.rowitem{display:flex;align-items:center;gap:12px;padding:14px;border-radius:18px;min-height:52px}
+.rowitem .ic{width:40px;height:40px;border-radius:18px;flex:none;display:flex;align-items:center;
+  justify-content:center;background:var(--pm-solid);border:1px solid var(--pm-edge);color:var(--text-2)}
 .rowitem .md{flex:1;min-width:0}
 .rowitem .md b{display:block;font-size:15px;font-weight:500;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .rowitem .md span{display:block;font-size:12px;color:var(--text-3);margin-top:2px}
-.rowitem .rv{font-size:15px;font-weight:600;color:var(--text-2)}
-.rowitem .rv.good{color:var(--sem-positive)}.rowitem .rv.bad{color:var(--sem-danger,#B72F42)}
+.rowitem .rv{font-size:15px;font-weight:600;color:var(--text-2);flex:none}
+.rowitem .rv.good{color:var(--sem-positive)}
+.rowitem .rv.bad{color:var(--sem-danger)}
+/* 按住行 = press 反馈（10.6.1，120ms scale .985） */
+.pm-swipe:active .gcard{transform:scale(.985)}
+.gcard{transition:transform .12s var(--ease)}
 
-/* 开关（移动 48×28） */
-.switch{position:relative;width:48px;height:28px;border-radius:999px;flex:none;cursor:pointer;
-  background:rgba(58,52,84,.12);border:1px solid rgba(255,255,255,.8);
-  box-shadow:inset 0 1px 2px rgba(58,52,84,.10);transition:background .25s ease,box-shadow .25s ease}
-.switch::after{content:"";position:absolute;top:2px;left:2px;width:22px;height:22px;border-radius:50%;
+/* ── 7 · Switch（10.6.4：轨道 48×28 / 滑块 24 / 弹簧 300ms）────────────── */
+.switch{position:relative;width:48px;height:28px;border-radius:999px;flex:none;
+  background:var(--pm-input);border:1px solid var(--pm-edge);
+  box-shadow:inset 0 1px 2px rgba(58,52,84,.10);
+  transition:background .25s ease,border-color .25s ease}
+.switch::before{content:"";position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);
+  width:100%;min-width:44px;height:100%;min-height:44px;border-radius:999px}
+.switch::after{content:"";position:absolute;top:1px;left:1px;width:24px;height:24px;border-radius:50%;
   background:#FFF;box-shadow:0 2px 6px rgba(58,52,84,.22);transition:left .3s var(--spring)}
-.switch.on{background:var(--mmh-grad-action-hc,#F77FA3);border-color:transparent;box-shadow:0 1px 2px rgba(178,58,99,.22),0 8px 20px rgba(240,127,163,.30)}
-.switch.on::after{left:22px}
+[data-theme="dark"] .switch::after{background:#F3EFEC}
+.switch[aria-checked="true"]{background:var(--mmh-grad-action-hc);border-color:transparent;
+  box-shadow:0 1px 2px rgba(178,58,99,.22),0 8px 20px rgba(240,127,163,.30)}
+.switch[aria-checked="true"]::after{left:21px}
+.switch:active::after{width:26px}
 
-/* 仪表条 */
-.meter{height:8px;border-radius:999px;background:rgba(58,52,84,.08);overflow:hidden;margin-top:8px}
+/* ── 8 · 仪表条 / 进度 ───────────────────────────────────────────────── */
+.meter{height:8px;border-radius:999px;background:var(--pm-input);overflow:hidden;margin-top:8px}
 .meter i{display:block;height:100%;border-radius:999px;width:0;transition:width 1s var(--ease);
   background:linear-gradient(90deg,#9A78FF,#8066F0)}
 .meter i.ok{background:linear-gradient(90deg,#96E6CF,#42C7A1)}
 .meter i.warn{background:linear-gradient(90deg,#FAE1B3,#F2B25C)}
+.pm-row{display:flex;align-items:center;gap:12px;min-height:44px}
+.pm-row .ic{width:40px;height:40px;border-radius:18px;flex:none;display:flex;align-items:center;
+  justify-content:center;background:var(--pm-solid);border:1px solid var(--pm-edge);color:var(--text-2)}
+.pm-row .md{flex:1;min-width:0}
+.pm-row .md b{display:block;font-size:15px;font-weight:500}
+.pm-row .md span{display:block;font-size:12px;color:var(--text-3);margin-top:2px}
 
-/* 图表卡 */
+/* ── 9 · SearchBar / NoticeBar（11.2.1 / 11.2.8）─────────────────────── */
+.sbar{display:flex;align-items:center;gap:8px;padding:0 6px 0 14px;height:var(--lg-m-touch);
+  border-radius:18px;background:var(--pm-input);
+  box-shadow:inset 0 0 0 1px var(--pm-divider),inset 0 1px 2px rgba(58,52,84,.05)}
+.sbar svg{flex:none;color:var(--text-3)}
+.sbar input{flex:1;min-width:0;border:none;outline:none;background:transparent;font-family:var(--font);
+  font-size:16px;color:var(--text);height:var(--lg-m-touch)}
+.sbar input::placeholder{color:var(--text-3)}
+.sbar input:focus-visible{outline:2px solid var(--pm-ring);outline-offset:2px;border-radius:18px}
+.sbar .go{flex:none;font-size:14px;font-weight:600;color:var(--pm-link);min-height:44px;
+  display:flex;align-items:center;padding:0 8px}
+.notice{display:flex;align-items:center;gap:8px;padding:8px 8px 8px 14px;border-radius:18px;
+  background:var(--pm-solid);border:1px solid var(--pm-edge);font-size:12px;color:var(--text-2);min-height:44px}
+.notice .nt{flex:1;overflow:hidden;text-overflow:ellipsis;display:-webkit-box;-webkit-line-clamp:2;
+  -webkit-box-orient:vertical}
+.notice svg{flex:none;color:var(--sem-special)}
+.notice .x{width:44px;height:44px;border-radius:50%;color:var(--text-2);flex:none;display:flex;
+  align-items:center;justify-content:center;font-size:18px;line-height:1}
+
+/* ── 10 · Chips / Segmented（11.2.2）/ CapsuleTabs（11.6.3）───────────── */
+.chips{display:flex;gap:8px;flex-wrap:wrap}
+.chip{min-height:44px;padding:0 16px;border-radius:999px;font-size:14px;color:var(--text-2);
+  display:inline-flex;align-items:center;
+  background:var(--pm-input);border:1px solid var(--pm-divider);transition:background .25s ease,color .25s ease}
+.chip:active{transform:scale(.97)}
+.chip.on{background:var(--mmh-grad-action-hc);color:var(--text);font-weight:600;border-color:transparent;
+  box-shadow:0 1px 2px rgba(178,58,99,.22),0 8px 20px rgba(240,127,163,.30)}
+[data-theme="dark"] .chip.on{color:#1B1A21}
+.seg2{display:flex;gap:4px;padding:4px;border-radius:18px;background:var(--pm-input);
+  border:1px solid var(--pm-edge);overflow-x:auto;scrollbar-width:none}
+.seg2::-webkit-scrollbar{display:none}
+.seg2 .s2{position:relative;flex:1;min-width:64px;min-height:40px;display:flex;align-items:center;
+  justify-content:center;font-size:14px;color:var(--text-2);border-radius:18px;white-space:nowrap}
+.seg2 .s2::before{content:"";position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);
+  width:100%;height:100%;min-height:44px}
+.seg2 .s2.on{background:var(--mmh-grad-action-hc);color:var(--text);font-weight:600;
+  box-shadow:0 1px 2px rgba(178,58,99,.22),0 8px 20px rgba(240,127,163,.30)}
+[data-theme="dark"] .seg2 .s2.on{color:#1B1A21}
+/* CapsuleTabs：激活项=白玻璃胶囊 + 玫瑰描边 + 上浮 2px（11.6.3） */
+.pm-caps{display:flex;gap:8px;overflow-x:auto;scrollbar-width:none;padding:4px 2px 10px;
+  scroll-snap-type:x proximity}
+.pm-caps::-webkit-scrollbar{display:none}
+.pm-cap{flex:none;min-height:44px;padding:0 16px;border-radius:999px;font-size:14px;color:var(--text-2);
+  display:inline-flex;align-items:center;gap:6px;background:transparent;border:1px solid transparent;
+  scroll-snap-align:center;transition:transform .28s var(--ease),background .28s var(--ease)}
+.pm-cap i{font-style:normal;font-size:11px;font-weight:600;padding:1px 6px;border-radius:999px;
+  background:var(--pm-input);color:var(--text-3)}
+.pm-cap.on{background:var(--pm-solid);border-color:rgba(232,93,143,.45);color:var(--text);
+  font-weight:600;transform:translateY(-2px);box-shadow:var(--shadow-card)}
+.pm-cap.on i{background:var(--rose-100);color:#B23A63}
+
+/* ── 11 · Selector 选择卡（11.6.4）/ Stepper（11.2.11）/ OTP（11.2.14）── */
+.pm-selects{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.pm-select{position:relative;min-height:56px;padding:12px 34px 12px 14px;border-radius:18px;
+  background:var(--pm-input);border:1px solid var(--pm-divider);display:flex;flex-direction:column;
+  gap:2px;justify-content:center}
+.pm-select b{font-size:15px;font-weight:500}
+.pm-select span{font-size:12px;color:var(--text-3)}
+/* 勾徽用**深实底**白字（#B23A63 上白字 5.3:1）；压在玫瑰渐变上时白字只有 3.28:1，
+   违反 D9 二分口径（亮粉底配深字、白字只出现在深实底上）。 */
+.pm-select .pm-ck{position:absolute;top:8px;right:8px;width:20px;height:20px;border-radius:50%;
+  display:none;align-items:center;justify-content:center;background:#B23A63;color:#FFF;
+  font-size:12px;line-height:1}
+.pm-select[aria-checked="true"]{border-color:rgba(232,93,143,.5);background:rgba(255,240,244,.72)}
+[data-theme="dark"] .pm-select[aria-checked="true"]{background:rgba(247,127,163,.18)}
+.pm-select[aria-checked="true"] .pm-ck{display:flex}
+.pm-select:active{transform:scale(.97)}
+.pm-select[disabled]{opacity:.5}
+
+.pm-stepper{display:inline-flex;align-items:center;gap:6px;padding:2px;border-radius:18px;
+  background:var(--pm-input);border:1px solid var(--pm-edge)}
+.pm-stepper button{width:44px;height:44px;border-radius:18px;display:flex;align-items:center;
+  justify-content:center;font-size:20px;font-weight:600;color:var(--text-2)}
+.pm-stepper button:active{transform:scale(.97);background:var(--pm-solid)}
+.pm-stepper button[disabled]{opacity:.4;cursor:not-allowed}
+.pm-stepper .v{min-width:56px;text-align:center;font-size:16px;font-weight:600}
+
+.pm-otp{display:flex;gap:8px}
+.pm-otp input{width:44px;height:52px;border-radius:18px;text-align:center;font-family:var(--font);
+  font-size:18px;font-weight:600;color:var(--text);background:var(--pm-input);
+  border:1px solid var(--pm-divider);outline:none;font-variant-numeric:tabular-nums}
+.pm-otp input:focus-visible{border-color:rgba(232,93,143,.6);outline:2px solid var(--pm-ring);outline-offset:2px}
+
+/* ── 12 · Rate（11.2.12）/ Upload（11.2.13）/ Steps ──────────────────── */
+.mrate{display:flex;gap:8px}
+.mrate button{width:44px;height:44px;display:flex;align-items:center;justify-content:center;
+  color:var(--text-3)}
+.mrate svg{width:26px;height:26px;fill:currentColor;stroke:currentColor;stroke-width:1.2;
+  transition:transform .2s var(--spring),color .2s}
+.mrate button.on svg{color:var(--rose-500)}
+.mrate button:active svg{transform:scale(.85)}
+.msteps{display:flex;gap:10px;flex-wrap:wrap}
+.msteps span{display:flex;align-items:center;gap:5px;font-size:12px;color:var(--text-3)}
+.msteps span b{width:20px;height:20px;border-radius:50%;display:inline-flex;align-items:center;
+  justify-content:center;font-size:10px;font-weight:600}
+.msteps span.done b{background:var(--grad-p);color:#FFF}
+.msteps span.cur b{background:#FFF;border:2px solid var(--rose-500);color:#B23A63}
+[data-theme="dark"] .msteps span.cur b{background:#23222A;color:#FFC4D6}
+.msteps span.todo b{border:1px solid var(--pm-divider);color:var(--text-3)}
+
+.upgrid{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}
+.pm-tile{position:relative;aspect-ratio:1}
+.up{width:100%;height:100%;border-radius:18px;background:var(--pm-solid);border:1px solid var(--pm-edge);
+  box-shadow:var(--shadow-card);display:flex;align-items:center;justify-content:center;color:var(--text-2);
+  overflow:hidden;transition:transform .14s var(--ease)}
+.up:active{transform:scale(.985)}
+.up.add{border:1.5px dashed rgba(154,120,255,.55);background:var(--pm-input);box-shadow:none;color:var(--sem-special)}
+.up .busy{position:absolute;inset:0;background:rgba(255,255,255,.62);display:flex;align-items:center;
+  justify-content:center}
+[data-theme="dark"] .up .busy{background:rgba(27,26,33,.6)}
+.up .ring{width:22px;height:22px;border-radius:50%;border:2px solid rgba(154,120,255,.25);
+  border-top-color:var(--sem-special);animation:spin .9s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+.del{position:absolute;top:2px;right:2px;width:24px;height:24px;border-radius:50%;
+  background:var(--solid-danger);color:#FFF;display:flex;align-items:center;justify-content:center;
+  font-size:14px;line-height:1;box-shadow:0 2px 6px rgba(58,52,84,.24)}
+.del::before{content:"";position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);
+  width:100%;min-width:44px;height:100%;min-height:44px;border-radius:50%}
+
+/* ── 13 · 图表（10.5.2 降级：单图单卡 + 数字聚焦）────────────────────── */
 .spark{width:100%;height:64px;display:block;margin-top:10px}
-.footnote{font-size:12px;color:var(--text-3);line-height:1.8;padding:0 6px 6px;text-align:center}
+.pm-chartcard .pm-big{font-size:32px;font-weight:700;line-height:1.1;color:var(--pm-rose-text);letter-spacing:-.02em}
 
-/* ── 底部 TabBar（玻璃悬浮条，移动 10.3.2）── */
-.tabbar{position:fixed;left:50%;bottom:calc(env(safe-area-inset-bottom) + 12px);
-  transform:translateX(-50%);z-index:30;width:min(406px,calc(100% - 24px));
-  display:flex;padding:6px;border-radius:22px;
-  background:linear-gradient(160deg,rgba(255,255,255,.78),rgba(255,255,255,.5));
+/* ── 14 · 手势实验室：下拉刷新（10.4.1）/ 加载更多 / 吸顶（11.6.8）───── */
+.pm-lab{position:relative;border-radius:20px;overflow:hidden;border:1px solid var(--pm-edge);
+  background:var(--pm-solid)}
+.pm-labbar{position:sticky;top:0;z-index:3;display:flex;align-items:center;gap:8px;padding:10px 14px;
+  font-size:12px;color:var(--text-2);background:var(--pm-solid);border-bottom:1px solid var(--pm-divider)}
+.pm-labbar b{font-size:14px;font-weight:600;color:var(--text)}
+.pm-labscroll{height:280px;overflow-y:auto;overscroll-behavior:contain;-webkit-overflow-scrolling:touch;
+  padding:0 12px 12px;touch-action:pan-y}
+.pm-pullbody{transition:transform .26s var(--spring)}
+.pm-ptr{height:56px;margin-top:-56px;display:flex;align-items:center;justify-content:center;gap:8px;
+  font-size:12px;color:var(--text-3);transition:transform .26s var(--spring)}
+.pm-ptr .pm-ring{width:20px;height:20px;border-radius:50%;border:2px solid rgba(154,120,255,.25);
+  border-top-color:var(--sem-special);transform:rotate(0deg)}
+.pm-refreshing .pm-ptr .pm-ring{animation:spin .9s linear infinite}
+.pm-ptr b{font-weight:500}
+.pm-more{display:flex;justify-content:center;padding:12px 0 4px}
+.pm-more span{font-size:12px;color:var(--text-3);padding:6px 14px;border-radius:999px;
+  background:var(--pm-input);border:1px solid var(--pm-divider)}
+.pm-more.is-loading span{color:var(--pm-link)}
+
+/* ── 15 · 列表状态：骨架 / 空 / 错（8.2.15 · 8.2.12 · 11.6.9）────────── */
+.pm-sk{display:flex;flex-direction:column;gap:12px}
+.pm-sk div{height:16px;border-radius:999px;background:var(--pm-input);
+  animation:pmBreath 1.6s ease-in-out infinite}   /* 悬浮胶囊 + 1.6s 呼吸，禁左右扫光 */
+.pm-sk div:nth-child(1){width:62%}
+.pm-sk div:nth-child(3){width:44%}
+@keyframes pmBreath{0%,100%{opacity:.5}50%{opacity:.85}}
+.pm-state{display:none;text-align:center;padding:20px 16px}
+.pm-state.is-on{display:block;animation:pmFade .24s var(--ease)}
+.pm-state svg{margin:0 auto 10px;color:var(--text-3)}
+.pm-state b{display:block;font-size:18px;font-weight:600;margin-bottom:6px}
+.pm-state p{margin:0 0 14px;font-size:14px;color:var(--text-2)}
+.pm-state.risk svg{color:var(--sem-danger)}
+.pm-state .pm-acts{display:flex;gap:10px;justify-content:center;flex-wrap:wrap}
+
+/* ── 16 · Cell 单元行（11.2.4）/ Footer（11.6.11）────────────────────── */
+.pm-cellgroup{border-radius:20px;overflow:hidden;border:1px solid var(--pm-edge);background:var(--pm-solid)}
+.pm-cell{display:flex;align-items:center;gap:12px;width:100%;min-height:56px;padding:10px 14px;
+  border-bottom:1px solid var(--pm-divider)}
+.pm-cell:last-child{border-bottom:none}
+.pm-cell .ic{width:32px;height:32px;border-radius:18px;flex:none;display:flex;align-items:center;
+  justify-content:center;background:var(--pm-input);color:var(--text-2)}
+.pm-cell .md{flex:1;min-width:0}
+.pm-cell .md b{display:block;font-size:15px;font-weight:500}
+.pm-cell .md span{display:block;font-size:12px;color:var(--text-3);margin-top:2px}
+.pm-cell .rv{font-size:14px;color:var(--text-3);flex:none}
+.pm-cell .ch{flex:none;color:var(--text-3);transition:transform .2s var(--ease)}
+.pm-cell:active .ch{transform:translateX(2px)}
+.pm-cell.danger .md b{color:var(--sem-danger);font-weight:600}
+.pm-cell[aria-disabled="true"]{opacity:.5}
+.pm-foot{margin-top:18px;padding:14px 4px 4px;border-top:1px solid var(--pm-divider);
+  font-size:12px;line-height:1.9;color:var(--text-3);text-align:center}
+.pm-foot b{color:var(--text-2);font-weight:600}
+
+/* ── 17 · 安全区演示（11.6.7）────────────────────────────────────────── */
+.pm-safe{display:none;position:absolute;inset:0;z-index:40;pointer-events:none}
+.pm-safe.is-on{display:block}
+.pm-safe i{position:absolute;display:block;background:rgba(154,120,255,.22);
+  border:1px dashed rgba(154,120,255,.55)}
+.pm-safe i.t{left:0;right:0;top:0;height:env(safe-area-inset-top)}
+.pm-safe i.b{left:0;right:0;bottom:0;height:env(safe-area-inset-bottom)}
+.pm-safe i.l{top:0;bottom:0;left:0;width:env(safe-area-inset-left)}
+.pm-safe i.r{top:0;bottom:0;right:0;width:env(safe-area-inset-right)}
+.pm-safe u{position:absolute;top:calc(var(--pm-shell-nav) + 6px);left:50%;transform:translateX(-50%);font-size:11px;
+  text-decoration:none;color:#55333D;background:rgba(255,255,255,.85);padding:2px 8px;border-radius:999px}
+/* 触控热区可视化（自检工具，不是装饰） */
+.pm-hot [data-touch]{outline:2px solid rgba(154,120,255,.75);outline-offset:0}
+
+/* ── 18 · 浮层：Mask / 底部面板 / 滚轮 / 图片预览（11.6.6 / 10.4.1）──── */
+/* z-index 220 是算出来的、不是随手挑的：外壳吸顶导航 200、外壳 Toast 250
+   （见 build-site.py 外壳样式）。浮层必须**高于导航**——模态期间不能点到站点导航；
+   实测 z-index:60 时，图片预览右上角的关闭钮正好落在导航条下，
+   elementFromPoint 拿到的是 BUTTON.sh-tab，属"看得见、点不动"。
+   同时又必须**低于 Toast 250**——弹层里发生的反馈要看得见。 */
+.pm-layers{position:fixed;inset:0;z-index:220;pointer-events:none}
+/* ⚠️ 遮罩默认必须 pointer-events:none：它是 inset:0 的全屏层，只在 opacity:0 时"看不见"，
+   若照常接收指针事件，全站点击会被一层透明遮罩全部吃掉（本页实测踩到过）。 */
+/* ⚠️ 模糊只在**打开态**声明：关闭时留着 backdrop-filter，即使 opacity:0 / 移出屏外，
+   浏览器仍会为它准备合成层——实测遮罩 375×812 的 blur(16px) 在关闭状态下照常挂着，
+   同屏模糊节点从 2 变 5，正好撞上 10.8 的「全屏 ≤4」红线。挪到 .pm-open 下后，
+   关闭态的设备代价归零（10.8 第 1 条就是为了这个）。 */
+.pm-mask{position:absolute;inset:0;background:var(--pm-mask);opacity:0;pointer-events:none;
+  transition:opacity .25s ease}
+.pm-open .pm-mask{pointer-events:auto;-webkit-backdrop-filter:blur(16px);backdrop-filter:blur(16px)}
+.pm-sheet{position:absolute;left:0;right:0;bottom:0;border-radius:20px 20px 0 0;padding:8px 12px
+  calc(12px + env(safe-area-inset-bottom));transform:translateY(102%);transition:transform .32s var(--ease);
+  background:var(--pm-glass);border:1px solid var(--pm-edge);border-bottom:none;
+  box-shadow:0 -20px 50px rgba(58,52,84,.22);pointer-events:auto}
+[data-theme="dark"] .pm-sheet{box-shadow:0 -20px 50px rgba(0,0,0,.55)}
+.pm-open .pm-mask{opacity:1}
+/* 只有被打开的那一张面板上来：两张面板都在 .pm-layers 里，
+   用容器状态 `.pm-open` 控制会让它们**同时**滑上来（脚本里实测踩到过）。 */
+.pm-sheet.is-open{transform:translateY(0);
+  -webkit-backdrop-filter:blur(32px) saturate(1.2);backdrop-filter:blur(32px) saturate(1.2)}
+.pm-sheet .pm-grab{width:40px;height:4px;border-radius:999px;background:var(--pm-divider);margin:6px auto 8px}
+.pm-sheet h2{font-size:12px;font-weight:500;color:var(--text-3);text-align:center;margin:0 0 8px}
+.pm-sheetitem{display:flex;align-items:center;gap:12px;width:100%;min-height:56px;padding:0 14px;
+  border-radius:18px;font-size:16px;color:var(--text)}
+.pm-sheetitem svg{color:var(--text-2);flex:none}
+.pm-sheetitem:active{background:var(--pm-input)}
+.pm-sheetitem.danger{color:var(--sem-danger);font-weight:600}
+.pm-sheetitem.danger svg{color:var(--sem-danger)}
+.pm-sheetcancel{width:100%;min-height:52px;margin-top:6px;border-radius:18px;text-align:center;
+  font-size:16px;font-weight:600;color:var(--text);background:var(--pm-input);border:1px solid var(--pm-edge);
+  display:flex;align-items:center;justify-content:center}
+/* 滚轮选择器：原生 scroll-snap（惯性由浏览器给，比自绘物理稳），中心选中线 */
+.pm-wheels{display:flex;gap:4px;position:relative;height:220px}
+.pm-wheels::before{content:"";position:absolute;left:0;right:0;top:88px;height:44px;border-radius:18px;
+  background:var(--pm-input);border-top:1px solid var(--pm-divider);border-bottom:1px solid var(--pm-divider);
+  pointer-events:none}
+.pm-wheel{flex:1;overflow-y:auto;scroll-snap-type:y mandatory;scrollbar-width:none;
+  padding:88px 0;overscroll-behavior:contain;touch-action:pan-y}
+.pm-wheel::-webkit-scrollbar{display:none}
+.pm-wo{display:flex;align-items:center;justify-content:center;width:100%;height:44px;font-size:16px;
+  color:var(--text-3);scroll-snap-align:center;font-variant-numeric:tabular-nums}
+.pm-wo[aria-selected="true"]{color:var(--text);font-weight:600}
+.pm-sheetfoot{display:flex;gap:10px;padding:8px 4px 0}
+.pm-sheetfoot button{flex:1;min-height:48px;border-radius:18px;font-size:16px;font-weight:600;
+  display:flex;align-items:center;justify-content:center}
+.pm-ghost{background:var(--pm-input);border:1px solid var(--pm-edge);color:var(--text)}
+.pm-primary{background:var(--mmh-grad-action-hc);color:var(--text);border:1px solid transparent;
+  box-shadow:0 1px 2px rgba(178,58,99,.22),0 8px 20px rgba(240,127,163,.30)}
+[data-theme="dark"] .pm-primary{color:#1B1A21}
+.pm-primary:active,.pm-ghost:active{transform:scale(.97)}
+/* 图片预览（11.2.9） */
+.pm-viewer{position:absolute;inset:0;display:none;align-items:center;justify-content:center;
+  pointer-events:auto;
+  background:rgba(58,52,84,.55);-webkit-backdrop-filter:blur(40px);backdrop-filter:blur(40px)}
+[data-theme="dark"] .pm-viewer{background:rgba(0,0,0,.68)}
+.pm-viewer.is-open{display:flex;animation:pmFade .24s var(--ease)}
+/* 占位块本身是**浅色**渐变（当作照片），所以文字必须深色：
+   白字在 #D9CBFE 上只有 3.20:1（浅色档实测失败）。 */
+.pm-vstage{width:76%;aspect-ratio:1;border-radius:26px;border:1px solid rgba(255,255,255,.5);
+  display:flex;align-items:center;justify-content:center;color:#343A46;font-size:15px;font-weight:600;
+  background-color:#EDE7FE;   /* 不透明基色：渐变只是叠加，底是确定的 */
+  box-shadow:0 20px 50px rgba(0,0,0,.35);transition:transform .28s var(--ease)}
+.pm-vclose{position:absolute;top:calc(env(safe-area-inset-top) + 16px);right:16px;width:44px;height:44px;
+  border-radius:50%;background:rgba(255,255,255,.24);border:1px solid rgba(255,255,255,.5);color:#FFF;
+  display:flex;align-items:center;justify-content:center}
+.pm-vcount{position:absolute;bottom:calc(env(safe-area-inset-bottom) + 24px);left:50%;
+  transform:translateX(-50%);color:#FFF;font-size:12px;padding:6px 14px;border-radius:999px;
+  background:rgba(58,52,84,.5)}
+.pm-vnav{position:absolute;top:50%;transform:translateY(-50%);width:44px;height:44px;border-radius:50%;
+  background:rgba(255,255,255,.24);border:1px solid rgba(255,255,255,.5);color:#FFF;display:flex;
+  align-items:center;justify-content:center}
+.pm-vnav.prev{left:10px}
+.pm-vnav.next{right:10px}
+
+/* ── 19 · TabBar（10.3.2）────────────────────────────────────────────── */
+.tabbar{position:fixed;left:50%;bottom:calc(env(safe-area-inset-bottom) + 12px);transform:translateX(-50%);
+  z-index:30;width:min(406px,calc(100% - 24px));display:flex;padding:6px;border-radius:22px;
+  background:var(--pm-glass);
   -webkit-backdrop-filter:blur(32px) saturate(1.25);backdrop-filter:blur(32px) saturate(1.25);
-  border:1px solid rgba(255,255,255,.85);
-  box-shadow:inset 0 1px 0 rgba(255,255,255,.9),var(--shadow-tab)}
-.tab{flex:1;height:56px;border-radius:18px;display:flex;flex-direction:column;gap:3px;align-items:center;
-  justify-content:center;color:var(--text-3);font-size:10px;font-weight:500;cursor:pointer;
+  border:1px solid var(--pm-edge);box-shadow:inset 0 1px 0 rgba(255,255,255,.6),var(--shadow-tab)}
+.tab{position:relative;flex:1;min-height:56px;border-radius:18px;display:flex;flex-direction:column;
+  gap:3px;align-items:center;justify-content:center;color:var(--text-3);font-size:11px;font-weight:500;
   transition:color .22s ease,background .26s var(--ease),transform .26s var(--ease),box-shadow .26s ease}
 .tab svg{width:22px;height:22px}
-.tab.on{color:#343A46;background:var(--mmh-grad-action-hc,#F77FA3);box-shadow:0 1px 2px rgba(178,58,99,.22),0 8px 20px rgba(240,127,163,.30);transform:translateY(-5px)}
+.tab.on{color:var(--text);background:var(--mmh-grad-action-hc);
+  box-shadow:0 1px 2px rgba(178,58,99,.22),0 8px 20px rgba(240,127,163,.30);transform:translateY(-4px)}
+[data-theme="dark"] .tab.on{color:#1B1A21}
 .tab.on svg{transform:scale(1.04)}
+.tab .pm-dot{position:absolute;top:8px;right:calc(50% - 20px);min-width:16px;height:16px;padding:0 4px;
+  border-radius:999px;background:var(--solid-danger);color:#FFF;font-size:10px;font-weight:600;line-height:16px}
 
-/* 底部主行动 */
-/* 移动端主 CTA —— 03 · 3.2.4 主按钮配方（与全站主按钮完全一致）
-   ⚠️ 原规则里 `border` 与 `box-shadow` **各声明了两次**，后写的「白边 + 白内高光」胜出，
-      把前面的配方静默吃掉 —— 这是"描边与分层错行"的又一实例，本次一并去重。 */
+/* ── 20 · 主行动 CTA（03 · 3.2.4 配方）───────────────────────────────── */
 .cta{display:flex;align-items:center;justify-content:center;gap:8px;width:100%;height:50px;
-  border:none;border-radius:18px;font-family:var(--font);font-size:16px;font-weight:600;color:#343A46;
-  background:var(--mmh-grad-action-hc,#F77FA3);
+  border:1px solid transparent;border-radius:18px;font-family:var(--font);font-size:16px;font-weight:600;
+  color:var(--text);background:var(--mmh-grad-action-hc);
   box-shadow:0 1px 2px rgba(178,58,99,.22),0 8px 20px rgba(240,127,163,.30);
-  transition:transform .12s ease;cursor:pointer;margin:6px 0 4px}
+  transition:transform .12s ease;margin:6px 0 4px}
 .cta:active{transform:scale(.97)}
+[data-theme="dark"] .cta{color:#1B1A21}
 
-/* 桌面侧批注 */
-.desk-note{display:none}
-@media(min-width:1024px){
-  body::before{content:"妈咪好 GoodMom · 移动端液态玻璃预览 — 品牌 12 / 领域 13（手机宽度预览，可用设备模式查看）";
-    position:fixed;left:12px;bottom:12px;z-index:99;font-size:12px;color:#FFF;font-weight:600;
-    background:rgba(58,52,84,.75);padding:8px 14px;border-radius:999px}
-}
-@media (prefers-reduced-motion:reduce){
-  
-}
-
-/* ── 11 章新增组件演示样式 ── */
-/* NoticeBar 公告条 */
-.notice{display:flex;align-items:center;gap:8px;padding:10px 14px;border-radius:18px;
-  background:rgba(255,255,255,.42);border:1px solid rgba(255,255,255,.65);font-size:12px;color:var(--text-2)}
-.notice .nt{flex:1;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.notice svg{flex:none;color:var(--sem-special)}
-.notice .x{color:var(--text-3);flex:none;display:flex;padding:6px}
-/* SearchBar */
-.sbar{display:flex;align-items:center;gap:8px;padding:0 6px 0 14px;height:44px;border-radius:18px;
-  background:rgba(255,255,255,.4);border:1px solid var(--lg-divider,rgba(58,52,84,.10));
-  box-shadow:inset 0 1px 2px rgba(58,52,84,.05)}
-.sbar svg{flex:none;color:var(--text-3)}
-.sbar input{flex:1;border:none;outline:none;background:transparent;font-family:var(--font);
-  font-size:16px;color:var(--text);height:100%}
-.sbar input::placeholder{color:var(--lg-sem-neutral,#5E6673)}
-/* 02 · 2.7.1 焦点环：搜索框在原规则里被 outline:none 抹掉且无兜底 */
-.sbar input:focus-visible{outline:2px solid rgba(232,93,143,.6);outline-offset:2px;border-radius:18px}
-/* 10 · 10.4：≤767px 热区 ≥44×44（::after 扩展，视觉 20–28px 不变） */
-@media(max-width:767px){
-  .mbb,.switch,.up .del,.notice .x,.sbar input,.tab,.seg2 .s2,.chip{position:relative}
-  .mbb::after,.switch::after,.up .del::after,.notice .x::after,.sbar input::after,
-  .tab::after,.seg2 .s2::after,.chip::after{
-    content:"";position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);
-    width:100%;min-width:44px;height:100%;min-height:44px}
-}
-.sbar .go{flex:none;font-size:14px;font-weight:600;color:var(--sem-special);padding:8px 8px}
-/* chips 筛选 */
-.chips{display:flex;gap:8px;flex-wrap:wrap}
-.chip{padding:8px 16px;border-radius:999px;font-size:13px;color:var(--text-2);cursor:pointer;
-  background:rgba(255,255,255,.4);border:1px solid var(--lg-divider,rgba(58,52,84,.10));
-  transition:color .2s ease,background .25s ease,box-shadow .25s ease;user-select:none}
-.chip:active{transform:scale(.96)}
-.chip.on{color:#343A46;background:var(--mmh-grad-action-hc,#F77FA3);border-color:transparent;box-shadow:0 1px 2px rgba(178,58,99,.22),0 8px 20px rgba(240,127,163,.30)}
-/* Segmented 移动版 */
-.seg2{display:flex;gap:4px;padding:4px;border-radius:18px;background:rgba(255,255,255,.4);
-  border:1px solid rgba(255,255,255,.65);overflow-x:auto;scrollbar-width:none}
-.seg2::-webkit-scrollbar{display:none}
-.seg2 .s2{flex:1;min-width:64px;text-align:center;padding:8px 10px;font-size:13px;color:var(--text-2);
-  border-radius:18px;cursor:pointer;white-space:nowrap;user-select:none;transition:color .2s ease,background .25s ease}
-.seg2 .s2.on{background:var(--mmh-grad-action-hc,#F77FA3);color:#343A46;font-weight:600;box-shadow:0 1px 2px rgba(178,58,99,.22),0 8px 20px rgba(240,127,163,.30)}
-/* Upload 九宫格 */
-.upgrid{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}
-.up{position:relative;aspect-ratio:1;border-radius:18px;background:linear-gradient(160deg,rgba(255,255,255,.7),rgba(255,255,255,.4));
-  border:1px solid rgba(255,255,255,.8);box-shadow:var(--shadow-card);display:flex;align-items:center;justify-content:center;
-  color:var(--text-2);overflow:hidden;cursor:pointer;transition:transform .14s var(--ease)}
-.up:active{transform:scale(.95)}
-.up .del{position:absolute;top:5px;right:5px;width:20px;height:20px;border-radius:50%;
-  background:var(--solid-danger,#B04052);color:#FFF;display:flex;align-items:center;justify-content:center;font-size:12px}
-.up.add{border:1.5px dashed rgba(154,120,255,.55);background:rgba(255,255,255,.3);box-shadow:none;color:var(--sem-special)}
-.up .busy{position:absolute;inset:0;background:rgba(255,255,255,.6);display:flex;align-items:center;justify-content:center;
-  -webkit-backdrop-filter:blur(16px);backdrop-filter:blur(16px)}
-.up .ring{width:22px;height:22px;border-radius:50%;border:2px solid rgba(154,120,255,.25);border-top-color:var(--sem-special);
-  animation:spin .9s linear infinite}
-@keyframes spin{to{transform:rotate(360deg)}}
-/* Part 18 · MD-18-01/04 —— Toast 的样式与实现都在**外壳**（scripts/build-site.py 的
-   全局反馈层），本模块只调用 window.gmToast(msg, status)。
-   旧实现（.mtoast，已删）：注解写「底部玻璃 Toast」、实际定位 top:96px（合并为单一首页后
-   移动端吸顶导航实测 144px —— 96px 会被整条盖住）、过渡 .25s、驻留 1600ms、无 role/aria-live。 */
-
-/* 移动端补充：评分与步骤（组件丰富化） */
-.mrate{display:flex;gap:8px;cursor:pointer}
-.mrate svg{width:30px;height:30px;color:rgba(58,52,84,.16);fill:currentColor;stroke:currentColor;stroke-width:1.2;transition:transform .2s var(--spring),color .2s}
-.mrate svg.on{color:var(--rose-500)}
-.mrate svg:active{transform:scale(.85)}
-.msteps{display:flex;gap:6px;flex-wrap:wrap}
-.msteps span{display:flex;align-items:center;gap:5px;font-size:12px;color:var(--text-3)}
-.msteps span b{width:18px;height:18px;border-radius:50%;display:inline-flex;align-items:center;justify-content:center;font-size:10px;font-weight:600}
-.msteps span.done b{background:var(--grad-p);color:#FFF}
-.msteps span.cur b{background:#FFF;border:2px solid var(--rose-500);color:var(--mmh-rose-700,#B23A63)}
-.msteps span.todo b{border:1px solid rgba(58,52,84,.2);color:var(--text-3)}
-
-
-/* ═══ Arco Mobile 对齐 · 移动按钮谱 ═══ */
-.mbb{display:inline-flex;align-items:center;justify-content:center;gap:6px;height:44px;padding:0 20px;
+/* ── 21 · 移动按钮谱（11.6.1 / 03 · 3.2.4 统一配方）──────────────────── */
+.abox{display:flex;flex-wrap:wrap;gap:10px;align-items:center;margin:10px 0}
+.abl{font-size:12px;color:var(--text-3);width:80px;flex:none}
+.mbb{display:inline-flex;align-items:center;justify-content:center;gap:8px;height:44px;padding:0 20px;
   border-radius:20px;border:1px solid transparent;font-family:var(--font);font-size:15px;font-weight:600;
-  cursor:pointer;white-space:nowrap;transition:transform .12s ease}
-.mbb:active{transform:scale(.96)}
-.mbb svg{width:17px;height:17px;stroke:currentColor;fill:none;stroke-width:1.9;stroke-linecap:round;stroke-linejoin:round}
-/* ── 03 · 3.2.4 按钮统一配方（V2.9）──
-   ① 主按钮不套玻璃白描边/白内高光：那两层是 02 · 2.5 给**半透明玻璃面**的边光，
-      落在 D9 后的浅粉实底上会「亮端看不见、暗端看得见」→ 描边错行；再叠 inset 白高光成双线发糊（脏）。
-      边缘清晰度改由同族玫色「接触影 + 辉光」承担（02 · 2.6 色相统一）。
-   ② 白底按钮的边不再用白色（白边在白/浅底上等于没有边 → 廉价），改用 02 · 2.7.1 同源的
-      暖中性 hairline `--lg-divider`（暗色档自动翻白）+ 02 · 2.6 双层柔影。 */
-.mbb-primary{background:var(--mmh-grad-action-hc,#F77FA3);color:#343A46;border:1px solid transparent;box-shadow:0 1px 2px rgba(178,58,99,.22),0 8px 20px rgba(240,127,163,.30)}
-.mbb-primary:hover{box-shadow:0 2px 4px rgba(178,58,99,.24),0 12px 26px rgba(240,127,163,.38)}
-.mbb-default{background:linear-gradient(160deg,rgba(255,255,255,.94),rgba(255,255,255,.78));color:var(--lg-text-primary,#343A46);border:1px solid var(--lg-divider,rgba(58,52,84,.10));box-shadow:0 1px 2px rgba(58,52,84,.06),0 4px 12px rgba(58,52,84,.08);-webkit-backdrop-filter:blur(16px) saturate(1.2);backdrop-filter:blur(16px) saturate(1.2)}
-.mbb-default:hover{border-color:rgba(58,52,84,.16);box-shadow:0 2px 4px rgba(58,52,84,.07),0 8px 18px rgba(58,52,84,.10)}
-.mbb-secondary{background:linear-gradient(135deg,#2F8F76,#1E6B52);color:#FFF;border:1px solid transparent;box-shadow:0 1px 2px rgba(30,107,82,.22),0 8px 20px rgba(47,143,118,.28)}
-.mbb-outline{background:transparent;color:#B23A63;border:1.5px solid rgba(232,93,143,.45);box-shadow:0 1px 2px rgba(178,58,99,.06)}
+  white-space:nowrap;transition:transform .12s ease}
+.mbb:active{transform:scale(.97)}
+.mbb svg{width:16px;height:16px;stroke:currentColor;fill:none;stroke-width:1.7;stroke-linecap:round;
+  stroke-linejoin:round;flex:none}
+.mbb-primary{background:var(--mmh-grad-action-hc);color:var(--text);
+  box-shadow:0 1px 2px rgba(178,58,99,.22),0 8px 20px rgba(240,127,163,.30)}
+/* 亮粉底在暗档不变 → 字必须翻成深档，否则实测 2.16:1（白字压在亮粉上） */
+[data-theme="dark"] .mbb-primary{color:#1B1A21}
+.mbb-default{background:var(--pm-solid);color:var(--text);border-color:var(--pm-divider);
+  box-shadow:0 1px 2px rgba(58,52,84,.06),0 4px 12px rgba(58,52,84,.08)}
+.mbb-secondary,.mbb-success{background:#1E6B52;color:#FFF;
+  box-shadow:0 1px 2px rgba(30,107,82,.22),0 8px 20px rgba(47,143,118,.28)}
+.mbb-warning{background:#9A5A0E;color:#FFF;box-shadow:0 1px 2px rgba(154,90,14,.22),0 8px 20px rgba(185,119,28,.26)}
+.mbb-danger{background:#B04052;color:#FFF;box-shadow:0 1px 2px rgba(176,64,82,.24),0 8px 20px rgba(208,90,110,.28)}
+.mbb-outline{background:transparent;color:#B23A63;border:1.5px solid rgba(232,93,143,.45)}
 .mbb-dashed{background:transparent;color:#B23A63;border:1.5px dashed rgba(232,93,143,.45)}
 .mbb-text{background:none;color:#B23A63;padding:0 8px}
-.mbb-success{background:linear-gradient(135deg,#2F8F76,#1E6B52);color:#FFF;box-shadow:0 1px 2px rgba(30,107,82,.22),0 8px 20px rgba(47,143,118,.28)}
-.mbb-warning{background:linear-gradient(135deg,#B9771C,#9A5A0E);color:#FFF;box-shadow:0 1px 2px rgba(154,90,14,.22),0 8px 20px rgba(185,119,28,.26)}
-.mbb-danger{background:linear-gradient(135deg,#C25064,#B04052);color:#FFF;box-shadow:0 1px 2px rgba(176,64,82,.24),0 8px 20px rgba(208,90,110,.28)}
-.mbb-danger.mbb-outline{background:transparent;color:#B72F42;border:1.5px solid rgba(183,47,66,.45);box-shadow:0 1px 2px rgba(183,47,66,.08)}
+.mbb-danger.mbb-outline{background:transparent;color:var(--sem-danger);border:1.5px solid rgba(183,47,66,.45)}
+[data-theme="dark"] .mbb-outline,[data-theme="dark"] .mbb-dashed,[data-theme="dark"] .mbb-text{color:#FFC4D6}
 .mbb-xs{height:28px;font-size:12px;padding:0 14px;border-radius:18px}
 .mbb-sm{height:32px;font-size:13px;padding:0 16px;border-radius:18px}
 .mbb-lg{height:48px;font-size:16px;padding:0 26px;border-radius:22px}
-.mbb.round{border-radius:999px}
+.mbb.round{border-radius:999px;height:48px}
 .mbb.cr{border-radius:50%;width:44px;height:44px;padding:0}
-.mbb.block{width:100%;justify-content:center}
-.mbb.disabled{opacity:.4;pointer-events:none}
+.mbb.block{width:100%}
+.mbb[disabled]{opacity:.4;cursor:not-allowed}
 .mbb.loading svg{animation:spin .9s linear infinite}
-.abox{display:flex;flex-wrap:wrap;gap:10px;align-items:center;margin:10px 0}
-.abl{font-size:12px;color:var(--text-3);width:80px;flex:none}:root{--mmh-grad-action-hc:linear-gradient(135deg,#FFC4D6 0%,#F77FA3 100%)}
-/* AA 高对比行动（D5/审查收口） */
-.mbb-primary{background:var(--mmh-grad-action-hc,#F77FA3)!important;color:#343A46!important}
-.mbb-secondary,.mbb-success{background:#1E6B52!important;color:#FFF!important}
-.mbb-warning{background:#9A5A0E!important;color:#FFF!important}
-.mbb-danger{background:#B04052!important;color:#FFF!important}
+/* 小尺寸按钮补热区（10.4）：视觉 28/32，热区 44 */
+@media (max-width:767px){
+  .mbb-xs,.mbb-sm{position:relative}
+  .mbb-xs::before,.mbb-sm::before{content:"";position:absolute;left:50%;top:50%;
+    transform:translate(-50%,-50%);width:100%;height:100%;min-height:44px}
+}
 
-/* 按钮 文字+图标 组合（03 · 3.2.5）：几何居中 + 固定 gap + 图标不挤压 */
-.cta,.mbb{display:inline-flex!important;align-items:center;justify-content:center;white-space:nowrap;vertical-align:middle;gap:8px}
-.cta svg,.mbb svg{flex:none!important;display:block!important;width:16px!important;height:16px!important;fill:none;stroke:currentColor;stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round}
-.cta.sm svg,.mbb.sm svg,.small svg{width:14px!important;height:14px!important}
-.cta.lg svg,.mbb.lg svg,.btn-lg svg,.b1.lg svg,.large svg{width:18px!important;height:18px!important}:root{--mmh-grad-action-hc:linear-gradient(135deg,#FFC4D6 0%,#F77FA3 100%)}
-.chip.on{background:var(--mmh-grad-action-hc,#F77FA3)!important;color:#343A46!important;border:1px solid transparent!important}
+/* ── 22 · 桌面档：真机框（≥1024 自成一个可滚动屏，浮层改为框内定位）────── */
+@media (min-width:1024px){
+  .stage{max-width:392px;height:min(844px,86vh);min-height:0;margin:20px auto 34px;
+    border-radius:40px;border:1px solid var(--pm-edge);overflow:hidden;
+    box-shadow:0 30px 70px rgba(58,52,84,.22),inset 0 1px 0 rgba(255,255,255,.6);
+    padding:0;display:flex;flex-direction:column}
+  .pm-status{display:flex;align-items:center;justify-content:space-between;padding:8px 22px 2px;
+    font-size:12px;font-weight:600;color:var(--text-2);flex:none}
+  .pm-status .r{display:flex;align-items:center;gap:4px}
+  .pm-status svg{width:15px;height:13px;stroke:currentColor;fill:currentColor;stroke-width:0}
+  .navbar{position:absolute;top:26px;left:12px;right:12px;margin:0;flex:none}
+  .pm-searchp{position:absolute;top:88px;left:12px;right:12px;z-index:19;margin:0}
+  .pm-screen{position:absolute;inset:0;overflow-y:auto;overscroll-behavior:contain;
+    -webkit-overflow-scrolling:touch;padding:96px 0 108px}
+  .tabbar{position:absolute;bottom:12px;left:12px;right:12px;width:auto;transform:none}
+  .pm-layers{position:absolute}
+  /* 桌面档批注：把"演示了什么、锚点在哪"写在真机框右侧 */
+  .desk-note{display:block;position:absolute;top:20px;right:calc(50% + 216px);width:300px;
+    font-size:12px;line-height:1.9;color:var(--text-2)}
+  .desk-note b{display:block;font-size:13px;font-weight:600;color:var(--text);margin-bottom:6px}
+  .desk-note code{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:11px;color:var(--pm-link)}
+  .desk-note ul{margin:0;padding-left:16px}
+}
+@media (min-width:1024px) and (max-width:1439px){
+  .desk-note{position:static;width:auto;max-width:392px;margin:0 auto 20px}
+}
+
+/* ── 23 · 降低动效（07 · 7.5 / 10.7）────────────────────────────────── */
+@media (prefers-reduced-motion:reduce){
+  .pm-view.is-on,.pm-searchp.is-open,.pm-state.is-on,.pm-viewer.is-open{animation:none}
+  .pm-swipebody,.pm-pullbody,.pm-ptr,.pm-sheet,.pm-mask,.pm-chip,.tab,.pm-cap,.meter i,
+  .mrate svg,.switch,.switch::after{transition:none}
+  .pm-sk div{animation:none;opacity:.7}
+  .up .ring,.pm-ptr .pm-ring,.mbb.loading svg{animation-duration:1.6s}
+  .pm-nomotion{display:block}
+}
+.pm-nomotion{display:none}
 
 <!--@body-->
-<div class="stage">
+<div class="stage pm-at-root" id="pmStage">
+  <p class="pm-sr" id="pmLive" role="status" aria-live="polite"></p>
 
-  <!-- NavBar -->
+  <!-- 真机状态条（仅桌面档；真机上系统状态条已在，不重复画） -->
+  <div class="pm-status" aria-hidden="true">
+    <span class="num">9:41</span>
+    <span class="r">
+      <svg viewBox="0 0 24 24"><rect x="2" y="7" width="3" height="10" rx="1"/><rect x="7" y="5" width="3" height="12" rx="1"/><rect x="12" y="8" width="3" height="9" rx="1"/><rect x="17" y="10" width="3" height="7" rx="1"/></svg>
+      <svg viewBox="0 0 24 24"><path d="M3 9.5a13 13 0 0 1 18 0l-9 10z"/></svg>
+      <svg viewBox="0 0 24 24"><rect x="2" y="7" width="17" height="10" rx="3"/><rect x="21" y="10" width="2" height="4" rx="1"/></svg>
+    </span>
+  </div>
+
+  <!-- NavBar（10.3.1）：返回仅非根页出现；滚动 120px 后玻璃加深 -->
   <header class="navbar">
-    <span class="back" aria-label="返回"><svg class="i" viewBox="0 0 24 24"><path d="M20 12H5.5M11 6.5 5.5 12l5.5 5.5"/></svg></span>
-    <img src="../brand/logo-512.png" alt="妈咪好" style="width:24px;height:24px;border-radius:8px;flex:none"><h1>妈咪好 · 孕 20 周 + 3</h1>
+    <button class="back" type="button" id="pmBack" aria-label="返回上一页">
+      <svg class="i" viewBox="0 0 24 24"><path d="M20 12H5.5M11 6.5 5.5 12l5.5 5.5"/></svg>
+    </button>
+    <img src="../brand/logo-512.png" alt="妈咪好">
+    <h1 id="pmTitle">总览 · 孕 20 周 + 3</h1>
     <span class="ops">
-      <span class="o" aria-label="搜索"><svg class="i" viewBox="0 0 24 24"><circle cx="10.5" cy="10.5" r="6.5"/><path d="M15.4 15.4 21 21"/></svg></span>
-      <span class="o" aria-label="通知"><svg class="i" viewBox="0 0 24 24"><path d="M18 8.2a6 6 0 0 0-12 0c0 6.8-2.8 8.8-2.8 8.8h17.6S18 15 18 8.2"/><path d="M13.9 20.4a2 2 0 0 1-3.8 0"/></svg></span>
+      <button class="o" type="button" id="pmSearchBtn" aria-label="搜索" aria-expanded="false" aria-controls="pmSearchPanel">
+        <svg class="i" viewBox="0 0 24 24"><circle cx="10.5" cy="10.5" r="6.5"/><path d="M15.4 15.4 21 21"/></svg>
+      </button>
+      <button class="o" type="button" id="pmBellBtn" aria-label="提醒，3 条待处理">
+        <svg class="i" viewBox="0 0 24 24"><path d="M18 8.2a6 6 0 0 0-12 0c0 6.8-2.8 8.8-2.8 8.8h17.6S18 15 18 8.2"/><path d="M13.9 20.4a2 2 0 0 1-3.8 0"/></svg>
+        <i class="pm-badge num">3</i>
+      </button>
     </span>
   </header>
 
+  <!-- 搜索面板（11.2.1）：聚焦后出建议与清空键 -->
+  <div class="pm-searchp" id="pmSearchPanel">
+    <div class="pm-searchrow">
+      <svg class="i" viewBox="0 0 24 24"><circle cx="10.5" cy="10.5" r="6.5"/><path d="M15.4 15.4 21 21"/></svg>
+      <input type="search" id="pmSearchInput" enterkeyhint="search" aria-label="搜索宝宝、孕周或疫苗" placeholder="搜索宝宝 / 孕周 / 疫苗…">
+      <button class="pm-clear" type="button" id="pmSearchClear" aria-label="清空搜索">
+        <svg class="i" viewBox="0 0 24 24"><path d="M6 6l12 12M18 6 6 18"/></svg>
+      </button>
+    </div>
+    <div class="pm-sugg" aria-label="快捷搜索">
+      <button type="button" data-q="孕 20 周">孕 20 周</button>
+      <button type="button" data-q="乙肝疫苗第 2 剂">乙肝疫苗</button>
+      <button type="button" data-q="3 月龄儿保体检">3 月龄儿保</button>
+    </div>
+  </div>
+
+  <div class="pm-screen">
   <div class="wrap">
-    <!-- 区块标题 -->
-    <div class="sec">今日状态 <small>孕期 · 儿保 · 实时同步</small></div>
 
-    <!-- KPI 对排 -->
-    <div class="kpis">
-      <div class="gcard kpi">
-        <h2><svg class="i" style="width:15px;height:15px;color:var(--sem-special)" viewBox="0 0 24 24"><path d="M12 3.2 19 5.7v5.4c0 4.6-3 8.3-7 9.7-4-1.4-7-5.1-7-9.7V5.7z"/><path d="m9.2 11.9 2 2 3.6-3.9"/></svg>累计随访记录</h2>
-        <div class="v num" style="color:var(--mmh-rose-700,#B23A63)">12,849</div>
-        <div class="d"><b class="up">↑ 8.4%</b>较上月</div>
-      </div>
-      <div class="gcard kpi">
-        <h2><svg class="i" style="width:15px;height:15px;color:var(--sem-positive)" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="m8.2 12.4 2.6 2.6 5-5.6"/></svg>疫苗应种率</h2>
-        <div class="v num" style="color:var(--sem-positive)">96.2%</div>
-        <div class="d"><b class="up">↑ 1.4pt</b>本月应种率</div>
-      </div>
-    </div>
-
-    <!-- 待处理：状态行列表 -->
-    <!-- 移动按钮谱：对齐 Arco Mobile -->
-    <div class="sec" style="margin-top:16px">移动按钮 <small>Arco Mobile 对齐 · 类型 / 状态 / 尺寸 / 形状 / Loading</small></div>
-    <div class="gcard" style="margin-bottom:14px">
-      <div class="abox"><span class="abl">类型 Type</span><button class="mbb mbb-primary">Primary 随访</button><button class="mbb mbb-default">Default</button><button class="mbb mbb-secondary">Secondary 已约</button><button class="mbb mbb-outline">Outline</button><button class="mbb mbb-dashed">Dashed</button><button class="mbb mbb-text">Text</button></div>
-      <div class="abox"><span class="abl">状态 Status</span><button class="mbb mbb-success">成功</button><button class="mbb mbb-warning">警告</button><button class="mbb mbb-danger">危险</button><button class="mbb mbb-danger mbb-outline">危险描边</button></div>
-      <div class="abox"><span class="abl">尺寸 Size</span><button class="mbb mbb-primary mbb-xs">mini</button><button class="mbb mbb-primary mbb-sm">small</button><button class="mbb mbb-primary">middle</button><button class="mbb mbb-primary mbb-lg">large</button></div>
-      <div class="abox"><span class="abl">形状 Shape</span><button class="mbb mbb-primary round" style="height:40px">胶囊 round · 立即随访</button><button class="mbb mbb-primary cr" aria-label="添加"><svg viewBox="0 0 24 24"><path d="M12 5.5v13M5.5 12h13"/></svg></button></div>
-      <div class="abox"><span class="abl">Loading / 禁用</span><button class="mbb mbb-primary" id="mbLoad">保存并预约</button><button class="mbb mbb-primary disabled">Disabled</button></div>
-      <p style="font-size:11px;color:var(--text-3);margin:4px 0 8px">点「保存并预约」体验 1.4s 假加载；全部按钮为 press 缩放反馈（无 hover）</p>
-      <button class="mbb mbb-primary block" id="mbLong">全宽主行动 Block · 提交产检记录</button>
-      <p class="footnote" style="text-align:left;padding:8px 2px 0;color:var(--text-3)">细则见 <b>11-移动端组件全量库.md · 11.6.1</b>（对齐 Arco Mobile Button）</p>
-    </div>
-    <div class="lst">
-      <div class="rowitem gcard">
-        <span class="ic" style="color:var(--danger)"><svg class="i" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="m9.4 9.4 5.2 5.2M14.6 9.4l-5.2 5.2"/></svg></span>
-        <div class="md"><b>高危 · 生长低于 P3</b><span>18 月龄 · 建议尽快复查</span></div>
-        <span class="rv bad">随访</span>
-      </div>
-      <div class="rowitem gcard">
-        <span class="ic" style="color:var(--sem-warn)"><svg class="i" viewBox="0 0 24 24"><path d="M12 3.8 21.4 19.7a1.5 1.5 0 0 1-1.3 2.2H3.9a1.5 1.5 0 0 1-1.3-2.2z"/><path d="M12 10.2v4.6"/></svg></span>
-        <div class="md"><b>疫苗到期提醒</b><span>12 月龄 · 剩余 5 天</span></div>
-        <span class="rv" style="color:var(--sem-warn)">预约</span>
-      </div>
-      <div class="rowitem gcard">
-        <span class="ic" style="color:var(--sem-special)"><svg class="i" viewBox="0 0 24 24"><path d="M12 3.4l2.1 5.2 5.2 2.1-5.2 2.1-2.1 5.2-2.1-5.2-5.2-2.1 5.2-2.1z"/></svg></span>
-        <div class="md"><b>AI 已生成随访建议</b><span>05:12 · 待家长确认</span></div>
-        <span class="rv good">查看</span>
-      </div>
-    </div>
-
-    <!-- 开关设置卡 -->
-    <div class="gcard" style="display:flex;flex-direction:column;gap:14px;margin-bottom:14px">
-      <div style="display:flex;align-items:center;gap:12px">
-        <span class="ic" style="color:var(--sem-special)"><svg class="i" viewBox="0 0 24 24"><path d="M12 3.2 19 5.7v5.4c0 4.6-3 8.3-7 9.7-4-1.4-7-5.1-7-9.7V5.7z"/></svg></span>
-        <div class="md"><b>产检提醒</b><span>按孕周自动提醒检查项</span></div>
-        <span class="switch on" onclick="this.classList.toggle('on')"></span>
-      </div>
-      <div style="display:flex;align-items:center;gap:12px">
-        <span class="ic" style="color:var(--cyan)"><svg class="i" viewBox="0 0 24 24"><path d="M17.5 19H9a7 7 0 1 1 6.7-9.4A5.5 5.5 0 0 1 17.5 19Z"/></svg></span>
-        <div class="md"><b>儿保云档案</b><span>记录自动同步各医院</span></div>
-        <span class="switch on" onclick="this.classList.toggle('on')"></span>
-      </div>
-      <div style="display:flex;align-items:center;gap:12px">
-        <span class="ic"><svg class="i" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 7v5.2l3.4 2"/></svg></span>
-        <div class="md"><b>疫苗提醒</b><span>到期前 3 天提醒接种</span></div>
-        <span class="switch" onclick="this.classList.toggle('on')"></span>
-      </div>
-    </div>
-
-    <!-- 搜索与公告：SearchBar / NoticeBar -->
-    <div class="sec" style="margin-top:18px">发现与提醒 <small>SearchBar · NoticeBar</small></div>
-    <div class="gcard" style="display:flex;flex-direction:column;gap:12px;margin-bottom:14px">
-      <div class="sbar">
-        <svg class="i" viewBox="0 0 24 24"><circle cx="10.5" cy="10.5" r="6.5"/><path d="M15.4 15.4 21 21"/></svg>
-        <input placeholder="搜索宝宝 / 孕周 / 疫苗…" aria-label="搜索">
-        <span class="go">搜索</span>
-      </div>
-      <div class="notice">
-        <svg class="i" style="width:15px;height:15px" viewBox="0 0 24 24"><path d="M18 8.2a6 6 0 0 0-12 0c0 6.8-2.8 8.8-2.8 8.8h17.6S18 15 18 8.2"/><path d="M13.9 20.4a2 2 0 0 1-3.8 0"/></svg>
-        <span class="nt">本周日 09:30 有 3 月龄儿保体检，记得带上接种本</span>
-        <span class="x" onclick="toastM('公告已收起')">×</span>
-      </div>
-    </div>
-
-    <!-- 筛选与分段：Chips / Segmented -->
-    <div class="sec">快速筛选 <small>Chips · Segmented</small></div>
-    <div class="gcard" style="display:flex;flex-direction:column;gap:12px;margin-bottom:14px">
-      <div class="chips">
-        <span class="chip on">全部</span><span class="chip">P3 以下</span><span class="chip">待随访</span><span class="chip">疫苗</span><span class="chip">儿保</span>
-      </div>
-      <div class="seg2">
-        <span class="s2 on">今日</span><span class="s2">本周</span><span class="s2">本月</span><span class="s2">自定义</span>
-      </div>
-    </div>
-
-    <!-- 资产附件：Upload 九宫格 -->
-    <div class="sec">成长相册 <small>Upload · 拍照/相册 · 上传中状态</small></div>
-    <div class="gcard" style="display:flex;flex-direction:column;gap:12px;margin-bottom:14px">
-      <div class="upgrid">
-        <div class="up" style="background:linear-gradient(150deg,#EDE7FE,#D9CBFE)"><svg class="i" style="color:#7D66F2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 3.2 19 5.7v5.4c0 4.6-3 8.3-7 9.7-4-1.4-7-5.1-7-9.7V5.7z"/><path d="m9.2 11.9 2 2 3.6-3.9"/></svg><span class="del" onclick="toastM('已移除附件')">×</span></div>
-        <div class="up" style="background:linear-gradient(150deg,#E0F8F6,#A5F1EE)"><svg class="i" style="color:#2A8D92" viewBox="0 0 24 24"><rect x="4" y="5.4" width="16" height="14.6" rx="2.2"/><path d="M4 9.6h16M8.4 3.6v3.6M15.6 3.6v3.6"/></svg><span class="del" onclick="toastM('已移除附件')">×</span></div>
-        <div class="up"><div class="busy"><span class="ring"></span></div><svg class="i" viewBox="0 0 24 24"><path d="M17.5 19H9a7 7 0 1 1 6.7-9.4A5.5 5.5 0 0 1 17.5 19Z"/></svg></div>
-        <div class="up add" onclick="toastM('已唤起系统相册（示例）')"><svg class="i" viewBox="0 0 24 24"><path d="M12 5.5v13M5.5 12h13"/></svg></div>
-      </div>
-      <div style="font-size:12px;color:var(--text-3)">生长/体检记录图 · 点击预览大图 · 右上角移除 · 第三张为上传中（玻璃环）</div>
-    </div>
-
-
-    <!-- 评估与工具：Rating · Progress · Steps -->
-    <div class="sec" style="margin-top:18px">评估与工具 <small>Rating · Progress · Steps</small></div>
-    <div class="gcard" style="display:flex;flex-direction:column;gap:14px;margin-bottom:14px">
-      <div style="display:flex;align-items:center;gap:12px">
-        <span class="ic" style="color:var(--rose-500)"><svg class="i" viewBox="0 0 24 24"><path d="m12 3.6 2.5 5.4 5.9.8-4.3 4.2 1 5.9-5.1-2.7-5.1 2.7 1-5.9L3.6 9.8l5.9-.8z"/></svg></span>
-        <div class="md"><b>本次儿保服务评分</b><span>点按星形评分（Rate · spring 弹动）</span></div>
-        <div class="mrate" id="mrate" style="margin-left:auto">
-          <svg data-v="1" viewBox="0 0 24 24"><path d="m12 3.6 2.5 5.4 5.9.8-4.3 4.2 1 5.9-5.1-2.7-5.1 2.7 1-5.9L3.6 9.8l5.9-.8z"/></svg>
-          <svg data-v="2" viewBox="0 0 24 24"><path d="m12 3.6 2.5 5.4 5.9.8-4.3 4.2 1 5.9-5.1-2.7-5.1 2.7 1-5.9L3.6 9.8l5.9-.8z"/></svg>
-          <svg data-v="3" viewBox="0 0 24 24"><path d="m12 3.6 2.5 5.4 5.9.8-4.3 4.2 1 5.9-5.1-2.7-5.1 2.7 1-5.9L3.6 9.8l5.9-.8z"/></svg>
-          <svg data-v="4" viewBox="0 0 24 24"><path d="m12 3.6 2.5 5.4 5.9.8-4.3 4.2 1 5.9-5.1-2.7-5.1 2.7 1-5.9L3.6 9.8l5.9-.8z"/></svg>
-          <svg data-v="5" viewBox="0 0 24 24"><path d="m12 3.6 2.5 5.4 5.9.8-4.3 4.2 1 5.9-5.1-2.7-5.1 2.7 1-5.9L3.6 9.8l5.9-.8z"/></svg>
+    <!-- ══ 视图 1 · 总览 ══════════════════════════════════════════════ -->
+    <section class="pm-view is-on" data-view="home" id="pmViewHome" role="tabpanel" aria-labelledby="pmTabHome" tabindex="-1">
+      <h2 class="sec">今日状态 <small>孕期 · 儿保 · 实时同步</small></h2>
+      <div class="kpis" id="pmKpis">
+        <div class="gcard kpi">
+          <h2><svg class="i" style="width:15px;height:15px;color:var(--sem-special)" viewBox="0 0 24 24"><path d="M12 3.2 19 5.7v5.4c0 4.6-3 8.3-7 9.7-4-1.4-7-5.1-7-9.7V5.7z"/><path d="m9.2 11.9 2 2 3.6-3.9"/></svg>累计随访记录</h2>
+          <div class="v num" data-count="12849" style="color:var(--pm-rose-text)">0</div>
+          <div class="d"><b class="up">↑ 8.4%</b>较上月</div>
+        </div>
+        <div class="gcard kpi">
+          <h2><svg class="i" style="width:15px;height:15px;color:var(--sem-positive)" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="m8.2 12.4 2.6 2.6 5-5.6"/></svg>疫苗应种率</h2>
+          <div class="v num" data-count="96.2" data-suffix="%" style="color:var(--sem-positive)">0%</div>
+          <div class="d"><b class="up">↑ 1.4pt</b>本月应种率</div>
         </div>
       </div>
-      <div><div style="display:flex;justify-content:space-between;font-size:14px;font-weight:500;margin-bottom:6px"><span>疫苗全程率</span><b class="num" style="color:var(--sem-positive)">96%</b></div><div class="meter"><i class="ok" style="width:0" data-w="96"></i></div></div>
-      <div><div style="display:flex;justify-content:space-between;font-size:14px;font-weight:500;margin-bottom:6px"><span>高危随访闭环</span><b class="num" style="color:var(--sem-warn)">68%</b></div><div class="meter"><i class="warn" style="width:0" data-w="68"></i></div></div>
-      <div>
-        <div style="font-size:13px;font-weight:500;margin-bottom:8px">随访进度（Steps）</div>
-        <div class="msteps">
-          <span class="done"><b><svg style="width:10px;height:10px;stroke:#FFF;fill:none;stroke-width:3;stroke-linecap:round;stroke-linejoin:round" viewBox="0 0 24 24"><path d="M5 13l5 5L20 7"/></svg></b>建卡</span>
-          <span class="done"><b><svg style="width:10px;height:10px;stroke:#FFF;fill:none;stroke-width:3;stroke-linecap:round;stroke-linejoin:round" viewBox="0 0 24 24"><path d="M5 13l5 5L20 7"/></svg></b>首访</span>
-          <span class="cur"><b>3</b>评估</span>
-          <span class="todo"><b>4</b>随访</span>
+
+      <h2 class="sec">待处理 <small>左滑行内的操作（SwipeAction · 11.2.5）</small></h2>
+      <div class="lst" id="pmHomeList">
+        <div class="pm-swipe" data-row="risk">
+          <button class="pm-swipebody gcard rowitem" type="button" data-detail="高危 · 生长低于 P3">
+            <span class="ic" style="color:var(--sem-danger)"><svg class="i" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="m9.4 9.4 5.2 5.2M14.6 9.4l-5.2 5.2"/></svg></span>
+            <span class="md"><b>高危 · 生长低于 P3</b><span>18 月龄 · 建议尽快复查</span></span>
+            <span class="rv bad">随访</span>
+          </button>
+          <div class="pm-swipeacts">
+            <button class="pm-sa ok" type="button" data-act="随访" data-row="risk">随访</button>
+            <button class="pm-sa warn" type="button" data-act="改期" data-row="risk">改期</button>
+            <button class="pm-sa del" type="button" data-act="删除" data-row="risk">删除</button>
+          </div>
+        </div>
+        <div class="pm-swipe" data-row="vac">
+          <button class="pm-swipebody gcard rowitem" type="button" data-detail="疫苗到期提醒">
+            <span class="ic" style="color:var(--sem-warn)"><svg class="i" viewBox="0 0 24 24"><path d="M12 3.8 21.4 19.7a1.5 1.5 0 0 1-1.3 2.2H3.9a1.5 1.5 0 0 1-1.3-2.2z"/><path d="M12 10.2v4.6"/></svg></span>
+            <span class="md"><b>疫苗到期提醒</b><span>12 月龄 · 剩余 5 天</span></span>
+            <span class="rv" style="color:var(--sem-warn)">预约</span>
+          </button>
+          <div class="pm-swipeacts">
+            <button class="pm-sa ok" type="button" data-act="预约" data-row="vac">预约</button>
+            <button class="pm-sa warn" type="button" data-act="改期" data-row="vac">改期</button>
+            <button class="pm-sa del" type="button" data-act="删除" data-row="vac">删除</button>
+          </div>
+        </div>
+        <div class="pm-swipe" data-row="ai">
+          <button class="pm-swipebody gcard rowitem" type="button" data-detail="AI 已生成随访建议">
+            <span class="ic" style="color:var(--sem-special)"><svg class="i" viewBox="0 0 24 24"><path d="M12 3.4l2.1 5.2 5.2 2.1-5.2 2.1-2.1 5.2-2.1-5.2-5.2-2.1 5.2-2.1z"/></svg></span>
+            <span class="md"><b>AI 已生成随访建议</b><span>05:12 · 待家长确认</span></span>
+            <span class="rv good">查看</span>
+          </button>
+          <div class="pm-swipeacts">
+            <button class="pm-sa ok" type="button" data-act="查看" data-row="ai">查看</button>
+            <button class="pm-sa warn" type="button" data-act="忽略" data-row="ai">忽略</button>
+          </div>
         </div>
       </div>
-    </div>
+      <p class="footnote" style="text-align:left;padding:0 4px 8px">左滑任意行露出操作；键盘 Tab 到操作钮会自动展开该行（手势不是唯一路径）</p>
 
-    <!-- 趋势卡（单图单卡 + 数字聚焦） -->
-    <div class="sec">随访完成趋势 <small>机构示例数据 · 蜜桃粉主序列</small></div>
-    <div class="gcard">
-      <div style="display:flex;align-items:baseline;gap:8px">
-        <b class="num" style="font-size:28px;font-weight:700;color:var(--mmh-rose-700,#B23A63)">64.2k</b>
-        <span style="font-size:12px;color:var(--text-2)">当前时段</span>
-        <b class="up num" style="font-size:12px;color:var(--sem-positive);margin-left:auto">↑ 12.6%</b>
+      <h2 class="sec">提醒设置 <small>Switch 48×28 · 键盘可用</small></h2>
+      <div class="gcard" style="display:flex;flex-direction:column;gap:6px;margin-bottom:14px">
+        <div class="pm-row">
+          <span class="ic" style="color:var(--sem-special)"><svg class="i" viewBox="0 0 24 24"><path d="M12 3.2 19 5.7v5.4c0 4.6-3 8.3-7 9.7-4-1.4-7-5.1-7-9.7V5.7z"/></svg></span>
+          <div class="md"><b>产检提醒</b><span>按孕周自动提醒检查项</span></div>
+          <button class="switch" type="button" role="switch" aria-checked="true" aria-label="产检提醒" data-touch></button>
+        </div>
+        <div class="pm-row">
+          <span class="ic" style="color:var(--cyan)"><svg class="i" viewBox="0 0 24 24"><path d="M17.5 19H9a7 7 0 1 1 6.7-9.4A5.5 5.5 0 0 1 17.5 19Z"/></svg></span>
+          <div class="md"><b>儿保云档案</b><span>记录自动同步各医院</span></div>
+          <button class="switch" type="button" role="switch" aria-checked="true" aria-label="儿保云档案" data-touch></button>
+        </div>
+        <div class="pm-row">
+          <span class="ic"><svg class="i" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 7v5.2l3.4 2"/></svg></span>
+          <div class="md"><b>疫苗提醒</b><span>到期前 3 天提醒接种</span></div>
+          <button class="switch" type="button" role="switch" aria-checked="false" aria-label="疫苗提醒" data-touch></button>
+        </div>
       </div>
-      <svg class="spark" viewBox="0 0 380 64" preserveAspectRatio="none">
-        <defs><linearGradient id="mg" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#9A78FF" stop-opacity=".30"/><stop offset="1" stop-color="#9A78FF" stop-opacity="0"/></linearGradient></defs>
-        <line x1="0" y1="18" x2="380" y2="18" stroke="rgba(58,52,84,.06)"/>
-        <line x1="0" y1="36" x2="380" y2="36" stroke="rgba(58,52,84,.06)"/>
-        <line x1="0" y1="54" x2="380" y2="54" stroke="rgba(58,52,84,.06)"/>
-        <path d="M0,50 L25,46 L50,48 L75,40 L100,42 L125,33 L150,36 L175,28 L200,30 L225,21 L250,24 L275,16 L300,19 L325,12 L350,14 L380,8 L380,64 L0,64 Z" fill="url(#mg)"/>
-        <path d="M0,50 L25,46 L50,48 L75,40 L100,42 L125,33 L150,36 L175,28 L200,30 L225,21 L250,24 L275,16 L300,19 L325,12 L350,14 L380,8" fill="none" stroke="#9A78FF" stroke-width="2.4" stroke-linecap="round"/>
-      </svg>
+
+      <h2 class="sec">发现与提醒 <small>SearchBar · NoticeBar</small></h2>
+      <div class="gcard" style="display:flex;flex-direction:column;gap:12px;margin-bottom:14px">
+        <div class="sbar">
+          <svg class="i" viewBox="0 0 24 24"><circle cx="10.5" cy="10.5" r="6.5"/><path d="M15.4 15.4 21 21"/></svg>
+          <input id="pmInlineSearch" type="search" enterkeyhint="search" placeholder="搜索宝宝 / 孕周 / 疫苗…" aria-label="搜索宝宝、孕周或疫苗">
+          <button class="go" type="button" id="pmInlineGo">搜索</button>
+        </div>
+        <div class="notice" id="pmNotice">
+          <svg class="i" style="width:15px;height:15px" viewBox="0 0 24 24"><path d="M18 8.2a6 6 0 0 0-12 0c0 6.8-2.8 8.8-2.8 8.8h17.6S18 15 18 8.2"/><path d="M13.9 20.4a2 2 0 0 1-3.8 0"/></svg>
+          <span class="nt">本周日 09:30 有 3 月龄儿保体检，记得带上接种本</span>
+          <button class="x" type="button" aria-label="关闭公告">×</button>
+        </div>
+      </div>
+
+      <h2 class="sec">快速筛选 <small>Chips · Segmented</small></h2>
+      <div class="gcard" style="display:flex;flex-direction:column;gap:12px;margin-bottom:14px">
+        <div class="chips" id="pmChips" role="radiogroup" aria-label="随访筛选">
+          <button class="chip on" type="button" role="radio" aria-checked="true" data-v="全部">全部</button>
+          <button class="chip" type="button" role="radio" aria-checked="false" data-v="P3 以下">P3 以下</button>
+          <button class="chip" type="button" role="radio" aria-checked="false" data-v="待随访">待随访</button>
+          <button class="chip" type="button" role="radio" aria-checked="false" data-v="疫苗">疫苗</button>
+          <button class="chip" type="button" role="radio" aria-checked="false" data-v="儿保">儿保</button>
+        </div>
+        <div class="seg2" id="pmSeg" role="radiogroup" aria-label="时间范围">
+          <button class="s2 on" type="button" role="radio" aria-checked="true" data-v="今日">今日</button>
+          <button class="s2" type="button" role="radio" aria-checked="false" data-v="本周">本周</button>
+          <button class="s2" type="button" role="radio" aria-checked="false" data-v="本月">本月</button>
+          <button class="s2" type="button" role="radio" aria-checked="false" data-v="自定义">自定义</button>
+        </div>
+      </div>
+
+      <h2 class="sec">成长相册 <small>Upload · 点击预览 · 角标移除</small></h2>
+      <div class="gcard" style="display:flex;flex-direction:column;gap:12px;margin-bottom:14px">
+        <div class="upgrid" id="pmUps">
+          <div class="pm-tile">
+            <button class="up" type="button" data-photo="0" style="background:linear-gradient(150deg,#EDE7FE,#D9CBFE)" aria-label="查看照片：满月体检记录">
+              <svg class="i" style="color:#7D66F2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 3.2 19 5.7v5.4c0 4.6-3 8.3-7 9.7-4-1.4-7-5.1-7-9.7V5.7z"/></svg>
+            </button>
+            <button class="del" type="button" data-del="满月体检记录" aria-label="移除照片：满月体检记录">×</button>
+          </div>
+          <div class="pm-tile">
+            <button class="up" type="button" data-photo="1" style="background:linear-gradient(150deg,#E0F8F6,#A5F1EE)" aria-label="查看照片：第 3 次产检记录">
+              <svg class="i" style="color:#2A8D92" viewBox="0 0 24 24"><rect x="4" y="5.4" width="16" height="14.6" rx="2.2"/><path d="M4 9.6h16M8.4 3.6v3.6M15.6 3.6v3.6"/></svg>
+            </button>
+            <button class="del" type="button" data-del="第 3 次产检记录" aria-label="移除照片：第 3 次产检记录">×</button>
+          </div>
+          <div class="pm-tile">
+            <!-- 上传中的卡不是控件（点不动），因此**不能**用 disabled 按钮：
+                 禁用按钮不可聚焦，页面质检逐元素 focus() 时样式无变化，会误判成"焦点不可见"；
+                 用 role="img" + aria-label 既保留语义，也不进键盘序列。 -->
+            <div class="up" role="img" aria-label="照片上传中">
+              <span class="busy"><span class="ring"></span></span>
+              <svg class="i" viewBox="0 0 24 24"><path d="M17.5 19H9a7 7 0 1 1 6.7-9.4A5.5 5.5 0 0 1 17.5 19Z"/></svg>
+            </div>
+          </div>
+          <button class="up add" type="button" id="pmAddPhoto" aria-label="添加照片">
+            <svg class="i" viewBox="0 0 24 24"><path d="M12 5.5v13M5.5 12h13"/></svg>
+          </button>
+        </div>
+        <div style="font-size:12px;color:var(--text-3)">第 3 张为上传中（细环 0.9s/圈，不换内容）· 移除走二次确认</div>
+      </div>
+
+      <h2 class="sec">评估与工具 <small>Rate · Progress · Steps</small></h2>
+      <div class="gcard" style="display:flex;flex-direction:column;gap:14px;margin-bottom:14px">
+        <div class="pm-row">
+          <span class="ic" style="color:var(--rose-500)"><svg class="i" viewBox="0 0 24 24"><path d="m12 3.6 2.5 5.4 5.9.8-4.3 4.2 1 5.9-5.1-2.7-5.1 2.7 1-5.9L3.6 9.8l5.9-.8z"/></svg></span>
+          <div class="md"><b>本次儿保服务评分</b><span id="pmRateText">未评分 · 键盘 ←/→ 可调</span></div>
+          <div class="mrate" id="mrate" role="radiogroup" aria-label="服务评分">
+            <button type="button" role="radio" aria-checked="false" data-v="1" aria-label="1 分"><svg viewBox="0 0 24 24"><path d="m12 3.6 2.5 5.4 5.9.8-4.3 4.2 1 5.9-5.1-2.7-5.1 2.7 1-5.9L3.6 9.8l5.9-.8z"/></svg></button>
+            <button type="button" role="radio" aria-checked="false" data-v="2" aria-label="2 分"><svg viewBox="0 0 24 24"><path d="m12 3.6 2.5 5.4 5.9.8-4.3 4.2 1 5.9-5.1-2.7-5.1 2.7 1-5.9L3.6 9.8l5.9-.8z"/></svg></button>
+            <button type="button" role="radio" aria-checked="false" data-v="3" aria-label="3 分"><svg viewBox="0 0 24 24"><path d="m12 3.6 2.5 5.4 5.9.8-4.3 4.2 1 5.9-5.1-2.7-5.1 2.7 1-5.9L3.6 9.8l5.9-.8z"/></svg></button>
+            <button type="button" role="radio" aria-checked="false" data-v="4" aria-label="4 分"><svg viewBox="0 0 24 24"><path d="m12 3.6 2.5 5.4 5.9.8-4.3 4.2 1 5.9-5.1-2.7-5.1 2.7 1-5.9L3.6 9.8l5.9-.8z"/></svg></button>
+            <button type="button" role="radio" aria-checked="false" data-v="5" aria-label="5 分"><svg viewBox="0 0 24 24"><path d="m12 3.6 2.5 5.4 5.9.8-4.3 4.2 1 5.9-5.1-2.7-5.1 2.7 1-5.9L3.6 9.8l5.9-.8z"/></svg></button>
+          </div>
+        </div>
+        <div><div style="display:flex;justify-content:space-between;font-size:14px;font-weight:500;margin-bottom:6px"><span>疫苗全程率</span><b class="num" style="color:var(--sem-positive)">96%</b></div><div class="meter"><i class="ok" style="width:0" data-w="96"></i></div></div>
+        <div><div style="display:flex;justify-content:space-between;font-size:14px;font-weight:500;margin-bottom:6px"><span>高危随访闭环</span><b class="num" style="color:var(--sem-warn)">68%</b></div><div class="meter"><i class="warn" style="width:0" data-w="68"></i></div></div>
+        <div>
+          <div style="font-size:14px;font-weight:500;margin-bottom:8px">随访进度（Steps）</div>
+          <div class="msteps">
+            <span class="done"><b><svg style="width:10px;height:10px;stroke:#FFF;fill:none;stroke-width:3;stroke-linecap:round;stroke-linejoin:round" viewBox="0 0 24 24"><path d="M5 13l5 5L20 7"/></svg></b>建卡</span>
+            <span class="done"><b><svg style="width:10px;height:10px;stroke:#FFF;fill:none;stroke-width:3;stroke-linecap:round;stroke-linejoin:round" viewBox="0 0 24 24"><path d="M5 13l5 5L20 7"/></svg></b>首访</span>
+            <span class="cur"><b>3</b>评估</span>
+            <span class="todo"><b>4</b>随访</span>
+          </div>
+        </div>
+      </div>
+
+      <h2 class="sec">随访完成趋势 <small>机构示例数据 · 单图单卡（10.5.2）</small></h2>
+      <div class="gcard pm-chartcard">
+        <div style="display:flex;align-items:baseline;gap:8px">
+          <b class="num pm-big">64.2k</b>
+          <span style="font-size:12px;color:var(--text-2)">当前时段</span>
+          <b class="up num" style="font-size:12px;color:var(--sem-positive);margin-left:auto">↑ 12.6%</b>
+        </div>
+        <svg class="spark" viewBox="0 0 380 64" preserveAspectRatio="none" role="img" aria-label="近 16 周随访完成量趋势，整体上行">
+          <defs><linearGradient id="mg" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#9A78FF" stop-opacity=".34"/><stop offset="1" stop-color="#9A78FF" stop-opacity="0"/></linearGradient></defs>
+          <line x1="0" y1="18" x2="380" y2="18" stroke="rgba(58,52,84,.06)"/>
+          <line x1="0" y1="36" x2="380" y2="36" stroke="rgba(58,52,84,.06)"/>
+          <line x1="0" y1="54" x2="380" y2="54" stroke="rgba(58,52,84,.06)"/>
+          <path d="M0,50 L25,46 L50,48 L75,40 L100,42 L125,33 L150,36 L175,28 L200,30 L225,21 L250,24 L275,16 L300,19 L325,12 L350,14 L380,8 L380,64 L0,64 Z" fill="url(#mg)"/>
+          <path d="M0,50 L25,46 L50,48 L75,40 L100,42 L125,33 L150,36 L175,28 L200,30 L225,21 L250,24 L275,16 L300,19 L325,12 L350,14 L380,8" fill="none" stroke="#9A78FF" stroke-width="2.4" stroke-linecap="round"/>
+        </svg>
+      </div>
+
+      <h2 class="sec">健康进度 <small>示例数据</small></h2>
+      <div class="gcard" style="display:flex;flex-direction:column;gap:14px;margin-bottom:6px">
+        <div><div style="display:flex;justify-content:space-between;font-size:14px;font-weight:500"><span>儿童建档率</span><b class="num">72%</b></div><div class="meter"><i style="width:0" data-w="72"></i></div></div>
+        <div><div style="display:flex;justify-content:space-between;font-size:14px;font-weight:500"><span>疫苗全程率</span><b class="num">46%</b></div><div class="meter"><i style="width:0" data-w="46"></i></div></div>
+        <div><div style="display:flex;justify-content:space-between;font-size:14px;font-weight:500"><span>高危随访闭环</span><b class="num" style="color:var(--sem-warn)">68%</b></div><div class="meter"><i class="warn" style="width:0" data-w="68"></i></div></div>
+      </div>
+
+      <button class="cta" type="button" id="pmCta">
+        <svg class="i" style="width:18px;height:18px" viewBox="0 0 24 24"><path d="M12 5.5v13M5.5 12h13"/></svg>新建巡检任务
+      </button>
+      <p class="footnote">点主行动 → 底部操作表确认 → 忙碌态 → Toast（一次完整的三段式流程）</p>
+    </section>
+
+    <!-- ══ 视图 2 · 提醒（手势 + 列表状态）════════════════════════════ -->
+    <section class="pm-view" data-view="alerts" id="pmViewAlerts" role="tabpanel" aria-labelledby="pmTabAlerts" tabindex="-1">
+      <h2 class="sec">手势实验室 <small>下拉刷新 · 左滑操作 · 上滑加载更多</small></h2>
+      <div class="pm-lab">
+        <div class="pm-labbar">
+          <svg class="i" style="width:16px;height:16px" viewBox="0 0 24 24"><path d="M12 3.8 21.4 19.7a1.5 1.5 0 0 1-1.3 2.2H3.9a1.5 1.5 0 0 1-1.3-2.2z"/><path d="M12 10.2v4.6"/></svg>
+          <b>待随访队列</b><span id="pmLabCount">3 条</span>
+        </div>
+        <div class="pm-labscroll" id="pmGest" tabindex="0" role="group" aria-label="待随访队列，可下拉刷新、左滑操作、上滑加载更多">
+          <div class="pm-pullbody" id="pmPullBody">
+            <div class="pm-ptr" id="pmPtr" aria-hidden="true"><span class="pm-ring"></span><b id="pmPtrText">下拉刷新</b></div>
+            <div class="lst" id="pmGestList" style="padding-top:12px">
+              <div class="pm-swipe" data-row="g1">
+                <button class="pm-swipebody gcard rowitem" type="button" data-detail="王小雨 · 生长低于 P3">
+                  <span class="ic" style="color:var(--sem-danger)"><svg class="i" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="m9.4 9.4 5.2 5.2M14.6 9.4l-5.2 5.2"/></svg></span>
+                  <span class="md"><b>王小雨 · 生长低于 P3</b><span>18 月龄 · 今日到期</span></span>
+                  <span class="rv bad">随访</span>
+                </button>
+                <div class="pm-swipeacts">
+                  <button class="pm-sa ok" type="button" data-act="随访" data-row="g1">随访</button>
+                  <button class="pm-sa del" type="button" data-act="删除" data-row="g1">删除</button>
+                </div>
+              </div>
+              <div class="pm-swipe" data-row="g2">
+                <button class="pm-swipebody gcard rowitem" type="button" data-detail="李念 · 疫苗逾期 3 天">
+                  <span class="ic" style="color:var(--sem-warn)"><svg class="i" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 7v5.2l3.4 2"/></svg></span>
+                  <span class="md"><b>李念 · 疫苗逾期 3 天</b><span>12 月龄 · 需电话召回</span></span>
+                  <span class="rv">提醒</span>
+                </button>
+                <div class="pm-swipeacts">
+                  <button class="pm-sa ok" type="button" data-act="提醒" data-row="g2">提醒</button>
+                  <button class="pm-sa del" type="button" data-act="删除" data-row="g2">删除</button>
+                </div>
+              </div>
+              <div class="pm-swipe" data-row="g3">
+                <button class="pm-swipebody gcard rowitem" type="button" data-detail="赵果果 · 儿保已完成">
+                  <span class="ic" style="color:var(--sem-positive)"><svg class="i" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="m8.2 12.4 2.6 2.6 5-5.6"/></svg></span>
+                  <span class="md"><b>赵果果 · 儿保已完成</b><span>3 月龄 · 待录入结论</span></span>
+                  <span class="rv good">录入</span>
+                </button>
+                <div class="pm-swipeacts">
+                  <button class="pm-sa ok" type="button" data-act="录入" data-row="g3">录入</button>
+                  <button class="pm-sa del" type="button" data-act="删除" data-row="g3">删除</button>
+                </div>
+              </div>
+            </div>
+            <div class="pm-more" id="pmMore"><span>上滑加载更多</span></div>
+          </div>
+        </div>
+      </div>
+      <p class="footnote" style="text-align:left;padding:8px 4px 12px">区域内滚动不劫持页面滚动（<b>overscroll-behavior:contain</b>）· 下拉阈值 64 · 回弹 260ms spring</p>
+
+      <h2 class="sec">列表状态 <small>骨架 / 空 / 错（ErrorBlock）三通道</small></h2>
+      <div class="gcard" style="margin-bottom:14px">
+        <div class="seg2" id="pmStateSeg" role="radiogroup" aria-label="列表状态切换">
+          <button class="s2" type="button" role="radio" aria-checked="false" data-state="loading">加载中</button>
+          <button class="s2" type="button" role="radio" aria-checked="false" data-state="empty">空态</button>
+          <button class="s2" type="button" role="radio" aria-checked="false" data-state="error">错误</button>
+          <button class="s2 on" type="button" role="radio" aria-checked="true" data-state="data">有数据</button>
+        </div>
+        <div class="pm-states" id="pmStates" style="padding-top:14px">
+          <div class="pm-state" data-state="loading">
+            <div class="pm-sk"><div></div><div></div><div></div></div>
+            <p style="margin-top:14px;font-size:12px;color:var(--text-3)">骨架＝胶囊 + 1.6s 呼吸（禁左右扫光）· 高度贴近终态防跳动</p>
+          </div>
+          <div class="pm-state" data-state="empty">
+            <svg class="i" style="width:48px;height:48px" viewBox="0 0 24 24"><circle cx="10.5" cy="10.5" r="6.5"/><path d="M15.4 15.4 21 21"/></svg>
+            <b>今天没有待随访</b>
+            <p>已完成的随访会保留在「记录」里</p>
+            <div class="pm-acts"><button class="pm-ghost" type="button" style="min-height:44px;padding:0 18px;border-radius:18px" data-route="records">去记录页看看</button></div>
+          </div>
+          <div class="pm-state risk" data-state="error">
+            <svg class="i" style="width:48px;height:48px" viewBox="0 0 24 24"><path d="M12 3.8 21.4 19.7a1.5 1.5 0 0 1-1.3 2.2H3.9a1.5 1.5 0 0 1-1.3-2.2z"/><path d="M12 10.2v4.6M12 18.2v.1"/></svg>
+            <b>队列加载失败</b>
+            <p>网络不稳定，请稍后重试；现场数据已保留在本机</p>
+            <div class="pm-acts"><button class="pm-primary" type="button" id="pmRetry" style="min-height:44px;padding:0 18px;border-radius:18px">重新加载</button></div>
+          </div>
+          <div class="pm-state is-on" data-state="data">
+            <div class="lst" style="margin:0">
+              <div class="rowitem gcard">
+                <span class="ic" style="color:var(--sem-positive)"><svg class="i" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="m8.2 12.4 2.6 2.6 5-5.6"/></svg></span>
+                <div class="md"><b>今日待随访 3 例</b><span>高危 1 · 疫苗 1 · 儿保 1</span></div>
+                <span class="rv good">正常</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <h2 class="sec">登记与随访 <small>Cell 单元行 · 分组卡</small></h2>
+      <div class="pm-cellgroup" style="margin-bottom:14px">
+        <button class="pm-cell" type="button" data-sheet="doctor">
+          <span class="ic"><svg class="i" style="width:18px;height:18px" viewBox="0 0 24 24"><circle cx="12" cy="8.2" r="3.7"/><path d="M5 20.4c1.3-3.6 4.1-5.3 7-5.3s5.7 1.7 7 5.3"/></svg></span>
+          <span class="md"><b>责任医生</b><span>市妇幼保健院 · 儿保科</span></span>
+          <span class="rv">张医生</span>
+          <svg class="i ch" style="width:16px;height:16px" viewBox="0 0 24 24"><path d="m9 5 7 7-7 7"/></svg>
+        </button>
+        <button class="pm-cell" type="button" data-sheet="plan">
+          <span class="ic"><svg class="i" style="width:18px;height:18px" viewBox="0 0 24 24"><rect x="4" y="5.4" width="16" height="14.6" rx="2.2"/><path d="M4 9.6h16M8.4 3.6v3.6M15.6 3.6v3.6"/></svg></span>
+          <span class="md"><b>随访计划</b><span>本周 5 项 · 已完成 2 项</span></span>
+          <span class="rv">查看</span>
+          <svg class="i ch" style="width:16px;height:16px" viewBox="0 0 24 24"><path d="m9 5 7 7-7 7"/></svg>
+        </button>
+        <button class="pm-cell danger" type="button" data-sheet="close">
+          <span class="ic"><svg class="i" style="width:18px;height:18px" viewBox="0 0 24 24"><path d="M5 7h14M9.5 7V5.4h5V7M6.6 7l.8 12.2a1.6 1.6 0 0 0 1.6 1.5h6a1.6 1.6 0 0 0 1.6-1.5L17.4 7"/></svg></span>
+          <span class="md"><b>结束本次随访批次</b><span>列出为破坏性操作，需二次确认</span></span>
+          <svg class="i ch" style="width:16px;height:16px" viewBox="0 0 24 24"><path d="m9 5 7 7-7 7"/></svg>
+        </button>
+      </div>
+    </section>
+
+    <!-- ══ 视图 3 · 记录（表单类组件）════════════════════════════════ -->
+    <section class="pm-view" data-view="records" id="pmViewRecords" role="tabpanel" aria-labelledby="pmTabRecords" tabindex="-1">
+      <h2 class="sec">档案分类 <small>CapsuleTabs · 可横滑（11.6.3）</small></h2>
+      <div class="pm-caps" id="pmCaps" role="tablist" aria-label="档案分类">
+        <button class="pm-cap on" type="button" role="tab" aria-selected="true" data-cap="档案">档案</button>
+        <button class="pm-cap" type="button" role="tab" aria-selected="false" data-cap="随访">随访<i class="num">3</i></button>
+        <button class="pm-cap" type="button" role="tab" aria-selected="false" data-cap="疫苗">疫苗<i class="num">1</i></button>
+        <button class="pm-cap" type="button" role="tab" aria-selected="false" data-cap="儿保">儿保</button>
+        <button class="pm-cap" type="button" role="tab" aria-selected="false" data-cap="检验">检验</button>
+        <button class="pm-cap" type="button" role="tab" aria-selected="false" data-cap="影像">影像</button>
+      </div>
+      <div class="gcard" style="margin-bottom:14px">
+        <div class="pm-row"><div class="md"><b id="pmCapTitle">档案 · 共 6 类</b><span id="pmCapDesc">点击或 ←/→ 切换分类，激活项上浮 2px</span></div></div>
+      </div>
+
+      <h2 class="sec">孕周与日期 <small>底部滚轮选择器（10.6.3）</small></h2>
+      <div class="pm-cellgroup" style="margin-bottom:14px">
+        <button class="pm-cell" type="button" id="pmPickerOpen">
+          <span class="ic"><svg class="i" style="width:18px;height:18px" viewBox="0 0 24 24"><rect x="4" y="5.4" width="16" height="14.6" rx="2.2"/><path d="M4 9.6h16M8.4 3.6v3.6M15.6 3.6v3.6"/></svg></span>
+          <span class="md"><b>当前孕周</b><span>用于校正预产期与产检计划</span></span>
+          <span class="rv num" id="pmPickerValue">20 周 3 天</span>
+          <svg class="i ch" style="width:16px;height:16px" viewBox="0 0 24 24"><path d="m9 5 7 7-7 7"/></svg>
+        </button>
+        <button class="pm-cell" type="button" data-sheet="note">
+          <span class="ic"><svg class="i" style="width:18px;height:18px" viewBox="0 0 24 24"><path d="M5 4.5h14v15H5z"/><path d="M8.4 9h7.2M8.4 12.6h7.2M8.4 16.2h4.4"/></svg></span>
+          <span class="md"><b>产检备注</b><span>记录医生口头交代事项</span></span>
+          <svg class="i ch" style="width:16px;height:16px" viewBox="0 0 24 24"><path d="m9 5 7 7-7 7"/></svg>
+        </button>
+      </div>
+
+      <h2 class="sec">随访分类 <small>Selector 选择卡（11.6.4）</small></h2>
+      <div class="pm-selects" id="pmSelects" role="radiogroup" aria-label="随访分类" style="margin-bottom:14px">
+        <button class="pm-select" type="button" role="radio" aria-checked="true"><b>常规随访</b><span>按月龄计划</span><span class="pm-ck">✓</span></button>
+        <button class="pm-select" type="button" role="radio" aria-checked="false"><b>高危随访</b><span>红/橙级优先</span><span class="pm-ck">✓</span></button>
+        <button class="pm-select" type="button" role="radio" aria-checked="false"><b>疫苗补种</b><span>逾期召回</span><span class="pm-ck">✓</span></button>
+        <button class="pm-select" type="button" role="radio" aria-checked="false" disabled><b>营养门诊</b><span>未开放预约</span><span class="pm-ck">✓</span></button>
+      </div>
+
+      <h2 class="sec">录入工具 <small>Stepper · OTP · Dialog</small></h2>
+      <div class="gcard" style="display:flex;flex-direction:column;gap:16px;margin-bottom:14px">
+        <div class="pm-row">
+          <div class="md"><b>本次随访份数</b><span>步进器边界禁用 + 键盘 ↑/↓</span></div>
+          <div class="pm-stepper" id="pmStepper">
+            <button type="button" data-step="-1" aria-label="减少一份">−</button>
+            <span class="v num" id="pmStepVal" role="status" aria-live="polite">2</span>
+            <button type="button" data-step="1" aria-label="增加一份">+</button>
+          </div>
+        </div>
+        <div>
+          <div style="font-size:14px;font-weight:500;margin-bottom:8px">家长手机验证码 <span style="font-size:12px;color:var(--text-3)">6 位 · 自动跳格 · 支持整串粘贴</span></div>
+          <div class="pm-otp" id="pmOtp" role="group" aria-label="6 位短信验证码">
+            <input inputmode="numeric" maxlength="1" aria-label="验证码第 1 位" autocomplete="one-time-code">
+            <input inputmode="numeric" maxlength="1" aria-label="验证码第 2 位">
+            <input inputmode="numeric" maxlength="1" aria-label="验证码第 3 位">
+            <input inputmode="numeric" maxlength="1" aria-label="验证码第 4 位">
+            <input inputmode="numeric" maxlength="1" aria-label="验证码第 5 位">
+            <input inputmode="numeric" maxlength="1" aria-label="验证码第 6 位">
+          </div>
+        </div>
+        <div class="pm-row">
+          <div class="md"><b>提交前确认</b><span id="pmOtpState" role="status" aria-live="polite">尚未填写验证码</span></div>
+          <button class="pm-ghost" type="button" id="pmDialogOpen" style="min-height:44px;padding:0 18px;border-radius:18px">弹窗确认</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- ══ 视图 4 · 我的（真机与无障碍 + 组件谱）══════════════════════ -->
+    <section class="pm-view" data-view="mine" id="pmViewMine" role="tabpanel" aria-labelledby="pmTabMine" tabindex="-1">
+      <h2 class="sec">真机与无障碍 <small>每一项都可在本页当场验证</small></h2>
+      <div class="pm-cellgroup" style="margin-bottom:14px">
+        <!-- ⚠️ 这一行是 <div> 不是 <button>：开关本身就是按钮，
+            按钮里再放按钮是非法 HTML（浏览器会提前闭合外层），布局会当场散架。 -->
+        <div class="pm-cell" style="cursor:default">
+          <span class="ic"><svg class="i" style="width:18px;height:18px" viewBox="0 0 24 24"><path d="M20 14.5A8.5 8.5 0 1 1 9.5 4a6.8 6.8 0 0 0 10.5 10.5z"/></svg></span>
+          <span class="md"><b>暗色档（夜间暖石板）</b><span>02 · 2.1.9 映射 · 夜奶 / 夜间查房场景</span></span>
+          <button class="switch" type="button" role="switch" aria-checked="false" aria-label="暗色档" data-touch id="pmDarkSwitch"></button>
+        </div>
+        <button class="pm-cell" type="button" id="pmSafeToggle">
+          <span class="ic"><svg class="i" style="width:18px;height:18px" viewBox="0 0 24 24"><rect x="6" y="2.5" width="12" height="19" rx="3"/><path d="M10 5.2h4"/></svg></span>
+          <span class="md"><b>安全区可视化</b><span>env(safe-area-inset-*) 实际取值</span></span>
+          <span class="rv" id="pmSafeState">关闭</span>
+        </button>
+        <button class="pm-cell" type="button" id="pmHotToggle">
+          <span class="ic"><svg class="i" style="width:18px;height:18px" viewBox="0 0 24 24"><rect x="3.5" y="3.5" width="17" height="17" rx="4"/><path d="M8 12h8"/></svg></span>
+          <span class="md"><b>显示触控热区</b><span>10 · 10.4 要求 ≥44×44，圈出所有补过热区的控件</span></span>
+          <span class="rv" id="pmHotState">关闭</span>
+        </button>
+        <button class="pm-cell" type="button" id="pmMotionCell">
+          <span class="ic"><svg class="i" style="width:18px;height:18px" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 7.5v5l3 2"/></svg></span>
+          <span class="md"><b>降低动效</b><span>跟随系统 prefers-reduced-motion（只读）</span></span>
+          <span class="rv" id="pmMotionState">检测中</span>
+        </button>
+      </div>
+      <p class="pm-nomotion footnote" style="text-align:left;padding:0 4px 12px">系统已开启「降低动效」：本页所有位移/缩放/旋转已停用，加载环降速——信息不靠动画承载。</p>
+
+      <h2 class="sec">移动按钮谱 <small>11.6.1 · 对齐 Arco Mobile</small></h2>
+      <div class="gcard" style="margin-bottom:14px">
+        <div class="abox"><span class="abl">类型 Type</span>
+          <button class="mbb mbb-primary" type="button">Primary 随访</button>
+          <button class="mbb mbb-default" type="button">Default</button>
+          <button class="mbb mbb-secondary" type="button">Secondary 已约</button>
+          <button class="mbb mbb-outline" type="button">Outline</button>
+          <button class="mbb mbb-dashed" type="button">Dashed</button>
+          <button class="mbb mbb-text" type="button">Text</button>
+        </div>
+        <div class="abox"><span class="abl">状态 Status</span>
+          <button class="mbb mbb-success" type="button">成功</button>
+          <button class="mbb mbb-warning" type="button">警告</button>
+          <button class="mbb mbb-danger" type="button">危险</button>
+          <button class="mbb mbb-danger mbb-outline" type="button">危险描边</button>
+        </div>
+        <div class="abox"><span class="abl">尺寸 Size</span>
+          <button class="mbb mbb-primary mbb-xs" type="button">mini</button>
+          <button class="mbb mbb-primary mbb-sm" type="button">small</button>
+          <button class="mbb mbb-primary" type="button">middle</button>
+          <button class="mbb mbb-primary mbb-lg" type="button">large</button>
+        </div>
+        <div class="abox"><span class="abl">形状 Shape</span>
+          <button class="mbb mbb-primary round" type="button">胶囊 round · 立即随访</button>
+          <button class="mbb mbb-primary cr" type="button" aria-label="添加">
+            <svg viewBox="0 0 24 24"><path d="M12 5.5v13M5.5 12h13"/></svg>
+          </button>
+        </div>
+        <div class="abox"><span class="abl">Loading / 禁用</span>
+          <button class="mbb mbb-primary" type="button" id="mbLoad">保存并预约</button>
+          <button class="mbb mbb-primary disabled" type="button" disabled>Disabled</button>
+        </div>
+        <p style="font-size:12px;color:var(--text-3);margin:4px 0 8px">点「保存并预约」体验 1.4s 忙碌态：只换图标位、文字保留（10.6.1 / 07.9）</p>
+        <button class="mbb mbb-primary block" type="button" id="mbLong">全宽主行动 Block · 提交产检记录</button>
+        <p class="footnote" style="text-align:left;padding:8px 2px 0">细则见 11-移动端组件全量库 · 11.6.1（对齐 Arco Mobile Button）</p>
+      </div>
+
+      <h2 class="sec">数据与隐私 <small>破坏性操作走底部操作表</small></h2>
+      <div class="pm-cellgroup" style="margin-bottom:6px">
+        <button class="pm-cell" type="button" data-sheet="export">
+          <span class="ic"><svg class="i" style="width:18px;height:18px" viewBox="0 0 24 24"><path d="M12 3.6v11M7.6 10.2 12 14.6l4.4-4.4"/><path d="M5 19.4h14"/></svg></span>
+          <span class="md"><b>导出健康档案</b><span>生成 PDF 供就诊使用</span></span>
+          <svg class="i ch" style="width:16px;height:16px" viewBox="0 0 24 24"><path d="m9 5 7 7-7 7"/></svg>
+        </button>
+        <button class="pm-cell danger" type="button" data-sheet="erase">
+          <span class="ic"><svg class="i" style="width:18px;height:18px" viewBox="0 0 24 24"><path d="M12 3.8 21.4 19.7a1.5 1.5 0 0 1-1.3 2.2H3.9a1.5 1.5 0 0 1-1.3-2.2z"/><path d="M12 10.2v4.6"/></svg></span>
+          <span class="md"><b>注销并清除本机数据</b><span>不可恢复，需重述对象名确认</span></span>
+          <svg class="i ch" style="width:16px;height:16px" viewBox="0 0 24 24"><path d="m9 5 7 7-7 7"/></svg>
+        </button>
+      </div>
+
+      <div class="pm-foot">
+        <b>妈咪好 GoodMom</b> · 移动端液态玻璃（孕期 / 儿保示例）<br>
+        规范 10 / 11 章 · 品牌 12 · 妇幼领域 13 · Token 02<br>
+        本页为可交互演示：所有弹层都是真实 DOM，焦点在弹层内循环并在关闭后归还触发点。
+      </div>
+    </section>
+
+  </div>
+  </div>
+
+  <!-- 安全区可视化覆盖层（11.6.7） -->
+  <div class="pm-safe" id="pmSafe" aria-hidden="true">
+    <i class="t"></i><i class="b"></i><i class="l"></i><i class="r"></i>
+    <u id="pmSafeLabel">safe-area-inset</u>
+  </div>
+
+  <!-- TabBar（10.3.2）：3–5 项，激活项=玫瑰渐变胶囊 + 上浮 -->
+  <nav class="tabbar" role="tablist" aria-label="应用主导航" id="pmTabs">
+    <button class="tab on" type="button" role="tab" id="pmTabHome" aria-selected="true" aria-controls="pmViewHome" data-view="home">
+      <svg class="i" viewBox="0 0 24 24"><rect x="4" y="4" width="6.6" height="6.6" rx="1.8"/><rect x="13.4" y="4" width="6.6" height="6.6" rx="1.8"/><rect x="4" y="13.4" width="6.6" height="6.6" rx="1.8"/><rect x="13.4" y="13.4" width="6.6" height="6.6" rx="1.8"/></svg>总览
+    </button>
+    <button class="tab" type="button" role="tab" id="pmTabAlerts" aria-selected="false" aria-controls="pmViewAlerts" data-view="alerts" tabindex="-1">
+      <svg class="i" viewBox="0 0 24 24"><path d="M18 8.2a6 6 0 0 0-12 0c0 6.8-2.8 8.8-2.8 8.8h17.6S18 15 18 8.2"/><path d="M13.9 20.4a2 2 0 0 1-3.8 0"/></svg>提醒
+      <i class="pm-dot num">3</i>
+    </button>
+    <button class="tab" type="button" role="tab" id="pmTabRecords" aria-selected="false" aria-controls="pmViewRecords" data-view="records" tabindex="-1">
+      <svg class="i" viewBox="0 0 24 24"><path d="M6 3.5h9.5L20 8v12.5H6z"/><path d="M15.2 3.5V8H20"/><path d="M9 12.4h6M9 16h4"/></svg>记录
+    </button>
+    <button class="tab" type="button" role="tab" id="pmTabMine" aria-selected="false" aria-controls="pmViewMine" data-view="mine" tabindex="-1">
+      <svg class="i" viewBox="0 0 24 24"><circle cx="12" cy="8.2" r="3.7"/><path d="M5 20.4c1.3-3.6 4.1-5.3 7-5.3s5.7 1.7 7 5.3"/></svg>我的
+    </button>
+  </nav>
+
+  <!-- 浮层宿主（挂在应用根内 → 桌面档随真机框裁剪，移动档全屏固定） -->
+  <div class="pm-layers">
+    <div class="pm-mask" id="pmMask"></div>
+
+    <!-- 底部操作表 ActionSheet（10.4.1：标题 caption + 操作行 56 + 取消行） -->
+    <div class="pm-sheet" id="pmSheet" role="dialog" aria-modal="true" aria-labelledby="pmSheetTitle">
+      <div class="pm-grab"></div>
+      <h2 id="pmSheetTitle">请选择操作</h2>
+      <div id="pmSheetBody"></div>
+      <button class="pm-sheetcancel" type="button" id="pmSheetCancel">取消</button>
     </div>
 
-    <!-- 资产水位 -->
-    <div class="sec" style="margin-top:18px">健康进度（示例）</div>
-    <div class="gcard" style="display:flex;flex-direction:column;gap:14px;margin-bottom:6px">
-      <div><div style="display:flex;justify-content:space-between;font-size:14px;font-weight:500"><span>儿童建档率</span><b class="num" style="color:var(--text)">72%</b></div><div class="meter"><i style="width:0" data-w="72"></i></div></div>
-      <div><div style="display:flex;justify-content:space-between;font-size:14px;font-weight:500"><span>疫苗全程率</span><b class="num" style="color:var(--text)">46%</b></div><div class="meter"><i style="width:0" data-w="46"></i></div></div>
-      <div><div style="display:flex;justify-content:space-between;font-size:14px;font-weight:500"><span>高危随访闭环</span><b class="num" style="color:var(--sem-warn)">68%</b></div><div class="meter"><i class="warn" style="width:0" data-w="68"></i></div></div>
+    <!-- 滚轮选择器（10.6.3 / 11.6.6）：原生 scroll-snap，惯性由浏览器给 -->
+    <div class="pm-sheet" id="pmPicker" role="dialog" aria-modal="true" aria-labelledby="pmPickerTitle">
+      <div class="pm-grab"></div>
+      <h2 id="pmPickerTitle">当前孕周</h2>
+      <div class="pm-wheels">
+        <div class="pm-wheel" id="pmWheelW" role="listbox" aria-label="孕周" tabindex="0"></div>
+        <div class="pm-wheel" id="pmWheelD" role="listbox" aria-label="天数" tabindex="0"></div>
+      </div>
+      <div class="pm-sheetfoot">
+        <button class="pm-ghost" type="button" id="pmPickerCancel">取消</button>
+        <button class="pm-primary" type="button" id="pmPickerOk">确定</button>
+      </div>
     </div>
 
-    <button class="cta"><svg class="i" style="width:18px;height:18px;color:#FFF" viewBox="0 0 24 24"><path d="M12 5.5v13M5.5 12h13"/></svg>新建巡检任务</button>
-    <div class="footnote">妈咪好 GoodMom · 移动端液态玻璃（孕期 / 儿保示例）<br>规范见 <b>10-13 章</b>；品牌见 <b>12</b>、妇幼领域见 <b>13</b></div>
+    <!-- 图片预览（11.2.9） -->
+    <div class="pm-viewer" id="pmViewer" role="dialog" aria-modal="true" aria-label="照片预览">
+      <div class="pm-vstage" id="pmVStage">满月体检记录</div>
+      <button class="pm-vnav prev" type="button" id="pmVPrev" aria-label="上一张">
+        <svg class="i" viewBox="0 0 24 24"><path d="M15 5.5 8.5 12l6.5 6.5"/></svg>
+      </button>
+      <button class="pm-vnav next" type="button" id="pmVNext" aria-label="下一张">
+        <svg class="i" viewBox="0 0 24 24"><path d="m9 5.5 6.5 6.5L9 18.5"/></svg>
+      </button>
+      <button class="pm-vclose" type="button" id="pmVClose" aria-label="关闭预览">
+        <svg class="i" viewBox="0 0 24 24"><path d="M6 6l12 12M18 6 6 18"/></svg>
+      </button>
+      <div class="pm-vcount num" id="pmVCount">1 / 2</div>
+    </div>
   </div>
 </div>
 
-<!-- 底部 TabBar -->
-<nav class="tabbar">
-  <div class="tab on" data-k="总览"><svg class="i" viewBox="0 0 24 24"><rect x="4" y="4" width="6.6" height="6.6" rx="1.8"/><rect x="13.4" y="4" width="6.6" height="6.6" rx="1.8"/><rect x="4" y="13.4" width="6.6" height="6.6" rx="1.8"/><rect x="13.4" y="13.4" width="6.6" height="6.6" rx="1.8"/></svg>总览</div>
-  <div class="tab" data-k="告警"><svg class="i" viewBox="0 0 24 24"><path d="M18 8.2a6 6 0 0 0-12 0c0 6.8-2.8 8.8-2.8 8.8h17.6S18 15 18 8.2"/><path d="M13.9 20.4a2 2 0 0 1-3.8 0"/></svg>告警</div>
-  <div class="tab" data-k="资产"><svg class="i" viewBox="0 0 24 24"><path d="M17.5 19H9a7 7 0 1 1 6.7-9.4A5.5 5.5 0 0 1 17.5 19Z"/></svg>资产</div>
-  <div class="tab" data-k="我的"><svg class="i" viewBox="0 0 24 24"><circle cx="12" cy="8.2" r="3.7"/><path d="M5 20.4c1.3-3.6 4.1-5.3 7-5.3s5.7 1.7 7 5.3"/></svg>我的</div>
-</nav>
-
-
-
-
-
-
-
-
-
-
-
-
-<!-- 体例说明：本模块脚本只有 @js 分段一段（构建时以它为唯一出处）。
-     历史上同一段脚本在 body 内联 script 里还留了一份逐行副本，构建会静默
-     丢弃它（drop_body_scripts），两份并存极易改错一边 —— V2.9 已删除。 -->
+<!-- 桌面档批注：把"演示了什么、规范锚点在哪"写在真机框旁（≥1024 显示） -->
+<aside class="desk-note">
+  <b>本模块演示的组件与规范锚点</b>
+  <ul>
+    <li>NavBar / TabBar · <code>10.3.1 / 10.3.2</code></li>
+    <li>下拉刷新 · 加载更多 · 底部面板 · <code>10.4.1</code></li>
+    <li>SwipeAction 左滑操作 · <code>11.2.5</code></li>
+    <li>ImageViewer 图片预览 · <code>11.2.9</code></li>
+    <li>Stepper · OTP · <code>11.2.11 / 11.2.14</code></li>
+    <li>CapsuleTabs · Selector · <code>11.6.3 / 11.6.4</code></li>
+    <li>Popup / Mask · SafeArea · Sticky · ErrorBlock · <code>11.6.6–11.6.9</code></li>
+    <li>暗色档映射 · <code>02 · 2.1.9</code></li>
+    <li>玻璃节点 ≤4/屏 · 热区 ≥44 · <code>10.8 / 10.4</code></li>
+  </ul>
+</aside>
 
 <!--@js-->
 (function(){
-  /* TabBar 切换 */
-  var tabs=[].slice.call(document.querySelectorAll('.tab'));
-  tabs.forEach(function(t){
-    t.addEventListener('click',function(){
-      tabs.forEach(function(x){x.classList.remove('on')});
-      t.classList.add('on');
+  "use strict";
+  /* ⚠️ 合并进唯一首页后，本脚本会被 build-site.py 作用域化改写，两条纪律：
+     ① `document.querySelectorAll('.x')` 会被自动加上模块根前缀 → 一律用它做**文档级**查询；
+     ② **元素内**查询必须走下面两个辅助函数（选择器是变量，不会被改写）。
+        写成 `el.querySelector('.x')` 会被改写成 `el.querySelector('#gm-mod-x .x')` ——
+        在 el 内部再找模块根，恒为 null，交互静默全死（历史事故，脚本改动必查这一条）。
+     ③ 选择器里**不要写 `#id`**：HTML 的 id 会被加模块前缀，而选择器字符串里的 #id 不会，
+        于是 `#pmTabs .tab` 永远匹配不到（本模块 TabBar 曾因此整条失效）。id 一律用 getElementById。 */
+  var RM = window.matchMedia ? window.matchMedia("(prefers-reduced-motion: reduce)") : null;
+  function reduce(){ return !!(RM && RM.matches); }
+
+  /* ══ 选择器纪律（合并进唯一首页的硬约束，三条都踩过）══════════════════
+     build-site.py 会把模块内的**字面量**选择器改写成 `#gm-mod-<mod> sel`、把
+     `getElementById("x")` 改写成带 `<mod>--` 前缀。于是：
+     ① **不要**把 document 级查询包进自己的辅助函数：
+        `function one(s){return document.querySelector(s)}` 里 s 是变量，逃过改写，
+        变成**全局**查询 —— 实测本模块的 `.stage` 在全站有 2 个，
+        `qIn(ROOT, ".stage")` 拿到的是别的模块那一份，切页状态写到了别人身上。
+     ② **不要**写 `el.querySelector(".x")`：会被改写成 `el.querySelector("#gm-mod-x .x")`，
+        在 el 内部再找模块根 → 恒为 null（历史上整个模块交互静默失效）。
+     ③ **不要**在选择器字符串里写 `#id`：HTML 的 id 会被加前缀、字符串里的不会，
+        `#pmTabs .tab` 永远匹配不到（TabBar 曾因此整条失效）。
+     因此：文档级一律直写 `document.querySelector("...")`；元素级一律走 qIn/qaIn；
+     id 一律直写 `document.getElementById("...")`。 */
+  var ROOT = document.getElementById("gm-mod-preview-mobile") || document.documentElement;
+  function qIn(root, sel){ return root ? root.querySelector(sel) : null; }
+  function qaIn(root, sel){ return root ? Array.prototype.slice.call(root.querySelectorAll(sel)) : []; }
+  function modRoot(){ return ROOT; }
+  function toast(msg, status){ if (typeof window.gmToast === "function") window.gmToast(msg, status); }
+  function announce(msg){ var l = document.getElementById("pmLive"); if (!l) return; l.textContent = ""; setTimeout(function(){ l.textContent = msg; }, 40); }
+  function desktop(){ return window.matchMedia && window.matchMedia("(min-width:1024px)").matches; }
+  /* 滚动容器：桌面档是真机框内的 .pm-screen，移动档是页面本身（10.8 · 不劫持页面滚动） */
+  function screenEl(){ return desktop() ? qIn(ROOT, ".pm-screen") : null; }
+  function scrolled(){ var s = screenEl(); return s ? s.scrollTop : (window.scrollY || window.pageYOffset || 0); }
+  function focusables(root){
+    return Array.prototype.filter.call(
+      root.querySelectorAll('button,input,[href],[tabindex]:not([tabindex="-1"])'),
+      function(el){
+        if (el.disabled) return false;
+        if (el.getAttribute("aria-hidden") === "true") return false;
+        var r = el.getBoundingClientRect();
+        return r.width > 0 && r.height > 0;
+      });
+  }
+
+  /* ── ① TabBar 真切页（10.3.2 · ARIA tabs 模式：←/→/Home/End）────────── */
+  var TITLES = { home:"总览 · 孕 20 周 + 3", alerts:"提醒 · 待处理队列", records:"记录 · 成长与接种", mine:"我的 · 真机与无障碍" };
+  var tabs = qaIn(ROOT, ".tabbar .tab");
+  var views = qaIn(ROOT, ".pm-view");
+  var titleEl = document.getElementById("pmTitle");
+  function showView(key, moveFocus){
+    tabs.forEach(function(t){
+      var on = t.getAttribute("data-view") === key;
+      t.classList.toggle("on", on);
+      t.setAttribute("aria-selected", on ? "true" : "false");
+      t.tabIndex = on ? 0 : -1;
+    });
+    views.forEach(function(v){
+      var on = v.getAttribute("data-view") === key;
+      v.classList.toggle("is-on", on);
+      if (on) v.removeAttribute("aria-hidden"); else v.setAttribute("aria-hidden", "true");
+    });
+    if (titleEl && TITLES[key]) titleEl.textContent = TITLES[key];
+    var st = qIn(ROOT, ".stage");
+    if (st) st.classList.toggle("pm-at-root", key === "home");
+    var s = screenEl();
+    if (s) s.scrollTop = 0;
+    else if (!moveFocus && scrolled() > 40) {
+      var r = modRoot().getBoundingClientRect();
+      window.scrollTo({ top: Math.max(0, r.top + (window.scrollY || 0) - 8), behavior: reduce() ? "auto" : "smooth" });
+    }
+    if (moveFocus) { var p = qIn(ROOT, '.pm-view[data-view="' + key + '"]'); if (p) p.focus({ preventScroll:true }); }
+  }
+  tabs.forEach(function(t, i){
+    t.addEventListener("click", function(){ showView(t.getAttribute("data-view")); });
+    t.addEventListener("keydown", function(e){
+      var k = e.key, n = -1;
+      if (k === "ArrowRight") n = (i + 1) % tabs.length;
+      else if (k === "ArrowLeft") n = (i - 1 + tabs.length) % tabs.length;
+      else if (k === "Home") n = 0;
+      else if (k === "End") n = tabs.length - 1;
+      if (n < 0) return;
+      e.preventDefault();
+      tabs[n].focus(); showView(tabs[n].getAttribute("data-view"));
     });
   });
-  /* 资源水位条形生长（延迟播放） */
-  var meters=[].slice.call(document.querySelectorAll('.meter i'));
-  setTimeout(function(){
-    meters.forEach(function(m){m.style.width=m.getAttribute('data-w')+'%'});
-  },350);
-})();
-
-/* 11 章组件演示：Toast / Chips / Segmented */
-(function(){
-  /* Toast 统一走外壳的 window.gmToast：位置（顶部偏上、避让吸顶导航）/ 时序
-     （320ms 入 → 驻留 2.4s → 240ms 出）/ 同类仅 1 条 / role+aria-live 都在那里钉死。 */
-  window.toastM=function(msg,status){ gmToast(msg,status); };
-  [].slice.call(document.querySelectorAll('.chip')).forEach(function(c){
-    c.addEventListener('click',function(){
-      [].slice.call(c.parentNode.children).forEach(function(x){x.classList.remove('on')});
-      c.classList.add('on');
-      toastM('筛选：' + c.textContent);
-    });
+  var back = document.getElementById("pmBack");
+  if (back) back.addEventListener("click", function(){ showView("home"); });
+  var bell = document.getElementById("pmBellBtn");
+  if (bell) bell.addEventListener("click", function(){ showView("alerts"); announce("已切到提醒，3 条待处理"); });
+  var sBtn = document.getElementById("pmSearchBtn"), sPanel = document.getElementById("pmSearchPanel"), sInput = document.getElementById("pmSearchInput");
+  function setSearch(open){
+    if (!sPanel) return;
+    sPanel.classList.toggle("is-open", open);
+    if (sBtn) sBtn.setAttribute("aria-expanded", open ? "true" : "false");
+    if (open && sInput) setTimeout(function(){ sInput.focus(); }, 60);
+  }
+  if (sBtn) sBtn.addEventListener("click", function(){ setSearch(!sPanel.classList.contains("is-open")); });
+  var sClear = document.getElementById("pmSearchClear");
+  if (sInput) sInput.addEventListener("input", function(){ if (sClear) sClear.classList.toggle("is-on", !!sInput.value); });
+  if (sClear) sClear.addEventListener("click", function(){ sInput.value = ""; sClear.classList.remove("is-on"); sInput.focus(); });
+  qaIn(ROOT, ".pm-sugg button").forEach(function(b){
+    b.addEventListener("click", function(){ sInput.value = b.getAttribute("data-q"); if (sClear) sClear.classList.add("is-on"); sInput.focus(); });
   });
-  [].slice.call(document.querySelectorAll('.seg2 .s2')).forEach(function(s){
-    s.addEventListener('click',function(){
-      [].slice.call(s.parentNode.children).forEach(function(x){x.classList.remove('on')});
-      s.classList.add('on');
-    });
-  });
+  var inlineGo = document.getElementById("pmInlineGo"), inlineIn = document.getElementById("pmInlineSearch");
+  if (inlineGo) inlineGo.addEventListener("click", function(){ toast("搜索：" + (inlineIn && inlineIn.value || "（空）")); });
+  if (inlineIn) inlineIn.addEventListener("keydown", function(e){ if (e.key === "Enter") toast("搜索：" + (inlineIn.value || "（空）")); });
 
-  /* Rate（移动） */
-  var mrate=document.getElementById('mrate');
-  if(mrate){[].slice.call(mrate.querySelectorAll('svg')).forEach(function(st){
-    st.addEventListener('click',function(){
-      var n=parseInt(st.getAttribute('data-v'),10)||0;
-      [].slice.call(mrate.querySelectorAll('svg')).forEach(function(x){
-        x.classList.toggle('on',parseInt(x.getAttribute('data-v'),10)<=n);});
-    });});}
+  /* ── ② NavBar 滚动沉浸（10.3.1：120px 后玻璃加深，240ms 淡入）───────── */
+  var stage = qIn(ROOT, ".stage");
+  function onScroll(){ if (stage) stage.classList.toggle("pm-scrolled", scrolled() > 120); }
+  var sc = screenEl();
+  if (sc) sc.addEventListener("scroll", onScroll, { passive:true });
+  window.addEventListener("scroll", onScroll, { passive:true });
+  window.addEventListener("resize", onScroll, { passive:true });
 
-  /* 移动按钮 Loading 模拟 */
-  var mb=document.getElementById('mbLoad');
-  if(mb){
-    var mbTxt=mb.innerHTML;
-    mb.addEventListener('click',function(){
-      if(mb.getAttribute('data-run'))return;
-      mb.setAttribute('data-run','1');
-      mb.innerHTML='<svg class="ldc" viewBox="0 0 24 24"><circle cx="12" cy="12" r="8.5" fill="none" stroke="rgba(255,255,255,.4)" stroke-width="2.4"/><path d="M20.5 12A8.5 8.5 0 0 0 12 3.5" fill="none" stroke="#FFF" stroke-width="2.4" stroke-linecap="round"/></svg>保存中…';
-      mb.classList.add('loading');
-      mb.setAttribute('disabled','');
-      setTimeout(function(){mb.innerHTML=mbTxt;mb.classList.remove('loading');mb.removeAttribute('disabled');mb.removeAttribute('data-run');},1400);
+  /* ── ③ KPI 数字滚动 + 仪表条生长（10.7；easeOut 900ms）──────────────── */
+  function fmt(v){
+    var n = Math.round(v * 10) / 10;
+    var s = (n % 1 === 0) ? String(Math.round(n)) : n.toFixed(1);
+    var p = s.split(".");
+    p[0] = p[0].replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+    return p.join(".");
+  }
+  function countUp(el){
+    var target = parseFloat(el.getAttribute("data-count"));
+    if (isNaN(target)) return;
+    var suffix = el.getAttribute("data-suffix") || "";
+    if (reduce()){ el.textContent = fmt(target) + suffix; return; }
+    var t0 = null, dur = 900;
+    function step(t){
+      if (t0 === null) t0 = t;
+      var p = Math.min(1, (t - t0) / dur), e = 1 - Math.pow(1 - p, 3);
+      el.textContent = fmt(target * e) + suffix;
+      if (p < 1) requestAnimationFrame(step); else el.textContent = fmt(target) + suffix;
+    }
+    requestAnimationFrame(step);
+  }
+  function growMeters(){
+    qaIn(ROOT, ".meter i").forEach(function(m){ var w = m.getAttribute("data-w"); if (w) m.style.width = w + "%"; });
+  }
+  var kpis = document.getElementById("pmKpis"), revealed = false;
+  function reveal(){
+    if (revealed) return;
+    revealed = true;
+    qaIn(ROOT, ".kpi .v").forEach(countUp);
+    growMeters();
+  }
+  if (kpis && "IntersectionObserver" in window) {
+    var io = new IntersectionObserver(function(es){
+      es.forEach(function(e){ if (e.isIntersecting){ reveal(); io.disconnect(); } });
+    }, { threshold:.2 });
+    io.observe(kpis);
+    setTimeout(reveal, 2500);
+  } else {
+    setTimeout(reveal, 300);
+  }
+
+  /* ── ④ 单选组：Chips / Segmented / CapsuleTabs（11.2.2 / 11.6.3）────── */
+  function radioGroup(root, onPick){
+    if (!root) return;
+    var items = qaIn(root, '[role="radio"],[role="tab"]');
+    function pick(el, fire){
+      items.forEach(function(x){
+        var on = x === el;
+        x.classList.toggle("on", on);
+        if (x.getAttribute("role") === "tab") x.setAttribute("aria-selected", on ? "true" : "false");
+        else x.setAttribute("aria-checked", on ? "true" : "false");
+        x.tabIndex = on ? 0 : -1;
+      });
+      if (fire && onPick) onPick(el);
+    }
+    items.forEach(function(el, i){
+      el.tabIndex = el.classList.contains("on") ? 0 : -1;
+      el.addEventListener("click", function(){ pick(el, true); });
+      el.addEventListener("keydown", function(e){
+        var n = -1;
+        if (e.key === "ArrowRight" || e.key === "ArrowDown") n = (i + 1) % items.length;
+        else if (e.key === "ArrowLeft" || e.key === "ArrowUp") n = (i - 1 + items.length) % items.length;
+        else if (e.key === "Home") n = 0;
+        else if (e.key === "End") n = items.length - 1;
+        else if (e.key === " " || e.key === "Enter") { e.preventDefault(); pick(el, true); return; }
+        else return;
+        e.preventDefault(); pick(items[n], true); items[n].focus();
+      });
     });
   }
+  radioGroup(document.getElementById("pmChips"), function(el){
+    var v = el.getAttribute("data-v");
+    toast("筛选：" + v + "（←/→ 可切换）");
+    announce("已筛选 " + v);
+  });
+  radioGroup(document.getElementById("pmSeg"));
+  var capDescs = { "档案":"共 6 类 · 基础信息 / 孕产史 / 过敏史", "随访":"3 条待处理 · 最近一条今日到期", "疫苗":"1 剂逾期 · 乙肝第 2 剂", "儿保":"3 月龄体检已完成", "检验":"近 30 天 2 份报告", "影像":"超声 1 份 · 可放大预览" };
+  radioGroup(document.getElementById("pmCaps"), function(el){
+    var k = el.getAttribute("data-cap");
+    var t = document.getElementById("pmCapTitle"), d = document.getElementById("pmCapDesc");
+    if (t) t.textContent = k + " · " + (capDescs[k] || "");
+    if (d) d.textContent = capDescs[k] || "";
+    announce("已切到 " + k);
+  });
+
+  /* ── ⑤ Switch（10.6.4）：原生 button + role=switch（空格/回车由浏览器给） */
+  qaIn(ROOT, ".switch").forEach(function(sw){
+    if (sw.id && sw.id.indexOf("pmDarkSwitch") >= 0) return;   /* 暗色档开关单独接线 */
+    sw.addEventListener("click", function(){
+      var on = sw.getAttribute("aria-checked") !== "true";
+      sw.setAttribute("aria-checked", on ? "true" : "false");
+      var label = sw.getAttribute("aria-label") || "开关";
+      toast(label + (on ? "已开启" : "已关闭"));
+      announce(label + (on ? "已开启" : "已关闭"));
+    });
+  });
+
+  /* ── ⑥ 公告条关闭（11.2.8：仅 1 条在屏）────────────────────────────── */
+  var notice = document.getElementById("pmNotice");
+  if (notice) {
+    var nx = qIn(notice, ".x");
+    if (nx) nx.addEventListener("click", function(){ notice.style.display = "none"; toast("公告已收起"); });
+  }
+
+  /* ── ⑦ 浮层引擎：Mask / 面板 / 焦点陷阱 / Esc / 焦点归还（Part 18）─── */
+  var layers = qIn(ROOT, ".pm-layers"), mask = document.getElementById("pmMask"), sheet = document.getElementById("pmSheet"), sheetBody = document.getElementById("pmSheetBody"),
+      sheetTitle = document.getElementById("pmSheetTitle"), picker = document.getElementById("pmPicker"), viewer = document.getElementById("pmViewer");
+  var lastFocus = null, openEl = null, pendingDel = null;
+  function layerOpen(el, focusTarget){
+    if (!layers || !el) return;
+    lastFocus = document.activeElement;
+    openEl = el;
+    layers.classList.add("pm-open");
+    el.classList.add("is-open");
+    var f = focusables(el);
+    var t = focusTarget || f[0];
+    if (t) setTimeout(function(){ t.focus(); }, 60);
+    var h = qIn(el, "h2");
+    announce((h ? h.textContent : "弹层") + "已打开");
+  }
+  function layerClose(){
+    if (!layers || !openEl) return;
+    layers.classList.remove("pm-open");
+    openEl.classList.remove("is-open");
+    openEl = null;
+    pendingDel = null;
+    var prev = lastFocus;
+    if (prev && prev.focus) prev.focus();
+    announce("弹层已关闭");
+  }
+  /* Mask 点击关闭：同时提供 Esc 与「取消」按钮 —— 键盘等价路径必须存在 */
+  if (mask) mask.addEventListener("click", layerClose);
+  document.addEventListener("keydown", function(e){
+    if (e.key === "Escape" && openEl) { e.preventDefault(); layerClose(); return; }
+    if (e.key !== "Tab" || !openEl) return;
+    var f = focusables(openEl);
+    if (!f.length) return;
+    var first = f[0], last = f[f.length - 1];
+    if (e.shiftKey && document.activeElement === first) { e.preventDefault(); last.focus(); }
+    else if (!e.shiftKey && document.activeElement === last) { e.preventDefault(); first.focus(); }
+  });
+  /* 下拖关闭（10.4.1：上滑 320ms 入场；反向拖动 >80 关闭） */
+  [sheet, picker].forEach(function(node){
+    if (!node) return;
+    var y0 = null, dy = 0;
+    node.addEventListener("pointerdown", function(e){
+      if (e.target.closest("button")) return;
+      y0 = e.clientY; dy = 0; node.style.transition = "none";
+    });
+    node.addEventListener("pointermove", function(e){
+      if (y0 === null) return;
+      dy = Math.max(0, e.clientY - y0);
+      node.style.transform = "translateY(" + dy + "px)";
+    });
+    function end(){
+      if (y0 === null) return;
+      var close = dy > 80;
+      y0 = null;
+      node.style.transition = ""; node.style.transform = "";
+      if (close) layerClose();
+    }
+    node.addEventListener("pointerup", end);
+    node.addEventListener("pointercancel", end);
+  });
+
+  /* ActionSheet 内容（10.4.1：标题 caption + 操作行 56 + 取消行；破坏性红字 600） */
+  var SHEETS = {
+    cta:     { title:"新建巡检任务", items:[{ icon:"check", label:"确认创建并通知家长", act:"已创建巡检任务" }, { icon:"edit", label:"先存为草稿", act:"已存草稿" }] },
+    doctor:  { title:"责任医生", items:[{ icon:"user", label:"张医生 · 儿保科", act:"已选张医生" }, { icon:"user", label:"刘医生 · 儿童保健", act:"已选刘医生" }] },
+    plan:    { title:"随访计划", items:[{ icon:"bell", label:"提醒我明日复核", act:"已设置提醒" }, { icon:"edit", label:"调整计划日期", act:"进入日期调整" }] },
+    close:   { title:"结束本次随访批次？", danger:true, items:[{ icon:"check", label:"结束批次（未完成项退回队列）", act:"批次已结束" }] },
+    note:    { title:"产检备注", items:[{ icon:"edit", label:"添加文字备注", act:"已打开备注输入" }, { icon:"bell", label:"语音备忘转文字", act:"已开始录音" }] },
+    export:  { title:"导出健康档案", items:[{ icon:"check", label:"生成 PDF（含生长曲线）", act:"档案已导出" }, { icon:"edit", label:"仅导出本次记录", act:"已导出本次记录" }] },
+    erase:   { title:"注销并清除「王小雨」的本机数据？", danger:true, items:[{ icon:"trash", label:"我已确认，清除数据", act:"数据已清除", status:"error" }] },
+    deliver: { title:"移除这张照片？", danger:true, items:[{ icon:"trash", label:"移除照片", act:"照片已移除", status:"error" }] }
+  };
+  var ICONS = {
+    check:'<path d="M5 13l5 5L20 7"/>',
+    edit:'<path d="M4 20h4L20 8l-4-4L4 16z"/>',
+    user:'<circle cx="12" cy="8.2" r="3.7"/><path d="M5 20.4c1.3-3.6 4.1-5.3 7-5.3s5.7 1.7 7 5.3"/>',
+    bell:'<path d="M18 8.2a6 6 0 0 0-12 0c0 6.8-2.8 8.8-2.8 8.8h17.6S18 15 18 8.2"/>',
+    trash:'<path d="M5 7h14M9.5 7V5.4h5V7M6.6 7l.8 12.2a1.6 1.6 0 0 0 1.6 1.5h6a1.6 1.6 0 0 0 1.6-1.5L17.4 7"/>'
+  };
+  function openSheet(key){
+    var cfg = SHEETS[key];
+    if (!cfg || !sheet) return;
+    sheetTitle.textContent = cfg.title;
+    sheetBody.innerHTML = cfg.items.map(function(it){
+      return '<button class="pm-sheetitem' + (cfg.danger ? " danger" : "") + '" type="button" data-act="' + it.label + '"'
+        + (it.act ? ' data-done="' + it.act + '"' : "") + (it.status ? ' data-status="' + it.status + '"' : "") + '>'
+        + '<svg class="i" viewBox="0 0 24 24">' + (ICONS[it.icon] || ICONS.check) + "</svg>" + it.label + "</button>";
+    }).join("");
+    layerOpen(sheet);
+  }
+  if (sheetBody) sheetBody.addEventListener("click", function(e){
+    var b = e.target.closest(".pm-sheetitem");
+    if (!b) return;
+    var done = b.getAttribute("data-done"), status = b.getAttribute("data-status") || "success";
+    var target = pendingDel;
+    pendingDel = null;
+    if (target && status === "error") {
+      var host = target.parentNode;
+      target.style.transition = "opacity .2s ease,transform .2s ease";
+      target.style.opacity = "0"; target.style.transform = "scale(.96)";
+      setTimeout(function(){ if (host) host.removeChild(target); }, 200);
+    }
+    layerClose();
+    if (done) { toast(done, status); announce(done); }
+  });
+  qaIn(ROOT, "[data-sheet]").forEach(function(b){ b.addEventListener("click", function(){ openSheet(b.getAttribute("data-sheet")); }); });
+  var sheetCancel = document.getElementById("pmSheetCancel");
+  if (sheetCancel) sheetCancel.addEventListener("click", layerClose);
+  var cta = document.getElementById("pmCta");
+  if (cta) cta.addEventListener("click", function(){ openSheet("cta"); });
+  var mbLong = document.getElementById("mbLong");
+  if (mbLong) mbLong.addEventListener("click", function(){ openSheet("cta"); });
+
+  /* ── ⑧ SwipeAction（11.2.5）：左滑 300ms 贴靠；键盘 Tab 到操作钮自动展开 ─ */
+  function actsWidth(row){
+    var a = qIn(row, ".pm-swipeacts");
+    return a ? a.getBoundingClientRect().width : 0;
+  }
+  function setOpen(row, x, animate){
+    var body = qIn(row, ":scope > .pm-swipebody");
+    if (!body) return;
+    body.style.transition = animate ? "" : "none";
+    body.style.transform = x ? "translateX(" + x + "px)" : "";
+    row.setAttribute("data-open", x < -4 ? "1" : "0");
+  }
+  function wireSwipe(row){
+    if (!qIn(row, ":scope > .pm-swipebody")) return;
+    var x0 = null, y0 = null, axis = null, base = 0, cur = 0;
+    row.addEventListener("pointerdown", function(e){
+      if (e.target.closest(".pm-sa")) return;
+      x0 = e.clientX; y0 = e.clientY; axis = null;
+      base = row.getAttribute("data-open") === "1" ? -actsWidth(row) : 0;
+      cur = base;
+    });
+    row.addEventListener("pointermove", function(e){
+      if (x0 === null) return;
+      var dx = e.clientX - x0, dy = e.clientY - y0;
+      if (!axis) {
+        if (Math.abs(dx) < 8 && Math.abs(dy) < 8) return;
+        axis = Math.abs(dx) > Math.abs(dy) ? "x" : "y";
+        if (axis === "y") { x0 = null; return; }        /* 纵向手势让给页面滚动 */
+        row.classList.add("is-drag");
+        try { row.setPointerCapture(e.pointerId); } catch (err) {}
+      }
+      cur = Math.max(-actsWidth(row), Math.min(0, base + dx));
+      setOpen(row, cur, false);
+    });
+    function settle(e){
+      if (x0 === null && axis !== "x") return;
+      if (axis === "x") {
+        var w = actsWidth(row);
+        setOpen(row, Math.abs(cur) > w * 0.4 ? -w : 0, true);
+        try { if (e && e.pointerId != null) row.releasePointerCapture(e.pointerId); } catch (err) {}
+      }
+      row.classList.remove("is-drag");
+      x0 = null; axis = null;
+    }
+    row.addEventListener("pointerup", settle);
+    row.addEventListener("pointercancel", settle);
+    /* 键盘等价路径：操作钮（或主体）获得焦点即展开/收起该行 */
+    row.addEventListener("focusin", function(e){ if (e.target.closest(".pm-sa")) setOpen(row, -actsWidth(row), true); });
+    row.addEventListener("focusout", function(e){ if (!row.contains(e.relatedTarget)) setOpen(row, 0, true); });
+  }
+  qaIn(ROOT, ".pm-swipe").forEach(wireSwipe);
+
+  function findRow(key){ var r = null; qaIn(ROOT, ".pm-swipe").forEach(function(x){ if (x.getAttribute("data-row") === key) r = x; }); return r; }
+  document.addEventListener("click", function(e){
+    var body = e.target.closest(".pm-swipebody");
+    if (body) {
+      var row = body.closest(".pm-swipe");
+      if (row && row.getAttribute("data-open") === "1") { setOpen(row, 0, true); return; }
+      var d = body.getAttribute("data-detail");
+      if (d) { toast("打开详情：" + d); announce("已打开 " + d + " 详情"); }
+      return;
+    }
+    var b = e.target.closest(".pm-sa");
+    if (b) {
+      var act = b.getAttribute("data-act"), row2 = findRow(b.getAttribute("data-row"));
+      if (act === "删除" && row2) { pendingDel = row2; openSheet("deliver"); return; }
+      if (row2) setOpen(row2, 0, true);
+      toast("已" + act);
+      announce("已" + act);
+      return;
+    }
+    /* 点空白收起所有已展开的行 */
+    qaIn(ROOT, '.pm-swipe[data-open="1"]').forEach(function(row3){ if (!row3.contains(e.target)) setOpen(row3, 0, true); });
+  });
+
+  /* ── ⑨ 手势区：下拉刷新 + 加载更多（10.4.1 / 11.2.16 组合顺序）─────── */
+  var gest = document.getElementById("pmGest"), pullBody = document.getElementById("pmPullBody"), ptrText = document.getElementById("pmPtrText"), more = document.getElementById("pmMore"),
+      gestList = document.getElementById("pmGestList"), labCount = document.getElementById("pmLabCount");
+  var THRESHOLD = 64, MAXPULL = 96;
+  if (gest && pullBody) {
+    var gy0 = null, gdy = 0, refreshing = false;
+    gest.addEventListener("pointerdown", function(e){
+      if (refreshing) return;
+      /* 只排除行内操作钮（.pm-sa）。列表行主体也是 <button>，若一律按
+         "落在按钮上就不下拉"，真机上最常见的姿势（从行上开始下拉）会完全没反应——
+         这是本模块实测踩到的：鼠标从行上拖拽，位移恒为 0。 */
+      if (e.target.closest(".pm-sa")) return;
+      if (gest.scrollTop > 0) return;
+      gy0 = e.clientY; gdy = 0;
+      pullBody.style.transition = "none";
+    });
+    gest.addEventListener("pointermove", function(e){
+      if (gy0 === null) return;
+      var dy = e.clientY - gy0;
+      if (dy <= 0) { gdy = 0; pullBody.style.transform = ""; return; }
+      gdy = Math.min(MAXPULL, dy * 0.5);                 /* 阻尼 0.5，上限 96 */
+      pullBody.style.transform = "translateY(" + gdy + "px)";
+      if (ptrText) ptrText.textContent = gdy >= THRESHOLD * 0.5 ? "松手刷新" : "下拉刷新";
+    });
+    function endPull(){
+      if (gy0 === null) return;
+      var fire = gdy >= THRESHOLD * 0.5;
+      gy0 = null; gdy = 0;
+      pullBody.style.transition = "";
+      pullBody.style.transform = fire ? "translateY(56px)" : "";
+      if (!fire) { if (ptrText) ptrText.textContent = "下拉刷新"; return; }
+      refreshing = true;
+      gest.classList.add("pm-refreshing");
+      if (ptrText) ptrText.textContent = "正在刷新…";
+      announce("正在刷新队列");
+      setTimeout(function(){
+        var n = gestList ? gestList.children.length : 0;
+        if (gestList) {
+          var row = document.createElement("div");
+          row.className = "pm-swipe";
+          row.setAttribute("data-row", "new" + n);
+          row.innerHTML = '<button class="pm-swipebody gcard rowitem" type="button" data-detail="新分配 · 高危随访">'
+            + '<span class="ic" style="color:var(--sem-special)"><svg class="i" viewBox="0 0 24 24"><path d="M12 3.4l2.1 5.2 5.2 2.1-5.2 2.1-2.1 5.2-2.1-5.2-5.2-2.1 5.2-2.1z"/></svg></span>'
+            + '<span class="md"><b>新分配 · 高危随访</b><span>刚刚 · 系统自动指派</span></span>'
+            + '<span class="rv bad">随访</span></button>'
+            + '<div class="pm-swipeacts"><button class="pm-sa ok" type="button" data-act="随访" data-row="new' + n + '">随访</button>'
+            + '<button class="pm-sa del" type="button" data-act="删除" data-row="new' + n + '">删除</button></div>';
+          gestList.insertBefore(row, gestList.firstChild);
+          wireSwipe(row);
+          if (labCount) labCount.textContent = gestList.children.length + " 条";
+        }
+        pullBody.style.transform = "";
+        gest.classList.remove("pm-refreshing");
+        if (ptrText) ptrText.textContent = "下拉刷新";
+        refreshing = false;
+        toast("已刷新 · 新增 1 条待随访");
+        announce("刷新完成，新增 1 条待随访");
+      }, 1200);
+    }
+    gest.addEventListener("pointerup", endPull);
+    gest.addEventListener("pointercancel", endPull);
+    if (more) {
+      var moreTxt = qIn(more, "span"), batches = 0, MAX_BATCH = 1;
+      gest.addEventListener("scroll", function(){
+        if (!gestList) return;
+        if (gest.scrollTop + gest.clientHeight < gest.scrollHeight - 60) return;
+        if (more.getAttribute("data-done") === "1" || more.getAttribute("data-loading") === "1") return;
+        more.setAttribute("data-loading", "1");
+        more.classList.add("is-loading");
+        if (moreTxt) moreTxt.textContent = "加载中…";
+        announce("正在加载更多");
+        setTimeout(function(){
+          var add = batches < MAX_BATCH ? 3 : 0;   /* 批次上限固定为 1 页：到底提示必须可预期 */
+          var n = gestList.children.length;
+          for (var i = 0; i < add; i++) {
+            var r2 = document.createElement("div");
+            r2.className = "pm-swipe";
+            r2.setAttribute("data-row", "q" + (n + i));
+            r2.innerHTML = '<button class="pm-swipebody gcard rowitem" type="button" data-detail="排队中 · ' + (n + i + 1) + ' 号">'
+              + '<span class="ic"><svg class="i" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 7v5.2l3.4 2"/></svg></span>'
+              + '<span class="md"><b>排队中 · ' + (n + i + 1) + ' 号</b><span>预计今日完成</span></span>'
+              + '<span class="rv">等待</span></button>'
+              + '<div class="pm-swipeacts"><button class="pm-sa ok" type="button" data-act="随访" data-row="q' + (n + i) + '">随访</button>'
+              + '<button class="pm-sa del" type="button" data-act="删除" data-row="q' + (n + i) + '">删除</button></div>';
+            gestList.appendChild(r2);
+            wireSwipe(r2);
+          }
+          batches++;
+          more.removeAttribute("data-loading");
+          more.classList.remove("is-loading");
+          if (batches >= MAX_BATCH) {
+            more.setAttribute("data-done", "1");
+            if (moreTxt) moreTxt.textContent = "没有更多了";
+          }
+          if (labCount) labCount.textContent = gestList.children.length + " 条";
+          toast(add ? "已加载更多" : "已到底");
+          announce(add ? ("已加载更多，当前 " + gestList.children.length + " 条") : "已到底，没有更多了");
+        }, 900);
+      }, { passive:true });
+    }
+  }
+
+  /* ── ⑩ 列表状态：骨架 / 空 / 错 / 有数据（8.2.15 · 11.6.9）───────── */
+  var stateSeg = document.getElementById("pmStateSeg"), states = qaIn(ROOT, ".pm-states .pm-state");
+  var STATE_LABEL = { loading:"加载中（骨架）", empty:"空态", error:"错误", data:"有数据" };
+  function pickState(key){
+    states.forEach(function(s){ s.classList.toggle("is-on", s.getAttribute("data-state") === key); });
+    announce("列表状态：" + (STATE_LABEL[key] || key));
+  }
+  if (stateSeg) {
+    var sbtns = qaIn(stateSeg, ".s2");
+    sbtns.forEach(function(b, i){
+      b.addEventListener("click", function(){
+        sbtns.forEach(function(x){
+          var on = x === b;
+          x.classList.toggle("on", on);
+          x.setAttribute("aria-checked", on ? "true" : "false");
+          x.tabIndex = on ? 0 : -1;
+        });
+        pickState(b.getAttribute("data-state"));
+      });
+      b.addEventListener("keydown", function(e){
+        var n = -1;
+        if (e.key === "ArrowRight") n = (i + 1) % sbtns.length;
+        else if (e.key === "ArrowLeft") n = (i - 1 + sbtns.length) % sbtns.length;
+        if (n < 0) return;
+        e.preventDefault(); sbtns[n].focus(); sbtns[n].click();
+      });
+    });
+  }
+  var retry = document.getElementById("pmRetry");
+  if (retry) retry.addEventListener("click", function(){
+    pickState("loading");
+    if (stateSeg) {
+      qaIn(stateSeg, ".s2").forEach(function(x){
+        var on = x.getAttribute("data-state") === "loading";
+        x.classList.toggle("on", on);
+        x.setAttribute("aria-checked", on ? "true" : "false");
+        x.tabIndex = on ? 0 : -1;
+      });
+    }
+    announce("正在重新加载队列");
+    setTimeout(function(){ pickState("data"); toast("已重新加载队列"); }, 1100);
+  });
+  qaIn(ROOT, "[data-route]").forEach(function(b){ b.addEventListener("click", function(){ showView(b.getAttribute("data-route")); }); });
+
+  /* ── ⑪ Stepper（11.2.11）：边界禁用 + 键盘 ↑/↓ ────────────────────── */
+  var stepper = document.getElementById("pmStepper"), stepVal = document.getElementById("pmStepVal");
+  if (stepper && stepVal) {
+    var MIN = 1, MAX = 9;
+    function setStep(v){
+      var n = Math.max(MIN, Math.min(MAX, v));
+      stepVal.textContent = String(n);
+      qaIn(stepper, "button").forEach(function(b){
+        var d = parseInt(b.getAttribute("data-step"), 10);
+        b.disabled = (d < 0 && n <= MIN) || (d > 0 && n >= MAX);
+      });
+    }
+    qaIn(stepper, "button").forEach(function(b){
+      b.addEventListener("click", function(){ setStep(parseInt(stepVal.textContent, 10) + parseInt(b.getAttribute("data-step"), 10)); });
+    });
+    stepper.addEventListener("keydown", function(e){
+      if (e.key === "ArrowUp") { e.preventDefault(); setStep(parseInt(stepVal.textContent, 10) + 1); }
+      if (e.key === "ArrowDown") { e.preventDefault(); setStep(parseInt(stepVal.textContent, 10) - 1); }
+    });
+    setStep(2);
+  }
+
+  /* ── ⑫ OTP（11.2.14）：自动跳格 + 整串粘贴 + 状态播报 ──────────────── */
+  var otpWrap = document.getElementById("pmOtp");
+  if (otpWrap) {
+    var boxes = qaIn(otpWrap, "input");
+    function otpState(){
+      var v = boxes.map(function(b){ return b.value; }).join("");
+      var el = document.getElementById("pmOtpState");
+      if (el) el.textContent = v.length === 6 ? "验证码已填满，可提交" : "尚未填写验证码（已填 " + v.length + " / 6 位）";
+      if (v.length === 6) announce("验证码已填满，可提交");
+    }
+    boxes.forEach(function(b, i){
+      b.addEventListener("input", function(){
+        b.value = b.value.replace(/\D/g, "").slice(0, 1);
+        if (b.value && i < boxes.length - 1) boxes[i + 1].focus();
+        otpState();
+      });
+      b.addEventListener("keydown", function(e){
+        if (e.key === "Backspace" && !b.value && i > 0) { e.preventDefault(); boxes[i - 1].focus(); boxes[i - 1].value = ""; otpState(); }
+        else if (e.key === "ArrowLeft" && i > 0) { e.preventDefault(); boxes[i - 1].focus(); }
+        else if (e.key === "ArrowRight" && i < boxes.length - 1) { e.preventDefault(); boxes[i + 1].focus(); }
+      });
+      b.addEventListener("paste", function(e){
+        var cd = e.clipboardData || window.clipboardData;
+        if (!cd) return;
+        var t = (cd.getData("text") || "").replace(/\D/g, "").slice(0, 6);
+        if (!t) return;
+        e.preventDefault();
+        boxes.forEach(function(x, k){ x.value = t[k] || ""; });
+        boxes[Math.min(t.length, boxes.length - 1)].focus();
+        otpState();
+      });
+    });
+  }
+
+  /* ── ⑬ 滚轮选择器（10.6.3）：原生 scroll-snap（惯性由浏览器给）+ 键盘 ─ */
+  function buildWheel(node, max, unit){
+    if (!node) return null;
+    var html = "";
+    for (var i = 0; i <= max; i++) html += '<button class="pm-wo" type="button" role="option" aria-selected="false" data-v="' + i + '">' + i + " " + unit + "</button>";
+    node.innerHTML = html;
+    var sel = 0, t = null;
+    function mark(v){
+      sel = v;
+      Array.prototype.forEach.call(node.children, function(c){
+        var on = c.getAttribute("data-v") === String(v);
+        c.setAttribute("aria-selected", on ? "true" : "false");
+        c.tabIndex = on ? 0 : -1;
+      });
+    }
+    function go(v, focus){
+      v = Math.max(0, Math.min(max, v));
+      node.scrollTop = v * 44;
+      mark(v);
+      if (focus) {
+        var target = qIn(node, '[data-v="' + v + '"]');
+        if (target) target.focus({ preventScroll:true });
+      }
+    }
+    node.addEventListener("click", function(e){
+      var b = e.target.closest(".pm-wo");
+      if (b) go(parseInt(b.getAttribute("data-v"), 10));
+    });
+    node.addEventListener("keydown", function(e){
+      var d = e.key === "ArrowDown" ? 1 : e.key === "ArrowUp" ? -1 : 0;
+      if (!d) return;
+      e.preventDefault(); go(sel + d, true);
+    });
+    node.addEventListener("scroll", function(){
+      if (t) clearTimeout(t);
+      t = setTimeout(function(){ mark(Math.round(node.scrollTop / 44)); }, 90);
+    }, { passive:true });
+    mark(0);
+    return { get:function(){ return sel; }, set:function(v){ go(v); } };
+  }
+  var W = buildWheel(document.getElementById("pmWheelW"), 40, "周"), D = buildWheel(document.getElementById("pmWheelD"), 6, "天");
+  var pickerCur = { w:20, d:3 };
+  var pickerOpenBtn = document.getElementById("pmPickerOpen"), pickerVal = document.getElementById("pmPickerValue");
+  if (pickerOpenBtn) pickerOpenBtn.addEventListener("click", function(){
+    if (W) W.set(pickerCur.w);
+    if (D) D.set(pickerCur.d);
+    layerOpen(picker, W ? qIn(picker, ".pm-wheel") : null);
+  });
+  var pickerOk = document.getElementById("pmPickerOk"), pickerCancel = document.getElementById("pmPickerCancel");
+  if (pickerOk) pickerOk.addEventListener("click", function(){
+    pickerCur = { w: W ? W.get() : 20, d: D ? D.get() : 3 };
+    if (pickerVal) pickerVal.textContent = pickerCur.w + " 周 " + pickerCur.d + " 天";
+    if (titleEl) titleEl.textContent = "总览 · 孕 " + pickerCur.w + " 周 + " + pickerCur.d;
+    layerClose();
+    toast("已更新孕周：" + pickerCur.w + " 周 " + pickerCur.d + " 天");
+    announce("已更新孕周 " + pickerCur.w + " 周 " + pickerCur.d + " 天");
+  });
+  if (pickerCancel) pickerCancel.addEventListener("click", layerClose);
+
+  /* ── ⑭ ImageViewer（11.2.9）：滑动/方向键切换 + 计数 ───────────────── */
+  var PHOTOS = [
+    { label:"满月体检记录", bg:"linear-gradient(150deg,#EDE7FE,#D9CBFE)", solid:"#EDE7FE" },
+    { label:"第 3 次产检记录", bg:"linear-gradient(150deg,#E0F8F6,#A5F1EE)", solid:"#E0F8F6" }
+  ];
+  var photosLive = PHOTOS.slice(), vIdx = 0;
+  function renderViewer(){
+    var p = photosLive[vIdx];
+    if (!p) return;
+    var st = document.getElementById("pmVStage");
+    if (st) { st.textContent = p.label; st.style.backgroundImage = p.bg; st.style.backgroundColor = p.solid || "#EDE7FE"; }
+    var c = document.getElementById("pmVCount");
+    if (c) c.textContent = (vIdx + 1) + " / " + photosLive.length;
+  }
+  function openViewer(i){
+    vIdx = Math.max(0, Math.min(photosLive.length - 1, i));
+    renderViewer();
+    layerOpen(viewer, document.getElementById("pmVClose"));
+  }
+  qaIn(ROOT, "[data-photo]").forEach(function(t){
+    t.addEventListener("click", function(){ openViewer(parseInt(t.getAttribute("data-photo"), 10) || 0); });
+  });
+  function vGo(d){
+    if (!photosLive.length) return;
+    vIdx = (vIdx + d + photosLive.length) % photosLive.length;
+    renderViewer();
+    announce(photosLive[vIdx].label);
+  }
+  var vPrev = document.getElementById("pmVPrev"), vNext = document.getElementById("pmVNext"), vClose = document.getElementById("pmVClose");
+  if (vPrev) vPrev.addEventListener("click", function(){ vGo(-1); });
+  if (vNext) vNext.addEventListener("click", function(){ vGo(1); });
+  if (vClose) vClose.addEventListener("click", layerClose);
+  if (viewer) {
+    viewer.addEventListener("keydown", function(e){
+      if (e.key === "ArrowLeft") { e.preventDefault(); vGo(-1); }
+      else if (e.key === "ArrowRight") { e.preventDefault(); vGo(1); }
+    });
+    var vx0 = null;
+    viewer.addEventListener("pointerdown", function(e){ if (!e.target.closest("button")) vx0 = e.clientX; });
+    viewer.addEventListener("pointerup", function(e){
+      if (vx0 === null) return;
+      var dx = e.clientX - vx0; vx0 = null;
+      if (Math.abs(dx) > 48) vGo(dx < 0 ? 1 : -1);
+    });
+    viewer.addEventListener("pointercancel", function(){ vx0 = null; });
+  }
+
+  /* ── ⑮ 上传（11.2.13）：移除走二次确认 / 新增自动接线 ──────────────── */
+  function wireTile(tile, idx){
+    var nb = qIn(tile, "[data-photo]");
+    if (nb) nb.addEventListener("click", function(){ openViewer(idx); });
+    var nd = qIn(tile, "[data-del]");
+    if (nd) nd.addEventListener("click", function(){ pendingDel = tile; openSheet("deliver"); });
+  }
+  qaIn(ROOT, ".pm-tile").forEach(function(tile){
+    var nb = qIn(tile, "[data-photo]");
+    wireTile(tile, nb ? parseInt(nb.getAttribute("data-photo"), 10) : 0);
+  });
+  var addPhoto = document.getElementById("pmAddPhoto");
+  if (addPhoto) addPhoto.addEventListener("click", function(){
+    var idx = photosLive.length;
+    photosLive.push({ label:"新增照片 " + (idx + 1), bg:"linear-gradient(150deg,#FFF0F4,#FFDEE8)", solid:"#FFF0F4" });
+    var tile = document.createElement("div");
+    tile.className = "pm-tile";
+    tile.innerHTML = '<button class="up" type="button" data-photo="' + idx + '" style="background:' + photosLive[idx].bg + '" aria-label="查看照片：' + photosLive[idx].label + '">'
+      + '<svg class="i" style="color:#E85D8F" viewBox="0 0 24 24"><path d="M17.5 19H9a7 7 0 1 1 6.7-9.4A5.5 5.5 0 0 1 17.5 19Z"/></svg></button>'
+      + '<button class="del" type="button" data-del="' + photosLive[idx].label + '" aria-label="移除照片：' + photosLive[idx].label + '">×</button>';
+    if (addPhoto.parentNode) addPhoto.parentNode.insertBefore(tile, addPhoto);
+    wireTile(tile, idx);
+    toast("已从相册添加 1 张（示例）");
+  });
+
+  /* ── ⑯ Rate（11.2.12）：radiogroup + 方向键 ────────────────────────── */
+  var rate = document.getElementById("mrate");
+  if (rate) {
+    var stars = qaIn(rate, "button");
+    var LABELS = { 1:"很不满意", 2:"不太满意", 3:"一般", 4:"满意", 5:"非常满意" };
+    function setRate(n, fire){
+      stars.forEach(function(s, i){
+        s.classList.toggle("on", i < n);
+        var isSel = parseInt(s.getAttribute("data-v"), 10) === n;
+        s.setAttribute("aria-checked", isSel ? "true" : "false");
+        s.tabIndex = isSel ? 0 : -1;
+      });
+      var t = document.getElementById("pmRateText");
+      if (t) t.textContent = n + " 分 · " + LABELS[n] + "（←/→ 可调）";
+      if (fire) { toast("已评分 " + n + " 分"); announce("已评分 " + n + " 分，" + LABELS[n]); }
+    }
+    stars.forEach(function(s, i){
+      s.addEventListener("click", function(){ setRate(i + 1, true); });
+      s.addEventListener("keydown", function(e){
+        var d = (e.key === "ArrowRight" || e.key === "ArrowUp") ? 1 : (e.key === "ArrowLeft" || e.key === "ArrowDown") ? -1 : 0;
+        if (!d) return;
+        e.preventDefault();
+        var n = Math.max(1, Math.min(5, i + 1 + d));
+        setRate(n, true);
+        stars[n - 1].focus();
+      });
+    });
+  }
+
+  /* ── ⑰ Selector 选择卡（11.6.4）：单选 radiogroup + 跳过禁用项 ─────── */
+  var sel = document.getElementById("pmSelects");
+  if (sel) {
+    var opts = qaIn(sel, ".pm-select");
+    function selPick(i){
+      opts.forEach(function(o, k){
+        var on = k === i;
+        o.setAttribute("aria-checked", on ? "true" : "false");
+        o.tabIndex = on ? 0 : -1;
+      });
+      var b = qIn(opts[i], "b");
+      var label = b ? b.textContent : "";
+      toast("随访分类：" + label);
+      announce("已选择 " + label);
+    }
+    opts.forEach(function(o, i){
+      o.tabIndex = o.getAttribute("aria-checked") === "true" ? 0 : -1;
+      o.addEventListener("click", function(){ if (!o.disabled) selPick(i); });
+      o.addEventListener("keydown", function(e){
+        var d = (e.key === "ArrowRight" || e.key === "ArrowDown") ? 1 : (e.key === "ArrowLeft" || e.key === "ArrowUp") ? -1 : 0;
+        if (!d) return;
+        e.preventDefault();
+        for (var k = 1; k <= opts.length; k++) {
+          var n = (i + d * k + opts.length * 2) % opts.length;
+          if (!opts[n].disabled) { selPick(n); opts[n].focus(); return; }
+        }
+      });
+    });
+  }
+
+  /* ── ⑱ Dialog 移动版（11.2.15）：复用同一实例 ─────────────────────── */
+  var dlgOpen = document.getElementById("pmDialogOpen");
+  if (dlgOpen) dlgOpen.addEventListener("click", function(){
+    var v = qaIn(otpWrap, "input").map(function(b){ return b.value; }).join("");
+    openSheet(v.length === 6 ? "cta" : "note");
+  });
+
+  /* ── ⑲ 我的：暗色档 / 安全区 / 触控热区 / 降低动效（02 · 2.1.9）────── */
+  /* 暗色档只作用于本模块：build-site 把 document.documentElement 改写为模块根工厂，
+     故这里写 documentElement 是**有意**的 —— 独立页作用于整页，合并后作用于本模块，
+     不会把整站变暗（与交互范式模块同一套机制，页面质检的暗色档探针也照此挂载）。 */
+  var darkSw = document.getElementById("pmDarkSwitch");
+  function setDark(on){
+    if (on) document.documentElement.setAttribute("data-theme", "dark");
+    else document.documentElement.removeAttribute("data-theme");
+    if (darkSw) darkSw.setAttribute("aria-checked", on ? "true" : "false");
+    toast(on ? "已切到暗色档（夜间暖石板）" : "已切回浅色档");
+    announce(on ? "暗色档已开启" : "暗色档已关闭");
+  }
+  if (darkSw) darkSw.addEventListener("click", function(){ setDark(darkSw.getAttribute("aria-checked") !== "true"); });
+
+  var safe = document.getElementById("pmSafe"), safeT = document.getElementById("pmSafeToggle"), safeState = document.getElementById("pmSafeState");
+  if (safeT) safeT.addEventListener("click", function(){
+    var on = !(safe && safe.classList.contains("is-on"));
+    if (safe) safe.classList.toggle("is-on", on);
+    if (safeState) safeState.textContent = on ? "开启" : "关闭";
+    var lab = document.getElementById("pmSafeLabel");
+    if (lab) {
+      var cs = safe ? getComputedStyle(safe) : null;
+      var t = cs ? parseFloat(getComputedStyle(safe).paddingTop) || 0 : 0;
+      lab.textContent = "safe-area-inset · top " + Math.round(t) + "px（桌面浏览器多为 0，真机非 0）";
+    }
+    toast(on ? "已显示安全区（真机上才非 0）" : "已隐藏安全区");
+  });
+  var hotT = document.getElementById("pmHotToggle"), hotState = document.getElementById("pmHotState");
+  if (hotT) hotT.addEventListener("click", function(){
+    var on = !(stage && stage.classList.contains("pm-hot"));
+    if (stage) stage.classList.toggle("pm-hot", on);
+    if (hotState) hotState.textContent = on ? "开启" : "关闭";
+    toast(on ? "已圈出补过热区的控件（紫框）" : "已关闭热区标注");
+  });
+  var motionCell = document.getElementById("pmMotionCell"), motionState = document.getElementById("pmMotionState");
+  function syncMotion(){ if (motionState) motionState.textContent = reduce() ? "系统已开启" : "系统未开启"; }
+  syncMotion();
+  if (RM) {
+    if (RM.addEventListener) RM.addEventListener("change", syncMotion);
+    else if (RM.addListener) RM.addListener(syncMotion);
+  }
+  if (motionCell) motionCell.addEventListener("click", function(){
+    toast(reduce() ? "系统已开启降低动效" : "系统未开启（可在系统设置里切换）");
+  });
+
+  /* ── ⑳ 按钮忙碌态（10.6.1：只换图标位、文字保留）──────────────────── */
+  var mb = document.getElementById("mbLoad");
+  if (mb) {
+    var mbTxt = mb.innerHTML;
+    mb.addEventListener("click", function(){
+      if (mb.getAttribute("data-run")) return;
+      mb.setAttribute("data-run", "1");
+      mb.innerHTML = '<svg class="ldc" viewBox="0 0 24 24"><circle cx="12" cy="12" r="8.5" fill="none" stroke="rgba(255,255,255,.4)" stroke-width="2.4"/><path d="M20.5 12A8.5 8.5 0 0 0 12 3.5" fill="none" stroke="#FFC4D6" stroke-width="2.4" stroke-linecap="round"/></svg>保存中…';
+      mb.classList.add("loading");
+      mb.disabled = true;
+      announce("保存中");
+      setTimeout(function(){
+        mb.innerHTML = mbTxt;
+        mb.classList.remove("loading");
+        mb.disabled = false;
+        mb.removeAttribute("data-run");
+        toast("已保存并预约");
+      }, 1400);
+    });
+  }
+
+  /* ── ㉑ 首屏同步 ──────────────────────────────────────────────────── */
+  showView("home");
+  onScroll();
 })();

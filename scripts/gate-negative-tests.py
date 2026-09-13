@@ -37,10 +37,12 @@ def run_audit(only: str) -> tuple[int, str]:
 # (用例名, 目标门禁(--only 用), 目标文件, 查找串, 替换串, FAIL 里必须出现的关键词)
 CASES = [
     # ── feedback-spec ────────────────────────────────────────────────────
-    ("feedback/外壳未避让吸顶导航", "feedback-spec", "scripts/build-site.py",
-     "  --gm-toast-top:76px;\n", "  --gm-toast-top:20px;\n", "外壳未给出 --gm-toast-top"),
-    ("feedback/移动端避让值被改回去", "feedback-spec", "scripts/build-site.py",
-     "  :root{--gm-toast-top:160px}\n", "", "移动端须把 --gm-toast-top 抬到 160px"),
+    ("feedback/外壳 Toast 避让值写死", "feedback-spec", "scripts/build-site.py",
+     "  --gm-toast-top:calc(var(--sh-nav-h,60px) + 16px);",
+     "  --gm-toast-top:76px;", "必须写成 calc(var(--sh-nav-h"),
+    ("feedback/外壳不再实测导航高度", "feedback-spec", "scripts/build-site.py",
+     "  if(window.ResizeObserver){ try{ new ResizeObserver(sync).observe(top); }catch(e){} }\n",
+     "", "未实测吸顶导航高度"),
     ("feedback/驻留时长被改", "feedback-spec", "scripts/build-site.py",
      "var DWELL = 2400, LEAVE = 240;", "var DWELL = 1600, LEAVE = 240;", "驻留应为 2400ms"),
     ("feedback/退场时长被改", "feedback-spec", "scripts/build-site.py",
