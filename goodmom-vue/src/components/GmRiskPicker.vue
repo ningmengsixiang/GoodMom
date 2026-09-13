@@ -39,6 +39,9 @@ const ORDER: GmFive[] = ["m1", "m2", "m3", "m4", "m5"];
 const groupRef = ref<HTMLDivElement | null>(null);
 
 /** 显式 hex → var(--mmh-m5-*, fallback)：业务侧可覆盖区域配色 */
+/* V2.9：chip 文字**不用五色亮值** —— #4CB98A 等作 12.5px 文字只有 1.57–2.19:1，
+   违反站点手册 D6「亮渐变=装饰，文字承载=深档」。颜色由色点 + 描边 + 选中环承载
+   （模板标签内不能写块注释符号，会被 HTML 当成属性名而白屏 —— 已踩过）。 */
 function cssColor(k: GmFive): string {
   return varOf(FIVE_VAR[k], FIVE_COLOR[k]);
 }
@@ -92,7 +95,7 @@ const items = computed(() =>
       type="button"
       role="radio"
       :class="['gm-risk-it', model === it.key && 'on']"
-      :style="{ color: it.color, borderColor: it.color }"
+      :style="{ color: 'var(--lg-text-primary,#343A46)', borderColor: it.color, outlineColor: it.color }"
       :aria-checked="model === it.key"
       :aria-disabled="disabled || undefined"
       :tabindex="tabIndexFor(it.key)"

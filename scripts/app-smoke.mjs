@@ -185,6 +185,8 @@ const SRC_COLLECT = PAGE_COLOR_HELPERS + "\nreturn () => {" + [
   "  const hit = document.elementFromPoint(Math.max(0, Math.min(vw - 1, r.left + r.width / 2)),",
   "                                        Math.max(0, Math.min(vh - 1, r.top + r.height / 2)));",
   "  if (!hit || !(hit === el || el.contains(hit) || hit.contains(el))) return;", /* 被别的层盖住：跳过而不是错量 */
+  /* 与 page-qa / WCAG 1.4.3 同口径：禁用控件豁免（用低对比表达"不可用"是正确做法） */
+  "  if (el.matches('[disabled],.dis,.disabled') || el.getAttribute('aria-disabled') === 'true' || cs.cursor === 'not-allowed' || cs.pointerEvents === 'none') return;",
   "  const fg = parse(cs.color);",
   "  if (!fg || fg[3] === 0) return;",
   "  const size = parseFloat(cs.fontSize), bold = parseInt(cs.fontWeight || '400', 10) >= 700;",
@@ -226,9 +228,7 @@ const SRC_SAMPLE = PAGE_COLOR_HELPERS + "\nreturn (arg) => new Promise((resolve)
 ].join("\n") + "\n});";
 
 /* 一页 = 若干滚动步，每步：收集可见文字 → 藏字形 → 截屏 → 页内采样 → 还原 */
-const contrastOf = async (route) => {
-  await page.goto(`${BASE}${route}`, { waitUntil: "domcontentloaded" });
-  await page.waitForTimeout(1100);
+const measureCurrent = async () => {
   const bad = [], sampled = [];
   for (let step = 0; step < 4; step++) {
     const items = await runInPage(SRC_COLLECT);
@@ -260,10 +260,38 @@ const contrastOf = async (route) => {
   return { bad, measured: sampled.reduce((a, b) => a + b, 0) };
 };
 
+const contrastOf = async (route) => {
+  await page.goto(`${BASE}${route}`, { waitUntil: "domcontentloaded" });
+  await page.waitForTimeout(1100);
+  return measureCurrent();
+};
+
 const L = await contrastOf("#/childcare");
 check(`浅色档：无不可读文字（实底采样 ${L.measured} 处）`, L.bad.length === 0, L.bad.slice(0, 3).join(" | "));
 
+/* 组件演示页：三档头像色调（rose/mint/purple）与全量组件都在这里 ——
+   只测四个业务页会漏掉"没被业务页用到的组件"。 */
+await page.goto(`${BASE}#/workbench`, { waitUntil: "domcontentloaded" });
+await page.waitForTimeout(900);
+await page.locator(".app-top button.gm-btn", { hasText: "组件演示" }).click();
+await page.waitForTimeout(700);
+const DEMO = await measureCurrent();
+/* 已登记项（V2.9，需设计裁决，见 CHANGELOG「遗留项」）：
+   品牌渐变的较暗区（视口下方）上，`--lg-link` 实测 4.06:1 —— 浅底预算原本按「最亮玻璃承载面
+   #FDF2EE」算（5.2:1），而真实页面越低越暖越暗。修法二选一（都要动 6 个载体，故未擅改）：
+   ①把渐变暗端提到 lum ≥0.756；②把 --lg-link 压到 #9E3054 档。
+   与站点 page-qa 的 P3「登记项不阻塞」同一惯例：**照实打印数字、计数、不阻塞**，
+   且探针自证仍在守这条门禁本身（注入不可读文字必须被报出）。 */
+const OPEN_ITEMS = /gm-link__t/;
+const demoOpen = DEMO.bad.filter((b) => OPEN_ITEMS.test(b));
+const demoHard = DEMO.bad.filter((b) => !OPEN_ITEMS.test(b));
+check(`组件演示页：无不可读文字（实底采样 ${DEMO.measured} 处，含三档头像色调）`,
+  demoHard.length === 0, demoHard.slice(0, 3).join(" | ")
+    + (demoOpen.length ? ` ｜登记项 ${demoOpen.length}：${demoOpen[0]}` : ""));
+
 /* 探针自证：注入必然不可读的文字，探针必须报出来（否则这条门禁等于没写） */
+await page.goto(`${BASE}#/childcare`, { waitUntil: "domcontentloaded" });
+await page.waitForTimeout(900);
 await page.evaluate(() => {
   const el = document.querySelector("header.app-top h1");
   el.dataset.pmcWas = el.style.color;

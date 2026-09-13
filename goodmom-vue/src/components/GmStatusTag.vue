@@ -94,7 +94,7 @@ const resolved = computed(
  * （旧实现 `tint(hex, .13)` 在 JS 里算 rgba，只能得到静态浅色档。）
  */
 const style = computed(() => ({
-  color: resolved.value,
+  color: props.five && !props.color ? "var(--lg-text-primary,#343A46)" : resolved.value,
   background: semTintFill(resolved.value),
   borderColor: semTintBorder(resolved.value),
 }));

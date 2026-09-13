@@ -45,7 +45,9 @@ const GmRiskPicker = ({ value, onChange, disabled, ariaLabel = "妊娠风险等�
           role="radio"
           key={k}
           className={"gm-risk-it" + (value === k ? " on" : "")}
-          style={{ color: cssColor(k), borderColor: cssColor(k), cursor: disabled ? "not-allowed" : "pointer", opacity: disabled ? 0.5 : 1 }}
+          /* V2.9：文字**不用五色亮值**（#4CB98A 等作 12.5px 文字只有 1.57–2.19:1，违反站点手册 D6
+             「亮渐变=装饰，文字承载=深档」）。颜色由色点 + 描边 + 选中环承载，文字走主文字色。 */
+          style={{ color: "var(--lg-text-primary,#343A46)", borderColor: cssColor(k), outlineColor: cssColor(k), cursor: disabled ? "not-allowed" : "pointer", opacity: disabled ? 0.5 : 1 }}
           aria-checked={value === k}
           /* P1-11：roving tabindex 必须在"无选中"时也有一个可聚焦项，
              否则 Tab 完全进不来（旧实现 value 为 undefined 时全部 -1）。

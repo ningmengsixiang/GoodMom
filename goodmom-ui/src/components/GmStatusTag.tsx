@@ -18,6 +18,11 @@ import { GmFive, GmSemantic, SEMANTIC_LABEL, SEMANTIC_VAR, FIVE_COLOR, FIVE_VAR,
  *  · 取色曾读 `SEMANTIC_COLOR` 里的**静态浅色 hex**，暗色模式下不切换
  *    （变量对、组件错、门禁绿、报告 ✅ 同时成立）。现改为引用 CSS 变量。
  *
+ *   五色分支的文字**不用五色亮值**（V2.9 实测）：#4CB98A/#F2C14E/#F0954A 作 12px 文字只有
+  1.57–2.19:1 —— 与站点手册 D6「亮渐变=装饰，文字承载=深档」和站点五色图例
+  （色点承载颜色 + 普通文字）一致，故文字走主文字色，颜色由色点承载
+  （WCAG 1.4.1 双通道：色点 + 文案「黄 · 一般风险」）。
+ *
  * 需要"实底 + 白字"形态时请显式使用 `SEMANTIC_SOLID`（D5 达标档），
  * 不要再让 Arco 用自定义色自行铺底。
  */
@@ -47,7 +52,7 @@ const GmStatusTag = ({ children, semantic = "neutral", five, color, size = "smal
       : `var(${SEMANTIC_VAR[semantic]})`;
 
   const style: React.CSSProperties = {
-    color: base,
+    color: five && !color ? "var(--lg-text-primary,#343A46)" : base,
     background: semTintFill(base),
     borderColor: semTintBorder(base),
   };

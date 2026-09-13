@@ -194,7 +194,7 @@
 .gm-step .gs-dot{width:32px;height:32px;border-radius:50%;flex:none;display:flex;align-items:center;justify-content:center;
   font-size:12px;font-weight:600;background:var(--lg-glass-control);border:var(--lg-border-1) solid var(--lg-divider-hairline);
   color:var(--lg-text-secondary);z-index:1}
-.gm-step .gs-dot svg{width:13px;height:13px;stroke:#FFF;fill:none;stroke-width:2.6;stroke-linecap:round;stroke-linejoin:round}
+.gm-step .gs-dot svg{width:13px;height:13px;stroke:var(--lg-text-on-accent,#343A46);   /* V2.9：白描边压亮粉渐变 1.79:1，非文本需 3:1 */fill:none;stroke-width:2.6;stroke-linecap:round;stroke-linejoin:round}
 .gm-step.finish::before{background:linear-gradient(90deg,#FFC4D6,#F77FA3)}
 .gm-step.finish .gs-dot{background:var(--mmh-grad-rose);color:#FFF;border-color:transparent}
 .gm-step.process .gs-dot{border:2px solid var(--mmh-rose-600);color:var(--mmh-rose-700);animation:pulse 2.4s ease-in-out infinite}
@@ -347,6 +347,8 @@
 /* ─────────────────────────────────────────────────────────────────────────
    08 · 8.2.5 GmProgress 进度条（自包含，替代原 Arco Progress）
    ───────────────────────────────────────────────────────────────────────── */
+/* V2.9：Arco 默认进度文字色（gray-6）在玻璃卡上只有 2.90:1（实底采样实测），改走 Token */
+.gm-progress .arco-progress-circle-text,.gm-progress .arco-progress-line-text{color:var(--lg-text-primary,#343A46)}
 .gm-progress{display:flex;align-items:center;gap:10px;width:100%}
 /* ── 08 · 8.2.5 进度条（V2.9 完善）─────────────────────────────────────────
    1. 轨道＝规范原文 `rgba(58,52,84,.08)` 圆角胶囊（暗色档翻白），不再是 --lg-divider 的 .10；

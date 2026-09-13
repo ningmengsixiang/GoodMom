@@ -8,9 +8,16 @@ export const DesignTokens = {
   /** D9 主行动档：品牌粉上半段 Rose-300→Rose-500，承载深字（全尺寸 ≥4.89:1） */
   gradActionHc: "linear-gradient(135deg,#FFC4D6 0%,#F77FA3 100%)",
   gradPrimary: "linear-gradient(135deg,#FFA9C2,#F77FA3 45%,#E85D8F)",
-  gradRose: "linear-gradient(150deg,#FFA9C2,#E85D8F)",
-  gradMint: "linear-gradient(150deg,#7FD8C2,#4FB59C)",
-  gradPurple: "linear-gradient(150deg,#B9A0FF,#8066F0)",
+  /* 三档头像（仅 GmAvatar 使用）：**浅底渐变 + 同色系深墨字**，与站点 `.avt` 配方一致。
+     V2.9 实测：旧实现是「深渐变 + 白字」（--lg-text-on-inverse），压在亮粉渐变上只有 2.81:1；
+     深端 #E85D8F 配深墨字 3.48:1、#8066F0 配深墨字 2.76:1 —— 两头都不达标。
+     现渐变收到浅档（各色标亮度 0.65→0.51，深墨字 7.7:1 / 6.1:1），墨色用固定色值：
+     **刻意不用会换档的语义变量** —— 头像底是固定浅色，墨色若跟随暗色档翻浅就会掉到 ~1.5:1。 */
+  gradRose: "linear-gradient(150deg,#FFDEE8,#FFF0F4)",
+  gradMint: "linear-gradient(150deg,#A5F1EE,#E0F8F6)",
+  gradPurple: "linear-gradient(150deg,#D9CBFE,#EDE7FE)",
+  /* 头像墨色（同色系深档，固定值不随档位变） */
+  avatarInkRose: "#B23A63", avatarInkMint: "#25715D", avatarInkPurple: "#6242B8",
   radius: { card: 22, btn: 22, btnLg: 26, btnSm: 18, control: 20, chip: 999 }, // 对齐 02 · 2.4
   /** 边框宽度档 + 焦点环（02 · 2.7.1）；加粗态用 box-shadow/outline，禁改 border-width */
   border: { hairline: 1, half: 0.5, thin: 1, strong: 1.5, heavy: 2, ring: 2, ringOffset: 2 },
