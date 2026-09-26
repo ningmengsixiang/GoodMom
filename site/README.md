@@ -10,7 +10,7 @@
 | 组件与状态 | 组件全量 · 状态谱 · 健康度 · 图表 | `fragments/preview-examples.html` |
 | 移动端 | 移动端组件与交互形态 | `fragments/preview-mobile.html` |
 | 交互范式 | 链接 · 级联 · 响应式容器 · 虚拟列表 · 暗色 | `fragments/preview-patterns.html` |
-| 规范全文 | 19 份规范正文在线阅读（含阅读模式） | `fragments/site-spec.html` |
+| 规范全文 | 21 份规范正文在线阅读（含阅读模式） | `fragments/site-spec.html` |
 | 标准手册 | 38 部分标准手册 | `fragments/site-manual.html` |
 | 文档索引 | 按角色与任务的文档导航 | `fragments/site-docs.html` |
 

@@ -64,7 +64,7 @@ MODULES = [
     ("preview-examples","组件与状态", "comp",   "组件全量 · 状态谱 · 健康度 · 图表"),
     ("preview-mobile",  "移动端",     "mobile", "移动端组件与交互形态"),
     ("preview-patterns","交互范式",   "pattern","链接 · 级联 · 响应式容器 · 虚拟列表 · 暗色"),
-    ("site-spec",       "规范全文",   "spec",   "20 份规范正文在线阅读"),
+    ("site-spec",       "规范全文",   "spec",   "21 份规范正文在线阅读"),
     ("site-manual",     "标准手册",   "manual", "38 部分标准手册"),
     ("site-docs",       "文档索引",   "docs",   "按角色与任务的文档导航"),
 ]
@@ -719,7 +719,7 @@ SHELL = """<!DOCTYPE html>
 <title>妈咪好 GoodMom · 开源设计系统（单一入口）</title>
 <link rel="icon" type="image/png" href="../brand/logo-192.png">
 <meta name="theme-color" content="#F77FA3">
-<meta name="description" content="妈咪好 GoodMom · 妇幼儿童全生命周期开源设计系统：规范 20 份 · 组件 98 项 · 图标 77 枚 · 组件库 2 个（@goodmom/ui · @goodmom/vue）· 本站为唯一入口">
+<meta name="description" content="妈咪好 GoodMom · 妇幼儿童全生命周期开源设计系统：规范 21 份 · 组件 98 项 · 图标 77 枚 · 组件库 2 个（@goodmom/ui · @goodmom/vue）· 本站为唯一入口">
 <style>
 /* ══ 外壳样式（唯一一份，模块样式全部作用域隔离在各自 .gm-mod--x 内）══ */
 /* D9 主行动档：品牌粉上半段 + 深字 #343A46（白字在亮粉上仅 2.9:1，不合格） */

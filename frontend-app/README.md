@@ -2,7 +2,8 @@
 
 > **架构与规范**：见 [`19-工程架构与组件复用规范.md`](../19-工程架构与组件复用规范.md)（七项决定：视觉基调 / 技术选型 /
 > 组件选型 / 目录结构 / 模块边界 / 复用规则 / 样式系统）。
-> **红线速查**：见 [`.claude/skills/goodmom-frontend/SKILL.md`](../.claude/skills/goodmom-frontend/SKILL.md)（R1–R11）。
+> **红线速查**：见 [`.claude/skills/goodmom-frontend/SKILL.md`](../.claude/skills/goodmom-frontend/SKILL.md)（R1–R15）。
+> **落地口径**：见 [`20-前端设计规范.md`](../20-前端设计规范.md)（Token 可用清单、组件选型、状态词登记、验收矩阵）。
 > Monorepo（npm workspaces）：应用在根 `src/`，封装层在 `packages/gm-arco-ui`。
 
 ## 目录结构（19.4）

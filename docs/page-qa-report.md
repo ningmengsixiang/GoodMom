@@ -1,6 +1,6 @@
 # 逐页规范质检报告（Page-level Spec QA）
 
-- 生成时间：`2026-09-19 14:48:24+0800`
+- 生成时间：`2026-09-26 04:08:38+0800`
 - 工具：`node scripts/page-qa.mjs`（Playwright 真实渲染；桌面 1440 / 移动 375 / 暗色档各测一遍）
 - 口径：每条 finding 都带**规范锚点 + 选择器 + 实测值**，可逐条复现与回归
 - 范围：真实页面 18 个（唯一首页逐模块 · 打印手册 · 演示页）；重定向桩 7 个**单独统计**（服务端摘掉跳转脚本后测桩自身，避免测成目标模块而重复计数）
@@ -15,43 +15,44 @@
 
 ## 0b. 档位偏离分布（P3 · 聚合，非逐条）
 
-**偏离 4px 网格**（spacing-grid，锚点 02 · 2.3.1，共 34523 处）
+**偏离 4px 网格**（spacing-grid，锚点 02 · 2.3.1，共 43948 处）
 
 | 实测值 | 命中元素数 | 样例 |
 | --- | --- | --- |
-| 7 | 10102 | `site/index.html · preview-index` `div.demo-topbar>span.demo-topbar__seg>div#preview-index--segNav>span.seg-it.on` |
-| 9 | 10068 | `site/index.html · preview-index` `div.panel.glass-l2>div.demo-nav-grid>div>div` |
-| 1 | 3814 | `site/index.html · preview-index` `div.grid.g2>div.panel.glass-l2>div.field>input` |
-| 5 | 3605 | `site/index.html · preview-index` `div.wrap>header.hero.glass>div.hero-main>span.kicker` |
-| 14 | 2368 | `site/index.html · site-index` `div.wrap>div.hero.glass>div.stat>span` |
-| 6 | 1342 | `site/index.html · site-index` `section#gm-mod-site-index>div.wrap>div.hero.glass>div.stat` |
-| 10 | 893 | `site/index.html · site-index` `section#gm-mod-site-index>div.wrap>div.hero.glass>div.cta` |
-| 21.28 | 618 | `site/index.html · site-spec` `div.wrap>section#site-spec--ch-readme>div.md>h4` |
-| 22 | 421 | `site/index.html · site-index` `section#gm-mod-site-index>div.wrap>div.hero.glass>div.cta` |
+| 7 | 12404 | `site/index.html · preview-index` `div.demo-topbar>span.demo-topbar__seg>div#preview-index--segNav>span.seg-it.on` |
+| 9 | 12370 | `site/index.html · preview-index` `div.panel.glass-l2>div.demo-nav-grid>div>div` |
+| 1 | 5992 | `site/index.html · preview-index` `div.grid.g2>div.panel.glass-l2>div.field>input` |
+| 5 | 5783 | `site/index.html · preview-index` `div.wrap>header.hero.glass>div.hero-main>span.kicker` |
+| 14 | 2600 | `site/index.html · site-index` `div.wrap>div.hero.glass>div.stat>span` |
+| 6 | 1357 | `site/index.html · site-index` `section#gm-mod-site-index>div.wrap>div.hero.glass>div.stat` |
+| 10 | 976 | `site/index.html · site-index` `section#gm-mod-site-index>div.wrap>div.hero.glass>div.cta` |
+| 21.28 | 708 | `site/index.html · site-spec` `div.wrap>section#site-spec--ch-readme>div.md>h4` |
+| 22 | 441 | `site/index.html · site-index` `section#gm-mod-site-index>div.wrap>div.hero.glass>div.cta` |
 | 18 | 343 | `site/index.html · site-index` `main#gm-main>section#gm-mod-site-index>div.wrap>div.journey` |
 | 2 | 253 | `site/index.html · site-index` `div.secpad>div.sem>div.s>span` |
 | 3 | 224 | `site/index.html · preview-index` `div.panel.glass-l2>div.descrow>div.it>b` |
 | 13 | 121 | `site/index.html · site-index` `div.wrap>div.grid>div.card>p` |
-| 26 | 114 | `site/index.html · site-index` `main#gm-main>section#gm-mod-site-index>div.wrap>p.sub` |
+| 26 | 116 | `site/index.html · site-index` `main#gm-main>section#gm-mod-site-index>div.wrap>p.sub` |
 | 11 | 71 | `site/index.html · preview-index` `div.wrap>section#preview-index--allcomp>div.covline>span.cv` |
 | 19.92 | 36 | `site/index.html · preview-index` `div.wrap>section#preview-index--guide>div.sec-head>h2` |
 | 15 | 25 | `site/index.html · site-index` `div.wrap>div.grid>div.card>h3` |
-| 34 | 23 | `site/index.html · preview-mobile` `body>main#gm-main>section#gm-mod-preview-mobile>div#preview-mobile--pmStage` |
+| 34 | 24 | `site/index.html · preview-mobile` `body>main#gm-main>section#gm-mod-preview-mobile>div#preview-mobile--pmStage` |
 
-**字号不在层级**（type-scale，锚点 02 · 2.2.2，共 6022 处）
+**字号不在层级**（type-scale，锚点 02 · 2.2.2，共 7107 处）
 
 | 实测值 | 命中元素数 | 样例 |
 | --- | --- | --- |
-| 12.5 | 4758 | `site/index.html · site-index` `main#gm-main>section#gm-mod-site-index>div.wrap>pre.tree` |
+| 12.5 | 5830 | `site/index.html · site-index` `main#gm-main>section#gm-mod-site-index>div.wrap>pre.tree` |
 | 13.5 | 441 | `site/index.html · site-index` `div.secpad>div.tree2>div.gr>b` |
 | 13 | 241 | `site/index.html · site-index` `section#gm-mod-site-index>div.wrap>h2#site-index--start>span.secnum` |
 | 11 | 236 | `site/index.html · preview-index` `section#preview-index--glass>div.stage>div.lvl.l1>div.tag` |
 | 10 | 133 | `site/index.html · preview-index` `div.hero-stage>div.demo-card.c1>div.row>span.badge` |
 | 10.5 | 64 | `site/index.html · preview-index` `div.stmods>div.stmod>div>span.tpill.c-g` |
-| 20 | 26 | `site/index.html · site-spec` `div.wrap>section#site-spec--ch-readme>div.chap-hd>b` |
+| 20 | 27 | `site/index.html · site-spec` `div.wrap>section#site-spec--ch-readme>div.chap-hd>b` |
 | 17 | 24 | `site/index.html · preview-index` `div>div>div.stepbox>button.stpm` |
 | 26 | 23 | `site/index.html · site-index` `section#gm-mod-site-index>div.wrap>h2#site-index--start>span` |
-| 19 | 21 | `site/index.html · site-spec` `div.wrap>section#site-spec--ch-readme>div.md>h2` |
+| 19 | 22 | `site/index.html · site-spec` `div.wrap>section#site-spec--ch-readme>div.md>h2` |
+| 13.28 | 11 | `site/index.html · site-spec` `div.wrap>section#site-spec--ch-20>div.md>h5` |
 | 8.5 | 10 | `site/index.html · preview-index` `div.body>div.mrow2.mglass>span.md2>span` |
 | 9.5 | 9 | `site/index.html · preview-index` `div.scr>div.body>div.mkpi.mglass>span.l` |
 | 15.5 | 7 | `site/index.html · preview-index` `div.exgrid>a.excard.glass-l2>span>h3` |
@@ -59,7 +60,6 @@
 | 11.5 | 6 | `site/index.html · preview-index` `div.wrap>section#preview-index--allcomp>div.covline>a` |
 | 13.33 | 5 | `site/index.html · site-spec` `main#gm-main>section#gm-mod-site-spec>div.top>button#site-spec--modeBtn` |
 | 34 | 3 | `site/index.html · preview-index` `section#preview-index--component>div.grid.g3>div.kpi.glass-l2>div.k-val.num` |
-| 6.5 | 3 | `site/index.html · preview-index` `div>div>svg>text` |
 
 ## 1. 逐页明细
 
@@ -129,8 +129,8 @@
 
 ### site/index.html · site-spec
 
-- 结构：标题 478 个 · 焦点样本 32 个（其中不可见 0）· emoji 0 处
-- 对比度（浅色档）：确证失败 0（渐变上界 0）· 无法判定 7831
+- 结构：标题 549 个 · 焦点样本 32 个（其中不可见 0）· emoji 0 处
+- 对比度（浅色档）：确证失败 0（渐变上界 0）· 无法判定 10373
 - 横向溢出：桌面 0px / 移动 0px
 - 移动端非行内热区受检 0 个
 

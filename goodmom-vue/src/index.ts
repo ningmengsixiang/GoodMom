@@ -85,12 +85,14 @@ export {
   GmLink,
   GmProgress,
   GmResponsiveView,
+  GmResult,
   GmRiskPicker,
   GmSkeleton,
   GmSpin,
   GmStatusTag,
   GmSteps,
   GmTag,
+  GmToast,
   GmVirtualList,
 };
 

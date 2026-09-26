@@ -39,13 +39,13 @@ def md_links():
 def chapter_seq():
     files = sorted(glob.glob("[0-9][0-9]-*.md"))
     nums = [int(re.match(r"(\d\d)-", os.path.basename(f)).group(1)) for f in files]
-    expect = list(range(0, 20))
+    expect = list(range(0, 21))
     missing = [n for n in expect if n not in nums]
     dup = len(nums) != len(set(nums))
     if missing or dup:
         rec("FAIL", "chapters", "缺失 %s / 重复 %s" % (missing, dup))
         return False
-    rec("OK", "chapters", "00–19 编号连续（%d 份）" % len(files))
+    rec("OK", "chapters", "00–20 编号连续（%d 份）" % len(files))
     return True
 
 def icons():
@@ -1673,7 +1673,7 @@ def semantic_parity():
 
     口径：
       · 唯一源 = `goodmom-ui/src/theme.css` 的 `:root` 段的 `--lg-sem-*`；
-      · 规范性载体 = 02 · 2.1.9 映射表 B、14 · 4.4.5、skill reference/tokens.md；
+      · 规范性载体 = 02 · 2.1.9 映射表 B、14 · 4.4.5、skill `goodmom-tokens/reference/available.md`；
       · **历史文档不参与**（`docs/审查决策记录.md`、`docs/设计系统问题清单.md`、
         `18-视觉规范审计报告.md` 记的是当时的状态与整改证据，改写它们等于涂改留痕）。
     """
@@ -1709,7 +1709,7 @@ def semantic_parity():
     carriers = [
         ("02-Token规范.md", r"\| `--lg-sem-(\w+)` \| `(#[0-9A-Fa-f]{6})` \|"),
         ("14-命名与术语规范.md", r"`--lg-sem-(\w+)`（`(#[0-9A-Fa-f]{6})`）"),
-        (".claude/skills/goodmom-frontend/reference/tokens.md", r"\| `--lg-sem-(\w+)` \| `(#[0-9A-Fa-f]{6})` \|"),
+        (".claude/skills/goodmom-tokens/reference/available.md", r"\| `--lg-sem-(\w+)` \| `(#[0-9A-Fa-f]{6})` \|"),
     ]
     bad = []
     for path, pat in carriers:
@@ -1729,7 +1729,7 @@ def semantic_parity():
         rec("FAIL", "semantic-parity", "%d 处语义色口径与实现不一致：%s" % (len(bad), bad[:4]))
         return False
     rec("OK", "semantic-parity",
-        "六语义浅底档在 02 / 14 / skill reference 与 theme.css 之间完全一致（%s）"
+        "六语义浅底档在 02 / 14 / goodmom-tokens 与 theme.css 之间完全一致（%s）"
         % " · ".join("%s=%s" % (k, truth[k]) for k in sorted(truth)))
     return True
 

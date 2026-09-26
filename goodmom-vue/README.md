@@ -130,7 +130,8 @@ node playground/smoke.mjs                     # 35 项冒烟：渲染/语义色/
 | 移动端 | `10-移动端组件规范.md` |
 | 业务词库 | `15-妇幼业务词库与状态大典.md` |
 | 命名术语 | `14-命名与术语规范.md` |
-| 前端开发规范（skill） | `.claude/skills/goodmom-frontend/SKILL.md` |
+| 前端设计规范 | [`20-前端设计规范.md`](../20-前端设计规范.md) |
+| 前端开发规范（技能族） | `.claude/skills/goodmom-frontend/`（入口）· `goodmom-tokens` / `goodmom-components` / `goodmom-status` / `goodmom-layout` / `goodmom-motion-a11y`（子技能） |
 
 ## 与 React 版的关系
 
