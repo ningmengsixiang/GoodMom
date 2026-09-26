@@ -1,0 +1,1151 @@
+<!--@css-->
+/* ═══ GoodMom Tokens（精简版 · 同 02 附录 A/B 与 12.3.1）═══ */
+:root{
+  /* 文字与分隔（02 · 2.1.1）。小字一律次级/主色：三级色 #9AA2B0 只允许
+     ≥24px 常规或 ≥18.66px 加粗（02 · 2.1.1），本模块不把它用于任何正文/注释。 */
+  --lg-text-primary:#343A46; --lg-text-secondary:#4F5B6E; --lg-text-tertiary:#9AA2B0;
+  --lg-text-on-accent:#343A46; --lg-divider:rgba(58,52,84,.10); --lg-link:#B23A63;
+  --lg-tint-base:#FFFFFF; --lg-tint-pct:13%;
+  /* 六语义（14 · 4.4.5 / 15 · 15.5）：文字用深档 alias，-500 只作填充 */
+  --lg-sem-positive:#25715D; --lg-sem-info:#3261C1; --lg-sem-attention:#8D5A15;
+  --lg-sem-risk:#B72F42; --lg-sem-neutral:#5E6673; --lg-sem-special:#6A48DC;
+  --lg-success-500:#42C7A1; --lg-warning-500:#F2B25C; --lg-danger-500:#EF6A7B;
+  --lg-info-500:#6D9EFF; --lg-purple-500:#9A78FF; --lg-purple-300:#B69AFF;
+  /* 品牌（02 · 2.9 = 12.3.1） */
+  --mmh-rose-700:#B23A63; --mmh-rose-600:#E85D8F; --mmh-rose-500:#F77FA3;
+  --mmh-rose-300:#FFC4D6; --mmh-rose-200:#FFDEE8; --mmh-rose-100:#FFF0F4;
+  --mmh-peach-400:#FFC3A0; --mmh-peach-300:#FFDCC7; --mmh-peach-100:#FFF3EA;
+  --mmh-mint-600:#4FB59C; --mmh-mint-500:#6FC9B4; --mmh-mint-300:#A9E3D4; --mmh-mint-100:#E2F6F0;
+  --mmh-solid-special:#6242B8;
+  --mmh-grad-action-hc:linear-gradient(135deg,#FFC4D6 0%,#F77FA3 100%);
+  --mmh-grad-primary:linear-gradient(135deg,#FFA9C2 0%,#F77FA3 45%,#E85D8F 100%);
+  --mmh-grad-signature:linear-gradient(120deg,#FFD0D8 0%,#F77FA3 48%,#B69AFF 100%);
+  /* 妊娠风险五色（02 · 2.10；仅用于孕产妇风险分级语境，与六语义并行） */
+  --mmh-m5-m1:#4CB98A; --mmh-m5-m2:#F2C14E; --mmh-m5-m3:#F0954A;
+  --mmh-m5-m4:#EE5C70; --mmh-m5-m5:#8F6AE0;
+  /* 环境光斑（02 · 2.1.7） */
+  --lg-glow-pink:radial-gradient(closest-side,rgba(245,184,198,.18),transparent 70%);
+  --lg-glow-peach:radial-gradient(closest-side,rgba(246,192,160,.16),transparent 70%);
+  --lg-glow-purple:radial-gradient(closest-side,rgba(154,120,255,.22),transparent 70%);
+  --lg-glow-cyan:radial-gradient(closest-side,rgba(114,221,229,.20),transparent 70%);
+  --lg-glow-white:radial-gradient(closest-side,rgba(255,255,255,.60),transparent 70%);
+  /* 间距 / 圆角 / 阴影 / 边框（02 · 2.3–2.7） */
+  --lg-space-1:4px; --lg-space-2:8px; --lg-space-3:12px; --lg-space-4:16px;
+  --lg-space-5:20px; --lg-space-6:24px; --lg-space-7:32px; --lg-space-8:40px;
+  --lg-space-9:48px; --lg-space-10:64px;
+  --lg-radius-container:40px; --lg-radius-card-lg:28px; --lg-radius-card:22px;
+  --lg-radius-control:20px; --lg-radius-btn-sm:18px; --lg-radius-pill:999px;
+  --lg-shadow-xs:0 1px 2px rgba(58,52,84,.04),0 2px 8px rgba(58,52,84,.05);
+  --lg-shadow-sm:0 4px 12px rgba(58,52,84,.06);
+  --lg-shadow-md:0 8px 24px rgba(58,52,84,.08),0 2px 6px rgba(58,52,84,.05);
+  --lg-shadow-lg:0 16px 40px rgba(58,52,84,.12),0 4px 12px rgba(58,52,84,.05);
+  --lg-glass-highlight:inset 0 1px 0 rgba(255,255,255,.60);
+  --lg-ring-width:2px; --lg-ring-offset:2px; --lg-ring-color:rgba(232,93,143,.6);
+  /* 字阶（02 · 2.2.2 / 2.2.3） */
+  --lg-fs-display:32px;--lg-lh-display:40px; --lg-fs-title:24px;--lg-lh-title:32px;
+  --lg-fs-section:18px;--lg-lh-section:26px; --lg-fs-body:15px;--lg-lh-body:22px;
+  --lg-fs-body-sm:14px;--lg-lh-body-sm:20px; --lg-fs-caption:12px;--lg-lh-caption:16px;
+  --lg-fs-num-lg:32px;--lg-lh-num-lg:40px; --lg-fs-num-md:24px;--lg-lh-num-md:32px;
+  --lg-fs-num-sm:16px;--lg-lh-num-sm:22px;
+  --lg-font-sans:"Inter","SF Pro Display",-apple-system,BlinkMacSystemFont,"PingFang SC",
+    "MiSans","HarmonyOS Sans","Noto Sans SC","Helvetica Neue",sans-serif;
+  /* 动效（07 · 7.2） */
+  --lg-t-fast:120ms; --lg-t-base:220ms; --lg-t-slow:400ms; --lg-t-breathe:2.4s;
+  --lg-ease-out:cubic-bezier(.22,1,.36,1); --lg-ease-in-out:cubic-bezier(.65,0,.35,1);
+  --lg-z-control:30; --lg-z-overlay:40;
+}
+
+/* ── 产品辅助色（PRD §十一「五个业务系统可以拥有不同的辅助色」）──────────────
+   只用于**产品标识**：Hero 氛围光、产品名色条、KPI 主指标、侧栏选中色条、切换条色点。
+   主行动（Primary 按钮）六个产品一律走品牌蜜桃粉档 + 深字 —— 12 · 12.3.2 把
+   「主行动渐变」定为品牌语义，若随产品变色，同一动作在不同产品里就是不同权重。
+   ⚠️ --pm-ink 是**文字深档**（-500 亮档在浅底上不足 4.5:1，02 · 2.1.5），
+      --pm-hue 只作填充/色块/光斑，两者不得互换。 */
+.gm-pm--p01{--pm-hue:#B23A63;--pm-ink:#B23A63;--pm-tint:rgba(178,58,99,.10);--pm-glow:rgba(178,58,99,.14)}
+.gm-pm--p02{--pm-hue:#FFC3A0;--pm-ink:#8D5A15;--pm-tint:rgba(255,195,160,.22);--pm-glow:rgba(255,195,160,.20)}
+.gm-pm--p03{--pm-hue:#F77FA3;--pm-ink:#B23A63;--pm-tint:rgba(247,127,163,.14);--pm-glow:rgba(247,127,163,.18)}
+.gm-pm--p04{--pm-hue:#B69AFF;--pm-ink:#6242B8;--pm-tint:rgba(182,154,255,.16);--pm-glow:rgba(182,154,255,.18)}
+.gm-pm--p05{--pm-hue:#6FC9B4;--pm-ink:#25715D;--pm-tint:rgba(111,201,180,.16);--pm-glow:rgba(111,201,180,.16)}
+.gm-pm--p06{--pm-hue:#9A78FF;--pm-ink:#6A48DC;--pm-tint:rgba(154,120,255,.14);--pm-glow:rgba(154,120,255,.18)}
+
+/* ── 模块根：页面环境层（L0）。底色只走暖中性，彩色只出现在光斑与组件里
+      （02 · 2.1「大面积彩色背景一律禁止」）。 ── */
+.gm-pm{position:relative;font-family:var(--lg-font-sans);color:var(--lg-text-primary);line-height:1.6;
+  -webkit-font-smoothing:antialiased;padding:var(--lg-space-5) var(--lg-space-5) var(--lg-space-10)}
+
+/* 环境光斑 ≥2 处（06 · 6.2 验收）：品牌粉 + 淡紫为底，产品辅助色只出现在 Hero 内。 */
+.gm-pm__amb{position:absolute;inset:0;pointer-events:none;overflow:hidden;
+  border-radius:var(--lg-radius-container);z-index:0}
+.gm-pm__amb i{position:absolute;display:block}
+.gm-pm__amb i:nth-child(1){left:-6%;top:-4%;width:60%;height:52%;background:var(--lg-glow-pink)}
+.gm-pm__amb i:nth-child(2){right:-8%;top:8%;width:56%;height:56%;background:var(--lg-glow-purple)}
+.gm-pm__amb i:nth-child(3){left:24%;bottom:-18%;width:52%;height:46%;background:var(--lg-glow-white)}
+
+
+/* ── 切换条（产品 × 形态）──────────────────────────────────────────────
+   06 · 6.5.2「全屏 backdrop blur 节点 ≤6」：本模块只在**这一条**与工作台顶栏
+   两处使用 backdrop-filter。卡片一律用「白渐变 + 受光白边 + 柔影」表达玻璃，
+   不逐卡开模糊 —— 12 个页面同屏卡片数量很大，逐卡模糊既过腻又拖帧。 */
+
+
+
+
+
+/* 产品 chip / 形态分段：均用 <button> + aria-pressed（键盘可达，且不依赖 hover） */
+
+
+
+
+
+
+
+/* ── 品牌锁版（12 · 12.1 名称使用规范）：logo + 品牌名 + 系统名 ──────────────
+   全站**只此一处实现**：logo 一律圆形裁切、尺寸只 26 / 36 / 44 三档；
+   品牌名固定 `妈咪好 GoodMom`（大小写见 12.1），系统名用产品中文名。
+   早先各页面各写一遍 —— logo 圆角 8/18 混用、品牌行有的写 Goodmom 有的写 GoodMom。 */
+.gm-brand{display:inline-flex;align-items:center;gap:var(--lg-space-3);min-width:0}
+.gm-brand img{border-radius:50%;object-fit:cover;flex:none;box-shadow:0 2px 8px rgba(178,58,99,.20)}
+.gm-brand--sm img{width:26px;height:26px}
+.gm-brand--md img{width:36px;height:36px}
+.gm-brand--lg img{width:44px;height:44px}
+.gm-brand__t{display:flex;flex-direction:column;line-height:1.3;min-width:0}
+.gm-brand__t b{font-size:var(--lg-fs-caption);font-weight:600;color:var(--mmh-rose-700);letter-spacing:.01em}
+.gm-brand__t strong{font-size:var(--lg-fs-body-sm);font-weight:600;color:var(--lg-text-primary)}
+.gm-brand--lg .gm-brand__t strong{font-size:var(--lg-fs-section);font-weight:600}
+.gm-brand__t small{font-size:var(--lg-fs-caption);color:var(--lg-text-secondary)}
+
+/* 产品语义图标（09 · 图标库领域图标）：底色用产品辅助色浅染、图形用其深档 */
+.gm-prod-ico{flex:none;width:40px;height:40px;border-radius:var(--lg-radius-btn-sm);
+  display:inline-flex;align-items:center;justify-content:center;
+  color:var(--pm-ink,var(--mmh-rose-700));background:var(--pm-tint,rgba(247,127,163,.14))}
+.gm-prod-ico svg{width:24px;height:24px;fill:none;stroke:currentColor;stroke-width:1.7;
+  stroke-linecap:round;stroke-linejoin:round}
+
+/* 概览卡：把"队列 / 质量 / 动态"合成一张卡的三段 —— 三张并列小卡会显得页面很碎 */
+.gm-pm-ov{margin-top:var(--lg-space-3);padding-top:var(--lg-space-3);border-top:1px solid var(--lg-divider)}
+.gm-pm-ov:first-of-type{margin-top:0;padding-top:0;border-top:none}
+.gm-pm-ov>h4{margin:0 0 var(--lg-space-2);font-size:var(--lg-fs-caption);font-weight:600;
+  color:var(--lg-text-secondary);letter-spacing:.02em}
+
+/* ── 卡片与面板（02 · 2.5 的 L2/L1 配方：白渐变 + 受光白边 + 柔影 + border-box 原点）── */
+.gm-pm-card{border-radius:var(--lg-radius-card);padding:var(--lg-space-5);
+  background:linear-gradient(160deg,rgba(255,255,255,.62),rgba(255,255,255,.30));
+  border:1px solid rgba(255,255,255,.75);box-shadow:var(--lg-glass-highlight),var(--lg-shadow-sm);
+  background-origin:border-box;min-width:0}
+.gm-pm-panel{border-radius:var(--lg-radius-card-lg);padding:var(--lg-space-6);
+  background:linear-gradient(160deg,rgba(255,255,255,.55),rgba(255,255,255,.24) 55%,rgba(255,255,255,.32));
+  border:1px solid rgba(255,255,255,.70);box-shadow:var(--lg-glass-highlight),var(--lg-shadow-md);
+  background-origin:border-box;min-width:0}
+.gm-pm-card h3,.gm-pm-panel h3{margin:0 0 var(--lg-space-3);font-size:var(--lg-fs-section);
+  line-height:var(--lg-lh-section);font-weight:600}
+/* 曲线图宽度上限：外壳的 .gm-growth__svg 是 width:100%，卡片一变宽图就跟着长高
+   （实测 823px 宽时单张曲线卡 724px 高，把整列顶得极高）。图本身 viewBox 只有 380 宽，
+   超过 560 再放大只会变糊，故按内容宽度封顶。 */
+/* ⚠️ 不能用 `.gm-pm-chart .gm-growth__svg` 封顶：外壳的 gmGrowth 会**就地替换**挂载点内容
+   并改掉它的 class（挂载点的 `.gm-pm-chart` 随之消失，选择器再也匹配不到）。
+   故用一个外层容器封顶 —— 容器 class 不会被外壳改写。 */
+.gm-pm-chartbox{max-width:620px;margin:0 auto}
+.gm-pm-cap{font-size:var(--lg-fs-caption);line-height:var(--lg-lh-caption);color:var(--lg-text-secondary)}
+.gm-pm-num{font-variant-numeric:tabular-nums}
+
+/* ── 页面壳（17 · 17.1.1：① 页面标题区 ② 工具行 ③ 内容区 ④ 页脚）── */
+.gm-pm-view{display:none;position:relative;z-index:1}
+.gm-pm-view.is-on{display:block;animation:gmPmFade var(--lg-t-slow) var(--lg-ease-out) both}
+@keyframes gmPmFade{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+.gm-pm-head{display:flex;align-items:flex-end;gap:var(--lg-space-4);flex-wrap:wrap;
+  margin-bottom:var(--lg-space-6)}
+.gm-pm-head h2{margin:0;font-size:var(--lg-fs-title);line-height:var(--lg-lh-title);font-weight:600;
+  letter-spacing:-.01em}
+.gm-pm-head .en{font-size:var(--lg-fs-body-sm);color:var(--lg-text-secondary)}
+/* 序号徽标：**浅染底 + 深档字**。原写成"辅助色实底 + 深字"时，深玫档（#B23A63）
+   上深字实测 2.00:1、淡紫档（#9A78FF）3.54:1 —— a11y-dom 会判为确证失败。
+   深色底配白字是另一个方向，但 02 · 2.6 / D9 只允许品牌亮粉档配深字，
+   产品辅助色深浅不一，统一走"浅染 + 深档"最稳（02 · 2.1.5 亮档只作填充）。 */
+.gm-pm-head .no{font-size:var(--lg-fs-caption);font-weight:600;color:var(--pm-ink,var(--mmh-rose-700));
+  background:var(--pm-tint,rgba(247,127,163,.14));border-radius:var(--lg-radius-pill);
+  padding:var(--lg-space-1) var(--lg-space-3);flex:none}
+/* ── 落地页 · Hero ─────────────────────────────────────────────────── */
+.gm-pm-hero{position:relative;overflow:hidden;display:grid;
+  grid-template-columns:minmax(0,1fr);gap:var(--lg-space-6);align-items:center}
+.gm-pm-hero::after{content:"";position:absolute;right:-12%;top:-46%;width:62%;height:150%;
+  background:var(--lg-glow-pink);pointer-events:none}
+.gm-pm-hero>*{position:relative}
+.gm-pm-hero h3{margin:0 0 var(--lg-space-2);font-size:var(--lg-fs-display);
+  line-height:var(--lg-lh-display);font-weight:600;letter-spacing:-.02em}
+.gm-pm-hero p{margin:0;font-size:var(--lg-fs-body);line-height:1.7;max-width:58ch}
+.gm-pm-hero .en{display:inline-block;font-size:var(--lg-fs-body-sm);color:var(--lg-text-secondary);
+  padding-left:var(--lg-space-3);border-left:2px solid var(--mmh-rose-500);margin-bottom:var(--lg-space-3)}
+
+.gm-pm-hero>*{position:relative}
+
+
+
+
+
+
+
+
+
+
+/* ── 按钮（03 · 3.2.4；每屏 Primary 唯一 —— 17 · 1.1.3）── */
+.gm-pm-btn{font-family:inherit;display:inline-flex;align-items:center;justify-content:center;
+  gap:var(--lg-space-2);height:40px;padding:0 var(--lg-space-5);border-radius:var(--lg-radius-pill);
+  font-size:var(--lg-fs-body-sm);font-weight:600;line-height:1;cursor:pointer;white-space:nowrap;
+  border:1px solid transparent;text-decoration:none;
+  transition:transform var(--lg-t-fast) var(--lg-ease-out),box-shadow var(--lg-t-base) var(--lg-ease-out)}
+.gm-pm-btn:active{transform:scale(.97)}
+.gm-pm-btn svg{width:16px;height:16px;flex:none;fill:none;stroke:currentColor;stroke-width:1.7;
+  stroke-linecap:round;stroke-linejoin:round}
+.gm-pm-btn--pri{background:var(--mmh-grad-action-hc);color:var(--lg-text-on-accent);
+  box-shadow:0 1px 2px rgba(178,58,99,.22),0 8px 20px rgba(240,127,163,.30);background-origin:border-box}
+.gm-pm-btn--pri:hover{box-shadow:0 2px 4px rgba(178,58,99,.24),0 12px 26px rgba(240,127,163,.38)}
+.gm-pm-btn--line{background:rgba(255,255,255,.55);color:var(--mmh-rose-700);
+  border:1px solid rgba(232,93,143,.45);box-shadow:var(--lg-shadow-xs)}
+.gm-pm-btn--line:hover{background:rgba(247,127,163,.10);border-color:rgba(232,93,143,.72)}
+
+/* 文字动作（15 · 15.1.2 辅助操作 + 17 · 17.2.3「行内动作优先文字链接」） */
+
+.gm-pm-act:hover{text-decoration:underline}
+.gm-pm-acts{display:inline-flex;align-items:center;justify-content:flex-end;
+  gap:var(--lg-space-3);flex-wrap:nowrap}
+.gm-pm-act{font-family:inherit;font-size:var(--lg-fs-caption);font-weight:500;line-height:1.5;
+  color:var(--lg-link);background:none;border:none;padding:0;cursor:pointer;white-space:nowrap}
+.gm-pm-act:hover{text-decoration:underline}
+.gm-pm-act[data-kind="collab"]{color:var(--lg-sem-special)}
+.gm-pm-act[disabled]{color:var(--lg-text-secondary);cursor:default;text-decoration:none}
+
+/* ── 区块（17 · 17.1.2：小节间 ≥24，大板块 32–40）── */
+.gm-pm-sec{margin-top:var(--lg-space-8)}
+.gm-pm-sec__h{display:flex;align-items:baseline;gap:var(--lg-space-3);flex-wrap:wrap;
+  margin-bottom:var(--lg-space-4)}
+.gm-pm-sec__h h3{margin:0;font-size:var(--lg-fs-section);line-height:var(--lg-lh-section);font-weight:600}
+.gm-pm-sec__h span{font-size:var(--lg-fs-caption);line-height:var(--lg-lh-caption);
+  color:var(--lg-text-secondary)}
+.gm-pm-grid{display:grid;gap:var(--lg-space-4)}
+.gm-pm-grid--2{grid-template-columns:repeat(2,minmax(0,1fr))}
+.gm-pm-grid--3{grid-template-columns:repeat(3,minmax(0,1fr))}
+.gm-pm-grid--4{grid-template-columns:repeat(4,minmax(0,1fr))}
+/* ⚠️ 轨道一律 minmax(0,·)：`1fr` 的自动最小值是 **min-content**，
+   而本模块左列含宽表格（表头 6 列），min-content 可到 700px+ ——
+   写成 `1.6fr 1fr` 时网格列会被表格撑开，页面横向溢出（实测移动端 +290~391px）。 */
+.gm-pm-grid--wide{grid-template-columns:minmax(0,1.6fr) minmax(0,1fr)}
+
+/* 价值卡：序号 + 标题 + 说明（17 · 17.3.1 组合顺序） */
+
+
+
+
+
+/* 功能架构：一级模块 + 二级功能 chips（数据来自 PRD 功能架构树） */
+
+
+
+
+
+/* ── 状态标签（14 · 4.4.4：色点 8px + caption 文本；15 · 15.5：六语义唯一一套；
+      14 · 4.4.3：标签文本 ≤6 字）颜色永不单独传义（14 · 4.4.1）。
+      淡底用 --lg-tint-base + 语义色低透明，不用 color-mix（02 · 2.1.9 实测会把小字压到 4.06:1）。 ── */
+.gm-pm-tag{display:inline-flex;align-items:center;gap:var(--lg-space-2);
+  padding:var(--lg-space-1) var(--lg-space-3);border-radius:var(--lg-radius-pill);
+  font-size:var(--lg-fs-caption);line-height:var(--lg-lh-caption);font-weight:500;white-space:nowrap}
+.gm-pm-tag i{width:8px;height:8px;border-radius:50%;background:currentColor;flex:none}
+.gm-pm-tag--positive{color:var(--lg-sem-positive);background:rgba(111,201,180,.16)}
+.gm-pm-tag--info{color:var(--lg-sem-info);background:rgba(109,158,255,.14)}
+.gm-pm-tag--attention{color:var(--lg-sem-attention);background:rgba(242,178,92,.18)}
+.gm-pm-tag--risk{color:var(--lg-sem-risk);background:rgba(239,106,123,.14)}
+.gm-pm-tag--neutral{color:var(--lg-sem-neutral);background:rgba(88,98,115,.10)}
+.gm-pm-tag--special{color:var(--lg-sem-special);background:rgba(154,120,255,.14)}
+/* 五色分级：色点用 02 · 2.10 专项色板，文字仍走 AA 深档（两者不同轴，不得混用六语义色） */
+.gm-pm-tag--m5{color:var(--lg-text-primary);background:rgba(255,255,255,.62)}
+.gm-pm-tag--m5 i{background:var(--m5)}
+.gm-pm-tag--m5[data-m5="1"]{--m5:var(--mmh-m5-m1)} .gm-pm-tag--m5[data-m5="1"]{color:#1F6B4F}
+.gm-pm-tag--m5[data-m5="2"]{--m5:var(--mmh-m5-m2)} .gm-pm-tag--m5[data-m5="2"]{color:#7A5F0D}
+.gm-pm-tag--m5[data-m5="3"]{--m5:var(--mmh-m5-m3)} .gm-pm-tag--m5[data-m5="3"]{color:#8D5A15}
+.gm-pm-tag--m5[data-m5="4"]{--m5:var(--mmh-m5-m4)} .gm-pm-tag--m5[data-m5="4"]{color:var(--lg-sem-risk)}
+.gm-pm-tag--m5[data-m5="5"]{--m5:var(--mmh-m5-m5)} .gm-pm-tag--m5[data-m5="5"]{color:var(--lg-sem-special)}
+
+/* ── 全生命周期轴（13 · 13.4；阶段色按 12.2.1，填充档取最近品牌 Token，
+      文字深档另取 —— 阶段色本身只做「已完成段渐变 + 当前段呼吸点」）── */
+
+
+
+/* 连接线：从节点右侧画到下一个节点左侧。⚠️ **最后一个节点必须去掉** ——
+   它后面没有节点，线会沿 `left:calc(50% + 14px)` 一直伸到自身右侧 36% 处，
+   把容器撑出横向溢出（实测 1440px 视口溢出 135px，page-qa 判 P1）。
+   首节点同理（前面无线），两条缺一不可。 */
+
+
+/* 已完成节点：品牌**主行动档**渐变 + 深字（D9 · 06 · 6.5.3 路径②：亮粉底禁白字，
+   白字实测 2.46–3.48:1）。已连线段的渐变只作装饰，不承载文字。 */
+
+
+
+
+
+@keyframes gmPmBreathe{0%,100%{transform:scale(1);opacity:.75}50%{transform:scale(1.34);opacity:0}}
+
+
+
+/* ── 工作台页面壳（17 · 17.3.4：顶栏 → 4 KPI → 左待处理表 + 右快捷工具/概览）── */
+.gm-pm-pcbar{display:flex;align-items:center;gap:var(--lg-space-3);flex-wrap:wrap;
+  padding:var(--lg-space-2) var(--lg-space-3);border-radius:var(--lg-radius-pill);
+  background:linear-gradient(160deg,rgba(255,255,255,.78),rgba(255,255,255,.52));
+  border:1px solid rgba(255,255,255,.85);box-shadow:var(--lg-glass-highlight),var(--lg-shadow-md);
+  -webkit-backdrop-filter:blur(20px) saturate(1.2);backdrop-filter:blur(20px) saturate(1.2);
+  background-origin:border-box;margin-bottom:var(--lg-space-4)}
+.gm-pm-pcbar__logo{display:inline-flex;align-items:center;gap:var(--lg-space-2);
+  font-size:var(--lg-fs-body);font-weight:600;color:var(--mmh-rose-700);flex:0 1 auto;min-width:0}
+.gm-pm-pcbar__logo img{width:26px;height:26px;border-radius:var(--lg-radius-pill);
+  object-fit:cover;flex:none}
+.gm-pm-pcbar__logo small{font-size:var(--lg-fs-caption);font-weight:500;
+  color:var(--lg-text-secondary);margin-left:var(--lg-space-1)}
+.gm-pm-search{margin-left:auto;display:flex;align-items:center;gap:var(--lg-space-2);
+  background:rgba(255,255,255,.60);border:1px solid var(--lg-divider);
+  border-radius:var(--lg-radius-control);padding:0 var(--lg-space-3);height:40px;
+  min-width:260px;flex:1 1 220px;color:var(--lg-text-secondary)}
+.gm-pm-search svg{width:16px;height:16px;flex:none;fill:none;stroke:currentColor;stroke-width:1.7}
+.gm-pm-search input{border:none;outline:none;background:transparent;font-family:inherit;
+  font-size:var(--lg-fs-body-sm);color:var(--lg-text-primary);flex:1;min-width:0}
+.gm-pm-search input:focus-visible{outline:var(--lg-ring-width) solid var(--lg-ring-color);
+  outline-offset:var(--lg-ring-offset);border-radius:var(--lg-radius-control)}
+.gm-pm-pcbar__meta{font-size:var(--lg-fs-caption);color:var(--lg-text-secondary);white-space:nowrap}
+.gm-pm-av{width:36px;height:36px;border-radius:50%;flex:none;display:inline-flex;align-items:center;
+  justify-content:center;font-size:var(--lg-fs-body-sm);font-weight:600;
+  color:var(--mmh-rose-700);background:linear-gradient(150deg,#FFDEE8,#FFF0F4)}
+
+/* 左业务菜单 + 右内容（iPad 8:4 与移动单列由 17 · 17.1.2 的断点接管） */
+.gm-pm-wb{display:grid;grid-template-columns:212px minmax(0,1fr);gap:var(--lg-space-4);align-items:start}
+.gm-pm-side{padding:var(--lg-space-3);border-radius:var(--lg-radius-card);
+  background:linear-gradient(160deg,rgba(255,255,255,.58),rgba(255,255,255,.30));
+  border:1px solid rgba(255,255,255,.70);box-shadow:var(--lg-glass-highlight),var(--lg-shadow-sm);
+  background-origin:border-box}
+.gm-pm-side h4{margin:0 0 var(--lg-space-2);font-size:var(--lg-fs-caption);
+  line-height:var(--lg-lh-caption);color:var(--lg-text-secondary);font-weight:600;
+  padding-left:var(--lg-space-3)}
+.gm-pm-side a{display:flex;align-items:center;gap:var(--lg-space-2);min-height:40px;
+  padding:0 var(--lg-space-3);border-radius:var(--lg-radius-control);text-decoration:none;
+  font-size:var(--lg-fs-body-sm);color:var(--lg-text-primary);position:relative}
+.gm-pm-side a:hover{background:rgba(255,255,255,.65)}
+/* 选中态 = 产品辅助色浅染 + 左侧 2px 色条（不是实心粉：实心留给主行动，17 · 1.1.3） */
+.gm-pm-side a[aria-current="true"]{background:var(--pm-tint,rgba(247,127,163,.14));font-weight:600}
+.gm-pm-side a[aria-current="true"]::before{content:"";position:absolute;left:0;top:50%;
+  transform:translateY(-50%);width:2px;height:20px;border-radius:2px;
+  background:var(--pm-hue,var(--mmh-rose-500))}
+.gm-pm-side a span{margin-left:auto;font-size:var(--lg-fs-caption);color:var(--lg-text-secondary);
+  font-variant-numeric:tabular-nums}
+
+/* KPI 行（17 · 17.3.4「4 KPI」；数字 02 · 2.2.3 num-lg + tabular-nums，单位不缩小主数字） */
+.gm-pm-kpis{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:var(--lg-space-4);
+  margin-bottom:var(--lg-space-4)}
+.gm-pm-kpi__l{font-size:var(--lg-fs-caption);line-height:var(--lg-lh-caption);
+  color:var(--lg-text-secondary);display:flex;align-items:center;gap:var(--lg-space-1)}
+.gm-pm-kpi__v{margin-top:var(--lg-space-2);font-size:var(--lg-fs-num-lg);line-height:var(--lg-lh-num-lg);
+  font-weight:600;font-variant-numeric:tabular-nums;color:var(--lg-text-primary)}
+.gm-pm-kpi__v.is-accent{color:var(--pm-ink,var(--mmh-rose-700))}
+.gm-pm-kpi__v.is-risk{color:var(--lg-sem-risk)} .gm-pm-kpi__v.is-att{color:var(--lg-sem-attention)}
+.gm-pm-kpi__v.is-info{color:var(--lg-sem-info)}
+.gm-pm-kpi__d{margin-top:var(--lg-space-1);font-size:var(--lg-fs-caption);
+  line-height:var(--lg-lh-caption);color:var(--lg-text-secondary)}
+
+/* 表格外层横滑（10 · 10.11.1；表格语义保留给读屏，不为横滑改 display） */
+.gm-pm-tblwrap{overflow-x:auto;-webkit-overflow-scrolling:touch}
+.gm-pm-tblfoot{display:flex;align-items:center;gap:var(--lg-space-2);justify-content:flex-end;
+  margin-top:var(--lg-space-3);font-size:var(--lg-fs-caption);color:var(--lg-text-secondary)}
+
+/* 价值卡下的二级功能 chips（与功能架构同一套 chip 配方，避免两套外观） */
+
+
+/* 卡内小节标题（h4）与 chip 列表（15 · 15.1.2 交付清单） */
+
+
+
+/* 表格外层横滑（10 · 10.11.1：宽表在容器内横滚，不改 <table> 的 display —— 后者会把
+   表格语义从无障碍树里抹掉，读屏只剩一串散字 TB-15-02）。外壳只在 ≤767 给了这条，
+   桌面档由本模块补齐。 */
+.gm-tbl-wrap{overflow-x:auto;-webkit-overflow-scrolling:touch}
+
+/* 队列 / 工具 / 概览 / 动态行 */
+.gm-pm-qr{display:flex;gap:var(--lg-space-2);flex-wrap:wrap;margin-bottom:var(--lg-space-3)}
+.gm-pm-list{margin:0;padding:0;list-style:none}
+.gm-pm-list li{display:flex;align-items:center;gap:var(--lg-space-3);
+  padding:var(--lg-space-2) 0;border-top:1px solid var(--lg-divider);
+  font-size:var(--lg-fs-body-sm);line-height:var(--lg-lh-body-sm)}
+.gm-pm-list li:first-child{border-top:none}
+.gm-pm-list li b{margin-left:auto;font-variant-numeric:tabular-nums;font-weight:600}
+/* ⚠️ 工具按钮是 `white-space:nowrap` + 左右 20px 内边距（内容盒 = 列宽 − 40px），
+   固定两列时：320 档列宽 119 → 内容盒 79px 装不下 84px 的「建立妇女档案」（顶出 5px）；
+   768 档右列更窄（列宽 112）时同样顶出 12px。改成按内容落列：≥300px 可容纳两列，否则单列。 */
+/* ── 窄屏表格配方（17 · 17.1.3）：窄屏/平板整行合并单元（≤900 生效）─────────────────
+   ⚠️ 为什么不是"表格转卡片"（`display:block`）：那会把 `<table>` 的语义整个丢掉 ——
+   读屏在窄屏就读不出"这是一张表"，本仓 a11y 门禁也不接受。
+   ⚠️ 为什么不是"隐藏中间列 + 摘要塞进首列"（试过，更糟）：首列被状态/操作两列挤到 ~118px，
+   摘要被 `overflow-wrap:anywhere` 折成 6 行，实测单行高 **611px**，5 行表 3000px 高，还留 152px 横向滚动。
+   最终做法：★ 每个数据行同时给出两套单元 —— 桌面用原列（`.gm-tbl__desk`），窄屏用
+   一个 `colspan` 合并单元（`.gm-tbl__mob`）承载"对象+状态 / 详情 / 操作"三段式 ★。
+   两套各自 `display` 互斥，任一视口下都只有一套在渲染（AT 不会读两遍），表格语义原样保留。
+   实测数据（加这条的原因）：模块页表格 375 档宽 748px、卡片内容宽仅 ~290px，
+   每看一行都要横向拖动，操作列默认在屏幕外；1024 档也还要滚 178px。 */
+.gm-tbl__mob{display:none}
+@media(max-width:900px){
+  .gm-tbl__desk{display:none}
+  .gm-tbl__mob{display:table-cell;white-space:normal;padding:12px 2px}
+  .gm-tbl__mob .r1{display:flex;align-items:center;gap:var(--lg-space-2);flex-wrap:wrap}
+  .gm-tbl__mob .r1 b{font-size:var(--lg-fs-body-sm);font-weight:600}
+  .gm-tbl__mob .r2{margin-top:4px;font-size:var(--lg-fs-caption);line-height:var(--lg-lh-caption);
+    color:var(--lg-text-secondary);overflow-wrap:anywhere}
+  .gm-tbl__mob .r3{margin-top:var(--lg-space-2);display:flex;gap:var(--lg-space-2);
+    justify-content:flex-end;flex-wrap:wrap}
+  .gm-tbl tbody tr{display:table-row}
+  /* 表头在窄屏隐藏：6 个表头的文字 + 每格 24px 内边距合计 400px，是表格在 320 档仍滚 126px 的
+     唯一来源（数据行已经是合并单元）。隐藏后由**行内自带列名标签**承担表头职责（自描述），
+     桌面档表头原样保留、`<th scope>` 关联不变。 */
+  .gm-tbl thead{display:none}
+  .gm-tbl__mob .r2 i{font-style:normal;color:var(--lg-text-secondary);margin-right:6px}
+  .gm-tbl th,.gm-tbl td{padding-left:6px;padding-right:6px}
+}
+
+.gm-pm-tools{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:var(--lg-space-2)}
+.gm-pm-tools .gm-pm-btn{width:100%}
+.gm-pm-feed li{align-items:flex-start}
+.gm-pm-feed .gm-pm-tag{flex:none}
+.gm-pm-feed span{color:var(--lg-text-secondary)}
+
+/* AI 边界提示条（13 · 13.5 医疗合规与视觉纪律：边界必须写清，且不靠颜色单独传义） */
+.gm-pm-note{display:flex;gap:var(--lg-space-3);align-items:flex-start;
+  padding:var(--lg-space-3) var(--lg-space-4);border-radius:var(--lg-radius-control);
+  background:rgba(255,255,255,.62);border:1px solid var(--lg-divider);
+  font-size:var(--lg-fs-caption);line-height:1.75;color:var(--lg-text-secondary)}
+.gm-pm-note b{color:var(--lg-text-primary)}
+.gm-pm-note--warn{background:rgba(242,178,92,.16);border-color:rgba(242,178,92,.35)}
+.gm-pm-note i{width:8px;height:8px;border-radius:50%;flex:none;margin-top:6px;
+  background:var(--lg-sem-attention)}
+.gm-pm-note--info i{background:var(--lg-sem-info)}
+
+/* 页脚（17 · 17.1.1 ⑥）：口径 + 示意数据声明 + 章节链接 */
+/* ── 响应式（17 · 17.1.2：iPad 8:4 分栏 / Mobile 单列）。
+   断点只用收敛档 1024 / 767（audit.py breakpoint_reg 的白名单），不新起 1023/479 这类
+   相邻值 —— 相邻断点会让"同一设备不同页面换档不同"，是本仓 E 审查收口过的缺陷类。 ── */
+
+
+/* 07 · 7.6 / 无障碍：系统开启"减弱动态效果"后只保留最简反馈 */
+
+.gm-pm-kpi{font-family:inherit;text-align:left;cursor:pointer;width:100%;
+  transition:box-shadow var(--lg-t-base) var(--lg-ease-out),transform var(--lg-t-fast) var(--lg-ease-out)}
+.gm-pm-kpi:hover{box-shadow:var(--lg-glass-highlight),var(--lg-shadow-md)}
+.gm-pm-kpi:active{transform:scale(.99)}
+.gm-pm-kpi[aria-pressed="true"]{border-color:var(--pm-hue,var(--mmh-rose-500));
+  box-shadow:var(--lg-glass-highlight),var(--lg-shadow-md)}
+
+/* ── 首页 · 产品卡（6 个产品入口）────────────────────────────────────── */
+.gm-pm-prods{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:var(--lg-space-4)}
+.gm-pm-prod{position:relative;overflow:hidden;display:flex;flex-direction:column}
+/* 产品卡顶部一条产品色（辅助色只作场景标识；2px 落在 02 · 2.7.1 的强调档内） */
+.gm-pm-prod::before{content:"";position:absolute;left:0;right:0;top:0;height:2px;
+  background:var(--pm-hue,var(--mmh-rose-500))}
+.gm-pm-prod__hd{display:flex;align-items:center;gap:var(--lg-space-3);margin-bottom:var(--lg-space-3)}
+.gm-pm-prod__no{flex:none;width:36px;height:36px;border-radius:var(--lg-radius-btn-sm);
+  display:inline-flex;align-items:center;justify-content:center;font-size:var(--lg-fs-body-sm);
+  font-weight:600;color:var(--pm-ink,var(--mmh-rose-700));background:var(--pm-tint,rgba(247,127,163,.14))}
+.gm-pm-prod__hd b{display:block;font-size:var(--lg-fs-body);line-height:var(--lg-lh-body);font-weight:600}
+.gm-pm-prod__hd small{display:block;font-size:var(--lg-fs-caption);color:var(--lg-text-secondary)}
+.gm-pm-prod p{margin:0 0 var(--lg-space-3);font-size:var(--lg-fs-caption);line-height:1.75;
+  color:var(--lg-text-secondary);
+  /* 产品定位是 PRD 原文，整段保留（title 里有全文），但卡片上最多显示两行 ——
+     目录页要"扫得动"，6 张卡各 5 行定位会把页面拉得很长、也看不出重点。 */
+  display:-webkit-box;-webkit-box-orient:vertical;-webkit-line-clamp:2;overflow:hidden}
+.gm-pm-prod__meta{display:flex;flex-wrap:wrap;gap:var(--lg-space-2);margin-bottom:var(--lg-space-4)}
+.gm-pm-prod__meta span{font-size:var(--lg-fs-caption);line-height:var(--lg-lh-caption);
+  color:var(--lg-text-secondary);padding:var(--lg-space-1) var(--lg-space-3);
+  border-radius:var(--lg-radius-pill);background:rgba(255,255,255,.55);border:1px solid var(--lg-divider)}
+.gm-pm-prod__cta{margin-top:auto}
+
+/* ── 首页 · 互联链路（PRD §四「转入/贯通」把 6 个产品串起来；链路本身即可点导航）── */
+.gm-pm-chain{list-style:none;margin:0;padding:0}
+.gm-pm-chain li{display:flex;gap:var(--lg-space-3);align-items:flex-start;
+  padding:var(--lg-space-3) 0;border-top:1px solid var(--lg-divider)}
+.gm-pm-chain li:first-child{border-top:none}
+.gm-pm-chain .n{flex:none;width:26px;height:26px;border-radius:50%;display:inline-flex;
+  align-items:center;justify-content:center;font-size:var(--lg-fs-caption);font-weight:600;
+  color:var(--lg-text-on-accent);background:var(--mmh-grad-action-hc);background-origin:border-box}
+.gm-pm-chain .m{min-width:0}
+.gm-pm-chain b{display:block;font-size:var(--lg-fs-body-sm);line-height:var(--lg-lh-body-sm);font-weight:600}
+.gm-pm-chain span{font-size:var(--lg-fs-caption);color:var(--lg-text-secondary)}
+.gm-pm-chain a{color:var(--lg-link);text-decoration:none;font-weight:600}
+.gm-pm-chain a:hover{text-decoration:underline}
+/* 表格单元格里的文字链接（数据主责矩阵 → 该产品工作台）。
+   ⚠️ 移动端必须给足热区：`td > a` 的实测盒子只有 56×17，page-qa 会判 P1 touch-target
+   （10 · 10.4）。把盒子抬到 24 高（表内仍落在 44–52 行高档内），再用 ::after 扩到 44×44。 */
+.gm-pm-link{color:var(--lg-link);text-decoration:none;font-weight:600}
+.gm-pm-link:hover{text-decoration:underline}
+
+/* ── 筛选 chips（列表页工具行，17 · 17.3.4）：点选筛选待处理清单 ── */
+.gm-pm-filters{display:flex;align-items:center;gap:var(--lg-space-2);flex-wrap:wrap;
+  margin-bottom:var(--lg-space-3)}
+.gm-pm-filter{font-family:inherit;font-size:var(--lg-fs-caption);line-height:var(--lg-lh-caption);
+  font-weight:500;cursor:pointer;display:inline-flex;align-items:center;gap:var(--lg-space-2);
+  padding:var(--lg-space-1) var(--lg-space-3);border-radius:var(--lg-radius-pill);
+  background:rgba(255,255,255,.55);border:1px solid var(--lg-divider);color:var(--lg-text-secondary)}
+.gm-pm-filter:hover{background:rgba(255,255,255,.85)}
+.gm-pm-filter[aria-pressed="true"]{background:var(--mmh-grad-action-hc);color:var(--lg-text-on-accent);
+  border-color:transparent;font-weight:600;box-shadow:0 1px 2px rgba(178,58,99,.22);
+  background-origin:border-box}
+.gm-pm-filter__n{font-variant-numeric:tabular-nums}
+.gm-pm-count{margin-left:auto;font-size:var(--lg-fs-caption);color:var(--lg-text-secondary)}
+.gm-pm-empty{padding:var(--lg-space-5);text-align:center;font-size:var(--lg-fs-body-sm);
+  color:var(--lg-text-secondary)}
+/* 被筛掉的行：用 class 而不是 [hidden] —— 任何 display 规则都可能压过 UA 的 [hidden] */
+.gm-pm-off{display:none}
+
+/* 队列行可点：按该行语义筛选待处理清单（把"风险队列"与"待处理清单"连成一条动线） */
+.gm-pm-qbtn{display:flex;align-items:center;gap:var(--lg-space-3);width:100%;
+  font-family:inherit;font-size:var(--lg-fs-body-sm);line-height:var(--lg-lh-body-sm);
+  color:var(--lg-text-primary);background:none;border:none;cursor:pointer;text-align:left;
+  padding:var(--lg-space-2) 0;border-top:1px solid var(--lg-divider)}
+.gm-pm-qbtn:hover{color:var(--mmh-rose-700)}
+.gm-pm-qbtn b{margin-left:auto;font-variant-numeric:tabular-nums;font-weight:600;
+  color:var(--lg-text-primary)}
+.gm-pm-qbtn[aria-pressed="true"]{color:var(--mmh-rose-700);font-weight:600}
+
+/* ── 响应式（17 · 17.1.2：iPad 8:4 分栏 / Mobile 单列）。
+   断点只用收敛档 1024 / 767（audit.py breakpoint_reg 白名单），不新起 1023/479 这类相邻值。 ── */
+@media (max-width:1024px){
+  .gm-pm-hero{grid-template-columns:minmax(0,1fr)}
+  .gm-pm-prods{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .gm-pm-wb{grid-template-columns:minmax(0,1fr)}
+  .gm-pm-side{display:flex;flex-wrap:wrap;gap:var(--lg-space-1);align-items:center}
+  .gm-pm-side h4{margin:0 var(--lg-space-2) 0 0;padding-left:0}
+  .gm-pm-side a{min-height:36px;padding:0 var(--lg-space-3)}
+  .gm-pm-side a[aria-current="true"]::before{display:none}
+}
+/* ⚠️ 主表要能用，就得在窄平板/小桌面先把两列收成一列：
+   `.gm-tbl td` 的 `white-space:nowrap` 是设计系统的既有裁决（page-qa 的 P2 规则要求表格行高 44–52px，
+   单元格折行会顶破这一档）——所以**不能靠折行**缩短表格。实测数据：
+   1440 档卡片 652px、表格 772px（滚 120px）；1024 档卡片 554px（滚 218px）；768 档卡片 396px（滚 352px）。
+   两列布局在主表侧本来就太窄，把它提前收到 1200 就不需要横向拖动了。 */
+@media (max-width:1200px){
+  .gm-pm-grid--wide{grid-template-columns:minmax(0,1fr)}
+}
+/* 大桌面：主表侧的列比再放宽一档 —— 实测 1440 档「今日待处理」6 列表需要 690px，
+   1.6fr/1fr 只给到 652px（还差 38px 横向滚动）。列比放宽后不需要拖动，侧卡仍有 380px+。 */
+/* 大桌面：两列布局给主表列**最小宽度保障** —— 实测「今日待处理」5 列表需要 726px，
+   纯 `1.85fr` 在 1440 只给到 690px（滚 36px）。`minmax(780px, …)` 保证主表侧永远够宽（卡片内边距 2×20px 要算进去），
+   侧卡仍有 400px+；容器不够宽时下面的断点会把两列收成一列，不会溢出。 */
+@media (min-width:1280px){
+  .gm-pm-grid--wide{grid-template-columns:minmax(780px,1.85fr) minmax(0,1fr)}
+}
+@media (max-width:1200px){
+  .gm-pm-grid--wide{grid-template-columns:minmax(0,1fr)}
+}
+@media (max-width:900px){
+  /* 768~900 档：整宽后仍差几十像素，靠收单元格内边距补上 */
+  .gm-tbl th,.gm-tbl td{padding-left:8px;padding-right:8px}
+}
+@media (max-width:767px){
+  .gm-pm{padding:var(--lg-space-4) var(--lg-space-4) var(--lg-space-8)}
+  .gm-pm-prods,.gm-pm-grid--2,.gm-pm-grid--wide{grid-template-columns:minmax(0,1fr)}
+  .gm-pm-kpis{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .gm-pm-head h2{font-size:var(--lg-fs-section);line-height:var(--lg-lh-section)}
+  .gm-pm-hero h3{font-size:var(--lg-fs-title);line-height:var(--lg-lh-title)}
+  /* 顶栏品牌块：`flex:none` + 长机构名会把顶栏撑到比视口还宽（实测 375px 下 +290~391px 溢出）。
+     小屏改为可收缩 + 机构名换行到独立一行。 */
+  .gm-pm-pcbar__logo{flex:0 1 auto;min-width:0;flex-wrap:wrap}
+  .gm-pm-pcbar__logo small{width:100%;margin-left:0;line-height:1.5}
+  /* 页脚内联链接：11 · 11.2.18 要求行内链接热区高 ≥24 */
+  /* 表格内文字链接：盒子抬到 24 高，并由 ::after 扩到 44×44 热区（10 · 10.4） */
+  .gm-pm-link{position:relative;display:inline-flex;align-items:center;min-height:24px}
+  /* 10 · 10.4：≤767px 可点目标热区 ≥44×44（视觉盒子不动，::after 扩热区）。
+     ⚠️ 选择器与按钮集合必须同步维护：漏一处即"热区静默失联"。 */
+  .gm-pm-btn,.gm-pm-act,.gm-pm-filter,.gm-pm-side a,.gm-pm-qbtn,.gm-pm-chain a,.gm-pm-link{position:relative}
+  .gm-pm-btn::after,.gm-pm-act::after,.gm-pm-filter::after,.gm-pm-side a::after,
+  .gm-pm-qbtn::after,.gm-pm-chain a::after,.gm-pm-link::after{
+    content:"";position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);
+    width:100%;min-width:44px;height:100%;min-height:44px}
+  /* 搜索框：<input> 是替换元素，::after 不渲染，只能把盒子本身做够 44（10 · 10.4） */
+  .gm-pm-search,.gm-pm-search input{height:44px}
+}
+/* 07 · 7.6 / 无障碍：系统开启"减弱动态效果"后只保留最简反馈 */
+@media (prefers-reduced-motion:reduce){
+  .gm-pm-view.is-on{animation:none}
+}
+
+<!--@body-->
+<div class="gm-pm">
+<div class="gm-pm__amb" aria-hidden="true"><i></i><i></i><i></i></div>
+<div class="gm-pm-view gm-pm--home" id="home" data-p="home" data-k="home" aria-label="产品矩阵首页 · 6 大产品对接">
+<div class="gm-pm-head">
+  <h2>产品矩阵首页</h2>
+  <span class="en">GoodMom Product Matrix · 6 大产品对接</span>
+</div>
+<div class="gm-pm-panel gm-pm-hero">
+  <div>
+    <span class="gm-brand gm-brand--lg" style="margin-bottom:var(--lg-space-3)"><img src="../brand/logo-512.png" alt="妈咪好"><span class="gm-brand__t"><b>妈咪好 GoodMom</b><strong>妇幼全生命周期健康管理</strong></span></span>
+    <h3>6 大产品，一套统一数据标准</h3>
+    <p>五个业务系统可单独销售、独立部署，通过统一档案标准互联互通；AI 智能体平台后置叠加，建议<b>经医生审核后</b>写回业务系统。</p>
+  </div>
+</div>
+<section class="gm-pm-sec">
+  <div class="gm-pm-sec__h"><h3>产品入口</h3><span>也可用顶部「产品矩阵」下拉切换</span></div>
+  <div class="gm-pm-prods"><div class="gm-pm-card gm-pm-prod gm-pm--p01">
+  <div class="gm-pm-prod__hd"><span class="gm-prod-ico"><svg viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="9.4" cy="10.4" r="3.1"/><path d="M3.6 20.4c1.1-2.9 3.3-4.2 5.8-4.2 1.4 0 2.6.4 3.6 1.1"/><path d="m20.6 10.6 1 1.9 2.1.4-1.5 1.5.4 2.1-2-1-2 1 .4-2.1-1.5-1.5 2.1-.4z"/></g></svg></span><span><b>妇女健康管理系统</b><small>GoodMom Women Health</small></span></div>
+  <p title="面向妇女全生命周期健康管理，覆盖青春期、育龄期、围绝经期、老年期妇女保健，以及妇女疾病管理和两癌筛查。">面向妇女全生命周期健康管理，覆盖青春期、育龄期、围绝经期、老年期妇女保健，以及妇女疾病管理和两癌筛查。</p>
+  <div class="gm-pm-prod__cta"><a class="gm-pm-btn gm-pm-btn--line" href="#p01-work">进入工作台 <svg class="gm-pm-ico" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a></div>
+</div><div class="gm-pm-card gm-pm-prod gm-pm--p02">
+  <div class="gm-pm-prod__hd"><span class="gm-prod-ico"><svg viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="6.3" r="2.6"/><circle cx="12" cy="13.4" r="2.9"/><path d="M18.9 3.2l.9 1.7 1.9.4-1.4 1.4.4 1.9-1.8-1-1.8 1 .4-1.9-1.4-1.4 1.9-.4z"/></g></svg></span><span><b>婚前孕前保健系统</b><small>GoodMom Preconception Care</small></span></div>
+  <p title="面向婚前医学检查、孕前优生检查、备孕健康管理及孕前风险评估的专科业务系统。">面向婚前医学检查、孕前优生检查、备孕健康管理及孕前风险评估的专科业务系统。</p>
+  <div class="gm-pm-prod__cta"><a class="gm-pm-btn gm-pm-btn--line" href="#p02-work">进入工作台 <svg class="gm-pm-ico" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a></div>
+</div><div class="gm-pm-card gm-pm-prod gm-pm--p03">
+  <div class="gm-pm-prod__hd"><span class="gm-prod-ico"><svg viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="6.3" r="2.6"/><circle cx="12" cy="16.9" r="4.3"/><path d="M8.3 16h7.4M8.9 18h6.2"/></g></svg></span><span><b>孕产妇全程管理系统</b><small>GoodMom Maternity Care</small></span></div>
+  <p title="面向妇幼保健院产科、孕产保健科、高危孕产妇管理中心的孕期、分娩、产后全程业务管理系统。">面向妇幼保健院产科、孕产保健科、高危孕产妇管理中心的孕期、分娩、产后全程业务管理系统。</p>
+  <div class="gm-pm-prod__cta"><a class="gm-pm-btn gm-pm-btn--line" href="#p03-work">进入工作台 <svg class="gm-pm-ico" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a></div>
+</div><div class="gm-pm-card gm-pm-prod gm-pm--p04">
+  <div class="gm-pm-prod__hd"><span class="gm-prod-ico"><svg viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8.6" r="2.7"/><rect x="9.1" y="12.4" width="5.8" height="6.8" rx="2.9"/><path d="M9.1 15.2h5.8"/></g></svg></span><span><b>新生儿健康管理系统</b><small>GoodMom Newborn Care</small></span></div>
+  <p title="面向新生儿出生、访视、筛查、高危新生儿及新生儿向儿童保健转入的独立业务系统。">面向新生儿出生、访视、筛查、高危新生儿及新生儿向儿童保健转入的独立业务系统。</p>
+  <div class="gm-pm-prod__cta"><a class="gm-pm-btn gm-pm-btn--line" href="#p04-work">进入工作台 <svg class="gm-pm-ico" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a></div>
+</div><div class="gm-pm-card gm-pm-prod gm-pm--p05">
+  <div class="gm-pm-prod__hd"><span class="gm-prod-ico"><svg viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="5.6" r="2.4"/><rect x="10.1" y="9.4" width="3.8" height="4.2" rx="1.9"/><path d="M10.2 10.2 8.8 12M13.8 10.2l1.4 1.8"/><path d="M11 13.8v3.4M13 13.8v3.4"/></g></svg></span><span><b>儿童健康管理系统</b><small>GoodMom Child Health</small></span></div>
+  <p title="面向儿童保健、儿童成长发育、儿童“五健”、重点儿童及儿童健康档案的专科业务系统。">面向儿童保健、儿童成长发育、儿童“五健”、重点儿童及儿童健康档案的专科业务系统。</p>
+  <div class="gm-pm-prod__cta"><a class="gm-pm-btn gm-pm-btn--line" href="#p05-work">进入工作台 <svg class="gm-pm-ico" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a></div>
+</div><div class="gm-pm-card gm-pm-prod gm-pm--p06">
+  <div class="gm-pm-prod__hd"><span class="gm-prod-ico"><svg viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="4.6" y="8.6" width="14.8" height="10.8" rx="4"/><path d="M9.2 8.6V5.8h5.6v2.8"/><circle cx="9.7" cy="13.8" r=".95" fill="currentColor" stroke="none"/><circle cx="14.3" cy="13.8" r=".95" fill="currentColor" stroke="none"/><path d="M9.6 16.8h4.8"/></g></svg></span><span><b>妇幼AI智能体平台</b><small>GoodMom AI Care Intelligence</small></span></div>
+  <p title="在五大业务系统产生真实业务数据后，独立提供 AI 能力。">在五大业务系统产生真实业务数据后，独立提供 AI 能力。</p>
+  <div class="gm-pm-prod__cta"><a class="gm-pm-btn gm-pm-btn--line" href="#p06-work">进入工作台 <svg class="gm-pm-ico" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a></div>
+</div></div>
+</section>
+<section class="gm-pm-sec">
+  <div class="gm-pm-sec__h"><h3>数据互联链路</h3><span>PRD §四「转入/贯通」· §五 数据互联互通</span></div>
+  <div class="gm-pm-grid gm-pm-grid--wide">
+    <div class="gm-pm-card"><ul class="gm-pm-chain"><li><span class="n">1</span><span class="m"><b>妇女健康管理系统</b><span>妇女档案是婚孕前、孕产妇、儿童各档案的上游主档</span><a href="#p02-work">前往 婚前孕前 工作台 <svg class="gm-pm-ico" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a></span></li><li><span class="n">2</span><span class="m"><b>婚前孕前保健系统</b><span>婚检与孕前档案在妊娠后转入孕产妇系统，不重复建档</span><a href="#p03-work">前往 孕产妇 工作台 <svg class="gm-pm-ico" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a></span></li><li><span class="n">3</span><span class="m"><b>孕产妇全程管理系统</b><span>分娩结局关联新生儿档案，母婴数据贯通</span><a href="#p04-work">前往 新生儿 工作台 <svg class="gm-pm-ico" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a></span></li><li><span class="n">4</span><span class="m"><b>新生儿健康管理系统</b><span>新生儿档案在 28 天后转入儿童保健，随访计划连续</span><a href="#p05-work">前往 儿童健康 工作台 <svg class="gm-pm-ico" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a></span></li><li><span class="n">5</span><span class="m"><b>儿童健康管理系统</b><span>儿童健康档案与五健记录作为主责数据回流统一档案库</span></span></li><li><span class="n">6</span><span class="m"><b>妇幼AI智能体平台</b><span>后置叠加：只在业务系统产生真实数据后读取，AI 建议经审核后写回业务系统</span><a href="#p06-work">前往 AI 智能体工作台 <svg class="gm-pm-ico" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a></span></li></ul></div>
+    <div class="gm-pm-card">
+      <h3>数据主责原则</h3>
+      <div class="gm-tbl-wrap"><table class="gm-tbl">
+        <caption>每类数据只有一个主责产品（PRD §5.2）。</caption>
+        <thead><tr><th scope="col">数据对象</th><th scope="col">主责产品</th></tr></thead>
+        <tbody><tr><td>妇女基本档案</td><td><a class="gm-pm-link" href="#p01-work">妇女健康</a></td></tr><tr><td>婚前检查档案</td><td><a class="gm-pm-link" href="#p02-work">婚前孕前</a></td></tr><tr><td>孕前优生档案</td><td><a class="gm-pm-link" href="#p02-work">婚前孕前</a></td></tr><tr><td>妊娠档案</td><td><a class="gm-pm-link" href="#p03-work">孕产妇</a></td></tr><tr><td>孕期产检</td><td><a class="gm-pm-link" href="#p03-work">孕产妇</a></td></tr><tr><td>高危孕产妇</td><td><a class="gm-pm-link" href="#p03-work">孕产妇</a></td></tr><tr><td>分娩记录</td><td><a class="gm-pm-link" href="#p03-work">孕产妇</a></td></tr><tr><td>新生儿档案</td><td><a class="gm-pm-link" href="#p04-work">新生儿</a></td></tr><tr><td>新生儿筛查</td><td><a class="gm-pm-link" href="#p04-work">新生儿</a></td></tr><tr><td>儿童健康档案</td><td><a class="gm-pm-link" href="#p05-work">儿童</a></td></tr><tr><td>儿童五健</td><td><a class="gm-pm-link" href="#p05-work">儿童</a></td></tr><tr><td>重点儿童档案</td><td><a class="gm-pm-link" href="#p05-work">儿童</a></td></tr><tr><td>AI结果</td><td><a class="gm-pm-link" href="#p06-work">AI产品</a></td></tr></tbody>
+      </table></div>
+    </div>
+  </div>
+</section>
+</div>
+
+<div class="gm-pm-view gm-pm--p01" id="p01-work" data-p="p01" data-k="work" aria-label="妇女健康管理系统 · 工作台首页">
+<div class="gm-pm-head">
+  <h2>妇女健康工作台</h2>
+  <span class="en">GoodMom Women Health · Workbench</span>
+</div>
+<div class="gm-pm-pcbar">
+  <span class="gm-brand gm-brand--sm"><img src="../brand/logo-512.png" alt="妈咪好"><span class="gm-brand__t"><b>妈咪好 GoodMom</b><strong>妇女健康管理系统</strong></span></span>
+  <span class="gm-pm-search"><svg class="gm-pm-ico" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><circle cx="10.5" cy="10.5" r="6.5"/><path d="M15.4 15.4 21 21"/></svg><input type="search" aria-label="搜索档案 / 姓名 / 档案号" placeholder="搜索档案 / 姓名 / 档案号"></span>
+  <button type="button" class="gm-pm-btn gm-pm-btn--pri" data-tool="建立妇女档案">建立妇女档案</button>
+  <span class="gm-pm-pcbar__meta">望京妇幼保健院 · 2025-06-02</span>
+  <span class="gm-pm-av" aria-hidden="true">王</span>
+</div>
+<div class="gm-pm-wb">
+  <nav class="gm-pm-side" aria-label="对象视图">
+    <h4>对象视图</h4>
+    <div class="gm-pm-sidemenu"><a href="../fuyouaicansai/p01-women-health.html#work">工作台</a><a href="../fuyouaicansai/p01-women-health.html#archive">档案</a><a href="../fuyouaicansai/p01-women-health.html#ai">AI 协同</a><a href="../fuyouaicansai/p01-women-health.html#detail">详情</a></nav>
+  <nav class="gm-pm-side" aria-label="业务菜单">
+    <h4>业务菜单</h4>
+<a href="../fuyouaicansai/p01-women-health.html#mod-lifecycle">妇女全生命周期保健</a><a href="../fuyouaicansai/p01-women-health.html#mod-disease">妇女疾病管理</a><a href="../fuyouaicansai/p01-women-health.html#mod-screening">两癌筛查</a><a href="../fuyouaicansai/p01-women-health.html#mod-followup">妇女健康随访</a><a href="../fuyouaicansai/p01-women-health.html#mod-report">妇女健康报表</a></div>
+  </nav>
+  <div>
+    <div class="gm-pm-kpis"><button type="button" class="gm-pm-card gm-pm-kpi" data-tone-filter="all" aria-pressed="false" title="按「全部」筛选待处理清单"><span class="gm-pm-kpi__l">在管妇女档案</span><span class="gm-pm-kpi__v is-accent">12,849</span><span class="gm-pm-kpi__d">本月新增 320 · 今日 18</span></button><button type="button" class="gm-pm-card gm-pm-kpi" data-tone-filter="info" aria-pressed="false" title="按「信息 / 进行」筛选待处理清单"><span class="gm-pm-kpi__l">两癌待筛查</span><span class="gm-pm-kpi__v is-info">1,026</span><span class="gm-pm-kpi__d">宫颈 612 · 乳腺 414</span></button><button type="button" class="gm-pm-card gm-pm-kpi" data-tone-filter="attention" aria-pressed="false" title="按「注意 / 待办」筛选待处理清单"><span class="gm-pm-kpi__l">筛查阳性待随访</span><span class="gm-pm-kpi__v is-att">86</span><span class="gm-pm-kpi__d">待复查 41 · 待转诊 45</span></button><button type="button" class="gm-pm-card gm-pm-kpi" data-tone-filter="risk" aria-pressed="false" title="按「风险 / 异常」筛选待处理清单"><span class="gm-pm-kpi__l">检查异常待复核</span><span class="gm-pm-kpi__v is-risk">23</span><span class="gm-pm-kpi__d">宫颈 14 · 乳腺 9</span></button></div>
+    <div class="gm-pm-grid gm-pm-grid--wide">
+      <div>
+        <div class="gm-pm-card" style="margin-bottom:var(--lg-space-4)">
+          <h3>今日待处理</h3>
+          <div class="gm-pm-filters"><button type="button" class="gm-pm-filter" data-tone-filter="all" aria-pressed="true">全部 <span class="gm-pm-filter__n">5</span></button><button type="button" class="gm-pm-filter" data-tone-filter="risk" aria-pressed="false">风险 / 异常 <span class="gm-pm-filter__n">1</span></button><button type="button" class="gm-pm-filter" data-tone-filter="attention" aria-pressed="false">注意 / 待办 <span class="gm-pm-filter__n">2</span></button><button type="button" class="gm-pm-filter" data-tone-filter="info" aria-pressed="false">信息 / 进行 <span class="gm-pm-filter__n">1</span></button><button type="button" class="gm-pm-filter" data-tone-filter="neutral" aria-pressed="false">中性 / 未动 <span class="gm-pm-filter__n">1</span></button><span class="gm-pm-count" data-count>共 5 / 5 条</span></div>
+          <div class="gm-tbl-wrap gm-pm-todos"><table class="gm-tbl">
+            <thead><tr><th scope="col">服务对象</th><th scope="col">事项</th><th scope="col">状态</th><th scope="col">时限</th><th scope="col" class="col-ops">操作</th></tr></thead>
+            <tbody><tr data-tone="risk"><td class="gm-tbl__desk"><b>李慧 · 女 36</b></td><td class="gm-tbl__desk">宫颈癌筛查异常</td><td class="gm-tbl__desk">已逾期 3 天</td><td class="gm-tbl__desk"><span class="gm-pm-tag gm-pm-tag--risk" data-status="1"><i></i>检查异常</span></td><td class="gm-tbl__desk col-ops"><span class="gm-pm-acts"><button type="button" class="gm-pm-act" data-act="view">查看</button><button type="button" class="gm-pm-act" data-act="advance" data-after="info|复查中">安排复查</button><button type="button" class="gm-pm-act" data-kind="collab" data-act="collab" data-after="special|转诊">发起转诊</button></span></td><td class="gm-tbl__mob" colspan="5"><div class="r1"><b>李慧 · 女 36</b><span class="gm-pm-tag gm-pm-tag--risk" data-status="1"><i></i>检查异常</span></div><div class="r2"><i>事项</i>宫颈癌筛查异常</div><div class="r2"><i>时限</i>已逾期 3 天</div><div class="r3"><span class="gm-pm-acts"><button type="button" class="gm-pm-act" data-act="view">查看</button><button type="button" class="gm-pm-act" data-act="advance" data-after="info|复查中">安排复查</button><button type="button" class="gm-pm-act" data-kind="collab" data-act="collab" data-after="special|转诊">发起转诊</button></span></div></td></tr><tr data-tone="attention"><td class="gm-tbl__desk"><b>王雨桐 · 女 32</b></td><td class="gm-tbl__desk">乳腺 B 超可疑</td><td class="gm-tbl__desk">今日 15:00</td><td class="gm-tbl__desk"><span class="gm-pm-tag gm-pm-tag--attention" data-status="1"><i></i>待复核</span></td><td class="gm-tbl__desk col-ops"><span class="gm-pm-acts"><button type="button" class="gm-pm-act" data-act="view">查看</button><button type="button" class="gm-pm-act" data-act="advance" data-after="positive|已完成">录入结果</button></span></td><td class="gm-tbl__mob" colspan="5"><div class="r1"><b>王雨桐 · 女 32</b><span class="gm-pm-tag gm-pm-tag--attention" data-status="1"><i></i>待复核</span></div><div class="r2"><i>事项</i>乳腺 B 超可疑</div><div class="r2"><i>时限</i>今日 15:00</div><div class="r3"><span class="gm-pm-acts"><button type="button" class="gm-pm-act" data-act="view">查看</button><button type="button" class="gm-pm-act" data-act="advance" data-after="positive|已完成">录入结果</button></span></div></td></tr><tr data-tone="attention"><td class="gm-tbl__desk"><b>陈玉兰 · 女 54</b></td><td class="gm-tbl__desk">围绝经期保健随访</td><td class="gm-tbl__desk">明日</td><td class="gm-tbl__desk"><span class="gm-pm-tag gm-pm-tag--attention" data-status="1"><i></i>待随访</span></td><td class="gm-tbl__desk col-ops"><span class="gm-pm-acts"><button type="button" class="gm-pm-act" data-act="view">查看</button><button type="button" class="gm-pm-act" data-act="advance" data-after="info|随访中">开始随访</button></span></td><td class="gm-tbl__mob" colspan="5"><div class="r1"><b>陈玉兰 · 女 54</b><span class="gm-pm-tag gm-pm-tag--attention" data-status="1"><i></i>待随访</span></div><div class="r2"><i>事项</i>围绝经期保健随访</div><div class="r2"><i>时限</i>明日</div><div class="r3"><span class="gm-pm-acts"><button type="button" class="gm-pm-act" data-act="view">查看</button><button type="button" class="gm-pm-act" data-act="advance" data-after="info|随访中">开始随访</button></span></div></td></tr><tr data-tone="info"><td class="gm-tbl__desk"><b>张敏 · 女 30</b></td><td class="gm-tbl__desk">宫颈筛查报告已出</td><td class="gm-tbl__desk">今日 16:00</td><td class="gm-tbl__desk"><span class="gm-pm-tag gm-pm-tag--info" data-status="1"><i></i>筛查中</span></td><td class="gm-tbl__desk col-ops"><span class="gm-pm-acts"><button type="button" class="gm-pm-act" data-act="view">查看</button><button type="button" class="gm-pm-act" data-act="advance" data-after="positive|已完成">录入结果</button></span></td><td class="gm-tbl__mob" colspan="5"><div class="r1"><b>张敏 · 女 30</b><span class="gm-pm-tag gm-pm-tag--info" data-status="1"><i></i>筛查中</span></div><div class="r2"><i>事项</i>宫颈筛查报告已出</div><div class="r2"><i>时限</i>今日 16:00</div><div class="r3"><span class="gm-pm-acts"><button type="button" class="gm-pm-act" data-act="view">查看</button><button type="button" class="gm-pm-act" data-act="advance" data-after="positive|已完成">录入结果</button></span></div></td></tr><tr data-tone="neutral"><td class="gm-tbl__desk"><b>刘佳 · 女 28</b></td><td class="gm-tbl__desk">两癌筛查未做</td><td class="gm-tbl__desk">已预约 06-08</td><td class="gm-tbl__desk"><span class="gm-pm-tag gm-pm-tag--neutral" data-status="1"><i></i>待筛查</span></td><td class="gm-tbl__desk col-ops"><span class="gm-pm-acts"><button type="button" class="gm-pm-act" data-act="view">查看</button><button type="button" class="gm-pm-act" data-act="advance" data-after="info|筛查中">开始筛查</button></span></td><td class="gm-tbl__mob" colspan="5"><div class="r1"><b>刘佳 · 女 28</b><span class="gm-pm-tag gm-pm-tag--neutral" data-status="1"><i></i>待筛查</span></div><div class="r2"><i>事项</i>两癌筛查未做</div><div class="r2"><i>时限</i>已预约 06-08</div><div class="r3"><span class="gm-pm-acts"><button type="button" class="gm-pm-act" data-act="view">查看</button><button type="button" class="gm-pm-act" data-act="advance" data-after="info|筛查中">开始筛查</button></span></div></td></tr></tbody>
+          </table></div>
+          <div class="gm-pm-empty gm-pm-off" data-empty>当前筛选下暂无事项。</div>
+        </div>
+        <div class="gm-pm-card">
+          <h3>两癌筛查闭环</h3>
+          <button type="button" class="gm-pm-qbtn" data-tone-filter="attention" aria-pressed="false">宫颈癌筛查（TCT + HPV）<b>已完成 612 · 待复查 41</b></button><button type="button" class="gm-pm-qbtn" data-tone-filter="attention" aria-pressed="false">乳腺癌筛查（乳腺 B 超）<b>已完成 414 · 待复查 22</b></button><button type="button" class="gm-pm-qbtn" data-tone-filter="risk" aria-pressed="false">阳性管理 · 转诊闭环<b>待转诊 45 · 已反馈 38</b></button><button type="button" class="gm-pm-qbtn" data-tone-filter="neutral" aria-pressed="false">筛查档案完整性<b>完整 1,208 份 · 待补 42 份</b></button>
+        </div>
+      </div>
+      <div>
+        <div class="gm-pm-card" style="margin-bottom:var(--lg-space-4)">
+          <h3>快捷工具</h3>
+          <div class="gm-pm-tools"><button type="button" class="gm-pm-btn gm-pm-btn--line" data-tool="建立妇女档案">建立妇女档案</button><button type="button" class="gm-pm-btn gm-pm-btn--line" data-tool="两癌筛查">两癌筛查</button><button type="button" class="gm-pm-btn gm-pm-btn--line" data-tool="妇科检查">妇科检查</button><button type="button" class="gm-pm-btn gm-pm-btn--line" data-tool="风险评估">风险评估</button><button type="button" class="gm-pm-btn gm-pm-btn--line" data-tool="异常随访">异常随访</button><button type="button" class="gm-pm-btn gm-pm-btn--line" data-tool="转诊">转诊</button></div>
+        </div>
+        <div class="gm-pm-card">
+          <div class="gm-pm-ov"><h4>质量</h4><ul class="gm-pm-list"><li>筛查完成率<b>78%</b></li><li>阳性随访闭环<b>92%</b></li><li>档案完整率<b>96%</b></li><li>随访及时率<b>88%</b></li></ul></div>
+          <div class="gm-pm-ov"><h4>动态</h4><ul class="gm-pm-list gm-pm-feed" data-feed><li><span class="gm-pm-tag gm-pm-tag--info"><i></i>已预约</span><span>李慧 · 宫颈筛查复查已预约</span></li><li><span class="gm-pm-tag gm-pm-tag--special"><i></i>转诊</span><span>王雨桐 · 转诊市妇幼保健院（绿色通道）</span></li><li><span class="gm-pm-tag gm-pm-tag--info"><i></i>已建档</span><span>刘佳 · 两癌筛查档案建档完成</span></li></ul></div>
+        </div>
+      </div>
+    </div>
+    
+    
+  </div>
+</div>
+</div>
+
+<div class="gm-pm-view gm-pm--p02" id="p02-work" data-p="p02" data-k="work" aria-label="婚前孕前保健系统 · 工作台首页">
+<div class="gm-pm-head">
+  <h2>婚前孕前工作台</h2>
+  <span class="en">GoodMom Preconception Care · Workbench</span>
+</div>
+<div class="gm-pm-pcbar">
+  <span class="gm-brand gm-brand--sm"><img src="../brand/logo-512.png" alt="妈咪好"><span class="gm-brand__t"><b>妈咪好 GoodMom</b><strong>婚前孕前保健系统</strong></span></span>
+  <span class="gm-pm-search"><svg class="gm-pm-ico" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><circle cx="10.5" cy="10.5" r="6.5"/><path d="M15.4 15.4 21 21"/></svg><input type="search" aria-label="搜索档案 / 姓名 / 档案号" placeholder="搜索档案 / 姓名 / 档案号"></span>
+  <button type="button" class="gm-pm-btn gm-pm-btn--pri" data-tool="婚检登记">婚检登记</button>
+  <span class="gm-pm-pcbar__meta">望京妇幼保健院 · 2025-06-02</span>
+  <span class="gm-pm-av" aria-hidden="true">王</span>
+</div>
+<div class="gm-pm-wb">
+  <nav class="gm-pm-side" aria-label="对象视图">
+    <h4>对象视图</h4>
+    <div class="gm-pm-sidemenu"><a href="../fuyouaicansai/p02-preconception.html#work">工作台</a><a href="../fuyouaicansai/p02-preconception.html#archive">档案</a><a href="../fuyouaicansai/p02-preconception.html#ai">AI 协同</a><a href="../fuyouaicansai/p02-preconception.html#detail">详情</a></nav>
+  <nav class="gm-pm-side" aria-label="业务菜单">
+    <h4>业务菜单</h4>
+<a href="../fuyouaicansai/p02-preconception.html#mod-premarital">婚前医学检查</a><a href="../fuyouaicansai/p02-preconception.html#mod-preconception">孕前优生</a><a href="../fuyouaicansai/p02-preconception.html#mod-prepare">备孕管理</a><a href="../fuyouaicansai/p02-preconception.html#mod-results">检查结果</a><a href="../fuyouaicansai/p02-preconception.html#mod-followup">随访管理</a><a href="../fuyouaicansai/p02-preconception.html#mod-report">数据报表</a></div>
+  </nav>
+  <div>
+    <div class="gm-pm-kpis"><button type="button" class="gm-pm-card gm-pm-kpi" data-tone-filter="all" aria-pressed="false" title="按「全部」筛选待处理清单"><span class="gm-pm-kpi__l">今日婚检</span><span class="gm-pm-kpi__v is-accent">24 对</span><span class="gm-pm-kpi__d">已预约 18 · 待登记 6</span></button><button type="button" class="gm-pm-card gm-pm-kpi" data-tone-filter="info" aria-pressed="false" title="按「信息 / 进行」筛选待处理清单"><span class="gm-pm-kpi__l">孕前优生待评估</span><span class="gm-pm-kpi__v is-info">38</span><span class="gm-pm-kpi__d">待检查 21 · 待评估 17</span></button><button type="button" class="gm-pm-card gm-pm-kpi" data-tone-filter="risk" aria-pressed="false" title="按「风险 / 异常」筛选待处理清单"><span class="gm-pm-kpi__l">高风险待咨询</span><span class="gm-pm-kpi__v is-risk">9</span><span class="gm-pm-kpi__d">遗传 4 · 感染 3 · 营养 2</span></button><button type="button" class="gm-pm-card gm-pm-kpi" data-tone-filter="attention" aria-pressed="false" title="按「注意 / 待办」筛选待处理清单"><span class="gm-pm-kpi__l">复查提醒</span><span class="gm-pm-kpi__v is-att">16</span><span class="gm-pm-kpi__d">本周到期 11 · 已逾期 5</span></button></div>
+    <div class="gm-pm-grid gm-pm-grid--wide">
+      <div>
+        <div class="gm-pm-card" style="margin-bottom:var(--lg-space-4)">
+          <h3>今日待处理</h3>
+          <div class="gm-pm-filters"><button type="button" class="gm-pm-filter" data-tone-filter="all" aria-pressed="true">全部 <span class="gm-pm-filter__n">5</span></button><button type="button" class="gm-pm-filter" data-tone-filter="risk" aria-pressed="false">风险 / 异常 <span class="gm-pm-filter__n">1</span></button><button type="button" class="gm-pm-filter" data-tone-filter="attention" aria-pressed="false">注意 / 待办 <span class="gm-pm-filter__n">2</span></button><button type="button" class="gm-pm-filter" data-tone-filter="info" aria-pressed="false">信息 / 进行 <span class="gm-pm-filter__n">1</span></button><button type="button" class="gm-pm-filter" data-tone-filter="neutral" aria-pressed="false">中性 / 未动 <span class="gm-pm-filter__n">1</span></button><span class="gm-pm-count" data-count>共 5 / 5 条</span></div>
+          <div class="gm-tbl-wrap gm-pm-todos"><table class="gm-tbl">
+            <thead><tr><th scope="col">服务对象</th><th scope="col">事项</th><th scope="col">状态</th><th scope="col">时限</th><th scope="col" class="col-ops">操作</th></tr></thead>
+            <tbody><tr data-tone="attention"><td class="gm-tbl__desk"><b>王磊 · 男 28</b></td><td class="gm-tbl__desk">婚前医学检查登记</td><td class="gm-tbl__desk">今日 10:30</td><td class="gm-tbl__desk"><span class="gm-pm-tag gm-pm-tag--attention" data-status="1"><i></i>待确认</span></td><td class="gm-tbl__desk col-ops"><span class="gm-pm-acts"><button type="button" class="gm-pm-act" data-act="view">查看</button><button type="button" class="gm-pm-act" data-act="advance" data-after="positive|已完成">录入结果</button></span></td><td class="gm-tbl__mob" colspan="5"><div class="r1"><b>王磊 · 男 28</b><span class="gm-pm-tag gm-pm-tag--attention" data-status="1"><i></i>待确认</span></div><div class="r2"><i>事项</i>婚前医学检查登记</div><div class="r2"><i>时限</i>今日 10:30</div><div class="r3"><span class="gm-pm-acts"><button type="button" class="gm-pm-act" data-act="view">查看</button><button type="button" class="gm-pm-act" data-act="advance" data-after="positive|已完成">录入结果</button></span></div></td></tr><tr data-tone="attention"><td class="gm-tbl__desk"><b>张敏 · 女 27</b></td><td class="gm-tbl__desk">孕前优生检查</td><td class="gm-tbl__desk">今日 14:00</td><td class="gm-tbl__desk"><span class="gm-pm-tag gm-pm-tag--attention" data-status="1"><i></i>待补检</span></td><td class="gm-tbl__desk col-ops"><span class="gm-pm-acts"><button type="button" class="gm-pm-act" data-act="view">查看</button><button type="button" class="gm-pm-act" data-act="advance" data-after="positive|已完成">录入结果</button><button type="button" class="gm-pm-act" data-kind="collab" data-act="collab" data-after="special|已驳回">健康指导</button></span></td><td class="gm-tbl__mob" colspan="5"><div class="r1"><b>张敏 · 女 27</b><span class="gm-pm-tag gm-pm-tag--attention" data-status="1"><i></i>待补检</span></div><div class="r2"><i>事项</i>孕前优生检查</div><div class="r2"><i>时限</i>今日 14:00</div><div class="r3"><span class="gm-pm-acts"><button type="button" class="gm-pm-act" data-act="view">查看</button><button type="button" class="gm-pm-act" data-act="advance" data-after="positive|已完成">录入结果</button><button type="button" class="gm-pm-act" data-kind="collab" data-act="collab" data-after="special|已驳回">健康指导</button></span></div></td></tr><tr data-tone="risk"><td class="gm-tbl__desk"><b>李文 · 女 31</b></td><td class="gm-tbl__desk">地中海贫血遗传风险</td><td class="gm-tbl__desk">06-08</td><td class="gm-tbl__desk"><span class="gm-pm-tag gm-pm-tag--risk" data-status="1"><i></i>高风险</span></td><td class="gm-tbl__desk col-ops"><span class="gm-pm-acts"><button type="button" class="gm-pm-act" data-act="view">查看</button><button type="button" class="gm-pm-act" data-act="advance" data-after="info|进行中">遗传咨询</button><button type="button" class="gm-pm-act" data-kind="collab" data-act="collab" data-after="special|转诊">发起转诊</button></span></td><td class="gm-tbl__mob" colspan="5"><div class="r1"><b>李文 · 女 31</b><span class="gm-pm-tag gm-pm-tag--risk" data-status="1"><i></i>高风险</span></div><div class="r2"><i>事项</i>地中海贫血遗传风险</div><div class="r2"><i>时限</i>06-08</div><div class="r3"><span class="gm-pm-acts"><button type="button" class="gm-pm-act" data-act="view">查看</button><button type="button" class="gm-pm-act" data-act="advance" data-after="info|进行中">遗传咨询</button><button type="button" class="gm-pm-act" data-kind="collab" data-act="collab" data-after="special|转诊">发起转诊</button></span></div></td></tr><tr data-tone="info"><td class="gm-tbl__desk"><b>赵鑫 · 男 30</b></td><td class="gm-tbl__desk">婚检登记（明日预约）</td><td class="gm-tbl__desk">明日 09:00</td><td class="gm-tbl__desk"><span class="gm-pm-tag gm-pm-tag--info" data-status="1"><i></i>已预约</span></td><td class="gm-tbl__desk col-ops"><span class="gm-pm-acts"><button type="button" class="gm-pm-act" data-act="view">查看</button><button type="button" class="gm-pm-act" data-act="advance" data-after="positive|已确认">确认到诊</button></span></td><td class="gm-tbl__mob" colspan="5"><div class="r1"><b>赵鑫 · 男 30</b><span class="gm-pm-tag gm-pm-tag--info" data-status="1"><i></i>已预约</span></div><div class="r2"><i>事项</i>婚检登记（明日预约）</div><div class="r2"><i>时限</i>明日 09:00</div><div class="r3"><span class="gm-pm-acts"><button type="button" class="gm-pm-act" data-act="view">查看</button><button type="button" class="gm-pm-act" data-act="advance" data-after="positive|已确认">确认到诊</button></span></div></td></tr><tr data-tone="neutral"><td class="gm-tbl__desk"><b>陈静 · 女 29</b></td><td class="gm-tbl__desk">备孕复查提醒</td><td class="gm-tbl__desk">明日</td><td class="gm-tbl__desk"><span class="gm-pm-tag gm-pm-tag--neutral" data-status="1"><i></i>未随访</span></td><td class="gm-tbl__desk col-ops"><span class="gm-pm-acts"><button type="button" class="gm-pm-act" data-act="view">查看</button><button type="button" class="gm-pm-act" data-act="advance" data-after="attention|待随访">复查提醒</button></span></td><td class="gm-tbl__mob" colspan="5"><div class="r1"><b>陈静 · 女 29</b><span class="gm-pm-tag gm-pm-tag--neutral" data-status="1"><i></i>未随访</span></div><div class="r2"><i>事项</i>备孕复查提醒</div><div class="r2"><i>时限</i>明日</div><div class="r3"><span class="gm-pm-acts"><button type="button" class="gm-pm-act" data-act="view">查看</button><button type="button" class="gm-pm-act" data-act="advance" data-after="attention|待随访">复查提醒</button></span></div></td></tr></tbody>
+          </table></div>
+          <div class="gm-pm-empty gm-pm-off" data-empty>当前筛选下暂无事项。</div>
+        </div>
+        <div class="gm-pm-card">
+          <h3>孕前风险因素</h3>
+          <button type="button" class="gm-pm-qbtn" data-tone-filter="risk" aria-pressed="false">遗传风险 · 需遗传咨询<b>共 12 · 待咨询 9</b></button><button type="button" class="gm-pm-qbtn" data-tone-filter="attention" aria-pressed="false">感染风险 · 需复查<b>共 26 · 待复查 18</b></button><button type="button" class="gm-pm-qbtn" data-tone-filter="attention" aria-pressed="false">营养风险 · 需健康指导<b>共 41 · 待指导 33</b></button><button type="button" class="gm-pm-qbtn" data-tone-filter="info" aria-pressed="false">婚检结论待出<b>共 8 · 今日到期 3</b></button>
+        </div>
+      </div>
+      <div>
+        <div class="gm-pm-card" style="margin-bottom:var(--lg-space-4)">
+          <h3>快捷工具</h3>
+          <div class="gm-pm-tools"><button type="button" class="gm-pm-btn gm-pm-btn--line" data-tool="婚检登记">婚检登记</button><button type="button" class="gm-pm-btn gm-pm-btn--line" data-tool="孕前登记">孕前登记</button><button type="button" class="gm-pm-btn gm-pm-btn--line" data-tool="优生检查">优生检查</button><button type="button" class="gm-pm-btn gm-pm-btn--line" data-tool="风险评估">风险评估</button><button type="button" class="gm-pm-btn gm-pm-btn--line" data-tool="健康指导">健康指导</button><button type="button" class="gm-pm-btn gm-pm-btn--line" data-tool="妊娠转入">妊娠转入</button></div>
+        </div>
+        <div class="gm-pm-card">
+          <div class="gm-pm-ov"><h4>质量</h4><ul class="gm-pm-list"><li>婚检完成率<b>94%</b></li><li>优生检查完成率<b>87%</b></li><li>高风险咨询闭环<b>90%</b></li><li>复查闭环率<b>76%</b></li></ul></div>
+          <div class="gm-pm-ov"><h4>动态</h4><ul class="gm-pm-list gm-pm-feed" data-feed><li><span class="gm-pm-tag gm-pm-tag--positive"><i></i>已完成</span><span>王磊 · 婚前医学检查已完成（未见异常）</span></li><li><span class="gm-pm-tag gm-pm-tag--info"><i></i>已预约</span><span>李文 · 遗传咨询已预约（转市妇产医院）</span></li><li><span class="gm-pm-tag gm-pm-tag--info"><i></i>已建档</span><span>陈静 · 孕前优生档案建档完成</span></li></ul></div>
+        </div>
+      </div>
+    </div>
+    
+    
+  </div>
+</div>
+</div>
+
+<div class="gm-pm-view gm-pm--p03" id="p03-work" data-p="p03" data-k="work" aria-label="孕产妇全程管理系统 · 工作台首页">
+<div class="gm-pm-head">
+  <h2>孕产妇工作台</h2>
+  <span class="en">GoodMom Maternity Care · Workbench</span>
+</div>
+<div class="gm-pm-pcbar">
+  <span class="gm-brand gm-brand--sm"><img src="../brand/logo-512.png" alt="妈咪好"><span class="gm-brand__t"><b>妈咪好 GoodMom</b><strong>孕产妇全程管理系统</strong></span></span>
+  <span class="gm-pm-search"><svg class="gm-pm-ico" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><circle cx="10.5" cy="10.5" r="6.5"/><path d="M15.4 15.4 21 21"/></svg><input type="search" aria-label="搜索档案 / 姓名 / 档案号" placeholder="搜索档案 / 姓名 / 档案号"></span>
+  <button type="button" class="gm-pm-btn gm-pm-btn--pri" data-tool="建档">建档</button>
+  <span class="gm-pm-pcbar__meta">望京妇幼保健院 · 2025-06-02</span>
+  <span class="gm-pm-av" aria-hidden="true">王</span>
+</div>
+<div class="gm-pm-wb">
+  <nav class="gm-pm-side" aria-label="对象视图">
+    <h4>对象视图</h4>
+    <div class="gm-pm-sidemenu"><a href="../fuyouaicansai/p03-maternity.html#work">工作台</a><a href="../fuyouaicansai/p03-maternity.html#archive">档案</a><a href="../fuyouaicansai/p03-maternity.html#ai">AI 协同</a><a href="../fuyouaicansai/p03-maternity.html#detail">详情</a></nav>
+  <nav class="gm-pm-side" aria-label="业务菜单">
+    <h4>业务菜单</h4>
+<a href="../fuyouaicansai/p03-maternity.html#mod-antenatal">孕期保健</a><a href="../fuyouaicansai/p03-maternity.html#mod-highrisk">高危孕产妇</a><a href="../fuyouaicansai/p03-maternity.html#mod-delivery">分娩管理</a><a href="../fuyouaicansai/p03-maternity.html#mod-postpartum">产后管理</a><a href="../fuyouaicansai/p03-maternity.html#mod-appointment">预约管理</a><a href="../fuyouaicansai/p03-maternity.html#mod-followup">随访管理</a><a href="../fuyouaicansai/p03-maternity.html#mod-report">统计报表</a></div>
+  </nav>
+  <div>
+    <div class="gm-pm-kpis"><button type="button" class="gm-pm-card gm-pm-kpi" data-tone-filter="all" aria-pressed="false" title="按「全部」筛选待处理清单"><span class="gm-pm-kpi__l">在管孕产妇</span><span class="gm-pm-kpi__v is-accent">1,286</span><span class="gm-pm-kpi__d">本月新增 96 · 今日 12</span></button><button type="button" class="gm-pm-card gm-pm-kpi" data-tone-filter="risk" aria-pressed="false" title="按「风险 / 异常」筛选待处理清单"><span class="gm-pm-kpi__l">高危专案（五色）</span><span class="gm-pm-kpi__v is-risk">132</span><span class="gm-pm-kpi__d">红 18 · 橙 41 · 紫 9</span></button><button type="button" class="gm-pm-card gm-pm-kpi" data-tone-filter="info" aria-pressed="false" title="按「信息 / 进行」筛选待处理清单"><span class="gm-pm-kpi__l">今日产检</span><span class="gm-pm-kpi__v is-info">68</span><span class="gm-pm-kpi__d">已到诊 41 · 待就诊 27</span></button><button type="button" class="gm-pm-card gm-pm-kpi" data-tone-filter="attention" aria-pressed="false" title="按「注意 / 待办」筛选待处理清单"><span class="gm-pm-kpi__l">待产后访视</span><span class="gm-pm-kpi__v is-att">45</span><span class="gm-pm-kpi__d">首次访视 28 · 42 天 17</span></button></div>
+    <div class="gm-pm-grid gm-pm-grid--stack">
+      <div>
+        <div class="gm-pm-card" style="margin-bottom:var(--lg-space-4)">
+          <h3>今日待处理</h3>
+          <div class="gm-pm-filters"><button type="button" class="gm-pm-filter" data-tone-filter="all" aria-pressed="true">全部 <span class="gm-pm-filter__n">5</span></button><button type="button" class="gm-pm-filter" data-tone-filter="risk" aria-pressed="false">风险 / 异常 <span class="gm-pm-filter__n">1</span></button><button type="button" class="gm-pm-filter" data-tone-filter="attention" aria-pressed="false">注意 / 待办 <span class="gm-pm-filter__n">2</span></button><button type="button" class="gm-pm-filter" data-tone-filter="info" aria-pressed="false">信息 / 进行 <span class="gm-pm-filter__n">1</span></button><button type="button" class="gm-pm-filter" data-tone-filter="neutral" aria-pressed="false">中性 / 未动 <span class="gm-pm-filter__n">1</span></button><span class="gm-pm-count" data-count>共 5 / 5 条</span></div>
+          <div class="gm-tbl-wrap gm-pm-todos"><table class="gm-tbl">
+            <thead><tr><th scope="col">服务对象</th><th scope="col">事项</th><th scope="col">风险分级</th><th scope="col">状态</th><th scope="col">时限</th><th scope="col" class="col-ops">操作</th></tr></thead>
+            <tbody><tr data-tone="risk"><td class="gm-tbl__desk"><b>陈静 · 孕 12 周</b></td><td class="gm-tbl__desk">妊娠合并心脏病 · 高危专案</td><td class="gm-tbl__desk"><span class="gm-pm-tag gm-pm-tag--m5" data-m5="4"><i></i>红 · 高风险</span></td><td class="gm-tbl__desk">今日复诊</td><td class="gm-tbl__desk"><span class="gm-pm-tag gm-pm-tag--risk" data-status="1"><i></i>待处理</span></td><td class="gm-tbl__desk col-ops"><span class="gm-pm-acts"><button type="button" class="gm-pm-act" data-act="view">查看</button><button type="button" class="gm-pm-act" data-act="advance" data-after="info|随访中">高危随访</button><button type="button" class="gm-pm-act" data-kind="collab" data-act="collab" data-after="special|转诊">发起转诊</button></span></td><td class="gm-tbl__mob" colspan="6"><div class="r1"><b>陈静 · 孕 12 周</b><span class="gm-pm-tag gm-pm-tag--risk" data-status="1"><i></i>待处理</span></div><div class="r2"><i>事项</i>妊娠合并心脏病 · 高危专案</div><div class="r2"><i>风险分级</i><span class="gm-pm-tag gm-pm-tag--m5" data-m5="4"><i></i>红 · 高风险</span></div><div class="r2"><i>时限</i>今日复诊</div><div class="r3"><span class="gm-pm-acts"><button type="button" class="gm-pm-act" data-act="view">查看</button><button type="button" class="gm-pm-act" data-act="advance" data-after="info|随访中">高危随访</button><button type="button" class="gm-pm-act" data-kind="collab" data-act="collab" data-after="special|转诊">发起转诊</button></span></div></td></tr><tr data-tone="attention"><td class="gm-tbl__desk"><b>周洁 · 孕 16 周</b></td><td class="gm-tbl__desk">子痫前期史 · 专案管理</td><td class="gm-tbl__desk"><span class="gm-pm-tag gm-pm-tag--m5" data-m5="3"><i></i>橙 · 较高风险</span></td><td class="gm-tbl__desk">06-08</td><td class="gm-tbl__desk"><span class="gm-pm-tag gm-pm-tag--attention" data-status="1"><i></i>待随访</span></td><td class="gm-tbl__desk col-ops"><span class="gm-pm-acts"><button type="button" class="gm-pm-act" data-act="view">查看</button><button type="button" class="gm-pm-act" data-act="advance" data-after="info|已预约">产检预约</button></span></td><td class="gm-tbl__mob" colspan="6"><div class="r1"><b>周洁 · 孕 16 周</b><span class="gm-pm-tag gm-pm-tag--attention" data-status="1"><i></i>待随访</span></div><div class="r2"><i>事项</i>子痫前期史 · 专案管理</div><div class="r2"><i>风险分级</i><span class="gm-pm-tag gm-pm-tag--m5" data-m5="3"><i></i>橙 · 较高风险</span></div><div class="r2"><i>时限</i>06-08</div><div class="r3"><span class="gm-pm-acts"><button type="button" class="gm-pm-act" data-act="view">查看</button><button type="button" class="gm-pm-act" data-act="advance" data-after="info|已预约">产检预约</button></span></div></td></tr><tr data-tone="attention"><td class="gm-tbl__desk"><b>张敏 · 孕 28 周</b></td><td class="gm-tbl__desk">妊娠期糖尿病 · 产检</td><td class="gm-tbl__desk"><span class="gm-pm-tag gm-pm-tag--m5" data-m5="2"><i></i>黄 · 一般风险</span></td><td class="gm-tbl__desk">今日 15:00</td><td class="gm-tbl__desk"><span class="gm-pm-tag gm-pm-tag--attention" data-status="1"><i></i>待处理</span></td><td class="gm-tbl__desk col-ops"><span class="gm-pm-acts"><button type="button" class="gm-pm-act" data-act="view">查看</button><button type="button" class="gm-pm-act" data-act="advance" data-after="positive|已完成">产检记录</button></span></td><td class="gm-tbl__mob" colspan="6"><div class="r1"><b>张敏 · 孕 28 周</b><span class="gm-pm-tag gm-pm-tag--attention" data-status="1"><i></i>待处理</span></div><div class="r2"><i>事项</i>妊娠期糖尿病 · 产检</div><div class="r2"><i>风险分级</i><span class="gm-pm-tag gm-pm-tag--m5" data-m5="2"><i></i>黄 · 一般风险</span></div><div class="r2"><i>时限</i>今日 15:00</div><div class="r3"><span class="gm-pm-acts"><button type="button" class="gm-pm-act" data-act="view">查看</button><button type="button" class="gm-pm-act" data-act="advance" data-after="positive|已完成">产检记录</button></span></div></td></tr><tr data-tone="info"><td class="gm-tbl__desk"><b>孙倩 · 孕 36 周</b></td><td class="gm-tbl__desk">待分娩评估</td><td class="gm-tbl__desk"><span class="gm-pm-tag gm-pm-tag--m5" data-m5="1"><i></i>绿 · 低风险</span></td><td class="gm-tbl__desk">明日</td><td class="gm-tbl__desk"><span class="gm-pm-tag gm-pm-tag--info" data-status="1"><i></i>进行中</span></td><td class="gm-tbl__desk col-ops"><span class="gm-pm-acts"><button type="button" class="gm-pm-act" data-act="view">查看</button><button type="button" class="gm-pm-act" data-act="advance" data-after="positive|已完成">分娩登记</button></span></td><td class="gm-tbl__mob" colspan="6"><div class="r1"><b>孙倩 · 孕 36 周</b><span class="gm-pm-tag gm-pm-tag--info" data-status="1"><i></i>进行中</span></div><div class="r2"><i>事项</i>待分娩评估</div><div class="r2"><i>风险分级</i><span class="gm-pm-tag gm-pm-tag--m5" data-m5="1"><i></i>绿 · 低风险</span></div><div class="r2"><i>时限</i>明日</div><div class="r3"><span class="gm-pm-acts"><button type="button" class="gm-pm-act" data-act="view">查看</button><button type="button" class="gm-pm-act" data-act="advance" data-after="positive|已完成">分娩登记</button></span></div></td></tr><tr data-tone="neutral"><td class="gm-tbl__desk"><b>吴敏 · 产后 30 天</b></td><td class="gm-tbl__desk">产后访视未完成</td><td class="gm-tbl__desk"><span class="gm-pm-tag gm-pm-tag--m5" data-m5="1"><i></i>绿 · 低风险</span></td><td class="gm-tbl__desk">已逾期 2 天</td><td class="gm-tbl__desk"><span class="gm-pm-tag gm-pm-tag--neutral" data-status="1"><i></i>未随访</span></td><td class="gm-tbl__desk col-ops"><span class="gm-pm-acts"><button type="button" class="gm-pm-act" data-act="view">查看</button><button type="button" class="gm-pm-act" data-act="advance" data-after="positive|已完成">产后访视</button></span></td><td class="gm-tbl__mob" colspan="6"><div class="r1"><b>吴敏 · 产后 30 天</b><span class="gm-pm-tag gm-pm-tag--neutral" data-status="1"><i></i>未随访</span></div><div class="r2"><i>事项</i>产后访视未完成</div><div class="r2"><i>风险分级</i><span class="gm-pm-tag gm-pm-tag--m5" data-m5="1"><i></i>绿 · 低风险</span></div><div class="r2"><i>时限</i>已逾期 2 天</div><div class="r3"><span class="gm-pm-acts"><button type="button" class="gm-pm-act" data-act="view">查看</button><button type="button" class="gm-pm-act" data-act="advance" data-after="positive|已完成">产后访视</button></span></div></td></tr></tbody>
+          </table></div>
+          <div class="gm-pm-empty gm-pm-off" data-empty>当前筛选下暂无事项。</div>
+        </div>
+        <div class="gm-pm-card">
+          <h3>高危孕产妇专案（五色）</h3>
+          <button type="button" class="gm-pm-qbtn" data-tone-filter="risk" aria-pressed="false">红色专案 · 市级救治中心管理<b>共 18 · 责任人 6</b></button><button type="button" class="gm-pm-qbtn" data-tone-filter="attention" aria-pressed="false">橙色专案 · 县级及以上机构管理<b>共 41 · 责任人 12</b></button><button type="button" class="gm-pm-qbtn" data-tone-filter="special" aria-pressed="false">紫色专案 · 传染病 + 母婴阻断<b>共 9 · 责任人 4</b></button><button type="button" class="gm-pm-qbtn" data-tone-filter="attention" aria-pressed="false">产后访视待完成<b>共 45 · 已逾期 7</b></button>
+        </div>
+      </div>
+      <div>
+        <div class="gm-pm-card" style="margin-bottom:var(--lg-space-4)">
+          <h3>快捷工具</h3>
+          <div class="gm-pm-tools"><button type="button" class="gm-pm-btn gm-pm-btn--line" data-tool="建档">建档</button><button type="button" class="gm-pm-btn gm-pm-btn--line" data-tool="首次产检">首次产检</button><button type="button" class="gm-pm-btn gm-pm-btn--line" data-tool="产检记录">产检记录</button><button type="button" class="gm-pm-btn gm-pm-btn--line" data-tool="高危评估">高危评估</button><button type="button" class="gm-pm-btn gm-pm-btn--line" data-tool="产后访视">产后访视</button><button type="button" class="gm-pm-btn gm-pm-btn--line" data-tool="发起转诊">发起转诊</button></div>
+        </div>
+        <div class="gm-pm-card">
+          <div class="gm-pm-ov"><h4>质量</h4><ul class="gm-pm-list"><li>高危管理率<b>96%</b></li><li>产后访视率<b>91%</b></li><li>产检及时率<b>88%</b></li><li>专案结案率<b>84%</b></li></ul></div>
+          <div class="gm-pm-ov"><h4>动态</h4><ul class="gm-pm-list gm-pm-feed" data-feed><li><span class="gm-pm-tag gm-pm-tag--special"><i></i>转诊</span><span>周洁 · 转市妇幼保健院（绿色通道）</span></li><li><span class="gm-pm-tag gm-pm-tag--info"><i></i>已预约</span><span>张敏 · 产检预约已确认</span></li><li><span class="gm-pm-tag gm-pm-tag--positive"><i></i>已完成</span><span>孙倩 · 分娩风险评估已完成</span></li></ul></div>
+        </div>
+      </div>
+    </div>
+    <div class="gm-pm-card" style="margin-top:var(--lg-space-4)"><div class="gm-pm-chartbox"><div class="gm-pm-chart" data-chart="p03"></div></div></div>
+    
+  </div>
+</div>
+</div>
+
+<div class="gm-pm-view gm-pm--p04" id="p04-work" data-p="p04" data-k="work" aria-label="新生儿健康管理系统 · 工作台首页">
+<div class="gm-pm-head">
+  <h2>新生儿工作台</h2>
+  <span class="en">GoodMom Newborn Care · Workbench</span>
+</div>
+<div class="gm-pm-pcbar">
+  <span class="gm-brand gm-brand--sm"><img src="../brand/logo-512.png" alt="妈咪好"><span class="gm-brand__t"><b>妈咪好 GoodMom</b><strong>新生儿健康管理系统</strong></span></span>
+  <span class="gm-pm-search"><svg class="gm-pm-ico" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><circle cx="10.5" cy="10.5" r="6.5"/><path d="M15.4 15.4 21 21"/></svg><input type="search" aria-label="搜索档案 / 姓名 / 档案号" placeholder="搜索档案 / 姓名 / 档案号"></span>
+  <button type="button" class="gm-pm-btn gm-pm-btn--pri" data-tool="新生儿建档">新生儿建档</button>
+  <span class="gm-pm-pcbar__meta">望京妇幼保健院 · 2025-06-02</span>
+  <span class="gm-pm-av" aria-hidden="true">王</span>
+</div>
+<div class="gm-pm-wb">
+  <nav class="gm-pm-side" aria-label="对象视图">
+    <h4>对象视图</h4>
+    <div class="gm-pm-sidemenu"><a href="../fuyouaicansai/p04-newborn.html#work">工作台</a><a href="../fuyouaicansai/p04-newborn.html#archive">档案</a><a href="../fuyouaicansai/p04-newborn.html#ai">AI 协同</a><a href="../fuyouaicansai/p04-newborn.html#detail">详情</a></nav>
+  <nav class="gm-pm-side" aria-label="业务菜单">
+    <h4>业务菜单</h4>
+<a href="../fuyouaicansai/p04-newborn.html#mod-visit">新生儿访视</a><a href="../fuyouaicansai/p04-newborn.html#mod-screening">新生儿筛查</a><a href="../fuyouaicansai/p04-newborn.html#mod-highrisk">高危新生儿</a><a href="../fuyouaicansai/p04-newborn.html#mod-handover">新生儿转儿童保健</a><a href="../fuyouaicansai/p04-newborn.html#mod-report">报表统计</a></div>
+  </nav>
+  <div>
+    <div class="gm-pm-kpis"><button type="button" class="gm-pm-card gm-pm-kpi" data-tone-filter="all" aria-pressed="false" title="按「全部」筛选待处理清单"><span class="gm-pm-kpi__l">在管新生儿</span><span class="gm-pm-kpi__v is-accent">486</span><span class="gm-pm-kpi__d">本月出生 62 · 今日 3</span></button><button type="button" class="gm-pm-card gm-pm-kpi" data-tone-filter="info" aria-pressed="false" title="按「信息 / 进行」筛选待处理清单"><span class="gm-pm-kpi__l">今日首次访视</span><span class="gm-pm-kpi__v is-info">32</span><span class="gm-pm-kpi__d">已完成 19 · 待访视 13</span></button><button type="button" class="gm-pm-card gm-pm-kpi" data-tone-filter="attention" aria-pressed="false" title="按「注意 / 待办」筛选待处理清单"><span class="gm-pm-kpi__l">筛查结果待录</span><span class="gm-pm-kpi__v is-att">18</span><span class="gm-pm-kpi__d">疾病筛查 11 · 听力 7</span></button><button type="button" class="gm-pm-card gm-pm-kpi" data-tone-filter="risk" aria-pressed="false" title="按「风险 / 异常」筛选待处理清单"><span class="gm-pm-kpi__l">高危新生儿专案</span><span class="gm-pm-kpi__v is-risk">24</span><span class="gm-pm-kpi__d">早产儿 14 · 低体重 10</span></button></div>
+    <div class="gm-pm-grid gm-pm-grid--wide">
+      <div>
+        <div class="gm-pm-card" style="margin-bottom:var(--lg-space-4)">
+          <h3>今日待处理</h3>
+          <div class="gm-pm-filters"><button type="button" class="gm-pm-filter" data-tone-filter="all" aria-pressed="true">全部 <span class="gm-pm-filter__n">5</span></button><button type="button" class="gm-pm-filter" data-tone-filter="risk" aria-pressed="false">风险 / 异常 <span class="gm-pm-filter__n">1</span></button><button type="button" class="gm-pm-filter" data-tone-filter="attention" aria-pressed="false">注意 / 待办 <span class="gm-pm-filter__n">2</span></button><button type="button" class="gm-pm-filter" data-tone-filter="neutral" aria-pressed="false">中性 / 未动 <span class="gm-pm-filter__n">1</span></button><button type="button" class="gm-pm-filter" data-tone-filter="special" aria-pressed="false">特殊 / 协作 <span class="gm-pm-filter__n">1</span></button><span class="gm-pm-count" data-count>共 5 / 5 条</span></div>
+          <div class="gm-tbl-wrap gm-pm-todos"><table class="gm-tbl">
+            <thead><tr><th scope="col">服务对象</th><th scope="col">事项</th><th scope="col">状态</th><th scope="col">时限</th><th scope="col" class="col-ops">操作</th></tr></thead>
+            <tbody><tr data-tone="attention"><td class="gm-tbl__desk"><b>安安 · 出生 5 天</b></td><td class="gm-tbl__desk">首次家庭访视（黄疸评估）</td><td class="gm-tbl__desk">今日</td><td class="gm-tbl__desk"><span class="gm-pm-tag gm-pm-tag--attention" data-status="1"><i></i>待随访</span></td><td class="gm-tbl__desk col-ops"><span class="gm-pm-acts"><button type="button" class="gm-pm-act" data-act="view">查看</button><button type="button" class="gm-pm-act" data-act="advance" data-after="info|随访中">开始随访</button><button type="button" class="gm-pm-act" data-kind="collab" data-act="collab" data-after="special|已驳回">健康指导</button></span></td><td class="gm-tbl__mob" colspan="5"><div class="r1"><b>安安 · 出生 5 天</b><span class="gm-pm-tag gm-pm-tag--attention" data-status="1"><i></i>待随访</span></div><div class="r2"><i>事项</i>首次家庭访视（黄疸评估）</div><div class="r2"><i>时限</i>今日</div><div class="r3"><span class="gm-pm-acts"><button type="button" class="gm-pm-act" data-act="view">查看</button><button type="button" class="gm-pm-act" data-act="advance" data-after="info|随访中">开始随访</button><button type="button" class="gm-pm-act" data-kind="collab" data-act="collab" data-after="special|已驳回">健康指导</button></span></div></td></tr><tr data-tone="risk"><td class="gm-tbl__desk"><b>乐乐 · 出生 3 天</b></td><td class="gm-tbl__desk">听力筛查初筛未通过</td><td class="gm-tbl__desk">06-08 复筛</td><td class="gm-tbl__desk"><span class="gm-pm-tag gm-pm-tag--risk" data-status="1"><i></i>异常</span></td><td class="gm-tbl__desk col-ops"><span class="gm-pm-acts"><button type="button" class="gm-pm-act" data-act="view">查看</button><button type="button" class="gm-pm-act" data-act="advance" data-after="info|已预约">复查转诊</button><button type="button" class="gm-pm-act" data-kind="collab" data-act="collab" data-after="special|转诊">发起转诊</button></span></td><td class="gm-tbl__mob" colspan="5"><div class="r1"><b>乐乐 · 出生 3 天</b><span class="gm-pm-tag gm-pm-tag--risk" data-status="1"><i></i>异常</span></div><div class="r2"><i>事项</i>听力筛查初筛未通过</div><div class="r2"><i>时限</i>06-08 复筛</div><div class="r3"><span class="gm-pm-acts"><button type="button" class="gm-pm-act" data-act="view">查看</button><button type="button" class="gm-pm-act" data-act="advance" data-after="info|已预约">复查转诊</button><button type="button" class="gm-pm-act" data-kind="collab" data-act="collab" data-after="special|转诊">发起转诊</button></span></div></td></tr><tr data-tone="attention"><td class="gm-tbl__desk"><b>甜甜 · 出生 12 天</b></td><td class="gm-tbl__desk">新生儿疾病筛查结果待录</td><td class="gm-tbl__desk">今日 16:00</td><td class="gm-tbl__desk"><span class="gm-pm-tag gm-pm-tag--attention" data-status="1"><i></i>待补检</span></td><td class="gm-tbl__desk col-ops"><span class="gm-pm-acts"><button type="button" class="gm-pm-act" data-act="view">查看</button><button type="button" class="gm-pm-act" data-act="advance" data-after="positive|已完成">录入结果</button></span></td><td class="gm-tbl__mob" colspan="5"><div class="r1"><b>甜甜 · 出生 12 天</b><span class="gm-pm-tag gm-pm-tag--attention" data-status="1"><i></i>待补检</span></div><div class="r2"><i>事项</i>新生儿疾病筛查结果待录</div><div class="r2"><i>时限</i>今日 16:00</div><div class="r3"><span class="gm-pm-acts"><button type="button" class="gm-pm-act" data-act="view">查看</button><button type="button" class="gm-pm-act" data-act="advance" data-after="positive|已完成">录入结果</button></span></div></td></tr><tr data-tone="neutral"><td class="gm-tbl__desk"><b>朵朵 · 出生 20 天</b></td><td class="gm-tbl__desk">满月访视未安排</td><td class="gm-tbl__desk">06-12</td><td class="gm-tbl__desk"><span class="gm-pm-tag gm-pm-tag--neutral" data-status="1"><i></i>未开始</span></td><td class="gm-tbl__desk col-ops"><span class="gm-pm-acts"><button type="button" class="gm-pm-act" data-act="view">查看</button><button type="button" class="gm-pm-act" data-act="advance" data-after="attention|待随访">开始随访</button></span></td><td class="gm-tbl__mob" colspan="5"><div class="r1"><b>朵朵 · 出生 20 天</b><span class="gm-pm-tag gm-pm-tag--neutral" data-status="1"><i></i>未开始</span></div><div class="r2"><i>事项</i>满月访视未安排</div><div class="r2"><i>时限</i>06-12</div><div class="r3"><span class="gm-pm-acts"><button type="button" class="gm-pm-act" data-act="view">查看</button><button type="button" class="gm-pm-act" data-act="advance" data-after="attention|待随访">开始随访</button></span></div></td></tr><tr data-tone="special"><td class="gm-tbl__desk"><b>小满 · 早产 32 周</b></td><td class="gm-tbl__desk">出生体重 1,780g · 专案随访</td><td class="gm-tbl__desk">06-09</td><td class="gm-tbl__desk"><span class="gm-pm-tag gm-pm-tag--special" data-status="1"><i></i>重点管理</span></td><td class="gm-tbl__desk col-ops"><span class="gm-pm-acts"><button type="button" class="gm-pm-act" data-act="view">查看</button><button type="button" class="gm-pm-act" data-act="advance" data-after="info|随访中">高危随访</button></span></td><td class="gm-tbl__mob" colspan="5"><div class="r1"><b>小满 · 早产 32 周</b><span class="gm-pm-tag gm-pm-tag--special" data-status="1"><i></i>重点管理</span></div><div class="r2"><i>事项</i>出生体重 1,780g · 专案随访</div><div class="r2"><i>时限</i>06-09</div><div class="r3"><span class="gm-pm-acts"><button type="button" class="gm-pm-act" data-act="view">查看</button><button type="button" class="gm-pm-act" data-act="advance" data-after="info|随访中">高危随访</button></span></div></td></tr></tbody>
+          </table></div>
+          <div class="gm-pm-empty gm-pm-off" data-empty>当前筛选下暂无事项。</div>
+        </div>
+        <div class="gm-pm-card">
+          <h3>新生儿筛查闭环</h3>
+          <button type="button" class="gm-pm-qbtn" data-tone-filter="attention" aria-pressed="false">新生儿疾病筛查（足跟血）<b>已采 468 · 待复查 6</b></button><button type="button" class="gm-pm-qbtn" data-tone-filter="attention" aria-pressed="false">听力筛查（初筛 + 复筛）<b>已筛 452 · 待复筛 12</b></button><button type="button" class="gm-pm-qbtn" data-tone-filter="risk" aria-pressed="false">高危新生儿专案随访<b>在管 24 · 本周到期 7</b></button><button type="button" class="gm-pm-qbtn" data-tone-filter="info" aria-pressed="false">访视完成情况<b>已完成 19 · 待访视 13</b></button>
+        </div>
+      </div>
+      <div>
+        <div class="gm-pm-card" style="margin-bottom:var(--lg-space-4)">
+          <h3>快捷工具</h3>
+          <div class="gm-pm-tools"><button type="button" class="gm-pm-btn gm-pm-btn--line" data-tool="新生儿建档">新生儿建档</button><button type="button" class="gm-pm-btn gm-pm-btn--line" data-tool="新生儿访视">新生儿访视</button><button type="button" class="gm-pm-btn gm-pm-btn--line" data-tool="筛查结果录入">筛查结果录入</button><button type="button" class="gm-pm-btn gm-pm-btn--line" data-tool="高危儿管理">高危儿管理</button><button type="button" class="gm-pm-btn gm-pm-btn--line" data-tool="复查提醒">复查提醒</button><button type="button" class="gm-pm-btn gm-pm-btn--line" data-tool="转入儿童保健">转入儿童保健</button></div>
+        </div>
+        <div class="gm-pm-card">
+          <div class="gm-pm-ov"><h4>质量</h4><ul class="gm-pm-list"><li>访视及时率<b>93%</b></li><li>筛查覆盖率<b>98%</b></li><li>筛查复查闭环<b>82%</b></li><li>专案随访率<b>90%</b></li></ul></div>
+          <div class="gm-pm-ov"><h4>动态</h4><ul class="gm-pm-list gm-pm-feed" data-feed><li><span class="gm-pm-tag gm-pm-tag--positive"><i></i>已完成</span><span>安安 · 首次访视已完成（黄疸正常范围）</span></li><li><span class="gm-pm-tag gm-pm-tag--info"><i></i>已预约</span><span>新生儿疾病筛查复查已预约 6 人</span></li><li><span class="gm-pm-tag gm-pm-tag--special"><i></i>重点管理</span><span>小满 · 已转入高危新生儿专案</span></li></ul></div>
+        </div>
+      </div>
+    </div>
+    <div class="gm-pm-card" style="margin-top:var(--lg-space-4)"><div class="gm-pm-chartbox"><div class="gm-pm-chart" data-chart="p04"></div></div></div>
+    
+  </div>
+</div>
+</div>
+
+<div class="gm-pm-view gm-pm--p05" id="p05-work" data-p="p05" data-k="work" aria-label="儿童健康管理系统 · 工作台首页">
+<div class="gm-pm-head">
+  <h2>儿童健康工作台</h2>
+  <span class="en">GoodMom Child Health · Workbench</span>
+</div>
+<div class="gm-pm-pcbar">
+  <span class="gm-brand gm-brand--sm"><img src="../brand/logo-512.png" alt="妈咪好"><span class="gm-brand__t"><b>妈咪好 GoodMom</b><strong>儿童健康管理系统</strong></span></span>
+  <span class="gm-pm-search"><svg class="gm-pm-ico" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><circle cx="10.5" cy="10.5" r="6.5"/><path d="M15.4 15.4 21 21"/></svg><input type="search" aria-label="搜索档案 / 姓名 / 档案号" placeholder="搜索档案 / 姓名 / 档案号"></span>
+  <button type="button" class="gm-pm-btn gm-pm-btn--pri" data-tool="儿童建档">儿童建档</button>
+  <span class="gm-pm-pcbar__meta">望京妇幼保健院 · 2025-06-02</span>
+  <span class="gm-pm-av" aria-hidden="true">王</span>
+</div>
+<div class="gm-pm-wb">
+  <nav class="gm-pm-side" aria-label="对象视图">
+    <h4>对象视图</h4>
+    <div class="gm-pm-sidemenu"><a href="../fuyouaicansai/p05-child-health.html#work">工作台</a><a href="../fuyouaicansai/p05-child-health.html#archive">档案</a><a href="../fuyouaicansai/p05-child-health.html#ai">AI 协同</a><a href="../fuyouaicansai/p05-child-health.html#detail">详情</a></nav>
+  <nav class="gm-pm-side" aria-label="业务菜单">
+    <h4>业务菜单</h4>
+<a href="../fuyouaicansai/p05-child-health.html#mod-care">儿童保健</a><a href="../fuyouaicansai/p05-child-health.html#mod-five">儿童五健</a><a href="../fuyouaicansai/p05-child-health.html#mod-vision">视力健康</a><a href="../fuyouaicansai/p05-child-health.html#mod-dental">口腔健康</a><a href="../fuyouaicansai/p05-child-health.html#mod-keychild">重点儿童管理</a><a href="../fuyouaicansai/p05-child-health.html#mod-rehab">康复转诊</a><a href="../fuyouaicansai/p05-child-health.html#mod-followup">随访管理</a><a href="../fuyouaicansai/p05-child-health.html#mod-report">报表统计</a></div>
+  </nav>
+  <div>
+    <div class="gm-pm-kpis"><button type="button" class="gm-pm-card gm-pm-kpi" data-tone-filter="all" aria-pressed="false" title="按「全部」筛选待处理清单"><span class="gm-pm-kpi__l">在管儿童</span><span class="gm-pm-kpi__v is-accent">8,432</span><span class="gm-pm-kpi__d">本月新增 214 · 今日 26</span></button><button type="button" class="gm-pm-card gm-pm-kpi" data-tone-filter="info" aria-pressed="false" title="按「信息 / 进行」筛选待处理清单"><span class="gm-pm-kpi__l">今日儿保体检</span><span class="gm-pm-kpi__v is-info">56</span><span class="gm-pm-kpi__d">已完成 38 · 待体检 18</span></button><button type="button" class="gm-pm-card gm-pm-kpi" data-tone-filter="risk" aria-pressed="false" title="按「风险 / 异常」筛选待处理清单"><span class="gm-pm-kpi__l">生长偏离待随访</span><span class="gm-pm-kpi__v is-risk">41</span><span class="gm-pm-kpi__d">低于 P3 计 12 · 高于 P97 计 8</span></button><button type="button" class="gm-pm-card gm-pm-kpi" data-tone-filter="attention" aria-pressed="false" title="按「注意 / 待办」筛选待处理清单"><span class="gm-pm-kpi__l">五健评估待完成</span><span class="gm-pm-kpi__v is-att">73</span><span class="gm-pm-kpi__d">视力 26 · 口腔 19 · 发育 28</span></button></div>
+    <div class="gm-pm-grid gm-pm-grid--wide">
+      <div>
+        <div class="gm-pm-card" style="margin-bottom:var(--lg-space-4)">
+          <h3>今日待处理</h3>
+          <div class="gm-pm-filters"><button type="button" class="gm-pm-filter" data-tone-filter="all" aria-pressed="true">全部 <span class="gm-pm-filter__n">5</span></button><button type="button" class="gm-pm-filter" data-tone-filter="risk" aria-pressed="false">风险 / 异常 <span class="gm-pm-filter__n">1</span></button><button type="button" class="gm-pm-filter" data-tone-filter="attention" aria-pressed="false">注意 / 待办 <span class="gm-pm-filter__n">2</span></button><button type="button" class="gm-pm-filter" data-tone-filter="info" aria-pressed="false">信息 / 进行 <span class="gm-pm-filter__n">1</span></button><button type="button" class="gm-pm-filter" data-tone-filter="neutral" aria-pressed="false">中性 / 未动 <span class="gm-pm-filter__n">1</span></button><span class="gm-pm-count" data-count>共 5 / 5 条</span></div>
+          <div class="gm-tbl-wrap gm-pm-todos"><table class="gm-tbl">
+            <thead><tr><th scope="col">服务对象</th><th scope="col">事项</th><th scope="col">状态</th><th scope="col">时限</th><th scope="col" class="col-ops">操作</th></tr></thead>
+            <tbody><tr data-tone="risk"><td class="gm-tbl__desk"><b>赵甜甜 · 18 月龄</b></td><td class="gm-tbl__desk">体重低于 P3 · 重点随访</td><td class="gm-tbl__desk">已逾期 2 天</td><td class="gm-tbl__desk"><span class="gm-pm-tag gm-pm-tag--risk" data-status="1"><i></i>异常</span></td><td class="gm-tbl__desk col-ops"><span class="gm-pm-acts"><button type="button" class="gm-pm-act" data-act="view">查看</button><button type="button" class="gm-pm-act" data-act="advance" data-after="info|随访中">开始随访</button><button type="button" class="gm-pm-act" data-kind="collab" data-act="collab" data-after="special|转诊">发起转诊</button></span></td><td class="gm-tbl__mob" colspan="5"><div class="r1"><b>赵甜甜 · 18 月龄</b><span class="gm-pm-tag gm-pm-tag--risk" data-status="1"><i></i>异常</span></div><div class="r2"><i>事项</i>体重低于 P3 · 重点随访</div><div class="r2"><i>时限</i>已逾期 2 天</div><div class="r3"><span class="gm-pm-acts"><button type="button" class="gm-pm-act" data-act="view">查看</button><button type="button" class="gm-pm-act" data-act="advance" data-after="info|随访中">开始随访</button><button type="button" class="gm-pm-act" data-kind="collab" data-act="collab" data-after="special|转诊">发起转诊</button></span></div></td></tr><tr data-tone="attention"><td class="gm-tbl__desk"><b>安安 · 36 月龄</b></td><td class="gm-tbl__desk">儿保体检（含视力筛查）</td><td class="gm-tbl__desk">今日 15:30</td><td class="gm-tbl__desk"><span class="gm-pm-tag gm-pm-tag--attention" data-status="1"><i></i>待处理</span></td><td class="gm-tbl__desk col-ops"><span class="gm-pm-acts"><button type="button" class="gm-pm-act" data-act="view">查看</button><button type="button" class="gm-pm-act" data-act="advance" data-after="positive|已完成">儿童体检</button></span></td><td class="gm-tbl__mob" colspan="5"><div class="r1"><b>安安 · 36 月龄</b><span class="gm-pm-tag gm-pm-tag--attention" data-status="1"><i></i>待处理</span></div><div class="r2"><i>事项</i>儿保体检（含视力筛查）</div><div class="r2"><i>时限</i>今日 15:30</div><div class="r3"><span class="gm-pm-acts"><button type="button" class="gm-pm-act" data-act="view">查看</button><button type="button" class="gm-pm-act" data-act="advance" data-after="positive|已完成">儿童体检</button></span></div></td></tr><tr data-tone="attention"><td class="gm-tbl__desk"><b>乐乐 · 24 月龄</b></td><td class="gm-tbl__desk">口腔检查 · 龋齿风险</td><td class="gm-tbl__desk">明日</td><td class="gm-tbl__desk"><span class="gm-pm-tag gm-pm-tag--attention" data-status="1"><i></i>待复查</span></td><td class="gm-tbl__desk col-ops"><span class="gm-pm-acts"><button type="button" class="gm-pm-act" data-act="view">查看</button><button type="button" class="gm-pm-act" data-act="advance" data-after="info|进行中">口腔检查</button></span></td><td class="gm-tbl__mob" colspan="5"><div class="r1"><b>乐乐 · 24 月龄</b><span class="gm-pm-tag gm-pm-tag--attention" data-status="1"><i></i>待复查</span></div><div class="r2"><i>事项</i>口腔检查 · 龋齿风险</div><div class="r2"><i>时限</i>明日</div><div class="r3"><span class="gm-pm-acts"><button type="button" class="gm-pm-act" data-act="view">查看</button><button type="button" class="gm-pm-act" data-act="advance" data-after="info|进行中">口腔检查</button></span></div></td></tr><tr data-tone="info"><td class="gm-tbl__desk"><b>小满 · 12 月龄</b></td><td class="gm-tbl__desk">五健评估 · 发育筛查</td><td class="gm-tbl__desk">06-08</td><td class="gm-tbl__desk"><span class="gm-pm-tag gm-pm-tag--info" data-status="1"><i></i>进行中</span></td><td class="gm-tbl__desk col-ops"><span class="gm-pm-acts"><button type="button" class="gm-pm-act" data-act="view">查看</button><button type="button" class="gm-pm-act" data-act="advance" data-after="positive|已完成">生长发育评估</button></span></td><td class="gm-tbl__mob" colspan="5"><div class="r1"><b>小满 · 12 月龄</b><span class="gm-pm-tag gm-pm-tag--info" data-status="1"><i></i>进行中</span></div><div class="r2"><i>事项</i>五健评估 · 发育筛查</div><div class="r2"><i>时限</i>06-08</div><div class="r3"><span class="gm-pm-acts"><button type="button" class="gm-pm-act" data-act="view">查看</button><button type="button" class="gm-pm-act" data-act="advance" data-after="positive|已完成">生长发育评估</button></span></div></td></tr><tr data-tone="neutral"><td class="gm-tbl__desk"><b>木木 · 8 月龄</b></td><td class="gm-tbl__desk">疫苗接种到期提醒</td><td class="gm-tbl__desk">06-10</td><td class="gm-tbl__desk"><span class="gm-pm-tag gm-pm-tag--neutral" data-status="1"><i></i>未开始</span></td><td class="gm-tbl__desk col-ops"><span class="gm-pm-acts"><button type="button" class="gm-pm-act" data-act="view">查看</button><button type="button" class="gm-pm-act" data-act="advance" data-after="attention|即将到期">疫苗提醒</button></span></td><td class="gm-tbl__mob" colspan="5"><div class="r1"><b>木木 · 8 月龄</b><span class="gm-pm-tag gm-pm-tag--neutral" data-status="1"><i></i>未开始</span></div><div class="r2"><i>事项</i>疫苗接种到期提醒</div><div class="r2"><i>时限</i>06-10</div><div class="r3"><span class="gm-pm-acts"><button type="button" class="gm-pm-act" data-act="view">查看</button><button type="button" class="gm-pm-act" data-act="advance" data-after="attention|即将到期">疫苗提醒</button></span></div></td></tr></tbody>
+          </table></div>
+          <div class="gm-pm-empty gm-pm-off" data-empty>当前筛选下暂无事项。</div>
+        </div>
+        <div class="gm-pm-card">
+          <h3>儿童健康保健清单（13 · 13.3.8）</h3>
+          <button type="button" class="gm-pm-qbtn" data-tone-filter="attention" aria-pressed="false">生长发育 · 身长体重 + 百分位<b>本节点待检 14</b></button><button type="button" class="gm-pm-qbtn" data-tone-filter="attention" aria-pressed="false">营养喂养 · 膳食与贫血筛查<b>本节点待检 9</b></button><button type="button" class="gm-pm-qbtn" data-tone-filter="risk" aria-pressed="false">心理行为发育 · 发育筛查<b>异常 3 · 待复查 6</b></button><button type="button" class="gm-pm-qbtn" data-tone-filter="attention" aria-pressed="false">视力保健 · 屈光筛查<b>异常 2 · 待复查 8</b></button><button type="button" class="gm-pm-qbtn" data-tone-filter="neutral" aria-pressed="false">听力保健 · 听力筛查<b>正常 46 · 待检 4</b></button><button type="button" class="gm-pm-qbtn" data-tone-filter="attention" aria-pressed="false">口腔保健 · 龋齿检查<b>异常 7 · 待复查 11</b></button>
+        </div>
+      </div>
+      <div>
+        <div class="gm-pm-card" style="margin-bottom:var(--lg-space-4)">
+          <h3>快捷工具</h3>
+          <div class="gm-pm-tools"><button type="button" class="gm-pm-btn gm-pm-btn--line" data-tool="儿童建档">儿童建档</button><button type="button" class="gm-pm-btn gm-pm-btn--line" data-tool="儿童体检">儿童体检</button><button type="button" class="gm-pm-btn gm-pm-btn--line" data-tool="生长发育评估">生长发育评估</button><button type="button" class="gm-pm-btn gm-pm-btn--line" data-tool="视力筛查">视力筛查</button><button type="button" class="gm-pm-btn gm-pm-btn--line" data-tool="口腔检查">口腔检查</button><button type="button" class="gm-pm-btn gm-pm-btn--line" data-tool="疫苗提醒">疫苗提醒</button></div>
+        </div>
+        <div class="gm-pm-card">
+          <div class="gm-pm-ov"><h4>质量</h4><ul class="gm-pm-list"><li>儿保完成率<b>86%</b></li><li>生长监测覆盖率<b>94%</b></li><li>重点儿童随访闭环<b>88%</b></li><li>疫苗接种率<b>96%</b></li></ul></div>
+          <div class="gm-pm-ov"><h4>动态</h4><ul class="gm-pm-list gm-pm-feed" data-feed><li><span class="gm-pm-tag gm-pm-tag--positive"><i></i>已完成</span><span>安安 · 36 月龄儿保体检已完成</span></li><li><span class="gm-pm-tag gm-pm-tag--info"><i></i>随访中</span><span>赵甜甜 · 已加入重点儿童随访队列</span></li><li><span class="gm-pm-tag gm-pm-tag--info"><i></i>已接诊</span><span>小满 · 康复转诊已接诊</span></li></ul></div>
+        </div>
+      </div>
+    </div>
+    <div class="gm-pm-card" style="margin-top:var(--lg-space-4)"><div class="gm-pm-chartbox"><div class="gm-pm-chart" data-chart="p05"></div></div></div>
+    
+  </div>
+</div>
+</div>
+
+<div class="gm-pm-view gm-pm--p06" id="p06-work" data-p="p06" data-k="work" aria-label="妇幼AI智能体平台 · 工作台首页">
+<div class="gm-pm-head">
+  <h2>AI 智能体工作台</h2>
+  <span class="en">GoodMom AI Care Intelligence · Workbench</span>
+</div>
+<div class="gm-pm-pcbar">
+  <span class="gm-brand gm-brand--sm"><img src="../brand/logo-512.png" alt="妈咪好"><span class="gm-brand__t"><b>妈咪好 GoodMom</b><strong>妇幼AI智能体平台</strong></span></span>
+  <span class="gm-pm-search"><svg class="gm-pm-ico" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><circle cx="10.5" cy="10.5" r="6.5"/><path d="M15.4 15.4 21 21"/></svg><input type="search" aria-label="搜索档案 / 姓名 / 档案号" placeholder="搜索档案 / 姓名 / 档案号"></span>
+  <button type="button" class="gm-pm-btn gm-pm-btn--pri" data-tool="AI 辅助评估">AI 辅助评估</button>
+  <span class="gm-pm-pcbar__meta">望京妇幼保健院 · 2025-06-02</span>
+  <span class="gm-pm-av" aria-hidden="true">王</span>
+</div>
+<div class="gm-pm-wb">
+  <nav class="gm-pm-side" aria-label="对象视图">
+    <h4>对象视图</h4>
+    <div class="gm-pm-sidemenu"><a href="../fuyouaicansai/p06-ai-care.html#work">工作台</a><a href="../fuyouaicansai/p06-ai-care.html#archive">档案</a><a href="../fuyouaicansai/p06-ai-care.html#ai">AI 协同</a><a href="../fuyouaicansai/p06-ai-care.html#detail">详情</a></nav>
+  <nav class="gm-pm-side" aria-label="业务菜单">
+    <h4>业务菜单</h4>
+<a href="../fuyouaicansai/p06-ai-care.html#mod-clinical">AI 临床辅助</a><a href="../fuyouaicansai/p06-ai-care.html#mod-health">AI 健康管理</a><a href="../fuyouaicansai/p06-ai-care.html#mod-followup">AI 随访</a><a href="../fuyouaicansai/p06-ai-care.html#mod-qc">AI 质控</a><a href="../fuyouaicansai/p06-ai-care.html#mod-report">AI 报告</a><a href="../fuyouaicansai/p06-ai-care.html#mod-analytics">AI 数据分析</a></div>
+  </nav>
+  <div>
+    <div class="gm-pm-kpis"><button type="button" class="gm-pm-card gm-pm-kpi" data-tone-filter="attention" aria-pressed="false" title="按「注意 / 待办」筛选待处理清单"><span class="gm-pm-kpi__l">待审核 AI 建议</span><span class="gm-pm-kpi__v is-att">128</span><span class="gm-pm-kpi__d">风险分级 46 · 随访 52 · 报告 30</span></button><button type="button" class="gm-pm-card gm-pm-kpi" data-tone-filter="info" aria-pressed="false" title="按「信息 / 进行」筛选待处理清单"><span class="gm-pm-kpi__l">今日 AI 随访外呼</span><span class="gm-pm-kpi__v is-info">46</span><span class="gm-pm-kpi__d">已接通 31 · 待回访 15</span></button><button type="button" class="gm-pm-card gm-pm-kpi" data-tone-filter="risk" aria-pressed="false" title="按「风险 / 异常」筛选待处理清单"><span class="gm-pm-kpi__l">质控问题</span><span class="gm-pm-kpi__v is-risk">23</span><span class="gm-pm-kpi__d">记录完整性 14 · 闭环及时性 9</span></button><button type="button" class="gm-pm-card gm-pm-kpi" data-tone-filter="all" aria-pressed="false" title="按「全部」筛选待处理清单"><span class="gm-pm-kpi__l">已接入业务系统</span><span class="gm-pm-kpi__v is-accent">5</span><span class="gm-pm-kpi__d">妇女 / 婚孕前 / 孕产妇 / 新生儿 / 儿童</span></button></div>
+    <div class="gm-pm-grid gm-pm-grid--wide">
+      <div>
+        <div class="gm-pm-card" style="margin-bottom:var(--lg-space-4)">
+          <h3>今日待处理</h3>
+          <div class="gm-pm-filters"><button type="button" class="gm-pm-filter" data-tone-filter="all" aria-pressed="true">全部 <span class="gm-pm-filter__n">5</span></button><button type="button" class="gm-pm-filter" data-tone-filter="risk" aria-pressed="false">风险 / 异常 <span class="gm-pm-filter__n">1</span></button><button type="button" class="gm-pm-filter" data-tone-filter="attention" aria-pressed="false">注意 / 待办 <span class="gm-pm-filter__n">2</span></button><button type="button" class="gm-pm-filter" data-tone-filter="info" aria-pressed="false">信息 / 进行 <span class="gm-pm-filter__n">1</span></button><button type="button" class="gm-pm-filter" data-tone-filter="neutral" aria-pressed="false">中性 / 未动 <span class="gm-pm-filter__n">1</span></button><span class="gm-pm-count" data-count>共 5 / 5 条</span></div>
+          <div class="gm-tbl-wrap gm-pm-todos"><table class="gm-tbl">
+            <thead><tr><th scope="col">业务对象</th><th scope="col">事项</th><th scope="col">状态</th><th scope="col">时限</th><th scope="col" class="col-ops">操作</th></tr></thead>
+            <tbody><tr data-tone="attention"><td class="gm-tbl__desk"><b>陈静 · 孕 12 周</b></td><td class="gm-tbl__desk">AI 建议：妊娠风险分级复核</td><td class="gm-tbl__desk">今日 11:00</td><td class="gm-tbl__desk"><span class="gm-pm-tag gm-pm-tag--attention" data-status="1"><i></i>待审核</span></td><td class="gm-tbl__desk col-ops"><span class="gm-pm-acts"><button type="button" class="gm-pm-act" data-act="view">查看</button><button type="button" class="gm-pm-act" data-act="advance" data-after="positive|审核通过">通过</button><button type="button" class="gm-pm-act" data-kind="collab" data-act="collab" data-after="special|已驳回">驳回</button></span></td><td class="gm-tbl__mob" colspan="5"><div class="r1"><b>陈静 · 孕 12 周</b><span class="gm-pm-tag gm-pm-tag--attention" data-status="1"><i></i>待审核</span></div><div class="r2"><i>事项</i>AI 建议：妊娠风险分级复核</div><div class="r2"><i>时限</i>今日 11:00</div><div class="r3"><span class="gm-pm-acts"><button type="button" class="gm-pm-act" data-act="view">查看</button><button type="button" class="gm-pm-act" data-act="advance" data-after="positive|审核通过">通过</button><button type="button" class="gm-pm-act" data-kind="collab" data-act="collab" data-after="special|已驳回">驳回</button></span></div></td></tr><tr data-tone="attention"><td class="gm-tbl__desk"><b>赵甜甜 · 18 月龄</b></td><td class="gm-tbl__desk">AI 建议：生长偏离随访计划</td><td class="gm-tbl__desk">今日</td><td class="gm-tbl__desk"><span class="gm-pm-tag gm-pm-tag--attention" data-status="1"><i></i>待审核</span></td><td class="gm-tbl__desk col-ops"><span class="gm-pm-acts"><button type="button" class="gm-pm-act" data-act="view">查看</button><button type="button" class="gm-pm-act" data-act="advance" data-after="positive|审核通过">通过</button><button type="button" class="gm-pm-act" data-kind="collab" data-act="collab" data-after="special|已驳回">驳回</button></span></td><td class="gm-tbl__mob" colspan="5"><div class="r1"><b>赵甜甜 · 18 月龄</b><span class="gm-pm-tag gm-pm-tag--attention" data-status="1"><i></i>待审核</span></div><div class="r2"><i>事项</i>AI 建议：生长偏离随访计划</div><div class="r2"><i>时限</i>今日</div><div class="r3"><span class="gm-pm-acts"><button type="button" class="gm-pm-act" data-act="view">查看</button><button type="button" class="gm-pm-act" data-act="advance" data-after="positive|审核通过">通过</button><button type="button" class="gm-pm-act" data-kind="collab" data-act="collab" data-after="special|已驳回">驳回</button></span></div></td></tr><tr data-tone="info"><td class="gm-tbl__desk"><b>李慧 · 女 36</b></td><td class="gm-tbl__desk">AI 报告草稿：宫颈筛查解读</td><td class="gm-tbl__desk">06-08</td><td class="gm-tbl__desk"><span class="gm-pm-tag gm-pm-tag--info" data-status="1"><i></i>审核中</span></td><td class="gm-tbl__desk col-ops"><span class="gm-pm-acts"><button type="button" class="gm-pm-act" data-act="view">查看</button><button type="button" class="gm-pm-act" data-act="advance" data-after="positive|审核通过">通过</button></span></td><td class="gm-tbl__mob" colspan="5"><div class="r1"><b>李慧 · 女 36</b><span class="gm-pm-tag gm-pm-tag--info" data-status="1"><i></i>审核中</span></div><div class="r2"><i>事项</i>AI 报告草稿：宫颈筛查解读</div><div class="r2"><i>时限</i>06-08</div><div class="r3"><span class="gm-pm-acts"><button type="button" class="gm-pm-act" data-act="view">查看</button><button type="button" class="gm-pm-act" data-act="advance" data-after="positive|审核通过">通过</button></span></div></td></tr><tr data-tone="neutral"><td class="gm-tbl__desk"><b>周洁 · 孕 16 周</b></td><td class="gm-tbl__desk">AI 随访外呼（已接通）</td><td class="gm-tbl__desk">今日 17:00</td><td class="gm-tbl__desk"><span class="gm-pm-tag gm-pm-tag--neutral" data-status="1"><i></i>未随访</span></td><td class="gm-tbl__desk col-ops"><span class="gm-pm-acts"><button type="button" class="gm-pm-act" data-act="view">查看</button><button type="button" class="gm-pm-act" data-act="advance" data-after="info|随访中">回访记录</button></span></td><td class="gm-tbl__mob" colspan="5"><div class="r1"><b>周洁 · 孕 16 周</b><span class="gm-pm-tag gm-pm-tag--neutral" data-status="1"><i></i>未随访</span></div><div class="r2"><i>事项</i>AI 随访外呼（已接通）</div><div class="r2"><i>时限</i>今日 17:00</div><div class="r3"><span class="gm-pm-acts"><button type="button" class="gm-pm-act" data-act="view">查看</button><button type="button" class="gm-pm-act" data-act="advance" data-after="info|随访中">回访记录</button></span></div></td></tr><tr data-tone="risk"><td class="gm-tbl__desk"><b>王雨桐 · 女 32</b></td><td class="gm-tbl__desk">AI 质控：随访记录完整性</td><td class="gm-tbl__desk">—</td><td class="gm-tbl__desk"><span class="gm-pm-tag gm-pm-tag--risk" data-status="1"><i></i>已驳回</span></td><td class="gm-tbl__desk col-ops"><span class="gm-pm-acts"><button type="button" class="gm-pm-act" data-act="view">查看</button><button type="button" class="gm-pm-act" data-act="advance" data-after="attention|待审核">重新生成</button></span></td><td class="gm-tbl__mob" colspan="5"><div class="r1"><b>王雨桐 · 女 32</b><span class="gm-pm-tag gm-pm-tag--risk" data-status="1"><i></i>已驳回</span></div><div class="r2"><i>事项</i>AI 质控：随访记录完整性</div><div class="r2"><i>时限</i>—</div><div class="r3"><span class="gm-pm-acts"><button type="button" class="gm-pm-act" data-act="view">查看</button><button type="button" class="gm-pm-act" data-act="advance" data-after="attention|待审核">重新生成</button></span></div></td></tr></tbody>
+          </table></div>
+          <div class="gm-pm-empty gm-pm-off" data-empty>当前筛选下暂无事项。</div>
+        </div>
+        <div class="gm-pm-card">
+          <h3>AI 质控 · 规则命中</h3>
+          <button type="button" class="gm-pm-qbtn" data-tone-filter="attention" aria-pressed="false">随访记录完整性<b>命中 14 · 已整改 9</b></button><button type="button" class="gm-pm-qbtn" data-tone-filter="attention" aria-pressed="false">筛查闭环及时性<b>命中 9 · 已整改 5</b></button><button type="button" class="gm-pm-qbtn" data-tone-filter="risk" aria-pressed="false">高危专案随访率<b>低于阈值 3 个科室</b></button><button type="button" class="gm-pm-qbtn" data-tone-filter="info" aria-pressed="false">报告审核及时率<b>平均 6 分钟 · 达标</b></button>
+        </div>
+      </div>
+      <div>
+        <div class="gm-pm-card" style="margin-bottom:var(--lg-space-4)">
+          <h3>快捷工具</h3>
+          <div class="gm-pm-tools"><button type="button" class="gm-pm-btn gm-pm-btn--line" data-tool="AI 辅助评估">AI 辅助评估</button><button type="button" class="gm-pm-btn gm-pm-btn--line" data-tool="生成随访计划">生成随访计划</button><button type="button" class="gm-pm-btn gm-pm-btn--line" data-tool="生成报告草稿">生成报告草稿</button><button type="button" class="gm-pm-btn gm-pm-btn--line" data-tool="质控规则校验">质控规则校验</button><button type="button" class="gm-pm-btn gm-pm-btn--line" data-tool="知识库检索">知识库检索</button><button type="button" class="gm-pm-btn gm-pm-btn--line" data-tool="工作流编排">工作流编排</button></div>
+        </div>
+        <div class="gm-pm-card">
+          <div class="gm-pm-ov"><h4>质量</h4><ul class="gm-pm-list"><li>建议采纳率<b>78%</b></li><li>审核平均时长<b>6 分钟</b></li><li>质控问题闭环<b>84%</b></li><li>业务系统覆盖<b>5 / 5</b></li></ul></div>
+          <div class="gm-pm-ov"><h4>动态</h4><ul class="gm-pm-list gm-pm-feed" data-feed><li><span class="gm-pm-tag gm-pm-tag--positive"><i></i>审核通过</span><span>陈静 · AI 风险分级建议已写入孕产妇系统</span></li><li><span class="gm-pm-tag gm-pm-tag--attention"><i></i>待审核</span><span>赵甜甜 · AI 生长偏离随访计划待审核</span></li><li><span class="gm-pm-tag gm-pm-tag--info"><i></i>审核中</span><span>李慧 · AI 筛查结果解读报告审核中</span></li></ul></div>
+        </div>
+      </div>
+    </div>
+    
+    <div class="gm-pm-note" style="margin-top:var(--lg-space-4)"><i></i><div><b>AI 不负责：</b>替代医生诊疗、自动下达医疗结论、无审核自动修改核心病历、无授权跨机构读取居民隐私数据。AI 只产出建议，须经医生审核后写入业务系统。</div></div>
+  </div>
+</div>
+</div>
+
+</div>
+
+<!--@js-->
+/* ══ 1. 视图切换：首页 + 6 个工作台（深链 #products--p0N-work）══
+   模块内**没有**自己的切换条 —— 导航只有顶部那一个下拉菜单（见 build-site.py 的 NAV_MENUS），
+   避免"站内导航 + 模块内切换条"两套并存。 */
+(function(){
+  var views = [].slice.call(document.querySelectorAll('.gm-pm-view'));
+  if(!views.length) return;
+  function vid(v){ return (v.id || '').replace(/^products--/, ''); }
+  function show(id, scroll){
+    var found = false;
+    views.forEach(function(v){ if(vid(v) === id) found = true; });
+    if(!found) return false;
+    views.forEach(function(v){ v.classList.toggle('is-on', vid(v) === id); });
+    if(scroll){
+      /* 吸顶导航高度由外壳实测写入 --sh-nav-h，模块根的 scroll-margin-top 已按它留白 */
+      var root = document.getElementById('gm-mod-products');
+      if(root && root.scrollIntoView) root.scrollIntoView({block: 'start'});
+    }
+    return true;
+  }
+  function fromAnchor(anchor){
+    var x = (anchor || '').replace(/^#/, '');
+    if(/^gm-mod-/.test(x)) return false;         /* 点主导航页签：保持当前视图 */
+    x = x.replace(/^products--/, '').replace(/^products$/, '');
+    if(!x) return false;
+    return show(x, true);
+  }
+  /* ⚠️ 首屏必须**兜底显示一个视图**：`#gm-mod-products` 这类"只点模块根"的 hash
+     在 fromAnchor 里是被跳过的（它不该改视图），若不兜底，模块首次显示时
+     7 个视图全都没有 .is-on → 整块空白（实测踩到过）。 */
+  if(!fromAnchor(location.hash)) show(vid(views[0]), false);
+  window.addEventListener('hashchange', function(){ fromAnchor(location.hash); });
+  /* 外壳在"模块内路由"时广播（点主导航下拉里的产品、点首页产品卡等） */
+  document.addEventListener('gm:module-shown', function(e){
+    var d = e.detail || {};
+    if(d.mod === 'products') fromAnchor(d.anchor);
+  });
+})();
+
+/* ══ 2. 工作台交互：KPI/筛选/队列 → 筛选待处理清单；行内动作推进状态；步骤轴；工具 ══
+   每个视图各自一份状态（7 个视图同存于 DOM），互不干扰。 */
+(function(){
+  function toast(msg, status){ if(window.gmToast) window.gmToast(msg, status || 'info'); }
+
+  [].slice.call(document.querySelectorAll('.gm-pm-view')).forEach(function(view){
+    if(!view.querySelector('.gm-pm-todos')) return;      /* 首页无待处理清单，跳过 */
+    var rows = [].slice.call(view.querySelectorAll('.gm-pm-todos tbody tr'));
+    /* ⚠️ 一行两份状态标签（桌面列 / 窄屏合并单元），推进时两份都要更新，否则窄屏看不到反馈。 */
+    var filters = [].slice.call(view.querySelectorAll('[data-tone-filter]'));
+    var countEl = view.querySelector('[data-count]');
+    var emptyEl = view.querySelector('[data-empty]');
+    var tone = 'all';
+
+    function feed(spec, text){
+      var ul = view.querySelector('[data-feed]');
+      if(!ul) return;
+      var parts = spec.split('|');
+      var li = document.createElement('li');
+      var t = document.createElement('span');
+      t.className = 'gm-pm-tag gm-pm-tag--' + parts[0];
+      t.innerHTML = '<i></i>';
+      t.appendChild(document.createTextNode(parts[1]));
+      var s = document.createElement('span');
+      s.textContent = text;
+      li.appendChild(t); li.appendChild(s);
+      ul.insertBefore(li, ul.firstChild);
+      while(ul.children.length > 6) ul.removeChild(ul.lastChild);   /* 只留最近 6 条 */
+    }
+    function setTag(el, spec){
+      var parts = spec.split('|');
+      el.className = 'gm-pm-tag gm-pm-tag--' + parts[0];
+      el.innerHTML = '<i></i>';
+      el.appendChild(document.createTextNode(parts[1]));
+    }
+    function applyFilter(next){
+      tone = next || 'all';
+      var n = 0;
+      rows.forEach(function(tr){
+        var on = tone === 'all' || tr.getAttribute('data-tone') === tone;
+        tr.classList.toggle('gm-pm-off', !on);
+        if(on) n++;
+      });
+      filters.forEach(function(b){
+        b.setAttribute('aria-pressed', b.getAttribute('data-tone-filter') === tone ? 'true' : 'false');
+      });
+      if(countEl) countEl.textContent = '共 ' + n + ' / ' + rows.length + ' 条';
+      if(emptyEl) emptyEl.classList.toggle('gm-pm-off', n !== 0);
+    }
+    function label(el){ return el.textContent.replace(/^\d+/, '').trim(); }
+
+    /* KPI / 筛选 chips / 队列行：同一套语义筛选（再点一次取消） */
+    filters.forEach(function(b){
+      b.addEventListener('click', function(){
+        var t = b.getAttribute('data-tone-filter');
+        applyFilter(tone === t ? 'all' : t);
+      });
+    });
+
+    /* 行内动作：查看 / 推进 / 协作（推进后本动作置灰，避免重复推进） */
+    rows.forEach(function(tr){
+      var tagEls = [].slice.call(tr.querySelectorAll('[data-status]'));
+      var tagEl = tagEls[0];
+      var whoEl = tr.querySelector('td b');
+      var who = whoEl ? whoEl.textContent : '该对象';
+      [].slice.call(tr.querySelectorAll('.gm-pm-act')).forEach(function(btn){
+        btn.addEventListener('click', function(){
+          var kind = btn.getAttribute('data-act');
+          var after = btn.getAttribute('data-after');
+          if(kind === 'view'){ toast('已打开 ' + who + ' 的记录', 'info'); return; }
+          if(!after || !tagEls.length) return;
+          var lbl = btn.textContent;
+          /* ⚠️ 一份行里两份状态标签（桌面列 `.gm-tbl__desk` / 窄屏合并单元 `.gm-tbl__mob`）：
+             只改第一份的话，窄屏点下去可见的那份不变 —— 用户看不到任何反馈。两份都改。 */
+          tagEls.forEach(function(el){ setTag(el, after); });
+          tr.setAttribute('data-tone', after.split('|')[0]);
+          /* 只置灰被点的那一颗；同一行的另一份（另一视口那份）也一起置灰，避免切尺寸后还能再点 */
+          [].slice.call(tr.querySelectorAll('.gm-pm-act')).forEach(function(b){
+            if(b.getAttribute('data-act') === kind && b !== btn) b.disabled = true;
+          });
+          btn.disabled = true;
+          toast(who + ' · ' + lbl + '：' + after.split('|')[1],
+                kind === 'advance' ? 'success' : 'info');
+          feed(after, who + ' · ' + lbl + '（' + after.split('|')[1] + '）');
+          applyFilter(tone);          /* 语义变了就按新语义重新归类 */
+        });
+      });
+    });
+
+    /* 快捷工具 / 顶栏主行动：反馈 + 写入最新动态 */
+    [].slice.call(view.querySelectorAll('[data-tool]')).forEach(function(b){
+      b.addEventListener('click', function(){
+        var name = b.getAttribute('data-tool');
+        toast(name + '：已打开（示例）', 'info');
+        feed('info|进行中', '执行「' + name + '」（示例）');
+      });
+    });
+
+    /* 顶栏搜索：回车给一次示意反馈（不接后端，也不假装搜出结果） */
+    var input = view.querySelector('.gm-pm-search input');
+    if(input) input.addEventListener('keydown', function(e){
+      if(e.key === 'Enter' && input.value.trim()){
+        toast('搜索「' + input.value.trim() + '」：示意反馈', 'info');
+        input.value = '';
+      }
+    });
+
+    applyFilter('all');
+  });
+})();
+
+/* ══ 3. 生长曲线（13 · 13.2 母题）══
+   图形与交互都在外壳的 window.gmGrowth：本模块只给数据（X 轴节点 / P3 / P50 / P97 /
+   实测值 / 数据源版本）。挂载点用 class + data 属性，不用 id（见文件头说明）。
+   ⚠️ 必须等 DOMContentLoaded：模块脚本在文档里位于外壳脚本之前，
+      外壳的 window.gmGrowth 此刻还没定义，直接调用会被守卫静默吞掉（图不出现）。 */
+(function(){
+  var CHARTS = {
+    p03: {
+        title:"孕期体重曲线", tone:"rose", source:"示意数据 · 孕前 BMI 正常范围推荐增重", bandLabel:"P3–P97 参考区间（示意）",
+        xName:"孕周", xUnit:"周", yName:"体重", yUnit:"kg",
+        x:[12,16,20,24,28,32,36,40], xTicks:[12,20,28,36,40], yTicks:[50,55,60,65,70],
+        p3:[48.5,50.2,52.4,54.6,57.0,59.2,61.0,62.2], p50:[50.0,52.4,55.2,58.0,61.0,63.8,66.0,67.5], p97:[52.0,55.4,59.0,62.6,66.4,69.8,72.6,74.6],
+        actual:[49.8,52.6,55.4,58.4,61.8,64.6,66.8,68.0], focus:28
+    },
+    p04: {
+        title:"新生儿体重曲线", tone:"mint", source:"WHO 2006 · 出生后 0–28 天（示意数据）", bandLabel:"P3–P97 参考区间",
+        xName:"日龄", xUnit:"天", yName:"体重", yUnit:"kg",
+        x:[0,3,7,14,21,28], xTicks:[0,7,14,21,28], yTicks:[3,4,5,6],
+        p3:[2.5,2.6,2.9,3.3,3.7,4.0], p50:[3.3,3.4,3.8,4.4,5.0,5.4], p97:[4.3,4.5,5.0,5.8,6.6,7.1],
+        actual:[2.9,2.8,3.2,3.9,4.6,5.1], focus:28
+    },
+    p05: {
+        title:"体重生长曲线", tone:"mint", source:"WHO 2006 · 0–24 月龄（示意数据）", bandLabel:"P3–P97",
+        xName:"月龄", xUnit:"月", yName:"体重", yUnit:"kg",
+        x:[0,3,6,9,12,15,18,21,24], xTicks:[0,6,12,18,24], yTicks:[6,8,10,12,14],
+        p3:[2.5,4.6,6.1,7.1,7.7,8.3,8.8,9.2,9.7], p50:[3.3,6.4,7.9,8.9,9.6,10.3,10.9,11.5,12.2], p97:[4.3,7.1,9.2,10.5,11.5,12.4,13.2,13.9,14.6],
+        actual:[3.4,6.2,7.9,8.9,9.7,10.5,11.5,12.0,9.4], focus:18,
+        advisories:[{x:24,tone:"attention",text:"24 月龄 · 体重 9.4kg 低于 P3（9.7kg）：建议 2 周内复测并评估喂养（示意）"}]
+    }
+  };
+  function boot(){
+    if(!window.gmGrowth) return;
+    [].slice.call(document.querySelectorAll('.gm-pm-chart')).forEach(function(el){
+      var cfg = CHARTS[el.getAttribute('data-chart')];
+      if(cfg) window.gmGrowth(el, cfg);
+    });
+  }
+  if(document.readyState === 'loading') document.addEventListener('DOMContentLoaded', boot);
+  else boot();
+})();

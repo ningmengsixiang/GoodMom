@@ -750,21 +750,36 @@ LOGO_ICON = "brand/logo-192.png"                   # favicon / 小图标
 LOGO_RETIRED = ("brand/logo-mark.svg", "brand/logo.svg", "brand/logo-tile.svg")   # 退役：页面不得引用
 
 # 2) logo 渲染圆角白名单：{文件: {说明: 原值}}，不得随组件圆角档调整
+# ── 2026 品牌口径变更（**用户当面确认**，非规范推导）────────────────────────
+# 变更前：首页 Hero 84px/圆角 24px、首页页脚 46px/14px、预览 Hero 88px/24px、
+#         预览行内 34px/10px、重定向桩 34px/8px + 24px/6px、打印手册 h1 44px/13px ——
+#         同一套 logo 在站内有"圆角方形"（对外展示位）与"正圆"（产品系统 chrome）两种裁切。
+# 变更后：**全站一律正圆**（`border-radius:50%`），尺寸收敛到锁版三档 26 / 36 / 44，
+#         避免"同一个 logo 两种裁切"；产品页与工作台锁版本来就是这个口径。
+# 旧值保留在本注释里，便于回溯"当时为什么是 24px"。
 LOGO_RADII = {
-    "site/index.html": {"首页 Hero 主 logo（84px）": "24px",
-                        "首页导航 logo（46px）": "14px",
-                        "视觉规范行内 logo（34px）": "10px"},
-    "site/fragments/site-index.html": {"首页 Hero 主 logo（84px）": "24px",
-                                       "首页导航 logo（46px）": "14px"},
-    "site/fragments/preview-index.html": {"视觉规范行内 logo（34px）": "10px",
-                                          "视觉规范 Hero logo（88px）": "24px"},
-    "fuyouaicansai/goodmom-redesign.html": {"侧栏品牌 logo": "8px", "顶栏 logo": "6px"},
-    "preview/manual.html": {"打印版手册页头 logo": "13px"},
+    "site/index.html": {"首页 Hero 主 logo（44px）": "50%",
+                        "首页页脚 logo（26px）": "50%",
+                        "视觉规范行内 logo（26px）": "50%"},
+    "site/fragments/site-index.html": {"首页 Hero 主 logo（44px）": "50%",
+                                       "首页页脚 logo（26px）": "50%"},
+    "site/fragments/preview-index.html": {"视觉规范行内 logo（26px）": "50%",
+                                          "视觉规范 Hero logo（44px）": "50%"},
+    "fuyouaicansai/goodmom-redesign.html": {"侧栏品牌 logo（36px）": "50%",
+                                            "顶栏 logo（26px）": "50%"},
+    "preview/manual.html": {"打印版手册页头 logo（26px）": "50%",
+                            "打印版手册 h1 logo（44px）": "50%"},
+    # 站内"预览"模块里的模拟 UI logo（移动端模拟导航栏、示例中心页头）
+    "site/fragments/preview-mobile.html": {"移动端模拟导航栏 logo（26px）": "50%"},
+    "site/fragments/preview-examples.html": {"示例中心页头 logo（26px）": "50%"},
 }
 
 # CSS 里 logo 可能由通用选择器着色（不带 logo/brand 字样），逐文件显式列出
 LOGO_CSS_SELECTORS = {
     "fuyouaicansai/goodmom-redesign.html": [r"\.side\s+\.brand\s+img", r"\.top\s+img"],
+    # 打印版总览手册页头：`.topm img`（类名不含 logo/brand，必须显式登记，否则这条白名单是空转）
+    "preview/manual.html": [r"\.topm\s+img"],
+    "site/fragments/preview-mobile.html": [r"\.navbar\s+img"],
 }
 
 # 3) 需要检查 logo 引用的文件（片段以 site/ 为相对基准，因为它会被内联进 site/index.html）
@@ -798,11 +813,13 @@ def _logo_radius_candidates(path):
         tag = m.group(0)
         if not re.search(r"logo|brand", tag, re.I):
             continue
-        r = re.search(r"border-radius:\s*([0-9.]+px)", tag)
+        r = re.search(r"border-radius:\s*([0-9.]+(?:px|%))", tag)
         if r:
             out.append(r.group(1))
     for sel in [r"\.(?:hero-logo|logo|brand)[^{]*"] + LOGO_CSS_SELECTORS.get(path, []):
-        for m in re.finditer(sel + r"\{[^}]*border-radius:\s*([0-9.]+px)", src):
+        # ⚠️ 必须同时收 `%`：本轮起"全站 logo 一律正圆"写的是 `border-radius:50%`，
+        # 只收 px 会让白名单永远匹配不到（旧实现只认 px）。
+        for m in re.finditer(sel + r"\{[^}]*border-radius:\s*([0-9.]+(?:px|%))", src):
             out.append(m.group(1))
     return out
 

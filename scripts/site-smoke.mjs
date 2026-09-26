@@ -8,6 +8,13 @@
  * 这里做的是"合并是否破坏了原功能"的回归：模块切换、样式隔离、
  * 各模块交互（状态谱 / 步骤 / 弹窗 / 级联 / 虚拟列表 / 暗色 / 文档锚点）。
  */
+import { readFileSync } from "node:fs";
+import { dirname } from "node:path";
+import { fileURLToPath } from "node:url";
+import { join } from "node:path";
+
+/* 站点目录：站内相对链接（如 ../fuyouaicansai/x.html）按它解析 */
+const SITE_DIR = join(dirname(fileURLToPath(import.meta.url)), "..", "site");
 import { chromium } from "playwright";
 
 const URL = process.env.SITE_URL || "http://localhost:5288/site/index.html";
@@ -107,8 +114,10 @@ const buttonAudit = async () => {
 {
   const bad = { radius: [], light: [], pinkText: [], pinkHi: [], size: [] };
   let total = 0;
+  /* ⚠️ 模块清单要与 scripts/build-site.py 的 MODULES 同集合：漏一个就等于
+     该模块的按钮配方完全不设防（历史上就漏过 —— 新增模块时忘了加这里）。 */
   for (const mod of ["preview-index", "preview-examples", "preview-patterns", "preview-mobile",
-                     "site-spec", "site-manual", "site-docs", "site-index"]) {
+                     "site-spec", "site-manual", "site-docs", "site-index", "products"]) {
     await page.locator(`#shTabs .sh-tab[data-mod="${mod}"]`).click();
     await page.waitForTimeout(300);
     const rows = await buttonAudit();
@@ -135,11 +144,20 @@ const buttonAudit = async () => {
 
 /* ── 1. 外壳与唯一入口 ─────────────────────────────────────────── */
 const tabs = await page.locator("#shTabs .sh-tab").count();
-check("主导航存在且包含全部模块", tabs === 8, `${tabs} 个一级项`);
+/* 模块数**从构建脚本的 MODULES 取**，不写死数字：写死的那份必然在下次加模块时过期，
+   而"过期"的表现是门禁变松（8 → 9 仍判 PASS），不是报错。 */
+const expectedTabs = (() => {
+  /* ⚠️ 不能用 `new URL(…, import.meta.url)`：本文件上面已把站点地址绑定到名为 URL 的
+     常量（第 14 行），全局 URL 构造器被遮蔽 —— 实测抛 "URL is not a constructor"。 */
+  const src = readFileSync(join(import.meta.dirname, "build-site.py"), "utf8");
+  const body = src.match(/^MODULES\s*=\s*\[([\s\S]*?)^\]/m);
+  return body ? (body[1].match(/\(\s*"[a-z-]+"/g) || []).length : NaN;
+})();
+check("主导航存在且包含全部模块", tabs === expectedTabs, `${tabs} 个一级项（期望 ${expectedTabs}）`);
 const titles = await page.locator("#shTabs .sh-tab").allTextContents();
 check("导航标题可读", titles.every((t) => t.trim().length > 0), titles.join(" / "));
 const modCount = await page.locator(".gm-mod").count();
-check("模块容器数量正确", modCount === 8, `${modCount} 个`);
+check("模块容器数量正确", modCount === expectedTabs, `${modCount} 个（期望 ${expectedTabs}）`);
 const visibleAtStart = await page.locator(".gm-mod.is-on").count();
 check("同一时刻只显示一个模块", visibleAtStart === 1, `${visibleAtStart} 个可见`);
 
@@ -158,6 +176,7 @@ for (const [mod, label] of [
   ["site-manual", "标准手册"],
   ["site-docs", "文档索引"],
   ["site-index", "首页与总览"],
+  ["products", "产品矩阵"],
 ]) {
   const ok = await switchTo(mod);
   const onCount = await page.locator(".gm-mod.is-on").count();
@@ -382,18 +401,30 @@ await page.waitForTimeout(300);
 const after = await page.locator('#shTabs .sh-tab[aria-selected="true"]').getAttribute("data-mod");
 check("导航支持左右方向键切换", before !== after, `${before} → ${after}`);
 
-/* ── 7. 旧页面链接必须已改写为模块切换（否则会白屏一跳）────────────
-   仅允许保留打印版手册（preview/manual.html 是独立页，仍带导航回来） */
+/* ── 7. 站内不得指向**重定向桩**（否则会白屏一跳）────────────────────
+   ⚠️ 这条原来写成"任何 .html 链接都是失败（仅放行打印版手册）"—— 那是当时的口径：
+   旧页面已合并进单入口首页、其余都成了重定向桩。但**真实存在的独立页**不该被这条误伤：
+   产品矩阵模块的业务菜单现在指到 `fuyouaicansai/p0N-*.html#mod-*`（真实交付页，不是桩）。
+   于是把判据从"看扩展名"改成"**看目标文件到底是不是重定向桩**"（读文件找跳转标记），
+   保护强度反而更高：链接失效、指向桩、指向不存在文件，三种都会失败。 */
 await switchTo("site-index");
-const legacy = await page.evaluate(() =>
+const htmlLinks = await page.evaluate(() =>
   Array.from(document.querySelectorAll('a[href]'))
     .map((a) => a.getAttribute("href"))
     .filter((h) => /\.html(?:#|$)/.test(h))
     .filter((h) => !h.startsWith("http"))
 );
-check("无指向已合并旧页面的链接（打印版除外）",
-  legacy.filter((h) => !h.includes("preview/manual.html")).length === 0,
-  legacy.slice(0, 4).join(" | "));
+const stubs = [], missing = [];
+for (const href of htmlLinks) {
+  const file = join(SITE_DIR, href.split("#")[0]);
+  try {
+    const body = readFileSync(file, "utf8");
+    if (/http-equiv="refresh"|location\.replace/i.test(body)) stubs.push(href);
+  } catch { missing.push(href); }
+}
+check("站内 .html 链接只指向真实页面（不指向重定向桩 / 不失效）",
+  stubs.length === 0 && missing.length === 0,
+  `指向桩 ${stubs.length} 条：${stubs.slice(0, 2).join(" | ")}；失效 ${missing.length} 条：${missing.slice(0, 2).join(" | ")}`);
 /* 覆盖度：站内应有足量模块切换链接 */
 const modLinks = await page.evaluate(() =>
   document.querySelectorAll('a[data-mod], a[href^="#gm-mod-"]').length

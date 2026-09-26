@@ -6,6 +6,11 @@
 <title>妈咪好 GoodMom · 设计系统总览手册（打印版）</title>
 <link rel="icon" type="image/png" href="../brand/logo-192.png">
 <style>
+  /* ⚠️ 打印版手册原来**只有局部容器画了底色**：粘性页头 `.topm{margin:10px auto}` 的上边距、
+     以及页面四周露出的是没有任何祖先绘制的**默认白画布**（多断点实测顶部整条白缝）。
+     与 6 个独立产品页同口径：底色写在根元素上，兜住所有未绘制区域。 */
+  html{background:linear-gradient(165deg,#FDF2EE,#F6E2DB 55%,#E6CFC6)}
+  body{margin:0}
 :root{--rose:#E85D8F;--text:#343A46;--t2:#4F5B6E;--t3:#4F5B6E}
 *{box-sizing:border-box}
 body{font-family:"PingFang SC","Inter","MiSans","Noto Sans SC",sans-serif;color:var(--text);margin:0;
@@ -22,12 +27,12 @@ a{color:var(--rose);text-decoration:none}
 .stat span{flex:1 1 120px;padding:10px 12px;text-align:center;border-right:1px solid #F0D4CF}
 .stat span:last-child{border-right:none}
 .stat b{display:block;font-size:18px;color:#B23A63}
-.stat i{font-style:normal;font-size:11px;color:var(--t3)}
+.stat i{font-style:normal;font-size:12px;color:var(--t3)}
 pre{background:#FFF7F4;border:1px solid #F0D4CF;border-radius:18px;padding:12px 16px;font-size:12px;line-height:1.8;overflow:auto;font-family:ui-monospace,Menlo,monospace}
 table{width:100%;border-collapse:collapse;font-size:12.5px;margin:8px 0}
 th,td{border-bottom:1px solid #EED9D3;text-align:left;padding:7px 8px;vertical-align:top}
 th{color:#B23A63;font-weight:600}
-.grid2{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.grid2{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:10px}
 .card{border:1px solid #F0D4CF;border-radius:18px;padding:12px 14px;background:#FFFAF7}
 .foot{margin-top:26px;padding-top:12px;border-top:1px dashed #E0C2BB;color:var(--t3);font-size:11px;line-height:2}
 @media print{
@@ -40,7 +45,7 @@ th{color:#B23A63;font-weight:600}
 .topm{position:sticky;top:10px;z-index:60;max-width:880px;margin:10px auto;padding:8px 14px;border-radius:999px;
   display:flex;align-items:center;gap:10px;background:rgba(255,255,255,.8);border:1px solid #F0D4CF;
   box-shadow:0 6px 16px rgba(90,70,70,.08)}
-.topm img{width:24px;height:24px;border-radius:50%;object-fit:cover}
+.topm img{width:26px;height:26px;border-radius:50%;object-fit:cover;flex:none}
 .topm b{color:#B23A63;font-size:13px}
 .topm .ng{position:relative;margin-left:auto;display:inline-flex}
 .topm .ngt{font-family:inherit;font-size:12px;color:#343A46;background:linear-gradient(160deg,rgba(255,255,255,.96),rgba(255,255,255,.82));border:1px solid rgba(58,52,84,.10);border-radius:999px;padding:6px 12px;cursor:pointer}
@@ -85,7 +90,7 @@ th{color:#B23A63;font-weight:600}
     </span></span>
 </div>
 <div class="page">
-  <h1><img src="../brand/logo-512.png" alt="妈咪好" style="width:44px;height:44px;border-radius:13px;object-fit:cover;vertical-align:-10px;margin-right:12px">妈咪好 GoodMom · 妇幼儿童全生命周期设计系统<small>Design System Overview · V2.9（打印版总览 · 规范正文见同仓 Markdown 文档）</small></h1>
+  <h1><img src="../brand/logo-512.png" alt="妈咪好" style="width:44px;height:44px;border-radius:50%;object-fit:cover;vertical-align:-10px;margin-right:12px">妈咪好 GoodMom · 妇幼儿童全生命周期设计系统<small>Design System Overview · V2.9（打印版总览 · 规范正文见同仓 Markdown 文档）</small></h1>
   <p class="meta">高级液态玻璃 · 柔光蜜桃 · 温暖可信 · 医疗克制 · 生长曲线</p>
 
   <div class="stat">

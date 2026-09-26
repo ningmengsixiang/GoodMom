@@ -31,7 +31,7 @@
 
 适用：妈妈/家庭 App（孕期首页、生长曲线、疫苗计划、儿保体检）、机构运营端、医护随访工作台与数据大屏。品牌定义见 [12](12-妈咪好品牌与设计语言.md)，妇幼领域组件见 [13](13-妇幼领域组件规范.md)；01–11 为通用视觉引擎文档。
 
-**交付统计（V2.9）**：20 份规范文档 · 98 项组件（00 总目录）· 77 枚自绘图标（icons/lg-icons.svg）· 60 条状态文案（`docs/coverage-report.md`）· 4 套可交互预览（首页 / 移动端 / 示例中心 6 页 / 新增能力示例）· **2 个开源组件库（`@goodmom/ui` React + Arco 16 模块 · `@goodmom/vue` Vue 3 零基座 16 组件）** + 前端参考（frontend-app）· 1 套前端开发规范 skill
+**交付统计（V2.9）**：20 份规范文档 · 98 项组件（00 总目录）· 77 枚自绘图标（icons/lg-icons.svg）· 60 条状态文案（`docs/coverage-report.md`）· 4 套可交互预览（首页 / 移动端 / 示例中心 6 页 / 新增能力示例）· **产品矩阵 7 页（1 个 6 大产品对接首页 + 6 个工作台首页，由 `prd/zong.md` 生成；入口在顶部导航「产品矩阵」下拉菜单）** · **6 个独立产品页（`fuyouaicansai/p01…p06`，每页 4 视图：工作台 / 档案 / AI 协同 / 详情，单文件可直接打开）** · **2 个开源组件库（`@goodmom/ui` React + Arco 16 模块 · `@goodmom/vue` Vue 3 零基座 16 组件）** + 前端参考（frontend-app）· 1 套前端开发规范 skill
 
 **体系架构**
 
@@ -117,8 +117,8 @@
 | [`17-页面布局与组件组合规范.md`](17-页面布局与组件组合规范.md) | **页面与组合全局规范**：页面壳/栅格留白/对齐基线（图标-文字）、组件组合顺序与间距档、实现验收 | 全员（先查后做） |
 | [`18-视觉规范审计报告.md`](18-视觉规范审计报告.md) | **视觉规范审计**：Token/字体/玻璃/图标/组件/页面/无障碍自查与整改行动清单 | 维护人/评审 |
 | [`19-工程架构与组件复用规范.md`](19-工程架构与组件复用规范.md) | **产品前端工程总纲（七项决定）**：视觉基调分密度 · 技术选型（React+TS+Vite+Arco+@goodmom/ui）· 组件三层选型 · 目录结构 · 9 个模块边界 · 复用规则 · 样式系统；配套机器门禁 `check-module-boundary.py`（B1–B9） | 前端 / 架构 / 维护人 |
-| [`site/index.html`](site/index.html) | **唯一首页（唯一入口）**：融合原 8 个页面为单文件，顶部主导航切换 8 个模块——首页与总览 / 视觉规范 / 组件与状态 / 移动端 / 交互范式 / 规范全文 / 标准手册 / 文档索引 | 所有人，从这里开始 |
-| `site/fragments/` | 唯一首页的**内容片段**（构建输入，非交付页面），由 `scripts/build-site.py` 组装 | 维护者 |
+| [`site/index.html`](site/index.html) | **唯一首页（唯一入口）**：融合原 8 个页面为单文件，顶部主导航切换 9 个模块（「产品矩阵」为**下拉菜单**，可直接跳 6 个产品的工作台）——首页与总览 / 产品矩阵 / 视觉规范 / 组件与状态 / 移动端 / 交互范式 / 规范全文 / 标准手册 / 文档索引 | 所有人，从这里开始 |
+| `site/fragments/` | 唯一首页的**内容片段**（构建输入，非交付页面），由 `scripts/build-site.py` 组装；`site-fragments/products.html` 由 `scripts/gen-products.py` 从 [`prd/zong.md`](prd/zong.md) 生成（改了 PRD 必须重跑，CI 有 `gen-products.py` + `git diff` 守门） | 维护者 |
 | 旧入口（7 个） | `site/spec.html` `site/manual.html` `site/docs.html` `preview/index.html` `preview/examples.html` `preview/mobile.html` `preview/patterns.html` 均已改写为**重定向页**（保留旧链接可达，锚点透传） | 兼容旧链接 |
 
 | [`preview/manual.html`](preview/manual.html) | **总览手册（打印版，保留为独立页）**：定位/架构/DNA/状态/文档地图，浏览器可另存 PDF | 全员（对外介绍用） |
@@ -221,7 +221,7 @@ node goodmom-vue/playground/smoke.mjs                    # 冒烟（组件契约
 git clone git@github.com:ningmengsixiang/GoodMom.git && cd GoodMom
 
 # 本地预览（无需构建，双击打开即可）
-open site/index.html   # 唯一入口：顶部导航切换 8 个模块（原 8 个页面已全部并入）
+open site/index.html   # 唯一入口：顶部导航切换 9 个模块（原 8 个页面 + 产品矩阵）
 
 # 维护：站点是"产物"，改内容请改片段后重新构建，不要直接编辑 site/index.html
 python3 scripts/build-site.py            # 生成唯一首页

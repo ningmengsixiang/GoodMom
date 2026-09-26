@@ -51,7 +51,7 @@
   -webkit-backdrop-filter:blur(32px);backdrop-filter:blur(32px);padding:18px;background-origin:border-box}
 .row{display:flex;gap:14px;flex-wrap:wrap;align-items:center}
 .col{display:flex;flex-direction:column;gap:10px}
-.lbl{font-size:11px;color:var(--t2);margin-bottom:2px}
+.lbl{font-size:12px;color:var(--t2);margin-bottom:2px}
 /* ── 3.10 链接 ── */
 .lk{display:inline-flex;align-items:center;gap:4px;font-size:14px;line-height:22px;color:var(--link);text-decoration:none;background:none;
   border:none;font-family:inherit;cursor:pointer;transition:color .14s,opacity .14s}
@@ -106,7 +106,7 @@
 .rv-box{resize:horizontal;overflow:auto;max-width:100%;width:100%;border-radius:18px;padding:12px;
   border:1px dashed rgba(178,58,99,.35);background:rgba(255,255,255,.28)}
 .rv-box::after{content:"↔ 拖动右下角改容器宽度（形态见上方实时读数）";font-size:11px;color:var(--t2)}
-.rv-mode{font-size:11px;color:var(--rose-deep);font-weight:600;margin-bottom:8px}
+.rv-mode{font-size:12px;color:var(--rose-deep);font-weight:600;margin-bottom:8px}
 /* 玻璃表格：配方在**外壳**（scripts/build-site.py 的「数据呈现层」）。
    旧实现（已删）实测：表头 12px（类型阶最小档是 caption 12、03.7 要 body-sm 14/600）、
    表体 13px（02 · 2.2.2 场景列写明「表格正文」= body-sm 14/20）、行高 49（✓ 在 44–52 内）、
@@ -161,16 +161,18 @@
 .bws{display:flex;gap:14px;flex-wrap:wrap}
 .bw{flex:1;min-width:150px;padding:14px;border-radius:18px;background:rgba(255,255,255,.45);text-align:center}
 .bw .bx{height:44px;border-radius:18px;border-style:solid;border-color:var(--rose-deep);margin-bottom:8px}
-.bw code{font-size:12px;color:var(--text)}.bw small{display:block;color:var(--t2);font-size:11px;margin-top:4px}
+.bw code{font-size:12px;color:var(--text)}.bw small{display:block;color:var(--t2);font-size:12px;margin-top:4px;overflow-wrap:anywhere}
 .sw{display:inline-flex;align-items:center;gap:8px;font-size:12px;color:var(--t2);background:rgba(255,255,255,.5);
   border:1px solid var(--lg-divider,rgba(58,52,84,.10));border-radius:999px;padding:6px 14px;cursor:pointer;font-family:inherit}
 .sw:focus-visible{outline:var(--bw-3) solid var(--ring);outline-offset:2px}
 @media (max-width:767px){
-  .row{display:grid;grid-template-columns:1fr;gap:14px}      /* 移动端：并列演示改单列堆叠，触发条得满宽 */
+  .row{display:grid;grid-template-columns:minmax(0,1fr);gap:14px}      /* 移动端：并列演示改单列堆叠，触发条得满宽 */
   .cas{display:block} .cas-t{min-width:0;width:100%}
   .hub{gap:6px;padding:8px 12px}
   .hub a{padding:6px 10px}
-  .bw{min-width:0}
+  /* ⚠️ 原来只写 `min-width:0`：320 档三张卡被压成 40px 宽，卡内文字（17px）直接溢出这个小盒。
+     给 flex-basis 后按 132px 起排、装不下自动换行。 */
+  .bw{min-width:0;flex:1 1 132px}
   .glass{padding:14px}
   /* 10 · 10.4：≤767px 可点热区 ≥44×44。
      实测修复前：链接型操作 22px、级联项 34px、吸顶表头 43px、开关 28px —— 全部不足。

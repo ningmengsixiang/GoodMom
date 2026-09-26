@@ -48,7 +48,7 @@ background:rgba(255,255,255,.5);border:1px solid var(--lg-divider,rgba(58,52,84,
 .view{display:none;max-width:1180px;margin:0 auto 60px;padding:8px 18px}
 .view.on{display:block;animation:fade .35s ease}
 @keyframes fade{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
-.pgtag{font-size:11px;color:var(--t3);margin:6px 2px 14px}
+.pgtag{font-size:12px;color:var(--t3);margin:6px 2px 14px}
 .pgtag b{color:var(--t2)}
 /* 标签 */
 .tg{display:inline-flex;align-items:center;gap:6px;padding:4px 12px;border-radius:999px;font-size:12px;font-weight:500;white-space:nowrap}
@@ -86,11 +86,11 @@ background:rgba(255,255,255,.5);border:1px solid var(--lg-divider,rgba(58,52,84,
 .pcbar .search input:focus-visible{outline:2px solid rgba(232,93,143,.6);outline-offset:2px;border-radius:18px}
 .pcbar .u{width:36px;height:36px;border-radius:50%;background:linear-gradient(150deg,#D9CBFE,#EDE7FE);color:var(--mmh-solid-special,#6242B8);
   display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:600}
-.kpis{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin:14px 0}
+.kpis{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:14px;margin:14px 0}
 .kpi{padding:14px 16px}
 .kpi .l{font-size:12px;color:var(--t2);display:flex;align-items:center;gap:6px}
 .kpi .v{font-size:26px;font-weight:700;margin-top:6px}
-.kpi .d{font-size:11.5px;color:var(--t3);margin-top:4px}
+.kpi .d{font-size:12px;color:var(--t3);margin-top:4px}
 /* 描述列表：网格/排版/省略都在外壳的 .gm-desc 里，本页只补一处卡片内边距。 */
 .gm-desc{padding:14px}
 
@@ -114,9 +114,9 @@ background:rgba(255,255,255,.5);border:1px solid var(--lg-divider,rgba(58,52,84,
 .hr{height:1px;background:var(--line);margin:12px 0}
 /* 生命周期轴 */
 .lca{display:flex;align-items:flex-start;gap:0;padding:10px 6px 2px}
-.lc{flex:1;text-align:center;position:relative;font-size:10.5px;color:var(--t2)}
+.lc{flex:1;text-align:center;position:relative;font-size:12px;color:var(--t2)}
 .lc .d{width:22px;height:22px;border-radius:50%;margin:0 auto 4px;display:flex;align-items:center;justify-content:center;
-  background:rgba(255,255,255,.85);border:1px solid rgba(255,255,255,.9);color:var(--t3);font-size:10px;font-weight:600}
+  background:rgba(255,255,255,.85);border:1px solid rgba(255,255,255,.9);color:var(--t3);font-size:12px;font-weight:600}
 .lc.done .d{background:var(--mmh-grad-action-hc,#F77FA3);color:#343A46;border-color:transparent;background-origin:border-box}
 .lc.cur .d{background:#FFF;border:2px solid var(--rose-d);color:var(--rose-deep)}
 .lc::before{content:"";position:absolute;top:10px;left:calc(50% + 14px);width:calc(100% - 28px);height:2px;background:var(--line)}
@@ -130,7 +130,7 @@ background:rgba(255,255,255,.5);border:1px solid var(--lg-divider,rgba(58,52,84,
 .wjrow .ic svg{width:22px;height:22px}
 .wjrow .m{flex:1;min-width:0}
 .wjrow .m b{font-size:13px;display:block}
-.wjrow .m span{font-size:11px;color:var(--t3)}
+.wjrow .m span{font-size:12px;color:var(--t3)}
 /* 步骤/表单 */
 .steps{display:flex;gap:8px;align-items:center;margin:6px 0 18px}
 .stp{display:flex;align-items:center;gap:8px;font-size:12.5px;color:var(--t3)}
@@ -140,12 +140,12 @@ background:rgba(255,255,255,.5);border:1px solid var(--lg-divider,rgba(58,52,84,
 .stp.cur{color:var(--rose-deep);font-weight:600}
 .stp.cur .n{border:2px solid var(--rose-d);color:var(--rose-deep)}
 .stp .ln{width:70px;height:1.5px;background:var(--line)}
-.form2{display:grid;grid-template-columns:1fr 1fr;gap:14px 22px;padding:16px}
+.form2{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:14px 22px;padding:16px}
 .fld label{font-size:12px;color:var(--t2);display:block;margin-bottom:6px}
 .fld input,.fld select{width:100%;height:40px;border-radius:20px;border:1px solid rgba(255,255,255,.8);
   background:rgba(255,255,255,.55);padding:0 12px;font-size:14px;color:var(--text);outline:none;font-family:var(--font)}
 .fld input:focus{border-color:rgba(232,93,143,.5);box-shadow:0 0 0 3px rgba(232,93,143,.12)}
-.fld .err{font-size:11px;color:var(--sem-danger);margin-top:5px}
+.fld .err{font-size:12px;color:var(--sem-danger);margin-top:5px}
 /* 移动 */
 .mwrap{max-width:420px;margin:0 auto;position:relative;min-height:calc(100vh - 60px)}
 .mnav{position:sticky;top:12px;z-index:20;display:flex;align-items:center;gap:8px;padding:6px 10px;border-radius:22px;margin-bottom:12px}
@@ -164,12 +164,12 @@ background:rgba(255,255,255,.5);border:1px solid var(--lg-divider,rgba(58,52,84,
   background:rgba(255,255,255,.6);border:1px solid rgba(255,255,255,.85);color:var(--mmh-rose-700,#B23A63)}
 .lvitem .m{flex:1;min-width:0}
 .lvitem .m b{display:block;font-size:14.5px;font-weight:600}
-.lvitem .m span{font-size:11.5px;color:var(--t3)}
+.lvitem .m span{font-size:12px;color:var(--t3)}
 .lvitem .arr{color:var(--t3)}
-.two{display:grid;grid-template-columns:1.6fr 1fr;gap:16px;margin-top:14px}
+.two{display:grid;grid-template-columns:minmax(0,1.6fr) minmax(0,1fr);gap:16px;margin-top:14px}
 /* 10 · 10.11.1 宽表：小屏在容器内横滚（实测修复前 375px 溢出 347px） */
 @media(max-width:767px){
-  .two{grid-template-columns:1fr}.kpis{grid-template-columns:repeat(2,1fr)}
+  .two{grid-template-columns:minmax(0,1fr)}.kpis{grid-template-columns:repeat(2,minmax(0,1fr))}
   /* 10 · 10.4：表格复选框视觉 22×22、热区 44×44；下拉项/操作链接热区 ≥44 */
   input[type="checkbox"]{width:22px;height:22px;position:relative}
   input[type="checkbox"]::before{content:"";position:absolute;inset:-11px}
@@ -186,8 +186,8 @@ background:rgba(255,255,255,.5);border:1px solid var(--lg-divider,rgba(58,52,84,
     content:"";position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);
     width:100%;min-width:44px;height:100%;min-height:44px}
 }
-@media(max-width:640px){.kpis{grid-template-columns:1fr 1fr}.form2{grid-template-columns:1fr}}
-footer.note{max-width:1180px;margin:10px auto 40px;text-align:center;font-size:11.5px;color:var(--t3);line-height:2;padding:0 18px}
+@media(max-width:640px){.kpis{grid-template-columns:minmax(0,1fr) minmax(0,1fr)}.form2{grid-template-columns:minmax(0,1fr)}}
+footer.note{max-width:1180px;margin:10px auto 40px;text-align:center;font-size:12px;color:var(--t3);line-height:2;padding:0 18px}
 footer.note a{color:var(--rose-deep);text-decoration:none}
 
 /* ═══ 规范对齐修复 ═══ */
@@ -208,13 +208,13 @@ footer.note a{color:var(--rose-deep);text-decoration:none}
 .mobottom{display:flex;gap:8px;padding:10px;border-radius:24px}
 .lvitem .m span{line-height:1.6;display:block;margin-top:2px}
 /* iPad 页 */
-.ipadgrid{display:grid;grid-template-columns:1.7fr 1fr;gap:16px;margin-top:14px}
-@media(max-width:767px){.ipadgrid{grid-template-columns:1fr}}
+.ipadgrid{display:grid;grid-template-columns:minmax(0,1.7fr) minmax(0,1fr);gap:16px;margin-top:14px}
+@media(max-width:767px){.ipadgrid{grid-template-columns:minmax(0,1fr)}}
 .avrow{display:flex;align-items:center;gap:12px;padding:12px 14px;border-radius:18px;margin-bottom:10px;background:rgba(255,255,255,.5);border:1px solid rgba(255,255,255,.75);cursor:pointer}
 .avrow.cur{outline:2px solid rgba(232,93,143,.5);outline-offset:1px;background:#FFF}
 .avrow .m{flex:1;min-width:0}
 .avrow .m b{font-size:14px;display:block}
-.avrow .m span{font-size:11px;color:var(--t3)}
+.avrow .m span{font-size:12px;color:var(--t3)}
 textarea.note{width:100%;min-height:84px;border-radius:18px;border:1px solid rgba(255,255,255,.8);background:rgba(255,255,255,.55);padding:10px 12px;font-size:13.5px;color:var(--text);font-family:var(--font);outline:none;resize:vertical}
 
 
@@ -251,7 +251,7 @@ textarea.note{width:100%;min-height:84px;border-radius:18px;border:1px solid rgb
 .hub .ng{position:relative;display:inline-flex}
 .hub .ngt{font-family:inherit;font-size:12.5px;font-weight:500;color:var(--t2);background:none;border:none;
   padding:7px 14px;border-radius:999px;cursor:pointer}
-.hub .ngt::after{content:"▾";margin-left:5px;font-size:10px;opacity:.6}
+.hub .ngt::after{content:"▾";margin-left:5px;font-size:12px;opacity:.6}
 .hub .ngdrop{position:absolute;top:calc(100% + 10px);right:0;min-width:200px;z-index:80;padding:6px;border-radius:18px;
   background:#FFF;border:1px solid rgba(232,93,143,.22);box-shadow:0 16px 40px rgba(90,70,70,.14);
   opacity:0;pointer-events:none;transform:translateY(6px);transition:.2s ease}
@@ -296,7 +296,7 @@ textarea.note{width:100%;min-height:84px;border-radius:18px;border:1px solid rgb
 
 <!--@body-->
 <div class="hub">
-  <b><img src="../brand/logo-512.png" alt="妈咪好" style="width:22px;height:22px;border-radius:50%">妈咪好 · 示例中心</b><span class="ng" style="margin-left:auto"><button class="ngt" type="button">站点导航 ▾</button><span class="ngdrop"><a href="site/index.html">主站 · 落地 ›</a>
+  <b><img src="../brand/logo-512.png" alt="妈咪好" style="width:26px;height:26px;border-radius:50%">妈咪好 · 示例中心</b><span class="ng" style="margin-left:auto"><button class="ngt" type="button">站点导航 ▾</button><span class="ngdrop"><a href="site/index.html">主站 · 落地 ›</a>
       <a href="https://github.com/ningmengsixiang/GoodMom" target="_blank" rel="noopener">GitHub 开源仓库 ›</a><a href="preview/mobile.html">移动端预览</a><a href="site/manual.html">总览手册</a><a href="preview/examples.html#list">回到本页顶部</a></span></span>
   <span class="chip on" data-v="list">列表页 · 筛查队列</span>
   <span class="chip" data-v="detail">详情页 · 儿童档案</span>
@@ -327,7 +327,7 @@ textarea.note{width:100%;min-height:84px;border-radius:18px;border:1px solid rgb
   <div class="card" style="padding:16px 18px">
     <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:12px">
       <span class="chip on">全部</span><span class="chip">待筛查</span><span class="chip">异常</span><span class="chip">待随访</span><span class="chip">已结案</span>
-      <span style="font-size:11.5px;color:var(--t3);margin-left:auto">共 12,849 条 · 导出 / 打印 / 批量操作</span>
+      <span style="font-size:12px;color:var(--t3);margin-left:auto">共 12,849 条 · 导出 / 打印 / 批量操作</span>
     </div>
     <div class="gm-tbl-wrap">
     <table class="gm-tbl">
@@ -399,7 +399,7 @@ textarea.note{width:100%;min-height:84px;border-radius:18px;border:1px solid rgb
       </div>
 
       <div class="card" style="padding:16px 18px;margin-top:14px">
-        <div style="display:flex;align-items:center;margin-bottom:12px"><b style="font-size:15px">儿童健康保健清单（五健 + 口腔）</b><span style="font-size:11.5px;color:var(--t3);margin-left:auto">最近评估：05-06 · 王医生</span></div>
+        <div style="display:flex;align-items:center;margin-bottom:12px"><b style="font-size:15px">儿童健康保健清单（五健 + 口腔）</b><span style="font-size:12px;color:var(--t3);margin-left:auto">最近评估：05-06 · 王医生</span></div>
         <div class="wjrow"><span class="ic"><svg class="i" viewBox="0 0 24 24"><circle cx="8.6" cy="6.9" r="2.1"/><path d="M8.6 9.1v3.4M6.9 10.9l1.7.7M10.3 10.9l-1.7.7M8.6 12.5 7.5 15.2M8.6 12.5l1.1 2.7"/><path d="M16.6 5v12M15.2 7.3 16.6 5l1.4 2.3M15.2 14.7 16.6 17l1.4-2.3"/></svg></span><div class="m"><b>生长发育</b><span>身长 83cm P75 · 体重 11.2kg P62</span></div><span class="tg g"><i></i>正常</span></div>
         <div class="wjrow"><span class="ic" style="color:var(--mmh-rose-700,#B23A63)"><svg class="i" viewBox="0 0 24 24"><circle cx="11.8" cy="14.6" r="5.4"/><path d="M11.8 9.5c.3-1.9 1.2-3.1 2.9-3.8"/><path d="M14.5 6.1c1.7-.7 3.1-.5 4 .4"/></svg></span><div class="m"><b>营养喂养</b><span>辅食结构良好 · 奶量充足</span></div><span class="tg g"><i></i>正常</span></div>
         <div class="wjrow"><span class="ic" style="color:var(--mmh-rose-700,#B23A63)"><svg class="i" viewBox="0 0 24 24"><circle cx="12" cy="12.2" r="6.4"/><circle cx="9.8" cy="11" r=".9" fill="currentColor" stroke="none"/><circle cx="14.2" cy="11" r=".9" fill="currentColor" stroke="none"/><path d="M9.5 14.3c1.5 1.2 3.5 1.2 5 0"/></svg></span><div class="m"><b>心理行为发育</b><span>语言发育良好 · 社交回应佳</span></div><span class="tg g"><i></i>正常</span></div>
@@ -450,7 +450,7 @@ textarea.note{width:100%;min-height:84px;border-radius:18px;border:1px solid rgb
     <div class="spwrap">
       <div class="sp off" data-i="0">
         <div class="card" style="padding:18px 20px">
-          <div style="display:flex;align-items:center;margin-bottom:6px"><b style="font-size:15px">基本信息</b><span style="font-size:11.5px;color:var(--t3);margin-left:auto">带 * 为必填</span></div>
+          <div style="display:flex;align-items:center;margin-bottom:6px"><b style="font-size:15px">基本信息</b><span style="font-size:12px;color:var(--t3);margin-left:auto">带 * 为必填</span></div>
           <div class="hr"></div>
           <div class="form2">
             <div class="fld"><label>服务对象姓名 *</label><input placeholder="请输入真实姓名"></div>
@@ -464,7 +464,7 @@ textarea.note{width:100%;min-height:84px;border-radius:18px;border:1px solid rgb
       </div>
       <div class="sp off" data-i="1">
         <div class="card" style="padding:18px 20px">
-          <div style="display:flex;align-items:center;margin-bottom:6px"><b style="font-size:15px">孕产信息</b><span style="font-size:11.5px;color:var(--t3);margin-left:auto">带 * 为必填 · 信息仅用于健康管理</span></div>
+          <div style="display:flex;align-items:center;margin-bottom:6px"><b style="font-size:15px">孕产信息</b><span style="font-size:12px;color:var(--t3);margin-left:auto">带 * 为必填 · 信息仅用于健康管理</span></div>
           <div class="hr"></div>
           <div class="form2">
             <div class="fld"><label>末次月经（LMP）*</label><input type="date" value="2025-01-10"></div>
@@ -478,14 +478,14 @@ textarea.note{width:100%;min-height:84px;border-radius:18px;border:1px solid rgb
             <div style="font-size:12px;color:var(--t2);margin-bottom:8px">妊娠风险初评（五色分级 · 02.10）</div>
             <div id="riskPick" style="display:flex;gap:10px;flex-wrap:wrap;align-items:center">
               <span class="tg g" style="cursor:pointer">绿 · 低风险</span><span class="tg y pill-sel" style="cursor:pointer">黄 · 一般风险</span><span class="tg o" style="cursor:pointer">橙 · 较高风险</span><span class="tg r" style="cursor:pointer">红 · 高风险</span><span class="tg p" style="cursor:pointer">紫 · 合并传染病</span>
-              <span style="font-size:11px;color:var(--t3)">黄级 → 增加产检频次 · 保健机构专案管理（15.2.10）</span>
+              <span style="font-size:12px;color:var(--t3)">黄级 → 增加产检频次 · 保健机构专案管理（15.2.10）</span>
             </div>
           </div>
         </div>
       </div>
       <div class="sp off" data-i="2">
         <div class="card" style="padding:18px 20px">
-          <div style="display:flex;align-items:center;margin-bottom:6px"><b style="font-size:15px">检查与风险</b><span style="font-size:11.5px;color:var(--t3);margin-left:auto">可多选</span></div>
+          <div style="display:flex;align-items:center;margin-bottom:6px"><b style="font-size:15px">检查与风险</b><span style="font-size:12px;color:var(--t3);margin-left:auto">可多选</span></div>
           <div class="hr"></div>
           <div style="font-size:12px;color:var(--t2);margin-bottom:8px">已完成的孕期检查</div>
           <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:14px">
@@ -508,7 +508,7 @@ textarea.note{width:100%;min-height:84px;border-radius:18px;border:1px solid rgb
             <div><dt class="k">建档机构 / 医生</dt><dd class="v" title="望京社区卫生服务中心 · 王医生">望京社区卫生服务中心 · 王医生</dd></div>
             <div><dt class="k">随访计划</dt><dd class="v" title="自动生成：按黄级增加产检频次（15.2.10）">自动生成：按黄级增加产检频次（15.2.10）</dd></div>
           </dl>
-          <div style="font-size:11.5px;color:var(--t3);line-height:1.8;margin-top:10px">提交即创建档案并开始随访管理；如需修改可返回上一步或保存草稿。</div>
+          <div style="font-size:12px;color:var(--t3);line-height:1.8;margin-top:10px">提交即创建档案并开始随访管理；如需修改可返回上一步或保存草稿。</div>
           <div style="display:flex;gap:10px;justify-content:flex-end;margin-top:14px">
             <button class="btn gho">另存草稿</button>
             <button class="btn pri lg">提交并完成建档</button>
@@ -519,7 +519,7 @@ textarea.note{width:100%;min-height:84px;border-radius:18px;border:1px solid rgb
     <div class="wizfoot">
       <button class="btn line" id="bPrev"><svg class="i"><path d="M20 12H5.5M11 6.5 5.5 12l5.5 5.5"/></svg> 上一步</button>
       <div style="display:flex;gap:8px;align-items:center">
-        <span style="font-size:11.5px;color:var(--t3)" id="wizProg">第 1 / 4 步 · 孕产信息</span>
+        <span style="font-size:12px;color:var(--t3)" id="wizProg">第 1 / 4 步 · 孕产信息</span>
         <button class="btn pri" id="bNext" style="height:42px;padding:0 24px">下一步 <svg class="i"><path d="M5 12h14M13 6l6 6-6 6"/></svg></button>
       </div>
     </div>
@@ -536,7 +536,7 @@ textarea.note{width:100%;min-height:84px;border-radius:18px;border:1px solid rgb
         <span class="av purp" style="width:48px;height:48px;font-size:17px">李</span>
         <div style="flex:1;min-width:0">
           <b style="font-size:15px">李慧 · 女 · 36 岁</b>
-          <div style="font-size:11px;color:var(--t3);margin-top:2px">妇女 · 两癌筛查 · 管理医生 王医生</div>
+          <div style="font-size:12px;color:var(--t3);margin-top:2px">妇女 · 两癌筛查 · 管理医生 王医生</div>
           <div style="display:flex;gap:6px;margin-top:6px;flex-wrap:wrap"><span class="tg b"><i></i>已建档</span><span class="tg r"><i></i>检查异常</span><span class="tg o"><i></i>待复查</span></div>
         </div>
       </div>
@@ -588,7 +588,7 @@ textarea.note{width:100%;min-height:84px;border-radius:18px;border:1px solid rgb
         <div class="card" style="padding:14px 16px">
           <b style="font-size:15px;display:block;margin-bottom:8px">风险队列 · 五色筛选</b>
           <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:6px">
-            <span class="chip on" style="padding:4px 12px;font-size:11px">全部</span><span class="chip" style="padding:4px 12px;font-size:11px">红 · 高风险</span><span class="chip" style="padding:4px 12px;font-size:11px">橙 · 较高风险</span>
+            <span class="chip on" style="padding:4px 12px;font-size:12px">全部</span><span class="chip" style="padding:4px 12px;font-size:12px">红 · 高风险</span><span class="chip" style="padding:4px 12px;font-size:12px">橙 · 较高风险</span>
           </div>
           <div style="font-size:12.5px;color:var(--t2);line-height:2.2">
             <div>陈静 · 孕 12 周 · <span class="tg r"><i></i>红 · 妊娠合并心脏病</span> · 王立</div>
@@ -601,7 +601,7 @@ textarea.note{width:100%;min-height:84px;border-radius:18px;border:1px solid rgb
         <div class="card" style="padding:14px 16px;margin-bottom:12px">
           <b style="font-size:15px;display:block;margin-bottom:8px">快捷工具</b>
           <button class="btn pri" style="width:100%;justify-content:center">＋ 新建档案</button>
-          <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:8px">
+          <div style="display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:8px;margin-top:8px">
             <button class="btn line">开始筛查</button><button class="btn mint">发起随访</button>
             <button class="btn line">产检预约</button><button class="btn line">发起转诊</button>
           </div>
@@ -693,14 +693,14 @@ textarea.note{width:100%;min-height:84px;border-radius:18px;border:1px solid rgb
       </div>
       <div>
         <div class="card" style="padding:14px 18px;margin-bottom:12px">
-          <div style="display:flex;align-items:baseline;gap:8px"><b style="font-size:15px">体重增长曲线</b><span style="font-size:11px;color:var(--t3)">孕周参考带（示例）</span><span class="tg y" style="margin-left:auto">+8.2kg</span></div>
+          <div style="display:flex;align-items:baseline;gap:8px"><b style="font-size:15px">体重增长曲线</b><span style="font-size:12px;color:var(--t3)">孕周参考带（示例）</span><span class="tg y" style="margin-left:auto">+8.2kg</span></div>
           <svg width="100%" height="130" viewBox="0 0 300 130" preserveAspectRatio="none" style="margin-top:6px">
             <path d="M0,26 L50,25 L100,23 L150,22 L200,20 L250,18 L300,17 L300,66 L250,68 L200,70 L150,71 L100,73 L50,74 L0,75 Z" fill="rgba(242,178,92,.18)"></path>
             <path d="M0,75 L50,74 L100,73 L150,71 L200,70 L250,68 L300,66" fill="none" stroke="#F2B25C" stroke-width="1.1" stroke-dasharray="4 5"></path>
             <path d="M0,48 L50,46 L100,45 L150,43 L200,40 L250,37 L300,34" fill="none" stroke="#F77FA3" stroke-width="2.3" stroke-linecap="round"></path>
             <circle cx="250" cy="37" r="4" fill="#FFF" stroke="#F77FA3" stroke-width="2"></circle>
           </svg>
-          <div style="font-size:11px;color:var(--t3);margin-top:3px">参考带（琥珀）=正常增长范围 · 实测（蜜桃粉）· GDM 需监测血糖与体重</div>
+          <div style="font-size:12px;color:var(--t3);margin-top:3px">参考带（琥珀）=正常增长范围 · 实测（蜜桃粉）· GDM 需监测血糖与体重</div>
         </div>
         <div class="card" style="padding:14px 18px;margin-bottom:12px">
           <b style="font-size:15px;display:block;margin-bottom:8px">高危 / 随访计划（02.10 五色）</b>

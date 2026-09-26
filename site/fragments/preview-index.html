@@ -96,7 +96,7 @@ section.block{margin-top:26px}
   background:var(--lg-grad-hero);vertical-align:-2px;box-shadow:0 0 0 3px rgba(255,255,255,.6)}
 
 /* hero */
-.hero{display:grid;grid-template-columns:1.35fr .9fr;gap:0;border-radius:var(--lg-radius-container);
+.hero{display:grid;grid-template-columns:minmax(0,1.35fr) minmax(0,.9fr);gap:0;border-radius:var(--lg-radius-container);
   overflow:hidden}
 .hero-main{padding:52px 46px}
 .hero-main .kicker{display:inline-flex;align-items:center;gap:8px;font-size:12px;font-weight:600;
@@ -133,13 +133,14 @@ section.block{margin-top:26px}
 
 /* generic grid + panels */
 .grid{display:grid;gap:18px}
-.g2{grid-template-columns:1fr 1fr}
-.g3{grid-template-columns:repeat(3,1fr)}
-.g4{grid-template-columns:repeat(4,1fr)}
+.g2{grid-template-columns:minmax(0,1fr) minmax(0,1fr)}
+.g3{grid-template-columns:repeat(3,minmax(0,1fr))}
+.g4{grid-template-columns:repeat(4,minmax(0,1fr))}
 /* 17 · 页面壳：网格子项默认 min-width:auto，内容（宽表/长数字行）会把列撑破 ——
    实测 375px 溢出 405px。补 min-width:0，并让 ≤640 真正降到单列。 */
 .grid>*{min-width:0}
-@media(max-width:767px){.g2,.g3,.g4{grid-template-columns:1fr 1fr}.hero{grid-template-columns:1fr}}
+@media(max-width:767px){.g2,.g3,.g4{grid-template-columns:minmax(0,1fr) minmax(0,1fr)}.hero{grid-template-columns:minmax(0,1fr)}
+.btn,.bx,.btnrow a,.btnrow button,.gbtn,.mbtn,.direct.primary,.sysbar a,.sbtn,.ngdrop a,.hub a,.go-link,.excard .go,.chk,.switch,.field input,.seg-it,.tabmini i,.mchip,.covline a,.stpm,.stpp,.uprow .del,.slrow input,footer a,.excard,.steps .sd,.tab,#preview-index--exhome a,.panel span a,.panel a,.mrow2 a,.bxrow,.btnrow{position:relative}}
 
 /* 10 · 10.4：≤767px 可点热区 ≥44×44。视觉尺寸与行高保持不变，
    统一用 `::after` 把可点区域扩到 44×44（10 章明确认可的补足方式）。 */
@@ -166,7 +167,7 @@ section.block{margin-top:26px}
     width:100%;min-width:44px;height:100%;min-height:44px}
 }
 @media(max-width:640px){
-  .g2,.g3,.g4{grid-template-columns:1fr}
+  .g2,.g3,.g4{grid-template-columns:minmax(0,1fr)}
   /* 窄屏：气泡卡改**静态流式**（绝对定位无论贴哪边都可能越界，实测仍溢出 18px） */
   .pcwrap{display:block;width:100%}
   .pcbub{position:static;width:100%;bottom:auto;margin-top:8px;transform:none}
@@ -193,14 +194,14 @@ section.block{margin-top:26px}
   box-shadow:0 6px 14px rgba(58,52,84,.05);background:rgba(255,255,255,.35)}
 .sw .chip{height:56px}
 .sw .meta{padding:6px 8px;background:rgba(255,255,255,.55);-webkit-backdrop-filter:blur(16px);backdrop-filter:blur(16px)}
-.sw .meta b{display:block;font-size:11px;font-weight:600;color:var(--lg-text-primary);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.sw .meta span{font-size:10px;color:var(--lg-text-secondary);font-family:ui-monospace,Menlo,monospace}
+.sw .meta b{display:block;font-size:12px;font-weight:600;color:var(--lg-text-primary);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.sw .meta span{font-size:12px;color:var(--lg-text-secondary);font-family:ui-monospace,Menlo,monospace}
 .grad-bar{height:44px;border-radius:18px;margin-bottom:10px;border:1px solid rgba(255,255,255,.55);box-shadow:var(--lg-glass-highlight)}
-.gradbar-label{display:flex;justify-content:space-between;font-size:11px;color:var(--lg-text-secondary);margin:2px 2px 12px}
+.gradbar-label{display:flex;justify-content:space-between;font-size:12px;color:var(--lg-text-secondary);margin:2px 2px 12px}
 
 /* typography */
 .type-row{display:flex;align-items:baseline;gap:20px;padding:10px 2px;border-bottom:1px solid rgba(58,52,84,.07)}
-.type-row .meta{width:190px;flex:none;font-size:11px;color:var(--lg-text-secondary);line-height:1.6}
+.type-row .meta{width:190px;flex:none;font-size:12px;color:var(--lg-text-secondary);line-height:1.6}
 .type-row .meta b{color:var(--lg-text-secondary);font-weight:600}
 .type-row .demo{flex:1}
 .t-display-lg{font-size:40px;font-weight:600;letter-spacing:-.02em;line-height:1.2}
@@ -251,16 +252,16 @@ section.block{margin-top:26px}
 .rd{width:64px;height:64px;background:linear-gradient(160deg,rgba(255,255,255,.7),rgba(255,255,255,.3));
   border:1px solid rgba(255,255,255,.75);box-shadow:var(--lg-shadow-md);text-align:center;
   display:flex;align-items:flex-end;justify-content:center;padding-bottom:4px;background-origin:border-box}
-.rd span{font-size:10px;color:var(--lg-text-secondary)}
+.rd span{font-size:12px;color:var(--lg-text-secondary)}
 .rd-wrap{display:flex;flex-direction:column;align-items:center;gap:6px}
-.rd-wrap .lbl{font-size:11px;color:var(--lg-text-secondary)}
+.rd-wrap .lbl{font-size:12px;color:var(--lg-text-secondary)}
 
 /* shadows */
 .sh-row{display:flex;align-items:center;gap:16px;padding:8px 0}
 .sh-row .box{width:86px;height:46px;flex:none;border-radius:18px;
   background:linear-gradient(160deg,rgba(255,255,255,.8),rgba(255,255,255,.5));border:1px solid rgba(255,255,255,.8);background-origin:border-box}
 .sh-row .lab{width:130px;font-size:12px;color:var(--lg-text-secondary);flex:none}
-.sh-row .val{font-size:11px;color:var(--lg-text-secondary);font-family:ui-monospace,Menlo,monospace;min-width:0;overflow-wrap:anywhere;word-break:break-word}
+.sh-row .val{font-size:12px;color:var(--lg-text-secondary);font-family:ui-monospace,Menlo,monospace;min-width:0;overflow-wrap:anywhere;word-break:break-word}
 
 /* buttons */
 .btnrow{display:flex;flex-wrap:wrap;gap:12px;align-items:center}
@@ -333,7 +334,7 @@ section.block{margin-top:26px}
 .dot.running{background:var(--lg-purple-500);box-shadow:0 0 0 3px rgba(154,120,255,.2);animation:pulse 2.4s infinite}
 @keyframes pulse{0%,100%{opacity:1}50%{opacity:.55}}
 .badge.status{background:rgba(255,255,255,.55)}
-.badge .t{font-size:11px;color:var(--lg-text-secondary)}
+.badge .t{font-size:12px;color:var(--lg-text-secondary)}
 
 /* KPI cards */
 .kpi{border-radius:var(--lg-radius-card);padding:20px;position:relative;overflow:hidden}
@@ -349,8 +350,9 @@ section.block{margin-top:26px}
 .kpi .spark{position:absolute;right:14px;bottom:14px;opacity:.9}
 
 /* charts */
-.chart-cards{display:grid;grid-template-columns:2fr 1fr 1fr;gap:18px}
-@media(max-width:767px){.chart-cards{grid-template-columns:1fr 1fr}}
+.chart-cards{display:grid;grid-template-columns:minmax(0,2fr) minmax(0,1fr) minmax(0,1fr);gap:18px}
+@media(max-width:767px){.chart-cards{grid-template-columns:minmax(0,1fr) minmax(0,1fr)}
+.btn,.bx,.btnrow a,.btnrow button,.gbtn,.mbtn,.direct.primary,.sysbar a,.sbtn,.ngdrop a,.hub a,.go-link,.excard .go,.chk,.switch,.field input,.seg-it,.tabmini i,.mchip,.covline a,.stpm,.stpp,.uprow .del,.slrow input,footer a,.excard,.steps .sd,.tab,#preview-index--exhome a,.panel span a,.panel a,.mrow2 a,.bxrow,.btnrow{position:relative}}
 
 /* 10 · 10.4：≤767px 可点热区 ≥44×44。视觉尺寸与行高保持不变，
    统一用 `::after` 把可点区域扩到 44×44（10 章明确认可的补足方式）。 */
@@ -361,6 +363,12 @@ section.block{margin-top:26px}
   .tab,#preview-index--exhome a,.panel span a,.panel a,.mrow2 a,.bxrow,.btnrow{position:relative}
   /* 按钮行在 375px 不换行 → 溢出 4px */
   .bxrow,.btnrow{flex-wrap:wrap}
+.btn::after,.bx::after,.btnrow a::after,.btnrow button::after,.gbtn::after,.mbtn::after,.direct.primary::after,.sysbar a::after,.sbtn::after,.ngdrop a::after,.hub a::after,.go-link::after,.excard .go::after,.chk::after,.switch::after,.field input::after,.seg-it::after,.tabmini i::after,.mchip::after,.covline a::after,.stpm::after,.stpp::after,.uprow .del::after,.slrow input::after,footer a::after,.excard::after,.steps .sd::after,.tab::after,#preview-index--exhome a::after,.panel span a::after,.panel a::after,.mrow2 a::after{
+    content:"";position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);
+    width:100%;min-width:44px;height:100%;min-height:44px}
+.btn::after,.bx::after,.btnrow a::after,.btnrow button::after,.gbtn::after,.mbtn::after,.direct.primary::after,.sysbar a::after,.sbtn::after,.ngdrop a::after,.hub a::after,.go-link::after,.excard .go::after,.chk::after,.switch::after,.field input::after,.seg-it::after,.tabmini i::after,.mchip::after,.covline a::after,.stpm::after,.stpp::after,.uprow .del::after,.slrow input::after,footer a::after,.excard::after,.steps .sd::after,.tab::after,#preview-index--exhome a::after,.panel span a::after,.panel a::after,.mrow2 a::after{
+    content:"";position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);
+    width:100%;min-width:44px;height:100%;min-height:44px}
   .btn::after,.bx::after,.btnrow a::after,.btnrow button::after,.gbtn::after,.mbtn::after,
   .direct.primary::after,.sysbar a::after,.sbtn::after,
   .ngdrop a::after,.hub a::after,.go-link::after,.excard .go::after,
@@ -376,7 +384,7 @@ section.block{margin-top:26px}
     content:"";position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);
     width:100%;min-width:44px;height:100%;min-height:44px}
 }
-@media(max-width:640px){.chart-cards{grid-template-columns:1fr}}
+@media(max-width:640px){.chart-cards{grid-template-columns:minmax(0,1fr)}}
 .cchart{min-height:170px;position:relative}
 .cc-title{font-size:13px;font-weight:600;margin-bottom:6px}
 .cc-sub{font-size:11px;color:var(--lg-text-secondary);margin-bottom:10px}
@@ -384,9 +392,10 @@ section.block{margin-top:26px}
 .legend i{display:inline-block;width:9px;height:9px;border-radius:3px;margin-right:5px;vertical-align:-1px}
 
 /* network topo */
-.topo{display:flex;align-items:center;justify-content:center;gap:26px;flex-wrap:wrap;padding:10px 0}
+.topo{display:flex;align-items:center;justify-content:center;gap:clamp(12px,2.2vw,26px);flex-wrap:wrap;padding:10px 0}
+.topo .t-node{min-width:0}
 .t-node{display:flex;flex-direction:column;align-items:center;gap:6px;position:relative}
-.t-node .core{width:64px;height:64px;border-radius:20px;display:flex;align-items:center;justify-content:center;
+.t-node .core{width:clamp(44px,6.6vw,64px);height:clamp(44px,6.6vw,64px);border-radius:20px;display:flex;align-items:center;justify-content:center;
   background:linear-gradient(160deg,rgba(255,255,255,.75),rgba(255,255,255,.4));
   border:1px solid rgba(255,255,255,.85);box-shadow:var(--lg-shadow-md);font-size:24px;background-origin:border-box}
 .t-node.center .core{background:var(--mmh-grad-action-hc,#F77FA3);color:#343A46;
@@ -591,7 +600,7 @@ footer a{color:var(--lg-sem-special);text-decoration:none;font-weight:500}
 }
 
 /* ═══ 组件库全览（03/08/13 扩展展示）═══ */
-.mh{font-size:11px;color:var(--lg-text-secondary);font-weight:500;margin:-6px 2px 12px}
+.mh{font-size:12px;color:var(--lg-text-secondary);font-weight:500;margin:-6px 2px 12px}
 .prog{display:flex;align-items:center;gap:10px;margin:10px 0}
 .prog .pl{width:88px;font-size:12px;color:var(--lg-text-secondary);flex:none}
 .prog .track{flex:1;height:8px;border-radius:999px;background:rgba(58,52,84,.08);overflow:hidden}
@@ -629,7 +638,7 @@ footer a{color:var(--lg-sem-special);text-decoration:none;font-weight:500}
 .rst .one.w .ic{color:var(--lg-sem-attention,#8D5A15)} .rst .one.i .ic{color:var(--lg-sem-info,#3261C1)}
 .rst .t{font-size:12.5px;font-weight:600;color:var(--lg-text-primary)}
 .rst .one.e .t{color:var(--lg-sem-risk,#B72F42)}
-.rst .d{font-size:11px;color:var(--lg-text-secondary);text-align:center;line-height:1.6}
+.rst .d{font-size:12px;color:var(--lg-text-secondary);text-align:center;line-height:1.6}
 .pgr{display:flex;flex-direction:column;gap:8px;margin-top:8px}
 .pgr .tr{height:6px;border-radius:999px;background:rgba(58,52,84,.08);overflow:hidden}
 .pgr .tr i{display:block;height:100%;border-radius:999px;background:linear-gradient(90deg,var(--mmh-rose-300,#FFC4D6),var(--mmh-rose-500,#F77FA3))}
@@ -666,7 +675,7 @@ input[type=range].lgs::-webkit-slider-thumb{-webkit-appearance:none;width:20px;h
 .banner.warn svg{color:var(--lg-sem-attention)}
 .banner.danger svg{color:var(--lg-sem-risk)}
 .banner.info svg{color:var(--lg-sem-info)}
-.descrow{display:grid;grid-template-columns:repeat(3,1fr);gap:10px 18px;margin-top:8px}
+.descrow{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px 18px;margin-top:8px}
 .descrow .it b{display:block;font-size:11px;color:var(--lg-text-secondary);font-weight:500;margin-bottom:3px}
 .descrow .it span{font-size:14px;color:var(--lg-text-primary);font-weight:600;font-variant-numeric:tabular-nums}
 /* 折叠：配方在**外壳**（.gm-fold）。旧实现（已删）实测四处不符 11 · 11.2.6：
@@ -783,7 +792,9 @@ input[type=range].lgs::-webkit-slider-thumb{-webkit-appearance:none;width:20px;h
 .bx .ld{animation:spinm .9s linear infinite}
 @keyframes spinm{to{transform:rotate(360deg)}}
 .bxrow{display:flex;flex-wrap:wrap;gap:10px;align-items:center;min-height:38px}
-.bxlab{font-size:11px;color:var(--lg-text-secondary);font-weight:500;width:120px;flex:none}
+/* 字号下限 12px：这些 span 原来是继承到 11px（父级规则），显式兜住 */
+.bxrow span,.bxrow code{font-size:12px}
+.bxlab{font-size:12px;color:var(--lg-text-secondary);font-weight:500;width:120px;flex:none}
 
 
 /* ═══ 交互补全（07 · 7.8）：焦点环 + 步骤控制器 ═══ */
@@ -808,7 +819,7 @@ input[type=range].lgs::-webkit-slider-thumb{-webkit-appearance:none;width:20px;h
 .sem .c{height:34px;border-radius:18px;margin-bottom:8px;border:1px solid rgba(255,255,255,.6)}
 .sem b{font-size:12.5px;display:flex;align-items:center;gap:6px}
 .sem b i{width:9px;height:9px;border-radius:50%;background:currentColor}
-.sem span{font-size:10px;color:var(--lg-text-secondary);display:block;margin-top:3px;line-height:1.6}
+.sem span{font-size:12px;color:var(--lg-text-secondary);display:block;margin-top:3px;line-height:1.6}
 .tagc{display:inline-flex;align-items:center;gap:6px;padding:5px 13px;border-radius:999px;font-size:12px;font-weight:500;
   background:rgba(255,255,255,.55);border:1px solid rgba(255,255,255,.8);color:var(--lg-text-secondary)}
 .tagc i{width:7px;height:7px;border-radius:50%;background:currentColor;opacity:.95}
@@ -854,7 +865,7 @@ input[type=range].lgs::-webkit-slider-thumb{-webkit-appearance:none;width:20px;h
 /* 头像标识：饱和渐变 + 白字实测 2.49–4.14，深字同样不达标 → 浅染 + 深档文字（见 preview-examples 同名注释） */
 .avt{border-radius:50%;display:flex;align-items:center;justify-content:center;color:var(--mmh-rose-700,#B23A63);font-weight:600;
   background:linear-gradient(150deg,#FFDEE8,#FFF0F4);border:2px solid rgba(255,255,255,.9);box-shadow:var(--lg-shadow-sm);background-origin:border-box}
-.avt.s{width:28px;height:28px;font-size:11px}.avt.m{width:38px;height:38px;font-size:14px}.avt.l{width:50px;height:50px;font-size:18px}
+.avt.s{width:28px;height:28px;font-size:12px}.avt.m{width:38px;height:38px;font-size:14px}.avt.l{width:50px;height:50px;font-size:18px}
 .avt.mint{background:linear-gradient(150deg,#A5F1EE,#E0F8F6);color:var(--lg-sem-positive,#25715D)}
 .avt.purp{background:linear-gradient(150deg,#D9CBFE,#EDE7FE);color:var(--mmh-solid-special,#6242B8)}
 .sel{display:inline-flex;align-items:center;gap:6px;padding:8px 16px;border-radius:999px;font-size:13px;cursor:pointer;user-select:none;
@@ -921,7 +932,9 @@ input[type=range].lgs::-webkit-slider-thumb{-webkit-appearance:none;width:20px;h
 
 
 /* ═══ 首页专业版：分组菜单 + 速览条 ═══ */
-.hero-logo{width:88px;height:88px;border-radius:24px;object-fit:cover;box-shadow:0 14px 30px rgba(240,127,163,.3);margin-bottom:8px}
+.hero-logo{display:block;width:44px;height:44px;border-radius:50%;object-fit:cover;flex:none;
+  box-shadow:0 10px 22px rgba(240,127,163,.32);margin:0 0 12px}
+.hero-logo+h1{margin-top:0}
 .topnav{overflow:visible}
 .navgroups{display:flex;gap:4px;align-items:center;margin-left:6px;flex-wrap:wrap}
 .ng{position:relative}
@@ -971,8 +984,18 @@ section.block:first-of-type{margin-top:8px}
 .grid{gap:26px}
 .panel{padding:32px 32px;line-height:1.75}
 .panel h3{margin-bottom:20px}
-.panel .mh{margin:0 2px 16px;line-height:2;font-size:11.5px}
+.panel .mh{margin:0 2px 16px;line-height:2;font-size:12px}
 .panel .note{margin-top:18px;line-height:1.9;font-size:12px}
+.panel li,.panel p{overflow-wrap:anywhere}
+/* 玻璃顶部栏演示行（医护人员工作台导航范式）：三段横排合计需 365px，
+   320 档直接顶出视口 45px（实测 docScrollWidth=365 / vw=320）。行内样式只管外观，
+   这里接住布局：允许换行 + 允许收缩，分段控件在窄屏独占一行。 */
+/* ⚠️ 这一格原来是写死在行内样式里的 `grid-template-columns:230px 1fr`：230px 是硬值，
+   320 档面板内容区只有 264px（230+18+88=336）→ 顶出视口 45px。改成可收缩网格。 */
+.demo-nav-grid{display:grid;grid-template-columns:230px minmax(0,1fr);gap:18px}
+.demo-topbar{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+.demo-topbar>span{min-width:0;overflow-wrap:anywhere}
+.demo-topbar__seg{margin-left:auto;display:flex}
 .panel h3.panel-h3{margin-bottom:16px}
 .kpi{padding:22px 22px}
 .badges{gap:14px;row-gap:12px}
@@ -1026,6 +1049,9 @@ section.block:first-of-type{margin-top:8px}
 /* 按钮类型色 规范化（03 · 3.2.4 + D5/D6）：白字行动一律深档 */
 .mbtn,.direct.primary,.direct.primary:hover{background:var(--mmh-grad-action-hc,#F77FA3)!important;color:#343A46!important;border:1px solid transparent!important;background-origin:border-box}
 
+
+@media(max-width:560px){.demo-nav-grid{grid-template-columns:minmax(0,1fr)}}
+@media(max-width:520px){.demo-topbar__seg{margin-left:0;width:100%}}
 <!--@body-->
 <!-- floating top nav -->
 
@@ -1072,7 +1098,7 @@ section.block:first-of-type{margin-top:8px}
             <text x="40" y="37" text-anchor="middle" font-size="15" font-weight="600" fill="#343A46" class="num">86%</text>
             <text x="40" y="51" text-anchor="middle" font-size="8" fill="#4F5B6E">随访达标率</text>
           </svg>
-          <span style="font-size:11px;color:var(--lg-text-secondary)">等级<br><b style="color:var(--lg-sem-positive);font-size:13px">优</b></span>
+          <span style="font-size:12px;color:var(--lg-text-secondary)">等级<br><b style="color:var(--lg-sem-positive);font-size:13px">优</b></span>
         </div>
       </div>
       <div class="demo-card c3 glass-l3">
@@ -1328,7 +1354,7 @@ section.block:first-of-type{margin-top:8px}
     <div class="panel glass-l2">
       <div class="panel glass-l2">
         <h3><i></i>按钮全谱 Buttons · 对齐 Arco Design</h3>
-        <p class="mh">类型 Type（primary/secondary/outline/dashed/text）· 状态 Status（success/warning/danger）· 尺寸 Size（mini–large）· 形状与复合（round/circle/Group/Long/Loading）——细则见 03 · 3.2.4</p>
+        <p class="mh">五种类型 · 四种状态 · 四种尺寸 · 圆角 / 圆形 / 按钮组</p>
         <div class="bxrow"><span class="bxlab">类型 Type</span><button class="bx bx-default">Default</button><button class="bx bx-primary">Primary 随访</button><button class="bx bx-secondary">Secondary 已预约</button><button class="bx bx-outline">Outline 导出</button><button class="bx bx-dashed">+ Dashed 添加入口</button><button class="bx bx-text">Text 查看</button></div>
         <div class="bxrow"><span class="bxlab">状态 Status</span><button class="bx bx-solid st-success">Success 已完成</button><button class="bx bx-solid st-warning">Warning 提醒补种</button><button class="bx bx-solid st-danger">Danger 停用档案</button><button class="bx bx-outline st-danger">Outline · 删除</button><button class="bx bx-text st-danger">Text · 移除</button></div>
         <div class="bxrow"><span class="bxlab">尺寸 Size</span><button class="bx bx-mini bx-primary">mini</button><button class="bx bx-sm bx-primary">small</button><button class="bx bx-primary">default</button><button class="bx bx-lg bx-primary">large</button></div>
@@ -1378,7 +1404,7 @@ section.block:first-of-type{margin-top:8px}
     <div style="height:16px"></div>
     <div class="panel glass-l2">
       <h3><i></i>玻璃导航 Nav</h3>
-      <div style="display:grid;grid-template-columns:230px 1fr;gap:18px">
+      <div class="demo-nav-grid">
         <div style="border-radius:22px;padding:14px;background:linear-gradient(160deg,rgba(255,255,255,.55),rgba(255,255,255,.25));
           -webkit-backdrop-filter:blur(20px);backdrop-filter:blur(20px);border:1px solid rgba(255,255,255,.7);box-shadow:var(--lg-shadow-md)">
           <div style="display:flex;align-items:center;gap:8px;padding:8px 10px;margin-bottom:10px">
@@ -1393,11 +1419,11 @@ section.block:first-of-type{margin-top:8px}
           <div style="font-size:13px;color:var(--lg-text-secondary);padding:9px 12px;display:flex;gap:8px;align-items:center"><span style="display:inline-flex;align-items:center;gap:8px"><svg class="ni" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 21v-7M4 10V3M12 21v-9M12 8V3M20 21v-5M20 12V3"/><path d="M1 14h6M9 8h6M17 16h6"/></svg>妈妈设置</span></div>
         </div>
         <div style="display:flex;flex-direction:column;gap:10px">
-          <div style="display:flex;align-items:center;gap:10px;padding:10px 14px;border-radius:18px;
+          <div class="demo-topbar" style="padding:10px 14px;border-radius:18px;
             background:linear-gradient(160deg,rgba(255,255,255,.5),rgba(255,255,255,.22));border:1px solid rgba(255,255,255,.65);
             -webkit-backdrop-filter:blur(16px);backdrop-filter:blur(16px);box-shadow:var(--lg-shadow-sm);font-size:13px">
             <span style="font-weight:600">妇幼档案 / 工作台</span><span style="color:var(--lg-text-secondary)">儿童保健科 · 云同步</span>
-            <span style="margin-left:auto;display:flex">
+            <span class="demo-topbar__seg">
               <div class="seg" id="segNav" style="align-self:center">
                 <span class="seg-it on">日</span><span class="seg-it">周</span><span class="seg-it">月</span>
               </div>
@@ -1423,7 +1449,7 @@ section.block:first-of-type{margin-top:8px}
     <div class="grid g2">
       <div class="panel glass-l2">
         <h3 class="panel-h3"><i></i>数据与进度 Progress & Steps<span class="spec-chip">08 · 8.2.2/8.2.5</span></h3>
-        <p class="mh">Progress（线性，语义色）· 步骤条（玻璃胶囊，done=蜜桃渐变 / cur=呼吸）</p>
+        <p class="mh">线性进度 · 步骤条（done / cur 两态）</p>
         <div class="prog"><span class="pl">档案随访完成率</span><div class="track"><div class="pf" style="width:72%"></div></div><span class="pv">72%</span></div>
         <div class="prog mint"><span class="pl">本月疫苗应种率</span><div class="track"><div class="pf" style="width:96%"></div></div><span class="pv">96%</span></div>
         <div class="prog warn"><span class="pl">高危随访闭环</span><div class="track"><div class="pf" style="width:68%"></div></div><span class="pv">68%</span></div>
@@ -1529,7 +1555,7 @@ section.block:first-of-type{margin-top:8px}
     <div class="grid g2">
       <div class="panel glass-l2">
         <h3 class="panel-h3"><i></i>档案数据呈现（Descriptions · 折叠 · 玻璃表格）<span class="spec-chip">03 · 3.7 · 08 · 8.2.11 · 11.2.6</span></h3>
-        <p class="mh">宝宝档案卡 = 03 Card + 08 Descriptions + 玻璃表格（03 · 3.7）</p>
+        <p class="mh">宝宝档案卡 = 卡片 + 描述列表 + 玻璃表格</p>
         <div style="display:flex;align-items:center;gap:14px">
           <span class="mini-av" style="width:52px;height:52px;font-size:22px;border-radius:50%">朵</span>
           <div style="flex:1">
@@ -1571,7 +1597,7 @@ section.block:first-of-type{margin-top:8px}
     <div class="grid g2">
       <div class="panel glass-l2">
         <h3 class="panel-h3"><i></i>生长曲线 · 百分位带（13 · 13.2 母题）<span class="spec-chip">13 · 13.2</span></h3>
-        <p class="mh">参考带 P3–P97（薄荷淡带 + 细白描边上界）· 实测曲线（Rose-500 2.5px）· 悬停单点 / 拖拽框选 / 一键开关警戒线</p>
+        <p class="mh">参考带 P3–P97 · 实测曲线 · 悬停读点 / 拖拽框选 / 警戒线开关</p>
         <div id="growthChart"></div>
       </div>
 
@@ -1604,7 +1630,7 @@ section.block:first-of-type{margin-top:8px}
     <div class="sec-head"><h2>状态样式库 Styles &amp; States</h2><span class="en">六语义筛选 · 12 个模块页签 · 点击任意状态复制标签（14 · 4.4.5 / 15.2）</span></div>
     <div class="panel glass-l2">
       <h3><i></i>六语义筛选（点选仅高亮该类状态）</h3>
-      <div style="display:flex;gap:8px;flex-wrap:wrap;align-items:center"><span class="stsem" data-sem="g" title="正向 · 正常"><i style="background:#25715D"></i>正向 · 正常</span><span class="stsem" data-sem="b" title="信息 · 进行"><i style="background:#3261C1"></i>信息 · 进行</span><span class="stsem" data-sem="o" title="注意 · 待办"><i style="background:#8D5A15"></i>注意 · 待办</span><span class="stsem" data-sem="r" title="风险 · 异常"><i style="background:#B72F42"></i>风险 · 异常</span><span class="stsem" data-sem="n" title="中性 · 未动"><i style="background:#8A92A3"></i>中性 · 未动</span><span class="stsem" data-sem="p" title="特殊 · 协作"><i style="background:#6A48DC"></i>特殊 · 协作</span><span class="stsem" data-sem="y" title="五色 · 管理"><i style="background:#B98D1F"></i>五色 · 管理</span><span style="font-size:11px;color:var(--lg-text-secondary)">再次点击取消筛选 · 状态永远颜色+文字双通道</span></div>
+      <div style="display:flex;gap:8px;flex-wrap:wrap;align-items:center"><span class="stsem" data-sem="g" title="正向 · 正常"><i style="background:#25715D"></i>正向 · 正常</span><span class="stsem" data-sem="b" title="信息 · 进行"><i style="background:#3261C1"></i>信息 · 进行</span><span class="stsem" data-sem="o" title="注意 · 待办"><i style="background:#8D5A15"></i>注意 · 待办</span><span class="stsem" data-sem="r" title="风险 · 异常"><i style="background:#B72F42"></i>风险 · 异常</span><span class="stsem" data-sem="n" title="中性 · 未动"><i style="background:#8A92A3"></i>中性 · 未动</span><span class="stsem" data-sem="p" title="特殊 · 协作"><i style="background:#6A48DC"></i>特殊 · 协作</span><span class="stsem" data-sem="y" title="五色 · 管理"><i style="background:#B98D1F"></i>五色 · 管理</span><span style="font-size:12px;color:var(--lg-text-secondary)">再次点击取消筛选 · 状态永远颜色+文字双通道</span></div>
     </div>
     <div style="height:16px"></div>
     <div class="panel glass-l2">
@@ -1673,7 +1699,7 @@ section.block:first-of-type{margin-top:8px}
     <div class="grid g2">
       <div class="panel glass-l2">
         <h3><i></i>保健清单（0–6 岁 · 综合儿保）</h3>
-        <p class="mh">每项 = H 图标 + 项目名 + 口径说明 + 状态标签（15.2.1/15.5 语义色）</p>
+        <p class="mh">图标 + 项目名 + 口径说明 + 状态标签（15.5 语义色）</p>
       <div class="hrow" data-states="正常|异常|待检"><span class="fico"><svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="8.6" cy="6.9" r="2.1"/><path d="M8.6 9.1v3.4"/><path d="M6.9 10.9l1.7.7M10.3 10.9l-1.7.7"/><path d="M8.6 12.5 7.5 15.2M8.6 12.5l1.1 2.7"/><path d="M16.6 5v12"/><path d="M15.2 7.3 16.6 5l1.4 2.3"/><path d="M15.2 14.7 16.6 17l1.4-2.3"/></svg></span><span style="flex:1;min-width:0"><b style="display:block;font-size:13.5px">生长发育</b><span style="font-size:11px;color:var(--lg-text-secondary)">身高体重测量 · 生长曲线 P3–P97</span></span><span class="tagc c-g fkstate" style="cursor:pointer" title="点击切换状态">正常</span></div>
       <div class="hrow" data-states="正常|异常|待检"><span class="fico"><svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="11.8" cy="14.6" r="5.4"/><path d="M11.8 9.5c.3-1.9 1.2-3.1 2.9-3.8"/><path d="M14.5 6.1c1.7-.7 3.1-.5 4 .4"/></svg></span><span style="flex:1;min-width:0"><b style="display:block;font-size:13.5px">营养喂养</b><span style="font-size:11px;color:var(--lg-text-secondary)">营养评估 · 喂养指导</span></span><span class="tagc c-g fkstate" style="cursor:pointer" title="点击切换状态">正常</span></div>
       <div class="hrow" data-states="正常|异常|待检"><span class="fico"><svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12.2" r="6.4"/><circle cx="9.8" cy="11" r=".95" fill="currentColor" stroke="none"/><circle cx="14.2" cy="11" r=".95" fill="currentColor" stroke="none"/><path d="M9.5 14.3c1.5 1.2 3.5 1.2 5 0"/><path d="M18.6 4.8l.8 2 2 .8-2 .8-.8 2-.8-2-2-.8 2-.8z"/><path d="M4.8 5.6l.6 1.5 1.5.6-1.5.6-.6 1.5-.6-1.5-1.5-.6 1.5-.6z"/></svg></span><span style="flex:1;min-width:0"><b style="display:block;font-size:13.5px">心理行为发育</b><span style="font-size:11px;color:var(--lg-text-secondary)">发育筛查 · 心理行为评估</span></span><span class="tagc c-n fkstate" style="cursor:pointer" title="点击切换状态">待检</span></div>
@@ -2091,7 +2117,7 @@ section.block:first-of-type{margin-top:8px}
   </section>
 
   <footer>
-    <img src="../brand/logo-512.png" alt="妈咪好" style="width:34px;height:34px;border-radius:10px;vertical-align:-8px;margin-right:8px"><b style="color:var(--lg-text-secondary)">妈咪好 GoodMom · Design DNA</b> —— 柔光蜜桃 · 液态玻璃 · 生长曲线 · 医疗克制 · 妈妈的温度<br>
+    <img src="../brand/logo-512.png" alt="妈咪好" style="width:26px;height:26px;border-radius:50%;vertical-align:-6px;margin-right:8px"><b style="color:var(--lg-text-secondary)">妈咪好 GoodMom · Design DNA</b> —— 柔光蜜桃 · 液态玻璃 · 生长曲线 · 医疗克制 · 妈妈的温度<br>
     规范详见《妈咪好 GoodMom 设计系统 V2.5》： ·
     <a href="site/spec.html#ch-01">DNA</a> · <a href="site/spec.html#ch-02">Token</a> ·
     <a href="site/spec.html#ch-03">组件</a> · <a href="site/spec.html#ch-04">数据可视化</a> ·

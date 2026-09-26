@@ -145,7 +145,7 @@ svg.i{width:22px;height:22px;stroke:currentColor;fill:none;stroke-width:1.7;
 /* 根页无返回键（10.3.1）：整键移除而非置灰——置灰的按钮键盘不可聚焦，
    会同时触发"焦点不可见"与"禁用无理由"两条无障碍问题 */
 .pm-at-root .navbar .back{display:none}
-.navbar img{width:24px;height:24px;border-radius:8px;flex:none}
+.navbar img{width:26px;height:26px;border-radius:50%;object-fit:cover;flex:none}
 .navbar h1{flex:1;min-width:0;font-size:18px;font-weight:600;letter-spacing:-.01em;text-align:center;
   white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .navbar .ops{display:flex;gap:2px;flex:none}
@@ -198,11 +198,12 @@ svg.i{width:22px;height:22px;stroke:currentColor;fill:none;stroke-width:1.7;
 @keyframes pmFade{from{opacity:0}to{opacity:1}}
 
 /* ── 5 · KPI / 区块卡 ─────────────────────────────────────────────────── */
-.kpis{display:grid;grid-template-columns:1fr 1fr;gap:var(--lg-m-gap-card);margin-bottom:14px}
+.kpis{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:var(--lg-m-gap-card);margin-bottom:14px}
 .kpi h2{font-size:12px;line-height:16px;color:var(--text-2);font-weight:500;margin-bottom:8px;
   display:flex;align-items:center;gap:6px}
 .kpi h2 svg{flex:none}
-.kpi .v{font-size:32px;font-weight:700;line-height:1.1;letter-spacing:-.02em}
+/* 32px 固定字号在 320 档装不下「12,290.7」（文本 138px > 内容盒 104px）→ 随视口收缩 */
+.kpi .v{font-size:clamp(22px,7vw,32px);font-weight:700;line-height:1.1;letter-spacing:-.02em}
 .kpi .d{font-size:12px;margin-top:8px;color:var(--text-3);display:flex;align-items:center;gap:6px}
 .kpi .d b.up{color:var(--sem-positive);font-weight:600}
 .kpi .d b.down{color:var(--sem-danger);font-weight:600}
@@ -324,7 +325,7 @@ svg.i{width:22px;height:22px;stroke:currentColor;fill:none;stroke-width:1.7;
 .pm-cap.on i{background:var(--rose-100);color:#B23A63}
 
 /* ── 11 · Selector 选择卡（11.6.4）/ Stepper（11.2.11）/ OTP（11.2.14）── */
-.pm-selects{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.pm-selects{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:10px}
 .pm-select{position:relative;min-height:56px;padding:12px 34px 12px 14px;border-radius:18px;
   background:var(--pm-input);border:1px solid var(--pm-divider);display:flex;flex-direction:column;
   gap:2px;justify-content:center}
@@ -372,7 +373,14 @@ svg.i{width:22px;height:22px;stroke:currentColor;fill:none;stroke-width:1.7;
 [data-theme="dark"] .msteps span.cur b{background:#23222A;color:#FFC4D6}
 .msteps span.todo b{border:1px solid var(--pm-divider);color:var(--text-3)}
 
-.upgrid{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}
+/* 4 列 KPI 只在手机模拟够宽时成立：320 档 4 列每列仅 ~40px，卡内文字顶出视口
+   （实测 .gcard.kpi right=331 / .mrate right=349，vw=320）。窄档退 2 列并允许评分行换行。 */
+.upgrid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px}
+@media(max-width:420px){
+  .upgrid{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .mrate{flex-wrap:wrap}
+}
+.mrate{flex-wrap:wrap}
 .pm-tile{position:relative;aspect-ratio:1}
 .up{width:100%;height:100%;border-radius:18px;background:var(--pm-solid);border:1px solid var(--pm-edge);
   box-shadow:var(--shadow-card);display:flex;align-items:center;justify-content:center;color:var(--text-2);
@@ -630,7 +638,7 @@ svg.i{width:22px;height:22px;stroke:currentColor;fill:none;stroke-width:1.7;
 .pm-calhead button{width:44px;height:44px;border-radius:50%;display:flex;align-items:center;
   justify-content:center;color:var(--text-2);flex:none}
 .pm-calhead button:active{transform:scale(.92);background:var(--pm-solid)}
-.pm-calwk,.pm-calgrid{display:grid;grid-template-columns:repeat(7,1fr)}
+.pm-calwk,.pm-calgrid{display:grid;grid-template-columns:repeat(7,minmax(0,1fr))}
 .pm-calwk span{padding:4px 0;text-align:center;font-size:12px;color:var(--text-3)}
 /* 日期格：**按钮盒** = 44×44（热区达标），视觉芯片是里面的 36×36 —— 用内层承载底色，
    这样既有格间距，又不会因为 margin 把实测热区压到 44 以下（10.4 实测坑）。 */
@@ -657,7 +665,7 @@ svg.i{width:22px;height:22px;stroke:currentColor;fill:none;stroke-width:1.7;
   background:var(--pm-input);border:1px solid var(--pm-divider)}
 .pm-numdisp .lbl{font-size:12px;color:var(--text-3)}
 .pm-numdisp b{margin-left:auto;font-size:24px;font-weight:700;font-variant-numeric:tabular-nums}
-.pm-numkbd{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;padding:10px;border-radius:20px;
+.pm-numkbd{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;padding:10px;border-radius:20px;
   background:var(--pm-glass);border:1px solid var(--pm-edge)}
 .pm-numkey{min-height:48px;border-radius:18px;display:flex;align-items:center;justify-content:center;
   font-size:18px;font-weight:600;color:var(--text);background:var(--pm-solid);
@@ -760,7 +768,7 @@ svg.i{width:22px;height:22px;stroke:currentColor;fill:none;stroke-width:1.7;
   .desk-note{display:block;position:absolute;top:20px;right:calc(50% + 216px);width:300px;
     font-size:12px;line-height:1.9;color:var(--text-2)}
   .desk-note b{display:block;font-size:13px;font-weight:600;color:var(--text);margin-bottom:6px}
-  .desk-note code{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:11px;color:var(--pm-link)}
+  .desk-note code{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:12px;color:var(--pm-link)}
   .desk-note ul{margin:0;padding-left:16px}
 }
 @media (min-width:1024px) and (max-width:1439px){

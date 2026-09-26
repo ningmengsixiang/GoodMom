@@ -19,7 +19,7 @@
    下次运行会把它当成待测页面；残留还会让 `audit.py` 的 hex-case 门禁变红。
    本版写到系统临时目录，并注入 `<base>` 使相对资源仍能解析。
 
-另补上"反向盲区"：合并后的 `site/index.html` 里 8 个模块靠 `display` 切换，
+另补上"反向盲区"：合并后的 `site/index.html` 里各模块靠 `display` 切换，
 **只测默认模块等于漏掉另外 7 个**（旧报告把首页失败数报成 4，而迁入该文件的
 两个页面原本各有 71 / 147 项）。本版对 `site/index.html` 逐模块各测一遍。
 
@@ -123,9 +123,14 @@ def collect_pages() -> list:
                 out.append((p, "gm-mod-" + mod))
         else:
             out.append((p, ""))
-    extra = "fuyouaicansai/goodmom-redesign.html"
-    if os.path.exists(extra):
-        out.append((extra, ""))
+    # fuyouaicansai/：参照项目重画版 + **6 个独立产品页 + 索引页**（由 gen-product-apps.py 生成）。
+    # 这些页不在 site//preview/ 下，故单独列；与 site/index.html 的模块一起构成"全站逐页"口径。
+    extras = ["fuyouaicansai/goodmom-redesign.html", "fuyouaicansai/index.html"] + [
+        "fuyouaicansai/p0%d-%s.html" % (i, slug) for i, slug in enumerate(
+            ["women-health", "preconception", "maternity", "newborn", "child-health", "ai-care"], 1)]
+    for extra in extras:
+        if os.path.exists(extra):
+            out.append((extra, ""))
     return out
 
 
@@ -268,7 +273,7 @@ function pathOf(el){
 }
 /* 测量范围 = 当前激活的模块（合并页）或整个 body（独立页）。
    只测"当前可见"会漏掉模块内靠 display 切换的隐藏内容（示例页 6 个 view 只测到 1 个）；
-   测整个 body 又会把 8 个模块重复计 8 次。取模块根即两者兼顾。 */
+   测整个 body 又会把各模块重复计一次。取模块根即两者兼顾。 */
 var root=document.querySelector('.gm-mod.is-on')||document.body||document.documentElement;
 var walker=document.createTreeWalker(root,NodeFilter.SHOW_ELEMENT);
 var fails=[],infos=[];
@@ -471,7 +476,8 @@ def main() -> int:
                  "- 工具：`scripts/a11y-dom.py` v%s（无头 Chrome 逐文本节点按 WCAG 公式实测）" % TOOL_VERSION,
                  "- 算法：前景/背景均**保留 alpha 并做 source-over 合成**（沿祖先链逐层叠加）；",
                  "  渐变与图片背景无法取样，标 INFO，不参与阈值。",
-                 "- 覆盖：`site/index.html` 逐模块各测一遍（8 个模块靠 display 切换，只测默认模块会漏 7 个）；",
+                 "- 覆盖：`site/index.html` 逐模块各测一遍（模块数从 build-site.py 的 MODULES 读取；"
+                 "模块靠 display 切换，只测默认模块会漏掉其余全部）；",
                  "  重定向桩与 `_*` 临时文件已排除。",
                  ""]
         if errs:

@@ -32,13 +32,36 @@ def inline(t):
     t=re.sub(r'\[([^\]]+)\]\(([^)]+)\)',mdlink,t)
     return t
 
+def brk(html: str) -> str:
+    """在标题 HTML 的**文本节点**里插入 `<wbr>` 断行点（中日韩 ↔ 拉丁/数字边界、全角括号内侧）。
+
+    ⚠️ 为什么必须在生成期插标签，而不是靠 CSS 或零宽空格：
+      · 「总表（Flat Component Registry）」这类粗体混排标题在 250px 内容宽下实测 254px；
+      · `overflow-wrap:anywhere` / `word-break:break-all` / `line-break:anywhere` 全部无效；
+      · 插 U+200B **更糟**（CJK 禁则：「（」不得落在行末、其后本就不许断行，ZWSP 被抑制，仍不换行）；
+      · 实测唯独 `<wbr>` 在每个边界都能断开（高 27px→54px，溢出 4px→0）。
+    只在文本节点插入（按标签切分后跳过标签段），不会破坏 `<code>`/`<a>` 等内联结构。
+    """
+    cjk = "[\u3000-\u9fff\uff00-\uffef]"
+    out = []
+    for part in re.split(r"(<[^>]+>)", html):
+        if part.startswith("<"):
+            out.append(part); continue
+        part = re.sub("(" + cjk + ")(?=[A-Za-z0-9])", r"\1<wbr>", part)
+        part = re.sub("(?<=[A-Za-z0-9])(" + cjk + ")", r"<wbr>\1", part)
+        part = re.sub("([\uff08\u3010\u300a])", r"\1<wbr>", part)
+        part = re.sub("([\uff09\u3011\u300b])", r"<wbr>\1", part)
+        out.append(part)
+    return "".join(out)
+
+
 def render_md(txt):
     out=[]; code=False; buf=[]; para=[]; inlist=None; table=[]
     lines=txt.split('\n')
     i=0
     def flush_p():
         if para:
-            out.append('<p>'+' '.join(inline(x) for x in para)+'</p>'); para.clear()
+            out.append('<p>'+brk(' '.join(inline(x) for x in para))+'</p>'); para.clear()
     while i<len(lines):
         ln=lines[i]
         if ln.strip().startswith('```'):
@@ -65,7 +88,7 @@ def render_md(txt):
         if m:
             flush_p()
             h=min(len(m.group(1))+1,6)
-            out.append('<h%d>%s</h%d>'%(h,inline(m.group(2)),h)); i+=1; continue
+            out.append('<h%d>%s</h%d>'%(h,brk(inline(m.group(2))),h)); i+=1; continue
         if s=='---':
             flush_p(); out.append('<hr>'); i+=1; continue
         if s.startswith('>'):
@@ -82,7 +105,7 @@ def render_md(txt):
                 mm=re.match(r'^(\s*)[-*]\s+(.*)$',lines[i])
                 if not mm: break
                 items.append(mm.group(2)); i+=1
-            out.append('<ul>'+''.join('<li>'+inline(x)+'</li>' for x in items)+'</ul>')
+            out.append('<ul>'+''.join('<li>'+brk(inline(x))+'</li>' for x in items)+'</ul>')
             continue
         mnum=re.match(r'^\s*\d+[.、]\s*(.*)$',s)
         if mnum:
@@ -92,7 +115,7 @@ def render_md(txt):
                 mn=re.match(r'^\s*\d+[.、]\s*(.*)$',lines[i])
                 if not mn: break
                 items.append(mn.group(1)); i+=1
-            out.append('<ol>'+''.join('<li>'+inline(x)+'</li>' for x in items)+'</ol>')
+            out.append('<ol>'+''.join('<li>'+brk(inline(x))+'</li>' for x in items)+'</ol>')
             continue
         # code block indented? none significant
         para.append(s); i+=1
@@ -160,7 +183,8 @@ a{color:var(--rose-deep)}
 .chap-hd b{font-weight:700}
 .md h1{font-size:24px;margin:18px 0 8px;color:var(--rose-deep)}
 .md h2{font-size:19px;margin:20px 0 6px}
-.md h3{font-size:16px;margin:16px 0 6px}
+.md h3{font-size:16px;margin:16px 0 6px;min-width:0;flex-wrap:wrap}
+.md h4{min-width:0;flex-wrap:wrap}
 .md p{line-height:1.85;font-size:14px}
 .md ul,.md ol{padding-left:22px;line-height:1.9;font-size:14px}
 .md table{width:100%;border-collapse:collapse;margin:10px 0;font-size:12.5px}
@@ -177,12 +201,23 @@ a{color:var(--rose-deep)}
    正文里的宽表同样越界。`overflow-wrap:anywhere` 允许在任意字符处断行。 */
 .md,.chap,.doc,main{min-width:0;max-width:100%}
 .md p,.md li,.md td,.md blockquote{overflow-wrap:anywhere;word-break:break-word}
+.md h1,.md h2,.md h3,.md h4{overflow-wrap:anywhere}
+@media(max-width:480px){
+  /* 窄屏把正文两侧留白各收 6px（18→12）+ 章内边距收 4px：一起多出 20px 内容宽，
+     把上面那类"混排标题差 4~5px 收不进"的情况一次性吸收掉（比逐条改文案稳）。 */
+  .wrap{padding-left:12px;padding-right:12px}
+  .chap{padding:12px}
+}
 .md blockquote a,.md a{overflow-wrap:anywhere;word-break:break-word}
 .md table,.chap table{display:block;max-width:100%;overflow-x:auto;-webkit-overflow-scrolling:touch}
 @media(max-width:767px){
   .chap{padding:16px}
-  /* 17 · 页面壳：顶栏下拉（绝对定位 min-width:210px）与正文宽表在 375px 越界 */
-  .drop{left:auto;right:0;min-width:0;max-width:calc(100vw - 32px)}
+  /* 17 · 页面壳：顶栏下拉（绝对定位 min-width:210px）与正文宽表在 375px 越界。
+     ⚠️ 只写 `right:0` 不够：菜单锚在药丸上，320~600 档实测左边缘跑到 -18 / -76 / -98px
+     （菜单文字被左边缘切掉）。窄屏改成"挂在顶栏上的整宽面板"——任何视口宽度都不出屏。 */
+  .top{position:relative}
+  .gp{position:static}
+  .drop{left:12px;right:12px;top:calc(100% + 6px);min-width:0;max-width:none;width:auto}
   .md pre{max-width:100%;overflow-x:auto}
   /* 10 · 10.4：可点热区 ≥44×44（原实测 34–38px） */
   .top button,.top a,.drop a,.chapnav button{min-height:44px;display:inline-flex;align-items:center}

@@ -28,10 +28,12 @@ jobs:
         run: |
           # 排除两份**带生成时间戳**的自动报告：它们每次运行都会变（内容相同、仅时间不同），
           # 因此永远不可能让工作树干净；而"过期可自证"正是加时间戳的目的，不能去掉。
-          # a11y-dom-report.md 由本工作流的 a11y-dom job 重新生成，audit-report.md 同理。
+          # a11y-dom-report.md 由本工作流的 a11y-dom job 重新生成；audit-report.md 与
+          # layout-gate-report.md 同样由各自 job 重新生成（内容相同、仅时间戳不同）。
           # 其余任何未提交/未跟踪文件都必须让这一步失败 —— 那才是 P0-1 要防的情况。
           DIRTY="$(git status --porcelain --untracked-files=all \
-            -- . ':(exclude)docs/a11y-dom-report.md' ':(exclude)docs/audit-report.md')"
+            -- . ':(exclude)docs/a11y-dom-report.md' ':(exclude)docs/audit-report.md' \
+                 ':(exclude)docs/layout-gate-report.md')"
           if [ -n "$DIRTY" ]; then
             echo "::error::存在未提交或未跟踪的交付物，交付不完整："
             echo "$DIRTY" | head -40
@@ -251,8 +253,15 @@ jobs:
           # 从不证明"片段 == 源文件"，于是内嵌规范快照可以静默过期。
           python3 scripts/gen-spec.py
           python3 scripts/gen-manual.py
-          if ! git diff --exit-code -- site/fragments/; then
-            echo "::error::站点片段已过期（与生成器输出不一致），请提交重新生成后的片段"
+          # 产品矩阵片段由 prd/zong.md 生成（7 个页面壳与交互机制同源），
+          # 与 spec/manual 同样属于"片段 == 源文件"的守门范围：
+          # PRD 改了而片段没重跑，页面上的功能架构/价值/数据主责就会静默过期。
+          python3 scripts/gen-products.py
+          # fuyouaicansai/ 下 6 个独立产品页同样由 prd/zong.md 生成（每页 4 个视图）：
+          # PRD 改了而页面没重跑，页面上的功能架构/旗舰流程/主责数据就会静默过期。
+          python3 scripts/gen-product-apps.py
+          if ! git diff --exit-code -- site/fragments/ fuyouaicansai/; then
+            echo "::error::站点片段/独立产品页已过期（与生成器输出不一致），请提交重新生成后的产物"
             exit 1
           fi
           echo "OK 站点片段与生成器输出一致"
@@ -289,14 +298,32 @@ jobs:
           # 暗色档）。site-smoke 对它只断言"`.tab` 存在且点了会选中"—— 交互被改坏它照样全绿，
           # 故单独一支：40 条断言全部对应用户能感知的行为与几何。
           node scripts/mobile-smoke.mjs
+          # 产品矩阵是"一个模块里 7 个页面"（1 对接首页 + 6 工作台，靠 .is-on 切换），而 site-smoke / page-qa /
+          # a11y-dom 都只审"模块的默认呈现状态"= p01 + 落地页 ——
+          # 另外 11 页的对比度/溢出/热区/曲线渲染若无这支脚本就完全不设防。
+          node scripts/products-smoke.mjs
+          # fuyouaicansai/ 下 6 个独立产品页：每页 4 个视图（靠 .is-on 切换），
+          # page-qa / a11y-dom 只审默认视图，另外 3 个视图与全部交互由此脚本逐条断言。
+          node scripts/product-apps-smoke.mjs
 
       - name: 逐页规范质检（结构 / 对比度 / 焦点 / 触控 / 溢出 / Token 档位）
         # 与既有守门的分工：a11y.py 是静态断言、a11y-dom.py 只测对比度；
-        # 本步是**渲染级逐页质检**（17 页 × 桌面/移动/暗色三档），
+        # 本步是**渲染级逐页质检**（真实页 11 + 产品矩阵 7 个视图状态 × 桌面/移动/暗色三档），
         # 覆盖圆角/边框/阴影/模糊/字号/字重/热区/焦点环/横向溢出/emoji/版本，
         # 每条 finding 都带规范锚点，输出 docs/page-qa-report.md。
         # 阈值：除 P3「模块未实现暗色皮肤」外必须为 0。
         run: node scripts/page-qa.mjs --ci
+
+      - name: 布局体检（多断点响应式 · 背景白条 · 组件错位）
+        # 用户三次报「各页面背景后面留有很大的白色缝隙」「所有页面都要响应式」
+        # 「模块组件格式错位、布局不好」—— 这三类此前**没有任何门禁**：
+        #   · page-qa 只跑 1440/375 两档，且按组件规则分类，不看"有没有人画过这块背景"；
+        #   · products-smoke / product-apps-smoke 只覆盖各自模块的默认视图；
+        #   · 320 档（iPhone SE 宽度）完全没人测 —— 实测三处页面级横向溢出都落在 320/768；
+        #     白条真因是独立页没重置 UA 默认 `body{margin:8px}`、`html` 又没画底色。
+        # 本步自起静态服务，扫 9 个站点模块 + 6 个独立页 × 4 视图 + 打印版手册（70 次扫描 / 7 档，
+        # 320~1920）：P0（页面横向溢出 / 背景白条）、P1（出框 / 块级重叠）、P2（文字被切）必须为 0。
+        run: node scripts/layout-gate.mjs
 
   vue-pkg-build:
     name: Vue 组件库构建（@goodmom/vue）

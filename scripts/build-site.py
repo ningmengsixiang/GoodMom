@@ -59,6 +59,7 @@ OUT = os.path.join(SITE, "index.html")
 # 分组决定主导航里的一级项；顺序即导航顺序。
 MODULES = [
     ("site-index",      "首页与总览", "start",  "品牌 · 能力 · 开源治理 · 站点地图"),
+    ("products",        "产品矩阵",   "product","6 大产品 × 2 页：对外落地页 / 系统工作台首页（按 prd/zong.md 生成）"),
     ("preview-index",   "视觉规范",   "visual", "设计 DNA · 色彩 · 字体 · 玻璃 · 间距 · 阴影"),
     ("preview-examples","组件与状态", "comp",   "组件全量 · 状态谱 · 健康度 · 图表"),
     ("preview-mobile",  "移动端",     "mobile", "移动端组件与交互形态"),
@@ -67,6 +68,47 @@ MODULES = [
     ("site-manual",     "标准手册",   "manual", "38 部分标准手册"),
     ("site-docs",       "文档索引",   "docs",   "按角色与任务的文档导航"),
 ]
+
+# ── 主导航的**下拉菜单**（模块 → [(序号, 名称, 副标题, 锚点), …]）──────────────
+# 为什么放在这里而不是模块自己实现：导航属于外壳。模块内再放一套切换条，
+# 就变成"站内导航 + 模块内切换条"两套并存 —— 用户反馈的正是这个。
+# 锚点合同：`#gm-mod-<mod>`（模块根）或 `#<mod>--<元素 id>`（模块内元素，构建期已加前缀）。
+# ⚠️ 这些锚点由 validate_html 校验：目标模块若缺失，构建会**直接失败**（而不是静默生成死链）。
+NAV_MENUS = {
+    "products": [
+        ("", "产品矩阵首页", "6 大产品对接 · 数据互联 · 销售组合", "#gm-mod-products"),
+        ("01", "妇女健康管理系统", "两癌筛查 · 妇女全生命周期保健", "#products--p01-work"),
+        ("02", "婚前孕前保健系统", "婚前医学检查 · 孕前优生 · 备孕管理", "#products--p02-work"),
+        ("03", "孕产妇全程管理系统", "孕期保健 · 高危专案 · 分娩 · 产后", "#products--p03-work"),
+        ("04", "新生儿健康管理系统", "出生档案 · 访视 · 筛查 · 高危新生儿", "#products--p04-work"),
+        ("05", "儿童健康管理系统", "儿童保健 · 五健 · 视力口腔 · 重点儿童", "#products--p05-work"),
+        ("06", "妇幼AI智能体平台", "AI 建议需审核后写入业务系统", "#products--p06-work"),
+    ],
+}
+
+
+def tab_markup(mod: str, title: str, desc: str) -> str:
+    """主导航项。带子菜单的模块（见 NAV_MENUS）渲染成**下拉菜单**：
+    点它既切到该模块，又展开子项，选中即跳到对应页面。
+
+    ⚠️ 按钮必须保持 `role="tab" data-mod="<mod>"`：外壳的激活逻辑、键盘左右键、
+    以及 site-smoke 的"切到每个模块"都靠这两个属性。
+    """
+    btn = (f'<button type="button" class="sh-tab" role="tab" data-mod="{mod}" '
+           f'aria-selected="false" tabindex="-1" title="{desc}">{title}</button>')
+    items = NAV_MENUS.get(mod)
+    if not items:
+        return btn
+    menu = "".join(
+        f'<a role="menuitem" href="{href}" data-mod="{mod}"'
+        + (' class="is-home"' if not no else '') + '>'
+        + (f'<i>{no}</i>' if no else '')
+        + f'<span><b>{name}</b><small>{sub}</small></span></a>'
+        for no, name, sub, href in items)
+    return ('<span class="sh-menu">' + btn
+            + f'<span class="sh-menu__pop" role="menu" aria-label="{title} · 选择产品">'
+            + menu + '</span></span>')
+
 
 # 模块 CSS 作用域类名（`:root`/`body`/`*` 规则改写到它）
 def scope_cls(mod: str) -> str:
@@ -715,6 +757,26 @@ body{margin:0;font-family:var(--sh-font);color:var(--sh-t);line-height:1.7;-webk
    linear-gradient(165deg,#FDF2EE,#F6E2DB 52%,#EAD3CA);
   min-height:100vh}
 .sh-sr{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap;border:0}
+/* ⚠️ 生长曲线的"读屏用数据表"（`table.gm-sr-only`，图形对 AT 不可见）此前**没有对应样式** ——
+   于是这张 9 行 × 5 列的数字表**直接渲染在曲线下面**（实测 320px 高、与图表内容重复），
+   页面因此显得"多了一大堆数字"。此处按 .sh-sr 的做法隐藏；表本身保留给读屏。 */
+.gm-sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;
+  clip:rect(0 0 0 0);white-space:nowrap;border:0}
+/* ⚠️ `width:1px` 对**表格**不生效：表格默认 table-layout:auto，列宽按内容（min-content）算，
+   1px 只是下限 —— 于是这张 5 列数据表的盒宽≈409px，在 375 视口下真的把文档撑出 34px
+   横向滚动（products-smoke 实测 p03/p04/p05 各报一次）。固定布局后表格盒宽=1px，
+   单元格内容仍对读屏可读，只是被裁在 1px 里。 */
+/* ⚠️ 表格版 sr-only 的三个坑（都实测过，别再"简化"回去）：
+   ① `width:1px` 配默认 table-layout:auto 只是**下限** —— 盒宽按内容涨到 409px，
+      375 视口下真的多出 34px 横向滚动（products-smoke 报 p03/p04/p05 三条失败）；
+   ② 只补 table-layout:fixed 仍不够：caption（「妇女健康 中国 0–6 岁…」）与 nowrap 单元格的
+      min-content 会**反向撑大表格盒**到 373px，绝对定位后压在图表上；
+   ③ 把单元格改成允许任意断行，8 行表会竖成 1906px 高，等于拿一根看不见的柱子盖住半页。
+   最终配方 = 固定布局 + caption 出流 + 单元格 nowrap 裁切：盒 12×270、文档零溢出，
+   表格语义与每个单元格文本对读屏原样保留（否掉整段 display:none / aria-hidden 的做法）。 */
+table.gm-sr-only{table-layout:fixed;pointer-events:none}
+.gm-sr-only caption{position:absolute;width:1px;height:1px;overflow:hidden}
+.gm-sr-only th,.gm-sr-only td{white-space:nowrap;overflow:hidden}
 /* ── 唯一主导航 ── */
 .sh-top{position:sticky;top:0;z-index:200;padding:10px 16px;
   background:linear-gradient(180deg,rgba(253,242,238,.92),rgba(253,242,238,.78));
@@ -735,6 +797,33 @@ body{margin:0;font-family:var(--sh-font);color:var(--sh-t);line-height:1.7;-webk
 .sh-tab[aria-selected="true"]{background:var(--sh-grad-action);color:var(--sh-t);border-color:transparent;
   box-shadow:0 6px 16px rgba(240,127,163,.3);background-origin:border-box}
 .sh-tab:focus-visible{outline:var(--sh-ring) solid rgba(232,93,143,.6);outline-offset:2px}
+/* ── 主导航下拉（产品矩阵）：点页签展开 6 个产品的工作台入口 ────────────────
+   桌面：绝对定位在页签下方。
+   移动：`.sh-tabs` 是**横向滚动容器**（overflow-x:auto），绝对定位的下拉会被它裁掉 ——
+        故移动档改为 fixed 整宽面板，位置按外壳实测的 --sh-nav-h 让开吸顶导航。 */
+.sh-menu{position:relative;display:inline-flex}
+.sh-menu__pop{position:absolute;top:calc(100% + 8px);left:0;z-index:240;display:none;
+  width:max-content;min-width:300px;max-width:min(92vw,420px);padding:8px;border-radius:20px;
+  background:#FFF;border:1px solid rgba(232,93,143,.22);
+  box-shadow:0 16px 40px rgba(90,70,70,.16);background-origin:border-box}
+.sh-menu.is-open .sh-menu__pop{display:block}
+.sh-menu__pop a{display:flex;align-items:center;gap:10px;min-height:44px;padding:6px 12px;
+  border-radius:18px;text-decoration:none;color:var(--sh-t)}
+.sh-menu__pop a:hover{background:rgba(247,127,163,.10);color:var(--sh-rose-deep)}
+.sh-menu__pop a:focus-visible{outline:var(--sh-ring) solid rgba(232,93,143,.6);outline-offset:-2px}
+.sh-menu__pop a i{flex:none;width:28px;height:28px;border-radius:14px;display:inline-flex;
+  align-items:center;justify-content:center;font-size:11px;font-weight:700;font-style:normal;
+  color:var(--sh-rose-deep);background:#FFF0F4}
+.sh-menu__pop a span{display:flex;flex-direction:column;line-height:1.35;min-width:0}
+.sh-menu__pop a b{font-size:13px;font-weight:600}
+.sh-menu__pop a small{font-size:11.5px;font-weight:400;color:var(--sh-t2)}
+.sh-menu__pop a.is-home{border-bottom:1px solid rgba(232,93,143,.16);
+  border-radius:18px 18px 0 0;margin-bottom:4px}
+/* 与上面那条同档：`.sh-tabs` 在 ≤1024 就是横向滚动容器，下拉必须走 fixed 面板 */
+@media (max-width:1024px){
+  .sh-menu__pop{position:fixed;left:12px;right:12px;top:calc(var(--sh-nav-h,60px) + 8px);
+    width:auto;max-width:none;max-height:70vh;overflow:auto}
+}
 .sh-ext{margin-left:auto;display:flex;gap:8px;align-items:center;flex:none}
 .sh-ext a{font-size:12.5px;font-weight:600;text-decoration:none;padding:8px 14px;border-radius:999px;
   color:var(--sh-rose-deep);background:#FFF;border:1px solid rgba(232,93,143,.3);white-space:nowrap}
@@ -938,7 +1027,7 @@ body{margin:0;font-family:var(--sh-font);color:var(--sh-t);line-height:1.7;-webk
    故凡覆盖"模块里已有的类"，必须写成 `.gm-tbl td .badge` 这类 ≥ 0,2,1 的形式。 */
 .gm-tbl td .badge,.gm-tbl td .tg,.gm-tbl td .tag,.gm-tbl td .status-tag{
   padding-top:3px;padding-bottom:3px;line-height:18px;font-size:12px}
-.gm-tbl td .av{width:26px;height:26px;font-size:11px}
+.gm-tbl td .av{width:26px;height:26px;font-size:12px}   /* 字阶下限 12px（原 11px 不在 02 · 2.3 字阶内） */
 .gm-tbl td .btn.mini{height:26px;padding:0 12px;font-size:12px;border-radius:16px}
 /* 首列可加玻璃头像/Logo（03.7 圆角：圆形头像走 50%，方形标识走 12） */
 .gm-tbl td .lg-mark{width:26px;height:26px;border-radius:12px;object-fit:cover;flex:none}
@@ -963,7 +1052,7 @@ body{margin:0;font-family:var(--sh-font);color:var(--sh-t);line-height:1.7;-webk
    与 02 · 2.1.1「三级色只可用于 ≥24px 常规」冲突，按后者从严（同 8.2.11 之前
    Spacing/Descriptions 的既有裁决口径，见 D19）。
    8.2.13：描述列表 ≤1 行 → value 单行省略，全文走 title（TB-15-02 同口径）。 */
-.gm-desc{display:grid;grid-template-columns:repeat(var(--gm-desc-cols,3),minmax(0,1fr));
+.gm-desc{display:grid;grid-template-columns:repeat(var(--gm-desc-cols,3),minmax(0,1fr),);
   gap:12px 20px;margin:0}
 .gm-desc>div{min-width:0}
 .gm-desc dt,.gm-desc .k{font-size:12px;line-height:16px;font-weight:400;
@@ -972,7 +1061,7 @@ body{margin:0;font-family:var(--sh-font);color:var(--sh-t);line-height:1.7;-webk
   color:var(--lg-text-primary,#343A46);
   overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 @media (max-width:1023px){.gm-desc{grid-template-columns:repeat(2,minmax(0,1fr))}}
-@media (max-width:767px){.gm-desc{grid-template-columns:repeat(var(--gm-desc-cols-sm,1),minmax(0,1fr))}}
+@media (max-width:767px){.gm-desc{grid-template-columns:repeat(var(--gm-desc-cols-sm,1),minmax(0,1fr),)}}
 /* 描述列表同理：颜色一律走 Token，不写死暗色档（否则无暗色档的模块上变成浅字压浅底） */
 
 /* ── 折叠面板（11 · 11.2.6）────────────────────────────────────────────
@@ -1018,12 +1107,17 @@ body{margin:0;font-family:var(--sh-font);color:var(--sh-t);line-height:1.7;-webk
   .gm-fold__body,.gm-fold .gm-fold__arr{transition:none}
 }
 /* 折叠同理：底走 Token（模块没做暗色档时保持浅玻璃，文字仍是深档 → 仍可读） */
-/* ── 移动端：导航压成单行，横向滚动不换行挤压 ──
+/* ── 窄屏：导航压成**单行 + 横向滚动**，不换行挤压 ──
    原实现是**三行**（品牌行 + 页签行 + 外链行），实测 375×812 上吸顶导航高 144px ——
    占屏高 17.7%，且模块内容被整体下推；把外链行收进页签滚动条后为 ~58px，
    手机上多出 86px 内容高度（约 10.6%）。外链里的「规范全文」在页签里已有入口，
-   品牌副标题在手机上也读不全，故这两项在手机档不显示（`.sh-ext` 桌面档保留）。 */
-@media (max-width:767px){
+   品牌副标题在手机上也读不全，故这两项在窄屏档不显示（`.sh-ext` 桌面档保留）。
+   ⚠️ 断点取 1024 而不是 767：9 个页签在 768–1024（平板竖屏/小笔记本）区间会
+      **自动换行成多行** —— 实测 768px 时吸顶导航 184px、834px 时 146px、1024px 时 106px，
+      比手机档还高，内容被整体下推。单行横滑在平板上同样成立，故一并收进这一档。
+      凡把 `.sh-tabs` 变成横向滚动容器（overflow-x:auto），其内部的绝对定位下拉会被裁切 ——
+      故主导航下拉面板在本档改为 fixed 整宽面板（见 .sh-menu__pop 的窄屏规则）。 */
+@media (max-width:1024px){
   .sh-top{padding:8px 12px}
   .sh-top-in{flex-wrap:nowrap;gap:8px}
   .sh-brand{order:1;margin-right:0}
@@ -1151,6 +1245,67 @@ __MODULES__
       }
     }
   });
+
+  /* ── 主导航下拉菜单（产品矩阵）─────────────────────────────────────────
+     为什么是**点击**而不是 hover：触屏没有 hover，且 hover 面板在键盘下不可达。
+     能力：点击开合 · Esc 关闭 · 点面板外关闭 · 方向键在菜单项间移动 · 选中后收起。
+     跳转本身**不在这里实现** —— 菜单项是 `a[data-mod][href="#<mod>--<id>"]`，
+     由上面那个 document 级处理器切模块并把锚点广播给模块（gm:module-shown）。 */
+  (function(){
+    var menus = Array.prototype.slice.call(document.querySelectorAll('#shTabs .sh-menu'));
+    if(!menus.length) return;
+    function closeAll(except){
+      menus.forEach(function(m){
+        if(m === except) return;
+        m.classList.remove('is-open');
+        var b = m.querySelector('.sh-tab');
+        if(b) b.setAttribute('aria-expanded', 'false');
+      });
+    }
+    menus.forEach(function(m){
+      var btn = m.querySelector('.sh-tab'), pop = m.querySelector('.sh-menu__pop');
+      if(!btn || !pop) return;
+      btn.setAttribute('aria-haspopup', 'true');
+      btn.setAttribute('aria-expanded', 'false');
+      function open(on){
+        closeAll(m);
+        m.classList.toggle('is-open', on);
+        btn.setAttribute('aria-expanded', on ? 'true' : 'false');
+      }
+      btn.addEventListener('click', function(){
+        var on = !m.classList.contains('is-open');
+        open(on);
+        if(on){ var f = pop.querySelector('a'); if(f) f.focus(); }
+      });
+      btn.addEventListener('keydown', function(e){
+        if(e.key === 'ArrowDown'){
+          e.preventDefault(); open(true);
+          var f = pop.querySelector('a'); if(f) f.focus();
+        }
+      });
+      pop.addEventListener('keydown', function(e){
+        var items = Array.prototype.slice.call(pop.querySelectorAll('a'));
+        var i = items.indexOf(document.activeElement);
+        if(e.key === 'ArrowDown'){ e.preventDefault(); (items[i + 1] || items[0]).focus(); }
+        else if(e.key === 'ArrowUp'){ e.preventDefault(); (items[i - 1] || items[items.length - 1]).focus(); }
+        else if(e.key === 'Escape'){ e.preventDefault(); open(false); btn.focus(); }
+        else if(e.key === 'Tab'){ open(false); }
+      });
+      pop.addEventListener('click', function(e){ if(e.target.closest('a')) open(false); });
+    });
+    document.addEventListener('click', function(e){
+      if(!e.target || !e.target.closest || !e.target.closest('.sh-menu')) closeAll(null);
+    });
+    document.addEventListener('keydown', function(e){ if(e.key === 'Escape') closeAll(null); });
+    /* 点别的页签也收起：否则下拉会一直挂在导航下面挡住内容 */
+    Array.prototype.slice.call(document.querySelectorAll('#shTabs .sh-tab')).forEach(function(t){
+      t.addEventListener('click', function(){
+        var host = t.closest('.sh-menu');
+        if(host && host.querySelector('.sh-menu__pop')) return;   /* 本菜单的页签：自己管开合 */
+        closeAll(null);
+      });
+    });
+  })();
 
   /* 初始模块：优先 URL hash，支持三种形态
        #gm-mod-<mod>      模块根
@@ -1445,7 +1600,12 @@ window.gmGrowth = function(el, d){
   });
   if(!mini) parts.push('</tbody></table>');
 
-  el.className = 'gm-growth' + (mini ? ' gm-growth--mini' : '') + (d.tone === 'rose' ? '" data-tone="rose' : '');
+  /* ⚠️ 这里原来写成 `... + (d.tone === 'rose' ? '" data-tone="rose' : '')` ——
+     把 data 属性硬拼进 **className**，于是 class 实际是 `gm-growth" data-tone="rose`：
+     ① `.gm-growth[data-tone="rose"] .gm-growth__band`（参考带配色）**从未命中**；
+     ② class 属性被污染成非法值。data-* 必须用 setAttribute 挂。 */
+  el.className = 'gm-growth' + (mini ? ' gm-growth--mini' : '');
+  if(d.tone) el.setAttribute('data-tone', d.tone);
   el.innerHTML = parts.join('');
 
   /* ── 交互 ── */
@@ -1813,10 +1973,7 @@ def build() -> tuple[str, dict]:
         passthrough = bool(fr.get("passthrough"))
         if passthrough:
             # 原样内联：内容已是完成态，任何二次改写都会破坏它
-            tab_html.append(
-                f'<button type="button" class="sh-tab" role="tab" data-mod="{mod}" '
-                f'aria-selected="false" tabindex="-1" title="{desc}">{title}</button>'
-            )
+            tab_html.append(tab_markup(mod, title, desc))
             mod_html.append(
                 f'<section class="gm-mod {scope_cls(mod)}" id="gm-mod-{mod}" role="tabpanel" '
                 f'aria-label="{title}" data-title="{title}">\n{fr["body"].strip()}\n</section>'
@@ -1851,10 +2008,7 @@ def build() -> tuple[str, dict]:
                       "scripts": len(re.findall(r"<script", body)) + (1 if js.strip() else 0),
                       "dropped": stats_dropped.get(mod, 0)}
 
-        tab_html.append(
-            f'<button type="button" class="sh-tab" role="tab" data-mod="{mod}" '
-            f'aria-selected="false" tabindex="-1" title="{desc}">{title}</button>'
-        )
+        tab_html.append(tab_markup(mod, title, desc))
         parts = [f'<section class="gm-mod {scope_cls(mod)}" id="gm-mod-{mod}" role="tabpanel" '
                  f'aria-label="{title}" data-title="{title}">']
         if css.strip():

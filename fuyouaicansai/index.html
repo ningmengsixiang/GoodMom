@@ -1,0 +1,948 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>妈咪好 GoodMom · 6 大产品页</title>
+<link rel="icon" type="image/png" href="../brand/logo-192.png">
+<meta name="theme-color" content="#F77FA3">
+<meta name="description" content="妈咪好 GoodMom 六大产品独立页索引：工作台 / 档案 / AI 协同 / 详情">
+<style>
+
+/* ═══ GoodMom Tokens（精简版 · 同 02 附录 A/B 与 12.3.1）═══ */
+:root{
+  /* 文字与分隔（02 · 2.1.1）。小字一律次级/主色：三级色 #9AA2B0 只允许
+     ≥24px 常规或 ≥18.66px 加粗（02 · 2.1.1），本模块不把它用于任何正文/注释。 */
+  --lg-text-primary:#343A46; --lg-text-secondary:#4F5B6E; --lg-text-tertiary:#9AA2B0;
+  --lg-text-on-accent:#343A46; --lg-divider:rgba(58,52,84,.10); --lg-link:#B23A63;
+  --lg-tint-base:#FFFFFF; --lg-tint-pct:13%;
+  /* 六语义（14 · 4.4.5 / 15 · 15.5）：文字用深档 alias，-500 只作填充 */
+  --lg-sem-positive:#25715D; --lg-sem-info:#3261C1; --lg-sem-attention:#8D5A15;
+  --lg-sem-risk:#B72F42; --lg-sem-neutral:#5E6673; --lg-sem-special:#6A48DC;
+  --lg-success-500:#42C7A1; --lg-warning-500:#F2B25C; --lg-danger-500:#EF6A7B;
+  --lg-info-500:#6D9EFF; --lg-purple-500:#9A78FF; --lg-purple-300:#B69AFF;
+  /* 品牌（02 · 2.9 = 12.3.1） */
+  --mmh-rose-700:#B23A63; --mmh-rose-600:#E85D8F; --mmh-rose-500:#F77FA3;
+  --mmh-rose-300:#FFC4D6; --mmh-rose-200:#FFDEE8; --mmh-rose-100:#FFF0F4;
+  --mmh-peach-400:#FFC3A0; --mmh-peach-300:#FFDCC7; --mmh-peach-100:#FFF3EA;
+  --mmh-mint-600:#4FB59C; --mmh-mint-500:#6FC9B4; --mmh-mint-300:#A9E3D4; --mmh-mint-100:#E2F6F0;
+  --mmh-solid-special:#6242B8;
+  --mmh-grad-action-hc:linear-gradient(135deg,#FFC4D6 0%,#F77FA3 100%);
+  --mmh-grad-primary:linear-gradient(135deg,#FFA9C2 0%,#F77FA3 45%,#E85D8F 100%);
+  --mmh-grad-signature:linear-gradient(120deg,#FFD0D8 0%,#F77FA3 48%,#B69AFF 100%);
+  /* 妊娠风险五色（02 · 2.10；仅用于孕产妇风险分级语境，与六语义并行） */
+  --mmh-m5-m1:#4CB98A; --mmh-m5-m2:#F2C14E; --mmh-m5-m3:#F0954A;
+  --mmh-m5-m4:#EE5C70; --mmh-m5-m5:#8F6AE0;
+  /* 环境光斑（02 · 2.1.7） */
+  --lg-glow-pink:radial-gradient(closest-side,rgba(245,184,198,.18),transparent 70%);
+  --lg-glow-peach:radial-gradient(closest-side,rgba(246,192,160,.16),transparent 70%);
+  --lg-glow-purple:radial-gradient(closest-side,rgba(154,120,255,.22),transparent 70%);
+  --lg-glow-cyan:radial-gradient(closest-side,rgba(114,221,229,.20),transparent 70%);
+  --lg-glow-white:radial-gradient(closest-side,rgba(255,255,255,.60),transparent 70%);
+  /* 间距 / 圆角 / 阴影 / 边框（02 · 2.3–2.7） */
+  --lg-space-1:4px; --lg-space-2:8px; --lg-space-3:12px; --lg-space-4:16px;
+  --lg-space-5:20px; --lg-space-6:24px; --lg-space-7:32px; --lg-space-8:40px;
+  --lg-space-9:48px; --lg-space-10:64px;
+  --lg-radius-container:40px; --lg-radius-card-lg:28px; --lg-radius-card:22px;
+  --lg-radius-control:20px; --lg-radius-btn-sm:18px; --lg-radius-pill:999px;
+  --lg-shadow-xs:0 1px 2px rgba(58,52,84,.04),0 2px 8px rgba(58,52,84,.05);
+  --lg-shadow-sm:0 4px 12px rgba(58,52,84,.06);
+  --lg-shadow-md:0 8px 24px rgba(58,52,84,.08),0 2px 6px rgba(58,52,84,.05);
+  --lg-shadow-lg:0 16px 40px rgba(58,52,84,.12),0 4px 12px rgba(58,52,84,.05);
+  --lg-glass-highlight:inset 0 1px 0 rgba(255,255,255,.60);
+  --lg-ring-width:2px; --lg-ring-offset:2px; --lg-ring-color:rgba(232,93,143,.6);
+  /* 字阶（02 · 2.2.2 / 2.2.3） */
+  --lg-fs-display:32px;--lg-lh-display:40px; --lg-fs-title:24px;--lg-lh-title:32px;
+  --lg-fs-section:18px;--lg-lh-section:26px; --lg-fs-body:15px;--lg-lh-body:22px;
+  --lg-fs-body-sm:14px;--lg-lh-body-sm:20px; --lg-fs-caption:12px;--lg-lh-caption:16px;
+  --lg-fs-num-lg:32px;--lg-lh-num-lg:40px; --lg-fs-num-md:24px;--lg-lh-num-md:32px;
+  --lg-fs-num-sm:16px;--lg-lh-num-sm:22px;
+  --lg-font-sans:"Inter","SF Pro Display",-apple-system,BlinkMacSystemFont,"PingFang SC",
+    "MiSans","HarmonyOS Sans","Noto Sans SC","Helvetica Neue",sans-serif;
+  /* 动效（07 · 7.2） */
+  --lg-t-fast:120ms; --lg-t-base:220ms; --lg-t-slow:400ms; --lg-t-breathe:2.4s;
+  --lg-ease-out:cubic-bezier(.22,1,.36,1); --lg-ease-in-out:cubic-bezier(.65,0,.35,1);
+  --lg-z-control:30; --lg-z-overlay:40;
+}
+
+/* ── 产品辅助色（PRD §十一「五个业务系统可以拥有不同的辅助色」）──────────────
+   只用于**产品标识**：Hero 氛围光、产品名色条、KPI 主指标、侧栏选中色条、切换条色点。
+   主行动（Primary 按钮）六个产品一律走品牌蜜桃粉档 + 深字 —— 12 · 12.3.2 把
+   「主行动渐变」定为品牌语义，若随产品变色，同一动作在不同产品里就是不同权重。
+   ⚠️ --pm-ink 是**文字深档**（-500 亮档在浅底上不足 4.5:1，02 · 2.1.5），
+      --pm-hue 只作填充/色块/光斑，两者不得互换。 */
+.gm-pm--p01{--pm-hue:#B23A63;--pm-ink:#B23A63;--pm-tint:rgba(178,58,99,.10);--pm-glow:rgba(178,58,99,.14)}
+.gm-pm--p02{--pm-hue:#FFC3A0;--pm-ink:#8D5A15;--pm-tint:rgba(255,195,160,.22);--pm-glow:rgba(255,195,160,.20)}
+.gm-pm--p03{--pm-hue:#F77FA3;--pm-ink:#B23A63;--pm-tint:rgba(247,127,163,.14);--pm-glow:rgba(247,127,163,.18)}
+.gm-pm--p04{--pm-hue:#B69AFF;--pm-ink:#6242B8;--pm-tint:rgba(182,154,255,.16);--pm-glow:rgba(182,154,255,.18)}
+.gm-pm--p05{--pm-hue:#6FC9B4;--pm-ink:#25715D;--pm-tint:rgba(111,201,180,.16);--pm-glow:rgba(111,201,180,.16)}
+.gm-pm--p06{--pm-hue:#9A78FF;--pm-ink:#6A48DC;--pm-tint:rgba(154,120,255,.14);--pm-glow:rgba(154,120,255,.18)}
+
+/* ── 模块根：页面环境层（L0）。底色只走暖中性，彩色只出现在光斑与组件里
+      （02 · 2.1「大面积彩色背景一律禁止」）。 ── */
+.gm-pm{position:relative;font-family:var(--lg-font-sans);color:var(--lg-text-primary);line-height:1.6;
+  -webkit-font-smoothing:antialiased;padding:var(--lg-space-5) var(--lg-space-5) var(--lg-space-10)}
+
+/* 环境光斑 ≥2 处（06 · 6.2 验收）：品牌粉 + 淡紫为底，产品辅助色只出现在 Hero 内。 */
+.gm-pm__amb{position:absolute;inset:0;pointer-events:none;overflow:hidden;
+  border-radius:var(--lg-radius-container);z-index:0}
+.gm-pm__amb i{position:absolute;display:block}
+.gm-pm__amb i:nth-child(1){left:-6%;top:-4%;width:60%;height:52%;background:var(--lg-glow-pink)}
+.gm-pm__amb i:nth-child(2){right:-8%;top:8%;width:56%;height:56%;background:var(--lg-glow-purple)}
+.gm-pm__amb i:nth-child(3){left:24%;bottom:-18%;width:52%;height:46%;background:var(--lg-glow-white)}
+
+
+/* ── 切换条（产品 × 形态）──────────────────────────────────────────────
+   06 · 6.5.2「全屏 backdrop blur 节点 ≤6」：本模块只在**这一条**与工作台顶栏
+   两处使用 backdrop-filter。卡片一律用「白渐变 + 受光白边 + 柔影」表达玻璃，
+   不逐卡开模糊 —— 12 个页面同屏卡片数量很大，逐卡模糊既过腻又拖帧。 */
+
+
+
+
+
+/* 产品 chip / 形态分段：均用 <button> + aria-pressed（键盘可达，且不依赖 hover） */
+
+
+
+
+
+
+
+/* ── 品牌锁版（12 · 12.1 名称使用规范）：logo + 品牌名 + 系统名 ──────────────
+   全站**只此一处实现**：logo 一律圆形裁切、尺寸只 26 / 36 / 44 三档；
+   品牌名固定 `妈咪好 GoodMom`（大小写见 12.1），系统名用产品中文名。
+   早先各页面各写一遍 —— logo 圆角 8/18 混用、品牌行有的写 Goodmom 有的写 GoodMom。 */
+.gm-brand{display:inline-flex;align-items:center;gap:var(--lg-space-3);min-width:0}
+.gm-brand img{border-radius:50%;object-fit:cover;flex:none;box-shadow:0 2px 8px rgba(178,58,99,.20)}
+.gm-brand--sm img{width:26px;height:26px}
+.gm-brand--md img{width:36px;height:36px}
+.gm-brand--lg img{width:44px;height:44px}
+.gm-brand__t{display:flex;flex-direction:column;line-height:1.3;min-width:0}
+.gm-brand__t b{font-size:var(--lg-fs-caption);font-weight:600;color:var(--mmh-rose-700);letter-spacing:.01em}
+.gm-brand__t strong{font-size:var(--lg-fs-body-sm);font-weight:600;color:var(--lg-text-primary)}
+.gm-brand--lg .gm-brand__t strong{font-size:var(--lg-fs-section);font-weight:600}
+.gm-brand__t small{font-size:var(--lg-fs-caption);color:var(--lg-text-secondary)}
+
+/* 产品语义图标（09 · 图标库领域图标）：底色用产品辅助色浅染、图形用其深档 */
+.gm-prod-ico{flex:none;width:40px;height:40px;border-radius:var(--lg-radius-btn-sm);
+  display:inline-flex;align-items:center;justify-content:center;
+  color:var(--pm-ink,var(--mmh-rose-700));background:var(--pm-tint,rgba(247,127,163,.14))}
+.gm-prod-ico svg{width:24px;height:24px;fill:none;stroke:currentColor;stroke-width:1.7;
+  stroke-linecap:round;stroke-linejoin:round}
+
+/* 概览卡：把"队列 / 质量 / 动态"合成一张卡的三段 —— 三张并列小卡会显得页面很碎 */
+.gm-pm-ov{margin-top:var(--lg-space-3);padding-top:var(--lg-space-3);border-top:1px solid var(--lg-divider)}
+.gm-pm-ov:first-of-type{margin-top:0;padding-top:0;border-top:none}
+.gm-pm-ov>h4{margin:0 0 var(--lg-space-2);font-size:var(--lg-fs-caption);font-weight:600;
+  color:var(--lg-text-secondary);letter-spacing:.02em}
+
+/* ── 卡片与面板（02 · 2.5 的 L2/L1 配方：白渐变 + 受光白边 + 柔影 + border-box 原点）── */
+.gm-pm-card{border-radius:var(--lg-radius-card);padding:var(--lg-space-5);
+  background:linear-gradient(160deg,rgba(255,255,255,.62),rgba(255,255,255,.30));
+  border:1px solid rgba(255,255,255,.75);box-shadow:var(--lg-glass-highlight),var(--lg-shadow-sm);
+  background-origin:border-box;min-width:0}
+.gm-pm-panel{border-radius:var(--lg-radius-card-lg);padding:var(--lg-space-6);
+  background:linear-gradient(160deg,rgba(255,255,255,.55),rgba(255,255,255,.24) 55%,rgba(255,255,255,.32));
+  border:1px solid rgba(255,255,255,.70);box-shadow:var(--lg-glass-highlight),var(--lg-shadow-md);
+  background-origin:border-box;min-width:0}
+.gm-pm-card h3,.gm-pm-panel h3{margin:0 0 var(--lg-space-3);font-size:var(--lg-fs-section);
+  line-height:var(--lg-lh-section);font-weight:600}
+/* 曲线图宽度上限：外壳的 .gm-growth__svg 是 width:100%，卡片一变宽图就跟着长高
+   （实测 823px 宽时单张曲线卡 724px 高，把整列顶得极高）。图本身 viewBox 只有 380 宽，
+   超过 560 再放大只会变糊，故按内容宽度封顶。 */
+/* ⚠️ 不能用 `.gm-pm-chart .gm-growth__svg` 封顶：外壳的 gmGrowth 会**就地替换**挂载点内容
+   并改掉它的 class（挂载点的 `.gm-pm-chart` 随之消失，选择器再也匹配不到）。
+   故用一个外层容器封顶 —— 容器 class 不会被外壳改写。 */
+.gm-pm-chartbox{max-width:620px;margin:0 auto}
+.gm-pm-cap{font-size:var(--lg-fs-caption);line-height:var(--lg-lh-caption);color:var(--lg-text-secondary)}
+.gm-pm-num{font-variant-numeric:tabular-nums}
+
+/* ── 页面壳（17 · 17.1.1：① 页面标题区 ② 工具行 ③ 内容区 ④ 页脚）── */
+.gm-pm-view{display:none;position:relative;z-index:1}
+.gm-pm-view.is-on{display:block;animation:gmPmFade var(--lg-t-slow) var(--lg-ease-out) both}
+@keyframes gmPmFade{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+.gm-pm-head{display:flex;align-items:flex-end;gap:var(--lg-space-4);flex-wrap:wrap;
+  margin-bottom:var(--lg-space-6)}
+.gm-pm-head h2{margin:0;font-size:var(--lg-fs-title);line-height:var(--lg-lh-title);font-weight:600;
+  letter-spacing:-.01em}
+.gm-pm-head .en{font-size:var(--lg-fs-body-sm);color:var(--lg-text-secondary)}
+/* 序号徽标：**浅染底 + 深档字**。原写成"辅助色实底 + 深字"时，深玫档（#B23A63）
+   上深字实测 2.00:1、淡紫档（#9A78FF）3.54:1 —— a11y-dom 会判为确证失败。
+   深色底配白字是另一个方向，但 02 · 2.6 / D9 只允许品牌亮粉档配深字，
+   产品辅助色深浅不一，统一走"浅染 + 深档"最稳（02 · 2.1.5 亮档只作填充）。 */
+.gm-pm-head .no{font-size:var(--lg-fs-caption);font-weight:600;color:var(--pm-ink,var(--mmh-rose-700));
+  background:var(--pm-tint,rgba(247,127,163,.14));border-radius:var(--lg-radius-pill);
+  padding:var(--lg-space-1) var(--lg-space-3);flex:none}
+/* ── 落地页 · Hero ─────────────────────────────────────────────────── */
+.gm-pm-hero{position:relative;overflow:hidden;display:grid;
+  grid-template-columns:minmax(0,1fr);gap:var(--lg-space-6);align-items:center}
+.gm-pm-hero::after{content:"";position:absolute;right:-12%;top:-46%;width:62%;height:150%;
+  background:var(--lg-glow-pink);pointer-events:none}
+.gm-pm-hero>*{position:relative}
+.gm-pm-hero h3{margin:0 0 var(--lg-space-2);font-size:var(--lg-fs-display);
+  line-height:var(--lg-lh-display);font-weight:600;letter-spacing:-.02em}
+.gm-pm-hero p{margin:0;font-size:var(--lg-fs-body);line-height:1.7;max-width:58ch}
+.gm-pm-hero .en{display:inline-block;font-size:var(--lg-fs-body-sm);color:var(--lg-text-secondary);
+  padding-left:var(--lg-space-3);border-left:2px solid var(--mmh-rose-500);margin-bottom:var(--lg-space-3)}
+
+.gm-pm-hero>*{position:relative}
+
+
+
+
+
+
+
+
+
+
+/* ── 按钮（03 · 3.2.4；每屏 Primary 唯一 —— 17 · 1.1.3）── */
+.gm-pm-btn{font-family:inherit;display:inline-flex;align-items:center;justify-content:center;
+  gap:var(--lg-space-2);height:40px;padding:0 var(--lg-space-5);border-radius:var(--lg-radius-pill);
+  font-size:var(--lg-fs-body-sm);font-weight:600;line-height:1;cursor:pointer;white-space:nowrap;
+  border:1px solid transparent;text-decoration:none;
+  transition:transform var(--lg-t-fast) var(--lg-ease-out),box-shadow var(--lg-t-base) var(--lg-ease-out)}
+.gm-pm-btn:active{transform:scale(.97)}
+.gm-pm-btn svg{width:16px;height:16px;flex:none;fill:none;stroke:currentColor;stroke-width:1.7;
+  stroke-linecap:round;stroke-linejoin:round}
+.gm-pm-btn--pri{background:var(--mmh-grad-action-hc);color:var(--lg-text-on-accent);
+  box-shadow:0 1px 2px rgba(178,58,99,.22),0 8px 20px rgba(240,127,163,.30);background-origin:border-box}
+.gm-pm-btn--pri:hover{box-shadow:0 2px 4px rgba(178,58,99,.24),0 12px 26px rgba(240,127,163,.38)}
+.gm-pm-btn--line{background:rgba(255,255,255,.55);color:var(--mmh-rose-700);
+  border:1px solid rgba(232,93,143,.45);box-shadow:var(--lg-shadow-xs)}
+.gm-pm-btn--line:hover{background:rgba(247,127,163,.10);border-color:rgba(232,93,143,.72)}
+
+/* 文字动作（15 · 15.1.2 辅助操作 + 17 · 17.2.3「行内动作优先文字链接」） */
+
+.gm-pm-act:hover{text-decoration:underline}
+.gm-pm-acts{display:inline-flex;align-items:center;justify-content:flex-end;
+  gap:var(--lg-space-3);flex-wrap:nowrap}
+.gm-pm-act{font-family:inherit;font-size:var(--lg-fs-caption);font-weight:500;line-height:1.5;
+  color:var(--lg-link);background:none;border:none;padding:0;cursor:pointer;white-space:nowrap}
+.gm-pm-act:hover{text-decoration:underline}
+.gm-pm-act[data-kind="collab"]{color:var(--lg-sem-special)}
+.gm-pm-act[disabled]{color:var(--lg-text-secondary);cursor:default;text-decoration:none}
+
+/* ── 区块（17 · 17.1.2：小节间 ≥24，大板块 32–40）── */
+.gm-pm-sec{margin-top:var(--lg-space-8)}
+.gm-pm-sec__h{display:flex;align-items:baseline;gap:var(--lg-space-3);flex-wrap:wrap;
+  margin-bottom:var(--lg-space-4)}
+.gm-pm-sec__h h3{margin:0;font-size:var(--lg-fs-section);line-height:var(--lg-lh-section);font-weight:600}
+.gm-pm-sec__h span{font-size:var(--lg-fs-caption);line-height:var(--lg-lh-caption);
+  color:var(--lg-text-secondary)}
+.gm-pm-grid{display:grid;gap:var(--lg-space-4)}
+.gm-pm-grid--2{grid-template-columns:repeat(2,minmax(0,1fr))}
+.gm-pm-grid--3{grid-template-columns:repeat(3,minmax(0,1fr))}
+.gm-pm-grid--4{grid-template-columns:repeat(4,minmax(0,1fr))}
+/* ⚠️ 轨道一律 minmax(0,·)：`1fr` 的自动最小值是 **min-content**，
+   而本模块左列含宽表格（表头 6 列），min-content 可到 700px+ ——
+   写成 `1.6fr 1fr` 时网格列会被表格撑开，页面横向溢出（实测移动端 +290~391px）。 */
+.gm-pm-grid--wide{grid-template-columns:minmax(0,1.6fr) minmax(0,1fr)}
+
+/* 价值卡：序号 + 标题 + 说明（17 · 17.3.1 组合顺序） */
+
+
+
+
+
+/* 功能架构：一级模块 + 二级功能 chips（数据来自 PRD 功能架构树） */
+
+
+
+
+
+/* ── 状态标签（14 · 4.4.4：色点 8px + caption 文本；15 · 15.5：六语义唯一一套；
+      14 · 4.4.3：标签文本 ≤6 字）颜色永不单独传义（14 · 4.4.1）。
+      淡底用 --lg-tint-base + 语义色低透明，不用 color-mix（02 · 2.1.9 实测会把小字压到 4.06:1）。 ── */
+.gm-pm-tag{display:inline-flex;align-items:center;gap:var(--lg-space-2);
+  padding:var(--lg-space-1) var(--lg-space-3);border-radius:var(--lg-radius-pill);
+  font-size:var(--lg-fs-caption);line-height:var(--lg-lh-caption);font-weight:500;white-space:nowrap}
+.gm-pm-tag i{width:8px;height:8px;border-radius:50%;background:currentColor;flex:none}
+.gm-pm-tag--positive{color:var(--lg-sem-positive);background:rgba(111,201,180,.16)}
+.gm-pm-tag--info{color:var(--lg-sem-info);background:rgba(109,158,255,.14)}
+.gm-pm-tag--attention{color:var(--lg-sem-attention);background:rgba(242,178,92,.18)}
+.gm-pm-tag--risk{color:var(--lg-sem-risk);background:rgba(239,106,123,.14)}
+.gm-pm-tag--neutral{color:var(--lg-sem-neutral);background:rgba(88,98,115,.10)}
+.gm-pm-tag--special{color:var(--lg-sem-special);background:rgba(154,120,255,.14)}
+/* 五色分级：色点用 02 · 2.10 专项色板，文字仍走 AA 深档（两者不同轴，不得混用六语义色） */
+.gm-pm-tag--m5{color:var(--lg-text-primary);background:rgba(255,255,255,.62)}
+.gm-pm-tag--m5 i{background:var(--m5)}
+.gm-pm-tag--m5[data-m5="1"]{--m5:var(--mmh-m5-m1)} .gm-pm-tag--m5[data-m5="1"]{color:#1F6B4F}
+.gm-pm-tag--m5[data-m5="2"]{--m5:var(--mmh-m5-m2)} .gm-pm-tag--m5[data-m5="2"]{color:#7A5F0D}
+.gm-pm-tag--m5[data-m5="3"]{--m5:var(--mmh-m5-m3)} .gm-pm-tag--m5[data-m5="3"]{color:#8D5A15}
+.gm-pm-tag--m5[data-m5="4"]{--m5:var(--mmh-m5-m4)} .gm-pm-tag--m5[data-m5="4"]{color:var(--lg-sem-risk)}
+.gm-pm-tag--m5[data-m5="5"]{--m5:var(--mmh-m5-m5)} .gm-pm-tag--m5[data-m5="5"]{color:var(--lg-sem-special)}
+
+/* ── 全生命周期轴（13 · 13.4；阶段色按 12.2.1，填充档取最近品牌 Token，
+      文字深档另取 —— 阶段色本身只做「已完成段渐变 + 当前段呼吸点」）── */
+
+
+
+/* 连接线：从节点右侧画到下一个节点左侧。⚠️ **最后一个节点必须去掉** ——
+   它后面没有节点，线会沿 `left:calc(50% + 14px)` 一直伸到自身右侧 36% 处，
+   把容器撑出横向溢出（实测 1440px 视口溢出 135px，page-qa 判 P1）。
+   首节点同理（前面无线），两条缺一不可。 */
+
+
+/* 已完成节点：品牌**主行动档**渐变 + 深字（D9 · 06 · 6.5.3 路径②：亮粉底禁白字，
+   白字实测 2.46–3.48:1）。已连线段的渐变只作装饰，不承载文字。 */
+
+
+
+
+
+@keyframes gmPmBreathe{0%,100%{transform:scale(1);opacity:.75}50%{transform:scale(1.34);opacity:0}}
+
+
+
+/* ── 工作台页面壳（17 · 17.3.4：顶栏 → 4 KPI → 左待处理表 + 右快捷工具/概览）── */
+.gm-pm-pcbar{display:flex;align-items:center;gap:var(--lg-space-3);flex-wrap:wrap;
+  padding:var(--lg-space-2) var(--lg-space-3);border-radius:var(--lg-radius-pill);
+  background:linear-gradient(160deg,rgba(255,255,255,.78),rgba(255,255,255,.52));
+  border:1px solid rgba(255,255,255,.85);box-shadow:var(--lg-glass-highlight),var(--lg-shadow-md);
+  -webkit-backdrop-filter:blur(20px) saturate(1.2);backdrop-filter:blur(20px) saturate(1.2);
+  background-origin:border-box;margin-bottom:var(--lg-space-4)}
+.gm-pm-pcbar__logo{display:inline-flex;align-items:center;gap:var(--lg-space-2);
+  font-size:var(--lg-fs-body);font-weight:600;color:var(--mmh-rose-700);flex:0 1 auto;min-width:0}
+.gm-pm-pcbar__logo img{width:26px;height:26px;border-radius:var(--lg-radius-pill);
+  object-fit:cover;flex:none}
+.gm-pm-pcbar__logo small{font-size:var(--lg-fs-caption);font-weight:500;
+  color:var(--lg-text-secondary);margin-left:var(--lg-space-1)}
+.gm-pm-search{margin-left:auto;display:flex;align-items:center;gap:var(--lg-space-2);
+  background:rgba(255,255,255,.60);border:1px solid var(--lg-divider);
+  border-radius:var(--lg-radius-control);padding:0 var(--lg-space-3);height:40px;
+  min-width:260px;flex:1 1 220px;color:var(--lg-text-secondary)}
+.gm-pm-search svg{width:16px;height:16px;flex:none;fill:none;stroke:currentColor;stroke-width:1.7}
+.gm-pm-search input{border:none;outline:none;background:transparent;font-family:inherit;
+  font-size:var(--lg-fs-body-sm);color:var(--lg-text-primary);flex:1;min-width:0}
+.gm-pm-search input:focus-visible{outline:var(--lg-ring-width) solid var(--lg-ring-color);
+  outline-offset:var(--lg-ring-offset);border-radius:var(--lg-radius-control)}
+.gm-pm-pcbar__meta{font-size:var(--lg-fs-caption);color:var(--lg-text-secondary);white-space:nowrap}
+.gm-pm-av{width:36px;height:36px;border-radius:50%;flex:none;display:inline-flex;align-items:center;
+  justify-content:center;font-size:var(--lg-fs-body-sm);font-weight:600;
+  color:var(--mmh-rose-700);background:linear-gradient(150deg,#FFDEE8,#FFF0F4)}
+
+/* 左业务菜单 + 右内容（iPad 8:4 与移动单列由 17 · 17.1.2 的断点接管） */
+.gm-pm-wb{display:grid;grid-template-columns:212px minmax(0,1fr);gap:var(--lg-space-4);align-items:start}
+.gm-pm-side{padding:var(--lg-space-3);border-radius:var(--lg-radius-card);
+  background:linear-gradient(160deg,rgba(255,255,255,.58),rgba(255,255,255,.30));
+  border:1px solid rgba(255,255,255,.70);box-shadow:var(--lg-glass-highlight),var(--lg-shadow-sm);
+  background-origin:border-box}
+.gm-pm-side h4{margin:0 0 var(--lg-space-2);font-size:var(--lg-fs-caption);
+  line-height:var(--lg-lh-caption);color:var(--lg-text-secondary);font-weight:600;
+  padding-left:var(--lg-space-3)}
+.gm-pm-side a{display:flex;align-items:center;gap:var(--lg-space-2);min-height:40px;
+  padding:0 var(--lg-space-3);border-radius:var(--lg-radius-control);text-decoration:none;
+  font-size:var(--lg-fs-body-sm);color:var(--lg-text-primary);position:relative}
+.gm-pm-side a:hover{background:rgba(255,255,255,.65)}
+/* 选中态 = 产品辅助色浅染 + 左侧 2px 色条（不是实心粉：实心留给主行动，17 · 1.1.3） */
+.gm-pm-side a[aria-current="true"]{background:var(--pm-tint,rgba(247,127,163,.14));font-weight:600}
+.gm-pm-side a[aria-current="true"]::before{content:"";position:absolute;left:0;top:50%;
+  transform:translateY(-50%);width:2px;height:20px;border-radius:2px;
+  background:var(--pm-hue,var(--mmh-rose-500))}
+.gm-pm-side a span{margin-left:auto;font-size:var(--lg-fs-caption);color:var(--lg-text-secondary);
+  font-variant-numeric:tabular-nums}
+
+/* KPI 行（17 · 17.3.4「4 KPI」；数字 02 · 2.2.3 num-lg + tabular-nums，单位不缩小主数字） */
+.gm-pm-kpis{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:var(--lg-space-4);
+  margin-bottom:var(--lg-space-4)}
+.gm-pm-kpi__l{font-size:var(--lg-fs-caption);line-height:var(--lg-lh-caption);
+  color:var(--lg-text-secondary);display:flex;align-items:center;gap:var(--lg-space-1)}
+.gm-pm-kpi__v{margin-top:var(--lg-space-2);font-size:var(--lg-fs-num-lg);line-height:var(--lg-lh-num-lg);
+  font-weight:600;font-variant-numeric:tabular-nums;color:var(--lg-text-primary)}
+.gm-pm-kpi__v.is-accent{color:var(--pm-ink,var(--mmh-rose-700))}
+.gm-pm-kpi__v.is-risk{color:var(--lg-sem-risk)} .gm-pm-kpi__v.is-att{color:var(--lg-sem-attention)}
+.gm-pm-kpi__v.is-info{color:var(--lg-sem-info)}
+.gm-pm-kpi__d{margin-top:var(--lg-space-1);font-size:var(--lg-fs-caption);
+  line-height:var(--lg-lh-caption);color:var(--lg-text-secondary)}
+
+/* 表格外层横滑（10 · 10.11.1；表格语义保留给读屏，不为横滑改 display） */
+.gm-pm-tblwrap{overflow-x:auto;-webkit-overflow-scrolling:touch}
+.gm-pm-tblfoot{display:flex;align-items:center;gap:var(--lg-space-2);justify-content:flex-end;
+  margin-top:var(--lg-space-3);font-size:var(--lg-fs-caption);color:var(--lg-text-secondary)}
+
+/* 价值卡下的二级功能 chips（与功能架构同一套 chip 配方，避免两套外观） */
+
+
+/* 卡内小节标题（h4）与 chip 列表（15 · 15.1.2 交付清单） */
+
+
+
+/* 表格外层横滑（10 · 10.11.1：宽表在容器内横滚，不改 <table> 的 display —— 后者会把
+   表格语义从无障碍树里抹掉，读屏只剩一串散字 TB-15-02）。外壳只在 ≤767 给了这条，
+   桌面档由本模块补齐。 */
+.gm-tbl-wrap{overflow-x:auto;-webkit-overflow-scrolling:touch}
+
+/* 队列 / 工具 / 概览 / 动态行 */
+.gm-pm-qr{display:flex;gap:var(--lg-space-2);flex-wrap:wrap;margin-bottom:var(--lg-space-3)}
+.gm-pm-list{margin:0;padding:0;list-style:none}
+.gm-pm-list li{display:flex;align-items:center;gap:var(--lg-space-3);
+  padding:var(--lg-space-2) 0;border-top:1px solid var(--lg-divider);
+  font-size:var(--lg-fs-body-sm);line-height:var(--lg-lh-body-sm)}
+.gm-pm-list li:first-child{border-top:none}
+.gm-pm-list li b{margin-left:auto;font-variant-numeric:tabular-nums;font-weight:600}
+/* ⚠️ 工具按钮是 `white-space:nowrap` + 左右 20px 内边距（内容盒 = 列宽 − 40px），
+   固定两列时：320 档列宽 119 → 内容盒 79px 装不下 84px 的「建立妇女档案」（顶出 5px）；
+   768 档右列更窄（列宽 112）时同样顶出 12px。改成按内容落列：≥300px 可容纳两列，否则单列。 */
+/* ── 窄屏表格配方（17 · 17.1.3）：窄屏/平板整行合并单元（≤900 生效）─────────────────
+   ⚠️ 为什么不是"表格转卡片"（`display:block`）：那会把 `<table>` 的语义整个丢掉 ——
+   读屏在窄屏就读不出"这是一张表"，本仓 a11y 门禁也不接受。
+   ⚠️ 为什么不是"隐藏中间列 + 摘要塞进首列"（试过，更糟）：首列被状态/操作两列挤到 ~118px，
+   摘要被 `overflow-wrap:anywhere` 折成 6 行，实测单行高 **611px**，5 行表 3000px 高，还留 152px 横向滚动。
+   最终做法：★ 每个数据行同时给出两套单元 —— 桌面用原列（`.gm-tbl__desk`），窄屏用
+   一个 `colspan` 合并单元（`.gm-tbl__mob`）承载"对象+状态 / 详情 / 操作"三段式 ★。
+   两套各自 `display` 互斥，任一视口下都只有一套在渲染（AT 不会读两遍），表格语义原样保留。
+   实测数据（加这条的原因）：模块页表格 375 档宽 748px、卡片内容宽仅 ~290px，
+   每看一行都要横向拖动，操作列默认在屏幕外；1024 档也还要滚 178px。 */
+.gm-tbl__mob{display:none}
+@media(max-width:900px){
+  .gm-tbl__desk{display:none}
+  .gm-tbl__mob{display:table-cell;white-space:normal;padding:12px 2px}
+  .gm-tbl__mob .r1{display:flex;align-items:center;gap:var(--lg-space-2);flex-wrap:wrap}
+  .gm-tbl__mob .r1 b{font-size:var(--lg-fs-body-sm);font-weight:600}
+  .gm-tbl__mob .r2{margin-top:4px;font-size:var(--lg-fs-caption);line-height:var(--lg-lh-caption);
+    color:var(--lg-text-secondary);overflow-wrap:anywhere}
+  .gm-tbl__mob .r3{margin-top:var(--lg-space-2);display:flex;gap:var(--lg-space-2);
+    justify-content:flex-end;flex-wrap:wrap}
+  .gm-tbl tbody tr{display:table-row}
+  /* 表头在窄屏隐藏：6 个表头的文字 + 每格 24px 内边距合计 400px，是表格在 320 档仍滚 126px 的
+     唯一来源（数据行已经是合并单元）。隐藏后由**行内自带列名标签**承担表头职责（自描述），
+     桌面档表头原样保留、`<th scope>` 关联不变。 */
+  .gm-tbl thead{display:none}
+  .gm-tbl__mob .r2 i{font-style:normal;color:var(--lg-text-secondary);margin-right:6px}
+  .gm-tbl th,.gm-tbl td{padding-left:6px;padding-right:6px}
+}
+
+.gm-pm-tools{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:var(--lg-space-2)}
+.gm-pm-tools .gm-pm-btn{width:100%}
+.gm-pm-feed li{align-items:flex-start}
+.gm-pm-feed .gm-pm-tag{flex:none}
+.gm-pm-feed span{color:var(--lg-text-secondary)}
+
+/* AI 边界提示条（13 · 13.5 医疗合规与视觉纪律：边界必须写清，且不靠颜色单独传义） */
+.gm-pm-note{display:flex;gap:var(--lg-space-3);align-items:flex-start;
+  padding:var(--lg-space-3) var(--lg-space-4);border-radius:var(--lg-radius-control);
+  background:rgba(255,255,255,.62);border:1px solid var(--lg-divider);
+  font-size:var(--lg-fs-caption);line-height:1.75;color:var(--lg-text-secondary)}
+.gm-pm-note b{color:var(--lg-text-primary)}
+.gm-pm-note--warn{background:rgba(242,178,92,.16);border-color:rgba(242,178,92,.35)}
+.gm-pm-note i{width:8px;height:8px;border-radius:50%;flex:none;margin-top:6px;
+  background:var(--lg-sem-attention)}
+.gm-pm-note--info i{background:var(--lg-sem-info)}
+
+/* 页脚（17 · 17.1.1 ⑥）：口径 + 示意数据声明 + 章节链接 */
+/* ── 响应式（17 · 17.1.2：iPad 8:4 分栏 / Mobile 单列）。
+   断点只用收敛档 1024 / 767（audit.py breakpoint_reg 的白名单），不新起 1023/479 这类
+   相邻值 —— 相邻断点会让"同一设备不同页面换档不同"，是本仓 E 审查收口过的缺陷类。 ── */
+
+
+/* 07 · 7.6 / 无障碍：系统开启"减弱动态效果"后只保留最简反馈 */
+
+.gm-pm-kpi{font-family:inherit;text-align:left;cursor:pointer;width:100%;
+  transition:box-shadow var(--lg-t-base) var(--lg-ease-out),transform var(--lg-t-fast) var(--lg-ease-out)}
+.gm-pm-kpi:hover{box-shadow:var(--lg-glass-highlight),var(--lg-shadow-md)}
+.gm-pm-kpi:active{transform:scale(.99)}
+.gm-pm-kpi[aria-pressed="true"]{border-color:var(--pm-hue,var(--mmh-rose-500));
+  box-shadow:var(--lg-glass-highlight),var(--lg-shadow-md)}
+
+/* ── 首页 · 产品卡（6 个产品入口）────────────────────────────────────── */
+.gm-pm-prods{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:var(--lg-space-4)}
+.gm-pm-prod{position:relative;overflow:hidden;display:flex;flex-direction:column}
+/* 产品卡顶部一条产品色（辅助色只作场景标识；2px 落在 02 · 2.7.1 的强调档内） */
+.gm-pm-prod::before{content:"";position:absolute;left:0;right:0;top:0;height:2px;
+  background:var(--pm-hue,var(--mmh-rose-500))}
+.gm-pm-prod__hd{display:flex;align-items:center;gap:var(--lg-space-3);margin-bottom:var(--lg-space-3)}
+.gm-pm-prod__no{flex:none;width:36px;height:36px;border-radius:var(--lg-radius-btn-sm);
+  display:inline-flex;align-items:center;justify-content:center;font-size:var(--lg-fs-body-sm);
+  font-weight:600;color:var(--pm-ink,var(--mmh-rose-700));background:var(--pm-tint,rgba(247,127,163,.14))}
+.gm-pm-prod__hd b{display:block;font-size:var(--lg-fs-body);line-height:var(--lg-lh-body);font-weight:600}
+.gm-pm-prod__hd small{display:block;font-size:var(--lg-fs-caption);color:var(--lg-text-secondary)}
+.gm-pm-prod p{margin:0 0 var(--lg-space-3);font-size:var(--lg-fs-caption);line-height:1.75;
+  color:var(--lg-text-secondary);
+  /* 产品定位是 PRD 原文，整段保留（title 里有全文），但卡片上最多显示两行 ——
+     目录页要"扫得动"，6 张卡各 5 行定位会把页面拉得很长、也看不出重点。 */
+  display:-webkit-box;-webkit-box-orient:vertical;-webkit-line-clamp:2;overflow:hidden}
+.gm-pm-prod__meta{display:flex;flex-wrap:wrap;gap:var(--lg-space-2);margin-bottom:var(--lg-space-4)}
+.gm-pm-prod__meta span{font-size:var(--lg-fs-caption);line-height:var(--lg-lh-caption);
+  color:var(--lg-text-secondary);padding:var(--lg-space-1) var(--lg-space-3);
+  border-radius:var(--lg-radius-pill);background:rgba(255,255,255,.55);border:1px solid var(--lg-divider)}
+.gm-pm-prod__cta{margin-top:auto}
+
+/* ── 首页 · 互联链路（PRD §四「转入/贯通」把 6 个产品串起来；链路本身即可点导航）── */
+.gm-pm-chain{list-style:none;margin:0;padding:0}
+.gm-pm-chain li{display:flex;gap:var(--lg-space-3);align-items:flex-start;
+  padding:var(--lg-space-3) 0;border-top:1px solid var(--lg-divider)}
+.gm-pm-chain li:first-child{border-top:none}
+.gm-pm-chain .n{flex:none;width:26px;height:26px;border-radius:50%;display:inline-flex;
+  align-items:center;justify-content:center;font-size:var(--lg-fs-caption);font-weight:600;
+  color:var(--lg-text-on-accent);background:var(--mmh-grad-action-hc);background-origin:border-box}
+.gm-pm-chain .m{min-width:0}
+.gm-pm-chain b{display:block;font-size:var(--lg-fs-body-sm);line-height:var(--lg-lh-body-sm);font-weight:600}
+.gm-pm-chain span{font-size:var(--lg-fs-caption);color:var(--lg-text-secondary)}
+.gm-pm-chain a{color:var(--lg-link);text-decoration:none;font-weight:600}
+.gm-pm-chain a:hover{text-decoration:underline}
+/* 表格单元格里的文字链接（数据主责矩阵 → 该产品工作台）。
+   ⚠️ 移动端必须给足热区：`td > a` 的实测盒子只有 56×17，page-qa 会判 P1 touch-target
+   （10 · 10.4）。把盒子抬到 24 高（表内仍落在 44–52 行高档内），再用 ::after 扩到 44×44。 */
+.gm-pm-link{color:var(--lg-link);text-decoration:none;font-weight:600}
+.gm-pm-link:hover{text-decoration:underline}
+
+/* ── 筛选 chips（列表页工具行，17 · 17.3.4）：点选筛选待处理清单 ── */
+.gm-pm-filters{display:flex;align-items:center;gap:var(--lg-space-2);flex-wrap:wrap;
+  margin-bottom:var(--lg-space-3)}
+.gm-pm-filter{font-family:inherit;font-size:var(--lg-fs-caption);line-height:var(--lg-lh-caption);
+  font-weight:500;cursor:pointer;display:inline-flex;align-items:center;gap:var(--lg-space-2);
+  padding:var(--lg-space-1) var(--lg-space-3);border-radius:var(--lg-radius-pill);
+  background:rgba(255,255,255,.55);border:1px solid var(--lg-divider);color:var(--lg-text-secondary)}
+.gm-pm-filter:hover{background:rgba(255,255,255,.85)}
+.gm-pm-filter[aria-pressed="true"]{background:var(--mmh-grad-action-hc);color:var(--lg-text-on-accent);
+  border-color:transparent;font-weight:600;box-shadow:0 1px 2px rgba(178,58,99,.22);
+  background-origin:border-box}
+.gm-pm-filter__n{font-variant-numeric:tabular-nums}
+.gm-pm-count{margin-left:auto;font-size:var(--lg-fs-caption);color:var(--lg-text-secondary)}
+.gm-pm-empty{padding:var(--lg-space-5);text-align:center;font-size:var(--lg-fs-body-sm);
+  color:var(--lg-text-secondary)}
+/* 被筛掉的行：用 class 而不是 [hidden] —— 任何 display 规则都可能压过 UA 的 [hidden] */
+.gm-pm-off{display:none}
+
+/* 队列行可点：按该行语义筛选待处理清单（把"风险队列"与"待处理清单"连成一条动线） */
+.gm-pm-qbtn{display:flex;align-items:center;gap:var(--lg-space-3);width:100%;
+  font-family:inherit;font-size:var(--lg-fs-body-sm);line-height:var(--lg-lh-body-sm);
+  color:var(--lg-text-primary);background:none;border:none;cursor:pointer;text-align:left;
+  padding:var(--lg-space-2) 0;border-top:1px solid var(--lg-divider)}
+.gm-pm-qbtn:hover{color:var(--mmh-rose-700)}
+.gm-pm-qbtn b{margin-left:auto;font-variant-numeric:tabular-nums;font-weight:600;
+  color:var(--lg-text-primary)}
+.gm-pm-qbtn[aria-pressed="true"]{color:var(--mmh-rose-700);font-weight:600}
+
+/* ── 响应式（17 · 17.1.2：iPad 8:4 分栏 / Mobile 单列）。
+   断点只用收敛档 1024 / 767（audit.py breakpoint_reg 白名单），不新起 1023/479 这类相邻值。 ── */
+@media (max-width:1024px){
+  .gm-pm-hero{grid-template-columns:minmax(0,1fr)}
+  .gm-pm-prods{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .gm-pm-wb{grid-template-columns:minmax(0,1fr)}
+  .gm-pm-side{display:flex;flex-wrap:wrap;gap:var(--lg-space-1);align-items:center}
+  .gm-pm-side h4{margin:0 var(--lg-space-2) 0 0;padding-left:0}
+  .gm-pm-side a{min-height:36px;padding:0 var(--lg-space-3)}
+  .gm-pm-side a[aria-current="true"]::before{display:none}
+}
+/* ⚠️ 主表要能用，就得在窄平板/小桌面先把两列收成一列：
+   `.gm-tbl td` 的 `white-space:nowrap` 是设计系统的既有裁决（page-qa 的 P2 规则要求表格行高 44–52px，
+   单元格折行会顶破这一档）——所以**不能靠折行**缩短表格。实测数据：
+   1440 档卡片 652px、表格 772px（滚 120px）；1024 档卡片 554px（滚 218px）；768 档卡片 396px（滚 352px）。
+   两列布局在主表侧本来就太窄，把它提前收到 1200 就不需要横向拖动了。 */
+@media (max-width:1200px){
+  .gm-pm-grid--wide{grid-template-columns:minmax(0,1fr)}
+}
+/* 大桌面：主表侧的列比再放宽一档 —— 实测 1440 档「今日待处理」6 列表需要 690px，
+   1.6fr/1fr 只给到 652px（还差 38px 横向滚动）。列比放宽后不需要拖动，侧卡仍有 380px+。 */
+/* 大桌面：两列布局给主表列**最小宽度保障** —— 实测「今日待处理」5 列表需要 726px，
+   纯 `1.85fr` 在 1440 只给到 690px（滚 36px）。`minmax(780px, …)` 保证主表侧永远够宽（卡片内边距 2×20px 要算进去），
+   侧卡仍有 400px+；容器不够宽时下面的断点会把两列收成一列，不会溢出。 */
+@media (min-width:1280px){
+  .gm-pm-grid--wide{grid-template-columns:minmax(780px,1.85fr) minmax(0,1fr)}
+}
+@media (max-width:1200px){
+  .gm-pm-grid--wide{grid-template-columns:minmax(0,1fr)}
+}
+@media (max-width:900px){
+  /* 768~900 档：整宽后仍差几十像素，靠收单元格内边距补上 */
+  .gm-tbl th,.gm-tbl td{padding-left:8px;padding-right:8px}
+}
+@media (max-width:767px){
+  .gm-pm{padding:var(--lg-space-4) var(--lg-space-4) var(--lg-space-8)}
+  .gm-pm-prods,.gm-pm-grid--2,.gm-pm-grid--wide{grid-template-columns:minmax(0,1fr)}
+  .gm-pm-kpis{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .gm-pm-head h2{font-size:var(--lg-fs-section);line-height:var(--lg-lh-section)}
+  .gm-pm-hero h3{font-size:var(--lg-fs-title);line-height:var(--lg-lh-title)}
+  /* 顶栏品牌块：`flex:none` + 长机构名会把顶栏撑到比视口还宽（实测 375px 下 +290~391px 溢出）。
+     小屏改为可收缩 + 机构名换行到独立一行。 */
+  .gm-pm-pcbar__logo{flex:0 1 auto;min-width:0;flex-wrap:wrap}
+  .gm-pm-pcbar__logo small{width:100%;margin-left:0;line-height:1.5}
+  /* 页脚内联链接：11 · 11.2.18 要求行内链接热区高 ≥24 */
+  /* 表格内文字链接：盒子抬到 24 高，并由 ::after 扩到 44×44 热区（10 · 10.4） */
+  .gm-pm-link{position:relative;display:inline-flex;align-items:center;min-height:24px}
+  /* 10 · 10.4：≤767px 可点目标热区 ≥44×44（视觉盒子不动，::after 扩热区）。
+     ⚠️ 选择器与按钮集合必须同步维护：漏一处即"热区静默失联"。 */
+  .gm-pm-btn,.gm-pm-act,.gm-pm-filter,.gm-pm-side a,.gm-pm-qbtn,.gm-pm-chain a,.gm-pm-link{position:relative}
+  .gm-pm-btn::after,.gm-pm-act::after,.gm-pm-filter::after,.gm-pm-side a::after,
+  .gm-pm-qbtn::after,.gm-pm-chain a::after,.gm-pm-link::after{
+    content:"";position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);
+    width:100%;min-width:44px;height:100%;min-height:44px}
+  /* 搜索框：<input> 是替换元素，::after 不渲染，只能把盒子本身做够 44（10 · 10.4） */
+  .gm-pm-search,.gm-pm-search input{height:44px}
+}
+/* 07 · 7.6 / 无障碍：系统开启"减弱动态效果"后只保留最简反馈 */
+@media (prefers-reduced-motion:reduce){
+  .gm-pm-view.is-on{animation:none}
+}
+
+.gm-tbl{width:100%;border-collapse:collapse;font-size:14px;line-height:20px;
+  color:var(--lg-text-primary,#343A46);font-variant-numeric:tabular-nums}
+.gm-tbl caption{text-align:left;font-size:12px;line-height:16px;color:var(--lg-text-secondary,#4F5B6E);padding:0 0 8px}
+.gm-tbl th{text-align:left;font-size:14px;line-height:20px;font-weight:600;
+  color:var(--lg-text-secondary,#4F5B6E);padding:12px 14px;white-space:nowrap;
+  border-bottom:var(--lg-border-hairline,1px) solid var(--lg-divider,rgba(58,52,84,.10))}
+.gm-tbl td{padding:12px 14px;vertical-align:middle;white-space:nowrap;
+  border-bottom:var(--lg-border-hairline,1px) solid var(--lg-divider,rgba(58,52,84,.10))}
+.gm-tbl td>span,.gm-tbl td>div,.gm-tbl td>a{flex-wrap:nowrap}
+.gm-tbl tbody tr{transition:background 140ms ease}
+.gm-tbl tbody tr:hover{background:rgba(255,255,255,.5)}
+.gm-tbl thead tr:hover{background:none}
+.gm-tbl .col-ops,.gm-tbl th.col-ops{text-align:right}
+.gm-tbl .ops{display:inline-flex;align-items:center;justify-content:flex-end;gap:12px;flex-wrap:nowrap}
+.gm-tbl .ops a,.gm-tbl .ops button{font-size:13px;line-height:18px}
+.gm-tbl .ops a{color:var(--lg-link,#B23A63);text-decoration:none;font-weight:500}
+.gm-tbl .ops a:hover{text-decoration:underline}
+.gm-tbl td .badge,.gm-tbl td .tg,.gm-tbl td .tag,.gm-tbl td .status-tag{
+  padding-top:3px;padding-bottom:3px;line-height:18px;font-size:12px}
+.gm-tbl td .av{width:26px;height:26px;font-size:12px}
+.gm-tbl td .btn.mini{height:26px;padding:0 12px;font-size:12px;border-radius:16px}
+.gm-tbl td .lg-mark{width:26px;height:26px;border-radius:12px;object-fit:cover;flex:none}
+@media (max-width:1023px){.gm-tbl th,.gm-tbl td{padding-left:12px;padding-right:12px}.gm-tbl-wrap{overflow-x:auto;-webkit-overflow-scrolling:touch}}
+[data-theme="dark"] .gm-tbl tbody tr:hover{background:rgba(255,255,255,.06)}
+.gm-sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;
+  clip:rect(0 0 0 0);white-space:nowrap;border:0}
+table.gm-sr-only{table-layout:fixed;pointer-events:none}
+.gm-sr-only caption{position:absolute;width:1px;height:1px;overflow:hidden}
+.gm-sr-only th,.gm-sr-only td{white-space:nowrap;overflow:hidden}
+/* ══════════════════════════════════════════════════════════════════════════
+   应用外壳增量（侧栏 / 顶栏 / 视图 / 时间线 / 对话 / 弹层 / 曲线）
+   形态对齐 fuyouaicansai/goodmom-redesign.html：可收起侧栏 + 顶栏模式 + 单文件。
+   ══════════════════════════════════════════════════════════════════════════ */
+/* ══ 页面背景与画布（用户报"背景后面留有很大一条白色缝隙"的真实成因）══════════
+   ⚠️ 这里原来**两件事都没做**：
+     ① 没有重置 UA 默认的 `body{margin:8px}` —— 整个应用被内缩 8px，四周那圈没有任何元素绘制的
+        区域直接露出**默认白画布**（实测左右各 8px 竖向白条）；
+     ② `html` 没有背景（`rgba(0,0,0,0)`）—— 白画布没有任何兜底。
+   再叠上 `.gm-app{min-height:100vh}`，文档高度恒为 100vh+16px，**底部固定留一条 8px 白缝**
+   （1440 视口实测 docH=1007 / body 991 / 视口 900）。
+   修法：html 上画同一套玻璃底（根元素背景会传播到画布，连过度滚动区一起覆盖），body 归零外边距。 */
+html{background:linear-gradient(165deg,#FDF2EE,#F6E2DB 55%,#E6CFC6)}
+body{margin:0}
+
+.gm-app{position:relative;min-height:100vh;padding:var(--lg-space-4) var(--lg-space-5) var(--lg-space-10);
+  font-family:var(--lg-font-sans);color:var(--lg-text-primary);line-height:1.6;-webkit-font-smoothing:antialiased;
+  background:
+    radial-gradient(1000px 600px at 90% -8%,rgba(247,127,163,.20),transparent 65%),
+    radial-gradient(900px 560px at -6% 24%,rgba(182,154,255,.15),transparent 65%),
+    radial-gradient(700px 500px at 30% 110%,rgba(255,255,255,.55),transparent 70%),
+    linear-gradient(165deg,#FDF2EE,#F6E2DB 55%,#E6CFC6);
+  transition:padding var(--lg-t-base) var(--lg-ease-out)}
+.gm-app__wrap{position:relative;z-index:1;max-width:1220px;margin:0 auto}
+@media (min-width:1600px){.gm-app__wrap{max-width:1400px}}
+body.mode-sider .gm-app{padding-left:calc(252px + var(--lg-space-6))}
+body.mode-sider.collapsed .gm-app{padding-left:calc(80px + var(--lg-space-6))}
+
+/* ── 侧栏（03 · 3.4.1 侧栏模式）：品牌 + 分组菜单 + 徽标 + 用户区，可收起 ── */
+.gm-side{position:fixed;left:var(--lg-space-4);top:var(--lg-space-4);bottom:var(--lg-space-4);width:252px;z-index:70;
+  display:none;flex-direction:column;gap:2px;padding:var(--lg-space-3);border-radius:var(--lg-radius-card);
+  overflow-y:auto;background:linear-gradient(160deg,rgba(255,255,255,.64),rgba(255,255,255,.30) 60%,rgba(255,255,255,.44));
+  border:1px solid rgba(255,255,255,.85);box-shadow:var(--lg-glass-highlight),var(--lg-shadow-lg);
+  -webkit-backdrop-filter:blur(20px) saturate(1.2);backdrop-filter:blur(20px) saturate(1.2);background-origin:border-box}
+body.mode-sider .gm-side{display:flex}
+body.mode-sider.collapsed .gm-side{width:80px;padding:var(--lg-space-3) var(--lg-space-2)}
+.gm-side__brand{display:flex;align-items:center;gap:var(--lg-space-2);
+  padding:var(--lg-space-1) var(--lg-space-1) var(--lg-space-3);
+  border-bottom:1px dashed rgba(58,52,84,.08);margin-bottom:var(--lg-space-2)}
+/* 顶栏"业务菜单"下拉：仅窄屏显示（≤1280 侧栏被隐藏，它是进业务模块页的唯一入口） */
+.gm-navm{position:relative;display:none}
+/* 高度 ≥44：窄屏（≤1280）它是唯一模块入口，热区必须够（page-qa P1 守门，实测 36px 被抓） */
+.gm-navm__btn{font-family:inherit;display:inline-flex;align-items:center;gap:6px;height:44px;padding:0 14px;
+  border-radius:var(--lg-radius-pill);border:1px solid rgba(58,52,84,.14);background:rgba(255,255,255,.72);
+  color:var(--lg-text-primary);font-size:var(--lg-fs-body-sm);font-weight:600;cursor:pointer}
+.gm-navm__btn[aria-expanded="true"]{border-color:var(--mmh-rose-500);background:#FFF}
+.gm-navm__n{font-style:normal;font-size:var(--lg-fs-caption);font-weight:600;color:var(--mmh-rose-700);
+  background:rgba(247,127,163,.16);border-radius:var(--lg-radius-pill);padding:1px 7px}
+.gm-navm__panel{position:absolute;right:0;top:calc(100% + 8px);z-index:120;min-width:236px;max-height:60vh;
+  overflow-y:auto;padding:var(--lg-space-3);border-radius:var(--lg-radius-card);
+  border:1px solid rgba(255,255,255,.85);background:linear-gradient(160deg,rgba(255,255,255,.96),rgba(255,255,255,.88));
+  box-shadow:var(--lg-shadow-lg);background-origin:border-box}
+.gm-navm__grp{display:flex;flex-direction:column;gap:2px}
+.gm-navm__grp+.gm-navm__grp{margin-top:var(--lg-space-2);padding-top:var(--lg-space-2);
+  border-top:1px solid var(--lg-divider)}
+.gm-navm__grp b{font-size:var(--lg-fs-caption);color:var(--lg-text-secondary);font-weight:600;padding:2px 6px}
+.gm-navm__it{font-family:inherit;text-align:left;padding:9px 10px;border:none;background:none;border-radius:var(--lg-radius-chip);
+  font-size:var(--lg-fs-body-sm);color:var(--lg-text-primary);cursor:pointer;min-height:44px}
+.gm-navm__it:hover,.gm-navm__it.is-on{background:var(--mmh-grad-action-hc);color:var(--lg-text-on-accent);font-weight:600}
+@media (max-width:1280px){
+  /* ⚠️ 顶栏必须自己带层叠上下文：卡片（`.gm-pm-card`）是定位元素、z-index:auto，
+     与顶栏同层时按 DOM 顺序**盖在展开的面板上**（实测窄屏点下拉项被 KPI 卡拦截）。
+     顶栏是文档流里的第一个兄弟元素，置于其后即可稳定压住内容。
+     ⚠️ 这条**必须写在 CSS 最末**：`.gm-top{position:static}` 在后面的 ≤1024 断点里，
+     同特异性下后者胜 —— 写在前面等于没写（实测 600 档顶栏仍是 static、面板被卡片盖住）。 */
+  .gm-navm{display:inline-flex}
+  .gm-tabs{order:3;width:100%;margin-left:0;flex-wrap:nowrap;overflow-x:auto}
+}
+@media (min-width:1281px){.gm-navm{display:none}}
+
+/* 模块页标题区的一句话说明（模块"是什么"），以及不可点的聚合统计卡 */
+.gm-pm-head__d{margin:6px 0 0;font-size:var(--lg-fs-body-sm);line-height:var(--lg-lh-body-sm);
+  color:var(--lg-text-secondary);max-width:72ch}
+/* ⚠️ 这里必须显式声明 box-sizing：KPI 卡有一条 `width:100%`（来自工作台的按钮版），
+   而 **按钮的 UA 默认是 border-box、div 不是** —— 于是"不可点的统计卡"（div）算出
+   136 + 40(padding) + 2(border) = 178px，比栅格轨道宽 42px，直接把页面顶出横向滚动
+   （实测 p01 两癌筛查 320 档溢出 26px、p06 六个模块页在 1440 档也溢出 22px）。
+   独立页没有全局 `*{box-sizing}` 重置，所以这一类"给 div 加 width:100%" 的写法都要自己带上。 */
+.gm-pm-kpi{box-sizing:border-box}
+.gm-pm-kpi.is-static{cursor:default}
+.gm-pm-kpi.is-static:hover{box-shadow:var(--lg-glass-highlight),var(--lg-shadow-sm)}
+.gm-pm-kpi.is-static:active{transform:none}
+
+.gm-side__brand b{display:block;font-size:var(--lg-fs-body-sm);line-height:1.35;color:var(--mmh-rose-700)}
+.gm-side__brand small{display:block;font-size:var(--lg-fs-caption);color:var(--lg-text-secondary)}
+.gm-side__gt{font-size:var(--lg-fs-caption);letter-spacing:.08em;color:var(--lg-text-secondary);
+  padding:var(--lg-space-2) var(--lg-space-3) var(--lg-space-1)}
+.nv{display:flex;align-items:center;gap:var(--lg-space-2);width:100%;min-height:44px;cursor:pointer;
+  font-family:inherit;font-size:var(--lg-fs-body-sm);font-weight:500;color:var(--lg-text-secondary);
+  border:none;border-radius:var(--lg-radius-control);padding:0 var(--lg-space-3);text-align:left;background:transparent;
+  transition:background var(--lg-t-fast) var(--lg-ease-out),color var(--lg-t-fast) var(--lg-ease-out)}
+.nv svg{width:17px;height:17px;flex:none;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+.nv:hover{background:rgba(255,255,255,.65);color:var(--lg-text-primary)}
+.nv.is-on{background:var(--mmh-grad-action-hc);color:var(--lg-text-on-accent);font-weight:600;
+  box-shadow:0 8px 18px rgba(240,127,163,.30);background-origin:border-box}
+.nv .bdg{margin-left:auto;min-width:20px;height:20px;padding:0 var(--lg-space-1);display:inline-flex;
+  align-items:center;justify-content:center;border-radius:var(--lg-radius-pill);font-size:var(--lg-fs-caption);
+  font-weight:600;color:var(--mmh-rose-700);background:rgba(255,255,255,.9);border:1px solid rgba(232,93,143,.25)}
+.nv.is-on .bdg{color:var(--mmh-rose-700);background:#FFFFFF;border-color:#FFFFFF}
+.gm-side__foot{margin-top:auto;padding-top:var(--lg-space-3);border-top:1px dashed rgba(58,52,84,.08);
+  display:flex;align-items:center;gap:var(--lg-space-2)}
+.gm-side__foot .who{flex:1;min-width:0}
+.gm-side__foot .who b{display:block;font-size:var(--lg-fs-caption);line-height:1.3}
+.gm-side__foot .who span{font-size:var(--lg-fs-caption);color:var(--lg-text-secondary)}
+body.mode-sider.collapsed .gm-side__brand div,body.mode-sider.collapsed .gm-side__gt,
+body.mode-sider.collapsed .nv span,body.mode-sider.collapsed .nv .bdg,
+body.mode-sider.collapsed .gm-side__foot .who{display:none}
+body.mode-sider.collapsed .nv{justify-content:center;padding:0}
+body.mode-sider.collapsed .gm-side__brand{justify-content:center;border-bottom:none}
+.gm-iconb{width:32px;height:32px;flex:none;display:inline-flex;align-items:center;justify-content:center;cursor:pointer;
+  border-radius:var(--lg-radius-btn-sm);border:1px solid var(--lg-divider);background:rgba(255,255,255,.6);
+  color:var(--lg-text-secondary)}
+.gm-iconb:hover{background:rgba(255,255,255,.95)}
+.gm-iconb svg{width:15px;height:15px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+
+/* ── 顶栏（吸顶胶囊）：品牌 + 页签 + 侧栏/顶栏切换 ── */
+.gm-top{position:sticky;top:var(--lg-space-3);z-index:60;display:flex;align-items:center;gap:var(--lg-space-3);
+  flex-wrap:wrap;padding:var(--lg-space-2) var(--lg-space-3);border-radius:var(--lg-radius-pill);
+  margin-bottom:var(--lg-space-4);background:linear-gradient(160deg,rgba(255,255,255,.80),rgba(255,255,255,.54));
+  border:1px solid rgba(255,255,255,.85);box-shadow:var(--lg-glass-highlight),var(--lg-shadow-md);
+  -webkit-backdrop-filter:blur(20px) saturate(1.2);backdrop-filter:blur(20px) saturate(1.2);background-origin:border-box}
+.gm-top__brand{display:flex;align-items:center;gap:var(--lg-space-2);font-size:var(--lg-fs-body-sm);
+  font-weight:600;color:var(--mmh-rose-700);min-width:0;flex:0 1 auto}
+.gm-top__brand img{width:28px;height:28px;border-radius:var(--lg-radius-btn-sm);object-fit:cover;flex:none}
+.gm-tabs{display:flex;gap:var(--lg-space-1);flex-wrap:wrap}
+.gm-tab{font-family:inherit;font-size:var(--lg-fs-caption);font-weight:500;color:var(--lg-text-secondary);cursor:pointer;
+  padding:0 var(--lg-space-3);min-height:32px;border-radius:var(--lg-radius-pill);white-space:nowrap;
+  background:rgba(255,255,255,.5);border:1px solid var(--lg-divider)}
+.gm-tab:hover{background:rgba(255,255,255,.9)}
+.gm-tab.is-on{background:var(--mmh-grad-action-hc);color:var(--lg-text-on-accent);border-color:transparent;
+  font-weight:600;box-shadow:0 1px 2px rgba(178,58,99,.22);background-origin:border-box}
+/* 导航形态（侧栏 / 顶栏）固定在顶栏最右侧：它是视图偏好，不是主内容。 */
+.gm-seg{margin-left:auto;display:inline-flex;gap:2px;padding:2px;border-radius:var(--lg-radius-pill);background:rgba(255,255,255,.5);
+  border:1px solid var(--lg-divider);flex:none}
+.gm-seg button{font-family:inherit;font-size:var(--lg-fs-caption);color:var(--lg-text-secondary);cursor:pointer;
+  border:none;background:none;padding:0 var(--lg-space-3);min-height:32px;border-radius:var(--lg-radius-pill)}
+.gm-seg button.is-on{background:var(--mmh-grad-action-hc);color:var(--lg-text-on-accent);font-weight:600;
+  background-origin:border-box}
+body.mode-sider .gm-tabs{display:none}
+body.mode-sider.collapsed .gm-top__brand span{display:none}
+
+/* ── 视图内排版块 ── */
+.gm-sec{margin-top:var(--lg-space-8)}
+.gm-sec__h{display:flex;align-items:baseline;gap:var(--lg-space-3);flex-wrap:wrap;margin-bottom:var(--lg-space-4)}
+.gm-sec__h h3{margin:0;font-size:var(--lg-fs-section);line-height:var(--lg-lh-section);font-weight:600}
+.gm-sec__h span{font-size:var(--lg-fs-caption);color:var(--lg-text-secondary)}
+.gm-2{display:grid;gap:var(--lg-space-4);grid-template-columns:minmax(0,1.6fr) minmax(0,1fr)}
+.gm-2e{display:grid;gap:var(--lg-space-4);grid-template-columns:repeat(2,minmax(0,1fr))}
+.gm-3{display:grid;gap:var(--lg-space-4);grid-template-columns:repeat(3,minmax(0,1fr))}
+
+/* 档案指标（caption 键 + body-sm 值） */
+/* 对象卡头（档案 / 详情）：头像 + 名称 + 档案信息。
+   ⚠️ 不复用 `.gm-brand`：品牌锁版是"logo + 品牌名 + 系统名"的语义，
+   对象卡头用的是头像与对象名，混用会让对象名继承品牌色（也会让读屏读出错误的层级）。 */
+.gm-obj{display:flex;align-items:center;gap:var(--lg-space-3);min-width:0}
+.gm-obj__t{display:flex;flex-direction:column;line-height:1.35;min-width:0}
+.gm-obj__t strong{font-size:var(--lg-fs-body);font-weight:600;color:var(--lg-text-primary)}
+.gm-obj__t small{font-size:var(--lg-fs-caption);color:var(--lg-text-secondary)}
+.gm-obj__ln{font-size:var(--lg-fs-caption);color:var(--lg-text-secondary)}
+
+.gm-kv{display:grid;gap:var(--lg-space-3) var(--lg-space-4);grid-template-columns:repeat(2,minmax(0,1fr))}
+.gm-kv>div{min-width:0}
+.gm-kv dt{font-size:var(--lg-fs-caption);line-height:var(--lg-lh-caption);color:var(--lg-text-secondary)}
+/* ⚠️ 档案「关键指标」的值含「128（风险分级 46 · 随访 52 · 报告 8）」这类长串，
+   不允许断行时 320 档顶出内容盒 7px（Range 实测文本宽 > 内容盒）。 */
+.gm-kv__sub{font-weight:400;color:var(--lg-text-secondary)}
+.gm-kv dd{overflow-wrap:anywhere;margin:2px 0 0;font-size:var(--lg-fs-body-sm);line-height:var(--lg-lh-body-sm);font-weight:600;
+  overflow-wrap:anywhere}
+
+/* 时间线（健康事件 / 证据链 / 随访计划）：13 · 13.4 的竖版轴 */
+.gm-tl{list-style:none;margin:0;padding:0}
+.gm-tl li{position:relative;padding:0 0 var(--lg-space-4) var(--lg-space-6);
+  border-left:2px solid var(--lg-divider);margin-left:6px}
+.gm-tl li:last-child{border-left-color:transparent;padding-bottom:0}
+.gm-tl li::before{content:"";position:absolute;left:-7px;top:4px;width:12px;height:12px;border-radius:50%;
+  background:#FFFFFF;border:2px solid var(--mmh-rose-500)}
+.gm-tl li[data-tone="positive"]::before{border-color:var(--lg-sem-positive);background:var(--lg-sem-positive)}
+.gm-tl li[data-tone="attention"]::before{border-color:var(--lg-sem-attention);background:var(--lg-sem-attention)}
+.gm-tl li[data-tone="risk"]::before{border-color:var(--lg-sem-risk);background:var(--lg-sem-risk)}
+.gm-tl .d{font-size:var(--lg-fs-caption);color:var(--lg-text-secondary)}
+.gm-tl .t{font-size:var(--lg-fs-body-sm);line-height:var(--lg-lh-body-sm);font-weight:600;margin-top:2px}
+.gm-tl .s{font-size:var(--lg-fs-caption);color:var(--lg-text-secondary);margin-top:2px}
+
+/* AI 建议待复核卡（置信度 = 数字 + 文案双通道，不靠颜色单独传义） */
+.gm-ai{border-radius:var(--lg-radius-card);padding:var(--lg-space-4);margin-bottom:var(--lg-space-3);
+  background:linear-gradient(160deg,rgba(255,255,255,.66),rgba(255,255,255,.32));
+  border:1px solid rgba(255,255,255,.78);box-shadow:var(--lg-glass-highlight),var(--lg-shadow-sm);
+  background-origin:border-box}
+.gm-ai__hd{display:flex;align-items:flex-start;gap:var(--lg-space-3);flex-wrap:wrap}
+.gm-ai__hd b{overflow-wrap:anywhere;font-size:var(--lg-fs-body-sm);line-height:var(--lg-lh-body-sm);flex:1;min-width:200px}
+.gm-ai__basis{margin:var(--lg-space-2) 0 var(--lg-space-3);font-size:var(--lg-fs-caption);line-height:1.75;
+  color:var(--lg-text-secondary)}
+.gm-ai__acts{display:flex;gap:var(--lg-space-2);flex-wrap:wrap;align-items:center}
+.gm-ai.is-done{opacity:.72}
+
+/* AI 助手对话 */
+.gm-chat{display:flex;flex-direction:column;gap:var(--lg-space-2);max-height:280px;overflow-y:auto;
+  padding:var(--lg-space-3);border-radius:var(--lg-radius-control);background:rgba(255,255,255,.5);
+  border:1px solid var(--lg-divider)}
+.gm-bubble{max-width:86%;padding:var(--lg-space-2) var(--lg-space-3);border-radius:var(--lg-radius-control);
+  font-size:var(--lg-fs-body-sm);line-height:1.7;white-space:pre-wrap;overflow-wrap:anywhere}
+.gm-bubble--ai{align-self:flex-start;background:#FFFFFF;border:1px solid var(--lg-divider)}
+.gm-bubble--me{align-self:flex-end;background:var(--mmh-grad-action-hc);color:var(--lg-text-on-accent);
+  background-origin:border-box}
+.gm-typing{display:inline-flex;gap:4px;align-items:center;padding:var(--lg-space-2) var(--lg-space-3);
+  border-radius:var(--lg-radius-control);background:#FFFFFF;border:1px solid var(--lg-divider);align-self:flex-start}
+.gm-typing i{width:6px;height:6px;border-radius:50%;background:var(--lg-text-secondary);
+  animation:gmTyping 1.2s ease-in-out infinite}
+.gm-typing i:nth-child(2){animation-delay:.16s} .gm-typing i:nth-child(3){animation-delay:.32s}
+@keyframes gmTyping{0%,100%{opacity:.25;transform:translateY(0)}50%{opacity:1;transform:translateY(-3px)}}
+.gm-chatbar{display:flex;gap:var(--lg-space-2);margin-top:var(--lg-space-3)}
+.gm-chatbar input{flex:1;min-width:0;height:40px;border-radius:var(--lg-radius-control);padding:0 var(--lg-space-3);
+  font-family:inherit;font-size:var(--lg-fs-body-sm);color:var(--lg-text-primary);
+  background:rgba(255,255,255,.7);border:1px solid var(--lg-divider);outline:none}
+.gm-chatbar input:focus-visible{outline:var(--lg-ring-width) solid var(--lg-ring-color);outline-offset:2px}
+.gm-qa{display:flex;flex-wrap:wrap;gap:var(--lg-space-2);margin-top:var(--lg-space-3)}
+
+/* 弹层（Part 18 · MD-18-02：role=dialog + aria-modal + Esc 关闭 + 焦点归还） */
+.gm-mask{position:fixed;inset:0;z-index:200;display:none;align-items:center;justify-content:center;padding:var(--lg-space-4);
+  background:rgba(58,52,84,.28);-webkit-backdrop-filter:blur(16px);backdrop-filter:blur(16px)}
+.gm-mask.is-on{display:flex}
+.gm-modal{width:100%;max-width:520px;max-height:86vh;overflow:auto;border-radius:var(--lg-radius-card-lg);
+  padding:var(--lg-space-5);background:linear-gradient(160deg,rgba(255,255,255,.96),rgba(255,255,255,.9));
+  border:1px solid rgba(255,255,255,.9);box-shadow:var(--lg-shadow-lg);background-origin:border-box}
+.gm-modal h3{margin:0 0 var(--lg-space-3);font-size:var(--lg-fs-section);line-height:var(--lg-lh-section);font-weight:600}
+.gm-modal__foot{display:flex;gap:var(--lg-space-2);justify-content:flex-end;margin-top:var(--lg-space-5);flex-wrap:wrap}
+.gm-lbl{display:block;font-size:var(--lg-fs-caption);color:var(--lg-text-secondary);margin:var(--lg-space-3) 0 var(--lg-space-2)}
+.gm-inp{width:100%;min-height:80px;border-radius:var(--lg-radius-control);padding:var(--lg-space-3);
+  font-family:inherit;font-size:var(--lg-fs-body-sm);line-height:1.7;color:var(--lg-text-primary);
+  background:rgba(255,255,255,.75);border:1px solid var(--lg-divider);outline:none;resize:vertical}
+.gm-inp:focus-visible{outline:var(--lg-ring-width) solid var(--lg-ring-color);outline-offset:2px}
+.gm-opts{display:flex;gap:var(--lg-space-2);flex-wrap:wrap}
+.gm-opt{display:inline-flex;align-items:center;gap:var(--lg-space-2);padding:var(--lg-space-2) var(--lg-space-3);
+  border-radius:var(--lg-radius-pill);background:rgba(255,255,255,.7);border:1px solid var(--lg-divider);
+  font-size:var(--lg-fs-caption);cursor:pointer;min-height:40px}
+.gm-opt input{accent-color:var(--mmh-rose-500)}
+
+/* 轻提示（Part 18 · MD-18-01/04：顶部偏上 · 320ms 入 / 2.4s 驻留 / 240ms 出 · 同类仅 1 条） */
+.gm-toast{position:fixed;left:50%;top:var(--lg-space-5);z-index:250;display:inline-flex;align-items:center;
+  gap:var(--lg-space-2);max-width:min(86vw,440px);padding:var(--lg-space-3) var(--lg-space-4);
+  border-radius:var(--lg-radius-pill);pointer-events:none;font-size:var(--lg-fs-body-sm);font-weight:600;
+  color:var(--lg-text-primary);background:linear-gradient(160deg,rgba(255,255,255,.97),rgba(255,255,255,.9));
+  border:1px solid var(--lg-divider);box-shadow:var(--lg-shadow-md);
+  animation:gmToastIn 320ms var(--lg-ease-out) both;background-origin:border-box}
+.gm-toast.is-leaving{animation:gmToastOut 240ms ease-in forwards}
+.gm-toast__dot{width:8px;height:8px;border-radius:50%;flex:none;background:var(--lg-sem-neutral)}
+.gm-toast--success .gm-toast__dot{background:var(--lg-sem-positive)}
+.gm-toast--error .gm-toast__dot{background:var(--lg-sem-risk)}
+.gm-toast--warning .gm-toast__dot{background:var(--lg-sem-attention)}
+.gm-toast--info .gm-toast__dot{background:var(--lg-sem-info)}
+@keyframes gmToastIn{from{opacity:0;transform:translate(-50%,-24px)}to{opacity:1;transform:translate(-50%,0)}}
+@keyframes gmToastOut{from{opacity:1;transform:translate(-50%,0)}to{opacity:0;transform:translate(-50%,-24px)}}
+
+/* 生长 / 体重曲线（13 · 13.2 母题的单页版，与站点外壳 window.gmGrowth 同口径：
+   参考带 alpha .12 + 细白描边上界 · 主曲线 Rose-500 2.5px · P3/P97 虚线 1.5px ·
+   网格 --lg-divider 1px · 刻度 caption 12px 等宽 · 白玻璃 Tooltip） */
+/* 曲线封顶：外壳/本页的渲染器都会就地替换挂载点并改其 class，
+   故用**外层容器**限宽（380 viewBox 的图放大超过 ~620 只会变糊、还把卡片顶得很高）。 */
+.gm-chartbox{max-width:620px;margin:0 auto}
+.gm-gx{position:relative}
+.gm-gx__head{display:flex;align-items:baseline;gap:var(--lg-space-3);flex-wrap:wrap;margin-bottom:var(--lg-space-2)}
+.gm-gx__head b{font-size:var(--lg-fs-body-sm)}
+.gm-gx__src{font-size:var(--lg-fs-caption);color:var(--lg-text-secondary)}
+.gm-gx__val{margin-left:auto;font-size:var(--lg-fs-body-sm);font-weight:600;font-variant-numeric:tabular-nums}
+.gm-gx__val i{font-style:normal;font-weight:400;font-size:var(--lg-fs-caption);color:var(--lg-text-secondary)}
+.gm-gx__svg{display:block;width:100%;height:auto;overflow:visible;touch-action:pan-y}
+.gm-gx__grid{stroke:var(--lg-divider);stroke-width:1;shape-rendering:crispEdges}
+.gm-gx__band{fill:rgba(169,227,212,.12)}
+.gm-gx__bandtop{fill:none;stroke:rgba(255,255,255,.9);stroke-width:1}
+.gm-gx__p50{fill:none;stroke:rgba(255,255,255,.9);stroke-width:1;stroke-dasharray:3 3}
+.gm-gx__warn{fill:none;stroke:#9AA2B0;stroke-width:1.5;stroke-dasharray:4 4}
+.gm-gx__line{fill:none;stroke:#F77FA3;stroke-width:2.5;stroke-linecap:round;stroke-linejoin:round}
+.gm-gx__dot{fill:#FFFFFF;stroke:#F77FA3;stroke-width:2}
+.gm-gx__pt{fill:#F77FA3;stroke:#FFFFFF;stroke-width:1.5}
+.gm-gx__pt[data-tone="attention"]{fill:var(--lg-sem-attention)}
+.gm-gx__tick{font-size:12px;fill:var(--lg-text-secondary);font-variant-numeric:tabular-nums}
+.gm-gx__legend{display:flex;gap:var(--lg-space-3);flex-wrap:wrap;align-items:center;margin-top:var(--lg-space-2);
+  font-size:var(--lg-fs-caption);color:var(--lg-text-secondary)}
+.gm-gx__legend span{display:inline-flex;align-items:center;gap:var(--lg-space-2);
+  padding:var(--lg-space-1) var(--lg-space-3);border-radius:var(--lg-radius-pill);
+  background:rgba(255,255,255,.6);border:1px solid var(--lg-divider)}
+.gm-gx__legend i{width:8px;height:8px;border-radius:50%;flex:none}
+.gm-gx__tip{position:absolute;z-index:3;pointer-events:none;opacity:0;transform:translate(-50%,-100%);
+  padding:var(--lg-space-2) var(--lg-space-3);border-radius:var(--lg-radius-btn-sm);white-space:nowrap;
+  background:rgba(255,255,255,.75);-webkit-backdrop-filter:blur(20px);backdrop-filter:blur(20px);
+  border:1px solid var(--lg-divider);box-shadow:var(--lg-shadow-md);transition:opacity 140ms ease}
+.gm-gx__tip.is-on{opacity:1}
+.gm-gx__tip b{display:block;font-size:var(--lg-fs-caption);font-weight:500;color:var(--lg-text-secondary)}
+.gm-gx__tip span{display:block;font-size:var(--lg-fs-body-sm);font-weight:600;color:var(--mmh-rose-700);
+  font-variant-numeric:tabular-nums}
+.gm-gx__note{display:flex;gap:var(--lg-space-2);align-items:flex-start;margin-top:var(--lg-space-2);
+  padding:var(--lg-space-2) var(--lg-space-3);border-radius:var(--lg-radius-btn-sm);
+  font-size:var(--lg-fs-caption);line-height:1.75;background:rgba(255,255,255,.75);
+  border:1px solid var(--lg-divider);color:var(--lg-sem-attention)}
+.gm-gx__note i{width:8px;height:8px;border-radius:50%;flex:none;margin-top:6px;background:currentColor}
+
+/* ── 响应式：≤1280 自动切顶栏模式（与参照项目同口径）；≤1024 单列；≤767 热区 ≥44 ── */
+@media (max-width:1280px){
+  body.mode-sider .gm-app{padding-left:var(--lg-space-5)}
+  body.mode-sider .gm-side{display:none}
+  body.mode-sider .gm-tabs{display:flex}
+}
+@media (max-width:1024px){
+  .gm-2,.gm-2e,.gm-3{grid-template-columns:minmax(0,1fr)}
+  .gm-kv{grid-template-columns:minmax(0,1fr)}
+}
+@media (max-width:767px){
+  .gm-app{padding:var(--lg-space-4) var(--lg-space-4) var(--lg-space-8)}
+  .gm-top{position:static}
+  .gm-tabs{width:100%;margin-left:0;flex-wrap:nowrap;overflow-x:auto;-webkit-overflow-scrolling:touch}
+  /* 窄屏：页签占满一行，形态按钮换行后仍靠右 */
+  .gm-seg{margin-left:auto}
+  .gm-tab{flex:none}
+  .gm-tab,.gm-seg button,.nv,.gm-iconb,.gm-opt{position:relative}
+  .gm-tab::after,.gm-seg button::after,.nv::after,.gm-iconb::after,.gm-opt::after{
+    content:"";position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);
+    width:100%;min-width:44px;height:100%;min-height:44px}
+  .gm-chatbar input{height:44px}
+}
+@media (prefers-reduced-motion:reduce){
+  .gm-app{transition:none}
+  .gm-typing i{animation:none}
+}
+/* ── 顶栏层叠（写在 APP_CSS 最末，避免被更后面的断点覆盖）：≤1280 顶栏是「业务菜单」下拉的宿主，
+   而卡片（`.gm-pm-card`）是定位元素且 z-index:auto —— 同层时按 DOM 顺序盖住展开的面板（实测点击被拦截）。
+   给顶栏一个正 z-index 的层叠上下文即可稳定压住内容。 */
+@media (max-width:1280px){
+  .gm-top{position:relative;z-index:90}
+}
+</style>
+</head>
+<body class="mode-top">
+<div class="gm-app"><div class="gm-app__wrap">
+<header class="gm-top"><span class="gm-brand gm-brand--sm"><img src="../brand/logo-512.png" alt=""><span class="gm-brand__t"><b>妈咪好 GoodMom</b><strong>6 大产品</strong></span></span><div class="gm-tabs"><a class="gm-tab" href="goodmom-redesign.html">妇幼智能辅助诊疗 Demo</a><a class="gm-tab" href="../site/index.html#gm-mod-products">产品矩阵模块</a></div></header>
+<div class="gm-pm-panel gm-pm-hero" style="margin-bottom:var(--lg-space-6)"><div><span class="gm-brand gm-brand--lg" style="margin-bottom:var(--lg-space-3)"><img src="../brand/logo-512.png" alt=""><span class="gm-brand__t"><b>妈咪好 GoodMom</b><strong>妇幼全生命周期健康管理</strong></span></span><h3>6 大产品，每页 4 个视图</h3><p>工作台 / 档案 / AI 协同 / 详情 —— 与 <b>goodmom-redesign.html</b> 同一套应用外壳形态：可收起侧栏、顶栏页签、AI 建议待复核与助手对话；数据取自 <b>prd/zong.md</b>。页面均为单文件、无 CDN 依赖，双击即可打开。</p></div><div class="gm-pm-card"><h3>怎么看</h3><ul class="gm-pm-list"><li>左侧<b>侧栏</b>切视图</li><li>窄屏自动切<b>顶栏</b></li><li>KPI / 队列<b>可点筛选</b></li><li>AI 建议<b>可采纳/驳回</b></li></ul><p class="gm-pm-cap" style="margin-top:var(--lg-space-3)">全部数值为示意数据，不作为医疗依据（13 · 13.5）。</p></div></div>
+<div class="gm-pm-prods"><div class="gm-pm-card gm-pm-prod gm-pm--p01"><div class="gm-pm-prod__hd"><span class="gm-prod-ico"><svg viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="9.4" cy="10.4" r="3.1"/><path d="M3.6 20.4c1.1-2.9 3.3-4.2 5.8-4.2 1.4 0 2.6.4 3.6 1.1"/><path d="m20.6 10.6 1 1.9 2.1.4-1.5 1.5.4 2.1-2-1-2 1 .4-2.1-1.5-1.5 2.1-.4z"/></g></svg></span><span><b>妇女健康管理系统</b><small>GoodMom Women Health</small></span></div><p title="面向妇女全生命周期健康管理，覆盖青春期、育龄期、围绝经期、老年期妇女保健，以及妇女疾病管理和两癌筛查。">面向妇女全生命周期健康管理，覆盖青春期、育龄期、围绝经期、老年期妇女保健，以及妇女疾病管理和两癌筛查。</p><div class="gm-pm-prod__cta"><a class="gm-pm-btn gm-pm-btn--line" href="p01-women-health.html">打开产品页</a></div></div><div class="gm-pm-card gm-pm-prod gm-pm--p02"><div class="gm-pm-prod__hd"><span class="gm-prod-ico"><svg viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="6.3" r="2.6"/><circle cx="12" cy="13.4" r="2.9"/><path d="M18.9 3.2l.9 1.7 1.9.4-1.4 1.4.4 1.9-1.8-1-1.8 1 .4-1.9-1.4-1.4 1.9-.4z"/></g></svg></span><span><b>婚前孕前保健系统</b><small>GoodMom Preconception Care</small></span></div><p title="面向婚前医学检查、孕前优生检查、备孕健康管理及孕前风险评估的专科业务系统。">面向婚前医学检查、孕前优生检查、备孕健康管理及孕前风险评估的专科业务系统。</p><div class="gm-pm-prod__cta"><a class="gm-pm-btn gm-pm-btn--line" href="p02-preconception.html">打开产品页</a></div></div><div class="gm-pm-card gm-pm-prod gm-pm--p03"><div class="gm-pm-prod__hd"><span class="gm-prod-ico"><svg viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="6.3" r="2.6"/><circle cx="12" cy="16.9" r="4.3"/><path d="M8.3 16h7.4M8.9 18h6.2"/></g></svg></span><span><b>孕产妇全程管理系统</b><small>GoodMom Maternity Care</small></span></div><p title="面向妇幼保健院产科、孕产保健科、高危孕产妇管理中心的孕期、分娩、产后全程业务管理系统。">面向妇幼保健院产科、孕产保健科、高危孕产妇管理中心的孕期、分娩、产后全程业务管理系统。</p><div class="gm-pm-prod__cta"><a class="gm-pm-btn gm-pm-btn--line" href="p03-maternity.html">打开产品页</a></div></div><div class="gm-pm-card gm-pm-prod gm-pm--p04"><div class="gm-pm-prod__hd"><span class="gm-prod-ico"><svg viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8.6" r="2.7"/><rect x="9.1" y="12.4" width="5.8" height="6.8" rx="2.9"/><path d="M9.1 15.2h5.8"/></g></svg></span><span><b>新生儿健康管理系统</b><small>GoodMom Newborn Care</small></span></div><p title="面向新生儿出生、访视、筛查、高危新生儿及新生儿向儿童保健转入的独立业务系统。">面向新生儿出生、访视、筛查、高危新生儿及新生儿向儿童保健转入的独立业务系统。</p><div class="gm-pm-prod__cta"><a class="gm-pm-btn gm-pm-btn--line" href="p04-newborn.html">打开产品页</a></div></div><div class="gm-pm-card gm-pm-prod gm-pm--p05"><div class="gm-pm-prod__hd"><span class="gm-prod-ico"><svg viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="5.6" r="2.4"/><rect x="10.1" y="9.4" width="3.8" height="4.2" rx="1.9"/><path d="M10.2 10.2 8.8 12M13.8 10.2l1.4 1.8"/><path d="M11 13.8v3.4M13 13.8v3.4"/></g></svg></span><span><b>儿童健康管理系统</b><small>GoodMom Child Health</small></span></div><p title="面向儿童保健、儿童成长发育、儿童“五健”、重点儿童及儿童健康档案的专科业务系统。">面向儿童保健、儿童成长发育、儿童“五健”、重点儿童及儿童健康档案的专科业务系统。</p><div class="gm-pm-prod__cta"><a class="gm-pm-btn gm-pm-btn--line" href="p05-child-health.html">打开产品页</a></div></div><div class="gm-pm-card gm-pm-prod gm-pm--p06"><div class="gm-pm-prod__hd"><span class="gm-prod-ico"><svg viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="4.6" y="8.6" width="14.8" height="10.8" rx="4"/><path d="M9.2 8.6V5.8h5.6v2.8"/><circle cx="9.7" cy="13.8" r=".95" fill="currentColor" stroke="none"/><circle cx="14.3" cy="13.8" r=".95" fill="currentColor" stroke="none"/><path d="M9.6 16.8h4.8"/></g></svg></span><span><b>妇幼AI智能体平台</b><small>GoodMom AI Care Intelligence</small></span></div><p title="在五大业务系统产生真实业务数据后，独立提供 AI 能力。">在五大业务系统产生真实业务数据后，独立提供 AI 能力。</p><div class="gm-pm-prod__cta"><a class="gm-pm-btn gm-pm-btn--line" href="p06-ai-care.html">打开产品页</a></div></div></div>
+</div></div>
+</body>
+</html>

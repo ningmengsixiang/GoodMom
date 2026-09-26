@@ -5,6 +5,15 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <link rel="icon" type="image/png" href="../brand/logo-192.png">
 <title>妈咪好 GoodMom · mom-health-web</title>
+<!-- ⚠️ 必须内联一份底色：真正的背景在 `src/styles/base.css`，要等 JS bundle 加载后才生效；
+   在此之前 `<div id="root">` 是空的，整屏**没有任何元素绘制** = 纯白画布（实测 docH=视口高、
+   逐点扫描 100% 未绘制）。与 6 个独立产品页同口径：底色写在根元素上，兜住未绘制区域，
+   消除"白闪一下再变暖底"。 -->
+<style>
+  html{background:linear-gradient(165deg,#FDF2EE,#F6E2DB 55%,#E6CFC6)}
+  body{margin:0}
+  #root{min-height:100vh}
+</style>
 </head>
 <body>
 <div id="root"></div>

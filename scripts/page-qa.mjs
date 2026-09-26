@@ -79,8 +79,15 @@ function collectPages() {
     }
   }
   void list;
-  const extra = 'fuyouaicansai/goodmom-redesign.html';
-  if (fs.existsSync(path.join(ROOT, extra))) out.push({ rel: extra, hash: '', kind: 'page' });
+  /* fuyouaicansai/：参照项目重画版 + 6 个独立产品页 + 索引页（gen-product-apps.py 生成）。
+     这些页不在 site//preview/ 下，故单独列；同样受"P0–P2 必须为 0"的约束。 */
+  const extras = ['fuyouaicansai/goodmom-redesign.html', 'fuyouaicansai/index.html',
+    'fuyouaicansai/p01-women-health.html', 'fuyouaicansai/p02-preconception.html',
+    'fuyouaicansai/p03-maternity.html', 'fuyouaicansai/p04-newborn.html',
+    'fuyouaicansai/p05-child-health.html', 'fuyouaicansai/p06-ai-care.html'];
+  for (const rel of extras) {
+    if (fs.existsSync(path.join(ROOT, rel))) out.push({ rel, hash: '', kind: 'page' });
+  }
   return out;
 }
 
@@ -925,7 +932,7 @@ function render(results, generatedAt) {
   L.push('- 生成时间：`' + generatedAt + '`');
   L.push('- 工具：`node scripts/page-qa.mjs`（Playwright 真实渲染；桌面 1440 / 移动 375 / 暗色档各测一遍）');
   L.push('- 口径：每条 finding 都带**规范锚点 + 选择器 + 实测值**，可逐条复现与回归');
-  L.push('- 范围：真实页面 ' + real.length + ' 个（唯一首页 8 模块逐模块 · 打印手册 · 演示页）；'
+  L.push('- 范围：真实页面 ' + real.length + ' 个（唯一首页逐模块 · 打印手册 · 演示页）；'
     + '重定向桩 ' + stubs.length + ' 个**单独统计**（服务端摘掉跳转脚本后测桩自身，避免测成目标模块而重复计数）', '');
   L.push('## 0. 结论摘要（不含重定向桩）', '');
   L.push('| 规则 | 严重度 | 规范锚点 | 命中数 | 涉及页面 |');
