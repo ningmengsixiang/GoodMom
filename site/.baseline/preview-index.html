@@ -44,7 +44,7 @@
   --lg-shadow-lg:0 16px 40px rgba(58,52,84,.12),0 4px 12px rgba(58,52,84,.05);
   --lg-glow-purple-soft:0 12px 32px rgba(154,120,255,.28);
   --lg-glow-cyan-soft:0 12px 32px rgba(114,221,229,.22);
-;--mmh-rose-100:#FFF0F4;--mmh-rose-deep:#B23A63}:root{scroll-behavior:smooth}:root{
+;--mmh-rose-100:#FFF0F4;--mmh-rose-deep:#A9315B}:root{scroll-behavior:smooth}:root{
   font-family:var(--lg-font-sans); color:var(--lg-text-primary);
   background:
     radial-gradient(1200px 700px at 85% -10%, rgba(154,120,255,.20), transparent 65%),
@@ -477,7 +477,7 @@ footer a{color:var(--lg-purple-600);text-decoration:none;font-weight:500}
 
 /* ═══ 12 · 妈咪好 GoodMom 品牌换肤（默认主题：蜜桃粉主色 + 淡紫柔光）═══ */
 :root{
-  --mmh-rose-700:#B23A63; --mmh-rose-600:#E85D8F; --mmh-rose-500:#F77FA3;
+  --mmh-rose-700:#A9315B; --mmh-rose-600:#E85D8F; --mmh-rose-500:#F77FA3;
   --mmh-rose-400:#FFA3BE; --mmh-rose-300:#FFC4D6; --mmh-rose-200:#FFDEE8; --mmh-rose-100:#FFF0F4;
   --mmh-peach-400:#FFC3A0; --mmh-peach-300:#FFDCC7; --mmh-peach-100:#FFF3EA;
   --mmh-mint-600:#4FB59C; --mmh-mint-500:#6FC9B4; --mmh-mint-300:#A9E3D4; --mmh-mint-100:#E2F6F0;
@@ -649,11 +649,11 @@ details.gfold .gfb{padding:0 14px 12px;font-size:12px;color:var(--lg-text-second
 .bx-default{background:linear-gradient(160deg,rgba(255,255,255,.66),rgba(255,255,255,.34));color:var(--lg-deep-slate);border-color:rgba(255,255,255,.78);box-shadow:inset 0 1px 0 rgba(255,255,255,.55),var(--lg-shadow-sm)}
 .bx-primary{background:var(--mmh-grad-action-hc,#F77FA3);color:#343A46;border-color:rgba(255,255,255,.6);box-shadow:inset 0 1px 0 rgba(255,255,255,.5),var(--lg-shadow-md)}
 .bx-secondary{background:linear-gradient(160deg,rgba(255,255,255,.5),transparent 55%),var(--mmh-grad-mint,#6FC9B4);color:#FFF;border-color:rgba(255,255,255,.65);box-shadow:inset 0 1px 0 rgba(255,255,255,.55),var(--lg-shadow-md)}
-.bx-outline{background:transparent;color:var(--mmh-rose-700,#B23A63);border:1.5px solid var(--mmh-rose-500,#F77FA3)}
+.bx-outline{background:transparent;color:var(--mmh-rose-700,#A9315B);border:1.5px solid var(--mmh-rose-500,#F77FA3)}
 .bx-outline:hover{background:rgba(247,127,163,.08)}
-.bx-dashed{background:transparent;color:var(--mmh-rose-700,#B23A63);border:1.5px dashed var(--mmh-rose-500,#F77FA3)}
+.bx-dashed{background:transparent;color:var(--mmh-rose-700,#A9315B);border:1.5px dashed var(--mmh-rose-500,#F77FA3)}
 .bx-dashed:hover{background:rgba(247,127,163,.08)}
-.bx-text{background:none;color:var(--mmh-rose-700,#B23A63);border-color:transparent;padding:0 10px;box-shadow:none}
+.bx-text{background:none;color:var(--mmh-rose-700,#A9315B);border-color:transparent;padding:0 10px;box-shadow:none}
 .bx-text:hover{background:rgba(247,127,163,.08)}
 .bx-solid.st-success{background:#1E6B52;color:#FFF;border-color:rgba(255,255,255,.55);box-shadow:inset 0 1px 0 rgba(255,255,255,.28)} /* AA：白字 6.4:1（D5） */
 .bx-solid.st-warning{background:#9A5A0E;color:#FFF;border-color:rgba(255,255,255,.55);box-shadow:inset 0 1px 0 rgba(255,255,255,.28)} /* AA：白字 5.46:1（D5） */
@@ -884,7 +884,7 @@ section.block:first-of-type{margin-top:8px}
 
 /* 悬停下拉：菜单 → 下拉之间的桥接区，鼠标可平滑下移 */
 .ng::after{content:"";position:absolute;left:0;right:0;top:100%;height:14px;z-index:5}
-.ngdrop a:active{background:var(--mmh-rose-100,#FFF0F4);color:var(--mmh-rose-deep,#B23A63)}:root{--mmh-grad-action-hc:linear-gradient(135deg,#FFC4D6 0%,#F77FA3 100%)}
+.ngdrop a:active{background:var(--mmh-rose-100,#FFF0F4);color:var(--mmh-rose-deep,#A9315B)}:root{--mmh-grad-action-hc:linear-gradient(135deg,#FFC4D6 0%,#F77FA3 100%)}
 /* AA 高对比行动（D5/审查收口）：文字承载面切深档，装饰渐变/开关/进度条保持品牌亮渐变 */
 .btn-primary,.bx-primary,.bgroup .bx.on,.mchip.on,.phone .tabmini i.on,.step.done .sd{background:var(--mmh-grad-action-hc,#F77FA3)!important;color:#343A46!important}
 .bx-secondary{background:#1E6B52!important;color:#FFF!important}
@@ -2317,7 +2317,7 @@ function MODROOT_preview_index(){return document.getElementById("gm-mod-preview-
     var mask=document.createElement('div');mask.className='dmask';mask.id='dlgMask';
     mask.innerHTML='<div class="dcard" role="dialog" aria-modal="true" aria-label="确认提交">'+
       '<div style="display:flex;align-items:flex-start;gap:10px;margin-bottom:14px">'+
-      '<span style="width:40px;height:40px;border-radius:14px;background:rgba(247,127,163,.14);color:#B23A63;display:flex;align-items:center;justify-content:center;flex:none">'+
+      '<span style="width:40px;height:40px;border-radius:14px;background:rgba(247,127,163,.14);color:#A9315B;display:flex;align-items:center;justify-content:center;flex:none">'+
       '<svg style="width:20px;height:20px;stroke:currentColor;fill:none;stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round" viewBox="0 0 24 24"><path d="M12 3.2 19 5.7v5.4c0 4.6-3 8.3-7 9.7-4-1.4-7-5.1-7-9.7V5.7z"/><path d="m9.2 11.9 2 2 3.6-3.9"/></svg></span>'+
       '<div style="flex:1"><div style="font-size:16px;font-weight:600">提交筛查结果</div>'+
       '<div style="font-size:12.5px;color:var(--lg-text-secondary);margin-top:4px;line-height:1.7">张女士 · 宫颈筛查（TCT）结果已录入，提交后进入“待复核”状态。</div></div></div>'+

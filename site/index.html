@@ -11,7 +11,7 @@
 /* ══ 外壳样式（唯一一份，模块样式全部作用域隔离在各自 .gm-mod--x 内）══ */
 /* D9 主行动档：品牌粉上半段 + 深字 #343A46（白字在亮粉上仅 2.9:1，不合格） */
 :root{
-  --sh-rose:#F77FA3;--sh-rose-d:#E85D8F;--sh-rose-deep:#B23A63;
+  --sh-rose:#F77FA3;--sh-rose-d:#E85D8F;--sh-rose-deep:#A9315B;
   --sh-t:#343A46;--sh-t2:#4F5B6E;--sh-t3:#9AA2B0;
   --sh-bg:#F4F0EC;
   --sh-grad-action:linear-gradient(135deg,#FFC4D6 0%,#F77FA3 100%);
@@ -254,7 +254,7 @@ table.gm-sr-only{table-layout:fixed;pointer-events:none}
   transition:opacity 140ms ease}
 .gm-growth__tip.is-on{opacity:1}
 .gm-growth__tip b{display:block;font-size:12px;font-weight:500;color:var(--lg-text-secondary,#4F5B6E)}
-.gm-growth__tip span{display:block;font-size:14px;line-height:20px;font-weight:600;color:#B23A63;
+.gm-growth__tip span{display:block;font-size:14px;line-height:20px;font-weight:600;color:#A9315B;
   font-variant-numeric:tabular-nums}
 /* 异常点玻璃气泡建议（13.2「P3 以下 / P97 以上 → 数据点转琥珀/红 + 玻璃气泡建议文案」） */
 .gm-growth__note{display:flex;gap:8px;align-items:flex-start;margin-top:8px;padding:9px 12px;
@@ -303,7 +303,7 @@ table.gm-sr-only{table-layout:fixed;pointer-events:none}
 .gm-tbl .col-ops,.gm-tbl th.col-ops{text-align:right}
 .gm-tbl .ops{display:inline-flex;align-items:center;justify-content:flex-end;gap:12px;flex-wrap:nowrap}
 .gm-tbl .ops a,.gm-tbl .ops button{font-size:13px;line-height:18px}
-.gm-tbl .ops a{color:var(--lg-link,#B23A63);text-decoration:none;font-weight:500}
+.gm-tbl .ops a{color:var(--lg-link,#A9315B);text-decoration:none;font-weight:500}
 .gm-tbl .ops a:hover{text-decoration:underline}
 /* ── 内联元素的垂直档：一律 26 高 ─────────────────────────────────────
    `.badge`/`.tg`/`.av` 若沿用页面自己的档，12px 字继承 line-height:1.7 会撑到 30px、
@@ -451,7 +451,7 @@ table.gm-sr-only{table-layout:fixed;pointer-events:none}
    多出的 1px 边框环会平铺取到渐变**另一端** → 顶部一条暗缝、底部一条亮缝，
    看起来像"胶囊缺了一角 / 露出别的底色"。全局声明，特异性 0，可被组件规则覆盖。 */
 .gm-mod--site-index{
-  --t:#343A46;--t2:#4F5B6E;--t3:#4F5B6E;--rose:#F77FA3;--rose-d:#E85D8F;--rose-deep:#B23A63;
+  --t:#343A46;--t2:#4F5B6E;--t3:#4F5B6E;--rose:#F77FA3;--rose-d:#E85D8F;--rose-deep:#A9315B;
   --mint:#6FC9B4;--mint-d:#4FB59C;--info:#6D9EFF;--warn:#F2B25C;--danger:#EF6A7B;--purple:#9A78FF;
   --font:"Inter","SF Pro Display",-apple-system,"PingFang SC","MiSans","Noto Sans SC","Helvetica Neue",sans-serif;
   --mono:ui-monospace,Menlo,Consolas,monospace;
@@ -585,7 +585,7 @@ table.gm-sr-only{table-layout:fixed;pointer-events:none}
 .gm-mod--site-index .secnum{display:inline-flex;align-items:center;justify-content:center;width:34px;height:34px;border-radius:18px;flex:none;
   font-size:13px;font-weight:700;color:#343A46;background:var(--mmh-grad-action-hc,#F77FA3);box-shadow:0 1px 2px rgba(178,58,99,.22),0 8px 20px rgba(240,127,163,.30)} /* D9：亮粉底配深字 */
 .gm-mod--site-index h2{display:flex;align-items:center;gap:12px;flex-wrap:wrap}
-.gm-mod--site-index h2 small{font-weight:600;letter-spacing:.14em;color:#B23A63;font-size:12px}
+.gm-mod--site-index h2 small{font-weight:600;letter-spacing:.14em;color:#A9315B;font-size:12px}
 .gm-mod--site-index .secpad{background:linear-gradient(160deg,rgba(255,255,255,.55),rgba(255,255,255,.18));border:1px solid rgba(255,255,255,.7);
   border-radius:26px;padding:24px 24px 16px;box-shadow:inset 0 1px 0 rgba(255,255,255,.85),0 12px 30px rgba(90,70,70,.08);
   -webkit-backdrop-filter:blur(16px);backdrop-filter:blur(16px);background-origin:border-box}
@@ -605,7 +605,7 @@ table.gm-sr-only{table-layout:fixed;pointer-events:none}
 .gm-mod--site-index .jc{border-radius:20px;padding:20px;background:linear-gradient(160deg,rgba(255,255,255,.66),rgba(255,255,255,.3));
   border:1px solid rgba(255,255,255,.85);box-shadow:0 10px 24px rgba(90,70,70,.08);transition:.25s;background-origin:border-box}
 .gm-mod--site-index .jc:hover{transform:translateY(-4px);box-shadow:0 18px 40px rgba(90,70,70,.14)}
-.gm-mod--site-index .jc .who{display:inline-flex;align-items:center;gap:6px;font-size:12px;font-weight:700;letter-spacing:.08em;color:#B23A63;
+.gm-mod--site-index .jc .who{display:inline-flex;align-items:center;gap:6px;font-size:12px;font-weight:700;letter-spacing:.08em;color:#A9315B;
   background:rgba(247,127,163,.12);border:1px solid rgba(247,127,163,.25);padding:4px 12px;border-radius:999px}
 .gm-mod--site-index .jc h3{font-size:16px;margin:10px 0 8px}
 .gm-mod--site-index .jc ol{margin:0;padding-left:18px;color:var(--t2);font-size:13px;line-height:2}
@@ -617,11 +617,11 @@ table.gm-sr-only{table-layout:fixed;pointer-events:none}
 .gm-mod--site-index .tree2 .gr{break-inside:avoid;margin-bottom:12px}
 .gm-mod--site-index .tree2 .gr b{color:var(--rose-deep);display:block;font-size:13.5px;margin-bottom:4px}
 .gm-mod--site-index .tree2 .gr a{display:block;color:var(--t2);text-decoration:none}
-.gm-mod--site-index .tree2 .gr a:hover{color:#B23A63}
+.gm-mod--site-index .tree2 .gr a:hover{color:#A9315B}
 .gm-mod--site-index .fcols{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:18px;text-align:left}
 .gm-mod--site-index .fcols b{color:var(--rose-deep);display:block;font-size:13px;margin-bottom:8px}
 .gm-mod--site-index .fcols a{display:block;font-size:12px;color:var(--t2);text-decoration:none;line-height:2.1}
-.gm-mod--site-index .fcols a:hover{color:#B23A63}
+.gm-mod--site-index .fcols a:hover{color:#A9315B}
 
 
 /* GitHub 入口 & 图标点缀 */
@@ -629,7 +629,7 @@ table.gm-sr-only{table-layout:fixed;pointer-events:none}
   font-size:12.5px;font-weight:600;color:var(--rose-deep);background:#fff;border:1px solid rgba(232,93,143,.3)}
 .gm-mod--site-index nav .git svg{width:15px;height:15px;fill:currentColor}
 .gm-mod--site-index nav .git:hover{background:var(--mmh-grad-action-hc,#F77FA3);color:#343A46;border-color:transparent;background-origin:border-box}
-.gm-mod--site-index .gx{position:absolute;right:16px;top:16px;width:56px;height:56px;opacity:.14;color:#B23A63;pointer-events:none}
+.gm-mod--site-index .gx{position:absolute;right:16px;top:16px;width:56px;height:56px;opacity:.14;color:#A9315B;pointer-events:none}
 .gm-mod--site-index .gx svg{width:100%;height:100%}
 .gm-mod--site-index .card,.gm-mod--site-index .jc{position:relative;overflow:hidden}
 .gm-mod--site-index .journey,.gm-mod--site-index .grid{row-gap:18px}
@@ -743,7 +743,7 @@ import { GmIcon } from "@goodmom/icons";
   </div>
 
   <h2 id="site-index--standards"><span class="secnum">06</span><span>标准手册与审查治理</span><small>STANDARDS & QA · V2.4</small></h2>
-  <div class="secpad" style="margin-top:-4px"><p class="sub">38 部分标准正文（docs/标准手册）· 可执行审计闭环 · 决策记录留档　<a href="#gm-mod-site-manual" data-mod="site-manual"" style="color:#B23A63;font-weight:600">在线阅读标准手册（HTML 版）›</a></p>
+  <div class="secpad" style="margin-top:-4px"><p class="sub">38 部分标准正文（docs/标准手册）· 可执行审计闭环 · 决策记录留档　<a href="#gm-mod-site-manual" data-mod="site-manual"" style="color:#A9315B;font-weight:600">在线阅读标准手册（HTML 版）›</a></p>
   <div class="grid">
     <div class="card"><h3><i></i>标准正文 01–13</h3><p>总则 / 品牌 / Token / 色彩 / Typography / 栅格 / 间距 / 图标 / 插画 / Motion / 基础组件 / 组件状态 / UX 交互——每份均含编号条款（应/宜/可）与验收表。</p><a class="go" href="https://github.com/ningmengsixiang/GoodMom/tree/main/docs/标准手册" target="_blank" rel="noopener">打开标准目录 ›</a></div>
     <div class="card"><h3><i></i>标准正文 14–26</h3><p>表单 / 表格 / Dashboard / 导航 / 弹窗反馈 / Empty·Error·Loading / PC / iPad / Mobile / Accessibility / 行业 / Figma / Token 代码标准。</p><a class="go" href="https://github.com/ningmengsixiang/GoodMom/tree/main/docs/标准手册" target="_blank" rel="noopener">打开标准目录 ›</a></div>
@@ -789,7 +789,7 @@ import { GmIcon } from "@goodmom/icons";
   /* 文字与分隔（02 · 2.1.1）。小字一律次级/主色：三级色 #9AA2B0 只允许
      ≥24px 常规或 ≥18.66px 加粗（02 · 2.1.1），本模块不把它用于任何正文/注释。 */
   --lg-text-primary:#343A46; --lg-text-secondary:#4F5B6E; --lg-text-tertiary:#9AA2B0;
-  --lg-text-on-accent:#343A46; --lg-divider:rgba(58,52,84,.10); --lg-link:#B23A63;
+  --lg-text-on-accent:#343A46; --lg-divider:rgba(58,52,84,.10); --lg-link:#A9315B;
   --lg-tint-base:#FFFFFF; --lg-tint-pct:13%;
   /* 六语义（14 · 4.4.5 / 15 · 15.5）：文字用深档 alias，-500 只作填充 */
   --lg-sem-positive:#25715D; --lg-sem-info:#3261C1; --lg-sem-attention:#8D5A15;
@@ -797,7 +797,7 @@ import { GmIcon } from "@goodmom/icons";
   --lg-success-500:#42C7A1; --lg-warning-500:#F2B25C; --lg-danger-500:#EF6A7B;
   --lg-info-500:#6D9EFF; --lg-purple-500:#9A78FF; --lg-purple-300:#B69AFF;
   /* 品牌（02 · 2.9 = 12.3.1） */
-  --mmh-rose-700:#B23A63; --mmh-rose-600:#E85D8F; --mmh-rose-500:#F77FA3;
+  --mmh-rose-700:#A9315B; --mmh-rose-600:#E85D8F; --mmh-rose-500:#F77FA3;
   --mmh-rose-300:#FFC4D6; --mmh-rose-200:#FFDEE8; --mmh-rose-100:#FFF0F4;
   --mmh-peach-400:#FFC3A0; --mmh-peach-300:#FFDCC7; --mmh-peach-100:#FFF3EA;
   --mmh-mint-600:#4FB59C; --mmh-mint-500:#6FC9B4; --mmh-mint-300:#A9E3D4; --mmh-mint-100:#E2F6F0;
@@ -846,9 +846,9 @@ import { GmIcon } from "@goodmom/icons";
    「主行动渐变」定为品牌语义，若随产品变色，同一动作在不同产品里就是不同权重。
    ⚠️ --pm-ink 是**文字深档**（-500 亮档在浅底上不足 4.5:1，02 · 2.1.5），
       --pm-hue 只作填充/色块/光斑，两者不得互换。 */
-.gm-mod--products .gm-pm--p01{--pm-hue:#B23A63;--pm-ink:#B23A63;--pm-tint:rgba(178,58,99,.10);--pm-glow:rgba(178,58,99,.14)}
+.gm-mod--products .gm-pm--p01{--pm-hue:#A9315B;--pm-ink:#A9315B;--pm-tint:rgba(178,58,99,.10);--pm-glow:rgba(178,58,99,.14)}
 .gm-mod--products .gm-pm--p02{--pm-hue:#FFC3A0;--pm-ink:#8D5A15;--pm-tint:rgba(255,195,160,.22);--pm-glow:rgba(255,195,160,.20)}
-.gm-mod--products .gm-pm--p03{--pm-hue:#F77FA3;--pm-ink:#B23A63;--pm-tint:rgba(247,127,163,.14);--pm-glow:rgba(247,127,163,.18)}
+.gm-mod--products .gm-pm--p03{--pm-hue:#F77FA3;--pm-ink:#A9315B;--pm-tint:rgba(247,127,163,.14);--pm-glow:rgba(247,127,163,.18)}
 .gm-mod--products .gm-pm--p04{--pm-hue:#B69AFF;--pm-ink:#6242B8;--pm-tint:rgba(182,154,255,.16);--pm-glow:rgba(182,154,255,.18)}
 .gm-mod--products .gm-pm--p05{--pm-hue:#6FC9B4;--pm-ink:#25715D;--pm-tint:rgba(111,201,180,.16);--pm-glow:rgba(111,201,180,.16)}
 .gm-mod--products .gm-pm--p06{--pm-hue:#9A78FF;--pm-ink:#6A48DC;--pm-tint:rgba(154,120,255,.14);--pm-glow:rgba(154,120,255,.18)}
@@ -942,7 +942,7 @@ import { GmIcon } from "@goodmom/icons";
 .gm-mod--products .gm-pm-head h2{margin:0;font-size:var(--lg-fs-title);line-height:var(--lg-lh-title);font-weight:600;
   letter-spacing:-.01em}
 .gm-mod--products .gm-pm-head .en{font-size:var(--lg-fs-body-sm);color:var(--lg-text-secondary)}
-/* 序号徽标：**浅染底 + 深档字**。原写成"辅助色实底 + 深字"时，深玫档（#B23A63）
+/* 序号徽标：**浅染底 + 深档字**。原写成"辅助色实底 + 深字"时，深玫档（#A9315B）
    上深字实测 2.00:1、淡紫档（#9A78FF）3.54:1 —— a11y-dom 会判为确证失败。
    深色底配白字是另一个方向，但 02 · 2.6 / D9 只允许品牌亮粉档配深字，
    产品辅助色深浅不一，统一走"浅染 + 深档"最稳（02 · 2.1.5 亮档只作填充）。 */
@@ -1983,7 +1983,7 @@ function MODROOT_products(){return document.getElementById("gm-mod-products")||M
   --lg-shadow-lg:0 16px 40px rgba(58,52,84,.12),0 4px 12px rgba(58,52,84,.05);
   --lg-glow-purple-soft:0 12px 32px rgba(154,120,255,.28);
   --lg-glow-cyan-soft:0 12px 32px rgba(114,221,229,.22);
-;--mmh-rose-100:#FFF0F4;--mmh-rose-deep:#B23A63}.gm-mod--preview-index{scroll-behavior:smooth}.gm-mod--preview-index{
+;--mmh-rose-100:#FFF0F4;--mmh-rose-deep:#A9315B}.gm-mod--preview-index{scroll-behavior:smooth}.gm-mod--preview-index{
   font-family:var(--lg-font-sans); color:var(--lg-text-primary);
   background:
     radial-gradient(1200px 700px at 85% -10%, rgba(154,120,255,.20), transparent 65%),
@@ -2482,7 +2482,7 @@ function MODROOT_products(){return document.getElementById("gm-mod-products")||M
 
 /* ═══ 12 · 妈咪好 GoodMom 品牌换肤（默认主题：蜜桃粉主色 + 淡紫柔光）═══ */
 .gm-mod--preview-index{
-  --mmh-rose-700:#B23A63; --mmh-rose-600:#E85D8F; --mmh-rose-500:#F77FA3;
+  --mmh-rose-700:#A9315B; --mmh-rose-600:#E85D8F; --mmh-rose-500:#F77FA3;
   --mmh-rose-400:#FFA3BE; --mmh-rose-300:#FFC4D6; --mmh-rose-200:#FFDEE8; --mmh-rose-100:#FFF0F4;
   --mmh-peach-400:#FFC3A0; --mmh-peach-300:#FFDCC7; --mmh-peach-100:#FFF3EA;
   --mmh-mint-600:#4FB59C; --mmh-mint-500:#6FC9B4; --mmh-mint-300:#A9E3D4; --mmh-mint-100:#E2F6F0;
@@ -2504,7 +2504,7 @@ function MODROOT_products(){return document.getElementById("gm-mod-products")||M
   --lg-sem-risk:#B72F42; --lg-sem-neutral:#5E6673; --lg-sem-special:#6A48DC;
   --lg-glass-control:rgba(255,255,255,.35);
   --lg-shadow-xl:0 24px 60px rgba(58,52,84,.16);
-  --rose-deep:#B23A63;
+  --rose-deep:#A9315B;
 }.gm-mod--preview-index{
   background:
     radial-gradient(1200px 700px at 85% -10%, rgba(247,127,163,.20), transparent 65%),
@@ -2536,9 +2536,9 @@ function MODROOT_products(){return document.getElementById("gm-mod-products")||M
 .gm-mod--preview-index .step.done::before,.gm-mod--preview-index .step.cur::before{background:linear-gradient(90deg,var(--mmh-rose-300,#FFC4D6),var(--mmh-rose-500,#F77FA3))}
 .gm-mod--preview-index .step .sd{width:32px;height:32px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:600;z-index:1;background:rgba(255,255,255,.7);border:1px solid rgba(255,255,255,.9);color:var(--lg-text-secondary);box-shadow:var(--lg-shadow-sm)}
 .gm-mod--preview-index .step.done .sd{background:var(--mmh-grad-action-hc,#F77FA3);color:#343A46;border-color:transparent;background-origin:border-box}
-.gm-mod--preview-index .step.cur .sd{background:#FFF;color:var(--mmh-rose-700,#B23A63);border:2px solid var(--mmh-rose-500,#F77FA3);animation:pulse 2.4s ease-in-out infinite}
+.gm-mod--preview-index .step.cur .sd{background:#FFF;color:var(--mmh-rose-700,#A9315B);border:2px solid var(--mmh-rose-500,#F77FA3);animation:pulse 2.4s ease-in-out infinite}
 .gm-mod--preview-index .step .st{font-size:11px;color:var(--lg-text-secondary)}
-.gm-mod--preview-index .step.cur .st{color:var(--mmh-rose-700,#B23A63);font-weight:600}
+.gm-mod--preview-index .step.cur .st{color:var(--mmh-rose-700,#A9315B);font-weight:600}
 .gm-mod--preview-index .ringrow{display:flex;gap:26px;align-items:center;flex-wrap:wrap}
 .gm-mod--preview-index .ringbox{display:flex;flex-direction:column;align-items:center;gap:6px}
 .gm-mod--preview-index .ringbox .rl{font-size:11px;color:var(--lg-text-secondary)}
@@ -2573,10 +2573,10 @@ function MODROOT_products(){return document.getElementById("gm-mod-products")||M
 .gm-mod--preview-index input[type=range].lgs{-webkit-appearance:none;appearance:none;flex:1;height:6px;border-radius:999px;outline:none;
   background:linear-gradient(90deg,var(--mmh-rose-400,#FFA3BE) var(--v,50%),rgba(58,52,84,.10) var(--v,50%))}
 .gm-mod--preview-index input[type=range].lgs::-webkit-slider-thumb{-webkit-appearance:none;width:20px;height:20px;border-radius:50%;background:#FFF;border:2px solid var(--mmh-rose-500,#F77FA3);box-shadow:0 4px 10px rgba(240,127,163,.35);cursor:pointer}
-.gm-mod--preview-index .slv{font-size:13px;font-weight:600;color:var(--mmh-rose-700,#B23A63);min-width:56px;text-align:right;font-variant-numeric:tabular-nums}
+.gm-mod--preview-index .slv{font-size:13px;font-weight:600;color:var(--mmh-rose-700,#A9315B);min-width:56px;text-align:right;font-variant-numeric:tabular-nums}
 .gm-mod--preview-index .stepbox{display:flex;align-items:center;border-radius:18px;overflow:hidden;border:1px solid rgba(255,255,255,.75);background:rgba(255,255,255,.45);box-shadow:var(--lg-shadow-xs)}
 .gm-mod--preview-index .stepbox button{width:36px;height:34px;border:none;background:transparent;font-size:17px;color:var(--lg-text-secondary);cursor:pointer}
-.gm-mod--preview-index .stepbox button:active{background:rgba(247,127,163,.12);color:var(--mmh-rose-700,#B23A63)}
+.gm-mod--preview-index .stepbox button:active{background:rgba(247,127,163,.12);color:var(--mmh-rose-700,#A9315B)}
 .gm-mod--preview-index .stepbox .sn{min-width:56px;text-align:center;font-size:15px;font-weight:600;font-variant-numeric:tabular-nums}
 .gm-mod--preview-index .rate{display:flex;gap:6px}
 .gm-mod--preview-index .rate .rs{width:28px;height:28px;color:rgba(88,98,115,.28);cursor:pointer;transition:transform .2s var(--lg-ease-spring),color .2s}
@@ -2584,7 +2584,7 @@ function MODROOT_products(){return document.getElementById("gm-mod-products")||M
 .gm-mod--preview-index .rate .rs.on{color:var(--mmh-rose-500,#F77FA3)}
 .gm-mod--preview-index .rate .rs:hover{transform:scale(1.12)}
 .gm-mod--preview-index .uprow{display:flex;align-items:center;gap:12px;padding:10px 12px;border-radius:18px;background:rgba(255,255,255,.45);border:1px solid rgba(255,255,255,.7)}
-.gm-mod--preview-index .uprow .fi{width:34px;height:34px;border-radius:18px;display:flex;align-items:center;justify-content:center;background:var(--mmh-rose-100,#FFF0F4);color:var(--mmh-rose-700,#B23A63);flex:none}
+.gm-mod--preview-index .uprow .fi{width:34px;height:34px;border-radius:18px;display:flex;align-items:center;justify-content:center;background:var(--mmh-rose-100,#FFF0F4);color:var(--mmh-rose-700,#A9315B);flex:none}
 .gm-mod--preview-index .uprow .fn{width:150px;font-size:12px;font-weight:500;color:var(--lg-text-primary);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;flex:none}
 .gm-mod--preview-index .uprow .prog{flex:1;margin:0}
 .gm-mod--preview-index .uprow .del{width:26px;height:26px;border-radius:50%;border:none;background:transparent;color:var(--lg-text-secondary);cursor:pointer;font-size:14px;flex:none}
@@ -2611,7 +2611,7 @@ function MODROOT_products(){return document.getElementById("gm-mod-products")||M
    本页只保留表格**专属**的两条：单元格内头像-文字的对齐、以及表格内联小钮档位。 */
 .gm-mod--preview-index .cell-av{display:flex;align-items:center;gap:9px}
 .gm-mod--preview-index .mini-av{width:26px;height:26px;border-radius:50%;background:linear-gradient(150deg,var(--mmh-rose-200,#FFDEE8),var(--mmh-rose-100,#FFF0F4));
-  border:1px solid var(--lg-divider,rgba(58,52,84,.10));display:flex;align-items:center;justify-content:center;color:var(--mmh-rose-700,#B23A63);font-size:11px;font-weight:600;background-origin:border-box}
+  border:1px solid var(--lg-divider,rgba(58,52,84,.10));display:flex;align-items:center;justify-content:center;color:var(--mmh-rose-700,#A9315B);font-size:11px;font-weight:600;background-origin:border-box}
 /* 03 · 3.2.4 mini 档：26 高（行内小钮）。表格内联操作必须走这一档 ——
    32px 的 small 档会把行高顶到 57，超出 03 · 3.7 的 44–52。 */
 .gm-mod--preview-index .btn-mini{height:26px;padding:0 12px;font-size:12px;border-radius:var(--lg-radius-pill,999px)}
@@ -2647,7 +2647,7 @@ function MODROOT_products(){return document.getElementById("gm-mod-products")||M
 .gm-mod--preview-index .mnav .mt{flex:1;text-align:center;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .gm-mod--preview-index .mkpi{padding:10px 11px;display:flex;flex-direction:column;gap:5px}
 .gm-mod--preview-index .mkpi .l{font-size:9.5px;color:var(--lg-text-secondary)}
-.gm-mod--preview-index .mkpi .v{font-size:26px;font-weight:700;line-height:1;letter-spacing:-.02em;color:var(--mmh-rose-700,#B23A63);font-variant-numeric:tabular-nums}
+.gm-mod--preview-index .mkpi .v{font-size:26px;font-weight:700;line-height:1;letter-spacing:-.02em;color:var(--mmh-rose-700,#A9315B);font-variant-numeric:tabular-nums}
 .gm-mod--preview-index .mchiprow{display:flex;gap:6px;flex-wrap:wrap}
 .gm-mod--preview-index .mchip{font-size:9.5px;padding:4px 10px;border-radius:999px;color:var(--lg-text-2,var(--lg-text-secondary));background:rgba(255,255,255,.55);border:1px solid rgba(255,255,255,.75)}
 .gm-mod--preview-index .mchip.on{background:var(--mmh-grad-action-hc,#F77FA3);color:#343A46;font-weight:600}
@@ -2672,7 +2672,7 @@ function MODROOT_products(){return document.getElementById("gm-mod-products")||M
 .gm-mod--preview-index .mc b{font-size:12.5px;color:var(--lg-text-primary);display:flex;align-items:center;gap:7px}
 .gm-mod--preview-index .mc b .n{font-size:9px;color:#FFF;font-weight:600;background:var(--mmh-rose-500,#F77FA3);border-radius:999px;padding:1px 7px}
 .gm-mod--preview-index .mc span{display:block;font-size:10.5px;color:var(--lg-text-secondary);margin-top:4px;line-height:1.6}
-.gm-mod--preview-index .go-link{font-size:12px;font-weight:600;color:var(--mmh-rose-700,#B23A63);text-decoration:none;margin-left:auto}
+.gm-mod--preview-index .go-link{font-size:12px;font-weight:600;color:var(--mmh-rose-700,#A9315B);text-decoration:none;margin-left:auto}
 .gm-mod--preview-index .go-link:hover{opacity:.8}
 
 
@@ -2690,11 +2690,11 @@ function MODROOT_products(){return document.getElementById("gm-mod-products")||M
 .gm-mod--preview-index .bx-default{background:linear-gradient(160deg,rgba(255,255,255,.94),rgba(255,255,255,.78));color:var(--lg-text-primary,#343A46);border:1px solid var(--lg-divider,rgba(58,52,84,.10));box-shadow:0 1px 2px rgba(58,52,84,.06),0 4px 12px rgba(58,52,84,.08);-webkit-backdrop-filter:blur(16px) saturate(1.2);backdrop-filter:blur(16px) saturate(1.2);background-origin:border-box}
 .gm-mod--preview-index .bx-primary{background:var(--mmh-grad-action-hc,#F77FA3);color:#343A46;border:1px solid transparent;box-shadow:0 1px 2px rgba(178,58,99,.22),0 8px 20px rgba(240,127,163,.30);background-origin:border-box}
 .gm-mod--preview-index .bx-secondary{background:linear-gradient(160deg,#C25064,#B04052);color:#FFF;border:none;box-shadow:0 1px 2px rgba(176,64,82,.24),0 8px 20px rgba(208,90,110,.28)}
-.gm-mod--preview-index .bx-outline{background:transparent;color:var(--mmh-rose-700,#B23A63);border:1.5px solid rgba(232,93,143,.45);box-shadow:0 1px 2px rgba(178,58,99,.06)}
+.gm-mod--preview-index .bx-outline{background:transparent;color:var(--mmh-rose-700,#A9315B);border:1.5px solid rgba(232,93,143,.45);box-shadow:0 1px 2px rgba(178,58,99,.06)}
 .gm-mod--preview-index .bx-outline:hover{background:rgba(247,127,163,.08)}
-.gm-mod--preview-index .bx-dashed{background:transparent;color:var(--mmh-rose-700,#B23A63);border:1.5px dashed rgba(232,93,143,.45);box-shadow:none}
+.gm-mod--preview-index .bx-dashed{background:transparent;color:var(--mmh-rose-700,#A9315B);border:1.5px dashed rgba(232,93,143,.45);box-shadow:none}
 .gm-mod--preview-index .bx-dashed:hover{background:rgba(247,127,163,.08)}
-.gm-mod--preview-index .bx-text{background:none;color:var(--mmh-rose-700,#B23A63);border-color:transparent;padding:0 10px;box-shadow:none}
+.gm-mod--preview-index .bx-text{background:none;color:var(--mmh-rose-700,#A9315B);border-color:transparent;padding:0 10px;box-shadow:none}
 .gm-mod--preview-index .bx-text:hover{background:rgba(247,127,163,.08)}
 .gm-mod--preview-index .bx-solid.st-success{background:#1E6B52;color:#FFF;border:1px solid transparent;box-shadow:0 1px 2px rgba(30,107,82,.22),0 8px 20px rgba(47,143,118,.28)} /* AA：白字 6.4:1（D5） */
 .gm-mod--preview-index .bx-solid.st-warning{background:#9A5A0E;color:#FFF;border:1px solid transparent;box-shadow:0 1px 2px rgba(154,90,14,.22),0 8px 20px rgba(185,119,28,.26)} /* AA：白字 5.46:1（D5） */
@@ -2729,7 +2729,7 @@ function MODROOT_products(){return document.getElementById("gm-mod-products")||M
 .gm-mod--preview-index .stepctl{display:flex;gap:10px;align-items:center;margin:2px 0 6px;flex-wrap:wrap}
 .gm-mod--preview-index .stepctl .sbtn{font-size:11px;font-weight:600;padding:6px 14px;border-radius:999px;cursor:pointer;
   background:linear-gradient(160deg,rgba(255,255,255,.94),rgba(255,255,255,.78));color:var(--lg-text-primary,#343A46);border:1px solid var(--lg-divider,rgba(58,52,84,.10));box-shadow:0 1px 2px rgba(58,52,84,.06),0 4px 12px rgba(58,52,84,.08);color:var(--lg-text-secondary);transition:transform .15s var(--lg-ease-out),background .2s;background-origin:border-box}
-.gm-mod--preview-index .stepctl .sbtn:hover{background:#FFF;color:var(--mmh-rose-700,#B23A63)}
+.gm-mod--preview-index .stepctl .sbtn:hover{background:#FFF;color:var(--mmh-rose-700,#A9315B)}
 .gm-mod--preview-index .stepctl .sbtn:active{transform:scale(.95)}
 .gm-mod--preview-index .stepctl .hint{font-size:11px;color:var(--lg-text-secondary)}
 
@@ -2784,7 +2784,7 @@ function MODROOT_products(){return document.getElementById("gm-mod-products")||M
 .gm-mod--preview-index .pgit.gap{border:none;background:none;cursor:default}
 .gm-mod--preview-index .avts{display:flex;gap:10px;align-items:center}
 /* 头像标识：饱和渐变 + 白字实测 2.49–4.14，深字同样不达标 → 浅染 + 深档文字（见 preview-examples 同名注释） */
-.gm-mod--preview-index .avt{border-radius:50%;display:flex;align-items:center;justify-content:center;color:var(--mmh-rose-700,#B23A63);font-weight:600;
+.gm-mod--preview-index .avt{border-radius:50%;display:flex;align-items:center;justify-content:center;color:var(--mmh-rose-700,#A9315B);font-weight:600;
   background:linear-gradient(150deg,#FFDEE8,#FFF0F4);border:2px solid rgba(255,255,255,.9);box-shadow:var(--lg-shadow-sm);background-origin:border-box}
 .gm-mod--preview-index .avt.s{width:28px;height:28px;font-size:12px}.gm-mod--preview-index .avt.m{width:38px;height:38px;font-size:14px}.gm-mod--preview-index .avt.l{width:50px;height:50px;font-size:18px}
 .gm-mod--preview-index .avt.mint{background:linear-gradient(150deg,#A5F1EE,#E0F8F6);color:var(--lg-sem-positive,#25715D)}
@@ -2813,7 +2813,7 @@ function MODROOT_products(){return document.getElementById("gm-mod-products")||M
   box-shadow:var(--lg-shadow-xs);transition:transform .18s var(--lg-ease-out),box-shadow .18s var(--lg-ease-out);background-origin:border-box}
 .gm-mod--preview-index .hrow:hover{transform:translateY(-2px);box-shadow:var(--lg-shadow-md)}
 .gm-mod--preview-index .hrow .fico{width:44px;height:44px;border-radius:18px;flex:none;display:flex;align-items:center;justify-content:center;
-  background:linear-gradient(150deg,var(--mmh-rose-200,#FFDEE8),var(--mmh-rose-100,#FFF0F4));border:1px solid rgba(255,255,255,.9);color:var(--mmh-rose-700,#B23A63);background-origin:border-box}
+  background:linear-gradient(150deg,var(--mmh-rose-200,#FFDEE8),var(--mmh-rose-100,#FFF0F4));border:1px solid rgba(255,255,255,.9);color:var(--mmh-rose-700,#A9315B);background-origin:border-box}
 .gm-mod--preview-index .hrow .fico svg{width:23px;height:23px}
 .gm-mod--preview-index .hrow .fkstate{transition:transform .15s var(--lg-ease-spring)}
 .gm-mod--preview-index .hrow .fkstate:active{transform:scale(.9)}
@@ -2846,7 +2846,7 @@ function MODROOT_products(){return document.getElementById("gm-mod-products")||M
   font-weight:700;color:#343A46;background:var(--mmh-grad-action-hc,#F77FA3);font-size:15px;box-shadow:0 1px 2px rgba(178,58,99,.22),0 8px 20px rgba(240,127,163,.30)}
 .gm-mod--preview-index .excard h3{font-size:15.5px;margin-top:2px}
 .gm-mod--preview-index .excard p{font-size:12px;color:var(--lg-text-secondary);line-height:1.8;flex:1}
-.gm-mod--preview-index .excard .go{font-size:12px;font-weight:600;color:var(--mmh-rose-700,#B23A63);display:flex;align-items:center;gap:6px}
+.gm-mod--preview-index .excard .go{font-size:12px;font-weight:600;color:var(--mmh-rose-700,#A9315B);display:flex;align-items:center;gap:6px}
 .gm-mod--preview-index .excard .go svg{width:14px;height:14px;stroke:currentColor;fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
 .gm-mod--preview-index .excard .ends{display:flex;gap:6px;flex-wrap:wrap}
 .gm-mod--preview-index .excard .ends i{font-style:normal;font-size:10px;padding:2px 9px;border-radius:999px;background:rgba(255,255,255,.6);border:1px solid rgba(255,255,255,.8);color:var(--lg-text-secondary)}
@@ -2861,9 +2861,9 @@ function MODROOT_products(){return document.getElementById("gm-mod-products")||M
 .gm-mod--preview-index .ng{position:relative}
 .gm-mod--preview-index .ngt{font-family:var(--lg-font-sans);font-size:13px;font-weight:500;color:var(--lg-text-secondary);background:none;
   border:1px solid transparent;border-radius:999px;padding:7px 13px;cursor:pointer;transition:.2s}
-.gm-mod--preview-index .ngt:hover{background:rgba(255,255,255,.6);color:var(--mmh-rose-700,#B23A63)}
+.gm-mod--preview-index .ngt:hover{background:rgba(255,255,255,.6);color:var(--mmh-rose-700,#A9315B)}
 .gm-mod--preview-index .ngt::after{content:"▾";margin-left:5px;font-size:10px;opacity:.6}
-.gm-mod--preview-index .ng.open .ngt{background:#FFF;color:var(--mmh-rose-700,#B23A63);box-shadow:var(--lg-shadow-xs)}
+.gm-mod--preview-index .ng.open .ngt{background:#FFF;color:var(--mmh-rose-700,#A9315B);box-shadow:var(--lg-shadow-xs)}
 .gm-mod--preview-index .ngdrop{position:absolute;top:calc(100% + 10px);left:0;min-width:176px;z-index:120;padding:6px;border-radius:18px;
   background:linear-gradient(160deg,rgba(255,255,255,.96),rgba(255,255,255,.82));
   border:1px solid rgba(255,255,255,.95);box-shadow:var(--lg-shadow-lg);
@@ -2871,7 +2871,7 @@ function MODROOT_products(){return document.getElementById("gm-mod-products")||M
   opacity:0;pointer-events:none;transform:translateY(6px);transition:.22s var(--lg-ease-out);background-origin:border-box}
 .gm-mod--preview-index .ng.open .ngdrop{opacity:1;pointer-events:auto;transform:none}
 .gm-mod--preview-index .ngdrop a{display:block;padding:9px 13px;border-radius:18px;font-size:13px;color:var(--lg-text-secondary);text-decoration:none;white-space:nowrap}
-.gm-mod--preview-index .ngdrop a:hover{background:var(--mmh-rose-100,#FFF0F4);color:var(--mmh-rose-700,#B23A63)}
+.gm-mod--preview-index .ngdrop a:hover{background:var(--mmh-rose-100,#FFF0F4);color:var(--mmh-rose-700,#A9315B)}
 .gm-mod--preview-index .direct{font-size:13px;font-weight:500;color:var(--lg-text-secondary);text-decoration:none;padding:7px 12px;border-radius:999px;white-space:nowrap}
 .gm-mod--preview-index .direct:hover{background:rgba(255,255,255,.6)}
 .gm-mod--preview-index .direct.primary{background:var(--mmh-grad-action-hc,#F77FA3);color:#343A46;font-weight:600;box-shadow:0 1px 2px rgba(178,58,99,.22),0 8px 20px rgba(240,127,163,.30)}
@@ -2882,7 +2882,7 @@ function MODROOT_products(){return document.getElementById("gm-mod-products")||M
 .gm-mod--preview-index .sysbar b{font-size:13px;color:var(--lg-text-primary);display:flex;align-items:center;gap:8px}
 .gm-mod--preview-index .sysbar b i{width:9px;height:9px;border-radius:50%;background:var(--mmh-grad-primary,#F77FA3);display:inline-block}
 .gm-mod--preview-index .sysbar .stat{display:flex;gap:16px;flex-wrap:wrap;color:var(--lg-text-secondary);font-size:12.5px}
-.gm-mod--preview-index .sysbar .stat span b{font-size:15px;color:var(--mmh-rose-700,#B23A63);font-variant-numeric:tabular-nums}
+.gm-mod--preview-index .sysbar .stat span b{font-size:15px;color:var(--mmh-rose-700,#A9315B);font-variant-numeric:tabular-nums}
 .gm-mod--preview-index .sysbar .go{margin-left:auto;display:flex;gap:8px}
 @media(max-width:1366px){.gm-mod--preview-index .topnav{overflow-x:auto}}
 
@@ -2890,7 +2890,7 @@ function MODROOT_products(){return document.getElementById("gm-mod-products")||M
 /* ═══ 组件库全览 v2：覆盖条 + 规范徽标 ═══ */
 .gm-mod--preview-index .covline{display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin:0 2px 14px}
 .gm-mod--preview-index .covline .cv{font-size:11px;color:var(--lg-text-secondary);background:rgba(255,255,255,.5);border:1px solid rgba(255,255,255,.75);padding:4px 11px;border-radius:999px}
-.gm-mod--preview-index .covline a{font-size:11.5px;font-weight:600;color:var(--mmh-rose-700,#B23A63);text-decoration:none;margin-left:2px}
+.gm-mod--preview-index .covline a{font-size:11.5px;font-weight:600;color:var(--mmh-rose-700,#A9315B);text-decoration:none;margin-left:2px}
 .gm-mod--preview-index .spec-chip{font-size:10px;font-weight:600;color:#6A48DC;background:rgba(154,120,255,.12);border:1px solid rgba(154,120,255,.25);padding:2px 9px;border-radius:999px;white-space:nowrap}
 .gm-mod--preview-index .panel-h3{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-bottom:16px}
 
@@ -2945,12 +2945,12 @@ function MODROOT_products(){return document.getElementById("gm-mod-products")||M
 
 /* 悬停下拉（桌面） */
 .gm-mod--preview-index .ng:hover .ngdrop{opacity:1;pointer-events:auto;transform:none}
-.gm-mod--preview-index .ng:hover .ngt{background:#FFF;color:var(--mmh-rose-700,#B23A63);box-shadow:var(--lg-shadow-xs)}
-.gm-mod--preview-index .ng:hover .ngt::after{color:var(--mmh-rose-700,#B23A63)}
+.gm-mod--preview-index .ng:hover .ngt{background:#FFF;color:var(--mmh-rose-700,#A9315B);box-shadow:var(--lg-shadow-xs)}
+.gm-mod--preview-index .ng:hover .ngt::after{color:var(--mmh-rose-700,#A9315B)}
 
 /* 悬停下拉：菜单 → 下拉之间的桥接区，鼠标可平滑下移 */
 .gm-mod--preview-index .ng::after{content:"";position:absolute;left:0;right:0;top:100%;height:14px;z-index:5}
-.gm-mod--preview-index .ngdrop a:active{background:var(--mmh-rose-100,#FFF0F4);color:var(--mmh-rose-deep,#B23A63)}.gm-mod--preview-index{--mmh-grad-action-hc:linear-gradient(135deg,#FFC4D6 0%,#F77FA3 100%)}
+.gm-mod--preview-index .ngdrop a:active{background:var(--mmh-rose-100,#FFF0F4);color:var(--mmh-rose-deep,#A9315B)}.gm-mod--preview-index{--mmh-grad-action-hc:linear-gradient(135deg,#FFC4D6 0%,#F77FA3 100%)}
 /* AA 高对比行动（D5/审查收口）：文字承载面切深档，装饰渐变/开关/进度条保持品牌亮渐变 */
 /* ⚠️ 这一组必须覆写**完整配方**（底色 + 文字 + 描边 + 阴影）。
    旧版只写 background/color，于是 `.btn-primary`/`.bx-primary` 的
@@ -3489,7 +3489,7 @@ function MODROOT_products(){return document.getElementById("gm-mod-products")||M
           <div class="it"><b>体重</b><span>11.2kg · P62</span></div>
           <div class="it"><b>头围</b><span>47cm · P58</span></div>
           <div class="it"><b>下次体检</b><span>21 月龄</span></div>
-          <div class="it"><b>随访状态</b><span style="color:var(--mmh-rose-700,#B23A63)">计划中</span></div>
+          <div class="it"><b>随访状态</b><span style="color:var(--mmh-rose-700,#A9315B)">计划中</span></div>
         </div>
         <details class="gm-fold" data-fold-group="baby-visit"><summary><span class="gm-fold__dot" data-tone="positive"></span>2024-10 儿保随访记录<svg class="gm-fold__arr" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg></summary><div class="gm-fold__body"><div><p>身高体重头围均正常，喂养指导完成；下次重点关注语言发育与 21 月龄体检。</p></div></div></details>
         <details class="gm-fold" data-fold-group="baby-visit"><summary><span class="gm-fold__dot" data-tone="info"></span>2024-07 疫苗：百白破 ②<svg class="gm-fold__arr" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg></summary><div class="gm-fold__body"><div><p>接种后留观 30 分钟无异常，下次疫苗接种为 12 月龄麻腮风。</p></div></div></details>
@@ -3530,7 +3530,7 @@ function MODROOT_products(){return document.getElementById("gm-mod-products")||M
           <div style="display:flex;gap:12px;align-items:center;padding:9px 4px;border-bottom:1px solid rgba(58,52,84,.07)">
             <span class="dot success"></span><span class="badge" style="font-size:10px;padding:2px 9px">2 月龄</span><span style="font-size:13px;flex:1">脊灰 ① · 百白破 ①</span><span style="font-size:11px;color:var(--lg-text-secondary)">已接种</span></div>
           <div style="display:flex;gap:12px;align-items:center;padding:9px 4px;border-bottom:1px solid rgba(58,52,84,.07)">
-            <span class="dot running"></span><span class="badge" style="font-size:10px;padding:2px 9px;color:var(--mmh-rose-700,#B23A63);background:var(--mmh-rose-100,#FFF0F4)">12 月龄</span><span style="font-size:13px;flex:1">麻腮风</span><button class="btn btn-primary btn-sm">预约接种</button></div>
+            <span class="dot running"></span><span class="badge" style="font-size:10px;padding:2px 9px;color:var(--mmh-rose-700,#A9315B);background:var(--mmh-rose-100,#FFF0F4)">12 月龄</span><span style="font-size:13px;flex:1">麻腮风</span><button class="btn btn-primary btn-sm">预约接种</button></div>
           <div style="display:flex;gap:12px;align-items:center;padding:9px 4px">
             <span class="dot warning"></span><span class="badge" style="font-size:10px;padding:2px 9px">18 月龄</span><span style="font-size:13px;flex:1">百白破 ④ · 甲肝</span><span style="font-size:11px;color:var(--lg-text-secondary)">剩余 26 天</span></div>
         </div>
@@ -3667,9 +3667,9 @@ function MODROOT_products(){return document.getElementById("gm-mod-products")||M
 </div></div><div class="phone"><div class="scr"><div class="notch"></div>
   <div class="body">
     <div class="mnav mglass"><svg viewBox="0 0 24 24"><path d="M20 12H5.5M11 6.5 5.5 12l5.5 5.5"/></svg><span class="mt">朵朵 · 18 月龄</span><svg viewBox="0 0 24 24"><path d="M9 6.6h11M9 12h11M9 17.4h11"/></svg></div>
-    <div class="mkpi mglass"><span class="l">体重生长曲线 · WHO 参考 · 当前百分位</span><span class="v" style="color:var(--mmh-rose-700,#B23A63)">P62</span>
+    <div class="mkpi mglass"><span class="l">体重生长曲线 · WHO 参考 · 当前百分位</span><span class="v" style="color:var(--mmh-rose-700,#A9315B)">P62</span>
       <div id="preview-index--growthChartMini"></div></div>
-    <div class="mrow2 mglass"><span class="mdot ok"></span><span class="md2"><b>疫苗：12 月龄麻腮风</b><span>已预约 · 周五 09:30</span></span><b style="color:var(--mmh-rose-700,#B23A63);font-size:10px">预约</b></div>
+    <div class="mrow2 mglass"><span class="mdot ok"></span><span class="md2"><b>疫苗：12 月龄麻腮风</b><span>已预约 · 周五 09:30</span></span><b style="color:var(--mmh-rose-700,#A9315B);font-size:10px">预约</b></div>
     <div class="mrow2 mglass"><span class="mdot warn"></span><span class="md2"><b>提醒：21 月龄儿保体检</b><span>剩余 90 天 · 自动提醒中</span></span></div>
     <div class="mrow2 mglass"><span class="mdot ok"></span><span class="md2"><b>AI 随访建议</b><span>语言发育良好，加强亲子共读</span></span></div>
     <div class="mchiprow"><span class="mchip on">生长</span><span class="mchip">疫苗</span><span class="mchip">体检</span><span class="mchip">记录</span></div>
@@ -3680,7 +3680,7 @@ function MODROOT_products(){return document.getElementById("gm-mod-products")||M
     <div class="mnav mglass"><svg viewBox="0 0 24 24"><path d="M20 12H5.5M11 6.5 5.5 12l5.5 5.5"/></svg><span class="mt">医护 · 今日随访</span><svg viewBox="0 0 24 24"><circle cx="10.5" cy="10.5" r="6.5"/><path d="M15.4 15.4 21 21"/></svg></div>
     <div class="mglass" style="display:flex;align-items:center;gap:6px;padding:7px 11px;font-size:11px;color:var(--lg-text-secondary)"><svg style="width:13px;height:13px;stroke:currentColor;fill:none;stroke-width:1.8;stroke-linecap:round" viewBox="0 0 24 24"><circle cx="10.5" cy="10.5" r="6.5"/><path d="M15.4 15.4 21 21"/></svg>搜索宝宝 / 档案号</div>
     <div class="mrow2 mglass"><span class="mdot danger"></span><span class="md2"><b>安安 · 36m · P3 以下</b><span>随访已逾期 3 天 · 需优先联系</span></span><b style="color:var(--lg-sem-risk,#B72F42);font-size:10px">优先</b></div>
-    <div class="mrow2 mglass"><span class="mdot ok"></span><span class="md2"><b>朵朵 · 18m · P62</b><span>今日 09:30 · 生长评估</span></span><b style="color:var(--mmh-rose-700,#B23A63);font-size:10px">评估</b></div>
+    <div class="mrow2 mglass"><span class="mdot ok"></span><span class="md2"><b>朵朵 · 18m · P62</b><span>今日 09:30 · 生长评估</span></span><b style="color:var(--mmh-rose-700,#A9315B);font-size:10px">评估</b></div>
     <div class="mrow2 mglass"><span class="mdot warn"></span><span class="md2"><b>大米 · 12m · 疫苗到期</b><span>麻腮风剩余 5 天 · 电话回访</span></span><b style="color:var(--lg-sem-attention,#8D5A15);font-size:10px">提醒</b></div>
     <div class="mrow2 mglass"><span class="mdot ok"></span><span class="md2"><b>乐乐 · 5m · 已预约</b><span>明日 14:00 · 儿保体检</span></span><b style="color:var(--lg-text-secondary);font-size:10px">查看</b></div>
     <div class="mbtn" style="background:linear-gradient(135deg,#A9E3D4,#6FC9B4);color:#1B3D33">开始今日随访（剩余 6 人）</div>
@@ -3719,7 +3719,7 @@ function MODROOT_products(){return document.getElementById("gm-mod-products")||M
     <div class="grid g2">
       <div class="panel glass-l2 cchart">
         <h3 style="margin-bottom:2px">KPI · 指标卡</h3><span class="ph-cap" style="margin:0 0 6px;color:var(--lg-text-secondary)">模块 1 · 数值聚焦 · 04 · 4.3.1</span><div style="display:flex;gap:12px;flex-wrap:wrap">
-<div class="kpi glass-l2" style="flex:1;min-width:130px"><div class="k-lab" style="font-size:12px">管理对象</div><div class="k-val num" style="font-size:26px;color:var(--mmh-rose-700,#B23A63)">12,849</div><div class="k-delta" style="font-size:11px;margin-top:2px"><span class="up" style="color:var(--lg-sem-positive)">↑320 本月</span></div></div>
+<div class="kpi glass-l2" style="flex:1;min-width:130px"><div class="k-lab" style="font-size:12px">管理对象</div><div class="k-val num" style="font-size:26px;color:var(--mmh-rose-700,#A9315B)">12,849</div><div class="k-delta" style="font-size:11px;margin-top:2px"><span class="up" style="color:var(--lg-sem-positive)">↑320 本月</span></div></div>
 <div class="kpi glass-l2" style="flex:1;min-width:130px"><div class="k-lab" style="font-size:12px">筛查完成率</div><div class="k-val num" style="font-size:26px;color:var(--lg-sem-positive,#25715D)">82%</div><div class="k-delta" style="font-size:11px;margin-top:2px"><span class="up" style="color:var(--lg-sem-positive)">达标</span></div></div>
 <div class="kpi glass-l2" style="flex:1;min-width:130px"><div class="k-lab" style="font-size:12px">高危随访闭环</div><div class="k-val num" style="font-size:26px;color:var(--lg-sem-attention)">68%</div><div class="k-delta" style="font-size:11px;margin-top:2px"><span style="color:var(--lg-text-secondary)">待跟进 23</span></div></div>
 </div><p class="note" style="margin-top:6px">大数字 tabular-nums + 单位/口径 caption 并列；状态语义色。</p>
@@ -3734,7 +3734,7 @@ function MODROOT_products(){return document.getElementById("gm-mod-products")||M
       </div>
       <div class="panel glass-l2 cchart">
         <h3 style="margin-bottom:2px">比较 · 柱/条形</h3><span class="ph-cap" style="margin:0 0 6px;color:var(--lg-text-secondary)">模块 3 · 顶部圆角 · 04 · 4.3.3</span><div style="display:flex;flex-direction:column;gap:7px">
-<div style="display:flex;justify-content:space-between;font-size:11px;margin-bottom:1px"><span style="color:var(--lg-text-secondary)">儿童保健随访</span><b class="num" style="color:var(--mmh-rose-700,#B23A63)">412</b></div><div class="prog" style="margin:0"><div class="track"><div class="pf" style="width:82%;background:linear-gradient(90deg,#FFA3BE,#E85D8F)"></div></div></div>
+<div style="display:flex;justify-content:space-between;font-size:11px;margin-bottom:1px"><span style="color:var(--lg-text-secondary)">儿童保健随访</span><b class="num" style="color:var(--mmh-rose-700,#A9315B)">412</b></div><div class="prog" style="margin:0"><div class="track"><div class="pf" style="width:82%;background:linear-gradient(90deg,#FFA3BE,#E85D8F)"></div></div></div>
 <div style="display:flex;justify-content:space-between;font-size:11px;margin-bottom:1px"><span style="color:var(--lg-text-secondary)">两癌筛查</span><b class="num" style="color:var(--lg-sem-attention,#8D5A15)">356</b></div><div class="prog" style="margin:0"><div class="track"><div class="pf" style="width:71%;background:linear-gradient(90deg,#FFDCC7,#F6A97E)"></div></div></div>
 <div style="display:flex;justify-content:space-between;font-size:11px;margin-bottom:1px"><span style="color:var(--lg-text-secondary)">孕产妇管理</span><b class="num" style="color:var(--lg-sem-special)">288</b></div><div class="prog" style="margin:0"><div class="track"><div class="pf" style="width:58%;background:linear-gradient(90deg,#B9A0FF,#9A78FF)"></div></div></div>
 </div><p class="note" style="margin-top:6px">横向条便于读数；数值在条右；堆叠 ≤3。</p>
@@ -3809,7 +3809,7 @@ function MODROOT_products(){return document.getElementById("gm-mod-products")||M
     <div class="panel glass-l2" style="margin-top:16px">
       <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap"><b style="font-size:13px">模块使用纪律</b>
         <span class="tg g">数据最亮</span><span class="tg b">单图单卡（M）</span><span class="tg o">加载=骨架屏</span><span class="tg n">空态=三点呼吸</span><span class="tg r">禁止霓虹/伪3D</span>
-        <span style="margin-left:auto;font-size:12px"><a href="#gm-mod-site-manual" data-mod="site-manual"" style="color:var(--mmh-rose-700,#B23A63);font-weight:600;text-decoration:none">总览手册 ›</a> · 完整规范 04 / 大屏蓝图与域指标 15.3.4</span></div>
+        <span style="margin-left:auto;font-size:12px"><a href="#gm-mod-site-manual" data-mod="site-manual"" style="color:var(--mmh-rose-700,#A9315B);font-weight:600;text-decoration:none">总览手册 ›</a> · 完整规范 04 / 大屏蓝图与域指标 15.3.4</span></div>
     </div>
   </section>
 
@@ -4392,7 +4392,7 @@ function MODROOT_preview_index(){return document.getElementById("gm-mod-preview-
     var mask=document.createElement('div');mask.className='dmask';mask.id='preview-index--dlgMask';
     mask.innerHTML='<div class="dcard" role="dialog" aria-modal="true" aria-label="确认提交">'+
       '<div style="display:flex;align-items:flex-start;gap:10px;margin-bottom:14px">'+
-      '<span style="width:40px;height:40px;border-radius:18px;background:rgba(247,127,163,.14);color:#B23A63;display:flex;align-items:center;justify-content:center;flex:none">'+
+      '<span style="width:40px;height:40px;border-radius:18px;background:rgba(247,127,163,.14);color:#A9315B;display:flex;align-items:center;justify-content:center;flex:none">'+
       '<svg style="width:20px;height:20px;stroke:currentColor;fill:none;stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round" viewBox="0 0 24 24"><path d="M12 3.2 19 5.7v5.4c0 4.6-3 8.3-7 9.7-4-1.4-7-5.1-7-9.7V5.7z"/><path d="m9.2 11.9 2 2 3.6-3.9"/></svg></span>'+
       '<div style="flex:1"><div style="font-size:16px;font-weight:600">提交筛查结果</div>'+
       '<div style="font-size:12.5px;color:var(--lg-text-secondary);margin-top:4px;line-height:1.7">张女士 · 宫颈筛查（TCT）结果已录入，提交后进入“待复核”状态。</div></div></div>'+
@@ -4635,7 +4635,7 @@ function MODROOT_preview_index(){return document.getElementById("gm-mod-preview-
   /* 系统 Token 别名（惰性引用）：数据呈现层读 --lg-* 命名，本页私有命名由这里接过去。
      不接的后果不是"没样式"，而是暗色档里"页面翻了、表格没翻"的暗底深字。 */
   --lg-text-primary:var(--text);--lg-text-secondary:var(--t2);  --lg-divider:var(--line);
-  --rose:#F77FA3;--rose-d:#E85D8F;--rose-deep:#B23A63;--mint:#6FC9B4;--mint-d:#4FB59C;
+  --rose:#F77FA3;--rose-d:#E85D8F;--rose-deep:#A9315B;--mint:#6FC9B4;--mint-d:#4FB59C;
   --info:#6D9EFF;--warn:#F2B25C;--danger:#EF6A7B;--purple:#9A78FF;
   /* 文字专用深档 alias（02 · 2.1.5：-500 仅作填充/色块/图表强调，文字走深色 alias） */
   --sem-info:#3261C1;--sem-warn:#8D5A15;--sem-danger:#B72F42;--sem-special:#6A48DC;--sem-positive:#25715D;
@@ -4697,7 +4697,7 @@ background:rgba(255,255,255,.5);border:1px solid var(--lg-divider,rgba(58,52,84,
 .gm-mod--preview-examples .btn.pri:hover{box-shadow:0 2px 4px rgba(178,58,99,.24),0 12px 26px rgba(240,127,163,.38)}
 .gm-mod--preview-examples .btn.mint{background:linear-gradient(135deg,#C25064,#B04052);color:#FFF}  /* 见下行：实底统一走 D5 深档 */
 .gm-mod--preview-examples .btn.gho{background:transparent;color:var(--rose-deep)}
-.gm-mod--preview-examples .btn.line{background:transparent;color:var(--mmh-rose-700,#B23A63);border:1.5px solid rgba(232,93,143,.45);box-shadow:0 1px 2px rgba(178,58,99,.06)}
+.gm-mod--preview-examples .btn.line{background:transparent;color:var(--mmh-rose-700,#A9315B);border:1.5px solid rgba(232,93,143,.45);box-shadow:0 1px 2px rgba(178,58,99,.06)}
 .gm-mod--preview-examples .btn.line:hover{border-color:rgba(232,93,143,.75);background:rgba(247,127,163,.07)}
 .gm-mod--preview-examples .btn.danger{background:linear-gradient(135deg,#C25064,#B04052);color:#FFF}
 .gm-mod--preview-examples .btn.mini{height:26px;font-size:12px;padding:0 12px;border-radius:var(--lg-radius-pill,999px)}   /* 03 · 3.2.4：mini 26 高（原 30 不在档上） */
@@ -4733,7 +4733,7 @@ background:rgba(255,255,255,.5);border:1px solid var(--lg-divider,rgba(58,52,84,
    理由（算术）：#F77FA3/#4FB59C 这类饱和面上，白字 2.46–4.14、深字 2.3–3.4，
    两个方向都过不了 AA；浅染 + 深字可达 4.6–8.9，且保留原来的轻盈观感。
    本项取代决策记录 D6「头像保留白字」的例外（例外不再必要）。 */
-.gm-mod--preview-examples .av{width:32px;height:32px;border-radius:50%;display:inline-flex;align-items:center;justify-content:center;font-weight:600;color:var(--mmh-rose-700,#B23A63);
+.gm-mod--preview-examples .av{width:32px;height:32px;border-radius:50%;display:inline-flex;align-items:center;justify-content:center;font-weight:600;color:var(--mmh-rose-700,#A9315B);
   background:linear-gradient(150deg,#FFDEE8,#FFF0F4);font-size:12px}
 .gm-mod--preview-examples .av.mint{background:linear-gradient(150deg,#A5F1EE,#E0F8F6);color:var(--lg-sem-positive,#25715D)}
 .gm-mod--preview-examples .av.purp{background:linear-gradient(150deg,#D9CBFE,#EDE7FE);color:var(--mmh-solid-special,#6242B8)}
@@ -4752,7 +4752,7 @@ background:rgba(255,255,255,.5);border:1px solid var(--lg-divider,rgba(58,52,84,
 .gm-mod--preview-examples .wjrow{display:flex;align-items:center;gap:12px;padding:10px 14px;border-radius:18px;margin-bottom:8px;
   background:rgba(255,255,255,.5);border:1px solid rgba(255,255,255,.75)}
 .gm-mod--preview-examples .wjrow .ic{width:40px;height:40px;border-radius:18px;display:flex;align-items:center;justify-content:center;flex:none;
-  background:linear-gradient(150deg,#FFDEE8,#FFF0F4);color:var(--mmh-rose-700,#B23A63)}
+  background:linear-gradient(150deg,#FFDEE8,#FFF0F4);color:var(--mmh-rose-700,#A9315B)}
 .gm-mod--preview-examples .wjrow .ic svg{width:22px;height:22px}
 .gm-mod--preview-examples .wjrow .m{flex:1;min-width:0}
 .gm-mod--preview-examples .wjrow .m b{font-size:13px;display:block}
@@ -4787,7 +4787,7 @@ background:rgba(255,255,255,.5);border:1px solid var(--lg-divider,rgba(58,52,84,
 .gm-mod--preview-examples .lv{display:flex;flex-direction:column;gap:10px;margin-top:10px}
 .gm-mod--preview-examples .lvitem{display:flex;align-items:center;gap:12px;padding:14px;border-radius:18px}
 .gm-mod--preview-examples .lvitem .ic{width:42px;height:42px;border-radius:18px;flex:none;display:flex;align-items:center;justify-content:center;
-  background:rgba(255,255,255,.6);border:1px solid rgba(255,255,255,.85);color:var(--mmh-rose-700,#B23A63)}
+  background:rgba(255,255,255,.6);border:1px solid rgba(255,255,255,.85);color:var(--mmh-rose-700,#A9315B)}
 .gm-mod--preview-examples .lvitem .m{flex:1;min-width:0}
 .gm-mod--preview-examples .lvitem .m b{display:block;font-size:14.5px;font-weight:600}
 .gm-mod--preview-examples .lvitem .m span{font-size:12px;color:var(--t3)}
@@ -4883,7 +4883,7 @@ background:rgba(255,255,255,.5);border:1px solid var(--lg-divider,rgba(58,52,84,
 .gm-mod--preview-examples .hub .ng:hover .ngdrop,.gm-mod--preview-examples .hub .ng:focus-within .ngdrop{opacity:1;pointer-events:auto;transform:none}
 .gm-mod--preview-examples .hub .ng::after{content:"";position:absolute;left:-8px;right:-8px;top:100%;height:12px}
 .gm-mod--preview-examples .hub .ngdrop a{display:block;padding:9px 12px;border-radius:18px;font-size:13px;color:var(--t2);text-decoration:none}
-.gm-mod--preview-examples .hub .ngdrop a:hover{background:rgba(247,127,163,.1);color:#B23A63}
+.gm-mod--preview-examples .hub .ngdrop a:hover{background:rgba(247,127,163,.1);color:#A9315B}
 
 
 /* ── 对齐规范修复（17 章全局：垂直居中/间距/基线） ── */
@@ -4941,7 +4941,7 @@ background:rgba(255,255,255,.5);border:1px solid var(--lg-divider,rgba(58,52,84,
   </div>
 
   <div class="kpis">
-    <div class="kpi card"><div class="l">管理对象总数</div><div class="v num" style="color:var(--mmh-rose-700,#B23A63)">12,849</div><div class="d">本月新增 320 · 今日 18</div></div>
+    <div class="kpi card"><div class="l">管理对象总数</div><div class="v num" style="color:var(--mmh-rose-700,#A9315B)">12,849</div><div class="d">本月新增 320 · 今日 18</div></div>
     <div class="kpi card"><div class="l">待筛查 / 待体检</div><div class="v num" style="color:var(--sem-info)">1,026</div><div class="d">宫颈 612 · 乳腺 414</div></div>
     <div class="kpi card"><div class="l">异常待管理</div><div class="v num" style="color:var(--sem-warn)">86</div><div class="d">待复查 41 · 待随访 45</div></div>
     <div class="kpi card"><div class="l">高危 / 重点对象</div><div class="v num" style="color:var(--sem-danger)">23</div><div class="d">孕产妇橙红 12 · 高危儿 11</div></div>
@@ -5024,11 +5024,11 @@ background:rgba(255,255,255,.5);border:1px solid var(--lg-divider,rgba(58,52,84,
       <div class="card" style="padding:16px 18px;margin-top:14px">
         <div style="display:flex;align-items:center;margin-bottom:12px"><b style="font-size:15px">儿童健康保健清单（五健 + 口腔）</b><span style="font-size:12px;color:var(--t3);margin-left:auto">最近评估：05-06 · 王医生</span></div>
         <div class="wjrow"><span class="ic"><svg class="i" viewBox="0 0 24 24"><circle cx="8.6" cy="6.9" r="2.1"/><path d="M8.6 9.1v3.4M6.9 10.9l1.7.7M10.3 10.9l-1.7.7M8.6 12.5 7.5 15.2M8.6 12.5l1.1 2.7"/><path d="M16.6 5v12M15.2 7.3 16.6 5l1.4 2.3M15.2 14.7 16.6 17l1.4-2.3"/></svg></span><div class="m"><b>生长发育</b><span>身长 83cm P75 · 体重 11.2kg P62</span></div><span class="tg g"><i></i>正常</span></div>
-        <div class="wjrow"><span class="ic" style="color:var(--mmh-rose-700,#B23A63)"><svg class="i" viewBox="0 0 24 24"><circle cx="11.8" cy="14.6" r="5.4"/><path d="M11.8 9.5c.3-1.9 1.2-3.1 2.9-3.8"/><path d="M14.5 6.1c1.7-.7 3.1-.5 4 .4"/></svg></span><div class="m"><b>营养喂养</b><span>辅食结构良好 · 奶量充足</span></div><span class="tg g"><i></i>正常</span></div>
-        <div class="wjrow"><span class="ic" style="color:var(--mmh-rose-700,#B23A63)"><svg class="i" viewBox="0 0 24 24"><circle cx="12" cy="12.2" r="6.4"/><circle cx="9.8" cy="11" r=".9" fill="currentColor" stroke="none"/><circle cx="14.2" cy="11" r=".9" fill="currentColor" stroke="none"/><path d="M9.5 14.3c1.5 1.2 3.5 1.2 5 0"/></svg></span><div class="m"><b>心理行为发育</b><span>语言发育良好 · 社交回应佳</span></div><span class="tg g"><i></i>正常</span></div>
-        <div class="wjrow"><span class="ic" style="color:var(--mmh-rose-700,#B23A63)"><svg class="i" viewBox="0 0 24 24"><path d="M3.6 13.2s3-6.2 8.4-6.2 8.4 6.2 8.4 6.2-3 6.2-8.4 6.2S3.6 13.2 3.6 13.2z"/><circle cx="12" cy="13.2" r="3.1"/></svg></span><div class="m"><b>视力保健</b><span>屈光筛查 · 建议 3 月后复查</span></div><span class="tg o"><i></i>待复查</span></div>
-        <div class="wjrow"><span class="ic" style="color:var(--mmh-rose-700,#B23A63)"><svg class="i" viewBox="0 0 24 24"><path d="M4.4 12.8a7.6 7.6 0 0 1 15.2 0"/><rect x="2.2" y="11.8" width="4.2" height="6" rx="1.9"/><rect x="17.6" y="11.8" width="4.2" height="6" rx="1.9"/></svg></span><div class="m"><b>听力保健</b><span>听力筛查 · 双耳通过</span></div><span class="tg g"><i></i>正常</span></div>
-        <div class="wjrow"><span class="ic" style="color:var(--mmh-rose-700,#B23A63)"><svg class="i" viewBox="0 0 24 24"><path d="M17.2 4.6c-1.6 0-2.6.8-3.5 1.8a3 3 0 0 1-3.4 0C9.4 5.4 8.4 4.6 6.8 4.6c-2.1 0-3.7 1.7-3.7 3.8 0 1.6.7 2.8 1.7 3.8 1.3 1.5 2.3 3.2 2.5 5.3.1 1.3.9 2.1 1.9 2.1.9 0 1.3-.6 1.6-1.6.5-1.2.9-2.5 1.9-2.5 1 0 1.5 1.2 2 2.4.3 1 .7 1.7 1.6 1.7 1 0 1.8-.8 1.9-2.1.2-2 1-3.7 2.3-5.1 1-1.1 1.7-2.4 1.7-3.9 0-2.1-1.6-3.9-3.7-3.9z"/></svg></span><div class="m"><b>口腔保健</b><span>出牙 16 颗 · 建议涂氟</span></div><span class="tg o"><i></i>待检</span></div>
+        <div class="wjrow"><span class="ic" style="color:var(--mmh-rose-700,#A9315B)"><svg class="i" viewBox="0 0 24 24"><circle cx="11.8" cy="14.6" r="5.4"/><path d="M11.8 9.5c.3-1.9 1.2-3.1 2.9-3.8"/><path d="M14.5 6.1c1.7-.7 3.1-.5 4 .4"/></svg></span><div class="m"><b>营养喂养</b><span>辅食结构良好 · 奶量充足</span></div><span class="tg g"><i></i>正常</span></div>
+        <div class="wjrow"><span class="ic" style="color:var(--mmh-rose-700,#A9315B)"><svg class="i" viewBox="0 0 24 24"><circle cx="12" cy="12.2" r="6.4"/><circle cx="9.8" cy="11" r=".9" fill="currentColor" stroke="none"/><circle cx="14.2" cy="11" r=".9" fill="currentColor" stroke="none"/><path d="M9.5 14.3c1.5 1.2 3.5 1.2 5 0"/></svg></span><div class="m"><b>心理行为发育</b><span>语言发育良好 · 社交回应佳</span></div><span class="tg g"><i></i>正常</span></div>
+        <div class="wjrow"><span class="ic" style="color:var(--mmh-rose-700,#A9315B)"><svg class="i" viewBox="0 0 24 24"><path d="M3.6 13.2s3-6.2 8.4-6.2 8.4 6.2 8.4 6.2-3 6.2-8.4 6.2S3.6 13.2 3.6 13.2z"/><circle cx="12" cy="13.2" r="3.1"/></svg></span><div class="m"><b>视力保健</b><span>屈光筛查 · 建议 3 月后复查</span></div><span class="tg o"><i></i>待复查</span></div>
+        <div class="wjrow"><span class="ic" style="color:var(--mmh-rose-700,#A9315B)"><svg class="i" viewBox="0 0 24 24"><path d="M4.4 12.8a7.6 7.6 0 0 1 15.2 0"/><rect x="2.2" y="11.8" width="4.2" height="6" rx="1.9"/><rect x="17.6" y="11.8" width="4.2" height="6" rx="1.9"/></svg></span><div class="m"><b>听力保健</b><span>听力筛查 · 双耳通过</span></div><span class="tg g"><i></i>正常</span></div>
+        <div class="wjrow"><span class="ic" style="color:var(--mmh-rose-700,#A9315B)"><svg class="i" viewBox="0 0 24 24"><path d="M17.2 4.6c-1.6 0-2.6.8-3.5 1.8a3 3 0 0 1-3.4 0C9.4 5.4 8.4 4.6 6.8 4.6c-2.1 0-3.7 1.7-3.7 3.8 0 1.6.7 2.8 1.7 3.8 1.3 1.5 2.3 3.2 2.5 5.3.1 1.3.9 2.1 1.9 2.1.9 0 1.3-.6 1.6-1.6.5-1.2.9-2.5 1.9-2.5 1 0 1.5 1.2 2 2.4.3 1 .7 1.7 1.6 1.7 1 0 1.8-.8 1.9-2.1.2-2 1-3.7 2.3-5.1 1-1.1 1.7-2.4 1.7-3.9 0-2.1-1.6-3.9-3.7-3.9z"/></svg></span><div class="m"><b>口腔保健</b><span>出牙 16 颗 · 建议涂氟</span></div><span class="tg o"><i></i>待检</span></div>
       </div>
     </div>
 
@@ -5187,7 +5187,7 @@ background:rgba(255,255,255,.5);border:1px solid var(--lg-divider,rgba(58,52,84,
       <span style="font-size:12px;color:var(--t3)">望京中心 · 2025-06-02</span><span class="u">王</span>
     </div>
     <div class="kpis">
-      <div class="kpi card"><div class="l">今日随访完成</div><div class="v num" style="color:var(--mmh-rose-700,#B23A63)">86 / 104</div><div class="d">83% · 剩余 6h</div></div>
+      <div class="kpi card"><div class="l">今日随访完成</div><div class="v num" style="color:var(--mmh-rose-700,#A9315B)">86 / 104</div><div class="d">83% · 剩余 6h</div></div>
       <div class="kpi card"><div class="l">高危对象（五色）</div><div class="v num" style="color:#B72F42">23</div><div class="d">红 6 · 橙 11 · 紫 6</div></div>
       <div class="kpi card"><div class="l">待办产检 / 体检</div><div class="v num" style="color:#8D5A15">41</div><div class="d">产检 24 · 儿保 17</div></div>
       <div class="kpi card"><div class="l">两癌待复查</div><div class="v num" style="color:#3261C1">18</div><div class="d">待复查 12 · 待转诊 6</div></div>
@@ -5232,7 +5232,7 @@ background:rgba(255,255,255,.5);border:1px solid var(--lg-divider,rgba(58,52,84,
           <b style="font-size:14px;display:block;margin-bottom:6px">质量概览</b>
           <div style="font-size:12.5px;color:var(--t2);line-height:2.2">
             <div>高危管理率 <b class="num" style="color:#B72F42">96%</b></div>
-            <div>产后访视率 <b class="num" style="color:var(--mmh-rose-700,#B23A63)">91%</b></div>
+            <div>产后访视率 <b class="num" style="color:var(--mmh-rose-700,#A9315B)">91%</b></div>
             <div>儿保随访闭环 <b class="num" style="color:#8D5A15">68%</b></div>
           </div>
         </div>
@@ -5539,11 +5539,11 @@ function MODROOT_preview_examples(){return document.getElementById("gm-mod-previ
   --pm-input:rgba(255,255,255,.40);
   --pm-shadow-black:rgba(58,52,84,.18);
   --pm-ring:rgba(232,93,143,.6);
-  /* 文字型行动 / 行内链接色：浅色 #B23A63、暗色 #FFC4D6（02 · 2.1.9 的 --lg-link 档）。
+  /* 文字型行动 / 行内链接色：浅色 #A9315B、暗色 #FFC4D6（02 · 2.1.9 的 --lg-link 档）。
      不借 --sem-special：语义不同（紫=特殊协作/AI），且暗档 #B9A0FF 在卡片合成面上
      实测 4.01:1 < 4.5，过不了 AA。 */
-  --pm-link:#B23A63;
-  --pm-rose-text:#B23A63;   /* 品牌色文字档（暗色翻浅，见下） */
+  --pm-link:#A9315B;
+  --pm-rose-text:#A9315B;   /* 品牌色文字档（暗色翻浅，见下） */
   /* 系统 Token 兜底：本模块用外壳的「数据呈现层」配方（.gm-fold），
      而外壳读的是 --lg-text-secondary / --lg-divider。片段只有私有命名
      （--text-2 / --pm-divider）时，暗色档会出现「页面翻了、折叠内容没翻」
@@ -5811,7 +5811,7 @@ function MODROOT_preview_examples(){return document.getElementById("gm-mod-previ
   background:var(--pm-input);color:var(--text-3)}
 .gm-mod--preview-mobile .pm-cap.on{background:var(--pm-solid);border-color:rgba(232,93,143,.45);color:var(--text);
   font-weight:600;transform:translateY(-2px);box-shadow:var(--shadow-card)}
-.gm-mod--preview-mobile .pm-cap.on i{background:var(--rose-100);color:#B23A63}
+.gm-mod--preview-mobile .pm-cap.on i{background:var(--rose-100);color:#A9315B}
 
 /* ── 11 · Selector 选择卡（11.6.4）/ Stepper（11.2.11）/ OTP（11.2.14）── */
 .gm-mod--preview-mobile .pm-selects{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:10px}
@@ -5820,10 +5820,10 @@ function MODROOT_preview_examples(){return document.getElementById("gm-mod-previ
   gap:2px;justify-content:center}
 .gm-mod--preview-mobile .pm-select b{font-size:15px;font-weight:500}
 .gm-mod--preview-mobile .pm-select span{font-size:12px;color:var(--text-3)}
-/* 勾徽用**深实底**白字（#B23A63 上白字 5.3:1）；压在玫瑰渐变上时白字只有 3.28:1，
+/* 勾徽用**深实底**白字（#A9315B 上白字 5.3:1）；压在玫瑰渐变上时白字只有 3.28:1，
    违反 D9 二分口径（亮粉底配深字、白字只出现在深实底上）。 */
 .gm-mod--preview-mobile .pm-select .pm-ck{position:absolute;top:8px;right:8px;width:20px;height:20px;border-radius:50%;
-  display:none;align-items:center;justify-content:center;background:#B23A63;color:#FFF;
+  display:none;align-items:center;justify-content:center;background:#A9315B;color:#FFF;
   font-size:12px;line-height:1}
 .gm-mod--preview-mobile .pm-select[aria-checked="true"]{border-color:rgba(232,93,143,.5);background:rgba(255,240,244,.72)}
 .gm-mod--preview-mobile[data-theme="dark"] .pm-select[aria-checked="true"]{background:rgba(247,127,163,.18)}
@@ -5858,7 +5858,7 @@ function MODROOT_preview_examples(){return document.getElementById("gm-mod-previ
 .gm-mod--preview-mobile .msteps span b{width:20px;height:20px;border-radius:50%;display:inline-flex;align-items:center;
   justify-content:center;font-size:10px;font-weight:600}
 .gm-mod--preview-mobile .msteps span.done b{background:var(--grad-p);color:#FFF}
-.gm-mod--preview-mobile .msteps span.cur b{background:#FFF;border:2px solid var(--rose-500);color:#B23A63}
+.gm-mod--preview-mobile .msteps span.cur b{background:#FFF;border:2px solid var(--rose-500);color:#A9315B}
 .gm-mod--preview-mobile[data-theme="dark"] .msteps span.cur b{background:#23222A;color:#FFC4D6}
 .gm-mod--preview-mobile .msteps span.todo b{border:1px solid var(--pm-divider);color:var(--text-3)}
 
@@ -6113,7 +6113,7 @@ function MODROOT_preview_examples(){return document.getElementById("gm-mod-previ
 .gm-mod--preview-mobile .pm-idxrail span.on{color:var(--pm-rose-text);font-size:12px}
 .gm-mod--preview-mobile .pm-idxbadge{position:absolute;left:50%;top:50%;z-index:3;width:56px;height:56px;border-radius:50%;
   display:flex;align-items:center;justify-content:center;pointer-events:none;
-  font-size:24px;font-weight:700;color:#B23A63;background:rgba(255,255,255,.88);
+  font-size:24px;font-weight:700;color:#A9315B;background:rgba(255,255,255,.88);
   border:1px solid rgba(232,93,143,.3);box-shadow:0 8px 24px rgba(58,52,84,.18);
   opacity:0;transform:translate(-50%,-50%) scale(.9);
   transition:opacity .18s ease,transform .18s var(--spring)}
@@ -6217,9 +6217,9 @@ function MODROOT_preview_examples(){return document.getElementById("gm-mod-previ
   box-shadow:0 1px 2px rgba(30,107,82,.22),0 8px 20px rgba(47,143,118,.28)}
 .gm-mod--preview-mobile .mbb-warning{background:#9A5A0E;color:#FFF;box-shadow:0 1px 2px rgba(154,90,14,.22),0 8px 20px rgba(185,119,28,.26)}
 .gm-mod--preview-mobile .mbb-danger{background:#B04052;color:#FFF;box-shadow:0 1px 2px rgba(176,64,82,.24),0 8px 20px rgba(208,90,110,.28)}
-.gm-mod--preview-mobile .mbb-outline{background:transparent;color:#B23A63;border:1.5px solid rgba(232,93,143,.45)}
-.gm-mod--preview-mobile .mbb-dashed{background:transparent;color:#B23A63;border:1.5px dashed rgba(232,93,143,.45)}
-.gm-mod--preview-mobile .mbb-text{background:none;color:#B23A63;padding:0 8px}
+.gm-mod--preview-mobile .mbb-outline{background:transparent;color:#A9315B;border:1.5px solid rgba(232,93,143,.45)}
+.gm-mod--preview-mobile .mbb-dashed{background:transparent;color:#A9315B;border:1.5px dashed rgba(232,93,143,.45)}
+.gm-mod--preview-mobile .mbb-text{background:none;color:#A9315B;padding:0 8px}
 .gm-mod--preview-mobile .mbb-danger.mbb-outline{background:transparent;color:var(--sem-danger);border:1.5px solid rgba(183,47,66,.45)}
 .gm-mod--preview-mobile[data-theme="dark"] .mbb-outline,.gm-mod--preview-mobile[data-theme="dark"] .mbb-dashed,.gm-mod--preview-mobile[data-theme="dark"] .mbb-text{color:#FFC4D6}
 .gm-mod--preview-mobile .mbb-xs{height:28px;font-size:12px;padding:0 14px;border-radius:var(--lg-radius-pill,999px)}
@@ -8227,7 +8227,7 @@ function MODROOT_preview_mobile(){return document.getElementById("gm-mod-preview
 /* ═══ GoodMom Tokens（精简，同 02/12；暗色档同 02 · 2.1.9）═══ */
 .gm-mod--preview-patterns{
   --text:#343A46;--t2:#4F5B6E;--t3:#8A92A3;--line:rgba(58,52,84,.09);
-  --rose:#F77FA3;--rose-d:#E85D8F;--rose-deep:#B23A63;--link:#B23A63;--link-h:#9E3054;
+  --rose:#F77FA3;--rose-d:#E85D8F;--rose-deep:#A9315B;--link:#A9315B;--link-h:#9E3054;
   --mint:#6FC9B4;--mint-d:#4FB59C;--info:#6D9EFF;--warn:#F2B25C;--danger:#EF6A7B;--purple:#9A78FF;
   --grad-p:linear-gradient(135deg,#FFA9C2,#F77FA3 45%,#E85D8F);
   --mmh-grad-action-hc:linear-gradient(135deg,#FFC4D6 0%,#F77FA3 100%);
@@ -8879,7 +8879,7 @@ document.getElementById("preview-patterns--dk-toggle").addEventListener("click",
    默认 padding-box 时，渐变图按 padding-box 定尺却要铺满 border-box，
    多出的 1px 边框环会平铺取到渐变**另一端** → 顶部一条暗缝、底部一条亮缝，
    看起来像"胶囊缺了一角 / 露出别的底色"。全局声明，特异性 0，可被组件规则覆盖。 */
-.gm-mod--site-spec{--t:#343A46;--t2:#4F5B6E;--t3:#4F5B6E;--rose:#E85D8F;--rose-deep:#B23A63;--bg:linear-gradient(165deg,#FDF2EE,#F6E2DB 55%,#E7D3CB)}
+.gm-mod--site-spec{--t:#343A46;--t2:#4F5B6E;--t3:#4F5B6E;--rose:#E85D8F;--rose-deep:#A9315B;--bg:linear-gradient(165deg,#FDF2EE,#F6E2DB 55%,#E7D3CB)}
 .gm-mod--site-spec{margin:0;font-family:"PingFang SC","Inter","MiSans","Noto Sans SC",sans-serif;color:var(--t);background:var(--bg)}
 .gm-mod--site-spec a{color:var(--rose-deep)}
 .gm-mod--site-spec .top{position:sticky;top:0;z-index:90;display:flex;flex-wrap:wrap;gap:4px;align-items:center;padding:10px 16px;background:rgba(255,255,255,.78);border-bottom:1px solid #F0D4CF;-webkit-backdrop-filter:blur(16px);backdrop-filter:blur(16px)}
@@ -8895,7 +8895,7 @@ document.getElementById("preview-patterns--dk-toggle").addEventListener("click",
 .gm-mod--site-spec .gp:hover .drop{opacity:1;pointer-events:auto;transform:none}
 .gm-mod--site-spec .gp::after{content:"";position:absolute;left:0;right:0;top:100%;height:12px}
 .gm-mod--site-spec .drop a{display:block;padding:8px 12px;border-radius:18px;font-size:13px;color:var(--t2);text-decoration:none;white-space:nowrap}
-.gm-mod--site-spec .drop a:hover{background:rgba(247,127,163,.1);color:#B23A63}
+.gm-mod--site-spec .drop a:hover{background:rgba(247,127,163,.1);color:#A9315B}
 .gm-mod--site-spec .top .ext{margin-left:auto;font-size:12.5px;font-weight:600;text-decoration:none;padding:7px 14px;border-radius:999px;background:#FFF;border:1px solid rgba(232,93,143,.3);color:var(--rose-deep)}
 .gm-mod--site-spec .top .ext2{margin-left:8px;background:var(--mmh-grad-action-hc,linear-gradient(135deg,#FFC4D6 0%,#F77FA3 100%));color:#343A46;font-weight:600;text-decoration:none;font-size:12.5px;padding:7px 14px;border-radius:999px;border:var(--lg-border-1,1px) solid transparent;box-shadow:0 1px 2px rgba(178,58,99,.22),0 8px 20px rgba(240,127,163,.30);background-origin:border-box}   /* 03 · 3.2.4 主按钮配方 */
 .gm-mod--site-spec .wrap{max-width:1080px;margin:0 auto;padding:20px 18px 80px}
@@ -9190,7 +9190,7 @@ Figma:    LG / Color / Purple / 500
 <p><b>三条硬口径</b></p>
 <ol><li><b>禁纯黑 <code>#000000</code>、禁纯白 <code>#FFFFFF</code></b>：底色走 <code>--lg-night-*</code>（<wbr><code>#1B1A21</code> / <code>#23222A</code><wbr>），文字走 <code>#F3EFEC</code>。纯黑会让玻璃下的光斑变成脏灰，纯白在暗底上产生光晕（<wbr><wbr>halation<wbr><wbr>）。</li><li><b>玻璃降白、加深底、提亮边</b>：白色叠加层由 14–60% 降到 6–16%；玻璃边缘光保留但只留顶部 1px<wbr>（<wbr><code>inset 0 1px 0 rgba(255,255,255,.16)</code><wbr>），多层高光会让面板发灰。</li><li><b>只换档位、不换色相</b>：品牌与状态色沿用原色相，文字档改用浅档（<wbr>浅底用 <code>-500</code>、暗底用 <code>-300</code><wbr>），禁止在暗色下新造色相或提高饱和度。</li></ol>
 <p><b>映射表 A · 底 / 文字 / 玻璃 / 阴影</b></p>
-<table><thead><tr><th>语义 Token</th><th>浅色（默认）</th><th>暗色（<code>[data-theme="dark"]</code>）</th><th>暗底实测对比度</th></tr></thead><tbody><tr><td><code>--lg-page-bg</code></td><td><code>#E6D9D0</code> Warm Ivory</td><td><code>#1B1A21</code> Night-900</td><td>— （页面底）</td></tr><tr><td><code>--lg-surface</code></td><td><code>#F4F0EC</code> Warm White</td><td><code>#23222A</code> Night-800</td><td>— （次级面/实底浮层底）</td></tr><tr><td><code>--lg-text-primary</code></td><td><code>#343A46</code></td><td><code>#F3EFEC</code></td><td>15.10:1（面 13.77）</td></tr><tr><td><code>--lg-text-secondary</code></td><td><code>#4F5B6E</code></td><td><code>#C9C4CE</code></td><td>10.09:1（面 9.20）</td></tr><tr><td><code>--lg-text-tertiary</code></td><td><code>#9AA2B0</code></td><td><code>#A6ADB9</code></td><td>7.65:1（最浅玻璃合成面 ≥5.6）</td></tr><tr><td><code>--lg-text-placeholder</code></td><td><code>rgba(88,98,115,0.5)</code></td><td><code>rgba(255,255,255,0.42)</code></td><td>仅占位符，不接受为正文</td></tr><tr><td><code>--lg-text-disabled</code></td><td><code>rgba(88,98,115,0.4)</code></td><td><code>rgba(255,255,255,0.34)</code></td><td>—</td></tr><tr><td><code>--lg-divider</code></td><td><code>rgba(58,52,84,0.10)</code></td><td><code>rgba(255,255,255,0.10)</code></td><td>暗色分隔线用白，不用黑</td></tr><tr><td><code>--lg-link</code></td><td><code>#B23A63</code></td><td><code>#FFC4D6</code></td><td>11.61:1（03 · 3.10）</td></tr><tr><td>主行动底（<code>--mmh-grad-action-hc</code>）</td><td>Rose-300→Rose-500</td><td><b>不变</b></td><td>品牌亮粉底在暗色下更突出</td></tr><tr><td><code>--lg-text-on-accent</code></td><td><code>#343A46</code>（亮粉底深字）</td><td><code>#1B1A21</code></td><td>7.00:1（Rose-500 端）～11.61:1（Rose-300 端）</td></tr><tr><td><code>--lg-glass-panel</code></td><td><code>rgba(255,255,255,0.14)</code></td><td><code>rgba(255,255,255,0.06)</code></td><td>—</td></tr><tr><td><code>--lg-glass-card</code></td><td><code>rgba(255,255,255,0.22)</code></td><td><code>rgba(255,255,255,0.09)</code></td><td>—</td></tr><tr><td><code>--lg-glass-control</code></td><td><code>rgba(255,255,255,0.35)</code></td><td><code>rgba(255,255,255,0.12)</code></td><td>—</td></tr><tr><td><code>--lg-glass-popover</code></td><td><code>rgba(255,255,255,0.60)</code></td><td><code>rgba(38,36,46,0.92)</code>（实底为主，模糊为辅）</td><td>暗色浮层优先可读性</td></tr><tr><td><code>--lg-glass-highlight</code></td><td><code>inset 0 1px 0 rgba(255,255,255,0.6)</code></td><td><code>inset 0 1px 0 rgba(255,255,255,0.16)</code></td><td>仅顶部 1px</td></tr><tr><td><code>--lg-border-white-70</code>（玻璃边）</td><td><code>rgba(255,255,255,0.70)</code></td><td><code>rgba(255,255,255,0.14)</code></td><td>—</td></tr><tr><td><code>--lg-border-hairline</code></td><td><code>1px</code>（<b>长度</b>）</td><td>同（宽度档不随主题变化）</td><td>玻璃内部细分隔<b>宽度</b></td></tr><tr><td><code>--lg-divider-hairline</code></td><td><code>rgba(58,52,84,.10)</code>（<b>颜色</b>）</td><td><code>rgba(255,255,255,.10)</code></td><td>与上一项配对使用的分隔<b>颜色</b></td></tr><tr><td><code>--lg-shadow-sm/md/lg/xl</code></td><td>蓝紫调 <code>rgba(58,52,84,.06–.16)</code></td><td><code>rgba(0,0,0,.35 / .42 / .50 / .58)</code></td><td>暗色阴影＝「加深 + 边缘光」</td></tr><tr><td><code>--lg-glow-purple-soft</code></td><td><code>0 12px 32px rgba(154,120,255,0.28)</code></td><td><code>0 12px 32px rgba(154,120,255,0.22)</code></td><td>暗底辉光略降，避免糊成一片</td></tr></tbody></table>
+<table><thead><tr><th>语义 Token</th><th>浅色（默认）</th><th>暗色（<code>[data-theme="dark"]</code>）</th><th>暗底实测对比度</th></tr></thead><tbody><tr><td><code>--lg-page-bg</code></td><td><code>#E6D9D0</code> Warm Ivory</td><td><code>#1B1A21</code> Night-900</td><td>— （页面底）</td></tr><tr><td><code>--lg-surface</code></td><td><code>#F4F0EC</code> Warm White</td><td><code>#23222A</code> Night-800</td><td>— （次级面/实底浮层底）</td></tr><tr><td><code>--lg-text-primary</code></td><td><code>#343A46</code></td><td><code>#F3EFEC</code></td><td>15.10:1（面 13.77）</td></tr><tr><td><code>--lg-text-secondary</code></td><td><code>#4F5B6E</code></td><td><code>#C9C4CE</code></td><td>10.09:1（面 9.20）</td></tr><tr><td><code>--lg-text-tertiary</code></td><td><code>#9AA2B0</code></td><td><code>#A6ADB9</code></td><td>7.65:1（最浅玻璃合成面 ≥5.6）</td></tr><tr><td><code>--lg-text-placeholder</code></td><td><code>rgba(88,98,115,0.5)</code></td><td><code>rgba(255,255,255,0.42)</code></td><td>仅占位符，不接受为正文</td></tr><tr><td><code>--lg-text-disabled</code></td><td><code>rgba(88,98,115,0.4)</code></td><td><code>rgba(255,255,255,0.34)</code></td><td>—</td></tr><tr><td><code>--lg-divider</code></td><td><code>rgba(58,52,84,0.10)</code></td><td><code>rgba(255,255,255,0.10)</code></td><td>暗色分隔线用白，不用黑</td></tr><tr><td><code>--lg-link</code></td><td><code>#A9315B</code></td><td><code>#FFC4D6</code></td><td>与品牌文字档同值（D34）</td></tr><tr><td>主行动底（<code>--mmh-grad-action-hc</code>）</td><td>Rose-300→Rose-500</td><td><b>不变</b></td><td>品牌亮粉底在暗色下更突出</td></tr><tr><td><code>--lg-text-on-accent</code></td><td><code>#343A46</code>（亮粉底深字）</td><td><code>#1B1A21</code></td><td>7.00:1（Rose-500 端）～11.61:1（Rose-300 端）</td></tr><tr><td><code>--lg-glass-panel</code></td><td><code>rgba(255,255,255,0.14)</code></td><td><code>rgba(255,255,255,0.06)</code></td><td>—</td></tr><tr><td><code>--lg-glass-card</code></td><td><code>rgba(255,255,255,0.22)</code></td><td><code>rgba(255,255,255,0.09)</code></td><td>—</td></tr><tr><td><code>--lg-glass-control</code></td><td><code>rgba(255,255,255,0.35)</code></td><td><code>rgba(255,255,255,0.12)</code></td><td>—</td></tr><tr><td><code>--lg-glass-popover</code></td><td><code>rgba(255,255,255,0.60)</code></td><td><code>rgba(38,36,46,0.92)</code>（实底为主，模糊为辅）</td><td>暗色浮层优先可读性</td></tr><tr><td><code>--lg-glass-highlight</code></td><td><code>inset 0 1px 0 rgba(255,255,255,0.6)</code></td><td><code>inset 0 1px 0 rgba(255,255,255,0.16)</code></td><td>仅顶部 1px</td></tr><tr><td><code>--lg-border-white-70</code>（玻璃边）</td><td><code>rgba(255,255,255,0.70)</code></td><td><code>rgba(255,255,255,0.14)</code></td><td>—</td></tr><tr><td><code>--lg-border-hairline</code></td><td><code>1px</code>（<b>长度</b>）</td><td>同（宽度档不随主题变化）</td><td>玻璃内部细分隔<b>宽度</b></td></tr><tr><td><code>--lg-divider-hairline</code></td><td><code>rgba(58,52,84,.10)</code>（<b>颜色</b>）</td><td><code>rgba(255,255,255,.10)</code></td><td>与上一项配对使用的分隔<b>颜色</b></td></tr><tr><td><code>--lg-shadow-sm/md/lg/xl</code></td><td>蓝紫调 <code>rgba(58,52,84,.06–.16)</code></td><td><code>rgba(0,0,0,.35 / .42 / .50 / .58)</code></td><td>暗色阴影＝「加深 + 边缘光」</td></tr><tr><td><code>--lg-glow-purple-soft</code></td><td><code>0 12px 32px rgba(154,120,255,0.28)</code></td><td><code>0 12px 32px rgba(154,120,255,0.22)</code></td><td>暗底辉光略降，避免糊成一片</td></tr></tbody></table>
 <p><b>映射表 B · 状态与语义色（<wbr>暗色文字档<wbr>）</b></p>
 <table><thead><tr><th>用途</th><th>浅底用（默认）</th><th>浅底实测</th><th>暗底用（dark）</th><th>暗底实测</th></tr></thead><tbody><tr><td>成功 <code>--lg-success-300</code></td><td><code>#96E6CF</code>（浅填充）</td><td>—（非文字）</td><td><code>#96E6CF</code> 作文/图标</td><td>11.93:1</td></tr><tr><td>警告 <code>--lg-warning-300</code></td><td><code>#FAE1B3</code></td><td>—（非文字）</td><td><code>#FAE1B3</code></td><td>13.55:1</td></tr><tr><td>危险 <code>--lg-danger-300</code></td><td><code>#FAC9D0</code></td><td>—（非文字）</td><td><code>#FAC9D0</code></td><td>11.78:1</td></tr><tr><td>信息 <code>--lg-info-500</code> 亮档</td><td><code>#6D9EFF</code></td><td>—（非文字）</td><td><code>#9CAEFF</code>（Blue-300）</td><td>8.15:1</td></tr><tr><td><code>--lg-sem-positive</code></td><td><code>#25715D</code></td><td>5.84:1</td><td><code>#6FC9B4</code></td><td>8.79:1</td></tr><tr><td><code>--lg-sem-info</code></td><td><code>#3261C1</code></td><td>5.81:1</td><td><code>#9CAEFF</code></td><td>8.15:1</td></tr><tr><td><code>--lg-sem-attention</code></td><td><code>#8D5A15</code></td><td>5.82:1</td><td><code>#F2C14E</code></td><td>10.29:1</td></tr><tr><td><code>--lg-sem-risk</code></td><td><code>#B72F42</code></td><td>6.00:1</td><td><code>#F79AA8</code></td><td>8.34:1</td></tr><tr><td><code>--lg-sem-neutral</code></td><td><code>#5E6673</code></td><td>5.79:1</td><td><code>#A6ADB9</code></td><td>7.65:1</td></tr><tr><td><code>--lg-sem-special</code></td><td><code>#6A48DC</code></td><td>5.88:1</td><td><code>#B9A0FF</code></td><td>7.84:1</td></tr></tbody></table>
 <blockquote>⚠️ <b>淡底口径（V2.9 新增）</b>：上表「浅底实测」取的是<b>最亮玻璃承载面 <code>#FDF2EE</code></b>。<br>实际渲染里，语义文字若压在同色系<b>淡底</b>上，底色由淡底决定：<br><code>color-mix(in srgb, 语义色 13%, transparent)</code> 会把玻璃卡与品牌渐变透出来，<br>12px 语义字实测只剩 <b>4.06:1（浅/暗两档皆然，不达 AA）</b>。<br>故淡底一律改混<b>实底</b> <code>--lg-tint-base</code>（浅 <code>#FFFFFF</code> ／ 暗 <code>#23222A</code>），<br>透明度由 <code>--lg-tint-pct</code> 按档位给（浅 13% ／ 暗 8%）→ 实测 4.86:1 ／ 4.9:1。<br>门禁：<code>audit.py --only tint-base</code>（禁止 <code>color-mix(…, transparent)</code>，并断言两档 token 在位）；<br>渲染级实测：<code>node scripts/app-smoke.mjs</code> 的「实底采样」（隐藏字形后按像素取底）。<br><br>⚠️ <b>浅底列口径修正（V2.9）</b>：本列原写 `positive #2F8F76 / info #4A76D0 / attention #B9771C /<br>risk #D35466 / neutral #757E8E / special #7A5CE0` —— 那是 V2.8「语义色板达 AA」<b>之前</b>的值，<br>实测作文字只有 <b>3.67–4.38:1（不达标）</b>（证据留档在 <code>docs/设计系统问题清单.md</code> 的 ❌ 表），<br>深档化之后本表漏改，且<b>照抄本表的 Vue 组件冒烟因此长期是红的</b>（不在 CI，没人发现）。<br>现按实现值（<code>theme.css</code> / <code>tokens/status.ts</code>）对齐；浅底实测取<b>最亮玻璃承载面</b> <code>#FDF2EE</code>。<br>门禁：<code>python3 scripts/audit.py --only semantic-parity</code> 核对本表 / 14 章 / skill reference 与 <code>theme.css</code>。</blockquote>
@@ -9300,7 +9300,7 @@ Figma:    LG / Color / Purple / 500
   --mmh-solid-positive:#1E6B52; --mmh-solid-attention:#9A5A0E; --mmh-solid-danger:#B04052;
   --mmh-solid-info:#385CB3; --mmh-solid-special:#6242B8;
   --lg-divider: rgba(58, 52, 84, .10);
-  --lg-link: #B23A63;                 /* 链接默认色（03 · 3.10）；暗色 #FFC4D6 */
+  --lg-link: #A9315B;                 /* 链接默认色（03 · 3.10）；暗色 #FFC4D6。D34：与品牌文字档同值 */
 
   /* ── 颜色：强调 ─────────────────────────── */
   --lg-purple-600: #8066F0; --lg-purple-500: #9A78FF; --lg-purple-300: #B69AFF;
@@ -9423,7 +9423,8 @@ Figma:    LG / Color / Purple / 500
 <blockquote>本设计系统服务产品 = <b>妈咪好 GoodMom（妇幼儿童全生命周期管理）</b>。在默认主题下执行 12.3.2 的语义重映射：把“紫主”视觉换为“蜜桃粉主 + 淡紫柔光”。<br>引用：品牌定义见 [12](#ch-12)，领域组件见 [13](#ch-13)。</blockquote>
 <pre>:root{
   /* 蜜桃粉（品牌主色系） */
-  --mmh-rose-700:#B23A63; --mmh-rose-600:#E85D8F; --mmh-rose-500:#F77FA3;
+  --mmh-rose-700:#A9315B; --mmh-rose-600:#E85D8F; --mmh-rose-500:#F77FA3;
+  /* D34：rose-700 是「品牌文字档」，实测需在暖底上 ≥4.5:1；原 #B23A63 仅 4.13:1，已加深 */
   --mmh-rose-400:#FFA3BE; --mmh-rose-300:#FFC4D6; --mmh-rose-200:#FFDEE8;
   --mmh-rose-100:#FFF0F4;
   /* 蜜杏氛围 */
@@ -9465,7 +9466,7 @@ Figma:    LG / Color / Purple / 500
 }</pre>
 <blockquote>⚠️ <b>本块是可交付的最小品牌主题</b>：它同时包含品牌色（<code>--mmh-*</code>）、语义色（<code>--lg-sem-*</code>，<br>见 §2.1.5/§2.8）、达标注文字色（<code>--lg-text-on-accent</code>）、D5 实底档（<code>--mmh-solid-*</code>）<br>与动效档（<code>--lg-t-*</code>/<code>--lg-ease-*</code>）。§2.8 是语义层的最小集，<b>两者需一起复制</b>才能得到<br>与仓库代码一致的主题。Token 名存在性由 <code>scripts/audit.py</code> + <code>scripts/check-style-parity.py</code> 守门。</blockquote>
 <p><b>妈咪好模式主值速查（<wbr>默认<wbr>）</b></p>
-<table><thead><tr><th>语义位</th><th>使用 Token</th></tr></thead><tbody><tr><td>主行动渐变 / 激活 / 分段</td><td><code>--mmh-grad-primary</code></td></tr><tr><td>Hero / 生长曲线主描边 / 品牌签名</td><td><code>--mmh-grad-signature</code></td></tr><tr><td>图表序列 1（宝宝/随访）</td><td><code>--mmh-rose-500</code></td></tr><tr><td>数据色序 1→8</td><td>Rose500 → Peach400 → Purple300 → Mint500 → Rose300 → Purple500 → Mint300 → Slate300（12.3.3）</td></tr><tr><td>环境光斑</td><td>蜜桃粉 0.18 + 淡紫 0.14（粉主紫辅）</td></tr><tr><td>玻璃折射染色</td><td><code>--mmh-rose-200</code> @ 0.05</td></tr><tr><td>白字对比底</td><td><code>--mmh-rose-700</code> 或渐变深端（≥13px/600）</td></tr></tbody></table>
+<table><thead><tr><th>语义位</th><th>使用 Token</th></tr></thead><tbody><tr><td>主行动渐变 / 激活 / 分段</td><td><code>--mmh-grad-primary</code></td></tr><tr><td>Hero / 生长曲线主描边 / 品牌签名</td><td><code>--mmh-grad-signature</code></td></tr><tr><td>图表序列 1（宝宝/随访）</td><td><code>--mmh-rose-500</code></td></tr><tr><td>数据色序 1→8</td><td>Rose500 → Peach400 → Purple300 → Mint500 → Rose300 → Purple500 → Mint300 → Slate300（12.3.3）</td></tr><tr><td>环境光斑</td><td>蜜桃粉 0.18 + 淡紫 0.14（粉主紫辅）</td></tr><tr><td>玻璃折射染色</td><td><code>--mmh-rose-200</code> @ 0.05</td></tr><tr><td>白字对比底</td><td><code>--mmh-rose-700</code>（<code>#A9315B</code>，白字 6.41:1）或渐变深端（≥13px/600）</td></tr></tbody></table>
 <blockquote>医护工作台可切「冷静模式」：主行动用深玫 700 或低饱和中性渐变，环境光减半，避免粉色分散专注（机制与切换只改 Token，不改结构，见 12.3.2）。</blockquote>
 <hr>
 <h3>2.10 附录 C · 孕产妇五色管理 Token<wbr>（<wbr>妊娠风险五色分级<wbr>）</h3>
@@ -10710,7 +10711,7 @@ large 48 高 / 15px      底部主行动推荐，可 block 全宽</pre>
 <h4>12.3.1 品牌色 Token<wbr>（<wbr><wbr>CSS 命名 <code>--mmh-*</code><wbr>）</h4>
 <pre>:root{
   /* 蜜桃粉（品牌主色系） */
-  --mmh-rose-700:#B23A63;   /* 强调文字/深端，可作白字底 */
+  --mmh-rose-700:#A9315B;   /* 强调文字/深端（D34：暖底文字档须 ≥4.5:1），可作白字底（6.41:1） */
   --mmh-rose-600:#E85D8F;   /* 渐变深端 / 按下态 */
   --mmh-rose-500:#F77FA3;   /* 品牌基准 */
   --mmh-rose-400:#FFA3BE;   /* 亮端 / 图形 */
@@ -11320,7 +11321,7 @@ import &quot;./styles/app.css&quot;;         // ② 应用布局</pre>
 <h4>20.2.1 ✅ 可用清单（<wbr>代码已定义，共 96 个<wbr>）</h4>
 <p><b>这就是前端能用的全部变量。</b> 不在表内的，一律不许写进 <code>var()</code>。</p>
 <h5>品牌色阶 <code>--mmh-*</code></h5>
-<table><thead><tr><th>变量</th><th>浅色</th><th>暗色</th><th>用途</th></tr></thead><tbody><tr><td><code>--mmh-rose-700</code></td><td><code>#B23A63</code></td><td><code>#FF9AB6</code></td><td>品牌深端；浅色档可作白字底</td></tr><tr><td><code>--mmh-rose-600</code></td><td><code>#E85D8F</code></td><td><code>#FF8FAE</code></td><td>渐变深端 / 按下态</td></tr><tr><td><code>--mmh-rose-500</code></td><td><code>#F77FA3</code></td><td><code>#F77FA3</code></td><td>品牌基准</td></tr><tr><td><code>--mmh-rose-400</code></td><td><code>#FFA3BE</code></td><td>—</td><td>亮端 / 图形</td></tr><tr><td><code>--mmh-rose-300</code></td><td><code>#FFC4D6</code></td><td>—</td><td>主行动渐变起点</td></tr><tr><td><code>--mmh-rose-200</code></td><td><code>#FFDEE8</code></td><td>—</td><td>极浅底</td></tr><tr><td><code>--mmh-rose-100</code></td><td><code>#FFF0F4</code></td><td><code>rgba(247,127,163,.14)</code></td><td>洗色底 / 选中淡底</td></tr><tr><td><code>--mmh-mint-600</code></td><td><code>#4FB59C</code></td><td>—</td><td>正向深端</td></tr><tr><td><code>--mmh-mint-500</code></td><td><code>#6FC9B4</code></td><td><code>#7FD8C2</code></td><td>儿保正向</td></tr><tr><td><code>--mmh-mint-400</code></td><td><code>#7FD8C2</code></td><td>—</td><td>（仅代码登记）</td></tr><tr><td><code>--mmh-mint-300</code></td><td><code>#A9E3D4</code></td><td>—</td><td>低值 / 参考</td></tr><tr><td><code>--mmh-mint-100</code></td><td><code>#E2F6F0</code></td><td>—</td><td>洗色底</td></tr><tr><td><code>--mmh-info</code> / <code>--mmh-warning</code> / <code>--mmh-danger</code> / <code>--mmh-purple</code></td><td><code>#6D9EFF</code> / <code>#F2B25C</code> / <code>#EF6A7B</code> / <code>#9A78FF</code></td><td>—</td><td>功能色（<b>非状态语义</b>，见 20.3）</td></tr></tbody></table>
+<table><thead><tr><th>变量</th><th>浅色</th><th>暗色</th><th>用途</th></tr></thead><tbody><tr><td><code>--mmh-rose-700</code></td><td><code>#A9315B</code></td><td><code>#FF9AB6</code></td><td>品牌深端 / <b>文字档</b>（D34：暖底 ≥4.5:1）；可作白字底（6.41:1）</td></tr><tr><td><code>--mmh-rose-600</code></td><td><code>#E85D8F</code></td><td><code>#FF8FAE</code></td><td>渐变深端 / 按下态</td></tr><tr><td><code>--mmh-rose-500</code></td><td><code>#F77FA3</code></td><td><code>#F77FA3</code></td><td>品牌基准</td></tr><tr><td><code>--mmh-rose-400</code></td><td><code>#FFA3BE</code></td><td>—</td><td>亮端 / 图形</td></tr><tr><td><code>--mmh-rose-300</code></td><td><code>#FFC4D6</code></td><td>—</td><td>主行动渐变起点</td></tr><tr><td><code>--mmh-rose-200</code></td><td><code>#FFDEE8</code></td><td>—</td><td>极浅底</td></tr><tr><td><code>--mmh-rose-100</code></td><td><code>#FFF0F4</code></td><td><code>rgba(247,127,163,.14)</code></td><td>洗色底 / 选中淡底</td></tr><tr><td><code>--mmh-mint-600</code></td><td><code>#4FB59C</code></td><td>—</td><td>正向深端</td></tr><tr><td><code>--mmh-mint-500</code></td><td><code>#6FC9B4</code></td><td><code>#7FD8C2</code></td><td>儿保正向</td></tr><tr><td><code>--mmh-mint-400</code></td><td><code>#7FD8C2</code></td><td>—</td><td>（仅代码登记）</td></tr><tr><td><code>--mmh-mint-300</code></td><td><code>#A9E3D4</code></td><td>—</td><td>低值 / 参考</td></tr><tr><td><code>--mmh-mint-100</code></td><td><code>#E2F6F0</code></td><td>—</td><td>洗色底</td></tr><tr><td><code>--mmh-info</code> / <code>--mmh-warning</code> / <code>--mmh-danger</code> / <code>--mmh-purple</code></td><td><code>#6D9EFF</code> / <code>#F2B25C</code> / <code>#EF6A7B</code> / <code>#9A78FF</code></td><td>—</td><td>功能色（<b>非状态语义</b>，见 20.3）</td></tr></tbody></table>
 <blockquote>⛔ <code>--mmh-peach-*</code>（蜜杏）与 <code>--mmh-grad-signature</code>（品牌签名渐变）<b>文档有、代码无</b>，不可使用。</blockquote>
 <h5>渐变</h5>
 <table><thead><tr><th>变量</th><th>值</th><th>用途</th></tr></thead><tbody><tr><td><code>--mmh-grad-action-hc</code></td><td><code>linear-gradient(135deg,#FFC4D6 0%,#F77FA3 100%)</code></td><td><b>主行动专用</b>（D9 档）：品牌粉<b>上半段</b>，必须配深字 <code>--lg-text-on-accent</code></td></tr><tr><td><code>--mmh-grad-primary</code></td><td><code>linear-gradient(135deg,#FFA9C2,#F77FA3 45%,#E85D8F)</code></td><td>品牌三段渐变（图表 / 插画 / 大面）</td></tr><tr><td><code>--mmh-grad-rose</code></td><td><code>linear-gradient(150deg,#FFA9C2,#E85D8F)</code></td><td>深档圆形渐变（仅限圆形件，勿用于承载白字）</td></tr><tr><td><code>--mmh-grad-mint</code></td><td><code>linear-gradient(150deg,#7FD8C2,#4FB59C)</code></td><td>同上，正向</td></tr><tr><td><code>--mmh-grad-purple</code></td><td><code>linear-gradient(150deg,#B9A0FF,#8066F0)</code></td><td>同上，特殊</td></tr></tbody></table>
@@ -11330,7 +11331,7 @@ import &quot;./styles/app.css&quot;;         // ② 应用布局</pre>
 <h5>孕产妇五色（<wbr>妊娠风险分级专用，<wbr>02.10<wbr><wbr>）</h5>
 <p><code>--mmh-m5-m1:#4CB98A</code>（<wbr>绿·低<wbr>）· <code>m2:#F2C14E</code>（<wbr>黄·一般<wbr>）· <code>m3:#F0954A</code>（<wbr>橙·较高<wbr>）· <code>m4:#EE5C70</code>（<wbr>红·高<wbr>）· <code>m5:#8F6AE0</code>（<wbr>紫·合并传染病<wbr>）</p>
 <h5>语义层（<wbr>组件默认引用的就是这些<wbr>）</h5>
-<table><thead><tr><th>变量</th><th>浅色</th><th>暗色</th><th>用途</th></tr></thead><tbody><tr><td><code>--lg-page-bg</code></td><td><code>#E6D9D0</code></td><td><code>#1B1A21</code></td><td>页面底</td></tr><tr><td><code>--lg-surface</code></td><td><code>#F4F0EC</code></td><td><code>#23222A</code></td><td>表面</td></tr><tr><td><code>--lg-text-primary</code></td><td><code>#343A46</code></td><td><code>#F3EFEC</code></td><td>主文字（on page-bg 实测 8.26:1）</td></tr><tr><td><code>--lg-text-secondary</code></td><td><code>#4F5B6E</code></td><td><code>#C9C4CE</code></td><td>次级（实测 4.46:1，<b>仅大字号/图形伴文</b>）</td></tr><tr><td><code>--lg-text-tertiary</code></td><td><code>#9AA2B0</code></td><td><code>#A6ADB9</code></td><td>三级（<b>≥24px 或 ≥18.66px 加粗</b>才可用；永不作可点击主标签）</td></tr><tr><td><code>--lg-text-placeholder</code></td><td><code>rgba(88,98,115,.5)</code></td><td><code>rgba(255,255,255,.42)</code></td><td>占位符</td></tr><tr><td><code>--lg-text-disabled</code></td><td><code>rgba(88,98,115,.4)</code></td><td><code>rgba(255,255,255,.34)</code></td><td>禁用文字</td></tr><tr><td><code>--lg-text-on-accent</code></td><td><code>#343A46</code></td><td><code>#1B1A21</code></td><td><b>主行动渐变上的文字色</b>，必须用它，不要硬编码 <code>#343A46</code></td></tr><tr><td><code>--lg-text-on-inverse</code></td><td><code>#FFFFFF</code></td><td><code>#1B1A21</code></td><td>反相底上的文字（⚠️ <b>仅 React 包有</b>，Vue 包未定义）</td></tr><tr><td><code>--lg-tint-base</code></td><td><code>#FFFFFF</code></td><td><code>#23222A</code></td><td>语义淡底的混色基（⚠️ Vue <code>base.css</code> 暗色档写的是 <code>#000000</code>，与「禁纯黑」红线冲突，见 20.12）</td></tr><tr><td><code>--lg-tint-pct</code></td><td><code>13%</code></td><td><code>8%</code></td><td>淡底透明度档（⚠️ <b>仅 React 包有</b>，Vue 包未定义 → 会回落 13%）</td></tr><tr><td><code>--lg-divider</code> / <code>--lg-divider-hairline</code></td><td><code>rgba(58,52,84,.10)</code></td><td><code>rgba(255,255,255,.10)</code></td><td>分隔线 / 行线（一律 hairline）</td></tr><tr><td><code>--lg-track</code></td><td><code>rgba(58,52,84,.08)</code></td><td><code>rgba(255,255,255,.12)</code></td><td>进度槽 / 骨架槽</td></tr><tr><td><code>--lg-link</code> / <code>--lg-link-hover</code></td><td><code>#B23A63</code> / <code>#9E3054</code></td><td><code>#FFC4D6</code> / <code>#FFA9C2</code></td><td>链接</td></tr><tr><td><code>--lg-glass-panel</code></td><td><code>rgba(255,255,255,.14)</code></td><td><code>rgba(255,255,255,.06)</code></td><td>L1 主玻璃</td></tr><tr><td><code>--lg-glass-card</code></td><td><code>rgba(255,255,255,.22)</code></td><td><code>rgba(255,255,255,.09)</code></td><td>L2 卡片</td></tr><tr><td><code>--lg-glass-control</code></td><td><code>rgba(255,255,255,.35)</code></td><td><code>rgba(255,255,255,.12)</code></td><td>L3 控件</td></tr><tr><td><code>--lg-glass-popover</code></td><td><code>rgba(255,255,255,.60)</code></td><td><code>rgba(38,36,46,.92)</code></td><td>L4 浮层</td></tr><tr><td><code>--lg-border-white-70</code> / <code>-75</code></td><td><code>rgba(255,255,255,.70)</code> / <code>.75</code></td><td><code>rgba(255,255,255,.14)</code> / <code>.12</code></td><td>玻璃描边（⛔ 无 <code>-45/-55/-85</code>）</td></tr><tr><td><code>--lg-shadow-sm</code></td><td><code>0 4px 12px rgba(58,52,84,.10)</code></td><td><code>0 6px 16px rgba(0,0,0,.34)</code></td><td>小阴影</td></tr><tr><td><code>--lg-shadow-md</code></td><td><code>0 8px 24px rgba(58,52,84,.08)</code></td><td><code>0 10px 28px rgba(0,0,0,.42)</code></td><td>中阴影</td></tr><tr><td><code>--lg-shadow-xl</code></td><td><code>0 24px 60px rgba(58,52,84,.16)</code></td><td><code>0 24px 60px rgba(0,0,0,.55)</code></td><td>大阴影（⛔ 无 <code>-xs</code> / <code>-lg</code> / <code>--lg-glow-*</code>）</td></tr></tbody></table>
+<table><thead><tr><th>变量</th><th>浅色</th><th>暗色</th><th>用途</th></tr></thead><tbody><tr><td><code>--lg-page-bg</code></td><td><code>#E6D9D0</code></td><td><code>#1B1A21</code></td><td>页面底</td></tr><tr><td><code>--lg-surface</code></td><td><code>#F4F0EC</code></td><td><code>#23222A</code></td><td>表面</td></tr><tr><td><code>--lg-text-primary</code></td><td><code>#343A46</code></td><td><code>#F3EFEC</code></td><td>主文字（on page-bg 实测 8.26:1）</td></tr><tr><td><code>--lg-text-secondary</code></td><td><code>#4F5B6E</code></td><td><code>#C9C4CE</code></td><td>次级（实测 4.46:1，<b>仅大字号/图形伴文</b>）</td></tr><tr><td><code>--lg-text-tertiary</code></td><td><code>#9AA2B0</code></td><td><code>#A6ADB9</code></td><td>三级（<b>≥24px 或 ≥18.66px 加粗</b>才可用；永不作可点击主标签）</td></tr><tr><td><code>--lg-text-placeholder</code></td><td><code>rgba(88,98,115,.5)</code></td><td><code>rgba(255,255,255,.42)</code></td><td>占位符</td></tr><tr><td><code>--lg-text-disabled</code></td><td><code>rgba(88,98,115,.4)</code></td><td><code>rgba(255,255,255,.34)</code></td><td>禁用文字</td></tr><tr><td><code>--lg-text-on-accent</code></td><td><code>#343A46</code></td><td><code>#1B1A21</code></td><td><b>主行动渐变上的文字色</b>，必须用它，不要硬编码 <code>#343A46</code></td></tr><tr><td><code>--lg-text-on-inverse</code></td><td><code>#FFFFFF</code></td><td><code>#1B1A21</code></td><td>反相底上的文字（⚠️ <b>仅 React 包有</b>，Vue 包未定义）</td></tr><tr><td><code>--lg-tint-base</code></td><td><code>#FFFFFF</code></td><td><code>#23222A</code></td><td>语义淡底的混色基（⚠️ Vue <code>base.css</code> 暗色档写的是 <code>#000000</code>，与「禁纯黑」红线冲突，见 20.12）</td></tr><tr><td><code>--lg-tint-pct</code></td><td><code>13%</code></td><td><code>8%</code></td><td>淡底透明度档（⚠️ <b>仅 React 包有</b>，Vue 包未定义 → 会回落 13%）</td></tr><tr><td><code>--lg-divider</code> / <code>--lg-divider-hairline</code></td><td><code>rgba(58,52,84,.10)</code></td><td><code>rgba(255,255,255,.10)</code></td><td>分隔线 / 行线（一律 hairline）</td></tr><tr><td><code>--lg-track</code></td><td><code>rgba(58,52,84,.08)</code></td><td><code>rgba(255,255,255,.12)</code></td><td>进度槽 / 骨架槽</td></tr><tr><td><code>--lg-link</code> / <code>--lg-link-hover</code></td><td><code>#A9315B</code> / <code>#9E3054</code></td><td><code>#FFC4D6</code> / <code>#FFA9C2</code></td><td>链接（与品牌文字档同值，D34）</td></tr><tr><td><code>--lg-glass-panel</code></td><td><code>rgba(255,255,255,.14)</code></td><td><code>rgba(255,255,255,.06)</code></td><td>L1 主玻璃</td></tr><tr><td><code>--lg-glass-card</code></td><td><code>rgba(255,255,255,.22)</code></td><td><code>rgba(255,255,255,.09)</code></td><td>L2 卡片</td></tr><tr><td><code>--lg-glass-control</code></td><td><code>rgba(255,255,255,.35)</code></td><td><code>rgba(255,255,255,.12)</code></td><td>L3 控件</td></tr><tr><td><code>--lg-glass-popover</code></td><td><code>rgba(255,255,255,.60)</code></td><td><code>rgba(38,36,46,.92)</code></td><td>L4 浮层</td></tr><tr><td><code>--lg-border-white-70</code> / <code>-75</code></td><td><code>rgba(255,255,255,.70)</code> / <code>.75</code></td><td><code>rgba(255,255,255,.14)</code> / <code>.12</code></td><td>玻璃描边（⛔ 无 <code>-45/-55/-85</code>）</td></tr><tr><td><code>--lg-shadow-sm</code></td><td><code>0 4px 12px rgba(58,52,84,.10)</code></td><td><code>0 6px 16px rgba(0,0,0,.34)</code></td><td>小阴影</td></tr><tr><td><code>--lg-shadow-md</code></td><td><code>0 8px 24px rgba(58,52,84,.08)</code></td><td><code>0 10px 28px rgba(0,0,0,.42)</code></td><td>中阴影</td></tr><tr><td><code>--lg-shadow-xl</code></td><td><code>0 24px 60px rgba(58,52,84,.16)</code></td><td><code>0 24px 60px rgba(0,0,0,.55)</code></td><td>大阴影（⛔ 无 <code>-xs</code> / <code>-lg</code> / <code>--lg-glow-*</code>）</td></tr></tbody></table>
 <h5>状态语义六色（<wbr>详见 20.3<wbr><wbr>）</h5>
 <p><code>--lg-sem-positive:#25715D</code> · <code>--lg-sem-info:#3261C1</code> · <code>--lg-sem-attention:#8D5A15</code> · <code>--lg-sem-risk:#B72F42</code> · <code>--lg-sem-neutral:#5E6673</code> · <code>--lg-sem-special:#6A48DC</code> 暗色档：<code>#6FC9B4</code> / <code>#9CAEFF</code> / <code>#F2C14E</code> / <code>#F79AA8</code> / <code>#A6ADB9</code> / <code>#B9A0FF</code></p>
 <h5>圆角（<wbr>只有 2 个档！<wbr>）</h5>
@@ -11353,7 +11354,7 @@ import &quot;./styles/app.css&quot;;         // ② 应用布局</pre>
 <p><b>写这些变量的唯一合法方式</b>：<code>var(--幽灵变量, 兜底值)</code> —— 有兜底值才能通过门禁 <code>B9</code>（<wbr><code>var()</code> 引用的变量要么有定义、要么带兜底<wbr>），且必须在注释里写明「该 Token 代码未实现，此处为文档档位值」。<b>默认做法是直接写字面量，不要制造幽灵引用。</b></p>
 <h4>20.2.3 命名规范</h4>
 <table><thead><tr><th>前缀</th><th>含义</th><th>何时用</th></tr></thead><tbody><tr><td><code>--lg-*</code></td><td>通用引擎 Token（<code>lg</code> = Liquid Glass），Figma 对应 <code>LG /</code></td><td>语义层、圆角、边框、焦点环、动效、玻璃</td></tr><tr><td><code>--mmh-*</code></td><td>妈咪好品牌 Token（<code>mmh</code> = 妈咪好）</td><td>品牌色阶、品牌渐变、D5 实底档、孕产妇五色</td></tr><tr><td><code>--lg-sem-*</code></td><td>状态语义 alias（<code>14 · 4.4.5</code> 权威）</td><td>状态<b>文字 / 色点 / 标签</b>一律用它</td></tr><tr><td><code>gm-</code></td><td>CSS 类前缀</td><td><code>.gm-btn</code>、<code>.gm-btn--primary</code>、<code>.gm-btn--sz-large</code></td></tr><tr><td><code>--sz-*</code></td><td>组件内<b>尺寸类</b>变量</td><td>必须叫 <code>--sz-*</code>：叫 <code>--small</code> 会与 <code>.gm-btn--default</code> 同名同特异性，后写的规则静默吃掉类型底色</td></tr></tbody></table>
-<p><b>Token 值书写</b>：<wbr>hex <b>字母一律大写</b>（<wbr><code>#B23A63</code> 不能写成小写形式<wbr>）；命名 kebab-case 全小写。</p>
+<p><b>Token 值书写</b>：<wbr>hex <b>字母一律大写</b>（<wbr><code>#A9315B</code> 不能写成小写形式<wbr>）；命名 kebab-case 全小写。</p>
 <p><b>定义处唯一</b>：业务页面<b>不得</b>另行定义 <code>--lg-*</code> / <code>--mmh-*</code>，只允许<b>局部作用域覆盖</b>：</p>
 <pre>[data-region=&quot;xx&quot;] { --mmh-m5-m1: #3FAE7E; }   /* ✅ 允许：局部覆盖 */
 :root { --lg-space-4: 16px; }                  /* ⛔ 禁止：与 Token 层抢定义权 */</pre>
@@ -11378,7 +11379,7 @@ import &quot;./styles/app.css&quot;;         // ② 应用布局</pre>
 <ol><li>**<code>--lg-sem-*</code> 是前景色<b>（<wbr>文字 / 色点 / 描边<wbr>），</b>不可拿来当填充底**。需要实底承载白字 → <code>SEMANTIC_SOLID</code> / <code>--mmh-solid-*</code>。</li><li><b>淡底一律混实底</b>：<code>color-mix(in srgb, var(--lg-sem-risk) 13%, var(--lg-tint-base))</code>。⛔ 禁止 <code>color-mix(…, transparent)</code> —— 玻璃卡与品牌渐变会透出来把底压暗，<wbr>12px 语义字只剩 <b>4.06:1</b>。暗色档用 <code>--lg-tint-pct</code>（<wbr><wbr>8%<wbr>）。库内已封成 <code>semTint()</code> / <code>semTintFill()</code> / <code>semTintBorder()</code>，业务侧直接用组件即可。</li><li><b>状态必须双通道</b>：色 + 文字（<wbr><wbr>WCAG 1.4.1<wbr><wbr>）。<b>任何状态展示都必须带文字，不得仅靠色点区分。</b></li></ol>
 <h4>20.3.4 妊娠风险五色（<wbr><code>GmFive</code><wbr>）</h4>
 <p><code>m1</code> 绿·低风险 <code>#4CB98A</code> · <code>m2</code> 黄·一般风险 <code>#F2C14E</code> · <code>m3</code> 橙·较高风险 <code>#F0954A</code> · <code>m4</code> 红·高风险 <code>#EE5C70</code> · <code>m5</code> 紫·合并传染病 <code>#8F6AE0</code></p>
-<ul><li>五色<b>只用于妊娠风险分级</b>，不用于其他任何状态。</li><li>chip 配方：底色 = 对应色 <b>12–18%</b> 洗色 + 深色文字；红/紫两级可用白字实色 chip<wbr>。<b>仅作管理标签，不做大面积填充。</b></li><li><code>GmStatusTag</code> 的五色分支<b>文字不用五色亮值</b>（<wbr>走 <code>--lg-text-primary</code><wbr>），颜色由色点承载。</li></ul>
+<ul><li>五色<b>只用于妊娠风险分级</b>，不用于其他任何状态。</li><li>chip 配方：底色 = 对应色 <b>12–18%</b> 洗色 + 深色文字；红/紫两级可用白字实色 chip<wbr>。<b>仅作管理标签，不做大面积填充。</b></li><li><b>五色分支的文字一律不用五色亮值</b>（<wbr><code>GmStatusTag</code> 与 <code>GmTag</code> 同规则<wbr>）：亮值只承载<b>色点与淡底</b>，文字走 <code>--lg-text-primary</code>；颜色由色点承载（<wbr>双通道<wbr>）。</li></ul>
 <h4>20.3.5 图表色序（<wbr><wbr>12.3.3 品牌默认顺序<wbr>）</h4>
 <pre>1 Rose-500 #F77FA3   随访/宝宝主指标
 2 Peach-400 #FFC3A0  孕期体重等      ← 代码未实现该 Token，用字面量
@@ -11470,14 +11471,19 @@ button{display:inline-flex;align-items:center;justify-content:center;gap:8px}</p
 <p>一屏允许几个：<wbr>L1 主行动 <b>1 个</b>；<wbr>L2 次行动 <b>≤2</b>；<wbr>L3/L4 不限。</p>
 <p><b>其它决策</b></p>
 <table><thead><tr><th>决策</th><th>规则</th></tr></thead><tbody><tr><td><code>GmButtonGroup</code></td><td><b>三个及以上、语义同级、可连续选择</b>才用组；<b>两个按钮不用组</b>（直接并排 + 间距 12）。组内必须同类型同尺寸，文字长度差 ≤2 倍，<code>ariaLabel</code> 必填</td></tr><tr><td>Link vs Button</td><td>导航/跳转/次级动作 → <b>链接</b>；提交/确认/主行动 → <b>按钮</b>。一屏内主色链接 <b>≤2 处</b>。动作用 <code>&lt;button&gt;</code>、导航用 <code>&lt;a href&gt;</code>，<b>禁止 <code>href="#"</code> 假链接</b></td></tr><tr><td>Tag vs StatusTag</td><td>文案来自 15 章词库 → <code>GmStatusTag</code>（自动取色）；否则 → <code>GmTag</code>（显式 <code>semantic</code> / <code>color</code>）</td></tr><tr><td>Empty vs Result</td><td><code>GmEmpty</code> = <b>没有数据但一切正常</b>；<code>GmResult</code> = <b>操作有结论</b>（成功/失败）</td></tr><tr><td>Modal / Drawer / ActionSheet</td><td>Mobile <b>底部优先</b>；危险操作在最后且带理由；<b>一次一个弹层</b>，弹窗内不再开弹窗</td></tr><tr><td><code>GmVirtualList</code> 门槛</td><td>移动 &gt;50 项 / PC 表格 &gt;200 行 / 单次渲染 DOM &gt;300 行时窗口化；固定行高 + <code>overscan</code> 4。<b>&lt;200 行直接 <code>v-for</code> / <code>map</code> 更快更简单</b></td></tr><tr><td><code>GmCascader</code> 门槛</td><td>层级 <b>≤4</b> 且单列选项 <b>&lt;200</b>；超过则改「搜索 + 逐级下钻页面」。⛔ 反面：三个 <code>Select</code> 串联层级、单列超 12 汉字塞进级联、移动端沿用桌面横排多列面板</td></tr></tbody></table>
-<h4>20.6.4 两库对照（<wbr><wbr>19 对同名组件<wbr>）</h4>
-<p>两库组件名<b>完全同名</b>（<wbr><wbr>19 个<wbr>）：<code>GmAvatar</code> <code>GmButton</code> <code>GmButtonGroup</code> <code>GmCard</code> <code>GmCascader</code> <code>GmClientCard</code> <code>GmEmpty</code> <code>GmLink</code> <code>GmProgress</code> <code>GmResponsiveView</code> <code>GmResult</code> <code>GmRiskPicker</code> <code>GmSkeleton</code> <code>GmSpin</code> <code>GmStatusTag</code> <code>GmSteps</code> <code>GmTag</code> <code>GmToast</code> <code>GmVirtualList</code></p>
-<table><thead><tr><th>维度</th><th>React <code>@goodmom/ui</code></th><th>Vue <code>@goodmom/vue</code></th></tr></thead><tbody><tr><td>基座</td><td>Arco（peer <code>^2.60.0</code>）；仅 <code>GmProgress</code> 实际使用</td><td><b>零基座</b></td></tr><tr><td>样式注入</td><td>入口<b>零 CSS import</b>；消费方显式引 <code>theme.css</code>（应用侧镜像 <code>gm.css</code>）</td><td>入口<b>副作用</b>引 <code>src/styles/index.css</code>；<code>exports["./style.css"]</code></td></tr><tr><td>构建</td><td><code>tsc</code></td><td><code>vite build &amp;&amp; vue-tsc --emitDeclarationOnly</code></td></tr><tr><td>逃生口</td><td><code>ArcoButton</code> + <code>ArcoButtonProps</code></td><td>无</td></tr><tr><td>样式全量</td><td>单文件 <code>theme.css</code>（约 52KB）</td><td><code>base.css</code> + <code>components.css</code>（约 41KB）</td></tr></tbody></table>
-<p><b>写法差异</b></p>
-<table><thead><tr><th>差异类</th><th>React</th><th>Vue</th></tr></thead><tbody><tr><td>子内容</td><td><code>children</code></td><td>默认插槽</td></tr><tr><td>命名插槽</td><td><code>title</code> / <code>extra</code> / <code>actions</code> 等 <b>props（ReactNode）</b></td><td><code>title</code> / <code>extra</code> / <code>footer</code> / <code>ops</code> 等<b>具名插槽</b></td></tr><tr><td>受控值</td><td><code>value</code> + <code>onChange</code></td><td><code>v-model</code>（<code>modelValue</code> / <code>update:modelValue</code>）</td></tr><tr><td>事件</td><td><code>onClick</code> / <code>onAction</code> / <code>onClose</code></td><td><code>@click</code> / <code>@action</code> / <code>@close</code></td></tr><tr><td>框架 props</td><td>显式 <code>children/className/style</code></td><td>默认插槽 / <code>class</code> / <code>style</code> 透传</td></tr><tr><td>render-prop</td><td><code>GmResponsiveView</code> 用函数</td><td>同名具名插槽</td></tr></tbody></table>
-<p><b>契约差异（<wbr>已登记，写代码前必看<wbr>）</b></p>
-<table><thead><tr><th>组件</th><th>差异</th><th>影响</th></tr></thead><tbody><tr><td><code>GmStatusTag</code></td><td>React <code>semantic</code> 默认 <code>"neutral"</code>，<b>不会从文案推导</b>；Vue <code>semantic</code> 默认 <code>undefined</code>，<b>会从插槽文案自动推导</b></td><td>React 侧必须显式传 <code>semantic={semanticOf(label)}</code>，否则永远灰</td></tr><tr><td><code>GmStatusTag</code></td><td>React <code>size</code> 默认 <code>"small"</code>，Vue 默认 <code>"default"</code></td><td>同页跨库对不齐</td></tr><tr><td><code>GmStatusTag</code></td><td>React <code>size="large"</code> 输出类 <code>gm-status-tag lg</code>，而 CSS 只定义 <code>.gm-status-tag--large</code></td><td><b>React 的 <code>large</code> 实际无效</b>（已知缺陷）</td></tr><tr><td><code>GmStatusTag</code></td><td>React 有 <code>onClose?: () =&gt; void</code>；Vue <code>@close(ev: MouseEvent)</code> 且多 <code>closeLabel</code>（默认「移除」）</td><td>React 关闭钮 <code>aria-label</code> 硬编码「移除」</td></tr><tr><td><code>GmCard</code></td><td>React 无 <code>hoverable</code> / <code>bodyless</code> / footer</td><td>跨库迁移要改结构</td></tr><tr><td><code>GmClientCard</code></td><td>React <code>actions</code> prop ↔ Vue <code>ops</code> 槽</td><td></td></tr><tr><td><code>GmResponsiveView</code> / <code>GmVirtualList</code></td><td><code>onModeChange</code> / <code>onEndReached</code> 两侧<b>都是 prop，不是事件</b></td><td>写 <code>@end-reached</code> 无效</td></tr><tr><td><code>GmVirtualList</code></td><td><code>scrollToIndex</code> <b>仅 Vue 暴露</b>；文档写的 <code>@end-reached</code> 两库都不存在</td><td></td></tr><tr><td><code>GmProgress</code></td><td>React 基于 Arco（<code>diameter</code> 曾被 Arco <code>size</code> 枚举吃掉）；Vue 自绘</td><td></td></tr></tbody></table>
-<blockquote>三层守门：<code>check-style-parity.py</code>（CSS 解析值）、<code>check-component-contract.py</code>（props/默认值/类名，<b>不在 CI</b>）、<code>audit.py mirror_sync</code>（React 包 ↔ 应用镜像逐字节；<b>明确排除 <code>goodmom-vue/</b></code>**）。</blockquote>
+<h4>20.6.4 两库统一化标准（<wbr><wbr>V2.9 起：零能力差异<wbr>）</h4>
+<p>两库各 <b>19 个同名组件</b>，<b>能力面/默认值/契约类名/DOM/无障碍行为完全一致</b>。这条不是口号，是四条机器门禁的判定结果：</p>
+<table><thead><tr><th>不变量</th><th>判定方式</th><th>当前</th></tr></thead><tbody><tr><td><b>props 与事件</b>（归一化宿主惯用写法后）</td><td><code>check-component-contract.py --ci</code></td><td>19/19 一致</td></tr><tr><td><b>默认值</b></td><td>同上</td><td>0 处不同</td></tr><tr><td><b>契约类名</b>（源码里<b>全部</b> <code>gm-*</code> 字面量，非只比首个）</td><td>同上</td><td>0 处不同</td></tr><tr><td><b>惯用写法映射的能力对等</b></td><td>同上（<code>capability_parity()</code>）</td><td>0 处缺失</td></tr><tr><td><b>CSS 声明写法</b>（共享选择器逐字节）</td><td><code>check-style-parity.py --ci</code></td><td>233 个共享选择器、<b>0 处不同</b></td></tr><tr><td><b>暗色覆盖集合</b></td><td>同上</td><td>两侧同名同值</td></tr><tr><td><b>Token 层</b>（浅色 + 暗色两张表）</td><td>同上</td><td>0 处不同</td></tr><tr><td><b>DOM 与无障碍</b>（渲染级）</td><td><code>goodmom-ui/playground/smoke.mjs</code>（<b>61/61</b>）+ <code>goodmom-vue/playground/smoke.mjs</code>（<b>40/40</b>）</td><td>全绿</td></tr><tr><td><b>无孤儿类名</b>（输出的每个 class 都有对应 CSS 规则）</td><td>同上（演示页渲染后逐元素比对 <code>styleSheets</code>）</td><td>4 个「与基态等价」的档位类已登记并写明理由</td></tr></tbody></table>
+<h5>✅ 唯一允许的差异：宿主语言惯用写法（<wbr>受门禁守护，不是"没对齐"<wbr>）</h5>
+<p><code>check-component-contract.py</code> 会把两侧<b>归一化到同一个规范名</b>再严格比对，因此"叫法不同"被显式承认，而<b>任何新的漂移照旧 FAIL</b>。归一化规则只有三条：</p>
+<table><thead><tr><th>#</th><th>规则</th><th>React 侧</th><th>Vue 侧</th><th>规范名</th></tr></thead><tbody><tr><td>1</td><td>默认内容区</td><td><code>children</code></td><td>默认插槽</td><td><code>#default</code></td></tr><tr><td>2</td><td>具名区域（同一种能力的两种写法）</td><td>prop（<code>ReactNode</code> / render 函数）</td><td>具名插槽</td><td><code>#&lt;name&gt;</code></td></tr><tr><td>3</td><td>受控值</td><td><code>value</code> + <code>onChange</code></td><td><code>v-model</code>（<code>modelValue</code> + <code>update:modelValue</code>）</td><td>prop <code>value</code> + 事件 <code>change</code></td></tr></tbody></table>
+<p><b>名字确实不同、能力完全相同的少数几处</b>由 <code>IDIOM</code> 表显式登记，并且必须通过<b>能力对等校验</b>（<wbr>映射表里写了哪一侧，那一侧就必须真有那个成员<wbr>）：</p>
+<table><thead><tr><th>组件</th><th>React</th><th>Vue</th><th>依据</th></tr></thead><tbody><tr><td><code>GmCascader</code> / <code>GmRiskPicker</code></td><td><code>value</code> + <code>onChange</code></td><td><code>v-model</code></td><td>受控值的框架惯用写法</td></tr><tr><td><code>GmResponsiveView</code></td><td><code>table</code> / <code>condensed</code> / <code>card</code> / <code>empty</code> render prop</td><td>同名具名插槽</td><td>具名区域</td></tr><tr><td><code>GmVirtualList</code></td><td><code>renderItem</code> / <code>stickyTop</code></td><td>默认插槽 / <code>sticky</code> 插槽</td><td>具名区域</td></tr></tbody></table>
+<blockquote><b>其余一切差异都是缺陷</b>。V2.9 之前这里躺着一张 <code>KNOWN_DIVERGENCE</code> 白名单，粒度是「允许这个组件的 props 不一致」—— 于是整组 props 与默认值的比对被<b>跳过</b>，实测漏掉了：<code>GmStatusTag</code> 的 <code>size</code> 默认值两侧不同、<code>size="large"</code> 在 React 输出一个 CSS 里不存在的类名（prop 完全无效）、<code>GmCard</code> 的 <code>hoverable</code>/<code>bodyless</code> 只有 Vue 有、<code>GmEmpty</code> 的 <code>title</code> 默认值不同（Vue 渲染「暂无数据」、React 什么都不渲染）。白名单已删除，改为「归一化 + 严格比对 + 能力对等」。</blockquote>
+<h5>消费方式差异（<wbr>与能力无关<wbr>）</h5>
+<table><thead><tr><th>维度</th><th>React <code>@goodmom/ui</code></th><th>Vue <code>@goodmom/vue</code></th></tr></thead><tbody><tr><td>基座</td><td>Arco（peer <code>^2.60.0</code>）；<b>仅保留 <code>ArcoButton</code> 逃生口</b>（<code>GmProgress</code> 已改为自绘）</td><td><b>零基座</b></td></tr><tr><td>样式注入</td><td>入口<b>零 CSS import</b>；消费方显式引 <code>theme.css</code>（应用侧镜像 <code>gm.css</code>）</td><td>入口<b>副作用</b>引 <code>src/styles/index.css</code>；<code>exports["./style.css"]</code></td></tr><tr><td>构建</td><td><code>tsc</code></td><td><code>vite build &amp;&amp; vue-tsc --emitDeclarationOnly</code></td></tr><tr><td>Token 层位置</td><td><code>theme.css</code> 的 <code>:root</code> / 暗色段</td><td><code>base.css</code> 的 <code>:root</code> / 暗色段（<b>文件归属差异，值必须一致</b>）</td></tr><tr><td>面板组件 CSS</td><td><code>theme.css</code></td><td><code>components.css</code>（与 <code>theme.css</code> <b>逐字节对齐</b>）</td></tr></tbody></table>
+<h5>守门（<wbr>四条，缺一不可<wbr>）</h5>
+<table><thead><tr><th>门禁</th><th>守什么</th><th>在 CI</th></tr></thead><tbody><tr><td><code>check-component-contract.py --ci</code></td><td>props / 事件 / 默认值 / 契约类名 / 惯用写法映射的能力对等</td><td>✅ <code>architecture-gate</code></td></tr><tr><td><code>check-style-parity.py --ci</code></td><td>共享选择器写法逐字节 · 暗色覆盖集合 · Token 层（浅+暗）</td><td>✅ <code>docs-links</code></td></tr><tr><td><code>audit.py mirror</code></td><td>React 包 ↔ 应用镜像逐字节 + 选择器集合（<b>明确排除 <code>goodmom-vue/</b></code>**）</td><td>✅ <code>docs-links</code></td></tr><tr><td><code>audit.py undefined-token</code></td><td>两库 CSS + 站点片段里 <code>var(--x)</code> 无兜底引用未定义变量</td><td>✅ <code>docs-links</code></td></tr></tbody></table>
 <h4>20.6.5 关键组件契约</h4>
 <p><b><code>GmButton</code></b>（<wbr>两侧完全一致<wbr>）</p>
 <table><thead><tr><th>prop</th><th>类型</th><th>默认</th></tr></thead><tbody><tr><td><code>type</code></td><td>`primary \</td><td>secondary \</td><td>outline \</td><td>dashed \</td><td>text \</td><td>default`</td><td><code>primary</code></td></tr><tr><td><code>status</code></td><td>`default \</td><td>success \</td><td>warning \</td><td>danger`</td><td><code>default</code></td></tr><tr><td><code>size</code></td><td>`mini \</td><td>small \</td><td>default \</td><td>large`</td><td><code>default</code></td></tr><tr><td><code>shape</code></td><td>`round \</td><td>circle \</td><td>square`</td><td><code>round</code></td></tr><tr><td><code>long</code> / <code>disabled</code> / <code>loading</code></td><td><code>boolean</code></td><td><code>false</code></td></tr><tr><td><code>nativeType</code></td><td>`button \</td><td>submit \</td><td>reset`</td><td><code>button</code></td></tr><tr><td><code>ariaLabel</code></td><td><code>string</code></td><td>—（<b>仅图标按钮必填</b>，缺失会 <code>console.warn</code>）</td></tr><tr><td><code>icon</code></td><td>节点 / 插槽</td><td>—（前置 16px 槽位）</td></tr></tbody></table>
@@ -11611,7 +11617,7 @@ python3 scripts/check-version.py --ci</pre>
 <h4>20.12.2 同名不同值（<wbr>跨库分叉<wbr>）</h4>
 <table><thead><tr><th>变量</th><th>文档</th><th>代码</th><th>处置</th></tr></thead><tbody><tr><td><code>--lg-tint-base</code>（暗色）</td><td><code>#23222A</code></td><td>React <code>theme.css</code> <code>#23222A</code> ✅ ／ Vue <code>base.css</code> <b><code>#000000</code></b> ❌</td><td>Vue 侧撞「禁纯黑」红线；本规范口径取 <b><code>#23222A</code></b></td></tr><tr><td><code>--lg-tint-pct</code>（暗色）</td><td><code>8%</code></td><td>React <code>8%</code> ✅ ／ Vue <b>未定义</b>（回落 <code>13%</code>）</td><td>Vue 侧暗色淡底偏亮；本规范口径取 <b><code>8%</code></b></td></tr><tr><td><code>--lg-shadow-sm</code></td><td><code>0 4px 12px rgba(58,52,84,.06)</code></td><td><code>.10</code></td><td>以代码为准</td></tr><tr><td><code>--lg-shadow-md</code></td><td>双层</td><td>单层</td><td>以代码为准</td></tr><tr><td><code>--lg-shadow-xl</code></td><td><code>0 32px 80px</code></td><td><code>0 24px 60px</code></td><td>以代码为准</td></tr><tr><td><code>--mmh-grad-mint</code></td><td><code>135deg #A9E3D4→#6FC9B4</code></td><td><code>150deg #7FD8C2→#4FB59C</code></td><td>以代码为准</td></tr><tr><td>字体栈</td><td><code>--lg-font-sans</code> 九族</td><td><code>--lg-font</code> 四族（且仅 Vue 有）</td><td>以代码为准；不新增字体变量</td></tr><tr><td>暗色分隔线</td><td><code>rgba(255,255,255,0.08)</code></td><td><code>rgba(255,255,255,.10)</code></td><td>以代码为准</td></tr><tr><td>遮罩 / 禁用透明度</td><td><code>--lg-opacity-overlay: .18</code> / <code>--lg-opacity-disabled: .4</code></td><td>变量不存在；字面量 <code>.35</code> / <code>.5</code> / <code>.55</code> / <code>.9</code></td><td>以代码为准</td></tr><tr><td><code>--lg-radius-btn-sm</code></td><td><code>18</code></td><td><b>两包都未定义</b> → <code>.gm-btn--square</code> 圆角失效</td><td>写字面量 <code>18</code></td></tr><tr><td>六语义淡色片实测</td><td><code>02</code> 表 B：positive 5.84:1</td><td>代码注释：5.79 / 4.85 / 4.86 三种表述</td><td>以代码注释为准，差异在测量条件</td></tr></tbody></table>
 <h4>20.12.3 代码内已知缺陷（<wbr>不要照抄<wbr>）</h4>
-<table><thead><tr><th>#</th><th>缺陷</th><th>影响</th></tr></thead><tbody><tr><td>1</td><td>React <code>GmStatusTag</code> 的 <code>size="large"</code> 输出类 <code>gm-status-tag lg</code>，CSS 只有 <code>.gm-status-tag--large</code></td><td>React 侧 <code>large</code> <b>无效果</b></td></tr><tr><td>1b</td><td>✅ <b>已修（V2.9）</b>：<code>goodmom-vue/src/index.ts</code> 的<b>具名导出块漏了 <code>GmResult</code> / <code>GmToast</code></b>（<code>components</code> 表有 19 个，具名导出只有 17 个）</td><td>此前 <code>import { GmResult } from "@goodmom/vue"</code> 报 <b>TS2614</b>，消费方只能退化成 <code>components.GmResult</code>（全量注册，失去摇树）。已补齐 19 个并重建 <code>dist/</code></td></tr><tr><td>2</td><td><code>GmStatusTag</code> 的 <code>size</code> 默认值 React <code>small</code> / Vue <code>default</code></td><td>跨库默认外观不同</td></tr><tr><td>3</td><td><code>.gm-cascader__opt{border-radius:10px}</code>（交互控件 &lt;16px 下限）、<code>.gm-link:focus-visible{border-radius:4px}</code>、<code>.gm-toast__act:focus-visible{border-radius:6px}</code></td><td>越界值仍在库内</td></tr><tr><td>4</td><td>Vue <code>base.css</code> 的 <code>reduce-motion</code> 是<b>组件白名单</b>（React 是 <code>*</code>）</td><td>Vue 自绘动画不降级</td></tr><tr><td>5</td><td>两库 CSS 实测 <b>207 个同名选择器、32 个声明写法不一致</b>。浅色档解析值仍一致（<code>check-style-parity.py</code> 因此绿），但<b>暗色档会真的分叉</b>：<code>.gm-step.finish .gs-dot</code> 的 Vue 侧写死 <code>color:#FFF</code>（暗色仍白字），React 侧写 <code>var(--lg-text-on-inverse,#FFF)</code>（暗色翻深字）</td><td>跨包视觉分叉，且<b>门禁看不见</b></td></tr><tr><td>6</td><td><code>--gm-toast-top</code> 被引用但<b>无任何库定义</b>（只有回落值）</td><td>依赖回落值</td></tr><tr><td>7</td><td><code>06.5</code> 写移动端同屏模糊节点 ≤6，<code>10.8</code> 写 ≤4；<code>10.10</code> 的 blur 上限 32px 在移动媒体查询内未生效</td><td>口径不一</td></tr><tr><td>8</td><td>断点：文档四档，代码只有 <code>@media (max-width:767px)</code></td><td>1024/1366 档缺实现</td></tr><tr><td>9</td><td><code>check-status-map.py</code> 不扫 <code>frontend-app</code> 镜像；色值检查依赖 CWD</td><td>镜像侧漏守</td></tr><tr><td>10</td><td><code>check-component-contract.py</code> / <code>gate-negative-tests.py</code> / <code>patterns-smoke.cjs</code> <b>不在 CI</b></td><td>契约漂移可静默合入</td></tr><tr><td>11</td><td><code>frontend-app/package-lock.json</code> 不存在，但 CI 两个 job 的 <code>cache-dependency-path</code> 指向它</td><td>只影响缓存命中</td></tr><tr><td>12</td><td><code>goodmom-ui/dist/</code> 为陈旧产物（含已移除的 <code>adapters/</code>，且无 CSS）；<code>goodmom-vue/dist/</code> 曾停留在 09-12 构建，<b>其中没有 <code>GmResult</code>/<code>GmToast</code>/<code>GmButtonGroup</code></b></td><td>已随 V2.9 重建；<b>不要从 <code>dist</code> 反推契约</b></td></tr><tr><td>13</td><td>文档/README 计数漂移：README 称「16 个组件」实为 19；16 章称「16 模块」实为 React 19 / Vue 19；<code>00</code> 总表实为 <b>99 行</b>（编号 1–98 + <code>10b</code>）；<code>GmRiskPicker</code> / <code>GmClientCard</code> 代码存在但 <code>00</code> 未登记</td><td>计数一律以 <code>docs/coverage-report.md</code> 为准</td></tr><tr><td>14</td><td>页面质检当前 <b>P3 = 13 条 <code>dark-missing</code></b>；布局体检 <b>P3 = 21 条 &lt;12px 字号</b></td><td>P3 不阻塞合入，但是待办</td></tr><tr><td>15</td><td><b><code>.gm-btn--secondary</code> / <code>.gm-btn--default</code> 在暗色档下是「白底白字」</b>：两类的底写死近白渐变 <code>linear-gradient(160deg,rgba(255,255,255,.94),rgba(255,255,255,.78))</code>，字走 <code>--lg-text-primary</code>（暗色 = <code>#F3EFEC</code>）；<code>theme.css</code> 的暗色段只覆盖 <code>.gm-btn-hc</code>，没有覆盖这两个类型。实测合成后 <b>≈1.04:1</b></td><td>暗色档下这两类按钮<b>不可读</b>。<code>audit.py dark</code> 与 <code>a11y-dom</code> 都没抓到它（站点暗色模块未用到这两类）。<b>暗色档禁用 <code>secondary</code> / <code>default</code></b>，或先修组件库</td></tr><tr><td>16</td><td><b><code>GmTag</code> 的五色分支文字直接用五色亮值</b>（<code>color: var(--mmh-m5-N)</code>，见 <code>GmTag.tsx</code> 的 <code>base</code>）：12px 压在 13% 淡底上实测 <b>1.78–3.93:1</b>，五档全不达 AA。<code>GmStatusTag</code> 的五色分支<b>无此问题</b>（文字走 <code>--lg-text-primary</code>）</td><td>妊娠风险五色<b>用 <code>&lt;GmStatusTag five="mN"&gt;</code>，不要用 <code>&lt;GmTag five="mN"&gt;</code></b></td></tr><tr><td>17</td><td><code>--lg-link</code>（<code>#B23A63</code>）压在页面品牌渐变上仅 <b>4.18:1</b>，14px 正文不达 AA</td><td>渐变底上的面包屑/次级链接改用 <code>--lg-text-secondary</code> 或主行动按钮</td></tr><tr><td>18</td><td>15.5 状态色表指向的 <code>--lg-success-500</code> / <code>--lg-info-500</code> / <code>--lg-warning-500</code> / <code>--lg-danger-500</code> / <code>--lg-purple-500</code> <b>五个变量全仓零实现</b>（该表只有 <code>--lg-text-tertiary</code> 存在）</td><td>一律改走 <code>--lg-sem-*</code>（见 20.2.2 第 10 类）</td></tr></tbody></table>
+<table><thead><tr><th>#</th><th>缺陷</th><th>影响</th></tr></thead><tbody><tr><td>1</td><td>React <code>GmStatusTag</code> 的 <code>size="large"</code> 输出类 <code>gm-status-tag lg</code>，CSS 只有 <code>.gm-status-tag--large</code></td><td>React 侧 <code>large</code> <b>无效果</b></td></tr><tr><td>1b</td><td>✅ <b>已修（V2.9）</b>：<code>goodmom-vue/src/index.ts</code> 的<b>具名导出块漏了 <code>GmResult</code> / <code>GmToast</code></b>（<code>components</code> 表有 19 个，具名导出只有 17 个）</td><td>此前 <code>import { GmResult } from "@goodmom/vue"</code> 报 <b>TS2614</b>，消费方只能退化成 <code>components.GmResult</code>（全量注册，失去摇树）。已补齐 19 个并重建 <code>dist/</code></td></tr><tr><td>2</td><td><code>GmStatusTag</code> 的 <code>size</code> 默认值 React <code>small</code> / Vue <code>default</code></td><td>跨库默认外观不同</td></tr><tr><td>3</td><td><code>.gm-cascader__opt{border-radius:10px}</code>（交互控件 &lt;16px 下限）、<code>.gm-link:focus-visible{border-radius:4px}</code>、<code>.gm-toast__act:focus-visible{border-radius:6px}</code></td><td>越界值仍在库内</td></tr><tr><td>4</td><td>Vue <code>base.css</code> 的 <code>reduce-motion</code> 是<b>组件白名单</b>（React 是 <code>*</code>）</td><td>Vue 自绘动画不降级</td></tr><tr><td>5</td><td>两库 CSS 实测 <b>207 个同名选择器、32 个声明写法不一致</b>。浅色档解析值仍一致（<code>check-style-parity.py</code> 因此绿），但<b>暗色档会真的分叉</b>：<code>.gm-step.finish .gs-dot</code> 的 Vue 侧写死 <code>color:#FFF</code>（暗色仍白字），React 侧写 <code>var(--lg-text-on-inverse,#FFF)</code>（暗色翻深字）</td><td>跨包视觉分叉，且<b>门禁看不见</b></td></tr><tr><td>6</td><td><code>--gm-toast-top</code> 被引用但<b>无任何库定义</b>（只有回落值）</td><td>依赖回落值</td></tr><tr><td>7</td><td><code>06.5</code> 写移动端同屏模糊节点 ≤6，<code>10.8</code> 写 ≤4；<code>10.10</code> 的 blur 上限 32px 在移动媒体查询内未生效</td><td>口径不一</td></tr><tr><td>8</td><td>断点：文档四档，代码只有 <code>@media (max-width:767px)</code></td><td>1024/1366 档缺实现</td></tr><tr><td>9</td><td><code>check-status-map.py</code> 不扫 <code>frontend-app</code> 镜像；色值检查依赖 CWD</td><td>镜像侧漏守</td></tr><tr><td>10</td><td><code>check-component-contract.py</code> / <code>gate-negative-tests.py</code> / <code>patterns-smoke.cjs</code> <b>不在 CI</b></td><td>契约漂移可静默合入</td></tr><tr><td>11</td><td><code>frontend-app/package-lock.json</code> 不存在，但 CI 两个 job 的 <code>cache-dependency-path</code> 指向它</td><td>只影响缓存命中</td></tr><tr><td>12</td><td><code>goodmom-ui/dist/</code> 为陈旧产物（含已移除的 <code>adapters/</code>，且无 CSS）；<code>goodmom-vue/dist/</code> 曾停留在 09-12 构建，<b>其中没有 <code>GmResult</code>/<code>GmToast</code>/<code>GmButtonGroup</code></b></td><td>已随 V2.9 重建；<b>不要从 <code>dist</code> 反推契约</b></td></tr><tr><td>13</td><td>文档/README 计数漂移：README 称「16 个组件」实为 19；16 章称「16 模块」实为 React 19 / Vue 19；<code>00</code> 总表实为 <b>99 行</b>（编号 1–98 + <code>10b</code>）；<code>GmRiskPicker</code> / <code>GmClientCard</code> 代码存在但 <code>00</code> 未登记</td><td>计数一律以 <code>docs/coverage-report.md</code> 为准</td></tr><tr><td>14</td><td>页面质检当前 <b>P3 = 13 条 <code>dark-missing</code></b>；布局体检 <b>P3 = 21 条 &lt;12px 字号</b></td><td>P3 不阻塞合入，但是待办</td></tr><tr><td>15</td><td><b><code>.gm-btn--secondary</code> / <code>.gm-btn--default</code> 在暗色档下是「白底白字」</b>：两类的底写死近白渐变 <code>linear-gradient(160deg,rgba(255,255,255,.94),rgba(255,255,255,.78))</code>，字走 <code>--lg-text-primary</code>（暗色 = <code>#F3EFEC</code>）；<code>theme.css</code> 的暗色段只覆盖 <code>.gm-btn-hc</code>，没有覆盖这两个类型。实测合成后 <b>≈1.04:1</b></td><td>暗色档下这两类按钮<b>不可读</b>。<code>audit.py dark</code> 与 <code>a11y-dom</code> 都没抓到它（站点暗色模块未用到这两类）。<b>暗色档禁用 <code>secondary</code> / <code>default</code></b>，或先修组件库</td></tr><tr><td>16</td><td>✅ <b>已修（V2.9 / D35）</b>：<code>GmTag</code> 的五色分支曾把五色亮值当文字色 —— 实测 <b>1.57–3.41:1（浅色档五档全不达 AA）</b>、暗色档 m4/m5 也不达标（4.36 / 3.62）。现两侧统一为「<b>亮值只承载色点与淡底，文字走 <code>--lg-text-primary</code></b>」，与 <code>GmStatusTag</code> 写法完全一致：实测 <b>9.82–10.68:1（浅）/ 11.60–12.55:1（暗）</b></td><td>五色不再分「哪个组件能用」—— <code>GmTag five</code> 与 <code>GmStatusTag five</code> 现在都安全</td></tr><tr><td>17</td><td>✅ <b>已随之缓解（V2.9 / D34）</b>：<code>--lg-link</code> 已加深为 <code>#A9315B</code>；渐变底上的面包屑/次级链接仍建议用 <code>--lg-text-secondary</code> 或主行动按钮（渐变面取样不确定）</td></tr><tr><td>18</td><td>15.5 状态色表指向的 <code>--lg-success-500</code> / <code>--lg-info-500</code> / <code>--lg-warning-500</code> / <code>--lg-danger-500</code> / <code>--lg-purple-500</code> <b>五个变量全仓零实现</b>（该表只有 <code>--lg-text-tertiary</code> 存在）</td><td>一律改走 <code>--lg-sem-*</code>（见 20.2.2 第 10 类）</td></tr><tr><td>19</td><td>✅ <b>已修（V2.9）</b>：React <code>theme.css</code> 有 <b>7 处 <code>font-family:var(--lg-font)</code>，而 <code>--lg-font</code> 从未在该文件定义</b>（只存在于 Vue <code>base.css</code>）</td><td>React 侧<b>所有组件的字体声明整条失效</b>，回落到浏览器默认字体（桌面为 Times 系衬线）。<code>audit</code>/<code>B9</code>/<code>page-qa</code> 全都没报 —— <code>undefined-token</code> 当时只扫站点片段。已定义该 Token，并把该门禁扩面到两库 CSS</td></tr><tr><td>20</td><td>✅ <b>已修（V2.9）</b>：React 渲染 <code>class="gm-result gm-result--{status}"</code>，但 <code>theme.css</code> <b>完全没有 <code>.gm-result</code> 容器与 <code>.gm-result__ic</code> 规则</b></td><td>React 的结果页是无样式裸排（没有居中、没有 56px 语义色圆图标）。站点用的是另一份拷贝，所以站点门禁看不见。已与 Vue 逐字节对齐</td></tr><tr><td>21</td><td>✅ <b>已修（V2.9）</b>：<code>.gm-btn--secondary</code> / <code>.gm-btn--default</code> 的底是<b>写死的近白渐变</b>、字走 <code>--lg-text-primary</code>，而暗色段没有覆盖这两类</td><td>暗色档<b>白底白字</b>，实测合成后 ≈1.09:1（修前）。已加同一份暗色配方（两库逐字节一致），修后 <b>9.15:1</b></td></tr><tr><td>22</td><td>✅ <b>已修（V2.9）</b>：Vue <code>base.css</code> 暗色 <code>--lg-tint-base:#000000</code>（撞「禁纯黑」）、漏 <code>--lg-tint-pct</code> 与 <code>--lg-text-on-inverse</code>；React 漏 <code>--lg-font</code></td><td>同一 13% 淡底在两库算出不同底色；Vue 暗色淡底偏亮；步骤条完成节点暗色档一白一深墨。三处已对齐，且新增门禁要求<b>浅/暗两张 Token 表</b>两侧完全一致</td></tr><tr><td>23</td><td>✅ <b>已修（V2.9）</b>：<code>.gm-btn--square</code> 引用 <code>--lg-radius-btn-sm</code> 而两库都未定义 → 方角按钮圆角失效；<code>.gm-cascader__opt</code> 圆角 <code>10px</code> 越界（&lt;16px 下限）</td><td>已补 <code>--lg-radius-btn-sm:18px</code>（与 02 · 2.4 同值）并把该圆角改 <code>16px</code></td></tr><tr><td>24</td><td>✅ <b>已修（V2.9 / D34）</b>：品牌深玫「文字档」由 <code>#B23A63</code> 加深为 <b><code>#A9315B</code></b>。原值按「白字压其上 5.71:1」选定（D7），但作为<b>落在暖底上的文字色</b>实测不达 AA：页面底 <b>4.13:1</b> ✗ / 玻璃卡合成面 <b>4.48:1</b> ✗ / 近白面 5.04:1 ✓ —— <b>两处最常用承载面都不达标</b>（<code>.gm-btn--outline</code>/<code>--dashed</code>/<code>--text</code> 与链接）。加深后实测：页面底 <b>4.64</b> / 玻璃卡 <b>4.99</b> / 近白面 <b>5.65</b> / 白字压其上 <b>6.41</b>，<b>两个方向同时改善</b>；<code>--lg-link</code> 同值，hover 仍为 <code>#9E3054</code>（5.06）</td><td>取值方法沿用 D9 的单点改动：在 <code>#F77FA3→#B23A63</code> 这条品牌同族 RGB 连线上向深端延长 13%。两库 + 应用镜像 + 两份 <code>tokens/design.ts</code> 同步；<code>audit.py</code> 的 <code>ALLOWED</code> 色板表登记新值</td></tr></tbody></table>
 <hr>
 <h3>20.13 与其它文档的关系</h3>
 <table><thead><tr><th>文档</th><th>关系</th></tr></thead><tbody><tr><td>01 / 12</td><td>风格与品牌定义；本章不重定义，只落地</td></tr><tr><td>02</td><td>Token 数值的<b>文档</b>来源；代码未实现的部分见 20.2.2</td></tr><tr><td>03 / 08 / 13</td><td>组件规范出处；本章只管<b>选型与消费写法</b></td></tr><tr><td>04</td><td>数据可视化；本章只管色序与图表状态色边界</td></tr><tr><td>07</td><td>动效分级与配方；本章补六态矩阵与 reduced-motion 落点</td></tr><tr><td>09</td><td>图标库（77 枚 <code>lg-icon-*</code>；<code>stroke-width 1.7</code>）</td></tr><tr><td>10 / 11</td><td>移动端规范；本章只收编<b>代码可实现</b>的硬指标</td></tr><tr><td>14 / 15</td><td>命名与状态词唯一来源</td></tr><tr><td>17</td><td>页面布局与组合顺序</td></tr><tr><td>19</td><td>工程架构与复用；本章 20.10 / 20.11 与其同源，不重复展开</td></tr><tr><td><code>.claude/skills/</code> 技能族</td><td>写代码时的入口：<code>goodmom-frontend</code>（15 条红线 + 任务路由 + 验收矩阵）+ 子技能 <code>goodmom-tokens</code> / <code>goodmom-components</code> / <code>goodmom-status</code> / <code>goodmom-layout</code> / <code>goodmom-motion-a11y</code></td></tr></tbody></table>
@@ -11643,23 +11649,23 @@ if(location.hash&&location.hash.indexOf('ch-')===1)reader(true);})();
 .gm-mod--site-manual .wrap{max-width:1240px;margin:0 auto;padding:16px 16px 90px;display:grid;grid-template-columns:250px minmax(0,1fr);gap:20px;align-items:start}
 .gm-mod--site-manual .top{grid-column:1/-1;position:sticky;top:8px;z-index:50;display:flex;gap:10px;align-items:center;flex-wrap:wrap;padding:9px 16px;border-radius:999px;background:rgba(255,255,255,.6);border:1px solid rgba(255,255,255,.85);-webkit-backdrop-filter:blur(16px);backdrop-filter:blur(16px)}
 .gm-mod--site-manual .top img{width:26px;height:26px;border-radius:50%;object-fit:cover;flex:none}
-.gm-mod--site-manual .top b{color:#B23A63;font-size:14px}
+.gm-mod--site-manual .top b{color:#A9315B;font-size:14px}
 .gm-mod--site-manual .top .navr{margin-left:auto;display:flex;gap:8px;flex-wrap:wrap}
 .gm-mod--site-manual .top a{font-size:12.5px;font-weight:600;text-decoration:none;padding:7px 13px;border-radius:999px;background:var(--mmh-grad-action-hc,linear-gradient(135deg,#FFC4D6 0%,#F77FA3 100%));color:#343A46;border:var(--lg-border-1,1px) solid transparent;box-shadow:0 1px 2px rgba(178,58,99,.22),0 8px 20px rgba(240,127,163,.30);background-origin:border-box}   /* 03 · 3.2.4 主按钮配方 */
 .gm-mod--site-manual aside{position:sticky;top:80px;max-height:calc(100vh - 100px);overflow:auto;padding:14px;border-radius:20px;background:rgba(255,255,255,.55);border:1px solid rgba(255,255,255,.85)}
 .gm-mod--site-manual aside b{display:block;font-size:12px;color:#4F5B6E;margin-bottom:8px}
 .gm-mod--site-manual aside a{display:block;font-size:12px;color:#343A46;text-decoration:none;padding:4px 8px;border-radius:18px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.gm-mod--site-manual aside a:hover{background:rgba(232,93,143,.1);color:#B23A63}
+.gm-mod--site-manual aside a:hover{background:rgba(232,93,143,.1);color:#A9315B}
 .gm-mod--site-manual main{min-width:0}
 .gm-mod--site-manual .chap{scroll-margin-top:76px;margin-bottom:18px;padding:18px 22px;border-radius:20px;background:linear-gradient(160deg,rgba(255,255,255,.66),rgba(255,255,255,.3));border:1px solid rgba(255,255,255,.85);box-shadow:0 8px 20px rgba(90,70,70,.07);background-origin:border-box}
-.gm-mod--site-manual .chap>h2{margin:0 0 10px;font-size:19px;color:#B23A63}
+.gm-mod--site-manual .chap>h2{margin:0 0 10px;font-size:19px;color:#A9315B}
 .gm-mod--site-manual .chap h3{font-size:15px;color:#343A46;margin:14px 0 6px}
 .gm-mod--site-manual .chap p,.gm-mod--site-manual .chap li{font-size:13.5px;color:#343A46}
 .gm-mod--site-manual .chap blockquote{border-left:2px solid #E85D8F;margin:10px 0;padding:6px 12px;color:#4F5B6E;background:rgba(247,127,163,.06);border-radius:0 18px 18px 0;font-size:12.5px}
 .gm-mod--site-manual .chap table{width:100%;border-collapse:collapse;margin:10px 0;font-size:12.5px}
 .gm-mod--site-manual .chap th,.gm-mod--site-manual .chap td{text-align:left;padding:7px 9px;border-bottom:1px solid rgba(58,52,84,.08);vertical-align:top}
 .gm-mod--site-manual .chap th{color:#4F5B6E;font-weight:600;background:rgba(255,255,255,.5)}
-.gm-mod--site-manual .chap code{background:rgba(232,93,143,.08);color:#B23A63;padding:1px 6px;border-radius:18px;font-size:12px}
+.gm-mod--site-manual .chap code{background:rgba(232,93,143,.08);color:#A9315B;padding:1px 6px;border-radius:18px;font-size:12px}
 .gm-mod--site-manual .chap hr{border:none;border-top:1px dashed #E6C6BD;margin:14px 0}
 /* ── 17 · 页面壳 / 10 · 10.11.1：正文护栏 ──
    实测根因（逐页质检 scripts/page-qa.mjs）：Part 11 的 `GmButton/StatusTag/Tag/…` 这类
@@ -11703,7 +11709,7 @@ if(location.hash&&location.hash.indexOf('ch-')===1)reader(true);})();
    默认 padding-box 时，渐变图按 padding-box 定尺却要铺满 border-box，
    多出的 1px 边框环会平铺取到渐变**另一端** → 顶部一条暗缝、底部一条亮缝，
    看起来像"胶囊缺了一角 / 露出别的底色"。全局声明，特异性 0，可被组件规则覆盖。 */
-.gm-mod--site-docs{--t:#343A46;--t2:#4F5B6E;--t3:#4F5B6E;--rose-d:#E85D8F;--rose-deep:#B23A63;
+.gm-mod--site-docs{--t:#343A46;--t2:#4F5B6E;--t3:#4F5B6E;--rose-d:#E85D8F;--rose-deep:#A9315B;
   --card-bg:rgba(255,255,255,.66);--card-bd:rgba(255,255,255,.85);--shadow:0 10px 26px rgba(90,70,70,.08);
   --bg:linear-gradient(165deg,#FDF2EE,#F6E2DB 52%,#EAD3CA)}
 

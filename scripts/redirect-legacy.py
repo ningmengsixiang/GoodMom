@@ -65,7 +65,7 @@ TEMPLATE = """<!DOCTYPE html>
 }})();
 </script>
 <style>
-  :root {{ --rose:#B23A63; --t:#343A46; --t2:#4F5B6E; }}
+  :root {{ --rose:#A9315B; --t:#343A46; --t2:#4F5B6E; }}
   body {{ margin:0; min-height:100vh; display:flex; align-items:center; justify-content:center;
     font-family:"Inter","PingFang SC","MiSans","Noto Sans SC",sans-serif; color:var(--t);
     background:linear-gradient(165deg,#FDF2EE,#F6E2DB 55%,#EAD3CA); text-align:center; padding:24px; }}

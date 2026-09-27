@@ -26,11 +26,20 @@ ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 os.chdir(ROOT)
 
 
+# 独立脚本门禁（不挂在 audit.py 的 GATES 表里）。
+# V2.9 起 `check-component-contract.py` 与 `check-style-parity.py` 也是硬门禁
+# （前者已接入 CI 的 architecture-gate），它们的"零差异"结论同样需要自证不空转。
+RUNNERS = {
+    "@contract": ["scripts/check-component-contract.py", "--ci"],
+    "@parity": ["scripts/check-style-parity.py", "--ci"],
+}
+
+
 def run_audit(only: str) -> tuple[int, str]:
     """只跑目标门禁：否则注入缺陷后可能被**其它**门禁先拦下，
     那样证明不了目标门禁本身有效（它可能早已空转）。"""
-    p = subprocess.run([sys.executable, "scripts/audit.py", "--only", only],
-                       capture_output=True, text=True)
+    cmd = RUNNERS.get(only) or ["scripts/audit.py", "--only", only]
+    p = subprocess.run([sys.executable] + cmd, capture_output=True, text=True)
     return p.returncode, p.stdout + p.stderr
 
 
@@ -249,6 +258,43 @@ CASES = [
     # ── css-syntax ──────────────────────────────────────────────────────
     ("css/注释不闭合", "css-syntax", "site/fragments/preview-patterns.html",
      "<!--@css-->\n", "<!--@css-->\n/* 未闭合的注释\n", "注释不闭合"),
+    # ── 双库契约（V2.9 新建的两条硬门禁）────────────────────────────────
+    # 这两条取代了旧的 KNOWN_DIVERGENCE 白名单 —— 白名单会把整组比对跳过，
+    # 于是"允许这个组件不一致"能藏住真差异。下面每条注入的都是**真实发生过**的缺陷形态。
+    ("contract/React 少一个 prop（GmCard.hoverable 曾只有 Vue 有）", "@contract",
+     "goodmom-ui/src/components/GmCard.tsx",
+     "  hoverable?: boolean;", "", "props 不一致"),
+    ("contract/两侧默认值不同（GmStatusTag.size 曾 small/default）", "@contract",
+     "goodmom-vue/src/components/GmStatusTag.vue",
+     "    size: \"default\",", "    size: \"small\",", "默认值不一致"),
+    # 注：这里注入的是 **`gm-*` 前缀**的字面量漂移，那才是本门禁的真实视野。
+    # 历史上 `size="large"` 输出的裸类名 `" lg"`（无 `gm-` 前缀）本门禁**看不见** ——
+    # 该盲区已由两库冒烟的「无孤儿类名」检查补上（见 playground/smoke.mjs 的 BASE_EQUIVALENT）。
+    ("contract/契约类名漂移（一侧多输出一个 gm-* 类）", "@contract",
+     "goodmom-ui/src/components/GmStatusTag.tsx",
+     "`gm-status-tag gm-status-tag--${sizeCls}`", "`gm-status-tag gm-status-tag--${sizeCls} gm-status-tag--lg`",
+     "契约类名不一致"),
+    ("parity/CSS 写法漂移（浅色档解析值相同、暗色档分叉）", "@parity",
+     "goodmom-vue/src/styles/components.css",
+     "color:var(--lg-text-on-inverse,#FFF);border-color:transparent", "color:#FFF;border-color:transparent",
+     "写法不一致"),
+    ("parity/Vue 漏一条暗色覆盖（曾漏 cascader__opt.is-active）", "@parity",
+     "goodmom-vue/src/styles/components.css",
+     '[data-theme="dark"] .gm-cascader__opt.is-active{background:rgba(255,255,255,.08)}\n', "",
+     "暗色覆盖仅 React 有"),
+    ("parity/暗色 Token 表不一致（Vue 曾把 tint-base 写成纯黑）", "@parity",
+     "goodmom-vue/src/styles/base.css",
+     "  --lg-tint-base:#23222A;\n  --lg-tint-pct:8%;", "  --lg-tint-base:#000000;\n  --lg-tint-pct:8%;",
+     "Token 值不一致"),
+    ("parity/浅色 Token 表缺项（Vue 曾漏 --lg-text-on-inverse）", "@parity",
+     "goodmom-vue/src/styles/base.css",
+     "  --lg-text-on-inverse:#FFFFFF;\n", "", "Token 仅 React 有"),
+    # ── undefined-token 扩面（V2.9：此前只扫站点片段，漏掉了 --lg-font 未定义）──
+    ("token/组件库 CSS 引用未定义变量（React 的 --lg-font 曾如此）", "undefined-token",
+     "goodmom-ui/src/theme.css",
+     '  --lg-font:"Inter","PingFang SC","MiSans","Noto Sans SC",sans-serif;\n', "",
+     "从未定义"),
+
 ]
 
 

@@ -724,7 +724,7 @@ SHELL = """<!DOCTYPE html>
 /* ══ 外壳样式（唯一一份，模块样式全部作用域隔离在各自 .gm-mod--x 内）══ */
 /* D9 主行动档：品牌粉上半段 + 深字 #343A46（白字在亮粉上仅 2.9:1，不合格） */
 :root{
-  --sh-rose:#F77FA3;--sh-rose-d:#E85D8F;--sh-rose-deep:#B23A63;
+  --sh-rose:#F77FA3;--sh-rose-d:#E85D8F;--sh-rose-deep:#A9315B;
   --sh-t:#343A46;--sh-t2:#4F5B6E;--sh-t3:#9AA2B0;
   --sh-bg:#F4F0EC;
   --sh-grad-action:linear-gradient(135deg,#FFC4D6 0%,#F77FA3 100%);
@@ -967,7 +967,7 @@ table.gm-sr-only{table-layout:fixed;pointer-events:none}
   transition:opacity 140ms ease}
 .gm-growth__tip.is-on{opacity:1}
 .gm-growth__tip b{display:block;font-size:12px;font-weight:500;color:var(--lg-text-secondary,#4F5B6E)}
-.gm-growth__tip span{display:block;font-size:14px;line-height:20px;font-weight:600;color:#B23A63;
+.gm-growth__tip span{display:block;font-size:14px;line-height:20px;font-weight:600;color:#A9315B;
   font-variant-numeric:tabular-nums}
 /* 异常点玻璃气泡建议（13.2「P3 以下 / P97 以上 → 数据点转琥珀/红 + 玻璃气泡建议文案」） */
 .gm-growth__note{display:flex;gap:8px;align-items:flex-start;margin-top:8px;padding:9px 12px;
@@ -1016,7 +1016,7 @@ table.gm-sr-only{table-layout:fixed;pointer-events:none}
 .gm-tbl .col-ops,.gm-tbl th.col-ops{text-align:right}
 .gm-tbl .ops{display:inline-flex;align-items:center;justify-content:flex-end;gap:12px;flex-wrap:nowrap}
 .gm-tbl .ops a,.gm-tbl .ops button{font-size:13px;line-height:18px}
-.gm-tbl .ops a{color:var(--lg-link,#B23A63);text-decoration:none;font-weight:500}
+.gm-tbl .ops a{color:var(--lg-link,#A9315B);text-decoration:none;font-weight:500}
 .gm-tbl .ops a:hover{text-decoration:underline}
 /* ── 内联元素的垂直档：一律 26 高 ─────────────────────────────────────
    `.badge`/`.tg`/`.av` 若沿用页面自己的档，12px 字继承 line-height:1.7 会撑到 30px、

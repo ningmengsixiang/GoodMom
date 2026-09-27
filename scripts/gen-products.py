@@ -38,7 +38,7 @@
 主行动（Primary）**六个产品一律**品牌蜜桃粉档 + 深字（12 · 12.3.2「主行动渐变」属品牌语义，
 不随产品变色）。产品辅助色只用于**产品标识**：产品名色条、序号徽标、KPI 主指标、侧栏选中色条。
 取值全部来自 12 · 12.2.1 阶段色 / 12 · 12.3.1 色板，**不新造色相**：
-p01 深玫 `#B23A63` · p02 杏桃 `#FFC3A0` · p03 蜜桃粉 `#F77FA3` ·
+p01 深玫 `#A9315B` · p02 杏桃 `#FFC3A0` · p03 蜜桃粉 `#F77FA3` ·
 p04 淡紫柔光 `#B69AFF` · p05 薄荷 `#6FC9B4` · p06 粉→淡紫签名渐变 + 青。
 
 ## 用法
@@ -71,7 +71,7 @@ CSS = r"""
   /* 文字与分隔（02 · 2.1.1）。小字一律次级/主色：三级色 #9AA2B0 只允许
      ≥24px 常规或 ≥18.66px 加粗（02 · 2.1.1），本模块不把它用于任何正文/注释。 */
   --lg-text-primary:#343A46; --lg-text-secondary:#4F5B6E; --lg-text-tertiary:#9AA2B0;
-  --lg-text-on-accent:#343A46; --lg-divider:rgba(58,52,84,.10); --lg-link:#B23A63;
+  --lg-text-on-accent:#343A46; --lg-divider:rgba(58,52,84,.10); --lg-link:#A9315B;
   --lg-tint-base:#FFFFFF; --lg-tint-pct:13%;
   /* 六语义（14 · 4.4.5 / 15 · 15.5）：文字用深档 alias，-500 只作填充 */
   --lg-sem-positive:#25715D; --lg-sem-info:#3261C1; --lg-sem-attention:#8D5A15;
@@ -79,7 +79,7 @@ CSS = r"""
   --lg-success-500:#42C7A1; --lg-warning-500:#F2B25C; --lg-danger-500:#EF6A7B;
   --lg-info-500:#6D9EFF; --lg-purple-500:#9A78FF; --lg-purple-300:#B69AFF;
   /* 品牌（02 · 2.9 = 12.3.1） */
-  --mmh-rose-700:#B23A63; --mmh-rose-600:#E85D8F; --mmh-rose-500:#F77FA3;
+  --mmh-rose-700:#A9315B; --mmh-rose-600:#E85D8F; --mmh-rose-500:#F77FA3;
   --mmh-rose-300:#FFC4D6; --mmh-rose-200:#FFDEE8; --mmh-rose-100:#FFF0F4;
   --mmh-peach-400:#FFC3A0; --mmh-peach-300:#FFDCC7; --mmh-peach-100:#FFF3EA;
   --mmh-mint-600:#4FB59C; --mmh-mint-500:#6FC9B4; --mmh-mint-300:#A9E3D4; --mmh-mint-100:#E2F6F0;
@@ -128,9 +128,9 @@ CSS = r"""
    「主行动渐变」定为品牌语义，若随产品变色，同一动作在不同产品里就是不同权重。
    ⚠️ --pm-ink 是**文字深档**（-500 亮档在浅底上不足 4.5:1，02 · 2.1.5），
       --pm-hue 只作填充/色块/光斑，两者不得互换。 */
-.gm-pm--p01{--pm-hue:#B23A63;--pm-ink:#B23A63;--pm-tint:rgba(178,58,99,.10);--pm-glow:rgba(178,58,99,.14)}
+.gm-pm--p01{--pm-hue:#A9315B;--pm-ink:#A9315B;--pm-tint:rgba(178,58,99,.10);--pm-glow:rgba(178,58,99,.14)}
 .gm-pm--p02{--pm-hue:#FFC3A0;--pm-ink:#8D5A15;--pm-tint:rgba(255,195,160,.22);--pm-glow:rgba(255,195,160,.20)}
-.gm-pm--p03{--pm-hue:#F77FA3;--pm-ink:#B23A63;--pm-tint:rgba(247,127,163,.14);--pm-glow:rgba(247,127,163,.18)}
+.gm-pm--p03{--pm-hue:#F77FA3;--pm-ink:#A9315B;--pm-tint:rgba(247,127,163,.14);--pm-glow:rgba(247,127,163,.18)}
 .gm-pm--p04{--pm-hue:#B69AFF;--pm-ink:#6242B8;--pm-tint:rgba(182,154,255,.16);--pm-glow:rgba(182,154,255,.18)}
 .gm-pm--p05{--pm-hue:#6FC9B4;--pm-ink:#25715D;--pm-tint:rgba(111,201,180,.16);--pm-glow:rgba(111,201,180,.16)}
 .gm-pm--p06{--pm-hue:#9A78FF;--pm-ink:#6A48DC;--pm-tint:rgba(154,120,255,.14);--pm-glow:rgba(154,120,255,.18)}
@@ -224,7 +224,7 @@ CSS = r"""
 .gm-pm-head h2{margin:0;font-size:var(--lg-fs-title);line-height:var(--lg-lh-title);font-weight:600;
   letter-spacing:-.01em}
 .gm-pm-head .en{font-size:var(--lg-fs-body-sm);color:var(--lg-text-secondary)}
-/* 序号徽标：**浅染底 + 深档字**。原写成"辅助色实底 + 深字"时，深玫档（#B23A63）
+/* 序号徽标：**浅染底 + 深档字**。原写成"辅助色实底 + 深字"时，深玫档（#A9315B）
    上深字实测 2.00:1、淡紫档（#9A78FF）3.54:1 —— a11y-dom 会判为确证失败。
    深色底配白字是另一个方向，但 02 · 2.6 / D9 只允许品牌亮粉档配深字，
    产品辅助色深浅不一，统一走"浅染 + 深档"最稳（02 · 2.1.5 亮档只作填充）。 */

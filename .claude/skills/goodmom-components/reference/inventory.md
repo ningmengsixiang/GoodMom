@@ -98,8 +98,8 @@
 
 妊娠风险分级？
 ├─ 可编辑 → GmRiskPicker
-└─ 只读   → GmStatusTag five="mN"   （⚠️ 不要用 GmTag five —— 它的文字直接吃五色亮值，
-                                   12px 实测 1.78–3.93:1，五档全不达 AA；GmStatusTag 的文字走主文字色）
+└─ 只读   → GmStatusTag five="mN" 或 GmTag five="mN"（D35 起两者同规则：
+                                   亮值只做色点/淡底，文字走主文字色，实测 9.8–12.6:1）
 
 同一页同一份数据要按宽度切形态？
 └─ GmResponsiveView（table / condensed / card，阈值 1024/767）

@@ -26,7 +26,7 @@ description: Use when 在本仓库决定该用哪个 UI 组件、或要查某个
 | --- | --- | --- |
 | 任何按钮（含全宽主行动） | `GmButton` | **亮粉底必配深字**；`loading` 保留宽度 |
 | 业务状态（待随访/已逾期/高危…） | `GmStatusTag` | 文案查 15 章词库定色；**禁页面自选 semantic** |
-| 风险五色（妊娠分级） | `GmRiskPicker`（可编辑）/ **`GmStatusTag five="mN"`**（只读） | **别让只读页面出现可点控件**；⛔ 不要用 `GmTag five` —— 它的文字直接吃五色亮值，12px 实测 1.78–3.93:1，五档全不达 AA |
+| 风险五色（妊娠分级） | `GmRiskPicker`（可编辑）/ `GmStatusTag five="mN"` 或 `GmTag five="mN"`（只读） | **别让只读页面出现可点控件**；五色分支文字已统一走 `--lg-text-primary`（D35，实测 9.8–12.6:1），两个组件都安全 |
 | 容器 / 卡 | `GmCard` | 玻璃配方在组件库里，页面别自己写 gradient |
 | 列表（≤1023 或移动） | `ListRow`（应用内 `shared/components`） | 行主体是 `button`，键盘可达 |
 | 表格（≥1024） | Arco `Table` | 与列表**同一份数据**，按容器宽度切形态 |
@@ -77,6 +77,8 @@ description: Use when 在本仓库决定该用哪个 UI 组件、或要查某个
 | 不变量 | 门禁 | 当前 |
 | --- | --- | --- |
 | props 与事件（归一化宿主惯用写法后） | `check-component-contract.py --ci` | 19/19 |
+| 契约类名（源码里**全部** `gm-*` 字面量） | 同上 | 0 处不同 |
+| 每个输出的 class 都有对应 CSS 规则（无孤儿类名） | 两库 `playground/smoke.mjs` | 全绿 |
 | 默认值 · 契约类名 · 惯用写法映射的能力对等 | 同上 | 0 处不同 |
 | CSS 声明写法（共享选择器逐字节）· 暗色覆盖集合 · Token 层 | `check-style-parity.py --ci` | 233 个共享选择器、0 处不同 |
 | DOM 与无障碍（渲染级） | 两库 `playground/smoke.mjs` | 60/60 · 39/39 |

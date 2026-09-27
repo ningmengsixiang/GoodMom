@@ -194,6 +194,46 @@ check("反复改尺寸无 ResizeObserver 循环报错", roErrors.length === 0, r
 const modesSeen = await page.locator(".gm-rv").getAttribute("data-mode");
 check("改尺寸后形态仍可解析", ["table", "condensed", "card"].includes(modesSeen), `data-mode=${modesSeen}`);
 
+/* ── 孤儿类名（V2.9 新增）─────────────────────────────────────────────
+   背景：`GmStatusTag` 的 `size="large"` 曾输出类名字面量 `" lg"`，而两库 CSS 只定义了
+   `.gm-status-tag--large` —— 于是该 prop **完全无效**，且**没有任何门禁看得见**：
+   `check-component-contract.py` 只比对 `gm-*` 前缀的字面量，裸类名 `lg` 不在它的视野里。
+   这里补上"输出即须有样式"这一条：演示页里组件渲染出的**每一个 class token**
+   都必须能匹配到至少一条 CSS 规则，否则就是死类名（无效档位 / 笔误 / 已改名的残留）。
+   框架与状态类（arco-/v-/vue-/is-/js-）不参与判定 —— 它们不由本库的 CSS 定义。 */
+const orphanClasses = await page.evaluate(() => {
+  const known = new Set();
+  const collect = (rules) => {
+    for (const r of Array.from(rules || [])) {
+      if (r.selectorText) for (const m of r.selectorText.matchAll(/\.(-?[_a-zA-Z][\w-]*)/g)) known.add(m[1]);
+      if (r.cssRules) collect(r.cssRules);
+    }
+  };
+  for (const sheet of Array.from(document.styleSheets)) {
+    try { collect(sheet.cssRules); } catch { /* 跨域表跳过 */ }
+  }
+  const ALLOW = [/^arco-/, /^v-/, /^vue-/, /^is-/, /^js-/, /^no-js$/];
+  // 「与基态等价」的修饰类：组件按约定输出档位/状态类，而该档位**就是基态**，
+  // CSS 不再重复声明一遍。每条都必须写明理由 —— 否则它会变成新死类名的藏身处，
+  // 而 `" lg"` 正是这样活了很久的（一个没有任何规则的类名，让 size="large" 完全失效）。
+  const BASE_EQUIVALENT = new Set([
+    "gm-link--default",      // 基态：.gm-link 已定义默认色与下划线行为
+    "gm-progress--default",  // 基态：轨道 6px 由 .gm-progress__track 给出（--small/--large 覆写）
+    "gm-rv--table",          // 基态：三分支里 table 是默认形态（.gm-rv 已 display:block）
+    "wait",                  // 步骤条等待态：色点样式由 .gm-step .gs-dot 基态给出
+  ]);
+  const out = new Set();
+  for (const el of document.querySelectorAll("[class]")) {
+    for (const c of Array.from(el.classList)) {
+      if (ALLOW.some((re) => re.test(c)) || BASE_EQUIVALENT.has(c)) continue;
+      if (!known.has(c)) out.add(c);
+    }
+  }
+  return Array.from(out).sort();
+});
+check("无孤儿类名（输出的每个 class 都有对应 CSS 规则）",
+  orphanClasses.length === 0, orphanClasses.join(", "));
+
 /* ── 10. 控制台干净 ───────────────────────────────────────────── */
 const realErrors = errors.filter((e) => !e.includes("favicon"));
 check("无控制台错误 / 未捕获异常", realErrors.length === 0, realErrors.slice(0, 3).join(" | "));

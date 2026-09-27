@@ -36,7 +36,11 @@ const GmTag = ({ children, semantic, five, color, dot = true, size = "small" }: 
     <span
       className={"gm-tag" + (size === "default" ? " lg" : "")}
       style={{
-        color: base,
+  /* 文字色规则（D35）：**五色分支的文字不用五色亮值** —— 亮值只承载色点与淡底，
+     文字一律走 --lg-text-primary。与 GmStatusTag 的写法完全一致（同一能力同一写法）。
+     实测（13% 淡底 / 浅色档）：五色亮值作文字仅 1.57–3.41:1（五档全不达 AA）；
+     改用主文字色后 9.82–10.68:1。语义分支不受影响（语义 alias 深档本就达标 4.83–4.90）。 */
+        color: five && !color ? "var(--lg-text-primary,#343A46)" : base,
         background: semTintFill(base),
         borderColor: semTintBorder(base),
       }}

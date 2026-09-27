@@ -50,11 +50,11 @@
   --pm-input:rgba(255,255,255,.40);
   --pm-shadow-black:rgba(58,52,84,.18);
   --pm-ring:rgba(232,93,143,.6);
-  /* 文字型行动 / 行内链接色：浅色 #B23A63、暗色 #FFC4D6（02 · 2.1.9 的 --lg-link 档）。
+  /* 文字型行动 / 行内链接色：浅色 #A9315B、暗色 #FFC4D6（02 · 2.1.9 的 --lg-link 档）。
      不借 --sem-special：语义不同（紫=特殊协作/AI），且暗档 #B9A0FF 在卡片合成面上
      实测 4.01:1 < 4.5，过不了 AA。 */
-  --pm-link:#B23A63;
-  --pm-rose-text:#B23A63;   /* 品牌色文字档（暗色翻浅，见下） */
+  --pm-link:#A9315B;
+  --pm-rose-text:#A9315B;   /* 品牌色文字档（暗色翻浅，见下） */
   /* 系统 Token 兜底：本模块用外壳的「数据呈现层」配方（.gm-fold），
      而外壳读的是 --lg-text-secondary / --lg-divider。片段只有私有命名
      （--text-2 / --pm-divider）时，暗色档会出现「页面翻了、折叠内容没翻」
@@ -322,7 +322,7 @@ svg.i{width:22px;height:22px;stroke:currentColor;fill:none;stroke-width:1.7;
   background:var(--pm-input);color:var(--text-3)}
 .pm-cap.on{background:var(--pm-solid);border-color:rgba(232,93,143,.45);color:var(--text);
   font-weight:600;transform:translateY(-2px);box-shadow:var(--shadow-card)}
-.pm-cap.on i{background:var(--rose-100);color:#B23A63}
+.pm-cap.on i{background:var(--rose-100);color:#A9315B}
 
 /* ── 11 · Selector 选择卡（11.6.4）/ Stepper（11.2.11）/ OTP（11.2.14）── */
 .pm-selects{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:10px}
@@ -331,10 +331,10 @@ svg.i{width:22px;height:22px;stroke:currentColor;fill:none;stroke-width:1.7;
   gap:2px;justify-content:center}
 .pm-select b{font-size:15px;font-weight:500}
 .pm-select span{font-size:12px;color:var(--text-3)}
-/* 勾徽用**深实底**白字（#B23A63 上白字 5.3:1）；压在玫瑰渐变上时白字只有 3.28:1，
+/* 勾徽用**深实底**白字（#A9315B 上白字 5.3:1）；压在玫瑰渐变上时白字只有 3.28:1，
    违反 D9 二分口径（亮粉底配深字、白字只出现在深实底上）。 */
 .pm-select .pm-ck{position:absolute;top:8px;right:8px;width:20px;height:20px;border-radius:50%;
-  display:none;align-items:center;justify-content:center;background:#B23A63;color:#FFF;
+  display:none;align-items:center;justify-content:center;background:#A9315B;color:#FFF;
   font-size:12px;line-height:1}
 .pm-select[aria-checked="true"]{border-color:rgba(232,93,143,.5);background:rgba(255,240,244,.72)}
 [data-theme="dark"] .pm-select[aria-checked="true"]{background:rgba(247,127,163,.18)}
@@ -369,7 +369,7 @@ svg.i{width:22px;height:22px;stroke:currentColor;fill:none;stroke-width:1.7;
 .msteps span b{width:20px;height:20px;border-radius:50%;display:inline-flex;align-items:center;
   justify-content:center;font-size:10px;font-weight:600}
 .msteps span.done b{background:var(--grad-p);color:#FFF}
-.msteps span.cur b{background:#FFF;border:2px solid var(--rose-500);color:#B23A63}
+.msteps span.cur b{background:#FFF;border:2px solid var(--rose-500);color:#A9315B}
 [data-theme="dark"] .msteps span.cur b{background:#23222A;color:#FFC4D6}
 .msteps span.todo b{border:1px solid var(--pm-divider);color:var(--text-3)}
 
@@ -624,7 +624,7 @@ svg.i{width:22px;height:22px;stroke:currentColor;fill:none;stroke-width:1.7;
 .pm-idxrail span.on{color:var(--pm-rose-text);font-size:12px}
 .pm-idxbadge{position:absolute;left:50%;top:50%;z-index:3;width:56px;height:56px;border-radius:50%;
   display:flex;align-items:center;justify-content:center;pointer-events:none;
-  font-size:24px;font-weight:700;color:#B23A63;background:rgba(255,255,255,.88);
+  font-size:24px;font-weight:700;color:#A9315B;background:rgba(255,255,255,.88);
   border:1px solid rgba(232,93,143,.3);box-shadow:0 8px 24px rgba(58,52,84,.18);
   opacity:0;transform:translate(-50%,-50%) scale(.9);
   transition:opacity .18s ease,transform .18s var(--spring)}
@@ -728,9 +728,9 @@ svg.i{width:22px;height:22px;stroke:currentColor;fill:none;stroke-width:1.7;
   box-shadow:0 1px 2px rgba(30,107,82,.22),0 8px 20px rgba(47,143,118,.28)}
 .mbb-warning{background:#9A5A0E;color:#FFF;box-shadow:0 1px 2px rgba(154,90,14,.22),0 8px 20px rgba(185,119,28,.26)}
 .mbb-danger{background:#B04052;color:#FFF;box-shadow:0 1px 2px rgba(176,64,82,.24),0 8px 20px rgba(208,90,110,.28)}
-.mbb-outline{background:transparent;color:#B23A63;border:1.5px solid rgba(232,93,143,.45)}
-.mbb-dashed{background:transparent;color:#B23A63;border:1.5px dashed rgba(232,93,143,.45)}
-.mbb-text{background:none;color:#B23A63;padding:0 8px}
+.mbb-outline{background:transparent;color:#A9315B;border:1.5px solid rgba(232,93,143,.45)}
+.mbb-dashed{background:transparent;color:#A9315B;border:1.5px dashed rgba(232,93,143,.45)}
+.mbb-text{background:none;color:#A9315B;padding:0 8px}
 .mbb-danger.mbb-outline{background:transparent;color:var(--sem-danger);border:1.5px solid rgba(183,47,66,.45)}
 [data-theme="dark"] .mbb-outline,[data-theme="dark"] .mbb-dashed,[data-theme="dark"] .mbb-text{color:#FFC4D6}
 .mbb-xs{height:28px;font-size:12px;padding:0 14px;border-radius:var(--lg-radius-pill,999px)}

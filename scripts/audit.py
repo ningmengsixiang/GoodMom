@@ -1305,6 +1305,12 @@ def undefined_tokens():
         # 不剥会把"注释"算成"缺陷"，逼着人把解释性注释删掉。
         code = re.sub(r"/\*.*?\*/", "", t, flags=re.S)
         code = re.sub(r"<!--.*?-->", "", code, flags=re.S)
+        # 还要剥掉 `<code>` / `<pre>`：规范正文里的**反例与说明**（如 `var(--lg-font)`、
+        # `var(--x)`）经 gen-spec 渲染后会变成代码片段文本，与注释同属"解释性内容"，
+        # 不是真的引用。V2.9 实测：把文档里的反例算成缺陷，会逼着人把说明删掉 ——
+        # 与本函数"剥注释"的理由完全一致（见上）。CSS 只可能出现在 <style> 与 style="" 里，
+        # 它们不受影响。
+        code = re.sub(r"<(code|pre)\b[^>]*>.*?</\1>", "", code, flags=re.S | re.I)
         nofb = set(re.findall(r"var\(\s*(--[a-z0-9-]+)\s*\)", code))
         missing = sorted(nofb - defined)
         if missing:
