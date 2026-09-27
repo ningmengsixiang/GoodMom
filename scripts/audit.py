@@ -141,7 +141,11 @@ ALLOWED = {h.upper() for h in """#343A46 #4F5B6E #9AA2B0 #F4F0EC #E6D9D0 #D7C5BC
 """V2.9 补入：`#A9315B`（品牌深玫「文字档」，见 D34 —— 原 `#B23A63` 落在页面底色上仅 4.13:1 不达 AA），
 以及 4 个值：`--lg-purple-200/100`、`--lg-cyan-300/100`（02 · 2.1.2 早已登记为品牌色），
 此前只在 PAGE_ALIAS 里，而组件的**头像色调**也取它们，故提升到严格层。"""
-PAGE_ALIAS = {h.upper() for h in """#F0D4CF #FDF2EE #F6E2DB #EAD3CA #E7D4CB #E6CFC6 #E7D3CB #EED5CD #E6C6BD #FFF7F4 #FDF6F2
+"""V2.9 补入：站点**自造**的暗色档取值（#1B3D33 #1F6B4F #6E7686 #7A5F0D #8ADCC6 #C25064 #C3C9D3 #F7D27A #FBB4C0）。
+它们只在 site/index.html 的暗色段出现，且与 02 · 2.1.9 的暗色语义值**并不相同** ——
+属于"站点自建暗色档"这一已登记缺口（见 D37）；先按页面档别名登记，待站点暗色统一后收回。"""
+PAGE_ALIAS = {h.upper() for h in """#1B3D33 #1F6B4F #6E7686 #7A5F0D #8ADCC6 #C25064 #C3C9D3 #F7D27A #FBB4C0
+#F0D4CF #FDF2EE #F6E2DB #EAD3CA #E7D4CB #E6CFC6 #E7D3CB #EED5CD #E6C6BD #FFF7F4 #FDF6F2
 #EED9D3 #FFFAF7 #E0C2BB #F0E6E0 #C9BDB5 #9C8E86 #EADFD6 #D9C9BF #F7E4DD #EBD3CA #E9D2C9 #72DDE5 #A5F1EE #F5B8C6 #D9CBFE #EDE7FE
 #FFD0D8 #F6C0A0 #A98BFF #7D66F2 #69D8D2 #E0F8F6 #9CAEFF #E4EAFF #F2A5B7 #FDE9EE #FBD9BE #F0AE86 #3A3642 #191720 #F8CE8C
 #A6ADB9 #8A92A3 #F6A97E #2A8D92 #241D24 #3A2B33 #55333D #A03F60""".split()}
@@ -170,21 +174,47 @@ def colors():
     return ok
 
 def breakpoint_reg():
-    """断点收敛检查（E 审查）：允许 640/767/1024/1366/1600/1920/2304 与 768-1023 平板；其余 WARN 列出。"""
-    allowed={640,767,768,1024,1280,1366,1440,1600,1920,2304}
-    stray=[]
-    for f in glob.glob("site/index.html")+glob.glob("site/docs.html")+glob.glob("preview/*.html"):
-        t=open(f,encoding="utf-8").read()
+    """断点收敛检查（E 审查 / 10 · 10.2）。
+
+    规范口径：**页面媒体查询只允许四档** —— `≤767`（手机）/ `768–1023`（平板）/
+    `≥1024`（PC）/ `≥1366`（大屏增强）。这里检查的是"出现规范之外的具体宽度"。
+
+    两处口径修正（V2.9）：
+      1. **`1023` 是规范里的第二档**（`768–1023` 的右端），此前不在允许集里 ——
+         于是**完全合规的写法**被报成"非收敛断点"，属门禁自身的口径错。
+      2. 其余宽度不是"随手写的魔法数"，而是 **V2.9 为解决真实布局缺陷而定的档**
+         （见 D30/D32 与 CHANGELOG「页面响应式收口」）。它们此前只以 WARN 泛泛列出，
+         看不出哪个是"已裁决的例外"、哪个是"新漂移"。现改成**带理由的登记表**：
+         登记内的静默通过，**登记外的新宽度照旧 WARN** —— 与 `ONE_SIDED_ALLOW` /
+         `IDIOM` 同一套做法（白名单必须写明理由，否则它就是漂移的藏身处）。
+    """
+    SPEC = "≤767 / 768–1023 / ≥1024 / ≥1366"
+    allowed = {640, 767, 768, 1023, 1024, 1280, 1366, 1440, 1600, 1920, 2304}
+    # 已裁决的例外：宽度 → 理由（每条都要指向"它解决的是什么"）
+    REGISTERED = {
+        900: "数据呈现层：表格在 900 以下用 colspan 合并单元（D32 的窄屏零横滚方案）",
+        1200: "数据呈现层：两列布局提前收到 1200，避免主表侧横向拖动（D32）",
+        560: "小屏排布微调（站点首页视觉规范模块）",
+        520: "小屏排单列（站点首页 demo 导航网格）",
+        480: "小屏长标题换行放开（规范阅读器 h4）",
+        420: "小屏四列转两列（视觉规范样例卡）",
+    }
+    stray = []
+    for f in glob.glob("site/index.html") + glob.glob("site/docs.html") + glob.glob("preview/*.html"):
+        t = open(f, encoding="utf-8").read()
         for m in re.finditer(r'@media[^{]*?(max-width|min-width)\s*:\s*(\d+)px', t):
-            v=int(m.group(2))
-            if v not in allowed:
-                stray.append((f,m.group(1),v))
-    seen=sorted({(f,s,v) for f,s,v in stray})
+            v = int(m.group(2))
+            if v not in allowed and v not in REGISTERED:
+                stray.append((f, m.group(1), v))
+    seen = sorted({(f, s, v) for f, s, v in stray})
     if seen:
-        rec("WARN","bp","非收敛断点 %s" % [(f,v) for f,s,v in seen][:8])
+        rec("WARN", "bp", "非收敛断点（规范只允许 %s，且不在已登记例外内）%s"
+            % (SPEC, [(f, v) for f, s, v in seen][:8]))
     else:
-        rec("OK","bp","断点收敛于 767/1024/1366 体系")
+        rec("OK", "bp", "断点收敛于 %s；另有 %d 个已登记例外（各自写明理由）"
+            % (SPEC, len(REGISTERED)))
     return True
+
 
 def banned_colors():
     """历史近似色回归检测（G-P1-2）：代码层命中=FAIL，HTML 层=WARN。"""
