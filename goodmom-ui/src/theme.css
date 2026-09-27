@@ -262,6 +262,16 @@
 .gm-status-tag__close:hover{opacity:1}
 .gm-status-tag__close:focus-visible{outline:var(--lg-ring-width) solid var(--lg-ring-color);outline-offset:1px}
 [data-theme="dark"] .gm-card{background:linear-gradient(160deg,rgba(255,255,255,.10),rgba(255,255,255,.05))}
+/* 暗色档按钮配方（V2.9 修复）：`.gm-btn--secondary` / `--default` 的底是**写死的近白渐变**，
+   而字走 `--lg-text-primary`（暗色档 = #F3EFEC）→ 暗色下白底白字，实测合成后 ≈1.04:1，
+   完全不可读；`audit.py dark` 与 `a11y-dom` 都没覆盖到这一类（站点暗色模块未用到它们）。
+   修法：按 02 · 2.1.9「暗色下白色叠加层由 14–60% 降到 6–16%」给同一条规则，两库逐字节一致。 */
+[data-theme="dark"] .gm-btn--secondary,[data-theme="dark"] .gm-btn--default{
+  background:linear-gradient(160deg,rgba(255,255,255,.16),rgba(255,255,255,.08));
+  background-origin:border-box;   /* 02 · 2.5.1：渐变+边框必须自带，否则 1px 异色缝 */
+  border-color:rgba(255,255,255,.14);color:var(--lg-text-primary)}
+[data-theme="dark"] .gm-btn--secondary:hover,[data-theme="dark"] .gm-btn--default:hover{
+  border-color:rgba(255,255,255,.22)}
 .gm-risk-it[aria-disabled="true"],.gm-risk-it:disabled{cursor:not-allowed;opacity:.5}
 .gm-steps.sm .gs-main b{font-size:12px}
 .gm-steps.sm .gs-main span{font-size:10px}
@@ -331,7 +341,8 @@
    `.gm-card` / `.gm-client` / `.gm-status-dot` 是不可聚焦的容器/装饰，
    它们的 `:focus` 规则永远不会匹配 —— 留着只会让"outline 压制"的清单变长、
    掩盖真正的缺口，故删除。 */
-.gm-tag:focus{outline:none}
+/* V2.9：删除 `.gm-tag:focus{outline:none}` —— `.gm-tag` 是 <span>，不可聚焦，该规则永远不生效；
+   且它形似「焦点抑制」，与 R8「禁止裸 outline:none」对不上。两库现只保留下面这条 :focus-visible。 */
 .gm-tag:focus-visible,.gm-steps .gm-step .gs-dot:focus-visible{outline:var(--lg-ring-width) solid var(--lg-ring-color);outline-offset:var(--lg-ring-offset)}
 .gm-risk-it:focus-visible{outline:var(--lg-ring-width) solid rgba(143,106,224,.7);outline-offset:var(--lg-ring-offset)} /* 键盘焦点可见 */
 
@@ -353,6 +364,11 @@
      混入实底后底色可预测：浅色档 13%（实测 4.86:1）、暗色档 8%（实测 4.9:1）。
      暗色档取 8% 而非 13%：同色系浅墨会把暗底抬高，13% 只有 4.3:1。 */
   --lg-tint-base:#FFFFFF; --lg-tint-pct:13%;
+  /* 字体栈：**必须**在这里定义。此前本文件 7 处 `font-family:var(--lg-font)` 引用它却从未定义 ——
+     B9 类缺陷（引用未定义变量 → 整条声明被浏览器静默丢弃），实测结果是 React 侧所有组件
+     回落到浏览器默认字体（桌面为 Times 系衬线），而 audit/B9 都没覆盖到库内 CSS。
+     与 `goodmom-vue/src/styles/base.css` 同值；两库字体栈必须逐字节一致。 */
+  --lg-font:"Inter","PingFang SC","MiSans","Noto Sans SC",sans-serif;
   --lg-text-placeholder:rgba(88,98,115,.5); --lg-text-disabled:rgba(88,98,115,.4);
   /* P1-17：主行动按钮文字的唯一来源。此前浅色档**未定义**，而在 9 条规则里硬编码 #343A46，
      于是"改 Token 完全没有效果"。现按 D9 定为 #343A46，9 处硬编码全部改为 var()。 */
@@ -373,6 +389,9 @@
      旧写法 --lg-radius-btn-lg/btn/btn-sm = 26/22/18 对 h=48/40/32 **都超过高度一半**，
      浏览器会把超出的圆角按比例缩放 —— 声明值 ≠ 渲染值，分段按钮的端头因此不是胶囊。 */
   --lg-radius-pill:999px;
+  /* 方角按钮档（02 · 2.4 = 18）。此前 `.gm-btn--square` 引用它却两库都没定义，
+     导致方角按钮的 border-radius 整条失效。与 02 · 2.4 同值补入。 */
+  --lg-radius-btn-sm:18px;
   --lg-radius-control:20px;
   --lg-shadow-md:0 8px 24px rgba(58,52,84,.08);
   --lg-shadow-sm:0 4px 12px rgba(58,52,84,.10);
@@ -421,8 +440,6 @@
 }
 [data-theme="dark"] .gm-vlist__sticky{background:rgba(38,36,46,.86)}
 [data-theme="dark"] .gm-cascader__opt.is-active{background:rgba(255,255,255,.08)}
-[data-theme="dark"] .gm-cascader__btn{background:rgba(255,255,255,.10)}
-[data-theme="dark"] .gm-rv__empty,.gm-rv__loading{color:var(--lg-text-secondary)}
 
 /* —— 屏幕阅读器专用文本 —— */
 .gm-sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap;border:0}
@@ -439,53 +456,66 @@
 .gm-spin--inverse{color:rgba(255,255,255,.92)}
 .gm-spin--inverse i{border-color:rgba(255,255,255,.30);border-top-color:#FFFFFF}
 
-/* Progress：轨道色与圆头端点按 08 · 8.2.5 原文（轨道 rgba(58,52,84,.08)，胶囊圆角）。
-   暗色档由 --lg-divider 自动翻转，不再写死。 */
-/* V2.9：Arco 默认进度文字色（gray-6）在玻璃卡上只有 2.90:1（实底采样实测），改走 Token */
+/* Progress：自包含实现 —— **与 @goodmom/vue 同 DOM、同类名、同声明**（08 · 8.2.5）。
+   V2.9：此前 React 侧是 Arco Progress 的包装，两库 DOM 与类名不同（`.arco-progress-*` vs
+   `.gm-progress__*`），视觉契约无法逐字节比对、暗色档各自演化。现改为与 Vue 完全同构的自绘实现，
+   并移除 Arco Progress 依赖（进度条是纯几何件，不需要第三方基座）。
+   以下保留一条 Arco 兼容规则：应用若仍直用 Arco 进度条，其默认文字色（gray-6）在玻璃卡上只有 2.90:1。 */
 .gm-progress .arco-progress-circle-text,.gm-progress .arco-progress-line-text{color:var(--lg-text-primary,#343A46)}
-.gm-progress .arco-progress-line-outer,.gm-progress .arco-progress-line-inner{border-radius:999px}
-.gm-progress .arco-progress-line-outer{background:var(--lg-track,rgba(58,52,84,.08))}
-.gm-progress .arco-progress-line-bar{border-radius:999px}
-/* 高度三档：thin 3 / default 6 / thick 10 */
-/* 高度三档与 Vue 侧同名同值（08 · 8.2.5「默认 6 / 细 3 / 粗 10」）；
-   组件输出的类名是 --small/--default/--large，此处必须与之一致。 */
-.gm-progress--small .arco-progress-line-outer,.gm-progress--small .arco-progress-line-inner{height:3px}
-.gm-progress--large .arco-progress-line-outer,.gm-progress--large .arco-progress-line-inner{height:10px}
-/* 环形中心百分比用等宽数字（08 · 8.2.5「中心百分比 tabular-nums」） */
-.gm-progress .arco-progress-circle-text{font-variant-numeric:tabular-nums;font-weight:600}
+.gm-progress{display:flex;align-items:center;gap:10px;width:100%}
+/* ── 08 · 8.2.5 进度条（V2.9 完善）─────────────────────────────────────────
+   1. 轨道＝规范原文 `rgba(58,52,84,.08)` 圆角胶囊（暗色档翻白），不再是 --lg-divider 的 .10；
+   2. 高度＝规范原文 默认 6 / 细 3 / 粗 10（原 8/4/12 不符）；
+   3. **类名修正**：组件输出的是 `--small/--default/--large`，而这里写的是 `--sm/--lg`
+      —— 从来对不上，是**死代码**（尺寸实际靠内联 style 生效）。现按真实类名写。
+   4. 语义色走 `--lg-sem-*` alias（02 · 2.1.5），随暗色档自动换浅档。 */
+.gm-progress__track{position:relative;flex:1;min-width:0;height:6px;border-radius:999px;
+  background:var(--lg-track,rgba(58,52,84,.08));overflow:hidden}
+.gm-progress--small .gm-progress__track{height:3px}
+.gm-progress--large .gm-progress__track{height:10px}
+.gm-progress__fill{height:100%;border-radius:999px;background:var(--mmh-grad-primary);
+  transition:width var(--lg-t-slow) var(--lg-ease-out)}
+.gm-progress--success .gm-progress__fill{background:var(--lg-sem-positive)}
+.gm-progress--warning .gm-progress__fill{background:var(--lg-sem-attention)}
+.gm-progress--danger .gm-progress__fill{background:var(--lg-sem-risk)}
+.gm-progress--positive .gm-progress__fill{background:var(--lg-sem-positive)}   /* 旧类名保留兼容 */
 
-/* 达到 100%：**一次**白扫光提示（08 · 8.2.5）。用 transform 位移实现（07 性能红线：
-   只动 transform/opacity），只跑一轮，不循环。 */
-.gm-progress.is-done .arco-progress-line-bar{position:relative;overflow:hidden}
-.gm-progress.is-done .arco-progress-line-bar::after{
-  content:"";position:absolute;inset:0;border-radius:999px;
+/* 达到 100%：**一次**白扫光（08 · 8.2.5），只跑一轮；只动 transform（07 性能红线） */
+.gm-progress.is-done .gm-progress__fill{position:relative;overflow:hidden}
+.gm-progress.is-done .gm-progress__fill::after{content:"";position:absolute;inset:0;border-radius:999px;
   background:linear-gradient(90deg,transparent,rgba(255,255,255,.75),transparent);
   animation:gmProgressSweep .7s ease-out 1 both}
 @keyframes gmProgressSweep{from{transform:translateX(-100%)}to{transform:translateX(100%)}}
 
-/* Progress：不确定时长（indeterminate）——滑动的短条，不报具体数值。
-   08 · 8.2.5 未覆盖该形态，本轮补入并同步规范正文。 */
-.gm-progress--indet{position:relative;width:100%;height:6px;border-radius:999px;
+/* 不确定时长（indeterminate）：滑动的短条，且**不报** aria-valuenow */
+.gm-progress--indet{position:relative;display:block;width:100%;height:6px;border-radius:999px;
   background:var(--lg-track,rgba(58,52,84,.08));overflow:hidden}
 .gm-progress--indet.gm-progress--small{height:3px}
 .gm-progress--indet.gm-progress--large{height:10px}
 .gm-progress--indet i{position:absolute;top:0;bottom:0;left:0;width:34%;border-radius:999px;
-  animation:gmProgressIndet 1.4s cubic-bezier(.65,0,.35,1) infinite}
-@keyframes gmProgressIndet{
-  from{transform:translateX(-100%)}
-  to{transform:translateX(294%)}}   /* 34% 宽的条跑满整条轨道 */
-
-/* ══════════════════════════════════════════════════════════════════════════
-   03 · 3.2.2 / Part 19 · EL-19-03 —— GmResult 结果页（V2.9 补齐）
-   三通道：色（语义 alias）· 文案（title/desc）· 动作（actionText 按钮）。
-   与 .gm-empty 的分工：Empty＝没有数据但一切正常；Result＝操作有结论。
-   ══════════════════════════════════════════════════════════════════════════ */
+  background:var(--mmh-grad-primary);animation:gmProgressIndet 1.4s cubic-bezier(.65,0,.35,1) infinite}
+@keyframes gmProgressIndet{from{transform:translateX(-100%)}to{transform:translateX(294%)}}
+.gm-progress__text{flex:none;font-size:12px;color:var(--lg-text-secondary);font-variant-numeric:tabular-nums}
+.gm-progress--circle{display:inline-flex;flex-direction:column;gap:6px;width:auto}
+.gm-progress__ring{position:relative;display:inline-flex;align-items:center;justify-content:center}
+.gm-progress__ring svg{transform:rotate(-90deg);display:block}
+.gm-progress__ring circle{fill:none;stroke-linecap:round}
+.gm-progress__ring .gm-progress__ring-bg{stroke:var(--lg-divider)}
+.gm-progress__ring .gm-progress__ring-fill{stroke:var(--mmh-rose-500);transition:stroke-dashoffset var(--lg-t-slow) var(--lg-ease-out)}
+.gm-progress--positive .gm-progress__ring .gm-progress__ring-fill{stroke:var(--mmh-mint-600)}
+.gm-progress__ring-label{position:absolute;font-size:12px;font-weight:600;color:var(--lg-text-primary);font-variant-numeric:tabular-nums}.gm-result__ic{width:56px;height:56px;border-radius:50%;display:flex;align-items:center;justify-content:center;
+  background:var(--lg-glass-control);border:var(--lg-border-1) solid var(--lg-divider);
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.8)}
+/* 色通道：图标与标题取语义 alias（02 · 2.1.5），暗色档自动换浅档 */
+/* V2.9 补齐：React 侧此前**完全没有** `.gm-result` 容器与 `.gm-result__ic` 规则 ——
+   组件渲染了 `class="gm-result gm-result--{status}"`，但库内没有对应样式，
+   结果页在 React 下是**无样式裸排**（没有居中、没有 56px 语义色圆图标）。
+   站点用的是 build-site.py 里另一份拷贝，所以站点门禁看不见。现与 Vue 侧逐字节对齐。 */
 .gm-result{display:flex;flex-direction:column;align-items:center;justify-content:center;
   gap:8px;padding:32px 20px;text-align:center}
 .gm-result__ic{width:56px;height:56px;border-radius:50%;display:flex;align-items:center;justify-content:center;
   background:var(--lg-glass-control);border:var(--lg-border-1) solid var(--lg-divider);
   box-shadow:inset 0 1px 0 rgba(255,255,255,.8)}
-/* 色通道：图标与标题取语义 alias（02 · 2.1.5），暗色档自动换浅档 */
 .gm-result--success .gm-result__ic{color:var(--lg-sem-positive)}
 .gm-result--error   .gm-result__ic{color:var(--lg-sem-risk)}
 .gm-result--warning .gm-result__ic{color:var(--lg-sem-attention)}
@@ -600,7 +630,7 @@
   border-right:var(--lg-border-hairline) solid var(--lg-divider-hairline)}
 .gm-cascader__col:last-child{border-right:none}
 .gm-cascader__opt{display:flex;align-items:center;gap:8px;width:100%;height:34px;padding:0 10px;border:none;background:none;
-  font-family:var(--lg-font);font-size:13px;color:var(--lg-text-primary);cursor:pointer;text-align:left;border-radius:10px}
+  font-family:var(--lg-font);font-size:13px;color:var(--lg-text-primary);cursor:pointer;text-align:left;border-radius:16px}   /* 02 · 2.4：交互组件圆角永不 <16px（原 10px 越界） */
 .gm-cascader__opt.is-active{background:var(--lg-glass-popover)}
 .gm-cascader__opt.is-selected{color:var(--lg-link);font-weight:600;box-shadow:inset 2px 0 0 var(--lg-link)}
 .gm-cascader__opt.is-disabled{color:var(--lg-text-disabled);cursor:not-allowed}
@@ -627,6 +657,7 @@
 .gm-rv{display:block;min-width:0}
 .gm-rv__loading{display:flex;justify-content:center;padding:24px}
 .gm-rv__empty{display:block}
+.gm-rv__empty,.gm-rv__loading{color:var(--lg-text-secondary)}
 
 /* —— 10 · 10.11.2 GmVirtualList 虚拟长列表 —— */
 .gm-vlist{position:relative;overflow:hidden;border-radius:16px;background:var(--lg-glass-card);

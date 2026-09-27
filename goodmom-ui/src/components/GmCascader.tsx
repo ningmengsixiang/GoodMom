@@ -20,7 +20,7 @@ export interface GmCascaderProps {
   options: GmCascaderOption[];
   /** 受控值（级联路径）；传入即为受控模式 */
   value?: string[];
-  /** 非受控初始值 */
+  /** 非受控初始值，默认 []（与 Vue 版同一默认值） */
   defaultValue?: string[];
   onChange?: (value: string[], selectedOptions: GmCascaderOption[]) => void;
   /** 形态，默认 "popup" */
@@ -108,7 +108,7 @@ function colKey(columns: GmCascaderOption[][], path: string[]): string {
 const GmCascader = ({
   options,
   value,
-  defaultValue,
+  defaultValue = [],
   onChange,
   mode = "popup",
   placeholder = "请选择",
@@ -120,7 +120,7 @@ const GmCascader = ({
   style,
 }: GmCascaderProps) => {
   const controlled = value !== undefined;
-  const [inner, setInner] = useState<string[]>(() => defaultValue || []);
+  const [inner, setInner] = useState<string[]>(() => defaultValue);
   const selected: string[] = controlled ? (value as string[]) : inner;
 
   const [open, setOpen] = useState<boolean>(mode === "inline");

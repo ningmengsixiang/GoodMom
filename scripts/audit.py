@@ -1260,12 +1260,41 @@ def feedback_spec():
 # ══════════════════════════════════════════════════════════════════════════
 
 def undefined_tokens():
+    """`var(--x)` 无兜底引用一个从未定义的变量 → 整条声明被浏览器静默丢弃。
+
+    V2.9 扩面：此前只扫 `site/fragments/*.html`，**两个组件库的 CSS 完全不设防**。
+    代价是实测漏掉一个极严重的缺陷 —— `goodmom-ui/src/theme.css` 有 **7 处
+    `font-family:var(--lg-font)`，而 `--lg-font` 从未在该文件定义**（它只存在于
+    Vue 的 base.css）→ React 侧所有组件的字体声明整条失效，回落到浏览器默认字体
+    （桌面是 Times 系衬线），而 audit / B9 / page-qa **一个都没报**。
+    现把两库的 CSS 与 Token 文件一并纳入。
+    """
     import io as _io, glob as _glob
     bad = []
     shell_defs = set()
     sh = "scripts/build-site.py"
     if os.path.exists(sh):
         shell_defs = set(re.findall(r"(--[a-z0-9-]+)\s*:", _io.open(sh, encoding="utf-8").read()))
+    # 组件库 CSS：各库内部自解析（React 的 Token 在 theme.css，Vue 的在 base.css）
+    lib_defs = {}
+    for group, files in (("goodmom-ui/src/theme.css", ["goodmom-ui/src/theme.css"]),
+                         ("goodmom-vue/src/styles/components.css",
+                          ["goodmom-vue/src/styles/base.css",
+                           "goodmom-vue/src/styles/components.css"])):
+        defs = set()
+        for f in files:
+            if os.path.exists(f):
+                defs |= set(re.findall(r"(--[a-z0-9-]+)\s*:", _io.open(f, encoding="utf-8").read()))
+        lib_defs[group] = defs
+    for group, defs in sorted(lib_defs.items()):
+        if not os.path.exists(group):
+            continue
+        code = re.sub(r"/\*.*?\*/", "", _io.open(group, encoding="utf-8").read(), flags=re.S)
+        nofb = set(re.findall(r"var\(\s*(--[a-z0-9-]+)\s*\)", code))
+        missing = sorted(nofb - defs)
+        if missing:
+            bad.append("%s：%d 个 Token 被 var() 无兜底引用却在本库内从未定义 → 声明会被静默丢弃（%s）"
+                       % (group, len(missing), ", ".join(missing[:8])))
     for f in sorted(_glob.glob("site/fragments/*.html")):
         t = _io.open(f, encoding="utf-8").read()
         defined = set(re.findall(r"(--[a-z0-9-]+)\s*:", t)) | shell_defs
@@ -1284,8 +1313,9 @@ def undefined_tokens():
         for b in bad:
             rec("FAIL", "undefined-token", b)
         return False
-    rec("OK", "undefined-token", "站点片段里 var(--x) 的无兜底引用全部有定义"
-        "（未定义 + 无兜底 = 整条声明被静默丢弃，是 V2.9 实测到的缺陷类）")
+    rec("OK", "undefined-token", "站点片段与两个组件库 CSS 里 var(--x) 的无兜底引用全部有定义"
+        "（未定义 + 无兜底 = 整条声明被静默丢弃，是 V2.9 实测到的缺陷类；"
+        "该检查曾因只扫站点片段而漏掉 `--lg-font` 未定义导致 React 全库字体失效）")
     return True
 
 

@@ -37,7 +37,7 @@ export default function ArchiveDetailPage({ id }: { id: string }) {
                 name={`${client.name} · ${client.kind === "pregnant" ? gestWeek(client.stage.week, client.stage.day) : monthAge(client.stage.month)}`}
                 sub={`档案号 ${client.archiveNo} · 管理医生 ${client.manager ?? "—"}`}
                 tags={<GmStatusTag five={client.risk}>{client.status}</GmStatusTag>}
-                actions={
+                ops={
                   <GmButton type="primary" size="small" onClick={() => toast("已创建随访任务", "success")}>
                     发起随访
                   </GmButton>

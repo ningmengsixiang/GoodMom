@@ -1,3 +1,57 @@
+## [V2.9] · 双库统一化（React ↔ Vue 零能力差异 · 门禁归一化替代白名单）
+
+> 依据：用户要求「把 Vue、React 两种语言的组件都完善成设计系统的统一化标准，不能有任何组件的差异化」。
+> 裁决与完整理由见决策记录 **D33**。
+
+### 一、结论
+
+`@goodmom/ui`（React）与 `@goodmom/vue`（Vue 3）同名组件**零能力差异**：
+props / 事件 / 默认值 / 契约类名 / DOM / 无障碍行为全部一致。唯一保留的是**宿主语言惯用写法**
+（`children`↔默认插槽、具名 prop↔具名插槽、`value`+`onChange`↔`v-model`）——
+它们被归一化到同一规范名后**仍然严格比对**，所以"叫法不同"被承认、"新漂移"照旧 FAIL。
+
+| 不变量 | 门禁 | 结果 |
+| --- | --- | --- |
+| props / 事件 / 默认值 / 契约类名 | `check-component-contract.py --ci` | 19/19 |
+| 共享选择器 CSS 写法（逐字节） | `check-style-parity.py --ci` | 233 个选择器、0 处不同 |
+| 暗色覆盖集合 · Token 层（浅+暗两张表） | 同上 | 0 处不同 |
+| DOM 与无障碍（渲染级） | 两库 `playground/smoke.mjs` | 60/60 · 39/39 |
+
+### 二、删掉白名单，改成「归一化 + 严格比对」
+
+旧 `KNOWN_DIVERGENCE` 的粒度是「允许这个组件的 props 不一致」→ 整组 props 与默认值的比对被**跳过**，
+实测漏掉了：`GmStatusTag` 的 `size` 默认值两侧不同、`size="large"` 在 React 输出一个 CSS 里不存在的类名
+（prop 完全无效）、React 不推导语义（照 Vue 写就是灰标签）、`GmCard` 少 `hoverable`/`bodyless`、
+`GmEmpty` 的 `title` 默认值不同、`GmClientCard` 的 `actions`↔`ops`、`GmProgress` 一库基于 Arco 一库自绘、
+`GmResult` 在 React 侧**没有任何容器样式**（结果页裸排）。
+
+### 三、修掉的真实缺陷
+
+1. **React `theme.css` 7 处 `font-family:var(--lg-font)`，而 `--lg-font` 从未在该文件定义** →
+   React 全库字体声明整条失效（回落浏览器默认衬线），而 `audit`/`B9`/`page-qa` 全都没报。
+   已定义该 Token，并把 `audit.py undefined-token` **扩面到两个组件库的 CSS**。
+2. **`.gm-btn--secondary` / `--default` 暗色档白底白字**：修前 **≈1.09:1** → 修后 **9.15:1**（两库同一份配方）。
+3. **Token 层三处不一致**：Vue 暗色 `--lg-tint-base` 曾是纯黑 `#000000`（撞「禁纯黑」）、
+   漏 `--lg-tint-pct` 与 `--lg-text-on-inverse`；React 漏 `--lg-font`。两侧现已逐项相同。
+4. `.gm-btn--square` 引用 `--lg-radius-btn-sm` 而两库都未定义（方角按钮圆角整条失效）→ 补 `18px`；
+   `.gm-cascader__opt` 圆角 `10px` 越界 → 改 `16px`。
+5. `@goodmom/vue` 具名导出漏 `GmResult` / `GmToast`（`import { GmResult }` 报 TS2614）→ 补齐。
+6. 四条「只在 React 有」的暗色覆盖补到 Vue（`cascader__opt.is-active` / `vlist__sticky`），
+   两条重复/硬编码的删掉（`cascader__btn` 改回 Token、`.gm-rv__*` 颜色回基色规则）。
+
+### 四、门禁
+
+- `check-component-contract.py --ci` 此前**不在 CI** → 加入 `architecture-gate` job。
+- `check-style-parity.py` 新增 B 层三条严格不变量：共享选择器**逐字节**一致 · 暗色覆盖集合一致 ·
+  **浅/暗两张 Token 表**同名同值；三条都做了注入式负向验证。
+- `audit.py undefined-token` 扩面到两库 CSS（此前只扫站点片段 —— 正是它漏掉 `--lg-font` 的原因）。
+
+### 五、遗留（待设计负责人裁决）
+
+`.gm-btn--outline` / `--dashed` / `--text` 与链接的字色 `--mmh-rose-700`（`#B23A63`）
+**直接落在页面底色上时 4.13:1**（14px 需 4.5）；落在玻璃卡/近白面 5.39:1 ✅、暗色档 8.67:1 ✅。
+即只有「文字型按钮/链接直接放在页面底色上」这一种用法不达 AA。详见 D33 / 20 · 20.12.3 第 24 条。
+
 ## [V2.9] · 前端设计规范落地（20 章）· 技能族重构 · 幽灵 Token 治理
 
 > 依据：把 01–19 的规范收敛成**写代码时能直接用的那一层**，并把「照文档写 CSS 却静默失效」这一类缺陷制度化拦下。

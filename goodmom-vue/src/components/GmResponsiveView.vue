@@ -155,7 +155,9 @@ const activeBranch = computed<"loading" | "empty" | "card" | "condensed" | "tabl
 
     <div v-else-if="activeBranch === 'empty'" class="gm-rv__empty">
       <slot v-if="slots.empty" name="empty" :rows="rows" />
-      <GmEmpty v-else title="暂无数据" desc="调整筛选条件或稍后重试" />
+      <!-- 默认空态必须与 React 侧**同参**（React: `<GmEmpty title="暂无数据" />`）：
+           多传一个 desc 会让两库同一份数据渲染出不同 DOM -->
+      <GmEmpty v-else title="暂无数据" />
     </div>
 
     <slot v-else-if="activeBranch === 'card'" name="card" :rows="rows" />

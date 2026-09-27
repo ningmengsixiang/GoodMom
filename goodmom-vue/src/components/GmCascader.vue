@@ -7,7 +7,10 @@
  *  - inline：面板常驻展开，用于表单内嵌/侧栏
  *  - picker：移动端遮罩 + 底部弹层（role="dialog" aria-modal），点遮罩=取消，**确定才提交**
  *
- * 支持 `v-model`（defineModel）：传了即受控，不传即非受控（defaultValue 仅作初始值）。
+ * 支持 `v-model`（defineModel）：传了即受控，不传即非受控（defaultValue 作初始值）。
+ * ⚠️ **不能**给 defineModel 写 `default`：那样 `props.modelValue` 永远有值（`[]`），
+ *    「没传 v-model」会被误判为受控，`defaultValue` 直接失效、值也永远改不动
+ *    —— 与 React 版 `value !== undefined ? value : inner` 的行为分歧（P1-12）。
  *
  * 无障碍契约（改动前务必读）：
  *  - 触发点为 <button aria-haspopup="listbox" aria-expanded>
@@ -28,12 +31,14 @@ export interface GmCascaderOption {
   disabled?: boolean;
 }
 
-const model = defineModel<string[]>({ default: () => [] });
+/** 受控值：`v-model` ↔ React 的 `value` + `onChange`（两侧框架惯用写法不同，行为契约一致）。
+ *  不写 default：见文件头注释 —— 否则 default/defaultValue 的非受控语义会失效。 */
+const model = defineModel<string[]>();
 
 const props = withDefaults(
   defineProps<{
     options: GmCascaderOption[];
-    /** 非受控初始值 */
+    /** 非受控初始值，默认 []（与 React 版同一默认值） */
     defaultValue?: string[];
     mode?: "popup" | "inline" | "picker";
     placeholder?: string;
@@ -125,7 +130,6 @@ function stepEnabled(list: GmCascaderOption[], from: number, dir: number): numbe
 
 /* ── 状态 ───────────────────────────────────────────────────────────── */
 const open = ref(props.mode === "inline");
-const nav = ref<NavState>({ path: props.defaultValue.slice(), focus: null });
 const active = ref<number[]>([0]);
 
 const rootRef = ref<HTMLDivElement | null>(null);
@@ -133,8 +137,15 @@ const panelRef = ref<HTMLDivElement | null>(null);
 const triggerRef = ref<HTMLButtonElement | null>(null);
 let didMount = false;
 
-/** 已提交值：v-model 受控 / defaultValue 非受控统一走 model */
-const selected = computed<string[]>(() => model.value ?? []);
+/** 非受控内部值：等价 React 的 `useState(defaultValue)` */
+const inner = ref<string[]>(props.defaultValue);
+/** 是否受控：等价 React 的 `value !== undefined`（传了 v-model 的 ref 即为受控） */
+const controlled = computed(() => model.value !== undefined);
+/** 已提交值：受控走 v-model，非受控走内部值 */
+const selected = computed<string[]>(() => (controlled.value ? (model.value as string[]) : inner.value));
+
+/** 导航态：初值与已提交值一致（等价 React 的 `useState({ path: selected })`） */
+const nav = ref<NavState>({ path: selected.value.slice(), focus: null });
 
 /* 面板展开时以 nav.path 为准；收起时回落到已提交值 */
 const path = computed(() => (open.value ? nav.value.path : selected.value));
@@ -154,7 +165,10 @@ const canConfirm = computed(
 
 /* ── 动作 ───────────────────────────────────────────────────────────── */
 function commit(next: string[]) {
-  model.value = next;
+  /* 受控（v-model）：写回 model → 触发 update:modelValue，等价 React 的 onChange 由父级回收；
+     非受控：只更新内部值，等价 React 的 setInner。两侧都无条件 emit change。 */
+  if (controlled.value) model.value = next;
+  else inner.value = next;
   emit("change", next, resolveOptions(props.options, next));
 }
 

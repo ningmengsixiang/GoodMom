@@ -9,6 +9,12 @@ import { GmFive, FIVE_COLOR, FIVE_VAR, GmSemantic, SEMANTIC_VAR, semTintFill, se
  * P1-2：取色一律走 CSS 变量（`var(--lg-sem-x)`），而不是 tokens 里的静态浅色 hex，
  * 否则暗色模式下颜色不会切换（"变量对、组件错"）。
  * P1-12：与 Vue 版 `<GmTag>` 保持同一 props 面（含 `five`）。
+ *  · `size="default"` 追加的类名字面量是 **`lg`**（不是 `gm-tag--default`）：两个库的 CSS
+ *    （`theme.css` / `components.css`）里只有 `.gm-tag.lg`，改名就与样式脱节 —— 命名看着是反的，
+ *    但这是既有 CSS 契约，两侧必须一同保留（要改成 `--default` 得先改 CSS，属另一件事）。
+ *  · `data-semantic` 只在**纯 semantic** 取色时挂载（color/five 覆盖时不挂），与 Vue 版同一条件。
+ *  · `.gm-tag:focus-visible` 是死规则：`<span>` 不是可聚焦元素、组件也不给 tabindex，
+ *    两侧都不加 tabindex 才是对齐的；该规则应从 CSS 删除（组件侧不改）。
  */
 export interface GmTagProps {
   children: React.ReactNode;

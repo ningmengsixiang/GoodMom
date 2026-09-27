@@ -130,10 +130,10 @@
    双通道：色点 + 文字；淡底 0.13 / 描边 0.32 由组件内联 tint() 计算
    ───────────────────────────────────────────────────────────────────────── */
 .gm-tag{display:inline-flex;align-items:center;gap:6px;padding:4px 12px;border-radius:999px;font-size:12px;font-weight:500;
-  border:1px solid;line-height:1.4;white-space:nowrap}
+  border:var(--lg-border-1) solid;line-height:1.4;white-space:nowrap}
 .gm-tag.lg{font-size:13px;padding:5px 14px}
 .gm-tag i{width:7px;height:7px;border-radius:50%;flex:none}
-.gm-tag:focus-visible{outline:var(--lg-ring-width) solid var(--lg-ring-color);outline-offset:var(--lg-ring-offset)}
+.gm-tag:focus-visible,.gm-steps .gm-step .gs-dot:focus-visible{outline:var(--lg-ring-width) solid var(--lg-ring-color);outline-offset:var(--lg-ring-offset)}
 .gm-status-dot{display:inline-block;width:7px;height:7px;border-radius:50%;margin-right:6px;vertical-align:1px;flex:none}
 .gm-status-tag{display:inline-flex;align-items:center;padding:3px 10px;border-radius:999px;font-size:12px;font-weight:500;
   line-height:1.5;border:1px solid;white-space:nowrap}
@@ -148,20 +148,32 @@
    03 · 3.3 GmCard 玻璃卡片 / 3.4.2 GmAvatar 头像
    ───────────────────────────────────────────────────────────────────────── */
 .gm-card{background:linear-gradient(160deg,rgba(255,255,255,.62),rgba(255,255,255,.3));
-  border:1px solid var(--lg-border-white-70);box-shadow:var(--lg-shadow-md);padding:16px;background-origin:border-box}
+  border:var(--lg-border-1) solid var(--lg-border-white-70);box-shadow:var(--lg-shadow-md);padding:16px;background-origin:border-box}
 [data-theme="dark"] .gm-card{background:linear-gradient(160deg,rgba(255,255,255,.10),rgba(255,255,255,.05))}
+/* 暗色档按钮配方（V2.9 修复）：`.gm-btn--secondary` / `--default` 的底是**写死的近白渐变**，
+   而字走 `--lg-text-primary`（暗色档 = #F3EFEC）→ 暗色下白底白字，实测合成后 ≈1.04:1，
+   完全不可读；`audit.py dark` 与 `a11y-dom` 都没覆盖到这一类（站点暗色模块未用到它们）。
+   修法：按 02 · 2.1.9「暗色下白色叠加层由 14–60% 降到 6–16%」给同一条规则，两库逐字节一致。 */
+[data-theme="dark"] .gm-btn--secondary,[data-theme="dark"] .gm-btn--default{
+  background:linear-gradient(160deg,rgba(255,255,255,.16),rgba(255,255,255,.08));
+  background-origin:border-box;   /* 02 · 2.5.1：渐变+边框必须自带，否则 1px 异色缝 */
+  border-color:rgba(255,255,255,.14);color:var(--lg-text-primary)}
+[data-theme="dark"] .gm-btn--secondary:hover,[data-theme="dark"] .gm-btn--default:hover{
+  border-color:rgba(255,255,255,.22)}
+[data-theme="dark"] .gm-vlist__sticky{background:rgba(38,36,46,.86)}
+[data-theme="dark"] .gm-cascader__opt.is-active{background:rgba(255,255,255,.08)}
 .gm-card-head{display:flex;justify-content:space-between;align-items:center;gap:12px;margin-bottom:12px}
 .gm-card-head b{font-size:15px;color:var(--lg-text-primary);font-weight:600}
 .gm-card-head span{font-size:12px;color:var(--lg-text-secondary)}
 /* 墨色用**固定**色值：头像底是固定浅渐变，跟随暗色档翻浅会掉到 ~1.5:1（组件内按色调覆盖） */
 .gm-avatar{display:inline-flex;align-items:center;justify-content:center;color:#B23A63;font-weight:600;
-  border-radius:50%;border:2px solid rgba(255,255,255,.9);box-shadow:var(--lg-shadow-sm);flex:none;line-height:1}
+  border-radius:50%;border:var(--lg-border-3) solid rgba(255,255,255,.9);box-shadow:var(--lg-shadow-sm);flex:none;line-height:1}
 
 /* ─────────────────────────────────────────────────────────────────────────
    15.6.1 / 13 GmClientCard 服务对象卡
    ───────────────────────────────────────────────────────────────────────── */
 .gm-client{display:flex;align-items:center;gap:12px;padding:14px;border-radius:16px;background:var(--lg-glass-card);
-  border:1px solid var(--lg-border-white-75)}
+  border:var(--lg-border-1) solid var(--lg-border-white-75)}
 .gm-client-main{flex:1;min-width:0}
 .gm-client-name{display:flex;align-items:center;gap:6px;flex-wrap:wrap}
 .gm-client-name b{font-size:14px;color:var(--lg-text-primary)}
@@ -181,9 +193,9 @@
   background:var(--lg-glass-control);border:var(--lg-border-1) solid;user-select:none;font-family:var(--lg-font);text-align:center;
   -webkit-appearance:none;appearance:none;cursor:pointer;min-height:32px}
 .gm-risk-it i{width:8px;height:8px;border-radius:50%;flex:none}
-.gm-risk-it.on{outline:2px solid currentColor;outline-offset:1px;font-weight:600}
+.gm-risk-it.on{outline:var(--lg-ring-width) solid currentColor;outline-offset:1px;font-weight:600}
 .gm-risk-it[aria-disabled="true"],.gm-risk-it:disabled{cursor:not-allowed;opacity:.5}
-.gm-risk-it:focus-visible{outline:2px solid rgba(143,106,224,.7);outline-offset:2px}
+.gm-risk-it:focus-visible{outline:var(--lg-ring-width) solid rgba(143,106,224,.7);outline-offset:var(--lg-ring-offset)}
 @media (max-width:767px){ .gm-risk-it{flex:1 1 auto;justify-content:center;min-height:44px} }
 
 /* ─────────────────────────────────────────────────────────────────────────
@@ -191,16 +203,16 @@
    ───────────────────────────────────────────────────────────────────────── */
 .gm-steps{display:flex;gap:0;align-items:flex-start}
 .gm-step{flex:1;display:flex;gap:8px;position:relative;padding-top:4px}
-.gm-step::before{content:"";position:absolute;top:17px;left:-50%;width:100%;height:2px;background:var(--lg-divider)}
+.gm-step::before{content:"";position:absolute;top:17px;left:-50%;width:100%;height:2px;background:var(--lg-divider-hairline)}
 .gm-step:first-child::before{display:none}
 .gm-step .gs-dot{width:32px;height:32px;border-radius:50%;flex:none;display:flex;align-items:center;justify-content:center;
   font-size:12px;font-weight:600;background:var(--lg-glass-control);border:var(--lg-border-1) solid var(--lg-divider-hairline);
   color:var(--lg-text-secondary);z-index:1}
 .gm-step .gs-dot svg{width:13px;height:13px;stroke:var(--lg-text-on-accent,#343A46);   /* V2.9：白描边压亮粉渐变 1.79:1，非文本需 3:1 */fill:none;stroke-width:2.6;stroke-linecap:round;stroke-linejoin:round}
 .gm-step.finish::before{background:linear-gradient(90deg,#FFC4D6,#F77FA3)}
-.gm-step.finish .gs-dot{background:var(--mmh-grad-rose);color:#FFF;border-color:transparent;background-origin:border-box}
-.gm-step.process .gs-dot{border:2px solid var(--mmh-rose-600);color:var(--mmh-rose-700);animation:pulse 2.4s ease-in-out infinite}
-.gm-step.error .gs-dot{border:2px solid var(--mmh-danger);color:var(--lg-sem-risk)}
+.gm-step.finish .gs-dot{background:var(--mmh-grad-rose);color:var(--lg-text-on-inverse,#FFF);border-color:transparent;background-origin:border-box}
+.gm-step.process .gs-dot{border:var(--lg-border-3) solid var(--mmh-rose-600);color:var(--mmh-rose-700);animation:pulse var(--lg-t-breathe) ease-in-out infinite}
+.gm-step.error .gs-dot{border:var(--lg-border-3) solid var(--mmh-danger);color:var(--lg-sem-risk)}
 .gm-step .gs-main b{display:block;font-size:13px;color:var(--lg-text-primary);line-height:1.4;font-weight:600}
 .gm-step .gs-main span{font-size:11px;color:var(--lg-text-secondary)}
 .gm-steps.sm .gs-dot{width:24px;height:24px;font-size:10px}
@@ -219,7 +231,7 @@
    ───────────────────────────────────────────────────────────────────────── */
 .gm-empty{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;padding:28px 16px;text-align:center}
 .gm-empty .gm-empty-ic{width:52px;height:52px;border-radius:50%;display:flex;align-items:center;justify-content:center;
-  background:var(--lg-glass-control);border:1px dashed var(--lg-divider-hairline);color:var(--lg-link);
+  background:var(--lg-glass-control);border:var(--lg-border-1) dashed var(--lg-divider-hairline);color:var(--lg-link);
   box-shadow:inset 0 1px 0 rgba(255,255,255,.8)}
 .gm-empty .t{font-size:13px;color:var(--lg-text-secondary);font-weight:600}
 .gm-empty .d{font-size:12px;color:var(--lg-text-secondary);line-height:1.7}   /* 02 · 2.1.1：小字回次级色 */
@@ -227,7 +239,7 @@
 /* Spin：深底 / 实底按钮内用白·浅色环（08 · 8.2.15「深底/按钮内为白/浅色」） */
 .gm-spin--inverse{color:rgba(255,255,255,.92)}
 .gm-spin--inverse i{border-color:rgba(255,255,255,.30);border-top-color:#FFFFFF}
-.gm-spin i{flex:none;border-radius:50%;border:2px solid rgba(232,93,143,.22);border-top-color:var(--mmh-rose-600);
+.gm-spin i{flex:none;border-radius:50%;border:var(--lg-border-3) solid rgba(232,93,143,.22);border-top-color:var(--mmh-rose-600);
   animation:gmSpin .9s linear infinite;display:inline-block}
 @keyframes gmSpin{to{transform:rotate(360deg)}}
 /* ── 08 · 8.2.15 Skeleton / Spin（V2.9 完善）───────────────────────────────
@@ -263,7 +275,7 @@
 .gm-link--muted{color:var(--lg-text-secondary)}
 .gm-link--muted:hover{color:var(--lg-link)}
 .gm-link--danger{color:var(--lg-sem-risk)}
-.gm-link--danger:hover{color:#B04052}
+.gm-link--danger:hover{color:var(--mmh-solid-danger)}
 .gm-link.is-disabled,.gm-link[aria-disabled="true"]{color:var(--lg-text-disabled);cursor:not-allowed;pointer-events:none}
 .gm-link:focus-visible{outline:var(--lg-ring-width) solid var(--lg-ring-color);outline-offset:var(--lg-ring-offset);border-radius:4px}
 .gm-link__ic{width:16px;height:16px;display:inline-flex;flex:none;align-items:center;justify-content:center}
@@ -297,10 +309,10 @@
   box-shadow:var(--lg-shadow-md)}
 .gm-cascader--inline .gm-cascader__panel{position:static;box-shadow:none;margin-top:0}
 .gm-cascader__col{width:168px;max-height:240px;overflow:auto;padding:2px 0;
-  border-right:var(--lg-border-hairline) solid var(--lg-divider)}
+  border-right:var(--lg-border-hairline) solid var(--lg-divider-hairline)}
 .gm-cascader__col:last-child{border-right:none}
 .gm-cascader__opt{display:flex;align-items:center;gap:8px;width:100%;height:34px;padding:0 10px;border:none;background:none;
-  font-family:var(--lg-font);font-size:13px;color:var(--lg-text-primary);cursor:pointer;text-align:left;border-radius:10px}
+  font-family:var(--lg-font);font-size:13px;color:var(--lg-text-primary);cursor:pointer;text-align:left;border-radius:16px}   /* 02 · 2.4：交互组件圆角永不 <16px（原 10px 越界） */
 .gm-cascader__opt.is-active{background:var(--lg-glass-popover)}
 .gm-cascader__opt.is-selected{color:var(--lg-link);font-weight:600;box-shadow:inset 2px 0 0 var(--lg-link)}
 .gm-cascader__opt.is-disabled{color:var(--lg-text-disabled);cursor:not-allowed}
@@ -322,9 +334,9 @@
 .gm-cascader__foot{display:flex;gap:12px;margin-top:12px}
 .gm-cascader__btn{flex:1;height:46px;border-radius:22px;border:var(--lg-border-1) solid var(--lg-border-white-75);
   background:var(--lg-glass-control);font-family:var(--lg-font);font-size:15px;font-weight:600;color:var(--lg-text-primary);cursor:pointer}
-.gm-cascader__btn.primary,.gm-cascader__btn.is-primary{background:var(--mmh-grad-action-hc);color:#343A46;border:none}
+.gm-cascader__btn.primary,.gm-cascader__btn.is-primary{background:var(--mmh-grad-action-hc,#F77FA3);color:var(--lg-text-on-accent);border:none}
 .gm-cascader__btn:disabled{opacity:.5;cursor:not-allowed}
-.gm-cascader__btn:focus-visible{outline:var(--lg-ring-width) solid var(--lg-ring-color);outline-offset:2px}
+.gm-cascader__btn:focus-visible{outline:var(--lg-ring-width) solid var(--lg-ring-color);outline-offset:var(--lg-ring-offset)}
 @keyframes gmFade{from{opacity:0}to{opacity:1}}
 @keyframes gmUp{from{transform:translateY(100%)}to{transform:translateY(0)}}
 
@@ -339,12 +351,12 @@
   border:var(--lg-border-1) solid var(--lg-border-white-70)}
 .gm-vlist__sticky{position:sticky;top:0;z-index:2;padding:10px 14px;font-size:12px;font-weight:600;color:var(--lg-text-secondary);
   background:var(--lg-glass-popover);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);
-  border-bottom:var(--lg-border-hairline) solid var(--lg-divider)}
+  border-bottom:var(--lg-border-hairline) solid var(--lg-divider-hairline)}
 .gm-vlist__viewport{position:relative;overflow:auto;-webkit-overflow-scrolling:touch;overscroll-behavior:contain}
 .gm-vlist__viewport:focus-visible{outline:var(--lg-ring-width) solid var(--lg-ring-color);outline-offset:-2px}
 .gm-vlist__inner{position:relative;will-change:transform}
 .gm-vlist__item{display:flex;align-items:center;gap:10px;box-sizing:border-box;padding:0 14px;font-size:14px;
-  color:var(--lg-text-primary);border-bottom:var(--lg-border-hairline) solid var(--lg-divider)}
+  color:var(--lg-text-primary);border-bottom:var(--lg-border-hairline) solid var(--lg-divider-hairline)}
 
 /* ─────────────────────────────────────────────────────────────────────────
    08 · 8.2.5 GmProgress 进度条（自包含，替代原 Arco Progress）

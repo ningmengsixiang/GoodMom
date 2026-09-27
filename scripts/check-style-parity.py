@@ -14,11 +14,29 @@
 属静默漂移。旧的 `audit.py mirror_sync()` 明确排除 goodmom-vue/**，
 `check-status-map.py` 只比"文案 → 语义"映射，**没有一处守门会看这些值**。
 
-## 口径
+## 口径（两层，缺一不可）
 
+**A 层 · 解析后的值**（原有）：
 1. 解析两侧 `var(--x)`（用各自的 token 层），把颜色统一成 `r,g,b,a`；
 2. 对**同名选择器**的**同名属性**逐一比对；
-3. 只报告双方都声明了该属性的差异（一方缺声明由 mirror/选择器集合检查负责）。
+3. 只报告双方都声明了该属性的差异（一方缺声明由选择器集合检查负责）。
+
+**B 层 · 严格不变量**（V2.9 新增，`strict_checks()`）：
+4. **共享选择器的声明写法必须逐字节一致**。A 层比的是解析值，于是
+   `var(--lg-border-1)` 与 `1px`、`var(--lg-divider-hairline)` 与 `var(--lg-divider)`
+   在浅色档解析值相同 —— A 层绿灯，但 Token 换档后**暗色档就分叉了**。
+   实证：`.gm-step.finish .gs-dot` 两侧一写 `var(--lg-text-on-inverse)`、一写死 `#FFF`，
+   浅色档都是白、暗色档一个白一个深墨，而旧门禁全程绿灯。
+5. **暗色覆盖集合必须一致**：`[data-theme="dark"] .gm-*` 两侧同名同值。
+   防「一边有暗色档、另一边漏了 → 暗色下退回浅色值」——这正是 `.gm-cascader__btn`
+   与 `.gm-vlist__sticky` 曾经的形态（Vue 漏、React 有）。
+6. **Token 层必须一致**：React `theme.css` 的 `:root`/暗色段 与 Vue `base.css` 的
+   `:root`/暗色段同名同值（Vue 的 Token 层在 base.css、React 的在 theme.css，
+   这是**文件归属差异**而不是值差异）。实证：Vue 曾把暗色 `--lg-tint-base` 写成 `#000000`
+   （既撞「禁纯黑」，又让同一 13% 淡底在两库算出不同底色）；Vue 还漏了
+   `--lg-tint-pct` 与 `--lg-text-on-inverse`，而 React 漏了 `--lg-font`
+   （**7 处 `font-family:var(--lg-font)` 引用一个从未定义的变量 → 整条声明被丢弃，
+   React 组件全部回落到浏览器默认字体**）。这三类都跑不出 A 层，只能靠 B 层。
 
 用法：
     python3 scripts/check-style-parity.py          # 报告
@@ -142,22 +160,105 @@ def decls(path: str, tokens: dict) -> dict:
 
 # 允许"只在单侧存在"的 `.gm-*` 选择器（白名单必须写明理由，否则又会变成静默漂移的藏身处）。
 # 键是选择器前缀。
+#
+# V2.9 收紧：此前这里躺着 5 条「已登记为待办」的差异（进度条整体 + 4 条暗色覆盖），
+# 白名单成了漂移的藏身处。本轮已把它们**全部补齐**，白名单只剩两类**结构上无法相同**的项：
+#   ① Arco 互操作层 —— 只在 React/应用侧有意义（Vue 零基座，没有 Arco 可覆盖）；
+#   ② 文件归属差异 —— 同一条规则被放在另一个文件（Vue 的 Token 与工具类在 base.css）。
 ONE_SIDED_ALLOW = {
-    # React/应用侧独有：Arco 互操作层 + 站点/基础层提供的通用类
+    # ① Arco 互操作层
     ".gm-btn.arco-btn": "Arco 互操作层：仅服务于历史代码里直接用 Arco Button 的写法",
     ".arco-btn-primary.gm-btn-hc": "同上（D9 高对比主行动档的历史选择器）",
     ".gm-btn-hc.arco-btn-primary": "同上（同一历史选择器的另一种书写顺序）",
-    ".gm-sr-only": "屏幕阅读器工具类，Vue 侧定义在 base.css 而非 components.css",
-    ".gm-tag:focus": "React/应用侧独有的默认描边压制（Vue 侧由 base.css 统一处理）",
-    ".gm-steps .gm-step .gs-dot:focus-visible": "选择器写法差异，语义等价于 Vue 的 .gm-step .gs-dot:focus-visible",
-    '[data-theme="dark"] .gm-cascader__btn': "暗色覆盖：Vue 侧写在 SFC/其他段，语义等价",
-    '[data-theme="dark"] .gm-cascader__opt.is-active': "同上",
-    '[data-theme="dark"] .gm-rv__empty': "同上",
-    '[data-theme="dark"] .gm-vlist__sticky': "同上",
-    # Vue 独有：React 侧同名组件由 Arco 承担渲染（已登记为待办，不是"没看见"）
-    ".gm-progress": "React 的 GmProgress 基于 Arco Progress 渲染（无 .gm-progress DOM）；"
-                    "双库进度条契约尚未统一，已登记为待办 —— 白名单不等于通过，只表示已知差异",
+    ".gm-progress .arco-progress": "Arco 进度条兼容层：应用若仍直用 Arco 进度条，其默认文字色仅 2.90:1",
+    # ② 文件归属差异（同一条规则，另一个文件）
+    ".gm-sr-only": "屏幕阅读器工具类：React 在 theme.css，Vue 在 base.css（文本逐字节相同）",
 }
+
+
+def raw_decls(path: str) -> dict:
+    """{选择器: {属性: 原样文本}} —— **不解析 var()**，用于「写法必须逐字节一致」的严格比对。
+
+    为什么需要它：`decls()` 比的是**解析后的值**，于是
+    `var(--lg-border-1)` 与 `1px`、`var(--lg-divider-hairline)` 与 `var(--lg-divider)`
+    在浅色档解析值相同 —— 门禁绿，但**暗色档会分叉**（Token 换档后值不再相同）。
+    实证：`.gm-step.finish .gs-dot` 的 Vue 侧写死 `#FFF`，React 侧写 `var(--lg-text-on-inverse)`，
+    浅色档都是白、暗色档一个白一个深墨 —— `check-style-parity` 全程绿灯。
+    """
+    s = strip_comments(io.open(path, encoding="utf-8").read())
+    s = re.sub(r"@(media|keyframes|supports)[^{]*\{(?:[^{}]*\{[^{}]*\})*[^{}]*\}", "", s)
+    out: dict = {}
+    for m in re.finditer(r"([^{}]+)\{([^{}]*)\}", s):
+        for sel in [re.sub(r"\s+", " ", x.strip()) for x in m.group(1).split(",")]:
+            if not sel or sel.startswith("@"):
+                continue
+            d = out.setdefault(sel, {})
+            for item in m.group(2).split(";"):
+                if ":" in item:
+                    k, v = item.split(":", 1)
+                    d[k.strip().lower()] = re.sub(r"\s+", " ", v.strip())
+    return out
+
+
+def token_layer(path: str, sel: str) -> dict:
+    """取某个块里的自定义属性原值（合并同名块，避免重复 `:root` 互相覆盖）"""
+    s = strip_comments(io.open(path, encoding="utf-8").read())
+    out: dict = {}
+    for m in re.finditer(re.escape(sel) + r"\s*\{([^}]*)\}", s):
+        for d in m.group(1).split(";"):
+            if ":" in d:
+                k, v = d.split(":", 1)
+                out[k.strip()] = re.sub(r"\s+", " ", v.strip())
+    return out
+
+
+ARCO_ONLY = lambda k: k.startswith(("--primary", "--success", "--warning", "--danger"))
+
+
+def strict_checks() -> list:
+    """三条「零差异」不变量（V2.9 新增，锁住本轮统一化的成果）。
+
+    1. **共享选择器的声明写法逐字节一致**（不只是解析值）—— 防暗色档分叉；
+    2. **暗色覆盖集合一致** —— `[data-theme="dark"] .gm-*` 在两侧必须同名同值，
+       防「一边有暗色档、另一边漏了」；
+    3. **Token 层一致** —— React `theme.css` 的 `:root` / 暗色段 与
+       Vue `base.css` 的 `:root` / 暗色段 必须同名同值（Vue 的 Token 层在 base.css，
+       React 的在 theme.css，这是**文件归属差异**，不是值差异）。
+    """
+    problems = []
+    ra = raw_decls("goodmom-ui/src/theme.css")
+    rb = raw_decls("goodmom-vue/src/styles/components.css")
+
+    # ① 共享选择器写法
+    for sel in sorted(set(ra) & set(rb)):
+        for prop in sorted(set(ra[sel]) & set(rb[sel])):
+            if ra[sel][prop] != rb[sel][prop]:
+                problems.append("写法不一致 %s | %s：React=%s  Vue=%s"
+                                % (sel, prop, ra[sel][prop], rb[sel][prop]))
+
+    # ② 暗色覆盖集合
+    da = {s for s in ra if s.startswith('[data-theme="dark"] .gm')}
+    db = {s for s in rb if s.startswith('[data-theme="dark"] .gm')}
+    for sel in sorted(da - db):
+        problems.append("暗色覆盖仅 React 有：%s（Vue 暗色档会退回浅色值）" % sel)
+    for sel in sorted(db - da):
+        problems.append("暗色覆盖仅 Vue 有：%s" % sel)
+
+    # ③ Token 层
+    for block in (":root", '[data-theme="dark"]'):
+        ta = {k: v for k, v in token_layer("goodmom-ui/src/theme.css", block).items()
+              if not ARCO_ONLY(k)}
+        tb = {k: v for k, v in token_layer("goodmom-vue/src/styles/base.css", block).items()
+              if not ARCO_ONLY(k)}
+        for k in sorted(set(ta) - set(tb)):
+            problems.append("Token 仅 React 有（%s）：%s = %s" % (block, k, ta[k]))
+        for k in sorted(set(tb) - set(ta)):
+            problems.append("Token 仅 Vue 有（%s）：%s = %s" % (block, k, tb[k]))
+        for k in sorted(set(ta) & set(tb)):
+            if ta[k] != tb[k]:
+                problems.append("Token 值不一致（%s）：%s → React=%s  Vue=%s"
+                                % (block, k, ta[k], tb[k]))
+    return problems
 
 
 def one_sided(da: dict, db: dict, label_a: str, label_b: str) -> list:
@@ -188,15 +289,19 @@ def main() -> int:
                 if da[sel][prop] != db[sel][prop]:
                     diffs.append((sel, prop, da[sel][prop], db[sel][prop]))
         solo = one_sided(da, db, la, lb)
+        strict = strict_checks()
         print("── %s  ↔  %s" % (la, lb))
-        print("   共同选择器 %d 个；解析值差异 %d 处；单侧独有 .gm-* 选择器 %d 个"
-              % (len(shared), len(diffs), len(solo)))
+        print("   共同选择器 %d 个；解析值差异 %d 处；单侧独有 .gm-* 选择器 %d 个；严格不变量问题 %d 处"
+              % (len(shared), len(diffs), len(solo), len(strict)))
         for sel, prop, va, vb in diffs:
             print("     DIFF %-34s %-16s %s   |   %s" % (sel, prop, va, vb))
             problems.append((la, lb, sel, prop, va, vb))
         for sel, side in solo:
             print("     ONLY %-48s 仅存在于 %s" % (sel, side))
             problems.append((la, lb, sel, "(单侧独有)", side, ""))
+        for item in strict:
+            print("     STRICT %s" % item)
+            problems.append((la, lb, item, "(严格不变量)", "", ""))
 
     print()
     if problems:

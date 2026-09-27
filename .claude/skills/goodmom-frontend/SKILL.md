@@ -31,7 +31,7 @@ description: Use when 在本仓库（妈咪好 GoodMom 设计系统）写或改�
 | **R9** | 加粗/强调**不得改 `border-width`**，用 `box-shadow` / `outline` | 会让 44×44 触控目标实测尺寸抖动 1px |
 | **R10** | 动效尊重 `prefers-reduced-motion`（React 侧已全局兜底，**Vue 侧只有组件白名单**，自写动画必须自己加） | 无障碍 |
 | **R11** | 组件内不得出现裸色值；不得改 `Gm*` 组件的视觉（覆写颜色/圆角/阴影） | 要改就改组件库 + 同步两个包 + 02/03 章 |
-| **R12** | **禁用「文档有、代码无」的 Token**：`--lg-space-*`、`--lg-type-*`、`--lg-num-*`、`--lg-weight-*`、`--lg-radius-card/-btn*`、`--lg-z-*`、`--lg-blur-*`、`--lg-opacity-*`、`--lg-glow-*`、`--lg-grad-*`、`--lg-purple/cyan/blue/pink/peach-*`、`--lg-m-*`、`--lg-dur-*`、`--lg-ease-standard/-emphasized`、`--mmh-peach-*`、`--mmh-grad-signature`、`--lg-font-sans` 全部**零实现**。间距/字号/圆角/模糊直接写字面量（档位见 `reference/tokens.md`）。若确需幽灵变量，只能写成 `var(--幽灵, 兜底值)` 并注释说明 | 这是本系统**第一号静默失败源**。照 02 章写 CSS 会得到一片「没生效」 |
+| **R12** | **禁用「文档有、代码无」的 Token**：`--lg-space-*`、`--lg-type-*`、`--lg-num-*`、`--lg-weight-*`、`--lg-radius-card`、`--lg-radius-btn`、`--lg-radius-btn-lg`（`--lg-radius-btn-sm` 已补，可用）、`--lg-z-*`、`--lg-blur-*`、`--lg-opacity-*`、`--lg-glow-*`、`--lg-grad-*`、`--lg-purple/cyan/blue/pink/peach-*`、`--lg-m-*`、`--lg-dur-*`、`--lg-ease-standard/-emphasized`、`--mmh-peach-*`、`--mmh-grad-signature`、`--lg-font-sans` 全部**零实现**。间距/字号/圆角/模糊直接写字面量（档位见 `reference/tokens.md`）。若确需幽灵变量，只能写成 `var(--幽灵, 兜底值)` 并注释说明 | 这是本系统**第一号静默失败源**。照 02 章写 CSS 会得到一片「没生效」 |
 | **R13** | 主行动按钮：底 `--mmh-grad-action-hc`（品牌粉**上半段**）+ 字 `--lg-text-on-accent`（深字）；**亮粉底禁白字**（2.46–2.9:1 不达 AA）；**不套玻璃白描边/白内高光** | D9 裁决 |
 | **R14** | **禁纯黑 `#000000`、禁纯白 `#FFFFFF`**（底色 `#1B1A21`/`#23222A`，文字 `#F3EFEC`）；**禁 3px 以上常规描边** | 02 · 2.1.9 / 2.7.1 |
 | **R15** | 同页同一份数据按**容器宽度**切形态 → 用 `GmResponsiveView`；**不得**用视口断点 | 同一页多容器宽度不同，用视口断点必然有一个错 |
@@ -81,7 +81,7 @@ python3 scripts/a11y-dom.py          # 渲染级对比度
 | 做法 | 为什么错 | 正确做法 |
 | --- | --- | --- |
 | `padding: var(--lg-space-4)` | `--lg-space-*` 代码零实现 → 整条声明被丢弃，等于没写 | `padding: 16px`（R12） |
-| `border-radius: var(--lg-radius-card)` | 该变量不存在（只有 `--lg-radius-pill` / `--lg-radius-control`） | `border-radius: 22px` |
+| `border-radius: var(--lg-radius-card)` | 该变量不存在（只有 `--lg-radius-pill` / `--lg-radius-control` / `--lg-radius-btn-sm`） | `border-radius: 22px` |
 | `font-size: var(--lg-type-body)` | 不存在 | `font-size: 15px`（移动端 16px） |
 | 页面里写 `color: #E85D8F` | 暗色模式失效、无法换肤 | `var(--lg-link)` 或 `var(--lg-sem-*)` |
 | 自己写 `statusMap` 映射状态色 | 与 15 章脱钩，必然漂移 | `GmStatusTag` + `semanticOf()` |

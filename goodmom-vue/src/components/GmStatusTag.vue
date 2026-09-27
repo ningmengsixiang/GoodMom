@@ -14,6 +14,22 @@
  * 遍历时若只看 `children` 而不识别 Fragment，会取到空串 → 语义推导静默失败、全部回落灰色。
  * 因此双重兜底：① 渲染期用 vnode 遍历（SSR 也生效，且能识别 Fragment）；
  * ② 挂载后用 DOM textContent 校正（覆盖任意自定义插槽结构，最可靠）。
+ *
+ * ## 与 React 版 `@goodmom/ui` 的零差异口径（P1-12）
+ *
+ * 改动本文件时**必须**同步 `goodmom-ui/src/components/GmStatusTag.tsx`：
+ *  1. **语义从文案推导**（本组件一直是这个行为，React 侧已改为相同口径）：不传 `semantic`
+ *     就用 15 章词库 `semanticOf(文案)` 推导，读不出文本时同样回落 `neutral`。
+ *  2. 尺寸默认 `"default"`；`small` 仍接受，但与 `default` **同档** ——
+ *     两库 CSS 只定义了 `.gm-status-tag--default` / `--large`，没有 `--small`
+ *     （React 侧原默认是 `"small"`，已对齐到 `"default"`）。
+ *  3. 尺寸类名一律 `gm-status-tag--{size}`（React 侧 `size="large"` 曾输出不存在的 `lg`，
+ *     档位实际无效，已改为同一规则）。
+ *  4. `closeLabel`（默认「移除」）两侧同名同默认值（React 侧已补）。
+ *  5. `close` 事件载荷是 `MouseEvent`，React 侧 `onClose` 已改为同签名。
+ *  6. DOM 钩子两侧一致：`data-semantic`（只在语义通道生效时输出）与内层 `data-gm-text`。
+ *  7. 取色优先级两侧一致：**显式 `color` > `five` > `semantic`**；语义走 `var(--lg-sem-*)`、
+ *     五色走 `var(--mmh-m5-*)`，组件内不出现裸色值。
  */
 import { computed, onMounted, ref, Fragment, Text, type VNode } from "vue";
 import { FIVE_COLOR, FIVE_VAR, SEMANTIC_LABEL, SEMANTIC_VAR, semTintFill, semTintBorder, type GmFive, type GmSemantic } from "../tokens/status";
@@ -22,16 +38,17 @@ import { cx } from "../utils";
 
 const props = withDefaults(
   defineProps<{
-    /** 六语义之一；不传则由默认插槽文案自动推导（推荐） */
+    /** 六语义之一；不传则由默认插槽文案自动推导（推荐，与 React 版同口径） */
     semantic?: GmSemantic;
     /** 孕产妇五色之一（优先级高于 semantic） */
     five?: GmFive;
-    /** 显式覆盖色 hex */
+    /** 显式覆盖颜色（hex 或 CSS 变量表达式）；传入后不再走语义通道 */
     color?: string;
+    /** 尺寸档；`small` 与 `default` 同档（两库 CSS 只有 --default / --large） */
     size?: "small" | "default" | "large";
-    /** 可关闭：显示关闭按钮并触发 close 事件 */
+    /** 可关闭：显示关闭按钮并触发 close 事件（与 React 版 onClose 同契约） */
     closable?: boolean;
-    /** 关闭按钮的可访问名，默认「移除」 */
+    /** 关闭按钮的可访问名，默认「移除」（与 React 版同默认值） */
     closeLabel?: string;
   }>(),
   {
@@ -106,12 +123,23 @@ const style = computed(() => ({
  */
 const srLabel = computed(() => (props.color || props.five ? "" : SEMANTIC_LABEL[derived.value]));
 
-/** small 复用 default 档视觉（12px / padding 3 10） */
+/** small 复用 default 档视觉（12px / padding 3 10）；类名规则与 React 版一致 */
 const sizeClass = computed(() => `gm-status-tag--${props.size === "small" ? "default" : props.size}`);
+
+/**
+ * `data-semantic` 只在**语义通道**生效时输出（显式 color/five 时省略，与 GmTag 同约定）。
+ * 取值直接复用 `derived`，因此该属性与渲染出的颜色**永远同源** ——
+ * 不会出现「属性写 risk、颜色却是 attention」这种两库对照时的隐性错位。
+ */
+const dataSemantic = computed(() => (props.color || props.five ? undefined : derived.value));
+
+/* 内层 `data-gm-text`（模板里的文案容器）也和 React 版对齐：Vue 的无值属性渲染成
+   `data-gm-text=""`，React 侧因此显式写成 `data-gm-text=""`。
+   它同时是本组件挂载后校正语义所用的 DOM 文本来源（`textRef`）。 */
 </script>
 
 <template>
-  <span :class="cx('gm-status-tag', sizeClass)" :style="style">
+  <span :class="cx('gm-status-tag', sizeClass)" :style="style" :data-semantic="dataSemantic">
     <span class="gm-status-dot" :style="{ background: resolved }" aria-hidden="true" />
     <span v-if="srLabel" class="gm-sr-only">{{ srLabel }}：</span>
     <span ref="textRef" data-gm-text><slot /></span>

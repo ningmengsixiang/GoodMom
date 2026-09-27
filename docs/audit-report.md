@@ -1,7 +1,7 @@
 # 规范审计报告（自动）
 
 - 命令：`python3 scripts/audit.py`
-- 时间：2026-09-26 11:48
+- 时间：2026-09-27 12:18
 - 结论：✅ 通过
 
 - **OK** `md-links`：全部内链有效
@@ -23,7 +23,7 @@
 - **OK** `loading-spec`：状态与加载族符合 08 · 8.2.5/8.2.15 与 EL-19-02/03：骨架＝胶囊+1.6s 呼吸（无扫光）· Spin 0.9s 且下限 18 · 进度条 3/6/10 · GmResult 三通道齐备
 - **OK** `css-syntax`：全部 CSS（两库样式表 + 站点片段样式段）注释与花括号平衡（未闭合注释会静默吞掉规则，是本轮实际踩过的坑）
 - **OK** `feedback-spec`：反馈与提示族符合 Part 18 · MD-18-01/02/04：Toast 顶部偏上（外壳给出 --gm-toast-top 避让吸顶导航）· 320ms 入 / 驻留 2.4s / 240ms 出 · 同类仅 1 条 · error→alert、其余→status+aria-live · 无白描边；Modal 有 role=dialog + aria-modal + ESC + 焦点归还
-- **OK** `undefined-token`：站点片段里 var(--x) 的无兜底引用全部有定义（未定义 + 无兜底 = 整条声明被静默丢弃，是 V2.9 实测到的缺陷类）
+- **OK** `undefined-token`：站点片段与两个组件库 CSS 里 var(--x) 的无兜底引用全部有定义（未定义 + 无兜底 = 整条声明被静默丢弃，是 V2.9 实测到的缺陷类；该检查曾因只扫站点片段而漏掉 `--lg-font` 未定义导致 React 全库字体失效）
 - **OK** `data-present`：数据呈现层符合 03 · 3.7 / 08 · 8.2.11+8.2.13 / 11 · 11.2.6 / TB-15-01/02：表格 body-sm 14+600 次级表头 · tabular-nums · 行高算术 44–52 · 操作列右对齐；描述列表 caption key + body-sm value + 单行省略；折叠 44 热区 + 300ms grid-rows + 220ms 箭头；外壳与独立页两份配方逐项相等，页面侧零私有实现
 - **OK** `growth-chart`：生长曲线·百分位带符合 13 · 13.2 与 04 · 4.2–4.3.2：参考带 alpha .12（.10–.14）+ 细白描边上界 · 主曲线 Rose-500 2.5px + 端点白芯粉描边 · P3/P97 虚线 1.5px 三级色（可一键开关）· 网格 --lg-divider 1px · 刻度 caption 12px 等宽 · 入场 0.6s · 白玻璃 Tooltip · role=img + 隐藏数据表 + 中位数锚定的百分位读数
 - **OK** `svg-refs`：全部 7 处 url(#id) 画刷引用均可解析（跨模块 id 前缀未断链）

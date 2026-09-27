@@ -27,13 +27,19 @@ import React from "react";
  *    `scripts/audit.py feedback-spec` 守门。
  * 4. **无障碍**：`role="alert"`（error 需立刻被听到）/ `role="status"` + `aria-live="polite"`
  *    （其余）；语义由**色点 + 文案**双通道承载（14 · 4.4.5），不靠颜色单独传义。
+ *
+ * ## 双库契约（P1-12）
+ *
+ * `open` 两侧同名同默认值（`boolean`，默认 `false`）；React 由父组件受控传值，
+ * Vue 侧额外支持 `v-model:open`（宿主惯用写法），语义一致。props 名集合、默认值、
+ * 契约类名与 `emit`/`on*` 映射由 `scripts/check-component-contract.py` 守门。
  */
 /** MD-18-01：淡出上滑 240ms（与 theme.css 的 gmToastOut 动画时长同源） */
 const LEAVE_MS = 240;
 
 export interface GmToastProps {
-  /** 是否显示（受控） */
-  open: boolean;
+  /** 是否显示（受控），默认 false。与 Vue 侧同名同默认 —— Vue 另有 v-model:open */
+  open?: boolean;
   message?: string;
   /** 语义：success 成功 / error 失败 / warning 注意 / info 中性（默认） */
   status?: "success" | "error" | "warning" | "info";
@@ -50,7 +56,7 @@ export interface GmToastProps {
 }
 
 const GmToast = ({
-  open,
+  open = false,
   message,
   status = "info",
   duration = 2400,
@@ -73,10 +79,14 @@ const GmToast = ({
     }
   }, [open]);
 
-  /* 驻留计时内置：避免每个调用点各写一遍 setTimeout 且写错数值（MD-18-01 明确 2.4s） */
+  /* 驻留计时内置：避免每个调用点各写一遍 setTimeout 且写错数值（MD-18-01 明确 2.4s）。
+     计时器**不因缺少 onClose 而缺席** —— Vue 侧同样只要 open 且 duration>0 就起计时
+     （只 emit，不关心宿主是否监听），两侧时序才会逐毫秒一致。 */
   React.useEffect(() => {
-    if (!open || duration <= 0 || !onClose) return;
-    const t = setTimeout(onClose, duration);
+    if (!open || duration <= 0) return;
+    const t = setTimeout(() => {
+      if (onClose) onClose();
+    }, duration);
     return () => clearTimeout(t);
   }, [open, duration, onClose, message, status]);
 

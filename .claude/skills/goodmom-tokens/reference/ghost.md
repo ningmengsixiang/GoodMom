@@ -1,6 +1,6 @@
 # ⛔ 幽灵 Token 禁用清单（文档有、代码无 —— 写了就静默失效）
 
-> **这是本设计系统最贵的坑。** `01/02/03/07/10/11/12/14/15` 章里能查到的变量名共 **216 个**（形状完整），代码 Token 层真正实现的只有 **96 个** —— 差 **142 个**。
+> **这是本设计系统最贵的坑。** `01/02/03/07/10/11/12/14/15` 章里能查到的变量名共 **216 个**（形状完整），代码 Token 层真正实现的只有 **97 个** —— 差 **141 个**。
 > 写了幽灵变量，浏览器**不报错**，只是把**整条 CSS 声明丢掉**。现象是「样式没生效」：0 内边距、0 圆角、16px 默认字号、没有阴影。
 > 生成口径：从上述章节提取 `--(lg|mmh)-[a-z0-9-]+`（去尾连字符碎片），减去 `theme.css` + `base.css` + `components.css` 的 `:root`/暗色段并集。
 
@@ -11,6 +11,7 @@
 | 内边距 16 | `var(--lg-space-4)` | `padding: 16px` |
 | 页面左右留白 | `var(--lg-gutter-page)` | `padding-inline: 40px`（PC）/ `24px`（平板）/ `16px`（移动） |
 | 卡片圆角 22 | `var(--lg-radius-card)` | `border-radius: 22px` |
+| 方角按钮 18 | —（已可用） | `var(--lg-radius-btn-sm)` |
 | 正文字号 15 | `var(--lg-type-body)` | `font-size: 15px` |
 | KPI 数字 28 | `var(--lg-num-lg)` | `font-size: 28px; font-variant-numeric: tabular-nums` |
 | 毛玻璃 32 | `var(--lg-blur-32)` | `backdrop-filter: blur(32px)` |
@@ -43,10 +44,9 @@
 
 ### 3. 圆角档 —— 除两个外全缺
 
-`--lg-radius-card` `--lg-radius-card-lg` `--lg-radius-container` `--lg-radius-btn` `--lg-radius-btn-lg` `--lg-radius-btn-sm` `--lg-radius-chip` `--lg-radius-round`
+`--lg-radius-card` `--lg-radius-card-lg` `--lg-radius-container` `--lg-radius-btn` `--lg-radius-btn-lg` `--lg-radius-chip` `--lg-radius-round`
 
-存在的只有 `--lg-radius-pill:999px` 与 `--lg-radius-control:20px`。
-⚠️ `--lg-radius-btn-sm` 被 `.gm-btn--square` 引用却从未定义 —— **两包同病，方角按钮圆角实际失效**。要方角就写 `border-radius: 18px`。
+存在的有三个：`--lg-radius-pill:999px`、`--lg-radius-control:20px`、`--lg-radius-btn-sm:18px`（V2.9 补入 —— 此前 `.gm-btn--square` 引用它却两库都没定义，方角按钮圆角整条失效）。
 
 ### 4. 层级 z-index —— 全缺
 
@@ -129,9 +129,10 @@ padding: var(--lg-space-4, 16px);
 
 **默认做法是直接写字面量** —— 不要为了「语义化」制造幽灵引用。
 
-## 反向清单：代码有、文档无
+## 反向清单：代码有、文档无（含 V2.9 补入的）
 
 这些能用，但文档里查不到，不要以为是笔误：
 
-`--lg-font`（仅 Vue）· `--lg-track` · `--lg-text-on-inverse`（仅 React）· `--lg-tint-pct`（仅 React）· `--mmh-grad-rose` · `--mmh-mint-400`
+`--lg-track` · `--mmh-grad-rose` · `--mmh-mint-400` · `--lg-radius-btn-sm`（V2.9 补，与 02 · 2.4 同值）
+（`--lg-font` / `--lg-text-on-inverse` / `--lg-tint-pct` 曾只在一侧存在，V2.9 已两侧齐备）
 Arco 覆盖：`--primary-1…7` · `--success-5/6` · `--warning-6` · `--danger-6`（`theme.css` 第 33–36 行）

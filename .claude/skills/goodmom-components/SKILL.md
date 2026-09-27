@@ -70,20 +70,45 @@ description: Use when 在本仓库决定该用哪个 UI 组件、或要查某个
 - ✘ 组件内出现裸色值；✘ 自造色板。
 - ✘ `size` 类名直接叫 `.gm-btn--small` —— 必须 `--sz-*` 前缀，否则与 `.gm-btn--default` 同名同特异性，后写的规则静默吃掉类型底色。
 
-## 跨库迁移必读（同名 ≠ 等价）
+## 两库是同一套标准（V2.9 起零能力差异）
 
-| 组件 | 差异 | 影响 |
+两库各 **19 个同名组件**，**props / 事件 / 默认值 / 契约类名 / DOM / 无障碍行为完全一致** —— 这是四条机器门禁的判定结果，不是承诺：
+
+| 不变量 | 门禁 | 当前 |
 | --- | --- | --- |
-| `GmStatusTag` | React `semantic` 默认 `neutral`、**不自动推导**；Vue 默认 `undefined`、**从文案自动推导** | React 侧必须显式传 `semantic={semanticOf(label)}`，否则永远灰 |
-| `GmStatusTag` | React `size` 默认 `small` / Vue `default`；React `size="large"` 输出类 `gm-status-tag lg` 而 CSS 只有 `--large` | **React 的 `large` 实际无效**（已知缺陷） |
-| `GmCard` | React 无 `hoverable` / `bodyless` / footer 槽 | 迁移要改结构 |
-| `GmClientCard` | React `actions` prop ↔ Vue `ops` 槽 | |
-| `GmResponsiveView` / `GmVirtualList` | `onModeChange` / `onEndReached` 两库**都是 prop，不是事件** | 写 `@end-reached` 无效 |
-| 受控值 | React `value`+`onChange` ↔ Vue `v-model` | `GmCascader`、`GmRiskPicker` |
-| 事件名 | `onAction` → `@action`；`onClose` → `@close` | |
-| 样式注入 | React 入口**零 CSS import**（消费方显式引）；Vue 入口**副作用引入** | 漏引 = 无样式 |
+| props 与事件（归一化宿主惯用写法后） | `check-component-contract.py --ci` | 19/19 |
+| 默认值 · 契约类名 · 惯用写法映射的能力对等 | 同上 | 0 处不同 |
+| CSS 声明写法（共享选择器逐字节）· 暗色覆盖集合 · Token 层 | `check-style-parity.py --ci` | 233 个共享选择器、0 处不同 |
+| DOM 与无障碍（渲染级） | 两库 `playground/smoke.mjs` | 60/60 · 39/39 |
 
-完整 19 条契约见 `reference/contracts.md`；两库差异清单见 `20-前端设计规范.md` §20.6.4。
+### ✅ 唯一允许的差异：宿主语言惯用写法
+
+门禁会先把两侧**归一化到同一个规范名**再严格比对，所以"叫法不同"是被承认的，而**新漂移照旧 FAIL**：
+
+| 规则 | React 写法 | Vue 写法 | 规范名 |
+| --- | --- | --- | --- |
+| 默认内容区 | `children` | 默认插槽 | `#default` |
+| 具名区域 | prop（`ReactNode` / render 函数） | 具名插槽 | `#<name>` |
+| 受控值 | `value` + `onChange` | `v-model`（`modelValue` + `update:modelValue`） | prop `value` + 事件 `change` |
+
+名字确实不同但能力相同的少数几处由 `IDIOM` 表显式登记（并必须通过能力对等校验）：
+`GmCascader`/`GmRiskPicker` 的受控值、`GmResponsiveView` 的 `table`/`condensed`/`card`/`empty`、`GmVirtualList` 的 `renderItem`↔默认插槽 与 `stickyTop`↔`sticky` 插槽。
+
+### 写法对照（能力等价，写代码时照自己的宿主写）
+
+| 能力 | React | Vue |
+| --- | --- | --- |
+| 子内容 | `children` | 默认插槽 |
+| 具名区域（标题/头部右侧/底部/操作区） | `title` / `extra` / `footer` / `ops`（`ReactNode`） | 同名具名插槽 |
+| 受控值 | `value` + `onChange` | `v-model` |
+| 事件 | `onClick` / `onAction` / `onClose` / `onChange` | `@click` / `@action` / `@close` / `@change` |
+| 长列表行渲染 / 吸顶 | `renderItem` / `stickyTop` | 默认插槽 / `sticky` 插槽 |
+| 响应式三分支 | `table` / `condensed` / `card` / `empty` render prop | 同名具名插槽 |
+| 命令式滚动 | `ref` → `scrollToIndex(index)` | `ref` → `scrollToIndex(index)` |
+
+**⚠️ 两处 prop 是 prop、不是事件**：`GmResponsiveView.onModeChange`、`GmVirtualList.onEndReached` —— 写 `@end-reached` 无效。
+
+> **V2.9 之前**这里是一张「同名 ≠ 等价」的差异表（React 的 `GmStatusTag` 不自动推导语义、`size` 默认值两侧不同、`size="large"` 输出一个 CSS 里不存在的类名、`GmCard` 少 `hoverable`/`bodyless`、`GmResult` 容器无样式、`GmProgress` 一个基于 Arco 一个自绘……）。这些**全部已消除**，差异表随之作废。历史清单见 `20-前端设计规范.md` §20.12.3。
 
 ## 组件级硬规则
 

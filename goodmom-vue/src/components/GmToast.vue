@@ -37,8 +37,9 @@ const props = withDefaults(
     /** 无 message 时的读屏名称 */
     ariaLabel?: string;
   }>(),
-  /* 默认值集合必须与 React 侧逐项一致（契约门禁比对默认值条数与取值） */
-  { status: "info", duration: 2400 }
+  /* 默认值集合必须与 React 侧逐项一致（契约门禁比对默认值条数与取值）；
+     `open` 也为 false —— 与 React 的 `open = false` 同默认，两侧都可有可无地省略 */
+  { open: false, status: "info", duration: 2400 }
 );
 
 const emit = defineEmits<{
@@ -65,6 +66,13 @@ watch(
   () => [props.open, props.duration, props.message, props.status] as const,
   () => {
     stop();
+    /* 退场计时器也要一并清掉：否则 `open` 在退场那 240ms 内又被打开时，
+       旧计时器仍会把刚挂上的节点卸载掉（React 侧由 effect cleanup 天然避免，
+       这里必须显式做，两侧 DOM 时序才逐帧一致）。 */
+    if (leaveTimer) {
+      clearTimeout(leaveTimer);
+      leaveTimer = undefined;
+    }
     if (props.open) {
       mounted.value = true;
       leaving.value = false;

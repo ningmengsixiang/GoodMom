@@ -209,12 +209,18 @@ jobs:
           node ../scripts/app-smoke.mjs
 
   architecture-gate:
-    name: 工程架构门禁（模块边界 / 分层方向 / 状态词登记 / 色值与配方）
+    name: 工程架构门禁（模块边界 / 分层方向 / 状态词登记 / 色值与配方 / 双库契约）
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
       # 纯静态扫描，不需要 node_modules：读 import 图、模块 README、状态词字典、样式文件
       - run: python3 scripts/check-module-boundary.py
+      # 双库组件契约（props 名 / 默认值 / 契约类名 / 目录约定）。
+      # 它此前**不在 CI 里** —— 于是「同名组件在两个库对外行为不同」可以静默合入。
+      # 实测过的形态：React 的 GmStatusTag 不自动推导语义（照 Vue 的写法写就是灰标签）、
+      # React 的 size="large" 输出一个 CSS 里不存在的类名（prop 完全无效）、
+      # React 的 GmResult 渲染了 class 而库内没有对应规则。纯静态、无依赖，放本 job 最省。
+      - run: python3 scripts/check-component-contract.py --ci
 
   open-pkg-typecheck:
     name: 开源包 typecheck + build（@goodmom/ui + @goodmom/icons + @goodmom/vue）

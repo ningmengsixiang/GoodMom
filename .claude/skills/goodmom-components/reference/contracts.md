@@ -56,19 +56,19 @@
 | prop | React | Vue |
 | --- | --- | --- |
 | 内容 | `children`（必填） | `default` 槽 |
-| `semantic` | `GmSemantic`，默认 **`neutral`**（**不自动推导**） | `GmSemantic`，默认 **`undefined`**（**从文案自动推导**） |
+| `semantic` | `GmSemantic`，可选 | `GmSemantic`，可选（两侧未显式传时都按文案 `semanticOf()` 推导） |
 | `five` | `GmFive` | 同 |
 | `color` | `string`（hex 或 CSS 变量表达式） | 同 |
-| `size` | `small \| default \| large`，默认 **`small`** | 同枚举，默认 **`default`** |
+| `size` | `small \| default \| large`，默认 **`default`** | 同枚举，同默认 **`default`** |
 | `closable` | `boolean` | `boolean`，默认 `false` |
-| 关闭 | `onClose?: () => void` | `@close(ev: MouseEvent)` |
-| `closeLabel` | **无此 prop**（`aria-label` 硬编码「移除」） | `string`，默认「移除」 |
+| 关闭 | `onClose?: (ev: React.MouseEvent) => void` | `@close(ev: MouseEvent)` |
+| `closeLabel` | `string`，默认「移除」 | `string`，默认「移除」 |
 
 - **取色优先级：显式 `color` > `five` > `semantic`**；语义/五色走 `var(--lg-sem-*)` / `var(--mmh-m5-*)`
 - 视觉三通道：`color: var(--lg-sem-x)` + `background: color-mix(… 13% …)`（`semTintFill`）+ 色点同色（`semTintBorder` 固定 32%）
 - 五色分支**文字不用五色亮值**（走 `--lg-text-primary`），颜色由色点承载
 - DOM：`<span class="gm-status-dot" aria-hidden>` + 可选 `<span class="gm-sr-only">{语义名}：</span>` + 可选 `<button class="gm-status-tag__close">`
-- ⚠️ **已知缺陷**：React `size="large"` 输出类 `gm-status-tag lg`，而 CSS 只有 `.gm-status-tag--large` → **该 prop 在 React 侧无效**
+- **尺寸类名两侧同规则**：`gm-status-tag--{size}`（`small` 复用 `default` 档视觉）。历史缺陷是 React 给 `large` 挂了一个 CSS 里不存在的字面类 `lg`，导致该 prop 完全无效 —— 已修。
 - 自动取色来源：`tokens/business.ts` 的 `MAP`（**60 条**）；未登记文案 `semanticOf()` 回落 `neutral` 且**不报错**
 
 ## `GmTag`（分类 / 标记）
@@ -226,6 +226,8 @@
 | `title` | `string` | — |
 | `desc` | `string`（Vue）/ `ReactNode`（React） | — |
 | `actionText` | `string` | —（为空则不渲染按钮） |
+
+- 容器与图标规则两侧逐字节一致（`.gm-result` / `.gm-result__ic`：居中竖排 + 56px 语义色圆图标）。React 侧此前**完全没有这两条规则**（渲染了 class 却没有样式 → 结果页裸排），已补齐。
 | `onAction` / `@action` | — | — |
 | `icon` `ariaLabel` | — | — |
 
@@ -321,9 +323,19 @@
 
 | 层 | 工具 | 防的是 | 在 CI |
 | --- | --- | --- | --- |
-| CSS 解析值 | `scripts/check-style-parity.py` | 两库同名选择器解析值漂移 + 单侧独有 `.gm-*` 选择器 | ✅ |
-| props / 默认值 / 类名 | `scripts/check-component-contract.py` | API 面漂移（含默认外观相反） | ❌ 不在 CI |
+| CSS 写法 | `scripts/check-style-parity.py --ci` | 共享选择器**逐字节**一致 · 暗色覆盖集合 · **浅/暗两张 Token 表** | ✅ `docs-links` |
+| props / 默认值 / 类名 | `scripts/check-component-contract.py --ci` | API 面漂移 + 惯用写法映射的能力对等（归一化后严格比对） | ✅ `architecture-gate` |
 | 镜像 | `scripts/audit.py mirror_sync` | React 包 ↔ 应用镜像逐字节（**排除 `goodmom-vue/**`**） | ✅ |
 | 状态字典 | `scripts/check-status-map.py --ci` | 15 章 ⇄ 两库映射表 + 六语义四来源同号 | ✅ |
 
-**已登记差异 8 个**（`KNOWN_DIVERGENCE`）：`GmCard` `GmClientCard` `GmResponsiveView` `GmProgress` `GmStatusTag` `GmCascader` `GmRiskPicker` `GmVirtualList` —— 分 A 类（宿主渲染模型不同，如 render-prop ↔ 具名插槽）与 B 类（受控值写法不同，如 `value`/`onChange` ↔ `v-model`）。未登记的差异会让 `check-component-contract.py` 失败。
+**已登记差异：只剩宿主惯用写法映射**（`IDIOM` 表）。原先的 `KNOWN_DIVERGENCE` 白名单（8 个组件）已**删除** —— 它的粒度是「允许这个组件的 props 不一致」，于是整组 props 与默认值的比对被跳过，实测漏掉了 `GmStatusTag` 的 `size` 默认值不同、`size="large"` 无效、`GmCard` 少 `hoverable`/`bodyless`、`GmEmpty` 的 `title` 默认值不同等真缺陷。
+
+现在改为「**归一化宿主惯用写法 → 严格集合比对 → 能力对等校验**」：
+
+| 规则 | React | Vue | 规范名 |
+| --- | --- | --- | --- |
+| 默认内容区 | `children` | 默认插槽 | `#default` |
+| 具名区域 | prop（`ReactNode` / render 函数） | 具名插槽 | `#<name>` |
+| 受控值 | `value` + `onChange` | `v-model`（`modelValue` + `update:modelValue`） | prop `value` + 事件 `change` |
+
+`IDIOM` 里每条映射都必须通过 `capability_parity()`：映射表里写了哪一侧，那一侧就必须真有那个成员。**任何新的漂移照旧 FAIL。**

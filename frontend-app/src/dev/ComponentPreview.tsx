@@ -96,7 +96,7 @@ export default function ComponentPreview() {
           name="张敏 · 孕 28 周"
           sub="档案号 MMH-2025-0102 · 管理医生 王医生"
           tags={<GmStatusTag five="m2">黄 · 一般风险</GmStatusTag>}
-          actions={
+          ops={
             <>
               <GmButton size="small" type="primary">随访</GmButton>
               <GmButton size="small" type="outline">转诊</GmButton>

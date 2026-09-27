@@ -84,9 +84,9 @@
 | 基座 | Arco（peer `^2.60.0`），仅 `GmProgress` 实际用到；逃生口 `ArcoButton` | **零基座** |
 | 样式注入 | 入口**零 CSS import**，消费方显式引 `theme.css`（应用侧镜像 `gm.css`） | 入口**副作用**引 `src/styles/index.css`；`exports["./style.css"]` |
 | 构建 | `tsc` | `vite build && vue-tsc --emitDeclarationOnly` |
-| 独有 | `GmProgress` 基于 Arco；`GmStatusTag` 有 `onClose`、有 `data-semantic` | `GmCard` 多 `hoverable`/`bodyless`/footer 槽；`GmStatusTag` 有 `closeLabel` + DOM 文本校正；`GmVirtualList` 暴露 `scrollToIndex` |
+| 独有 | `ArcoButton` 逃生口（`GmProgress` 已改为与 Vue 同构的自绘实现） | —（能力面已对齐，仅写法不同） |
 
-**已登记差异（8 个组件）**，见 `reference/contracts.md` 与 `scripts/check-component-contract.py` 的 `KNOWN_DIVERGENCE`。
+**V2.9 起两库零能力差异**：props/事件/默认值/契约类名/DOM/无障碍行为全部一致；只有**宿主语言惯用写法**（`children`↔默认插槽、具名 prop↔具名插槽、`value`+`onChange`↔`v-model`）由 `IDIOM` 表显式登记并通过能力对等校验。逐条见 `reference/contracts.md`。
 
 ## 5. 选型决策树
 
