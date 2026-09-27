@@ -32,6 +32,17 @@
 
 > ⚠️ `gate-negative-tests.py` 会**临时改写仓库文件**（随后还原）—— 运行前保证工作区干净。
 
+### 两处「带理由的登记表」（新增值之前先登记）
+
+| 登记表 | 在哪 | 管什么 |
+| --- | --- | --- |
+| `ALLOWED` / `PAGE_ALIAS` | `scripts/audit.py` | 站点样式里允许出现的 hex（严格层 vs 页面档）。新颜色不进表 → `color-css`/`color-html` 直接拦 |
+| `REGISTERED`（断点） | `scripts/audit.py` 的 `breakpoint_reg()` | 规范四档之外的**已裁决**宽度（900/1200/560/520/480/420），每条写明它解决什么；登记外的新宽度照旧 WARN |
+| `IDIOM` / `BASE_EQUIVALENT` | `check-component-contract.py` / 两库 `playground/smoke.mjs` | 宿主惯用写法映射 / 与基态等价的档位类 —— 都必须写明理由 |
+
+> **V2.9 起 `audit.py` 通篇 OK、零 WARN 零 FAIL**。这份干净是刻意的：新漂移立刻可见，
+> 别用"它本来就有 WARN"当借口往里面加新的。
+
 ## B1–B10（实际 10 条，文档常写 B1–B9）
 
 | 规则 | 检查什么 | 违反后果 |

@@ -31,7 +31,7 @@
 
 适用：妈妈/家庭 App（孕期首页、生长曲线、疫苗计划、儿保体检）、机构运营端、医护随访工作台与数据大屏。品牌定义见 [12](12-妈咪好品牌与设计语言.md)，妇幼领域组件见 [13](13-妇幼领域组件规范.md)；01–11 为通用视觉引擎文档。
 
-**交付统计（V2.9）**：21 份规范文档（00–20，含 **20 前端设计规范**） · 98 项组件（00 总目录）· 77 枚自绘图标（icons/lg-icons.svg）· 60 条状态文案（`docs/coverage-report.md`）· 4 套可交互预览（首页 / 移动端 / 示例中心 6 页 / 新增能力示例）· **产品矩阵 7 页（1 个 6 大产品对接首页 + 6 个工作台首页，由 `prd/zong.md` 生成；入口在顶部导航「产品矩阵」下拉菜单）** · **6 个独立产品页（`fuyouaicansai/p01…p06`，每页 4 视图：工作台 / 档案 / AI 协同 / 详情，单文件可直接打开）** · **2 个开源组件库（`@goodmom/ui` React + Arco 16 模块 · `@goodmom/vue` Vue 3 零基座 19 组件）** + 前端参考（frontend-app）· **1 套前端开发规范技能族（1 入口 + 5 子技能 + 7 份 reference）**
+**交付统计（V2.9）**：21 份规范文档（00–20，含 **20 前端设计规范**） · 98 项组件（00 总目录）· 77 枚自绘图标（icons/lg-icons.svg）· 60 条状态文案（`docs/coverage-report.md`）· 4 套可交互预览（首页 / 移动端 / 示例中心 6 页 / 新增能力示例）· **产品矩阵 7 页（1 个 6 大产品对接首页 + 6 个工作台首页，由 `prd/zong.md` 生成；入口在顶部导航「产品矩阵」下拉菜单）** · **6 个独立产品页（`fuyouaicansai/p01…p06`，每页 4 视图：工作台 / 档案 / AI 协同 / 详情，单文件可直接打开）** · **2 个开源组件库（`@goodmom/ui` React + Arco 16 模块 · `@goodmom/vue` Vue 3 零基座 19 组件）** + 前端参考（frontend-app）· **1 套前端开发规范技能族（1 入口 + 6 子技能 + 7 份 reference）**
 
 **体系架构**
 
@@ -146,7 +146,7 @@
 | `frontend-app/packages/gm-arco-ui/` | `@goodmom/gm-arco-ui` 封装层：GmButton / GmStatusTag / 主题 CSS | 骨架完成，待依赖构建验证 |
 | `goodmom-ui/` | **妈咪好开源组件库 @goodmom/ui**（Arco 基底 + GoodMom 封装）：**19 个 `Gm*` 组件**（含 GmLink/GmCascader/GmResponsiveView/GmVirtualList/GmRiskPicker/GmClientCard）/主题/语义字典 + LICENSE/NOTICE | 独立开源子库，待联网构建 |
 | `goodmom-vue/` | **Vue 3 组件库 @goodmom/vue**（**零基座自研 SFC**，无任何第三方 UI 依赖）：**19 个组件** + Token + 业务状态字典 + `.d.ts` 类型 + 单一 `style.css`；含 `playground/` 真机验收台与 Playwright 冒烟 | ✅ 构建/类型/冒烟全通过 |
-| `.claude/skills/` | **前端开发规范技能族**：入口 `goodmom-frontend`（15 条红线 + 路由 + 验收）+ 5 个子技能 `goodmom-tokens` / `goodmom-components` / `goodmom-status` / `goodmom-layout` / `goodmom-motion-a11y` + 7 份 reference（可用 Token 全表 / 幽灵 Token 禁用清单 / 组件契约 / 状态词库 / 页面范式 / 门禁矩阵） | ✅ 现行 |
+| `.claude/skills/` | **前端开发规范技能族**：入口 `goodmom-frontend`（15 条红线 + 三消费面路由 + 验收）+ 6 个子技能 `goodmom-tokens` / `goodmom-components` / `goodmom-status` / `goodmom-layout` / `goodmom-motion-a11y` / **`goodmom-site`**（站点与独立产品页：生成流水线 · 禁手改产物 · 片段新鲜度 · 颜色/断点登记表 · 暗色档缺口）+ 7 份 reference（可用 Token 全表 / 幽灵 Token 禁用清单 / 组件契约 / 状态词库 / 页面范式 / 门禁矩阵） | ✅ 现行 |
 | `goodmom-icons/` | **图标子包 @goodmom/icons**：77 枚自绘线性图标（registry.ts 编译产物） | 源码就绪，联网构建 |
 
 ### Vue 3 快速开始

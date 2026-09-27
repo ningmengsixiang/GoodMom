@@ -81,7 +81,7 @@ description: Use when 在本仓库决定该用哪个 UI 组件、或要查某个
 | 每个输出的 class 都有对应 CSS 规则（无孤儿类名） | 两库 `playground/smoke.mjs` | 全绿 |
 | 默认值 · 契约类名 · 惯用写法映射的能力对等 | 同上 | 0 处不同 |
 | CSS 声明写法（共享选择器逐字节）· 暗色覆盖集合 · Token 层 | `check-style-parity.py --ci` | 233 个共享选择器、0 处不同 |
-| DOM 与无障碍（渲染级） | 两库 `playground/smoke.mjs` | 60/60 · 39/39 |
+| DOM 与无障碍（渲染级） | 两库 `playground/smoke.mjs` | **61/61 · 40/40** |
 
 ### ✅ 唯一允许的差异：宿主语言惯用写法
 

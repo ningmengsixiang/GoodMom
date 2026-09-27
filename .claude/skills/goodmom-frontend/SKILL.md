@@ -1,9 +1,17 @@
 ---
 name: goodmom-frontend
-description: Use when 在本仓库（妈咪好 GoodMom 设计系统）写或改任何前端代码 —— React 页面组件（frontend-app / @goodmom/ui / gm-arco-ui）、Vue 3 页面组件（@goodmom/vue）、站点与独立产品页的样式。触发词：新建页面/写个组件/这个颜色不对/按钮样式/状态标签/暗色模式/表单/表格/列表/弹窗/移动端适配/无障碍/对比度/对不上设计稿/加个卡片/图表配色/改 Token/换主题。也用于评审前端实现是否符合规范、以及判断某个 CSS 变量或组件到底能不能用。
+description: Use when 在本仓库（妈咪好 GoodMom 设计系统）写或改任何前端代码 —— React 页面组件（frontend-app / @goodmom/ui / gm-arco-ui）、Vue 3 页面组件（@goodmom/vue）、站点与独立产品页（site/index.html、site/fragments、gen-*.py、fuyouaicansai/、preview/）。触发词：新建页面/写个组件/这个颜色不对/按钮样式/状态标签/暗色模式/表单/表格/列表/弹窗/移动端适配/无障碍/对比度/对不上设计稿/加个卡片/图表配色/改 Token/换主题。也用于评审前端实现是否符合规范、以及判断某个 CSS 变量或组件到底能不能用。
 ---
 
 # 妈咪好前端开发规范（入口）
+
+## 三个消费面（先认脸，再决定读哪个技能）
+
+| 消费面 | 技术栈 | 读哪个 |
+| --- | --- | --- |
+| React 库与应用（`@goodmom/ui` / `frontend-app`） | React 18 + TS + Arco | 本技能 + `goodmom-tokens` / `goodmom-components` / `goodmom-status` / `goodmom-layout` / `goodmom-motion-a11y` |
+| Vue 库（`@goodmom/vue`） | Vue 3 零基座 | 同上（两库已零能力差异，写法对照见 `goodmom-components`） |
+| **站点与独立产品页**（`site/`、`fuyouaicansai/`） | 原生 HTML/CSS，**由脚本生成** | **`goodmom-site`**（有独立的生成流水线与门禁） |
 
 ## 唯一事实来源
 
@@ -20,7 +28,7 @@ description: Use when 在本仓库（妈咪好 GoodMom 设计系统）写或改�
 
 | # | 红线 | 为什么 |
 | --- | --- | --- |
-| **R1** | **只写代码已定义的变量**。用之前先查 `reference/tokens.md` 的可用清单；查不到就**写字面量**，不要写 `var()` | 幽灵 Token 会让**整条声明被静默丢弃** —— 不报错，只是 0 内边距 / 0 圆角 / 默认字号 |
+| **R1** | **只写代码已定义的变量**。用之前先查 `goodmom-tokens` 的 `reference/available.md` 可用清单；查不到就**写字面量**，不要写 `var()` | 幽灵 Token 会让**整条声明被静默丢弃** —— 不报错，只是 0 内边距 / 0 圆角 / 默认字号 |
 | **R2** | 语义色只能来自 `SEMANTIC_COLOR` / `--lg-sem-*`；**业务代码禁裸 hex**、禁自造色板 | 暗色档与换肤会失效；改色要全仓找 |
 | **R3** | 业务状态用 `<GmStatusTag>`，由组件查 15 章词库定色；**禁止页面自选 semantic、禁手写 statusMap** | 各页各色即失控 |
 | **R4** | 新业务状态文案必须**四处一次改齐**：15 章 + `goodmom-ui/src/tokens/business.ts` + 应用镜像 + `goodmom-vue/src/tokens/business.ts` | 漏登记**静默**回落灰色（线上「高危显示成灰」），不报错 |
@@ -31,7 +39,7 @@ description: Use when 在本仓库（妈咪好 GoodMom 设计系统）写或改�
 | **R9** | 加粗/强调**不得改 `border-width`**，用 `box-shadow` / `outline` | 会让 44×44 触控目标实测尺寸抖动 1px |
 | **R10** | 动效尊重 `prefers-reduced-motion`（React 侧已全局兜底，**Vue 侧只有组件白名单**，自写动画必须自己加） | 无障碍 |
 | **R11** | 组件内不得出现裸色值；不得改 `Gm*` 组件的视觉（覆写颜色/圆角/阴影） | 要改就改组件库 + 同步两个包 + 02/03 章 |
-| **R12** | **禁用「文档有、代码无」的 Token**：`--lg-space-*`、`--lg-type-*`、`--lg-num-*`、`--lg-weight-*`、`--lg-radius-card`、`--lg-radius-btn`、`--lg-radius-btn-lg`（`--lg-radius-btn-sm` 已补，可用）、`--lg-z-*`、`--lg-blur-*`、`--lg-opacity-*`、`--lg-glow-*`、`--lg-grad-*`、`--lg-purple/cyan/blue/pink/peach-*`、`--lg-m-*`、`--lg-dur-*`、`--lg-ease-standard/-emphasized`、`--mmh-peach-*`、`--mmh-grad-signature`、`--lg-font-sans` 全部**零实现**。间距/字号/圆角/模糊直接写字面量（档位见 `reference/tokens.md`）。若确需幽灵变量，只能写成 `var(--幽灵, 兜底值)` 并注释说明 | 这是本系统**第一号静默失败源**。照 02 章写 CSS 会得到一片「没生效」 |
+| **R12** | **禁用「文档有、代码无」的 Token**：`--lg-space-*`、`--lg-type-*`、`--lg-num-*`、`--lg-weight-*`、`--lg-radius-card`、`--lg-radius-btn`、`--lg-radius-btn-lg`（`--lg-radius-btn-sm` 已补，可用）、`--lg-z-*`、`--lg-blur-*`、`--lg-opacity-*`、`--lg-glow-*`、`--lg-grad-*`、`--lg-purple/cyan/blue/pink/peach-*`、`--lg-m-*`、`--lg-dur-*`、`--lg-ease-standard/-emphasized`、`--mmh-peach-*`、`--mmh-grad-signature`、`--lg-font-sans` 全部**零实现**。间距/字号/圆角/模糊直接写字面量（档位见 `goodmom-tokens` 的 `reference/available.md`）。若确需幽灵变量，只能写成 `var(--幽灵, 兜底值)` 并注释说明 | 这是本系统**第一号静默失败源**。照 02 章写 CSS 会得到一片「没生效」 |
 | **R13** | 主行动按钮：底 `--mmh-grad-action-hc`（品牌粉**上半段**）+ 字 `--lg-text-on-accent`（深字）；**亮粉底禁白字**（2.46–2.9:1 不达 AA）；**不套玻璃白描边/白内高光** | D9 裁决 |
 | **R14** | **禁纯黑 `#000000`、禁纯白 `#FFFFFF`**（底色 `#1B1A21`/`#23222A`，文字 `#F3EFEC`）；**禁 3px 以上常规描边** | 02 · 2.1.9 / 2.7.1 |
 | **R15** | 同页同一份数据按**容器宽度**切形态 → 用 `GmResponsiveView`；**不得**用视口断点 | 同一页多容器宽度不同，用视口断点必然有一个错 |
@@ -40,7 +48,7 @@ description: Use when 在本仓库（妈咪好 GoodMom 设计系统）写或改�
 
 1. **查技能**：按下表路由，先读对应子技能的 SKILL.md（**不要一次全读**）。
 2. **查组件**：先在组件库找现成的（`@goodmom/ui` / `@goodmom/vue`）；有则用，没有才自建，并先判断是否该提为组件库组件。
-3. **查 Token**：需要数值先查 `reference/tokens.md`。**找不到档位 → 提问或写字面量，不要臆造 `var()`。**
+3. **查 Token**：需要数值先查 `goodmom-tokens` 的 `reference/available.md`（幽灵清单见 `reference/ghost.md`）。**找不到档位 → 提问或写字面量，不要臆造 `var()`。**
 4. **定状态**：列出该界面所有业务状态文案，逐个核对是否已登记（R4）。React 侧 `GmStatusTag` **不会**自动推导语义，必须显式传。
 5. **写结构**：语义化标签 + 组件；交互可达性一次写对（R6/R7/R8）。
 6. **写样式**：只用可用变量或字面量档位；暗色模式**不写任何专属规则**；响应式走 `GmResponsiveView` 或 `useMediaQuery`。
@@ -55,6 +63,7 @@ description: Use when 在本仓库（妈咪好 GoodMom 设计系统）写或改�
 | 状态标签、状态文案、语义色、妊娠风险五色 | `goodmom-status` |
 | 页面骨架、栅格、响应式、移动端、列表/表单/详情范式 | `goodmom-layout` |
 | 动效时长/曲线、hover/focus/loading、无障碍、对比度 | `goodmom-motion-a11y` |
+| **站点 / 独立产品页**（`site/index.html`、`site/fragments/*`、`gen-*.py`、`fuyouaicansai/*`、`preview/*`） | **`goodmom-site`** |
 | 改完要跑哪些命令、门禁失败怎么定位 | `reference/verification.md` |
 | 工程目录、模块边界 B1–B10、命名、复用抽象 | `19-工程架构与组件复用规范.md` |
 
