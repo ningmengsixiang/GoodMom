@@ -162,7 +162,7 @@ Figma:    LG / Color / Purple / 500
 | `--lg-text-placeholder` | `rgba(88,98,115,0.5)` | `rgba(255,255,255,0.42)` | 仅占位符，不接受为正文 |
 | `--lg-text-disabled` | `rgba(88,98,115,0.4)` | `rgba(255,255,255,0.34)` | — |
 | `--lg-divider` | `rgba(58,52,84,0.10)` | `rgba(255,255,255,0.10)` | 暗色分隔线用白，不用黑 |
-| `--lg-link` | `#B23A63` | `#FFC4D6` | 11.61:1（03 · 3.10） |
+| `--lg-link` | `#A9315B` | `#FFC4D6` | 与品牌文字档同值（D34） |
 | 主行动底（`--mmh-grad-action-hc`） | Rose-300→Rose-500 | **不变** | 品牌亮粉底在暗色下更突出 |
 | `--lg-text-on-accent` | `#343A46`（亮粉底深字） | `#1B1A21` | 7.00:1（Rose-500 端）～11.61:1（Rose-300 端） |
 | `--lg-glass-panel` | `rgba(255,255,255,0.14)` | `rgba(255,255,255,0.06)` | — |
@@ -473,7 +473,7 @@ CSS：
   --mmh-solid-positive:#1E6B52; --mmh-solid-attention:#9A5A0E; --mmh-solid-danger:#B04052;
   --mmh-solid-info:#385CB3; --mmh-solid-special:#6242B8;
   --lg-divider: rgba(58, 52, 84, .10);
-  --lg-link: #B23A63;                 /* 链接默认色（03 · 3.10）；暗色 #FFC4D6 */
+  --lg-link: #A9315B;                 /* 链接默认色（03 · 3.10）；暗色 #FFC4D6。D34：与品牌文字档同值 */
 
   /* ── 颜色：强调 ─────────────────────────── */
   --lg-purple-600: #8066F0; --lg-purple-500: #9A78FF; --lg-purple-300: #B69AFF;
@@ -605,7 +605,8 @@ CSS：
 ```css
 :root{
   /* 蜜桃粉（品牌主色系） */
-  --mmh-rose-700:#B23A63; --mmh-rose-600:#E85D8F; --mmh-rose-500:#F77FA3;
+  --mmh-rose-700:#A9315B; --mmh-rose-600:#E85D8F; --mmh-rose-500:#F77FA3;
+  /* D34：rose-700 是「品牌文字档」，实测需在暖底上 ≥4.5:1；原 #B23A63 仅 4.13:1，已加深 */
   --mmh-rose-400:#FFA3BE; --mmh-rose-300:#FFC4D6; --mmh-rose-200:#FFDEE8;
   --mmh-rose-100:#FFF0F4;
   /* 蜜杏氛围 */
@@ -662,7 +663,7 @@ CSS：
 | 数据色序 1→8 | Rose500 → Peach400 → Purple300 → Mint500 → Rose300 → Purple500 → Mint300 → Slate300（12.3.3） |
 | 环境光斑 | 蜜桃粉 0.18 + 淡紫 0.14（粉主紫辅） |
 | 玻璃折射染色 | `--mmh-rose-200` @ 0.05 |
-| 白字对比底 | `--mmh-rose-700` 或渐变深端（≥13px/600） |
+| 白字对比底 | `--mmh-rose-700`（`#A9315B`，白字 6.41:1）或渐变深端（≥13px/600） |
 
 > 医护工作台可切「冷静模式」：主行动用深玫 700 或低饱和中性渐变，环境光减半，避免粉色分散专注（机制与切换只改 Token，不改结构，见 12.3.2）。
 

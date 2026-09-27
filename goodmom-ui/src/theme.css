@@ -36,7 +36,12 @@
   --warning-6:#EFAF55; --danger-6:#E25B72;
 
   /* —— 品牌原色档（02 · 2.1 / 2.9）—— */
-  --mmh-rose-700:#B23A63; --mmh-rose-600:#E85D8F; --mmh-rose-500:#F77FA3;
+  /* D34（V2.9）：品牌深玫「文字档」由 #B23A63 加深为 #A9315B。
+     原值按「白字压其上 5.71:1」选定（D7），但作为**落在暖底上的文字色**实测：
+     页面底 4.13:1 ✗ / 玻璃卡合成面 4.48:1 ✗ / 近白面 5.04:1 ✓ —— 两处最常用承载面都不达 AA。
+     加深后：页面底 4.64 / 玻璃卡 5.03 / 近白面 5.65 / 白字压其上 6.41，**两个方向同时改善**。
+     取值方法沿用 D9 的单点改动：在 F77FA3→B23A63 这条品牌同族 RGB 连线上向深端延长 13%。 */
+  --mmh-rose-700:#A9315B; --mmh-rose-600:#E85D8F; --mmh-rose-500:#F77FA3;
   --mmh-rose-400:#FFA3BE; --mmh-rose-300:#FFC4D6; --mmh-rose-200:#FFDEE8; --mmh-rose-100:#FFF0F4;
   --mmh-mint-600:#4FB59C; --mmh-mint-500:#6FC9B4; --mmh-mint-400:#7FD8C2;
   --mmh-mint-300:#A9E3D4; --mmh-mint-100:#E2F6F0;
@@ -381,7 +386,8 @@
      浅色档是**长度**、暗色档是**颜色** —— 任何 `border:var(--lg-border-hairline) solid …`
      在暗色下必然失效。现拆成两个类型明确的变量。 */
   --lg-border-hairline:1px; --lg-divider-hairline:rgba(58,52,84,.10);
-  --lg-link:#B23A63; --lg-link-hover:#9E3054;
+  /* 链接＝文字，与品牌文字档同值（D34）；hover 用同族更深一档（5.06:1） */
+  --lg-link:#A9315B; --lg-link-hover:#9E3054;
   --lg-glass-panel:rgba(255,255,255,.14); --lg-glass-card:rgba(255,255,255,.22);
   --lg-glass-control:rgba(255,255,255,.35); --lg-glass-popover:rgba(255,255,255,.60);
   --lg-border-white-70:rgba(255,255,255,.70); --lg-border-white-75:rgba(255,255,255,.75);

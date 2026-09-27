@@ -1,9 +1,8 @@
 # ✅ 可用 Token 全表（代码已定义，共 97 个）
 
 > 来源：`goodmom-ui/src/theme.css`（浅/暗）+ `goodmom-vue/src/styles/base.css`（Vue 侧 Token 层）。
-> **V2.9 起两张表逐项相同**（由 `scripts/check-style-parity.py` 的严格不变量守门：
-> 浅色与暗色两张表都必须两侧同名同值）。前端能用的变量就是这张表，表外一律不许写进 `var()` —— 见 `ghost.md`。
-> 暗色列显示 `—` 表示该变量在暗色档**不重新声明**（沿用浅色值）。
+> **V2.9 起两张表逐项相同**（由 `scripts/check-style-parity.py` 的严格不变量守门：浅色与暗色两张表都必须两侧同名同值）。
+> 前端能用的变量就是这张表，表外一律不许写进 `var()` —— 见 `ghost.md`。暗色列 `—` 表示暗色档不重新声明（沿用浅色值）。
 
 ### 品牌色阶
 
@@ -23,7 +22,7 @@
 | `--mmh-rose-400` | `#FFA3BE` | — |
 | `--mmh-rose-500` | `#F77FA3` | `#F77FA3` |
 | `--mmh-rose-600` | `#E85D8F` | `#FF8FAE` |
-| `--mmh-rose-700` | `#B23A63` | `#FF9AB6` |
+| `--mmh-rose-700` | `#A9315B` | `#FF9AB6` |
 | `--mmh-warning` | `#F2B25C` | — |
 
 ### 品牌渐变与实底档
@@ -79,7 +78,7 @@
 | --- | --- | --- |
 | `--lg-divider` | `rgba(58,52,84,.10)` | `rgba(255,255,255,.10)` |
 | `--lg-divider-hairline` | `rgba(58,52,84,.10)` | `rgba(255,255,255,.10)` |
-| `--lg-link` | `#B23A63` | `#FFC4D6` |
+| `--lg-link` | `#A9315B` | `#FFC4D6` |
 | `--lg-link-hover` | `#9E3054` | `#FFA9C2` |
 
 ### 语义层：玻璃与描边
@@ -171,6 +170,7 @@
 | `--success-5` | `#6FC9B4` | — |
 | `--success-6` | `#4FB59C` | — |
 | `--warning-6` | `#EFAF55` | — |
+
 
 ---
 
