@@ -11,7 +11,7 @@
 
 <p align="center">
   <img alt="版本" src="https://img.shields.io/badge/version-2.9-ff9ab6?style=flat-square">
-  <img alt="文档" src="https://img.shields.io/badge/规范文档-20-6fc9b4?style=flat-square">
+  <img alt="文档" src="https://img.shields.io/badge/规范文档-21-6fc9b4?style=flat-square">
   <img alt="组件" src="https://img.shields.io/badge/组件-98-9a78ff?style=flat-square">
   <img alt="图标" src="https://img.shields.io/badge/图标-77-ffc3a0?style=flat-square">
   <img alt="示例" src="https://img.shields.io/badge/示例页面-6-e85d8f?style=flat-square">
@@ -31,7 +31,11 @@
 
 适用：妈妈/家庭 App（孕期首页、生长曲线、疫苗计划、儿保体检）、机构运营端、医护随访工作台与数据大屏。品牌定义见 [12](12-妈咪好品牌与设计语言.md)，妇幼领域组件见 [13](13-妇幼领域组件规范.md)；01–11 为通用视觉引擎文档。
 
-**交付统计（V2.9）**：21 份规范文档（00–20，含 **20 前端设计规范**） · 98 项组件（00 总目录）· 77 枚自绘图标（icons/lg-icons.svg）· 60 条状态文案（`docs/coverage-report.md`）· 4 套可交互预览（首页 / 移动端 / 示例中心 6 页 / 新增能力示例）· **产品矩阵 7 页（1 个 6 大产品对接首页 + 6 个工作台首页，由 `prd/zong.md` 生成；入口在顶部导航「产品矩阵」下拉菜单）** · **6 个独立产品页（`fuyouaicansai/p01…p06`，每页 4 视图：工作台 / 档案 / AI 协同 / 详情，单文件可直接打开）** · **2 个开源组件库（`@goodmom/ui` React + Arco 16 模块 · `@goodmom/vue` Vue 3 零基座 19 组件）** + 前端参考（frontend-app）· **1 套前端开发规范技能族（1 入口 + 6 子技能 + 7 份 reference）**
+**交付统计（V2.9）**：21 份规范文档（00–20，含 **20 前端设计规范**） · 98 项组件
+<!-- facts: docs=21; icons=77; gates=29; negcases=81 -->
+<!-- 上一行是**机器可读基线**：`audit.py report-facts` 会拿实测值逐项比对
+     （编号文档份数 / 图标数 / audit 门禁数 / 负向测试条数）。此前 README 徽章
+     一直写着「规范文档-20」，与实际 21 份对不上却没人发现 —— 数字只有进了门禁才不会烂。 -->（00 总目录）· 77 枚自绘图标（icons/lg-icons.svg）· 60 条状态文案（`docs/coverage-report.md`）· 4 套可交互预览（首页 / 移动端 / 示例中心 6 页 / 新增能力示例）· **产品矩阵 7 页（1 个 6 大产品对接首页 + 6 个工作台首页，由 `prd/zong.md` 生成；入口在顶部导航「产品矩阵」下拉菜单）** · **6 个独立产品页（`fuyouaicansai/p01…p06`，每页 4 视图：工作台 / 档案 / AI 协同 / 详情，单文件可直接打开）** · **2 个开源组件库（`@goodmom/ui` React + Arco 16 模块 · `@goodmom/vue` Vue 3 零基座 19 组件）** + 前端参考（frontend-app）· **1 套前端开发规范技能族（1 入口 + 6 子技能 + 7 份 reference）**
 
 **体系架构**
 

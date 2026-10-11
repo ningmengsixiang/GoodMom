@@ -37,7 +37,11 @@ storybook-static
 .npm-cache/
 
 # Vue 验收台构建缓存
-playground/.vite/
+# ⚠️ 必须写成 `**/playground/.vite/`：只写 `playground/.vite/` 会被 Git 当成**锚定到本目录**
+# 的规则（模式里含中间斜杠时不再跨层匹配），于是只有根目录的 playground 被忽略，
+# 而 `goodmom-vue/playground/.vite/` 照旧被追踪 —— 历史上有 4 个 Vite 预打包缓存文件
+# 因此入库。它们每次跑 `vite` 都会重写，工作树永远脏，CI 的 delivery-integrity 会红。
+**/playground/.vite/
 .goodmom-vue-cache/
 goodmom-vue/playground/smoke-*.png
 

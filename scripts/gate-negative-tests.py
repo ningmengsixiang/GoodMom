@@ -255,6 +255,31 @@ CASES = [
      "  --lg-sem-positive:#25715D; --lg-sem-info:#3261C1; --lg-sem-attention:#8D5A15;\n", "",
      "无兜底引用却从未定义"),
 
+    # ── spec（规范阅读器完整性与来源对齐）────────────────────────────────
+    # 本门禁长期**没有负向测试**，于是"已经空转"这件事本身不可见 —— 而它确实是坏的：它用固定 40 万字符
+    # 窗口统计章节数，窗口跨进相邻的 site-manual 模块，报告里的章节数会在 23/22 之间
+    # 随 index.html 的字节偏移漂移。现在数量改为与【源文件清单】对齐，且窗口按真实
+    # 模块边界切；下面三条分别压"少章 / 锚点被改写 / 阅读器开关丢失"。
+    ("spec/规范模块少了一章（README 章节被漏掉）", "spec", "site/index.html",
+     '<section class="chap" id="site-spec--ch-readme">', '', "章节"),
+    ("spec/章还在但锚点被改写（导航指不过去）", "spec", "site/index.html",
+     'id="site-spec--ch-13"', 'id="site-spec--ch-13x"', "缺锚点"),
+    ("spec/阅读器开关丢失（gen-spec 曾丢过整段脚本）", "spec", "site/index.html",
+     '<button class="readtoggle" id="site-spec--modeBtn" type="button">', '', "阅读器"),
+
+    # ── report-facts（报告/技能文档里的数字与实测对齐）────────────────────
+    # 三处都写错过：18 章报告写「20 份规范文档」（实际 21）、
+    # 写「双包镜像 theme.css 除外」（该例外早已被删）；README 徽章至今写着
+    # 「规范文档-20」；技能文档写「audit 28 条 / 负向测试 75 条」。
+    # 都没有门禁看守，所以错了也没人知道。现在换成机器可读串 + 逐项比对。
+    ("facts/报告里的规范份数回退到旧值", "report-facts", "18-视觉规范审计报告.md",
+     "docs=21;", "docs=20;", "与实际脱节"),
+    ("facts/技能文档的门禁条数没跟上", "report-facts",
+     ".claude/skills/goodmom-frontend/reference/verification.md",
+     "gates=29;", "gates=28;", "与实际脱节"),
+    ("facts/事实串被整段删掉（等于取消这项比对）", "report-facts", "README.md",
+     "<!-- facts:", "<!-- 无事实串:", "没有 facts 标记"),
+
     # ── css-syntax ──────────────────────────────────────────────────────
     ("css/注释不闭合", "css-syntax", "site/fragments/preview-patterns.html",
      "<!--@css-->\n", "<!--@css-->\n/* 未闭合的注释\n", "注释不闭合"),

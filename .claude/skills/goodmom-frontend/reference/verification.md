@@ -2,16 +2,20 @@
 
 > 所有脚本都假定**在仓库根**执行（脚本内部 `os.chdir(ROOT)`）。
 > 例外：`frontend-app` 相关命令要在 `frontend-app/` 下跑（CI 用 `working-directory`）。
+>
+> `<!-- facts: docs=21; icons=77; gates=29; negcases=81 -->`
+> 上一行是**机器可读基线**：`audit.py report-facts` 会拿实测值逐项比对。
+> 本表里的条数（`audit.py` 29 条 / 负向测试 81 条）此前写成 28 / 75，与实际脱节却无人发现。
 
 ## 门禁一览
 
 | 脚本 | 作用 | 命令 | 阈值 | CI |
 | --- | --- | --- | --- | --- |
 | `check-module-boundary.py` | **架构门禁 B1–B10**：模块边界 / 分层方向 / 状态词登记 / 裸 hex / 内联玻璃配方 / CSS 变量可解析 | `python3 scripts/check-module-boundary.py`（`--only B6` 单跑一条） | `problems` 为空 | ✅ `architecture-gate` |
-| `audit.py` | 全自动规范审计 **28 条**：链接 / 章节连续 / 图标 / 色彩 / hex 大小写 / 双包镜像 / 暗色对比度 / 导出 / CSS 语法 / 反馈族 / 生长曲线族 / `undefined-token` / `tint-base` / `bg-origin` / `btn-radius` … | `python3 scripts/audit.py`（`--only <名>`、`--strict`） | 任一硬 FAIL → 退出 1 | ✅ `docs-links` |
+| `audit.py` | 全自动规范审计 **29 条**：链接 / 章节连续 / 图标 / 色彩 / hex 大小写 / 双包镜像 / 暗色对比度 / 导出 / CSS 语法 / 反馈族 / 生长曲线族 / `undefined-token` / `tint-base` / `bg-origin` / `btn-radius` / `report-facts`（报告数字对账）… | `python3 scripts/audit.py`（`--only <名>`、`--strict`） | 任一硬 FAIL → 退出 1 | ✅ `docs-links` |
 | `check-status-map.py` | 15 章 ⇄ 两库状态映射表一致 + 六语义色四来源同号 | `python3 scripts/check-status-map.py --ci` | ERROR = 0 | ✅ |
 | `check-style-parity.py` | 双库**同名选择器解析值**一致（仅浅色档声明值） | `python3 scripts/check-style-parity.py --ci` | `problems` = 0 | ✅ |
-| `check-component-contract.py` | 双库 props / 默认值 / 契约类名 | `python3 scripts/check-component-contract.py` | **未登记**差异 = 0（已登记 8 个） | ❌ **不在 CI** |
+| `check-component-contract.py` | 双库 props / 默认值 / 契约类名 | `python3 scripts/check-component-contract.py --ci` | **未登记**差异 = 0（已登记 8 个） | ✅ `architecture-gate` |
 | `check-md-links.py` | Markdown 内链（递归全仓含 `docs/**`） | `python3 scripts/check-md-links.py` | 失效链接 = 0 | ✅ |
 | `check-version.py` | 版本一致性（唯一源 `VERSION`，**10 个载体**） | `python3 scripts/check-version.py --ci` | 不一致 = 0 | ✅ |
 | `check-anchors.py` | 站点锚点完整性（畸形 href / 悬空锚点） | `python3 scripts/check-anchors.py` | `fail = 0` | ✅ |
@@ -24,7 +28,7 @@
 | `site-smoke.mjs` / `mobile-smoke.mjs` / `products-smoke.mjs` / `product-apps-smoke.mjs` | 站点首页 / 移动端模块 / 产品矩阵 / 6 个独立产品页 | 起静态服务（5288）后分别跑 | 断言全绿 | ✅ |
 | `site-parity.mjs` | 合并保真度（对齐 `site/.baseline/`，8 个已入库页面） | 同上 | 只允许 `INTENTIONAL` 差集 | ✅ |
 | `patterns-smoke.cjs` | 示例页渲染回归（`file://` 直开） | `node scripts/patterns-smoke.cjs` | 42 条断言 | ❌ 不在 CI |
-| `gate-negative-tests.py` | 门禁负向测试 **75 条**（覆盖 audit 的 12 条门禁 + 独立脚本 `@contract` / `@parity`）：给每条门禁**注入真实缺陷**，断言它必须 FAIL 且报出预期关键词 | `python3 scripts/gate-negative-tests.py`（`<词>` 只跑匹配用例） | 任一注入后仍 PASS 即失败 | ❌ 不在 CI |
+| `gate-negative-tests.py` | 门禁负向测试 **81 条**（覆盖 audit 的 14 条门禁 + 独立脚本 `@contract` / `@parity`）：给每条门禁**注入真实缺陷**，断言它必须 FAIL 且报出预期关键词 | `python3 scripts/gate-negative-tests.py`（`<词>` 只跑匹配用例） | 任一注入后仍 PASS 即失败 | ❌ 不在 CI（会**临时改写仓库文件**并按字节还原；本地跑前请保证工作区干净） |
 | `goodmom-ui/playground/smoke.mjs` | React 组件契约渲染级冒烟（实测 **61/61**，含**无孤儿类名**检查） | `node goodmom-ui/playground/smoke.mjs` | 全绿 | ✅ `component-contract` |
 | `goodmom-vue/playground/smoke.mjs` | Vue 组件契约渲染级冒烟（实测 **40/40**，含**无孤儿类名**检查） | 起 vite（5273）后 `node goodmom-vue/playground/smoke.mjs` | 全绿 | ✅ |
 

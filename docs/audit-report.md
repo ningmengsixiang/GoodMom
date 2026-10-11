@@ -1,7 +1,7 @@
 # 规范审计报告（自动）
 
 - 命令：`python3 scripts/audit.py`
-- 时间：2026-09-27 12:37
+- 时间：2026-10-11 23:43
 - 结论：✅ 通过
 
 - **OK** `md-links`：全部内链有效
@@ -9,11 +9,11 @@
 - **OK** `icons`：77 图标唯一且命名合法，与 registry 同步
 - **OK** `html-md`：HTML 页面无 .md 链接（含片段与根目录）
 - **OK** `stale`：无旧称/旧定位残留
-- **WARN** `color-html`：site/index.html 非白名单色 9 个（低风险别名）
+- **OK** `color-html`：页面样式色全部处于 ALLOWED/PAGE_ALIAS（A1 收口）
 - **OK** `color-css`：代码/Tokem 层无硬编码色（严格层）
 - **OK** `color-banned`：无历史近似色回归
-- **WARN** `bp`：非收敛断点 [('site/index.html', 420), ('site/index.html', 480), ('site/index.html', 520), ('site/index.html', 560), ('site/index.html', 900), ('site/index.html', 1023), ('site/index.html', 1200)]
-- **OK** `spec`：合并产物 site-spec 模块 章节=23 阅读器在；旧入口为重定向
+- **OK** `bp`：断点收敛于 ≤767 / 768–1023 / ≥1024 / ≥1366；另有 6 个已登记例外（各自写明理由）
+- **OK** `spec`：合并产物 site-spec 模块 章节=22（与 22 份源逐一对齐）阅读器在；旧入口为重定向
 - **OK** `hex-case`：hex 色值全仓统一大写（14.1.1）
 - **OK** `mirror`：应用侧 gm-arco-ui 与设计系统源逐字节一致（含 theme.css ↔ gm.css），且无缺失选择器
 - **OK** `dark`：暗色段完整；10 项文字/语义色在最坏合成面 #36353C 上全部 ≥4.5:1
@@ -34,3 +34,4 @@
 - **OK** `tint-base`：淡底一律混实底（浅 13% ／ 暗 8%），且两档 token 在位
 - **OK** `bg-origin`：渐变+边框的规则均逐条声明 background-origin:border-box；无全局假防线与 padding-box 组合
 - **OK** `btn-radius`：按钮一律胶囊档（--lg-radius-pill=999px）；无"圆角大于半高"的声明
+- **OK** `report-facts`：3 份文档的事实串与实测一致（docs=21 · gates=29 · icons=77 · negcases=81）

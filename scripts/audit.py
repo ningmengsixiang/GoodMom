@@ -7,6 +7,7 @@ GoodMom 全自动规范审计（scripts/audit.py）
 用法：python3 scripts/audit.py [--strict]
 """
 import glob, os, re, sys, html as _html
+import io as _io
 import urllib.parse
 from html.parser import HTMLParser
 
@@ -240,31 +241,78 @@ def banned_colors():
         rec("WARN", "color-banned-html", "旧色回归(HTML 层) %s" % bad_html[:3])
     return ok
 
+def spec_source_ids():
+    """规范阅读器**应当**产出的章节锚点 —— 与 gen-spec.py 的 FILES 同源。
+
+    这里不写死数量：`gen-spec.py` 是 `README.md + sorted([0-9][0-9]-*.md)`，
+    新增一份编号规范时，站点侧必须同步多一章。写死数量等于宣布"多写一章不算错"。
+    """
+    if not os.path.exists("README.md"):
+        return []
+    return ["ch-readme"] + sorted("ch-" + os.path.basename(p)[:2] for p in glob.glob("[0-9][0-9]-*.md"))
+
+
+def module_seg(s, mod_id):
+    """把「某个 gm-mod 模块」的 HTML 片段按**真实边界**切出来。
+
+    旧实现是 `seg = s[i:i + 400000]`（从模块起点后取固定 40 万字符）：
+      · 它会**跨进下一个模块**（本仓库实测：site-spec 起点后 400k 正好切进
+        site-manual 前 6KB），于是章节数把相邻模块的章也算进来 —— 报告里
+        「章节=23」而实际只有 22，数字随 index.html 的字节偏移变化；
+      · 反过来，模块一旦超过 40 万字符就会被**静默截断**，少多少完全不可见。
+    两者都不会报错，只让"章节数"变成了一个与内容无关的随机数。
+    改为按 `<section …id="gm-mod-X">` 到下一模块之前的 `</section>` 切。
+    """
+    i = s.find('id="%s"' % mod_id)
+    if i < 0:
+        return None
+    start = s.rfind("<section", 0, i)
+    if start < 0:
+        start = i
+    # 下一个模块的起点（从本 id 之后开始找，避免匹配到自己）
+    nxt = s.find('id="gm-mod-', i + len(mod_id) + 4)
+    end = s.rfind("</section>", 0, nxt) if nxt > 0 else len(s)
+    if end <= start:
+        end = len(s)
+    return s[start:end]
+
+
 def spec_health():
     """规范全文健康度。
 
     V2.7 起全部内容并入唯一首页 site/index.html，旧 site/spec.html 只剩重定向；
     因此改为在**合并产物**里校验「site-spec 模块」的章节数与阅读器是否还在，
     同时校验旧路径确为重定向（避免旧链接 404）。
+
+    V2.9 修订（审查 D38）：章节数改为与**源文件清单**逐一对齐，而不是
+    「≥19 就算过」。旧的阈值式判断有三个盲区：① 丢失 3 章以内根本不报警；
+    ② 计数窗口越界，数字可被相邻模块污染；③ 无法发现"章在、但锚点被改写"
+    这种导航失效。现三条都收口为：章数 == 源数，且**每一份源都有自己的锚点**。
     """
     f = "site/index.html"
     if not os.path.exists(f):
         rec("FAIL", "spec", "缺少唯一首页 site/index.html"); return False
     s = open(f, encoding="utf-8").read()
-    i = s.find('id="gm-mod-site-spec"')
-    if i < 0:
+    seg = module_seg(s, "gm-mod-site-spec")
+    if seg is None:
         rec("FAIL", "spec", "合并产物缺少 site-spec 模块"); return False
-    seg = s[i:i + 400000]
-    chaps = seg.count('class="chap"')
-    # 阅读器资产在合并后由模块前缀化为 site-spec--modeBtn
-    has_reader = 'site-spec--modeBtn' in seg or 'id="modeBtn"' in seg
-    if chaps < 19 or not has_reader:
-        rec("FAIL", "spec", "模块内章节=%d 或阅读器缺失" % chaps); return False
+    chaps = seg.count('<section class="chap"')
+    expect = spec_source_ids()
+    # 每一份源都必须在模块体内有**带前缀的**锚点（build-site 会把 id 前缀化为 site-spec--…）
+    missing = [a for a in expect if ('id="site-spec--%s"' % a) not in seg]
+    # 阅读器资产在合并后由模块前缀化为 site-spec--modeBtn。
+    # ⚠️ 必须认**元素**，不能只认字符串里出现过这个 id：站点外壳 JS 里也会有同一个
+    # 字符串（CSS/JS 的模块前缀化改写会把它写进选择器），于是"按钮被删掉了"依然 PASS。
+    has_reader = bool(re.search(r'<button[^>]*\bid="(?:site-spec--)?modeBtn"', seg))
+    if not expect or chaps != len(expect) or missing or not has_reader:
+        rec("FAIL", "spec", "模块内章节=%d（源 %d 份）· 缺锚点=%s · 阅读器=%s"
+            % (chaps, len(expect), missing[:4] or "无", "在" if has_reader else "缺失")); return False
     # 旧入口必须是重定向
     legacy = os.path.join("site", "spec.html")
     if not os.path.exists(legacy) or "页面已合并" not in open(legacy, encoding="utf-8").read():
         rec("FAIL", "spec", "site/spec.html 未改写为重定向"); return False
-    rec("OK", "spec", "合并产物 site-spec 模块 章节=%d 阅读器在；旧入口为重定向" % chaps)
+    rec("OK", "spec", "合并产物 site-spec 模块 章节=%d（与 %d 份源逐一对齐）阅读器在；旧入口为重定向"
+        % (chaps, len(expect)))
     return True
 
 def hex_case():
@@ -1801,6 +1849,75 @@ def semantic_parity():
     return True
 
 
+# ══════════════════════════════════════════════════════════════════════════
+# report-facts · 让"报告里写的数字"与"仓库实测的数字"对齐
+#
+# 背景（审查 D38 实测）：`18-视觉规范审计报告.md` 里写着「编号规范文档 20 份」，
+# 实际是 21 份；写着「双包镜像……（`theme.css` 除外）」，而这个词早在 V2.9 就已
+# 被删掉（现在 theme.css 也在比对范围内）。两处都没有任何门禁看守 ——
+# 审计报告本身不在任何门禁的视野里，于是它只会越放越旧，
+# 而读者却把它当成"当前状态"。
+#
+# 做法：报告里写一行**机器可读的事实串** `<!-- facts: docs=21; icons=77; ... -->`，
+# 由本门禁拿实测值逐一比对。真人看的中文句子照旧，标记只是同一份事实的机器口径。
+# ══════════════════════════════════════════════════════════════════════════
+FACTS_FILES = [
+    "18-视觉规范审计报告.md",
+    "README.md",
+    ".claude/skills/goodmom-frontend/reference/verification.md",
+]
+
+
+def _measure_facts():
+    """实测值。故意只收「本文件里已有算法」的项，避免把别的脚本的口径再抄一遍。"""
+    facts = {}
+    facts["docs"] = str(len(glob.glob("[0-9][0-9]-*.md")))
+    try:
+        facts["icons"] = str(len(re.findall(r'<symbol id="', _io.open("icons/lg-icons.svg", encoding="utf-8").read())))
+    except OSError:
+        facts["icons"] = "0"
+    facts["gates"] = str(len(GATES))
+    try:
+        neg = _io.open("scripts/gate-negative-tests.py", encoding="utf-8").read()
+        facts["negcases"] = str(len(re.findall(r'(?m)^    \("', neg)))
+    except OSError:
+        facts["negcases"] = "0"
+    return facts
+
+
+def report_facts():
+    truth = _measure_facts()
+    bad, seen_files = [], []
+    for path in FACTS_FILES:
+        if not os.path.exists(path):
+            bad.append("%s 缺失（事实串无法比对）" % path)
+            continue
+        text = _io.open(path, encoding="utf-8").read()
+        marks = re.findall(r"<!--\s*facts:([^>]*)-->", text)
+        if not marks:
+            bad.append("%s 没有 facts 标记（报告脱缰：改了再也没人对账）" % path)
+            continue
+        seen_files.append(path)
+        for m in marks:
+            for pair in m.split(";"):
+                if "=" not in pair:
+                    continue
+                k, v = pair.split("=", 1)
+                k, v = k.strip(), v.strip()
+                if k not in truth:
+                    bad.append("%s 的 facts 里有未知项 %s=%s（本门禁没有对应实测）"
+                               % (path, k, v))
+                    continue
+                if truth[k] != v:
+                    bad.append("%s 的 %s=%s 与实测 %s 不符" % (path, k, v, truth[k]))
+    if bad:
+        rec("FAIL", "report-facts", "%d 处报告数字与实际脱节：%s" % (len(bad), bad[:4]))
+        return False
+    rec("OK", "report-facts", "%d 份文档的事实串与实测一致（%s）"
+        % (len(seen_files), " · ".join("%s=%s" % (k, truth[k]) for k in sorted(truth))))
+    return True
+
+
 # 门禁登记表：名字 → 函数。集中登记是为了支持 `--only <名>`（负向测试要能
 # 精确地"只跑这一条"，否则注入缺陷后先被其它门禁拦下，反而证明不了目标门禁有效）。
 GATES = [
@@ -1814,6 +1931,7 @@ GATES = [
     ("svg-refs", svg_refs), ("semantic-parity", semantic_parity), ("icon-mirror", icon_mirror),
     ("text-token-parity", text_token_parity), ("tertiary-size", tertiary_size), ("tint-base", tint_base),
     ("bg-origin", bg_origin), ("btn-radius", btn_radius),
+    ("report-facts", report_facts),
 ]
 
 
