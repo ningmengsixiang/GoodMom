@@ -154,7 +154,7 @@ svg.i{width:22px;height:22px;stroke:currentColor;fill:none;stroke-width:1.7;
 .navbar .ops .o:active{transform:scale(.9);color:var(--sem-special)}
 .navbar .ops .o[aria-expanded="true"]{background:var(--pm-input);color:var(--sem-special)}
 .pm-badge{position:absolute;top:5px;right:5px;min-width:18px;height:18px;padding:0 4px;border-radius:999px;
-  background:var(--solid-danger);color:#FFF;font-size:11px;font-weight:600;line-height:18px;text-align:center}
+  background:var(--solid-danger);color:#FFF;font-size:12px;font-weight:600;line-height:18px;text-align:center}
 
 /* 搜索面板：NavBar 下方展开（11.2.1）。输入字号 16 → 规避 iOS 聚焦缩放（10.6.2） */
 .pm-searchp{display:none;margin:-6px 12px 14px;padding:12px;border-radius:22px;
@@ -350,8 +350,10 @@ svg.i{width:22px;height:22px;stroke:currentColor;fill:none;stroke-width:1.7;
 .pm-stepper button[disabled]{opacity:.4;cursor:not-allowed}
 .pm-stepper .v{min-width:56px;text-align:center;font-size:16px;font-weight:600}
 
-.pm-otp{display:flex;gap:8px}
-.pm-otp input{width:44px;height:52px;border-radius:18px;text-align:center;font-family:var(--font);
+/* 320 档：flex + 固定 44px 会把 6 格撑到 304px（> 卡片内容 254px），整页横向溢出 17px。
+   grid + minmax(0,1fr) 让输入框随容器收缩，窄档不再出框（10.6.3 验证码）。 */
+.pm-otp{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:8px}
+.pm-otp input{width:100%;height:52px;border-radius:18px;text-align:center;font-family:var(--font);
   font-size:18px;font-weight:600;color:var(--text);background:var(--pm-input);
   border:1px solid var(--pm-divider);outline:none;font-variant-numeric:tabular-nums}
 .pm-otp input:focus-visible{border-color:rgba(232,93,143,.6);outline:2px solid var(--pm-ring);outline-offset:2px}
@@ -364,10 +366,18 @@ svg.i{width:22px;height:22px;stroke:currentColor;fill:none;stroke-width:1.7;
   transition:transform .2s var(--spring),color .2s}
 .mrate button.on svg{color:var(--rose-500)}
 .mrate button:active svg{transform:scale(.85)}
-.msteps{display:flex;gap:10px;flex-wrap:wrap}
-.msteps span{display:flex;align-items:center;gap:5px;font-size:12px;color:var(--text-3)}
-.msteps span b{width:20px;height:20px;border-radius:50%;display:inline-flex;align-items:center;
-  justify-content:center;font-size:10px;font-weight:600}
+/* 10.4：Steps 竖版（左连接线 + 步骤点竖排）。横排换行后「建卡→首访→评估→随访」
+   的先后关系不可读，且窄档下标签会掉到下一行、与圆点错位。 */
+.msteps{display:flex;flex-direction:column;gap:0}
+.msteps span{position:relative;display:flex;align-items:center;gap:10px;min-height:40px;
+  font-size:13px;color:var(--text-3)}
+/* 连接线从本步圆点底部连到下一步圆点顶部；left 取圆点半径（20/2 - 线宽/2） */
+.msteps span:not(:last-child)::after{content:"";position:absolute;left:9.25px;
+  top:calc(50% + 10px);bottom:calc(-50% + 10px);width:1.5px;border-radius:2px;
+  background:var(--pm-divider)}
+.msteps span.done:not(:last-child)::after{background:linear-gradient(180deg,#F77FA3,rgba(232,93,143,.35))}
+.msteps span b{position:relative;z-index:1;flex:none;width:20px;height:20px;border-radius:50%;
+  display:inline-flex;align-items:center;justify-content:center;font-size:12px;font-weight:600}
 .msteps span.done b{background:var(--grad-p);color:#FFF}
 .msteps span.cur b{background:#FFF;border:2px solid var(--rose-500);color:#A9315B}
 [data-theme="dark"] .msteps span.cur b{background:#23222A;color:#FFC4D6}
@@ -386,7 +396,10 @@ svg.i{width:22px;height:22px;stroke:currentColor;fill:none;stroke-width:1.7;
   box-shadow:var(--shadow-card);display:flex;align-items:center;justify-content:center;color:var(--text-2);
   overflow:hidden;transition:transform .14s var(--ease)}
 .up:active{transform:scale(.985)}
-.up.add{border:1.5px dashed rgba(154,120,255,.55);background:var(--pm-input);box-shadow:none;color:var(--sem-special)}
+/* 「+」在 2 列窄档常独占一行：网格 auto 行没有兄弟撑高，height:100% 会退化成
+   图标高度（实测 150×24，热区门禁抓到的正是这种"孤立行"）。用 aspect-ratio 自撑方形。 */
+.up.add{aspect-ratio:1;height:auto;border:1.5px dashed rgba(154,120,255,.55);
+  background:var(--pm-input);box-shadow:none;color:var(--sem-special)}
 .up .busy{position:absolute;inset:0;background:rgba(255,255,255,.62);display:flex;align-items:center;
   justify-content:center}
 [data-theme="dark"] .up .busy{background:rgba(27,26,33,.6)}
@@ -398,6 +411,36 @@ svg.i{width:22px;height:22px;stroke:currentColor;fill:none;stroke-width:1.7;
   font-size:14px;line-height:1;box-shadow:0 2px 6px rgba(58,52,84,.24)}
 .del::before{content:"";position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);
   width:100%;min-width:44px;height:100%;min-height:44px;border-radius:50%}
+/* 上传失败卡：红边 + 失败标 + 重试（重试是真实按钮，44 热区，不是静态装饰） */
+.up.fail{flex-direction:column;gap:2px;padding-bottom:42px;border:1.5px solid var(--sem-danger);
+  background:rgba(239,106,123,.10);color:var(--sem-danger);box-shadow:none}
+.up.fail .failtag{font-size:11px;font-weight:600;line-height:1}
+.pm-tile .retry{position:absolute;left:50%;bottom:6px;transform:translateX(-50%);
+  min-width:64px;min-height:44px;padding:0 12px;border-radius:999px;
+  background:var(--solid-danger);color:#FFF;font-size:13px;font-weight:600;
+  display:flex;align-items:center;justify-content:center;box-shadow:0 2px 8px rgba(58,52,84,.2)}
+.pm-tile .retry[aria-busy="true"]{opacity:.65;cursor:progress}
+.pm-upmeta{display:flex;align-items:center;gap:8px;flex-wrap:wrap;font-size:12px;color:var(--text-3)}
+.pm-upmeta b{margin-left:auto;font-weight:500;color:var(--text-2)}
+
+/* ── 12b · 行内校验（Form Validation）：红边框 + 字段下 12px 红文案 ──────
+   错误不是"抖一下"：aria-invalid / aria-describedby / role=alert 三件套都挂上，
+   读屏与键盘用户拿到的信息与视觉一致。 */
+.pm-field{display:flex;flex-direction:column;gap:6px}
+.pm-field > label{font-size:13px;font-weight:500;color:var(--text-2)}
+.pm-field input{width:100%;height:48px;padding:0 14px;border-radius:18px;font-family:var(--font);
+  font-size:16px;color:var(--text);background:var(--pm-input);border:1px solid var(--pm-divider);
+  outline:none;font-variant-numeric:tabular-nums}
+.pm-field input::placeholder{color:var(--text-3)}
+.pm-field input:focus-visible{border-color:rgba(232,93,143,.6);outline:2px solid var(--pm-ring);outline-offset:2px}
+.pm-field input.is-invalid,.pm-field input[aria-invalid="true"]{border-color:var(--sem-danger);
+  box-shadow:inset 0 0 0 1px var(--sem-danger),0 0 0 3px rgba(183,47,66,.12)}
+.pm-field .pm-hint{font-size:12px;line-height:16px;color:var(--text-3)}
+.pm-field .pm-err{font-size:12px;line-height:16px;color:var(--sem-danger);font-weight:500;margin:0}
+.pm-field .pm-err[hidden]{display:none}
+.pm-savebar{display:flex;align-items:center;gap:12px;margin-top:12px;flex-wrap:wrap}
+.pm-savebar .pm-primary{min-height:48px;padding:0 20px;border-radius:999px;font-size:15px;font-weight:600}
+.pm-savebar span{font-size:12px;color:var(--text-3)}
 
 /* ── 13 · 图表（10.5.2 降级：单图单卡 + 数字聚焦）────────────────────── */
 .spark{width:100%;height:64px;display:block;margin-top:10px}
@@ -494,9 +537,21 @@ svg.i{width:22px;height:22px;stroke:currentColor;fill:none;stroke-width:1.7;
 .pm-cell:active .ch{transform:translateX(2px)}
 .pm-cell.danger .md b{color:var(--sem-danger);font-weight:600}
 .pm-cell[aria-disabled="true"]{opacity:.5}
-.pm-foot{margin-top:18px;padding:14px 4px 4px;border-top:1px solid var(--pm-divider);
-  font-size:12px;line-height:1.9;color:var(--text-3);text-align:center}
+/* 11.6.11 Footer：玻璃细条（顶部 hairline + 半透明白底），
+   协议 / 隐私 / 备案为**行内链接** —— 视觉高 24，::before 补足 44 热区。 */
+.pm-foot{margin-top:18px;padding:8px 12px 10px;border-radius:16px;
+  background:var(--pm-solid);border:1px solid var(--pm-edge);border-top-color:var(--pm-divider);
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.5);
+  font-size:12px;line-height:1.8;color:var(--text-3);text-align:center}
 .pm-foot b{color:var(--text-2);font-weight:600}
+.pm-foot-legal{display:flex;align-items:center;justify-content:center;gap:2px;flex-wrap:wrap;
+  margin:0 0 6px;padding-bottom:6px;border-bottom:1px solid var(--pm-divider)}
+.pm-foot-legal a{position:relative;display:inline-flex;align-items:center;min-height:24px;
+  padding:0 4px;border-radius:12px;color:var(--pm-link);font-weight:500;text-decoration:none}
+.pm-foot-legal a::before{content:"";position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);
+  width:100%;min-width:44px;height:100%;min-height:44px}
+.pm-foot-legal a:active{background:var(--pm-input)}
+[data-theme="dark"] .pm-foot{box-shadow:inset 0 1px 0 rgba(255,255,255,.14)}
 
 /* ── 17 · 安全区演示（11.6.7）────────────────────────────────────────── */
 .pm-safe{display:none;position:absolute;inset:0;z-index:40;pointer-events:none}
@@ -595,6 +650,48 @@ svg.i{width:22px;height:22px;stroke:currentColor;fill:none;stroke-width:1.7;
   align-items:center;justify-content:center}
 .pm-vnav.prev{left:10px}
 .pm-vnav.next{right:10px}
+
+/* ── 18b · Dialog 居中对话框（11.2.15）/ Result 结果态（11.6.9）──────────
+   两者都挂在 .pm-layers 下，**复用同一套** Mask / Esc / 焦点陷阱 / 焦点归还
+   （layerOpen/layerClose），不再各写一份浮层生命周期。
+   玻璃感用半透明白 + 描边 + 顶边高光近似，**不加 backdrop-filter**：
+   10.8 的同屏模糊预算已被 NavBar / TabBar / Mask / 面板占满，这里再挂一个就破线。 */
+.pm-dialog{position:absolute;left:50%;top:50%;z-index:2;width:min(320px,calc(100% - 48px));
+  padding:24px 20px 20px;border-radius:26px;text-align:center;
+  background:var(--pm-glass);border:1px solid var(--pm-edge);
+  box-shadow:0 24px 60px var(--pm-shadow-black),inset 0 1px 0 rgba(255,255,255,.55);
+  opacity:0;visibility:hidden;pointer-events:none;transform:translate(-50%,-46%) scale(.94);
+  transition:opacity .22s var(--ease),transform .28s var(--spring),visibility .28s}
+[data-theme="dark"] .pm-dialog{box-shadow:0 24px 60px rgba(0,0,0,.55),inset 0 1px 0 rgba(255,255,255,.14)}
+.pm-dialog.is-open{opacity:1;visibility:visible;pointer-events:auto;
+  transform:translate(-50%,-50%) scale(1)}
+.pm-dialog h2{margin:0 0 8px;font-size:18px;line-height:26px;font-weight:600;color:var(--text)}
+.pm-dialog p{margin:0;font-size:14px;line-height:1.7;color:var(--text-2)}
+/* 竖排操作区：取消（Ghost）在上、确认（Primary）在下；只有一个按钮时同样 100% 全宽 */
+.pm-dlg-actions{display:flex;flex-direction:column;gap:10px;margin-top:20px}
+.pm-dlg-actions > button{width:100%;min-height:48px;border-radius:var(--lg-radius-pill,999px);
+  display:flex;align-items:center;justify-content:center;font-size:16px;font-weight:600;text-align:center}
+
+/* Result：全屏承载 + 居中玻璃卡；外框不吃指针，点空白仍落到 Mask 上关闭 */
+.pm-result{position:absolute;inset:0;z-index:2;display:none;align-items:center;justify-content:center;
+  padding:20px;pointer-events:none}
+.pm-result.is-open{display:flex;animation:pmFade .24s var(--ease)}
+.pm-result-card{width:min(340px,100%);padding:28px 20px 22px;border-radius:28px;text-align:center;
+  pointer-events:auto;background:var(--pm-glass);border:1px solid var(--pm-edge);
+  box-shadow:0 24px 60px var(--pm-shadow-black),inset 0 1px 0 rgba(255,255,255,.55)}
+[data-theme="dark"] .pm-result-card{box-shadow:0 24px 60px rgba(0,0,0,.55),inset 0 1px 0 rgba(255,255,255,.14)}
+/* 语义色图标 60（落在 11.6.9 的 56–64 区间）；成功档用文字专用深色 --sem-positive */
+.pm-result-icon{width:60px;height:60px;border-radius:50%;margin:0 auto 14px;display:flex;
+  align-items:center;justify-content:center;color:var(--sem-positive);
+  background:rgba(66,199,161,.16);border:1px solid rgba(66,199,161,.35)}
+[data-theme="dark"] .pm-result-icon{background:rgba(111,201,180,.16);border-color:rgba(111,201,180,.35)}
+.pm-result-icon svg{width:30px;height:30px;fill:none;stroke:currentColor;stroke-width:2.2;
+  stroke-linecap:round;stroke-linejoin:round}
+.pm-result h2{margin:0 0 6px;font-size:19px;line-height:27px;font-weight:600;color:var(--text)}
+.pm-result p{margin:0;font-size:14px;line-height:1.75;color:var(--text-2)}
+.pm-result-actions{display:flex;flex-direction:column;gap:10px;margin-top:20px}
+.pm-result-actions > button{width:100%;min-height:48px;border-radius:var(--lg-radius-pill,999px);
+  display:flex;align-items:center;justify-content:center;font-size:16px;font-weight:600;text-align:center}
 
 /* ══════════════════════════════════════════════════════════════════════════
    22b · 补齐 11 章缺的四个组件（IndexBar / Calendar / NumberKeyboard / WaterMark）
@@ -696,7 +793,7 @@ svg.i{width:22px;height:22px;stroke:currentColor;fill:none;stroke-width:1.7;
 [data-theme="dark"] .tab.on{color:#1B1A21}
 .tab.on svg{transform:scale(1.04)}
 .tab .pm-dot{position:absolute;top:8px;right:calc(50% - 20px);min-width:16px;height:16px;padding:0 4px;
-  border-radius:999px;background:var(--solid-danger);color:#FFF;font-size:10px;font-weight:600;line-height:16px}
+  border-radius:999px;background:var(--solid-danger);color:#FFF;font-size:12px;font-weight:600;line-height:16px}
 
 /* ── 20 · 主行动 CTA（03 · 3.2.4 配方）───────────────────────────────── */
 .cta{display:flex;align-items:center;justify-content:center;gap:8px;width:100%;height:48px;
@@ -967,11 +1064,22 @@ svg.i{width:22px;height:22px;stroke:currentColor;fill:none;stroke-width:1.7;
               <svg class="i" viewBox="0 0 24 24"><path d="M17.5 19H9a7 7 0 1 1 6.7-9.4A5.5 5.5 0 0 1 17.5 19Z"/></svg>
             </div>
           </div>
+          <div class="pm-tile" id="pmUploadFail" data-state="failed">
+            <!-- 失败卡：红边 + 失败标 + 重试按钮（真实按钮，点后进入重试态并最终替换为照片） -->
+            <div class="up fail" role="img" aria-label="疫苗本照片上传失败">
+              <svg class="i" viewBox="0 0 24 24"><path d="M12 3.8 21.4 19.7a1.5 1.5 0 0 1-1.3 2.2H3.9a1.5 1.5 0 0 1-1.3-2.2z"/><path d="M12 9.4v4.6M12 17.4v.2"/></svg>
+              <span class="failtag">上传失败</span>
+            </div>
+            <button class="retry" type="button" id="pmUploadRetry" aria-label="重试上传疫苗本照片">重试</button>
+          </div>
           <button class="up add" type="button" id="pmAddPhoto" aria-label="添加照片">
             <svg class="i" viewBox="0 0 24 24"><path d="M12 5.5v13M5.5 12h13"/></svg>
           </button>
         </div>
-        <div style="font-size:12px;color:var(--text-3)">第 3 张为上传中（细环 0.9s/圈，不换内容）· 移除走二次确认</div>
+        <div class="pm-upmeta">
+          <span>第 3 张为上传中（细环 0.9s/圈，不换内容）· 移除走二次确认</span>
+          <b id="pmUploadCount" class="num">单张上限 9 张 · 已添加 2 / 9</b>
+        </div>
       </div>
 
       <h2 class="sec">评估与工具 <small>Rate · Progress · Steps</small></h2>
@@ -1197,6 +1305,15 @@ svg.i{width:22px;height:22px;stroke:currentColor;fill:none;stroke-width:1.7;
         </div>
       </div>
 
+      <h2 class="sec">筛查结果 <small>Result 结果态（11.6.9）</small></h2>
+      <div class="gcard" style="margin-bottom:14px">
+        <div class="pm-row">
+          <span class="ic" style="color:var(--sem-positive)"><svg class="i" viewBox="0 0 24 24"><path d="M12 3.2 19 5.7v5.4c0 4.6-3 8.3-7 9.7-4-1.4-7-5.1-7-9.7V5.7z"/><path d="m8.8 11.8 2.2 2.2 4.2-4.4"/></svg></span>
+          <div class="md"><b>唐氏筛查 · 低风险</b><span>2026-09-13 市妇幼 · 报告已出</span></div>
+          <button class="pm-ghost" type="button" id="pmResultOpen" style="min-height:44px;padding:0 14px;border-radius:999px;font-size:14px;font-weight:600">查看筛查结果</button>
+        </div>
+      </div>
+
       <h2 class="sec">报告预览 · 水印 <small>WaterMark（11.6.13）</small></h2>
       <div class="pm-wmwrap gcard" style="margin-bottom:14px">
         <svg class="pm-wm" aria-hidden="true">
@@ -1222,6 +1339,21 @@ svg.i{width:22px;height:22px;stroke:currentColor;fill:none;stroke-width:1.7;
         </button>
         <div class="pm-numkbd" id="pmNumKbd" role="group" aria-label="数字键盘"></div>
         <div style="font-size:12px;color:var(--text-3)">点输入条唤出；与系统键盘二选一（正式实现优先 <b>inputmode</b>，自绘仅用于统一观感）</div>
+      </div>
+
+      <h2 class="sec">体重录入 <small>行内校验 · 空 / 0 / 超大</small></h2>
+      <div class="gcard" style="display:flex;flex-direction:column;gap:12px;margin-bottom:14px">
+        <div class="pm-field">
+          <label for="pmWeightInput">体重（kg）</label>
+          <input id="pmWeightInput" type="text" inputmode="decimal" autocomplete="off"
+                 placeholder="例如 8.6" aria-describedby="pmWeightHint pmWeightErr" aria-invalid="false">
+          <span class="pm-hint" id="pmWeightHint">出生 0–18 月龄参考区间 2.5–14 kg；保存前会再校验一次。</span>
+          <p class="pm-err" id="pmWeightErr" role="alert" hidden>请输入 0–200 kg 之间的数值</p>
+        </div>
+        <div class="pm-savebar">
+          <button class="pm-primary" type="button" id="pmWeightSave">保存体重</button>
+          <span id="pmWeightState" role="status" aria-live="polite">未保存</span>
+        </div>
       </div>
 
       <h2 class="sec">服务机构 <small>Cascader 移动版多列 Picker（11.2.17）</small></h2>
@@ -1350,11 +1482,16 @@ svg.i{width:22px;height:22px;stroke:currentColor;fill:none;stroke-width:1.7;
         </button>
       </div>
 
-      <div class="pm-foot">
+      <footer class="pm-foot">
+        <nav class="pm-foot-legal" aria-label="协议与备案">
+          <a href="https://www.goodmom.cn/legal/terms">用户协议</a>
+          <a href="https://www.goodmom.cn/legal/privacy">隐私政策</a>
+          <a href="https://beian.miit.gov.cn/" target="_blank" rel="noopener noreferrer">沪ICP备2025000000号</a>
+        </nav>
         <b>妈咪好 GoodMom</b> · 移动端液态玻璃（孕期 / 儿保示例）<br>
         规范 10 / 11 章 · 品牌 12 · 妇幼领域 13 · Token 02<br>
         本页为可交互演示：所有弹层都是真实 DOM，焦点在弹层内循环并在关闭后归还触发点。
-      </div>
+      </footer>
     </section>
 
   </div>
@@ -1434,6 +1571,35 @@ svg.i{width:22px;height:22px;stroke:currentColor;fill:none;stroke-width:1.7;
       </button>
       <div class="pm-vcount num" id="pmVCount">1 / 2</div>
     </div>
+
+    <!-- Dialog 居中玻璃卡（11.2.15）：取消在上 Ghost、确认在下 Primary；
+         生命周期复用 layerOpen/layerClose（Esc / 遮罩 / 取消三通道 + 焦点归还） -->
+    <div class="pm-dialog" id="pmDialog" role="dialog" aria-modal="true"
+         aria-label="确认提交本次随访" aria-labelledby="pmDialogTitle">
+      <h2 id="pmDialogTitle">确认提交本次随访？</h2>
+      <p id="pmDialogBody">提交后会通知家长并锁定本次记录，24 小时内可撤回。</p>
+      <div class="pm-dlg-actions">
+        <button class="pm-ghost" type="button" id="pmDialogCancel">取消</button>
+        <button class="pm-primary" type="button" id="pmDialogOk">确认提交</button>
+      </div>
+    </div>
+
+    <!-- Result 结果态（11.6.9）：全屏承载 + 居中玻璃卡；内容区 role=status 供读屏播报 -->
+    <div class="pm-result" id="pmResult" role="dialog" aria-modal="true" aria-label="筛查结果">
+      <div class="pm-result-card">
+        <div class="pm-result-icon" aria-hidden="true">
+          <svg viewBox="0 0 24 24"><path d="M5 13l5 5L20 7"/></svg>
+        </div>
+        <div id="pmResultStatus" role="status" aria-live="polite">
+          <h2>筛查结果已出</h2>
+          <p>唐氏筛查为低风险 · 报告已归档到健康档案，可在就诊时直接出示。</p>
+        </div>
+        <div class="pm-result-actions">
+          <button class="pm-primary" type="button" id="pmResultPrimary">查看报告详情</button>
+          <button class="pm-ghost" type="button" id="pmResultClose">返回记录</button>
+        </div>
+      </div>
+    </div>
   </div>
 </div>
 
@@ -1449,6 +1615,7 @@ svg.i{width:22px;height:22px;stroke:currentColor;fill:none;stroke-width:1.7;
     <li>CapsuleTabs · Selector · <code>11.6.3 / 11.6.4</code></li>
     <li>Popup / Mask · SafeArea · Sticky · ErrorBlock · <code>11.6.6–11.6.9</code></li>
     <li>IndexBar · Collapse · Calendar · NumberKeyboard · WaterMark · <code>11.2.3 / 11.2.6 / 11.6.5 / 11.6.10 / 11.6.13</code></li>
+    <li>Dialog · Result · Upload 拍照/相册 · 行内校验 · <code>11.2.15 / 11.6.9 / 11.2.13</code></li>
     <li>暗色档映射 · <code>02 · 2.1.9</code></li>
     <li>玻璃节点 ≤4/屏 · 热区 ≥44 · <code>10.8 / 10.4</code></li>
   </ul>
@@ -1679,7 +1846,8 @@ svg.i{width:22px;height:22px;stroke:currentColor;fill:none;stroke-width:1.7;
 
   /* ── ⑦ 浮层引擎：Mask / 面板 / 焦点陷阱 / Esc / 焦点归还（Part 18）─── */
   var layers = qIn(ROOT, ".pm-layers"), mask = document.getElementById("pmMask"), sheet = document.getElementById("pmSheet"), sheetBody = document.getElementById("pmSheetBody"),
-      sheetTitle = document.getElementById("pmSheetTitle"), picker = document.getElementById("pmPicker"), viewer = document.getElementById("pmViewer");
+      sheetTitle = document.getElementById("pmSheetTitle"), picker = document.getElementById("pmPicker"), viewer = document.getElementById("pmViewer"),
+      dialog = document.getElementById("pmDialog"), resultLayer = document.getElementById("pmResult");
   var lastFocus = null, openEl = null, pendingDel = null;
   function layerOpen(el, focusTarget){
     if (!layers || !el) return;
@@ -1747,14 +1915,18 @@ svg.i{width:22px;height:22px;stroke:currentColor;fill:none;stroke-width:1.7;
     note:    { title:"产检备注", items:[{ icon:"edit", label:"添加文字备注", act:"已打开备注输入" }, { icon:"bell", label:"语音备忘转文字", act:"已开始录音" }] },
     export:  { title:"导出健康档案", items:[{ icon:"check", label:"生成 PDF（含生长曲线）", act:"档案已导出" }, { icon:"edit", label:"仅导出本次记录", act:"已导出本次记录" }] },
     erase:   { title:"注销并清除「王小雨」的本机数据？", danger:true, items:[{ icon:"trash", label:"我已确认，清除数据", act:"数据已清除", status:"error" }] },
-    deliver: { title:"移除这张照片？", danger:true, items:[{ icon:"trash", label:"移除照片", act:"照片已移除", status:"error" }] }
+    deliver: { title:"移除这张照片？", danger:true, items:[{ icon:"trash", label:"移除照片", act:"照片已移除", status:"error" }] },
+    /* 上传来源（11.2.13）：拍照 / 相册 两个入口，取消行复用面板底部常驻的「取消」 */
+    upload:  { title:"添加照片", items:[{ icon:"camera", label:"拍照", src:"camera" }, { icon:"image", label:"相册", src:"album" }] }
   };
   var ICONS = {
     check:'<path d="M5 13l5 5L20 7"/>',
     edit:'<path d="M4 20h4L20 8l-4-4L4 16z"/>',
     user:'<circle cx="12" cy="8.2" r="3.7"/><path d="M5 20.4c1.3-3.6 4.1-5.3 7-5.3s5.7 1.7 7 5.3"/>',
     bell:'<path d="M18 8.2a6 6 0 0 0-12 0c0 6.8-2.8 8.8-2.8 8.8h17.6S18 15 18 8.2"/>',
-    trash:'<path d="M5 7h14M9.5 7V5.4h5V7M6.6 7l.8 12.2a1.6 1.6 0 0 0 1.6 1.5h6a1.6 1.6 0 0 0 1.6-1.5L17.4 7"/>'
+    trash:'<path d="M5 7h14M9.5 7V5.4h5V7M6.6 7l.8 12.2a1.6 1.6 0 0 0 1.6 1.5h6a1.6 1.6 0 0 0 1.6-1.5L17.4 7"/>',
+    camera:'<path d="M4 8.2h3.2l1.5-2.4h6.6l1.5 2.4H20v10.2H4z"/><circle cx="12" cy="13" r="3.4"/>',
+    image:'<rect x="3.6" y="4.8" width="16.8" height="14.4" rx="2.4"/><circle cx="8.6" cy="9.4" r="1.5"/><path d="m5 17.2 4.4-4.2 3.2 3 2.6-2.4 4 3.8"/>'
   };
   function openSheet(key){
     var cfg = SHEETS[key];
@@ -1762,7 +1934,8 @@ svg.i{width:22px;height:22px;stroke:currentColor;fill:none;stroke-width:1.7;
     sheetTitle.textContent = cfg.title;
     sheetBody.innerHTML = cfg.items.map(function(it){
       return '<button class="pm-sheetitem' + (cfg.danger ? " danger" : "") + '" type="button" data-act="' + it.label + '"'
-        + (it.act ? ' data-done="' + it.act + '"' : "") + (it.status ? ' data-status="' + it.status + '"' : "") + '>'
+        + (it.act ? ' data-done="' + it.act + '"' : "") + (it.status ? ' data-status="' + it.status + '"' : "")
+        + (it.src ? ' data-src="' + it.src + '"' : "") + '>'
         + '<svg class="i" viewBox="0 0 24 24">' + (ICONS[it.icon] || ICONS.check) + "</svg>" + it.label + "</button>";
     }).join("");
     layerOpen(sheet);
@@ -1771,6 +1944,7 @@ svg.i{width:22px;height:22px;stroke:currentColor;fill:none;stroke-width:1.7;
     var b = e.target.closest(".pm-sheetitem");
     if (!b) return;
     var done = b.getAttribute("data-done"), status = b.getAttribute("data-status") || "success";
+    var src = b.getAttribute("data-src");
     var target = pendingDel;
     pendingDel = null;
     if (target && status === "error") {
@@ -1787,9 +1961,16 @@ svg.i{width:22px;height:22px;stroke:currentColor;fill:none;stroke-width:1.7;
         }
         if (vl) vl.setTotal(vlItems.length);
       }
+      /* 照片删除同步「已添加 n / 9」：文案、数据、DOM 三处口径必须一致 */
+      if (target.classList && target.classList.contains("pm-tile")) {
+        photoCount = Math.max(0, photoCount - 1);
+        syncUploadCount();
+      }
       setTimeout(function(){ if (host) host.removeChild(target); }, 200);
     }
     layerClose();
+    /* 选完来源再走上传统一入口：拍照 / 相册 只在文案与 toast 上不同 */
+    if (src) addPhotoTile(src);
     if (done) { toast(done, status); announce(done); }
   });
   qaIn(ROOT, "[data-sheet]").forEach(function(b){ b.addEventListener("click", function(){ openSheet(b.getAttribute("data-sheet")); }); });
@@ -2244,18 +2425,73 @@ svg.i{width:22px;height:22px;stroke:currentColor;fill:none;stroke-width:1.7;
     var nb = qIn(tile, "[data-photo]");
     wireTile(tile, nb ? parseInt(nb.getAttribute("data-photo"), 10) : 0);
   });
-  var addPhoto = document.getElementById("pmAddPhoto");
-  if (addPhoto) addPhoto.addEventListener("click", function(){
-    var idx = photosLive.length;
-    photosLive.push({ label:"新增照片 " + (idx + 1), bg:"linear-gradient(150deg,#FFF0F4,#FFDEE8)", solid:"#FFF0F4" });
+  var addPhoto = document.getElementById("pmAddPhoto"),
+      uploadCount = document.getElementById("pmUploadCount"),
+      failTile = document.getElementById("pmUploadFail"),
+      retryBtn = document.getElementById("pmUploadRetry");
+  var photoCount = photosLive.length;          /* 已加入相册的照片数（上传中 / 失败不计） */
+  function syncUploadCount(){
+    if (uploadCount) uploadCount.textContent = "单张上限 9 张 · 已添加 " + photoCount + " / 9";
+  }
+  function makePhotoTile(idx){
+    var p = photosLive[idx];
     var tile = document.createElement("div");
     tile.className = "pm-tile";
-    tile.innerHTML = '<button class="up" type="button" data-photo="' + idx + '" style="background:' + photosLive[idx].bg + '" aria-label="查看照片：' + photosLive[idx].label + '">'
+    tile.innerHTML = '<button class="up" type="button" data-photo="' + idx + '" style="background:' + p.bg + '" aria-label="查看照片：' + p.label + '">'
       + '<svg class="i" style="color:#E85D8F" viewBox="0 0 24 24"><path d="M17.5 19H9a7 7 0 1 1 6.7-9.4A5.5 5.5 0 0 1 17.5 19Z"/></svg></button>'
-      + '<button class="del" type="button" data-del="' + photosLive[idx].label + '" aria-label="移除照片：' + photosLive[idx].label + '">×</button>';
-    if (addPhoto.parentNode) addPhoto.parentNode.insertBefore(tile, addPhoto);
+      + '<button class="del" type="button" data-del="' + p.label + '" aria-label="移除照片：' + p.label + '">×</button>';
+    return tile;
+  }
+  /* 拍照 / 相册 共用同一个新增入口：来源只影响文案，缩略图与删除确认走既有逻辑 */
+  function addPhotoTile(src){
+    if (photoCount >= 9) {
+      toast("单张上限 9 张，请先移除一张", "warning");
+      announce("已达单张上限 9 张");
+      return null;
+    }
+    var idx = photosLive.length;
+    var from = src === "camera" ? "拍照" : "相册";
+    photosLive.push({ label:from + "新增照片 " + (idx + 1), bg:"linear-gradient(150deg,#FFF0F4,#FFDEE8)", solid:"#FFF0F4" });
+    var tile = makePhotoTile(idx);
+    if (addPhoto && addPhoto.parentNode) addPhoto.parentNode.insertBefore(tile, addPhoto);
     wireTile(tile, idx);
-    toast("已从相册添加 1 张（示例）");
+    photoCount++;
+    syncUploadCount();
+    toast(src === "camera" ? "已拍照添加 1 张（示例）" : "已从相册添加 1 张（示例）");
+    announce("已添加 1 张照片，共 " + photoCount + " 张");
+    return tile;
+  }
+  syncUploadCount();
+  /* 「+」先弹 ActionSheet：拍照 / 相册 / 取消（取消行复用面板底部常驻按钮） */
+  if (addPhoto) addPhoto.addEventListener("click", function(){ openSheet("upload"); });
+
+  /* 失败卡重试：真实按钮 → 重试中（aria-busy）→ 成功后替换为照片缩略图 */
+  if (retryBtn && failTile) retryBtn.addEventListener("click", function(){
+    if (retryBtn.getAttribute("aria-busy") === "true") return;
+    retryBtn.setAttribute("aria-busy", "true");
+    retryBtn.disabled = true;
+    retryBtn.textContent = "重试中";
+    failTile.setAttribute("data-state", "retrying");
+    var up = qIn(failTile, ".up");
+    if (up) up.setAttribute("aria-label", "疫苗本照片正在重新上传");
+    announce("正在重试上传疫苗本照片");
+    setTimeout(function(){
+      if (photoCount >= 9) {
+        retryBtn.removeAttribute("aria-busy"); retryBtn.disabled = false; retryBtn.textContent = "重试";
+        failTile.setAttribute("data-state", "failed");
+        toast("单张上限 9 张，请先移除一张", "warning");
+        return;
+      }
+      var idx = photosLive.length;
+      photosLive.push({ label:"重试上传照片 " + (idx + 1), bg:"linear-gradient(150deg,#EAF9F5,#C8F1E7)", solid:"#EAF9F5" });
+      var tile = makePhotoTile(idx);
+      if (failTile.parentNode) failTile.parentNode.replaceChild(tile, failTile);
+      wireTile(tile, idx);
+      photoCount++;
+      syncUploadCount();
+      toast("重试成功，照片已添加");
+      announce("重试上传成功，共 " + photoCount + " 张照片");
+    }, 900);
   });
 
   /* ── ⑯ Rate（11.2.12）：radiogroup + 方向键 ────────────────────────── */
@@ -2317,11 +2553,82 @@ svg.i{width:22px;height:22px;stroke:currentColor;fill:none;stroke-width:1.7;
     });
   }
 
-  /* ── ⑱ Dialog 移动版（11.2.15）：复用同一实例 ─────────────────────── */
+  /* ── ⑱ Dialog 移动版（11.2.15）：居中玻璃卡 · 复用浮层引擎 ─────────────
+     三通道关闭全部由 layerOpen/layerClose 提供：Esc（全局 keydown）、遮罩（mask click）、
+     取消按钮；打开时焦点进面板、关闭归还触发点。 */
   var dlgOpen = document.getElementById("pmDialogOpen");
-  if (dlgOpen) dlgOpen.addEventListener("click", function(){
-    var v = qaIn(otpWrap, "input").map(function(b){ return b.value; }).join("");
-    openSheet(v.length === 6 ? "cta" : "note");
+  var dlgCancel = document.getElementById("pmDialogCancel"), dlgOk = document.getElementById("pmDialogOk");
+  if (dlgOpen && dialog) dlgOpen.addEventListener("click", function(){ layerOpen(dialog); });
+  if (dlgCancel) dlgCancel.addEventListener("click", layerClose);
+  if (dlgOk) dlgOk.addEventListener("click", function(){
+    layerClose();
+    toast("已提交随访记录");
+    announce("随访记录已提交");
+  });
+
+  /* ── ⑱b Result 结果态（11.6.9）：role=status · 关闭/返回路径 ────────── */
+  var resultOpen = document.getElementById("pmResultOpen"),
+      resultPrimary = document.getElementById("pmResultPrimary"),
+      resultClose = document.getElementById("pmResultClose");
+  if (resultOpen && resultLayer) resultOpen.addEventListener("click", function(){
+    layerOpen(resultLayer, resultPrimary);
+  });
+  if (resultClose) resultClose.addEventListener("click", layerClose);
+  if (resultPrimary) resultPrimary.addEventListener("click", function(){
+    layerClose();
+    toast("已打开报告详情（示例）");
+    announce("已打开筛查报告详情");
+  });
+
+  /* ── ⑱c 行内校验：非法值红边框 + 12px 红文案 + aria-invalid ────────────
+     空 / 0 / 超大 / 非数字 都算非法；合法值立即清错。错误文案用 role=alert，
+     aria-describedby 常驻指向「提示 + 错误」，读屏随时能拿到字段约束。 */
+  var weightInput = document.getElementById("pmWeightInput"),
+      weightErr = document.getElementById("pmWeightErr"),
+      weightSave = document.getElementById("pmWeightSave"),
+      weightState = document.getElementById("pmWeightState");
+  var weightTouched = false;
+  function weightOk(){
+    if (!weightInput) return false;
+    var raw = String(weightInput.value || "").trim();
+    if (!raw) return false;
+    var n = Number(raw);
+    return isFinite(n) && n > 0 && n <= 200;
+  }
+  function setWeightError(on, msg){
+    if (!weightInput) return;
+    weightInput.classList.toggle("is-invalid", on);
+    weightInput.setAttribute("aria-invalid", on ? "true" : "false");
+    if (weightErr) {
+      weightErr.hidden = !on;
+      if (msg) weightErr.textContent = msg;
+    }
+  }
+  function validateWeight(){
+    var ok = weightOk();
+    var raw = weightInput ? String(weightInput.value || "").trim() : "";
+    var n = Number(raw);
+    var msg = !raw ? "请输入体重后再保存"
+      : (raw !== "" && n === 0 ? "体重必须大于 0"
+      : "体重需在 0–200 kg 之间");
+    setWeightError(!ok, msg);
+    return ok;
+  }
+  if (weightInput) {
+    weightInput.addEventListener("input", function(){
+      weightTouched = true;
+      /* 首次输入空串不报错；一旦出现过错误，清空也要保持"空 = 非法"的反馈 */
+      if (weightInput.value.trim() !== "" || weightInput.getAttribute("aria-invalid") === "true") validateWeight();
+    });
+    weightInput.addEventListener("blur", function(){ if (weightTouched) validateWeight(); });
+  }
+  if (weightSave) weightSave.addEventListener("click", function(){
+    weightTouched = true;
+    if (!validateWeight()) { if (weightInput) weightInput.focus(); return; }
+    var v = String(weightInput.value).trim();
+    if (weightState) weightState.textContent = "已保存 " + v + " kg · 刚刚";
+    toast("已保存体重 " + v + " kg");
+    announce("已保存体重 " + v + " 千克");
   });
 
   /* ── ⑲ 我的：暗色档 / 安全区 / 触控热区 / 降低动效（02 · 2.1.9）────── */

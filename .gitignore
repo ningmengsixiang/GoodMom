@@ -54,3 +54,12 @@ goodmom-vue/playground/smoke-*.png
 # （4 秒，无头 Chrome 打印 preview/manual.html）。仓库不存这个数 MB 的二进制，
 # 需要时本地生成即可 —— 旧版曾把 V2.2 的 PDF 冻在 docs/ 里，落后 5 个版本。
 docs/GoodMom-Design-System-V*-Overview.pdf
+.gstack/
+
+# 工具会话记忆（workbuddy 本地缓存，不入库）
+.workbuddy/
+
+# PRD 交付物（HTML/PDF）不入库：本仓为公开仓库，内部 PRD 不下发。
+# 源文件 prd/*.md 仍入库；HTML/PDF 需要共享时走内网 / OSS / Codeup 附件。
+prd/*.html
+prd/*.pdf

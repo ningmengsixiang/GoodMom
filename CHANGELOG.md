@@ -1,3 +1,87 @@
+## [V2.13] · P2 领域件（7 组件 · 演示层 Dialog/Result/Upload/校验）
+
+> 承接 V2.12：把 00 ⑧ 妇幼领域件从「只有规范/演示」推进到「双库可复用」，并补齐演示层长期缺位的 Dialog / Result / Upload 拍照 Sheet / 表单行内校验。
+
+### 一、领域组件（两库 50 → 57，合计 114）
+- `GmPregnancyCard`（13.3.1）、`GmCheckupPlan`（13.3.2）、`GmVaccinePlan`（13.3.3）、`GmChildCheckup`（13.3.4）、`GmBabyCard`（13.1 #5）、`GmRecordFlow`（13.3.7，覆盖胎动/体重/宫高/喂养/睡眠/尿布）、`GmBirthPrep`（00 #88）。
+- 状态一律 `data-tone`（neutral/positive/attention/risk/info/special → `--lg-sem-*`），不新增 tone 类；医疗数值 `tabular-nums`；异常不靠颜色单独传达。
+- React/Vue 同契约（契约 57/57）；新增 CSS 两库逐字节一致（共享选择器 860、0 差异）；新增 7 个 story 文件（18 个 story，默认 mobile375）。
+
+### 二、演示层补齐（P1/P2 报告点名的缺口）
+- **Dialog**：居中玻璃卡 + 竖排双按钮 + role=dialog/aria-modal + ESC/遮罩/取消三通道 + 焦点入面板/归还。
+- **Result**：结果态（icon 语义色 + 主文案 + 说明 + 动作）。
+- **Upload**：「+」弹 ActionSheet（拍照/相册/取消），补失败卡重试与单张上限 9 文案。
+- **表单校验**：身高/体重行内校验（红框 + 12px 文案 + aria-invalid/aria-describedby），不只靠抖动。
+- `mobile-smoke` 110 → **122** 条，覆盖上述四项。
+
+### 三、验证
+`audit.py` PASS · 版本 10 载体 V2.13 · 契约 57/57 · 样式 0 差异（860 选择器）· `mobile-smoke` 375/320 全绿 · `build-storybook` 通过 · 双库 `tsc` 0 错误。
+
+---
+
+## [V2.12] · 移动端 P1 收口（17 组件 · Storybook 移动视口 · 演示补齐）
+
+> 承接 V2.11 的 P0：把「列表/表单闭环」与「反馈/辅助件」从演示层搬进双库组件库，并补齐演示层的两处规范偏差与 21 条冒烟断言。
+
+### 一、组件（两库 33 → 50，合计 100）
+- **列表/表单（8）**：`GmPullRefresh`、`GmLoadMore`、`GmSwipeAction`、`GmPicker`、`GmCalendar`、`GmStepper`、`GmOTP`、`GmNumberKeyboard`。
+- **反馈/辅助（9）**：`GmNoticeBar`、`GmImageViewer`、`GmErrorBlock`、`GmSafeArea`、`GmSticky`、`GmWaterMark`、`GmFooter`、`GmCapsuleTabs`、`GmSelector`。
+- React/Vue 同 props/默认值/事件/类名（契约 50/50）；新增 CSS 两库逐字节一致（共享选择器 701、0 差异）；新增 17 个 story 文件（50 个 story 文件 / 116 entries）。
+- 行为要点：下拉跟手 64px 阈值、LoadMore IO + 键盘等价、SwipeAction 方向判定/外部收起、Picker scroll-snap + 焦点归还、Calendar 月网格/事件点、Stepper 长按连发、OTP 粘贴分发、数字键盘 maxLength；NoticeBar/ImageViewer/ErrorBlock 语义与焦点管理、Sticky IO 吸顶、WaterMark 内联 SVG、Footer 真链接、CapsuleTabs/Selector 键盘可达。
+
+### 二、Storybook 移动视口
+- 使用 Storybook 10 核心 viewport（未新增依赖）：`mobile320` / `mobile375` / `mobile414` + INITIAL_VIEWPORTS；14 个移动组件 story meta 默认 `mobile375`。
+- 顺手修复 `stories/GmTag.stories.tsx` 的失效 import（`adapters/` → `components/`），完整 `build-storybook` 通过。
+
+### 三、演示层与门禁
+- Steps 改**竖版**（左侧连接线，375/320 无溢出）；Footer 改**玻璃细条** + 用户协议/隐私政策/备案链接（热区补足）。
+- `mobile-smoke` 新增 21 条断言（13 个此前无断言组件：SearchBar/NoticeBar/Chips/Segmented/Upload/Rate/Progress/Steps/CapsuleTabs/Selector/Cell/Footer/SafeArea），375 与 320 均 **110/110**。
+
+### 四、验证
+`audit.py` PASS（29 门禁）· 版本 10 载体 V2.12 · 契约 50/50 · 样式 0 差异 · `mobile-smoke` 375/320 110/110 · `build-storybook` 通过 · `tsc` 双库 0 错误。
+
+---
+
+## [V2.11] · 移动端 P0 收口（规范裁决 · 6 组件 · Token · 门禁）
+
+> 依据：`docs/移动端组件设计现状梳理.md` 的 P0 清单；移动端从「演示层有、代码层空」收口为「规范可依据、组件可复用、门禁可回归」。
+
+### 一、规范收口（8 条冲突 + 12 项登记）
+- 裁决 8 条口径冲突：TabBar 圆角统一 22（CSS 块的 24 是残留）、遮罩 blur 统一 16（原 8 不在 02 档位）、同屏模糊节点统一 ≤4（06.5 原 ≤6）、移动按钮统一 L48/M44/S36（Arco 档改为映射参考）、NavBar 标题统一 18/600、Dropdown 登记为双端（移动走 11.6.12 筛选下拉）、CapsuleTabs 与 Segmented 职责边界、Link 文字色 #A9315B（D34）。
+- `00` 组件总目录 98 → **109 项**：补登 SwipeAction / CapsuleTabs / Selector / Calendar / Popup·Mask / SafeArea / Sticky / ErrorBlock / NumberKeyboard / Footer / WaterMark，并修正 Dropdown 行。
+- 回写其余口径：紫渐变遗留措辞、勾徽实底（D5）、11.6.6 模糊档位引用、11.6.8 Sticky blur、ImageViewer 深幕布特例、Cascader 底栏 46/r22。
+- `20.12` 更新移动偏差登记：C-01/C-05/C-06 闭环，新增 V2.11 移动收口条目。
+
+### 二、代码（两库 27 → 33）
+- 新增 6 个移动组件（React/Vue 同契约、同类名、同无障碍行为）：`GmNavBar`、`GmTabBar`、`GmBottomSheet`、`GmActionSheet`、`GmCell`、`GmSearchBar`。
+- 18 个 `--lg-m-*` Token（间距/圆角/触控/模糊/字号）进 `@goodmom/ui` 与 `@goodmom/vue`；新增组件 CSS 两库逐字节一致（`check-style-parity.py --ci`）。
+- 修 D1：React `GmClientCard` 补 ≤767 换行规则，消除 Vue/React 移动分叉。
+- Storybook 新增 6 个 story 文件（18 个 story）。
+
+### 三、门禁与缺陷
+- `mobile-smoke.mjs` 支持 `MOBILE_VW` / `MOBILE_VH`，新增记录页横向溢出、弹层打开态溢出、OTP 容器溢出断言。
+- 修 320 宽「记录」页 OTP 6 格横向溢出（实测整页 337 > 320，触发 shrink-to-fit）。
+- `layout-gate.mjs` 收窄 `<12px`「设备模拟」白名单（不再整块豁免移动模块）。
+
+---
+
+## [V2.10] · 「库组件待补」七项清零（Table / Collapse / Descriptions / Modal / Popconfirm / Popover·Tooltip / 生长曲线卡）
+
+- **新封装 8 个组件 × 双库（React `@goodmom/ui` 与 Vue `@goodmom/vue` 各 19 → 27，同名同契约，`check-component-contract.py --ci` 27/27）**：
+  - `GmTable`（03 · 3.7 / TB-15-01/02/04）：`th scope="col"`、排序 `aria-sort="ascending|descending|none"`（asc→desc→null 循环，站点从未实现，库组件带头做）、省略 + `title` 全文、空态 GmEmpty；宽表横滑由 `.gm-tbl-wrap` 承担。
+  - `GmCollapse`（11 · 11.2.6）：300ms grid-rows + 220ms 箭头 + 一屏 ≤3（`maxOpen` 默认 3 收最早）+ `aria-expanded`/`aria-controls` 全部内建；两个实测坑（details 收起播不出 transition、代理层不可带 padding）按站点脚本口径固化为实现。
+  - `GmDescriptions`（08 · 8.2.11/8.2.13）：`<dl>` 键值语义、key caption 走**次级色**（D19 裁决）、value body-sm 单行省略 + title、分栏 `--gm-desc-cols` 默认 3。
+  - `GmModal`（03 · 3.9 / 11.2.15 / MD-18-01/02）：`role=dialog`+`aria-modal`、遮罩 250ms + 面板 320ms、ESC/遮罩/× 关闭、锁滚动、焦点进面板/归还触发点、移动双按钮竖排（确认在下）。
+  - `GmPopconfirm`（08 · 8.2.17）：非模态 `role=dialog` + 触发器 `aria-haspopup`/`aria-expanded`、ESC/外点关闭归还焦点、danger 深档实底（D5）、180ms/Y4px。
+  - `GmPopover`（03 · 3.5.4/3.9）：`--lg-glass-popover` 材质、240ms 指向触发点（MD-18-01）；`GmTooltip`：180ms/Y4px、移动 tap 开合（10.4 禁 hover 依赖）、`role="tooltip"`。
+  - `GmGrowthCard`（13 · 13.2）：数据契约与站点 `window.gmGrowth` **逐字一致**——参考带 .12、主曲线 2.5px、警戒线 1.5px 三级色虚线、悬停/框选/开关、P3–P50–P97 分段线性算法、`role="img"` + 隐藏数据表（table-layout:fixed）。
+- **双库样式**：V2.10 增量块两库逐字节一致（共享选择器 233 → **388**，`check-style-parity.py --ci` 0 差异）；新增 `--gm-guide`（图表导引件专用三级色档，浅/暗两档进 Token 层）；新增暗色档：表格 hover、折叠面板、Modal 按钮、气泡/提示底、生长曲线 tooltip/note。
+- **门禁在验证中抓到的真实缺陷（已修）**：① `.gm-growth__legend .gm-growth__li--warn i` 与 `.gm-tbl__sortic` 在 <24px 元素上用 `--lg-text-tertiary`（`audit.py tertiary-size` FAIL）→ 改次级色/导引件变量；② `[data-theme="dark"] .gm-modal__btn` 渐变+边框缺 `background-origin:border-box`（`audit.py bg-origin` FAIL，1px 异色缝）→ 补上；③ 三个渲染类名无 CSS 规则（孤儿类名冒烟 FAIL）→ 图例 chip 选择器改类名对齐、`--focus` 修饰类补真实规则、警戒线组补 `pointer-events:none`。
+- **验收台与冒烟**：双库 playground 增 8 组件全量渲染（排序点击、折叠展开、模态断言后回收遮罩、生长曲线开关/隐藏数据表）；React 冒烟 **61→75 项**、Vue 冒烟 **40→54 项**，含无孤儿类名与控制台零错误。
+- **Storybook**：新增 7 个 stories 文件（GmTable/GmCollapse/GmDescriptions/GmModal/GmPopconfirm/GmPopover/GmGrowthCard）；修复 `GmSteps.stories.tsx` 指向已移除的 `src/adapters/` 的陈旧 import。
+- **文档与登记**：00 目录 #33/#34/#38/#65/#67/#68/#90 七行「库组件待补」全部改 ✅ 已封装；Part 11「封装子集 17 模块 × 2 库」→ 27 组件；README/16/19/20/手册/skills 的组件数与冒烟数同步（coverage.py 为唯一计数来源，自动 19→27）；版本 2.9.0 → 2.10.0（VERSION 唯一源 + 10 载体）。
+- **回归**：`audit.py` PASS · `check-style-parity.py --ci` 0 差异（388 共享选择器）· `check-component-contract.py --ci` 27/27 · `check-status-map.py --ci` PASS · `a11y.py --ci` PASS · `check-module-boundary.py` PASS · React typecheck/build 0 错误 · Vue typecheck/build 0 错误 · frontend-app tsc 0 错误 · 双库冒烟 75/75 · 54/54。
+
 ## [V2.9] · 两条"假通过"的门禁与一份脱缰的自审计报告（D38）
 
 ### 一、`spec` 门禁的章节数一直是随机数

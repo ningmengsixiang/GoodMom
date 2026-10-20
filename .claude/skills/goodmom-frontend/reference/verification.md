@@ -29,8 +29,8 @@
 | `site-parity.mjs` | 合并保真度（对齐 `site/.baseline/`，8 个已入库页面） | 同上 | 只允许 `INTENTIONAL` 差集 | ✅ |
 | `patterns-smoke.cjs` | 示例页渲染回归（`file://` 直开） | `node scripts/patterns-smoke.cjs` | 42 条断言 | ❌ 不在 CI |
 | `gate-negative-tests.py` | 门禁负向测试 **81 条**（覆盖 audit 的 14 条门禁 + 独立脚本 `@contract` / `@parity`）：给每条门禁**注入真实缺陷**，断言它必须 FAIL 且报出预期关键词 | `python3 scripts/gate-negative-tests.py`（`<词>` 只跑匹配用例） | 任一注入后仍 PASS 即失败 | ❌ 不在 CI（会**临时改写仓库文件**并按字节还原；本地跑前请保证工作区干净） |
-| `goodmom-ui/playground/smoke.mjs` | React 组件契约渲染级冒烟（实测 **61/61**，含**无孤儿类名**检查） | `node goodmom-ui/playground/smoke.mjs` | 全绿 | ✅ `component-contract` |
-| `goodmom-vue/playground/smoke.mjs` | Vue 组件契约渲染级冒烟（实测 **40/40**，含**无孤儿类名**检查） | 起 vite（5273）后 `node goodmom-vue/playground/smoke.mjs` | 全绿 | ✅ |
+| `goodmom-ui/playground/smoke.mjs` | React 组件契约渲染级冒烟（实测 **75/75**，含**无孤儿类名**检查） | `node goodmom-ui/playground/smoke.mjs` | 全绿 | ✅ `component-contract` |
+| `goodmom-vue/playground/smoke.mjs` | Vue 组件契约渲染级冒烟（实测 **54/54**，含**无孤儿类名**检查） | 起 vite（5273）后 `node goodmom-vue/playground/smoke.mjs` | 全绿 | ✅ |
 
 > ⚠️ 本地起 vite 用 `node node_modules/vite/bin/vite.js`（`npx vite` 在本机静默退出、不报错）；CI 里 `npx vite` 正常。
 

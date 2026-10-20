@@ -972,7 +972,8 @@ table.gm-sr-only{table-layout:fixed;pointer-events:none}
 /* 异常点玻璃气泡建议（13.2「P3 以下 / P97 以上 → 数据点转琥珀/红 + 玻璃气泡建议文案」） */
 .gm-growth__note{display:flex;gap:8px;align-items:flex-start;margin-top:8px;padding:9px 12px;
   border-radius:18px;font-size:12px;line-height:18px;   /* 02 · 2.4 圆角档：18（16 不在档） */
-  background:rgba(255,255,255,.75);-webkit-backdrop-filter:blur(20px);backdrop-filter:blur(20px);
+  /* 亮面走填充档 Token：字面量在暗色模块里仍是一块亮片，琥珀文字压上去实测 1.07:1 */
+  background:var(--lg-glass-popover,rgba(255,255,255,.75));-webkit-backdrop-filter:blur(20px);backdrop-filter:blur(20px);
   border:1px solid var(--lg-divider,rgba(58,52,84,.10))}
 .gm-growth__note[data-tone="attention"]{color:var(--lg-sem-attention,#8D5A15)}
 .gm-growth__note[data-tone="risk"]{color:var(--lg-sem-risk,#B72F42)}
@@ -1489,7 +1490,10 @@ window.gmGrowth = function(el, d){
   if(!el || !d) return null;
   var mini = !!d.mini;   /* mini = M 家长端形态（13.2）：只留参考带 / 主曲线 / 端点，无坐标轴与图例 */
   var W = mini ? 200 : 380, H = mini ? 74 : 168;
-  var M = mini ? {t:4, r:4, b:4, l:4} : {t:10, r:12, b:26, l:34};
+  /* ⚠️ 非 mini 的右边距必须 ≥40：X 轴名称「孕周」与最后一个刻度（如 40）原来抢同一行，
+     axname 右对齐在绘图区右沿、刻度居中在同一 x → 实测叠成「孕周0」（620px 宽下清晰可见）。
+     40 让绘图区右沿左移，刻度与轴名之间留出 4 个 viewBox 单位的净空。 */
+  var M = mini ? {t:4, r:4, b:4, l:4} : {t:10, r:40, b:26, l:34};
   var iw = W - M.l - M.r, ih = H - M.t - M.b;
 
   /* ── 比例尺 ── */
@@ -1576,7 +1580,7 @@ window.gmGrowth = function(el, d){
     if(d.x.indexOf(x) < 0) return;
     parts.push('<text class="gm-growth__tick" x="' + X(x).toFixed(1) + '" y="' + (H - 8) + '" text-anchor="middle">' + x + '</text>');
   });
-  parts.push('<text class="gm-growth__axname" x="' + (M.l + iw) + '" y="' + (H - 8) + '" text-anchor="end">' + d.xName + '</text>');
+  parts.push('<text class="gm-growth__axname" x="' + (W - 4) + '" y="' + (H - 8) + '" text-anchor="end">' + d.xName + '</text>');
   if(!mini) parts.push('<rect class="gm-growth__sel" x="0" y="0" width="0" height="0" rx="6" style="display:none"/>');
   parts.push('</g>');
   parts.push('</svg>');
@@ -1923,9 +1927,11 @@ def rewrite_legacy_links(html: str, self_mod: str) -> str:
         else:
             target = f"#{mod}--{frag}"
         # ⚠️ `pre` 本身已以 `href="` 结尾（见下方 re.sub 的第 1 组），
-        # 因此这里绝不能再写一次 `href="` —— 否则产出 `href="href="#…"`，
-        # 浏览器把属性值解析为字面量 `href=`，点击后导航到 /site/href= → 404。
-        return f'{pre}{target}" data-mod="{mod}"{post}'
+        # `post` 以原闭合引号 `"` 开头 —— 因此这里绝不能再写一次引号：
+        # 旧代码 `...{mod}"{post}` 会产出 `data-mod="site-manual""`（属性值变成
+        # `site-manual"`，外壳 getAttribute 永远匹配不上 → 点击切换静默失效），
+        # 也不会写 `href="` —— 否则产出 `href="href="#…"`，导航到 /site/href= → 404。
+        return f'{pre}{target}" data-mod="{mod}{post}'
 
     return re.sub(r'(<a\b[^>]*?\shref=")([^"]+)(")', one, html)
 

@@ -7,10 +7,22 @@ ROOT=os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SRC=os.path.join(ROOT,"docs","妈咪好UIUX设计系统标准手册.md")
 OUT=os.path.join(ROOT,"site","manual.html")
 
+def mdlink(m):
+    txt, url = m.group(1), m.group(2)
+    if url.startswith(('http', 'mailto')):
+        return '<a href="%s" target="_blank" rel="noopener noreferrer">%s</a>' % (url, txt)
+    if url.startswith('#'):
+        return '<a href="%s">%s</a>' % (url, txt)
+    p = url if url.startswith(('../', './', '/')) else '../' + url
+    return '<a href="%s">%s</a>' % (p, txt)
+
 def inline(t):
     t=H.escape(t, quote=False)
     t=re.sub(r'`([^`]+)`', r'<code>\1</code>', t)
-    t=re.sub(r'\*\*([^*]+)\*\*', r'<b>\1</b>', t)
+    # 非贪婪配对：加粗范围内允许出现单个 `*`（如已转 <code> 的 Token `--lg-*`），
+    # 旧写法 `\*\*([^*]+)\*\*` 遇此情形无法闭合 → 星号原文漏出
+    t=re.sub(r'\*\*(.+?)\*\*', r'<b>\1</b>', t)
+    t=re.sub(r'\[([^\]]+)\]\(([^)]+)\)', mdlink, t)
     return t
 
 def read_table(rows):
@@ -35,9 +47,11 @@ def block_to_html(lines):
             tbl.append(ln)
         else:
             flush_table(tbl); tbl=[]
-            if ln.startswith('>'):
+            if ln.strip().startswith('>'):
+                # 缩进引用（列表项内 `  > …`）：按 strip 判定并剥离（此前只看行首 `>`，
+                # 缩进引用会掉进 <p> 分支，`>` 被 escape 成字面 `&gt;` 显示在页面上）
                 q=[]
-                while i<len(lines) and lines[i].rstrip().startswith('>'):
+                while i<len(lines) and lines[i].strip().startswith('>'):
                     q.append(inline(lines[i].strip()[1:].strip())); i+=1
                 out.append('<blockquote>'+('<br>'.join(q))+'</blockquote>'); i-=1
             elif re.match(r'\s*[-*] ', ln):

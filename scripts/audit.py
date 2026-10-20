@@ -149,7 +149,12 @@ PAGE_ALIAS = {h.upper() for h in """#1B3D33 #1F6B4F #6E7686 #7A5F0D #8ADCC6 #C25
 #F0D4CF #FDF2EE #F6E2DB #EAD3CA #E7D4CB #E6CFC6 #E7D3CB #EED5CD #E6C6BD #FFF7F4 #FDF6F2
 #EED9D3 #FFFAF7 #E0C2BB #F0E6E0 #C9BDB5 #9C8E86 #EADFD6 #D9C9BF #F7E4DD #EBD3CA #E9D2C9 #72DDE5 #A5F1EE #F5B8C6 #D9CBFE #EDE7FE
 #FFD0D8 #F6C0A0 #A98BFF #7D66F2 #69D8D2 #E0F8F6 #9CAEFF #E4EAFF #F2A5B7 #FDE9EE #FBD9BE #F0AE86 #3A3642 #191720 #F8CE8C
-#A6ADB9 #8A92A3 #F6A97E #2A8D92 #241D24 #3A2B33 #55333D #A03F60""".split()}
+#A6ADB9 #8A92A3 #F6A97E #2A8D92 #241D24 #3A2B33 #55333D #A03F60
+#221F29 #2A2731 #C4B0FF #FFD1A3""".split()}
+"""V2.10 补入：产品矩阵模块**暗色档**的 4 个取值（`#221F29` `#2A2731` 暗底渐变中段、
+`#C4B0FF` 新生儿产品暗色墨、`#FFD1A3` 五色橙标签暗色文字）。
+它们此前只存在于生成器 CSS 里、未进入交付页；V2.10 补齐暗色档后随片段进入 site/index.html，
+按页面档别名登记（与上一组"站点自建暗色档"D37 同一口径，站点暗色统一时一并收回）。"""
 COLOR_SOURCES = ["goodmom-ui/src/theme.css", "goodmom-ui/src/tokens/status.ts",
                  "goodmom-ui/src/tokens/design.ts", "frontend-app/packages/gm-arco-ui/src/gm.css",
                  "frontend-app/packages/gm-arco-ui/src/tokens/status.ts"]

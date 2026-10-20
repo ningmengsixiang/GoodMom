@@ -2,7 +2,7 @@
 
 > **定位**：妈咪好 UIUX 设计系统（妇幼儿童全生命周期）的「38 部分总纲 + 标准速查 + 资产导航」。
 > 本手册不替代分篇规范（详见每部分「来源」），而是把散落规范、代码封装、治理工具按统一标准组织成可评审、可交付、可落地的手册。
-> 版本：V1.0（随主系统 V2.9）· 维护：docs/审查决策记录.md + CHANGELOG.md 同步 · 更新方式见 Part 31。
+> 版本：V1.0（随主系统 V2.13）· 维护：docs/审查决策记录.md + CHANGELOG.md 同步 · 更新方式见 Part 31。
 
 ---
 
@@ -20,7 +20,7 @@
 | 08 | Iconography | 09、goodmom-icons | lg-icons.svg(77)、registry.ts、build-icons.py | ✅ 覆盖 |
 | 09 | Illustration | 12.4、13 | 插画基调条目 | ➕ 增量 |
 | 10 | Motion | 07、7.2/7.3/7.9 | 动效 token、reduced-motion | ✅ 覆盖 |
-| 11 | 100+ 基础组件规范 | 00(98)、03、08、10/11、13 | goodmom-ui 16 模块 | ✅ 覆盖（封装子集） |
+| 11 | 100+ 基础组件规范 | 00(109)、03、08、10/11、13 | goodmom-ui 57 模块 | ✅ 覆盖（封装子集） |
 | 12 | 组件状态规范 | 15、07.8、08、18.2.5 | 六语义/五色/GmStatusTag 等 | ✅ 覆盖 |
 | 13 | UX 交互规范 | 07、17.3、13 | 组合顺序、反馈节奏 | ✅ 覆盖 |
 | 14 | 表单规范 | 03.5、10.6、11 | 玻璃输入/选择/校验 | ✅ 覆盖 |
@@ -169,14 +169,14 @@
   - 曲线：出场 `cubic-bezier(.22,1,.36,1)`；对称 `cubic-bezier(.65,0,.35,1)`；spring `cubic-bezier(.34,1.56,.64,1)`（开关/勾选/计数）。
 - **分级 M1–M4**：M1 状态反馈（120–220ms）→ M2 悬浮/展开（220–400ms）→ M3 强调/庆祝（400ms+）→ M4 环境呼吸（仅在线/实时）。
 - **组件配方速查（07.3）**：按钮 sheen 0.8s / 按压 scale(.96)120ms / loading 圈 0.9s·转；卡片 hover 浮起 6px；开关 spring 300ms；分段滑块 280ms；弹层 250+320ms；Toast 滑入 320→驻留 2.4s→240ms；骨架 1.15s shimmer；列表错峰 60ms×n。
-- **红线**：只动 transform/opacity；全屏 backdrop-blur ≤6 节点；动效不承载唯一信息（颜色/文字双通道）；`prefers-reduced-motion` 全局降级（07.5/07.9）。
+- **红线**：只动 transform/opacity；全屏 backdrop-blur ≤4 节点；动效不承载唯一信息（颜色/文字双通道）；`prefers-reduced-motion` 全局降级（07.5/07.9）。
 - **验收**：`a11y.py`（outline/reduced-motion 静态项）+ 人工走查动效库（侧栏「动效库」视图演示 20 种配方）。
 
 ## Part 11 · 100+ 基础组件规范
-- **目录与覆盖口径（重要）**：00-组件总目录登记 **98 项 = 规范全量**（含字段/交互/领域组件）；`goodmom-ui` **已封装 16 模块 = 代码子集**；二者关系以 `docs/coverage-report.md`（coverage.py 自动统计）为准，README 已标注口径，避免“查 98 以为都有”。
+- **目录与覆盖口径（重要）**：00-组件总目录登记 **109 项 = 规范全量**（含字段/交互/领域组件）；`goodmom-ui` / `goodmom-vue` **各已封装 57 组件 = 代码子集**（同名同契约）；二者关系以 `docs/coverage-report.md`（coverage.py 自动统计）为准，README 已标注口径，避免“查 109 以为都有”。
 - **组件质量基线（03/08 逐组件）**：① 状态全覆盖（hover/focus/press/disabled/loading/error/empty 见 07.8 矩阵）；② props 克制且可组合（GmButton=Arco 全谱透传 + gm 语义类）；③ 同义场景复用同组件（状态标签 GmStatusTag/GmTag 共享 SEMANTIC_COLOR，不同引擎上下文不合并——D3）；④ 支持主题/局部定制（色走 token var）。
 - **引擎策略**：Arco（React）为工程基底、Semi 对齐矩阵见 08；自包含轻量适配（无 Arco 依赖）仅用于 GmTag/GmSteps 类轻组件。
-- **封装子集现状**：GmButton/StatusTag/Tag/Card/Avatar/Progress/Steps/RiskPicker/ClientCard/Empty/Spin/Skeleton/GmLink/GmCascader/GmResponsiveView/GmVirtualList（16）。缺封装组件：先用 Arco 原生 + `gm-*` 主题类实现，并按 00 登记制度回填。
+- **封装子集现状**：GmButton/StatusTag/Tag/Card/Avatar/Progress/Steps/RiskPicker/ClientCard/Empty/Spin/Skeleton/GmLink/GmCascader/GmResponsiveView/GmVirtualList/GmTable/GmCollapse/GmDescriptions/GmModal/GmPopconfirm/GmPopover/GmTooltip/GmGrowthCard（27）。缺封装组件：先用 Arco 原生 + `gm-*` 主题类实现，并按 00 登记制度回填。
 - **验收点**：组件新增须 index.ts 导出 + README 更新 + coverage 计数更新；`npm run typecheck`（CI）通过；组件内无魔法色。
 
 ## Part 12 · 组件状态规范
@@ -300,7 +300,7 @@
 
 ## Part 27 · Design-to-Code 标准
 - **映射纪律**：图面颜色/字号/间距/圆角/阴影只能出自 token；还原以 token 值为准（不允许类型化 token 偏差），视觉微调（±≤2px 类）由设计评审裁定并在决策记录留档。
-- **规范-代码登记**：00 目录=规范全量（98）↔ 代码封装=16（coverage.py 自动统计）↔ docs/coverage-report.md；新增封装双向登记。
+- **规范-代码登记**：00 目录=规范全量（109）↔ 代码封装=57（coverage.py 自动统计）↔ docs/coverage-report.md；新增封装双向登记。
 - **页面壳映射**：17.1.1 栅格/17.3.1 组合顺序 → 页面 class 结构；站内不重复定义品牌 :root，统一导航与 logo（`../brand/logo-512.png`，favicon 用 `../brand/logo-192.png`）；HTML 无 `.md` 链接（audit html-md）。
 - **双轨禁令**：Figma、代码、spec 三方必须同源同步；页面出现第三方风格/裸色视为回归（audit 色彩 + stale）。
 - **验收工具**：`audit.py`（含章节/图标/色彩/断点/spec）、`coverage.py`、CI 三 job；规范变更必须跑 `refresh-spec.py`。
@@ -346,13 +346,13 @@
 
 ## Part 34 · 产品经理使用规范
 - **词库对齐**：PRD/交互稿文案使用 15 章状态词条与 14 术语；新增业务状态先登记再写稿。
-- **组件查重**：提新 UI 前查 00 目录是否已有组件/领域组件（98 全量目录 + 16 封装子集见 docs/coverage-report.md）；已有则复用，避免各自实现。
+- **组件查重**：提新 UI 前查 00 目录是否已有组件/领域组件（109 全量目录 + 57 封装子集见 docs/coverage-report.md）；已有则复用，避免各自实现。
 - **领域口径**：涉及妊娠风险分级（五色）引用 02.10/15.2.10；随访/儿保/疫苗计划等流程用 13 章组件语言描述。
 - **验收引用**：交付验收直接引 Part 37 清单；需求版本与 CHANGELOG 对应。
 
 ## Part 35 · 前端工程师使用规范
 - **接入顺序**：`@arco-design/web-react/dist/css/arco.css` → `@goodmom/ui/theme.css` → 组件/tokens；样式覆盖只改主题层，不在页面写品牌 :root。
-- **可用 API**：Gm* 组件（16 模块，见 goodmom-ui README）、tokens（design/business/status）、gmIcon/GmIcon（title 语义化）、i18n。
+- **可用 API**：Gm* 组件（57 模块 × 双库，见 goodmom-ui README）、tokens（design/business/status）、gmIcon/GmIcon（title 语义化）、i18n。
 - **工程**：`npm run typecheck`（根：@goodmom/ui+icons）、`npm run build`；CI = docs-links / gm-ui-typecheck / open-pkg-typecheck；本地改动后跑 `scripts/audit.py` 与 `a11y.py --ci`。
 - **页面集成**：先 token 后组件后页面壳（17.1→class）；新封装组件回填 index.ts/README/00/coverage；禁止魔法色与页面级裸断点。
 
@@ -366,7 +366,7 @@
 - **硬性闸门（全部通过才可交付）**
   - `python3 scripts/audit.py`：md 链/章节 00–18/icons 77/html 无 md/stale/色彩（ALLOWED·PAGE_ALIAS）/color-banned/bp/spec 章节 20+阅读器
   - `python3 scripts/a11y.py --ci`：outline 兜底/禁 span+onClick
-  - `python3 scripts/coverage.py --ci`：docs 19/组件 98/16/图标 77 数值对齐
+  - `python3 scripts/coverage.py --ci`：docs 21/组件 109/57/图标 77 数值对齐
   - CI：docs-links、gm-ui-typecheck、open-pkg-typecheck 三 job 绿
 - **文档闸门**：CHANGELOG/README 版本同步；spec.html 由 refresh 重生成；决策记录回填（D-条目与保留项）。
 - **人工闸门**：品牌视觉（白字/渐变/层级）与医疗口径由设计/领域负责人过稿；`docs/a11y-dom-report.md` 残留清单逐条裁决或排期。
@@ -377,8 +377,8 @@
   | 资产 | 数量/位置 |
   | --- | --- |
   | 编号规范文档 | 20 份（根 `[0-9][0-9]-*.md`） |
-  | 组件目录（规范全量） | 98（00-组件总目录.md） |
-  | 代码组件（封装） | 16（goodmom-ui/src，以 coverage 为准） |
+  | 组件目录（规范全量） | 109（00-组件总目录.md） |
+  | 代码组件（封装） | 57（goodmom-ui/src 与 goodmom-vue/src 各 57，以 coverage 为准） |
   | 自绘图标 | 77（icons/lg-icons.svg ↔ registry ↔ 09） |
   | HTML 展示 | site 3 + preview 5 + fuyouaicansai 交互稿 |
   | Logo/品牌 | `brand/logo.png`（**正式 logo 真源**，2032×2032）+ `brand/logo-512.png` / `brand/logo-192.png`（派生档）；`brand/*.svg` 三个自绘稿已退役、仅留档 |

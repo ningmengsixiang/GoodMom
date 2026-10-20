@@ -2,394 +2,394 @@
 
 断点：320 / 375 / 414 / 768 / 1024 / 1440 / 1920　用例：71 个页面/视图 × 7 档 = 386 次扫描
 
-| 用例 | 溢出 | 白条 | 出框 | 重叠 | 塌陷 | 被切 | 热区 | <12px | <12px（设备模拟，登记） |
-| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
-| site#site-index @320 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| site#products @320 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| site#preview-index @320 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 57 | 20 |
-| site#preview-examples @320 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| site#preview-mobile @320 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 4 |
-| site#preview-patterns @320 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| site#site-spec @320 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| site#site-manual @320 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| site#site-docs @320 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| app/p01-women-health#work @320 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| app/p01-women-health#archive @320 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| app/p01-women-health#ai @320 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| app/p01-women-health#detail @320 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| app/p01-women-health#mod-lifecycle @320 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| app/p01-women-health#mod-disease @320 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| app/p01-women-health#mod-screening @320 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| app/p01-women-health#mod-followup @320 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| app/p01-women-health#mod-report @320 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| app/p02-preconception#work @320 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| app/p02-preconception#archive @320 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| app/p02-preconception#ai @320 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| app/p02-preconception#detail @320 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| app/p02-preconception#mod-premarital @320 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| app/p02-preconception#mod-preconception @320 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| app/p02-preconception#mod-prepare @320 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| app/p02-preconception#mod-results @320 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| app/p02-preconception#mod-followup @320 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| app/p02-preconception#mod-report @320 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| app/p03-maternity#work @320 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| app/p03-maternity#archive @320 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| app/p03-maternity#ai @320 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| app/p03-maternity#detail @320 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| app/p03-maternity#mod-antenatal @320 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| app/p03-maternity#mod-highrisk @320 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| app/p03-maternity#mod-delivery @320 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| app/p03-maternity#mod-postpartum @320 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| app/p03-maternity#mod-appointment @320 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| app/p03-maternity#mod-followup @320 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| app/p03-maternity#mod-report @320 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| app/p04-newborn#work @320 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| app/p04-newborn#archive @320 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| app/p04-newborn#ai @320 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| app/p04-newborn#detail @320 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| app/p04-newborn#mod-visit @320 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| app/p04-newborn#mod-screening @320 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| app/p04-newborn#mod-highrisk @320 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| app/p04-newborn#mod-handover @320 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| app/p04-newborn#mod-report @320 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| app/p05-child-health#work @320 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| app/p05-child-health#archive @320 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| app/p05-child-health#ai @320 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| app/p05-child-health#detail @320 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| app/p05-child-health#mod-care @320 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| app/p05-child-health#mod-five @320 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| app/p05-child-health#mod-vision @320 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| app/p05-child-health#mod-dental @320 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| app/p05-child-health#mod-keychild @320 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| app/p05-child-health#mod-rehab @320 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| app/p05-child-health#mod-followup @320 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| app/p05-child-health#mod-report @320 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| app/p06-ai-care#work @320 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| app/p06-ai-care#archive @320 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| app/p06-ai-care#ai @320 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| app/p06-ai-care#detail @320 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| app/p06-ai-care#mod-clinical @320 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| app/p06-ai-care#mod-health @320 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| app/p06-ai-care#mod-followup @320 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| app/p06-ai-care#mod-qc @320 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| app/p06-ai-care#mod-report @320 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| app/p06-ai-care#mod-analytics @320 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| preview/manual @320 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| site#site-index @375 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| site#products @375 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| site#preview-index @375 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 57 | 20 |
-| site#preview-examples @375 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| site#preview-mobile @375 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 4 |
-| site#preview-patterns @375 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| site#site-spec @375 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| site#site-manual @375 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| site#site-docs @375 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| app/p01-women-health#work @375 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| app/p01-women-health#archive @375 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| app/p01-women-health#ai @375 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| app/p01-women-health#detail @375 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| app/p02-preconception#work @375 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| app/p02-preconception#archive @375 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| app/p02-preconception#ai @375 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| app/p02-preconception#detail @375 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| app/p03-maternity#work @375 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| app/p03-maternity#archive @375 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| app/p03-maternity#ai @375 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| app/p03-maternity#detail @375 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| app/p04-newborn#work @375 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| app/p04-newborn#archive @375 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| app/p04-newborn#ai @375 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| app/p04-newborn#detail @375 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| app/p05-child-health#work @375 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| app/p05-child-health#archive @375 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| app/p05-child-health#ai @375 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| app/p05-child-health#detail @375 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| app/p06-ai-care#work @375 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| app/p06-ai-care#archive @375 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| app/p06-ai-care#ai @375 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| app/p06-ai-care#detail @375 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| preview/manual @375 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| site#site-index @414 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| site#products @414 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| site#preview-index @414 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 57 | 20 |
-| site#preview-examples @414 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| site#preview-mobile @414 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 4 |
-| site#preview-patterns @414 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| site#site-spec @414 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| site#site-manual @414 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| site#site-docs @414 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| app/p01-women-health#work @414 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| app/p01-women-health#archive @414 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| app/p01-women-health#ai @414 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| app/p01-women-health#detail @414 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| app/p01-women-health#mod-lifecycle @414 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| app/p01-women-health#mod-disease @414 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| app/p01-women-health#mod-screening @414 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| app/p01-women-health#mod-followup @414 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| app/p01-women-health#mod-report @414 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| app/p02-preconception#work @414 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| app/p02-preconception#archive @414 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| app/p02-preconception#ai @414 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| app/p02-preconception#detail @414 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| app/p02-preconception#mod-premarital @414 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| app/p02-preconception#mod-preconception @414 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| app/p02-preconception#mod-prepare @414 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| app/p02-preconception#mod-results @414 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| app/p02-preconception#mod-followup @414 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| app/p02-preconception#mod-report @414 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| app/p03-maternity#work @414 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| app/p03-maternity#archive @414 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| app/p03-maternity#ai @414 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| app/p03-maternity#detail @414 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| app/p03-maternity#mod-antenatal @414 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| app/p03-maternity#mod-highrisk @414 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| app/p03-maternity#mod-delivery @414 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| app/p03-maternity#mod-postpartum @414 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| app/p03-maternity#mod-appointment @414 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| app/p03-maternity#mod-followup @414 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| app/p03-maternity#mod-report @414 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| app/p04-newborn#work @414 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| app/p04-newborn#archive @414 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| app/p04-newborn#ai @414 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| app/p04-newborn#detail @414 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| app/p04-newborn#mod-visit @414 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| app/p04-newborn#mod-screening @414 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| app/p04-newborn#mod-highrisk @414 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| app/p04-newborn#mod-handover @414 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| app/p04-newborn#mod-report @414 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| app/p05-child-health#work @414 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| app/p05-child-health#archive @414 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| app/p05-child-health#ai @414 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| app/p05-child-health#detail @414 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| app/p05-child-health#mod-care @414 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| app/p05-child-health#mod-five @414 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| app/p05-child-health#mod-vision @414 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| app/p05-child-health#mod-dental @414 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| app/p05-child-health#mod-keychild @414 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| app/p05-child-health#mod-rehab @414 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| app/p05-child-health#mod-followup @414 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| app/p05-child-health#mod-report @414 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| app/p06-ai-care#work @414 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| app/p06-ai-care#archive @414 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| app/p06-ai-care#ai @414 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| app/p06-ai-care#detail @414 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| app/p06-ai-care#mod-clinical @414 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| app/p06-ai-care#mod-health @414 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| app/p06-ai-care#mod-followup @414 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| app/p06-ai-care#mod-qc @414 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| app/p06-ai-care#mod-report @414 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| app/p06-ai-care#mod-analytics @414 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| preview/manual @414 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| site#site-index @768 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| site#products @768 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| site#preview-index @768 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 57 | 20 |
-| site#preview-examples @768 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| site#preview-mobile @768 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 4 |
-| site#preview-patterns @768 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| site#site-spec @768 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| site#site-manual @768 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| site#site-docs @768 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| app/p01-women-health#work @768 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| app/p01-women-health#archive @768 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| app/p01-women-health#ai @768 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| app/p01-women-health#detail @768 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| app/p01-women-health#mod-lifecycle @768 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| app/p01-women-health#mod-disease @768 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| app/p01-women-health#mod-screening @768 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| app/p01-women-health#mod-followup @768 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| app/p01-women-health#mod-report @768 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| app/p02-preconception#work @768 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| app/p02-preconception#archive @768 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| app/p02-preconception#ai @768 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| app/p02-preconception#detail @768 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| app/p02-preconception#mod-premarital @768 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| app/p02-preconception#mod-preconception @768 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| app/p02-preconception#mod-prepare @768 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| app/p02-preconception#mod-results @768 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| app/p02-preconception#mod-followup @768 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| app/p02-preconception#mod-report @768 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| app/p03-maternity#work @768 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| app/p03-maternity#archive @768 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| app/p03-maternity#ai @768 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| app/p03-maternity#detail @768 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| app/p03-maternity#mod-antenatal @768 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| app/p03-maternity#mod-highrisk @768 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| app/p03-maternity#mod-delivery @768 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| app/p03-maternity#mod-postpartum @768 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| app/p03-maternity#mod-appointment @768 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| app/p03-maternity#mod-followup @768 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| app/p03-maternity#mod-report @768 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| app/p04-newborn#work @768 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| app/p04-newborn#archive @768 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| app/p04-newborn#ai @768 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| app/p04-newborn#detail @768 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| app/p04-newborn#mod-visit @768 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| app/p04-newborn#mod-screening @768 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| app/p04-newborn#mod-highrisk @768 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| app/p04-newborn#mod-handover @768 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| app/p04-newborn#mod-report @768 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| app/p05-child-health#work @768 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| app/p05-child-health#archive @768 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| app/p05-child-health#ai @768 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| app/p05-child-health#detail @768 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| app/p05-child-health#mod-care @768 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| app/p05-child-health#mod-five @768 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| app/p05-child-health#mod-vision @768 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| app/p05-child-health#mod-dental @768 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| app/p05-child-health#mod-keychild @768 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| app/p05-child-health#mod-rehab @768 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| app/p05-child-health#mod-followup @768 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| app/p05-child-health#mod-report @768 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| app/p06-ai-care#work @768 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| app/p06-ai-care#archive @768 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| app/p06-ai-care#ai @768 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| app/p06-ai-care#detail @768 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| app/p06-ai-care#mod-clinical @768 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| app/p06-ai-care#mod-health @768 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| app/p06-ai-care#mod-followup @768 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| app/p06-ai-care#mod-qc @768 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| app/p06-ai-care#mod-report @768 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| app/p06-ai-care#mod-analytics @768 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| preview/manual @768 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| site#site-index @1024 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| site#products @1024 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| site#preview-index @1024 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 57 | 20 |
-| site#preview-examples @1024 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| site#preview-mobile @1024 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 4 |
-| site#preview-patterns @1024 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| site#site-spec @1024 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| site#site-manual @1024 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| site#site-docs @1024 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| app/p01-women-health#work @1024 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| app/p01-women-health#archive @1024 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| app/p01-women-health#ai @1024 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| app/p01-women-health#detail @1024 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| app/p02-preconception#work @1024 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| app/p02-preconception#archive @1024 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| app/p02-preconception#ai @1024 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| app/p02-preconception#detail @1024 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| app/p03-maternity#work @1024 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| app/p03-maternity#archive @1024 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| app/p03-maternity#ai @1024 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| app/p03-maternity#detail @1024 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| app/p04-newborn#work @1024 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| app/p04-newborn#archive @1024 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| app/p04-newborn#ai @1024 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| app/p04-newborn#detail @1024 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| app/p05-child-health#work @1024 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| app/p05-child-health#archive @1024 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| app/p05-child-health#ai @1024 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| app/p05-child-health#detail @1024 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| app/p06-ai-care#work @1024 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| app/p06-ai-care#archive @1024 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| app/p06-ai-care#ai @1024 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| app/p06-ai-care#detail @1024 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| preview/manual @1024 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| site#site-index @1440 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| site#products @1440 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| site#preview-index @1440 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 57 | 20 |
-| site#preview-examples @1440 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| site#preview-mobile @1440 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 4 |
-| site#preview-patterns @1440 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| site#site-spec @1440 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| site#site-manual @1440 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| site#site-docs @1440 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| app/p01-women-health#work @1440 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| app/p01-women-health#archive @1440 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| app/p01-women-health#ai @1440 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| app/p01-women-health#detail @1440 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| app/p01-women-health#mod-lifecycle @1440 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| app/p01-women-health#mod-disease @1440 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| app/p01-women-health#mod-screening @1440 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| app/p01-women-health#mod-followup @1440 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| app/p01-women-health#mod-report @1440 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| app/p02-preconception#work @1440 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| app/p02-preconception#archive @1440 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| app/p02-preconception#ai @1440 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| app/p02-preconception#detail @1440 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| app/p02-preconception#mod-premarital @1440 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| app/p02-preconception#mod-preconception @1440 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| app/p02-preconception#mod-prepare @1440 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| app/p02-preconception#mod-results @1440 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| app/p02-preconception#mod-followup @1440 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| app/p02-preconception#mod-report @1440 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| app/p03-maternity#work @1440 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| app/p03-maternity#archive @1440 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| app/p03-maternity#ai @1440 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| app/p03-maternity#detail @1440 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| app/p03-maternity#mod-antenatal @1440 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| app/p03-maternity#mod-highrisk @1440 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| app/p03-maternity#mod-delivery @1440 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| app/p03-maternity#mod-postpartum @1440 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| app/p03-maternity#mod-appointment @1440 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| app/p03-maternity#mod-followup @1440 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| app/p03-maternity#mod-report @1440 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| app/p04-newborn#work @1440 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| app/p04-newborn#archive @1440 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| app/p04-newborn#ai @1440 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| app/p04-newborn#detail @1440 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| app/p04-newborn#mod-visit @1440 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| app/p04-newborn#mod-screening @1440 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| app/p04-newborn#mod-highrisk @1440 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| app/p04-newborn#mod-handover @1440 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| app/p04-newborn#mod-report @1440 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| app/p05-child-health#work @1440 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| app/p05-child-health#archive @1440 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| app/p05-child-health#ai @1440 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| app/p05-child-health#detail @1440 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| app/p05-child-health#mod-care @1440 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| app/p05-child-health#mod-five @1440 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| app/p05-child-health#mod-vision @1440 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| app/p05-child-health#mod-dental @1440 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| app/p05-child-health#mod-keychild @1440 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| app/p05-child-health#mod-rehab @1440 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| app/p05-child-health#mod-followup @1440 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| app/p05-child-health#mod-report @1440 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| app/p06-ai-care#work @1440 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| app/p06-ai-care#archive @1440 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| app/p06-ai-care#ai @1440 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| app/p06-ai-care#detail @1440 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| app/p06-ai-care#mod-clinical @1440 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| app/p06-ai-care#mod-health @1440 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| app/p06-ai-care#mod-followup @1440 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| app/p06-ai-care#mod-qc @1440 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| app/p06-ai-care#mod-report @1440 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| app/p06-ai-care#mod-analytics @1440 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| preview/manual @1440 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| site#site-index @1920 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| site#products @1920 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| site#preview-index @1920 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 57 | 20 |
-| site#preview-examples @1920 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| site#preview-mobile @1920 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 4 |
-| site#preview-patterns @1920 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| site#site-spec @1920 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| site#site-manual @1920 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| site#site-docs @1920 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| app/p01-women-health#work @1920 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| app/p01-women-health#archive @1920 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| app/p01-women-health#ai @1920 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| app/p01-women-health#detail @1920 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| app/p02-preconception#work @1920 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| app/p02-preconception#archive @1920 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| app/p02-preconception#ai @1920 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| app/p02-preconception#detail @1920 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| app/p03-maternity#work @1920 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| app/p03-maternity#archive @1920 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| app/p03-maternity#ai @1920 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| app/p03-maternity#detail @1920 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| app/p04-newborn#work @1920 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| app/p04-newborn#archive @1920 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| app/p04-newborn#ai @1920 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| app/p04-newborn#detail @1920 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| app/p05-child-health#work @1920 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| app/p05-child-health#archive @1920 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| app/p05-child-health#ai @1920 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| app/p05-child-health#detail @1920 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| app/p06-ai-care#work @1920 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| app/p06-ai-care#archive @1920 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| app/p06-ai-care#ai @1920 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| app/p06-ai-care#detail @1920 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| preview/manual @1920 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| 用例 | 溢出 | 白条 | 出框 | 重叠 | 塌陷 | 导航遮挡 | KPI 堆叠 | 被切 | 热区 | <12px | <12px（设备模拟，登记） |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| site#site-index @320 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| site#products @320 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| site#preview-index @320 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 66 | 11 |
+| site#preview-examples @320 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| site#preview-mobile @320 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
+| site#preview-patterns @320 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| site#site-spec @320 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| site#site-manual @320 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| site#site-docs @320 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| app/p01-women-health#work @320 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| app/p01-women-health#archive @320 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| app/p01-women-health#ai @320 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| app/p01-women-health#detail @320 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| app/p01-women-health#mod-lifecycle @320 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| app/p01-women-health#mod-disease @320 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| app/p01-women-health#mod-screening @320 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| app/p01-women-health#mod-followup @320 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| app/p01-women-health#mod-report @320 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| app/p02-preconception#work @320 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| app/p02-preconception#archive @320 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| app/p02-preconception#ai @320 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| app/p02-preconception#detail @320 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| app/p02-preconception#mod-premarital @320 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| app/p02-preconception#mod-preconception @320 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| app/p02-preconception#mod-prepare @320 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| app/p02-preconception#mod-results @320 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| app/p02-preconception#mod-followup @320 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| app/p02-preconception#mod-report @320 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| app/p03-maternity#work @320 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| app/p03-maternity#archive @320 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| app/p03-maternity#ai @320 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| app/p03-maternity#detail @320 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| app/p03-maternity#mod-antenatal @320 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| app/p03-maternity#mod-highrisk @320 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| app/p03-maternity#mod-delivery @320 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| app/p03-maternity#mod-postpartum @320 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| app/p03-maternity#mod-appointment @320 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| app/p03-maternity#mod-followup @320 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| app/p03-maternity#mod-report @320 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| app/p04-newborn#work @320 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| app/p04-newborn#archive @320 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| app/p04-newborn#ai @320 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| app/p04-newborn#detail @320 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| app/p04-newborn#mod-visit @320 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| app/p04-newborn#mod-screening @320 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| app/p04-newborn#mod-highrisk @320 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| app/p04-newborn#mod-handover @320 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| app/p04-newborn#mod-report @320 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| app/p05-child-health#work @320 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| app/p05-child-health#archive @320 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| app/p05-child-health#ai @320 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| app/p05-child-health#detail @320 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| app/p05-child-health#mod-care @320 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| app/p05-child-health#mod-five @320 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| app/p05-child-health#mod-vision @320 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| app/p05-child-health#mod-dental @320 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| app/p05-child-health#mod-keychild @320 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| app/p05-child-health#mod-rehab @320 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| app/p05-child-health#mod-followup @320 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| app/p05-child-health#mod-report @320 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| app/p06-ai-care#work @320 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| app/p06-ai-care#archive @320 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| app/p06-ai-care#ai @320 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| app/p06-ai-care#detail @320 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| app/p06-ai-care#mod-clinical @320 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| app/p06-ai-care#mod-health @320 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| app/p06-ai-care#mod-followup @320 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| app/p06-ai-care#mod-qc @320 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| app/p06-ai-care#mod-report @320 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| app/p06-ai-care#mod-analytics @320 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| preview/manual @320 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| site#site-index @375 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| site#products @375 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| site#preview-index @375 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 66 | 11 |
+| site#preview-examples @375 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| site#preview-mobile @375 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
+| site#preview-patterns @375 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| site#site-spec @375 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| site#site-manual @375 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| site#site-docs @375 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| app/p01-women-health#work @375 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| app/p01-women-health#archive @375 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| app/p01-women-health#ai @375 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| app/p01-women-health#detail @375 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| app/p02-preconception#work @375 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| app/p02-preconception#archive @375 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| app/p02-preconception#ai @375 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| app/p02-preconception#detail @375 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| app/p03-maternity#work @375 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| app/p03-maternity#archive @375 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| app/p03-maternity#ai @375 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| app/p03-maternity#detail @375 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| app/p04-newborn#work @375 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| app/p04-newborn#archive @375 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| app/p04-newborn#ai @375 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| app/p04-newborn#detail @375 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| app/p05-child-health#work @375 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| app/p05-child-health#archive @375 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| app/p05-child-health#ai @375 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| app/p05-child-health#detail @375 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| app/p06-ai-care#work @375 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| app/p06-ai-care#archive @375 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| app/p06-ai-care#ai @375 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| app/p06-ai-care#detail @375 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| preview/manual @375 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| site#site-index @414 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| site#products @414 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| site#preview-index @414 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 66 | 11 |
+| site#preview-examples @414 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| site#preview-mobile @414 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
+| site#preview-patterns @414 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| site#site-spec @414 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| site#site-manual @414 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| site#site-docs @414 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| app/p01-women-health#work @414 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| app/p01-women-health#archive @414 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| app/p01-women-health#ai @414 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| app/p01-women-health#detail @414 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| app/p01-women-health#mod-lifecycle @414 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| app/p01-women-health#mod-disease @414 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| app/p01-women-health#mod-screening @414 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| app/p01-women-health#mod-followup @414 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| app/p01-women-health#mod-report @414 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| app/p02-preconception#work @414 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| app/p02-preconception#archive @414 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| app/p02-preconception#ai @414 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| app/p02-preconception#detail @414 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| app/p02-preconception#mod-premarital @414 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| app/p02-preconception#mod-preconception @414 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| app/p02-preconception#mod-prepare @414 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| app/p02-preconception#mod-results @414 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| app/p02-preconception#mod-followup @414 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| app/p02-preconception#mod-report @414 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| app/p03-maternity#work @414 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| app/p03-maternity#archive @414 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| app/p03-maternity#ai @414 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| app/p03-maternity#detail @414 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| app/p03-maternity#mod-antenatal @414 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| app/p03-maternity#mod-highrisk @414 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| app/p03-maternity#mod-delivery @414 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| app/p03-maternity#mod-postpartum @414 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| app/p03-maternity#mod-appointment @414 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| app/p03-maternity#mod-followup @414 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| app/p03-maternity#mod-report @414 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| app/p04-newborn#work @414 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| app/p04-newborn#archive @414 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| app/p04-newborn#ai @414 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| app/p04-newborn#detail @414 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| app/p04-newborn#mod-visit @414 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| app/p04-newborn#mod-screening @414 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| app/p04-newborn#mod-highrisk @414 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| app/p04-newborn#mod-handover @414 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| app/p04-newborn#mod-report @414 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| app/p05-child-health#work @414 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| app/p05-child-health#archive @414 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| app/p05-child-health#ai @414 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| app/p05-child-health#detail @414 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| app/p05-child-health#mod-care @414 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| app/p05-child-health#mod-five @414 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| app/p05-child-health#mod-vision @414 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| app/p05-child-health#mod-dental @414 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| app/p05-child-health#mod-keychild @414 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| app/p05-child-health#mod-rehab @414 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| app/p05-child-health#mod-followup @414 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| app/p05-child-health#mod-report @414 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| app/p06-ai-care#work @414 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| app/p06-ai-care#archive @414 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| app/p06-ai-care#ai @414 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| app/p06-ai-care#detail @414 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| app/p06-ai-care#mod-clinical @414 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| app/p06-ai-care#mod-health @414 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| app/p06-ai-care#mod-followup @414 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| app/p06-ai-care#mod-qc @414 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| app/p06-ai-care#mod-report @414 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| app/p06-ai-care#mod-analytics @414 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| preview/manual @414 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| site#site-index @768 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| site#products @768 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| site#preview-index @768 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 66 | 11 |
+| site#preview-examples @768 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| site#preview-mobile @768 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
+| site#preview-patterns @768 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| site#site-spec @768 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| site#site-manual @768 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| site#site-docs @768 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| app/p01-women-health#work @768 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| app/p01-women-health#archive @768 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| app/p01-women-health#ai @768 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| app/p01-women-health#detail @768 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| app/p01-women-health#mod-lifecycle @768 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| app/p01-women-health#mod-disease @768 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| app/p01-women-health#mod-screening @768 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| app/p01-women-health#mod-followup @768 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| app/p01-women-health#mod-report @768 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| app/p02-preconception#work @768 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| app/p02-preconception#archive @768 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| app/p02-preconception#ai @768 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| app/p02-preconception#detail @768 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| app/p02-preconception#mod-premarital @768 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| app/p02-preconception#mod-preconception @768 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| app/p02-preconception#mod-prepare @768 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| app/p02-preconception#mod-results @768 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| app/p02-preconception#mod-followup @768 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| app/p02-preconception#mod-report @768 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| app/p03-maternity#work @768 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| app/p03-maternity#archive @768 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| app/p03-maternity#ai @768 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| app/p03-maternity#detail @768 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| app/p03-maternity#mod-antenatal @768 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| app/p03-maternity#mod-highrisk @768 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| app/p03-maternity#mod-delivery @768 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| app/p03-maternity#mod-postpartum @768 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| app/p03-maternity#mod-appointment @768 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| app/p03-maternity#mod-followup @768 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| app/p03-maternity#mod-report @768 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| app/p04-newborn#work @768 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| app/p04-newborn#archive @768 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| app/p04-newborn#ai @768 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| app/p04-newborn#detail @768 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| app/p04-newborn#mod-visit @768 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| app/p04-newborn#mod-screening @768 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| app/p04-newborn#mod-highrisk @768 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| app/p04-newborn#mod-handover @768 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| app/p04-newborn#mod-report @768 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| app/p05-child-health#work @768 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| app/p05-child-health#archive @768 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| app/p05-child-health#ai @768 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| app/p05-child-health#detail @768 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| app/p05-child-health#mod-care @768 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| app/p05-child-health#mod-five @768 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| app/p05-child-health#mod-vision @768 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| app/p05-child-health#mod-dental @768 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| app/p05-child-health#mod-keychild @768 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| app/p05-child-health#mod-rehab @768 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| app/p05-child-health#mod-followup @768 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| app/p05-child-health#mod-report @768 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| app/p06-ai-care#work @768 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| app/p06-ai-care#archive @768 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| app/p06-ai-care#ai @768 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| app/p06-ai-care#detail @768 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| app/p06-ai-care#mod-clinical @768 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| app/p06-ai-care#mod-health @768 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| app/p06-ai-care#mod-followup @768 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| app/p06-ai-care#mod-qc @768 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| app/p06-ai-care#mod-report @768 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| app/p06-ai-care#mod-analytics @768 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| preview/manual @768 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| site#site-index @1024 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| site#products @1024 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| site#preview-index @1024 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 66 | 11 |
+| site#preview-examples @1024 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| site#preview-mobile @1024 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
+| site#preview-patterns @1024 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| site#site-spec @1024 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| site#site-manual @1024 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| site#site-docs @1024 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| app/p01-women-health#work @1024 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| app/p01-women-health#archive @1024 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| app/p01-women-health#ai @1024 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| app/p01-women-health#detail @1024 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| app/p02-preconception#work @1024 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| app/p02-preconception#archive @1024 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| app/p02-preconception#ai @1024 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| app/p02-preconception#detail @1024 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| app/p03-maternity#work @1024 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| app/p03-maternity#archive @1024 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| app/p03-maternity#ai @1024 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| app/p03-maternity#detail @1024 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| app/p04-newborn#work @1024 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| app/p04-newborn#archive @1024 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| app/p04-newborn#ai @1024 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| app/p04-newborn#detail @1024 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| app/p05-child-health#work @1024 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| app/p05-child-health#archive @1024 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| app/p05-child-health#ai @1024 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| app/p05-child-health#detail @1024 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| app/p06-ai-care#work @1024 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| app/p06-ai-care#archive @1024 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| app/p06-ai-care#ai @1024 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| app/p06-ai-care#detail @1024 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| preview/manual @1024 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| site#site-index @1440 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| site#products @1440 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| site#preview-index @1440 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 66 | 11 |
+| site#preview-examples @1440 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| site#preview-mobile @1440 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
+| site#preview-patterns @1440 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| site#site-spec @1440 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| site#site-manual @1440 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| site#site-docs @1440 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| app/p01-women-health#work @1440 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| app/p01-women-health#archive @1440 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| app/p01-women-health#ai @1440 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| app/p01-women-health#detail @1440 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| app/p01-women-health#mod-lifecycle @1440 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| app/p01-women-health#mod-disease @1440 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| app/p01-women-health#mod-screening @1440 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| app/p01-women-health#mod-followup @1440 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| app/p01-women-health#mod-report @1440 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| app/p02-preconception#work @1440 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| app/p02-preconception#archive @1440 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| app/p02-preconception#ai @1440 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| app/p02-preconception#detail @1440 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| app/p02-preconception#mod-premarital @1440 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| app/p02-preconception#mod-preconception @1440 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| app/p02-preconception#mod-prepare @1440 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| app/p02-preconception#mod-results @1440 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| app/p02-preconception#mod-followup @1440 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| app/p02-preconception#mod-report @1440 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| app/p03-maternity#work @1440 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| app/p03-maternity#archive @1440 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| app/p03-maternity#ai @1440 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| app/p03-maternity#detail @1440 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| app/p03-maternity#mod-antenatal @1440 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| app/p03-maternity#mod-highrisk @1440 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| app/p03-maternity#mod-delivery @1440 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| app/p03-maternity#mod-postpartum @1440 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| app/p03-maternity#mod-appointment @1440 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| app/p03-maternity#mod-followup @1440 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| app/p03-maternity#mod-report @1440 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| app/p04-newborn#work @1440 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| app/p04-newborn#archive @1440 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| app/p04-newborn#ai @1440 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| app/p04-newborn#detail @1440 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| app/p04-newborn#mod-visit @1440 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| app/p04-newborn#mod-screening @1440 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| app/p04-newborn#mod-highrisk @1440 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| app/p04-newborn#mod-handover @1440 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| app/p04-newborn#mod-report @1440 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| app/p05-child-health#work @1440 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| app/p05-child-health#archive @1440 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| app/p05-child-health#ai @1440 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| app/p05-child-health#detail @1440 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| app/p05-child-health#mod-care @1440 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| app/p05-child-health#mod-five @1440 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| app/p05-child-health#mod-vision @1440 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| app/p05-child-health#mod-dental @1440 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| app/p05-child-health#mod-keychild @1440 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| app/p05-child-health#mod-rehab @1440 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| app/p05-child-health#mod-followup @1440 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| app/p05-child-health#mod-report @1440 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| app/p06-ai-care#work @1440 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| app/p06-ai-care#archive @1440 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| app/p06-ai-care#ai @1440 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| app/p06-ai-care#detail @1440 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| app/p06-ai-care#mod-clinical @1440 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| app/p06-ai-care#mod-health @1440 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| app/p06-ai-care#mod-followup @1440 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| app/p06-ai-care#mod-qc @1440 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| app/p06-ai-care#mod-report @1440 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| app/p06-ai-care#mod-analytics @1440 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| preview/manual @1440 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| site#site-index @1920 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| site#products @1920 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| site#preview-index @1920 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 66 | 11 |
+| site#preview-examples @1920 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| site#preview-mobile @1920 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 1 |
+| site#preview-patterns @1920 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| site#site-spec @1920 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| site#site-manual @1920 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| site#site-docs @1920 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| app/p01-women-health#work @1920 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| app/p01-women-health#archive @1920 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| app/p01-women-health#ai @1920 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| app/p01-women-health#detail @1920 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| app/p02-preconception#work @1920 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| app/p02-preconception#archive @1920 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| app/p02-preconception#ai @1920 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| app/p02-preconception#detail @1920 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| app/p03-maternity#work @1920 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| app/p03-maternity#archive @1920 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| app/p03-maternity#ai @1920 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| app/p03-maternity#detail @1920 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| app/p04-newborn#work @1920 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| app/p04-newborn#archive @1920 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| app/p04-newborn#ai @1920 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| app/p04-newborn#detail @1920 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| app/p05-child-health#work @1920 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| app/p05-child-health#archive @1920 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| app/p05-child-health#ai @1920 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| app/p05-child-health#detail @1920 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| app/p06-ai-care#work @1920 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| app/p06-ai-care#archive @1920 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| app/p06-ai-care#ai @1920 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| app/p06-ai-care#detail @1920 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| preview/manual @1920 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
 
 ## P0（0）
 （无）
@@ -401,24 +401,24 @@
 （无）
 
 ## P3（21）
-- site#preview-index @320 字号 <12px 57：section.block>div.panel.glass-l2>div.panel.glass-l2>div.bxrow>span 11px | div.panel.glass-l2>div.demo-nav-grid>div>div>span 10px
-- site#preview-index @320 字号 <12px（设备模拟内，登记）20：header.hero.glass>div.hero-stage>div.demo-card.c1>div.row>span.badge 10px
-- site#preview-mobile @320 字号 <12px（设备模拟内，登记）4：div.stage.pm-at-root>header.navbar>span.ops>button.o>i.pm-badge.num 11px
-- site#preview-index @375 字号 <12px 57：section.block>div.panel.glass-l2>div.panel.glass-l2>div.bxrow>span 11px | div.panel.glass-l2>div.demo-nav-grid>div>div>span 10px
-- site#preview-index @375 字号 <12px（设备模拟内，登记）20：header.hero.glass>div.hero-stage>div.demo-card.c1>div.row>span.badge 10px
-- site#preview-mobile @375 字号 <12px（设备模拟内，登记）4：div.stage.pm-at-root>header.navbar>span.ops>button.o>i.pm-badge.num 11px
-- site#preview-index @414 字号 <12px 57：section.block>div.panel.glass-l2>div.panel.glass-l2>div.bxrow>span 11px | div.panel.glass-l2>div.demo-nav-grid>div>div>span 10px
-- site#preview-index @414 字号 <12px（设备模拟内，登记）20：header.hero.glass>div.hero-stage>div.demo-card.c1>div.row>span.badge 10px
-- site#preview-mobile @414 字号 <12px（设备模拟内，登记）4：div.stage.pm-at-root>header.navbar>span.ops>button.o>i.pm-badge.num 11px
-- site#preview-index @768 字号 <12px 57：section.block>div.panel.glass-l2>div.panel.glass-l2>div.bxrow>span 11px | div.panel.glass-l2>div.demo-nav-grid>div>div>span 10px
-- site#preview-index @768 字号 <12px（设备模拟内，登记）20：header.hero.glass>div.hero-stage>div.demo-card.c1>div.row>span.badge 10px
-- site#preview-mobile @768 字号 <12px（设备模拟内，登记）4：div.stage.pm-at-root>header.navbar>span.ops>button.o>i.pm-badge.num 11px
-- site#preview-index @1024 字号 <12px 57：section.block>div.panel.glass-l2>div.panel.glass-l2>div.bxrow>span 11px | div.panel.glass-l2>div.demo-nav-grid>div>div>span 10px
-- site#preview-index @1024 字号 <12px（设备模拟内，登记）20：header.hero.glass>div.hero-stage>div.demo-card.c1>div.row>span.badge 10px
-- site#preview-mobile @1024 字号 <12px（设备模拟内，登记）4：div.stage.pm-at-root>header.navbar>span.ops>button.o>i.pm-badge.num 11px
-- site#preview-index @1440 字号 <12px 57：section.block>div.panel.glass-l2>div.panel.glass-l2>div.bxrow>span 11px | div.panel.glass-l2>div.demo-nav-grid>div>div>span 10px
-- site#preview-index @1440 字号 <12px（设备模拟内，登记）20：header.hero.glass>div.hero-stage>div.demo-card.c1>div.row>span.badge 10px
-- site#preview-mobile @1440 字号 <12px（设备模拟内，登记）4：div.stage.pm-at-root>header.navbar>span.ops>button.o>i.pm-badge.num 11px
-- site#preview-index @1920 字号 <12px 57：section.block>div.panel.glass-l2>div.panel.glass-l2>div.bxrow>span 11px | div.panel.glass-l2>div.demo-nav-grid>div>div>span 10px
-- site#preview-index @1920 字号 <12px（设备模拟内，登记）20：header.hero.glass>div.hero-stage>div.demo-card.c1>div.row>span.badge 10px
-- site#preview-mobile @1920 字号 <12px（设备模拟内，登记）4：div.stage.pm-at-root>header.navbar>span.ops>button.o>i.pm-badge.num 11px
+- site#preview-index @320 字号 <12px 66：div.wrap>section.block>div.stage>div.lvl.l1>div.tag 11px | section.block>div.stage>div.lvl.l1>div.kv>b 11px
+- site#preview-index @320 字号 <12px（设备模拟内，登记）11：header.hero.glass>div.hero-stage>div.demo-card.c1>div.row>span.badge 10px
+- site#preview-mobile @320 字号 <12px（设备模拟内，登记）1：div.gcard>div.upgrid>div.pm-tile>div.up.fail>span.failtag 11px
+- site#preview-index @375 字号 <12px 66：div.wrap>section.block>div.stage>div.lvl.l1>div.tag 11px | section.block>div.stage>div.lvl.l1>div.kv>b 11px
+- site#preview-index @375 字号 <12px（设备模拟内，登记）11：header.hero.glass>div.hero-stage>div.demo-card.c1>div.row>span.badge 10px
+- site#preview-mobile @375 字号 <12px（设备模拟内，登记）1：div.gcard>div.upgrid>div.pm-tile>div.up.fail>span.failtag 11px
+- site#preview-index @414 字号 <12px 66：div.wrap>section.block>div.stage>div.lvl.l1>div.tag 11px | section.block>div.stage>div.lvl.l1>div.kv>b 11px
+- site#preview-index @414 字号 <12px（设备模拟内，登记）11：header.hero.glass>div.hero-stage>div.demo-card.c1>div.row>span.badge 10px
+- site#preview-mobile @414 字号 <12px（设备模拟内，登记）1：div.gcard>div.upgrid>div.pm-tile>div.up.fail>span.failtag 11px
+- site#preview-index @768 字号 <12px 66：div.wrap>section.block>div.stage>div.lvl.l1>div.tag 11px | section.block>div.stage>div.lvl.l1>div.kv>b 11px
+- site#preview-index @768 字号 <12px（设备模拟内，登记）11：header.hero.glass>div.hero-stage>div.demo-card.c1>div.row>span.badge 10px
+- site#preview-mobile @768 字号 <12px（设备模拟内，登记）1：div.gcard>div.upgrid>div.pm-tile>div.up.fail>span.failtag 11px
+- site#preview-index @1024 字号 <12px 66：div.wrap>section.block>div.stage>div.lvl.l1>div.tag 11px | section.block>div.stage>div.lvl.l1>div.kv>b 11px
+- site#preview-index @1024 字号 <12px（设备模拟内，登记）11：header.hero.glass>div.hero-stage>div.demo-card.c1>div.row>span.badge 10px
+- site#preview-mobile @1024 字号 <12px（设备模拟内，登记）1：div.gcard>div.upgrid>div.pm-tile>div.up.fail>span.failtag 11px
+- site#preview-index @1440 字号 <12px 66：div.wrap>section.block>div.stage>div.lvl.l1>div.tag 11px | section.block>div.stage>div.lvl.l1>div.kv>b 11px
+- site#preview-index @1440 字号 <12px（设备模拟内，登记）11：header.hero.glass>div.hero-stage>div.demo-card.c1>div.row>span.badge 10px
+- site#preview-mobile @1440 字号 <12px（设备模拟内，登记）1：div.gcard>div.upgrid>div.pm-tile>div.up.fail>span.failtag 11px
+- site#preview-index @1920 字号 <12px 66：div.wrap>section.block>div.stage>div.lvl.l1>div.tag 11px | section.block>div.stage>div.lvl.l1>div.kv>b 11px
+- site#preview-index @1920 字号 <12px（设备模拟内，登记）11：header.hero.glass>div.hero-stage>div.demo-card.c1>div.row>span.badge 10px
+- site#preview-mobile @1920 字号 <12px（设备模拟内，登记）1：div.gcard>div.upgrid>div.pm-tile>div.up.fail>span.failtag 11px

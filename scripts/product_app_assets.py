@@ -37,7 +37,7 @@ body{margin:0}
   background:
     radial-gradient(1000px 600px at 90% -8%,rgba(247,127,163,.20),transparent 65%),
     radial-gradient(900px 560px at -6% 24%,rgba(182,154,255,.15),transparent 65%),
-    radial-gradient(700px 500px at 30% 110%,rgba(255,255,255,.55),transparent 70%),
+    radial-gradient(700px 500px at 30% 110%,var(--sh-w-55),transparent 70%),
     linear-gradient(165deg,#FDF2EE,#F6E2DB 55%,#E6CFC6);
   transition:padding var(--lg-t-base) var(--lg-ease-out)}
 .gm-app__wrap{position:relative;z-index:1;max-width:1220px;margin:0 auto}
@@ -46,28 +46,36 @@ body.mode-sider .gm-app{padding-left:calc(252px + var(--lg-space-6))}
 body.mode-sider.collapsed .gm-app{padding-left:calc(80px + var(--lg-space-6))}
 
 /* ── 侧栏（03 · 3.4.1 侧栏模式）：品牌 + 分组菜单 + 徽标 + 用户区，可收起 ── */
+/* ⚠️ `box-sizing:border-box` 不是风格问题，是**导航遮挡**的根因：
+   下面 `body.mode-sider .gm-app{padding-left:calc(252px + 24px)}` 的前提是
+   「侧栏占 252px」。但独立页没有全局 `*{box-sizing:border-box}`，`.gm-side` 声明
+   `width:252px` + 左右 padding 12×2 + 边框 1×2 = **实际占 278px**，内容列左边缘在 276px
+   —— 侧栏压住内容 18px（实测 1440/1281 档：h2「工作台」的「工」、首张 KPI 卡左沿、
+   档案头卡头像都被盖住）。收起档同理（80+24+2=106 vs 预留 104，压 2px）。
+   显式 border-box 后侧栏真实占 252 / 80，与 `padding-left` 的算法一致，留 8px 缝。 */
 .gm-side{position:fixed;left:var(--lg-space-4);top:var(--lg-space-4);bottom:var(--lg-space-4);width:252px;z-index:70;
+  box-sizing:border-box;
   display:none;flex-direction:column;gap:2px;padding:var(--lg-space-3);border-radius:var(--lg-radius-card);
-  overflow-y:auto;background:linear-gradient(160deg,rgba(255,255,255,.64),rgba(255,255,255,.30) 60%,rgba(255,255,255,.44));
-  border:1px solid rgba(255,255,255,.85);box-shadow:var(--lg-glass-highlight),var(--lg-shadow-lg);
+  overflow-y:auto;background:linear-gradient(160deg,var(--sh-w-64),var(--sh-w-30) 60%,var(--sh-w-44));
+  border:1px solid var(--sh-w-85);box-shadow:var(--lg-glass-highlight),var(--lg-shadow-lg);
   -webkit-backdrop-filter:blur(20px) saturate(1.2);backdrop-filter:blur(20px) saturate(1.2);background-origin:border-box}
 body.mode-sider .gm-side{display:flex}
 body.mode-sider.collapsed .gm-side{width:80px;padding:var(--lg-space-3) var(--lg-space-2)}
 .gm-side__brand{display:flex;align-items:center;gap:var(--lg-space-2);
   padding:var(--lg-space-1) var(--lg-space-1) var(--lg-space-3);
-  border-bottom:1px dashed rgba(58,52,84,.08);margin-bottom:var(--lg-space-2)}
+  border-bottom:1px dashed var(--sh-ink-08);margin-bottom:var(--lg-space-2)}
 /* 顶栏"业务菜单"下拉：仅窄屏显示（≤1280 侧栏被隐藏，它是进业务模块页的唯一入口） */
 .gm-navm{position:relative;display:none}
 /* 高度 ≥44：窄屏（≤1280）它是唯一模块入口，热区必须够（page-qa P1 守门，实测 36px 被抓） */
 .gm-navm__btn{font-family:inherit;display:inline-flex;align-items:center;gap:6px;height:44px;padding:0 14px;
-  border-radius:var(--lg-radius-pill);border:1px solid rgba(58,52,84,.14);background:rgba(255,255,255,.72);
+  border-radius:var(--lg-radius-pill);border:1px solid var(--sh-ink-14);background:var(--sh-w-72);
   color:var(--lg-text-primary);font-size:var(--lg-fs-body-sm);font-weight:600;cursor:pointer}
-.gm-navm__btn[aria-expanded="true"]{border-color:var(--mmh-rose-500);background:#FFF}
+.gm-navm__btn[aria-expanded="true"]{border-color:var(--mmh-rose-500);background:var(--sh-solid)}
 .gm-navm__n{font-style:normal;font-size:var(--lg-fs-caption);font-weight:600;color:var(--mmh-rose-700);
-  background:rgba(247,127,163,.16);border-radius:var(--lg-radius-pill);padding:1px 7px}
+  background:var(--sh-tint-rose);border-radius:var(--lg-radius-pill);padding:1px 7px}
 .gm-navm__panel{position:absolute;right:0;top:calc(100% + 8px);z-index:120;min-width:236px;max-height:60vh;
   overflow-y:auto;padding:var(--lg-space-3);border-radius:var(--lg-radius-card);
-  border:1px solid rgba(255,255,255,.85);background:linear-gradient(160deg,rgba(255,255,255,.96),rgba(255,255,255,.88));
+  border:1px solid var(--sh-w-85);background:linear-gradient(160deg,var(--sh-w-96),var(--sh-w-88));
   box-shadow:var(--lg-shadow-lg);background-origin:border-box}
 .gm-navm__grp{display:flex;flex-direction:column;gap:2px}
 .gm-navm__grp+.gm-navm__grp{margin-top:var(--lg-space-2);padding-top:var(--lg-space-2);
@@ -109,14 +117,14 @@ body.mode-sider.collapsed .gm-side{width:80px;padding:var(--lg-space-3) var(--lg
   border:none;border-radius:var(--lg-radius-control);padding:0 var(--lg-space-3);text-align:left;background:transparent;
   transition:background var(--lg-t-fast) var(--lg-ease-out),color var(--lg-t-fast) var(--lg-ease-out)}
 .nv svg{width:17px;height:17px;flex:none;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
-.nv:hover{background:rgba(255,255,255,.65);color:var(--lg-text-primary)}
+.nv:hover{background:var(--sh-w-65);color:var(--lg-text-primary)}
 .nv.is-on{background:var(--mmh-grad-action-hc);color:var(--lg-text-on-accent);font-weight:600;
   box-shadow:0 8px 18px rgba(240,127,163,.30);background-origin:border-box}
 .nv .bdg{margin-left:auto;min-width:20px;height:20px;padding:0 var(--lg-space-1);display:inline-flex;
   align-items:center;justify-content:center;border-radius:var(--lg-radius-pill);font-size:var(--lg-fs-caption);
-  font-weight:600;color:var(--mmh-rose-700);background:rgba(255,255,255,.9);border:1px solid rgba(232,93,143,.25)}
-.nv.is-on .bdg{color:var(--mmh-rose-700);background:#FFFFFF;border-color:#FFFFFF}
-.gm-side__foot{margin-top:auto;padding-top:var(--lg-space-3);border-top:1px dashed rgba(58,52,84,.08);
+  font-weight:600;color:var(--mmh-rose-700);background:var(--sh-w-9);border:1px solid rgba(232,93,143,.25)}
+.nv.is-on .bdg{color:var(--mmh-rose-700);background:var(--sh-solid);border-color:var(--sh-solid)}
+.gm-side__foot{margin-top:auto;padding-top:var(--lg-space-3);border-top:1px dashed var(--sh-ink-08);
   display:flex;align-items:center;gap:var(--lg-space-2)}
 .gm-side__foot .who{flex:1;min-width:0}
 .gm-side__foot .who b{display:block;font-size:var(--lg-fs-caption);line-height:1.3}
@@ -127,16 +135,16 @@ body.mode-sider.collapsed .gm-side__foot .who{display:none}
 body.mode-sider.collapsed .nv{justify-content:center;padding:0}
 body.mode-sider.collapsed .gm-side__brand{justify-content:center;border-bottom:none}
 .gm-iconb{width:32px;height:32px;flex:none;display:inline-flex;align-items:center;justify-content:center;cursor:pointer;
-  border-radius:var(--lg-radius-btn-sm);border:1px solid var(--lg-divider);background:rgba(255,255,255,.6);
+  border-radius:var(--lg-radius-btn-sm);border:1px solid var(--lg-divider);background:var(--sh-w-6);
   color:var(--lg-text-secondary)}
-.gm-iconb:hover{background:rgba(255,255,255,.95)}
+.gm-iconb:hover{background:var(--sh-w-95)}
 .gm-iconb svg{width:15px;height:15px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
 
 /* ── 顶栏（吸顶胶囊）：品牌 + 页签 + 侧栏/顶栏切换 ── */
 .gm-top{position:sticky;top:var(--lg-space-3);z-index:60;display:flex;align-items:center;gap:var(--lg-space-3);
   flex-wrap:wrap;padding:var(--lg-space-2) var(--lg-space-3);border-radius:var(--lg-radius-pill);
-  margin-bottom:var(--lg-space-4);background:linear-gradient(160deg,rgba(255,255,255,.80),rgba(255,255,255,.54));
-  border:1px solid rgba(255,255,255,.85);box-shadow:var(--lg-glass-highlight),var(--lg-shadow-md);
+  margin-bottom:var(--lg-space-4);background:linear-gradient(160deg,var(--sh-w-80),var(--sh-w-54));
+  border:1px solid var(--sh-w-85);box-shadow:var(--lg-glass-highlight),var(--lg-shadow-md);
   -webkit-backdrop-filter:blur(20px) saturate(1.2);backdrop-filter:blur(20px) saturate(1.2);background-origin:border-box}
 .gm-top__brand{display:flex;align-items:center;gap:var(--lg-space-2);font-size:var(--lg-fs-body-sm);
   font-weight:600;color:var(--mmh-rose-700);min-width:0;flex:0 1 auto}
@@ -144,12 +152,12 @@ body.mode-sider.collapsed .gm-side__brand{justify-content:center;border-bottom:n
 .gm-tabs{display:flex;gap:var(--lg-space-1);flex-wrap:wrap}
 .gm-tab{font-family:inherit;font-size:var(--lg-fs-caption);font-weight:500;color:var(--lg-text-secondary);cursor:pointer;
   padding:0 var(--lg-space-3);min-height:32px;border-radius:var(--lg-radius-pill);white-space:nowrap;
-  background:rgba(255,255,255,.5);border:1px solid var(--lg-divider)}
-.gm-tab:hover{background:rgba(255,255,255,.9)}
+  background:var(--sh-w-5);border:1px solid var(--lg-divider)}
+.gm-tab:hover{background:var(--sh-w-9)}
 .gm-tab.is-on{background:var(--mmh-grad-action-hc);color:var(--lg-text-on-accent);border-color:transparent;
   font-weight:600;box-shadow:0 1px 2px rgba(178,58,99,.22);background-origin:border-box}
 /* 导航形态（侧栏 / 顶栏）固定在顶栏最右侧：它是视图偏好，不是主内容。 */
-.gm-seg{margin-left:auto;display:inline-flex;gap:2px;padding:2px;border-radius:var(--lg-radius-pill);background:rgba(255,255,255,.5);
+.gm-seg{margin-left:auto;display:inline-flex;gap:2px;padding:2px;border-radius:var(--lg-radius-pill);background:var(--sh-w-5);
   border:1px solid var(--lg-divider);flex:none}
 .gm-seg button{font-family:inherit;font-size:var(--lg-fs-caption);color:var(--lg-text-secondary);cursor:pointer;
   border:none;background:none;padding:0 var(--lg-space-3);min-height:32px;border-radius:var(--lg-radius-pill)}
@@ -192,7 +200,7 @@ body.mode-sider.collapsed .gm-top__brand span{display:none}
   border-left:2px solid var(--lg-divider);margin-left:6px}
 .gm-tl li:last-child{border-left-color:transparent;padding-bottom:0}
 .gm-tl li::before{content:"";position:absolute;left:-7px;top:4px;width:12px;height:12px;border-radius:50%;
-  background:#FFFFFF;border:2px solid var(--mmh-rose-500)}
+  background:var(--sh-solid);border:2px solid var(--mmh-rose-500)}
 .gm-tl li[data-tone="positive"]::before{border-color:var(--lg-sem-positive);background:var(--lg-sem-positive)}
 .gm-tl li[data-tone="attention"]::before{border-color:var(--lg-sem-attention);background:var(--lg-sem-attention)}
 .gm-tl li[data-tone="risk"]::before{border-color:var(--lg-sem-risk);background:var(--lg-sem-risk)}
@@ -202,8 +210,8 @@ body.mode-sider.collapsed .gm-top__brand span{display:none}
 
 /* AI 建议待复核卡（置信度 = 数字 + 文案双通道，不靠颜色单独传义） */
 .gm-ai{border-radius:var(--lg-radius-card);padding:var(--lg-space-4);margin-bottom:var(--lg-space-3);
-  background:linear-gradient(160deg,rgba(255,255,255,.66),rgba(255,255,255,.32));
-  border:1px solid rgba(255,255,255,.78);box-shadow:var(--lg-glass-highlight),var(--lg-shadow-sm);
+  background:linear-gradient(160deg,var(--sh-w-66),var(--sh-w-32));
+  border:1px solid var(--sh-w-78);box-shadow:var(--lg-glass-highlight),var(--lg-shadow-sm);
   background-origin:border-box}
 .gm-ai__hd{display:flex;align-items:flex-start;gap:var(--lg-space-3);flex-wrap:wrap}
 .gm-ai__hd b{overflow-wrap:anywhere;font-size:var(--lg-fs-body-sm);line-height:var(--lg-lh-body-sm);flex:1;min-width:200px}
@@ -214,15 +222,15 @@ body.mode-sider.collapsed .gm-top__brand span{display:none}
 
 /* AI 助手对话 */
 .gm-chat{display:flex;flex-direction:column;gap:var(--lg-space-2);max-height:280px;overflow-y:auto;
-  padding:var(--lg-space-3);border-radius:var(--lg-radius-control);background:rgba(255,255,255,.5);
+  padding:var(--lg-space-3);border-radius:var(--lg-radius-control);background:var(--sh-w-5);
   border:1px solid var(--lg-divider)}
 .gm-bubble{max-width:86%;padding:var(--lg-space-2) var(--lg-space-3);border-radius:var(--lg-radius-control);
   font-size:var(--lg-fs-body-sm);line-height:1.7;white-space:pre-wrap;overflow-wrap:anywhere}
-.gm-bubble--ai{align-self:flex-start;background:#FFFFFF;border:1px solid var(--lg-divider)}
+.gm-bubble--ai{align-self:flex-start;background:var(--sh-solid);border:1px solid var(--lg-divider)}
 .gm-bubble--me{align-self:flex-end;background:var(--mmh-grad-action-hc);color:var(--lg-text-on-accent);
   background-origin:border-box}
 .gm-typing{display:inline-flex;gap:4px;align-items:center;padding:var(--lg-space-2) var(--lg-space-3);
-  border-radius:var(--lg-radius-control);background:#FFFFFF;border:1px solid var(--lg-divider);align-self:flex-start}
+  border-radius:var(--lg-radius-control);background:var(--sh-solid);border:1px solid var(--lg-divider);align-self:flex-start}
 .gm-typing i{width:6px;height:6px;border-radius:50%;background:var(--lg-text-secondary);
   animation:gmTyping 1.2s ease-in-out infinite}
 .gm-typing i:nth-child(2){animation-delay:.16s} .gm-typing i:nth-child(3){animation-delay:.32s}
@@ -230,27 +238,27 @@ body.mode-sider.collapsed .gm-top__brand span{display:none}
 .gm-chatbar{display:flex;gap:var(--lg-space-2);margin-top:var(--lg-space-3)}
 .gm-chatbar input{flex:1;min-width:0;height:40px;border-radius:var(--lg-radius-control);padding:0 var(--lg-space-3);
   font-family:inherit;font-size:var(--lg-fs-body-sm);color:var(--lg-text-primary);
-  background:rgba(255,255,255,.7);border:1px solid var(--lg-divider);outline:none}
+  background:var(--sh-w-7);border:1px solid var(--lg-divider);outline:none}
 .gm-chatbar input:focus-visible{outline:var(--lg-ring-width) solid var(--lg-ring-color);outline-offset:2px}
 .gm-qa{display:flex;flex-wrap:wrap;gap:var(--lg-space-2);margin-top:var(--lg-space-3)}
 
 /* 弹层（Part 18 · MD-18-02：role=dialog + aria-modal + Esc 关闭 + 焦点归还） */
 .gm-mask{position:fixed;inset:0;z-index:200;display:none;align-items:center;justify-content:center;padding:var(--lg-space-4);
-  background:rgba(58,52,84,.28);-webkit-backdrop-filter:blur(16px);backdrop-filter:blur(16px)}
+  background:var(--sh-ink-28);-webkit-backdrop-filter:blur(16px);backdrop-filter:blur(16px)}
 .gm-mask.is-on{display:flex}
 .gm-modal{width:100%;max-width:520px;max-height:86vh;overflow:auto;border-radius:var(--lg-radius-card-lg);
-  padding:var(--lg-space-5);background:linear-gradient(160deg,rgba(255,255,255,.96),rgba(255,255,255,.9));
-  border:1px solid rgba(255,255,255,.9);box-shadow:var(--lg-shadow-lg);background-origin:border-box}
+  padding:var(--lg-space-5);background:linear-gradient(160deg,var(--sh-w-96),var(--sh-w-9));
+  border:1px solid var(--sh-w-9);box-shadow:var(--lg-shadow-lg);background-origin:border-box}
 .gm-modal h3{margin:0 0 var(--lg-space-3);font-size:var(--lg-fs-section);line-height:var(--lg-lh-section);font-weight:600}
 .gm-modal__foot{display:flex;gap:var(--lg-space-2);justify-content:flex-end;margin-top:var(--lg-space-5);flex-wrap:wrap}
 .gm-lbl{display:block;font-size:var(--lg-fs-caption);color:var(--lg-text-secondary);margin:var(--lg-space-3) 0 var(--lg-space-2)}
 .gm-inp{width:100%;min-height:80px;border-radius:var(--lg-radius-control);padding:var(--lg-space-3);
   font-family:inherit;font-size:var(--lg-fs-body-sm);line-height:1.7;color:var(--lg-text-primary);
-  background:rgba(255,255,255,.75);border:1px solid var(--lg-divider);outline:none;resize:vertical}
+  background:var(--sh-w-75);border:1px solid var(--lg-divider);outline:none;resize:vertical}
 .gm-inp:focus-visible{outline:var(--lg-ring-width) solid var(--lg-ring-color);outline-offset:2px}
 .gm-opts{display:flex;gap:var(--lg-space-2);flex-wrap:wrap}
 .gm-opt{display:inline-flex;align-items:center;gap:var(--lg-space-2);padding:var(--lg-space-2) var(--lg-space-3);
-  border-radius:var(--lg-radius-pill);background:rgba(255,255,255,.7);border:1px solid var(--lg-divider);
+  border-radius:var(--lg-radius-pill);background:var(--sh-w-7);border:1px solid var(--lg-divider);
   font-size:var(--lg-fs-caption);cursor:pointer;min-height:40px}
 .gm-opt input{accent-color:var(--mmh-rose-500)}
 
@@ -297,11 +305,13 @@ body.mode-sider.collapsed .gm-top__brand span{display:none}
   font-size:var(--lg-fs-caption);color:var(--lg-text-secondary)}
 .gm-gx__legend span{display:inline-flex;align-items:center;gap:var(--lg-space-2);
   padding:var(--lg-space-1) var(--lg-space-3);border-radius:var(--lg-radius-pill);
-  background:rgba(255,255,255,.6);border:1px solid var(--lg-divider)}
+  /* ⚠️ 亮面一律走填充档 Token：字面量 rgba(255,255,255,.6) 在暗色档仍是亮片，
+     而文字已换成 #C9C4CE —— 实测 1.31:1（page-qa P1）。 */
+  background:var(--lg-glass-popover,rgba(255,255,255,.6));border:1px solid var(--lg-divider)}
 .gm-gx__legend i{width:8px;height:8px;border-radius:50%;flex:none}
 .gm-gx__tip{position:absolute;z-index:3;pointer-events:none;opacity:0;transform:translate(-50%,-100%);
   padding:var(--lg-space-2) var(--lg-space-3);border-radius:var(--lg-radius-btn-sm);white-space:nowrap;
-  background:rgba(255,255,255,.75);-webkit-backdrop-filter:blur(20px);backdrop-filter:blur(20px);
+  background:var(--lg-glass-popover,rgba(255,255,255,.75));-webkit-backdrop-filter:blur(20px);backdrop-filter:blur(20px);
   border:1px solid var(--lg-divider);box-shadow:var(--lg-shadow-md);transition:opacity 140ms ease}
 .gm-gx__tip.is-on{opacity:1}
 .gm-gx__tip b{display:block;font-size:var(--lg-fs-caption);font-weight:500;color:var(--lg-text-secondary)}
@@ -309,7 +319,9 @@ body.mode-sider.collapsed .gm-top__brand span{display:none}
   font-variant-numeric:tabular-nums}
 .gm-gx__note{display:flex;gap:var(--lg-space-2);align-items:flex-start;margin-top:var(--lg-space-2);
   padding:var(--lg-space-2) var(--lg-space-3);border-radius:var(--lg-radius-btn-sm);
-  font-size:var(--lg-fs-caption);line-height:1.75;background:rgba(255,255,255,.75);
+  font-size:var(--lg-fs-caption);line-height:1.75;
+  /* 同上：亮面走 Token，暗色档换成深玻璃 —— 否则琥珀文字压在亮片上实测 1.07:1 */
+  background:var(--lg-glass-popover,rgba(255,255,255,.75));
   border:1px solid var(--lg-divider);color:var(--lg-sem-attention)}
 .gm-gx__note i{width:8px;height:8px;border-radius:50%;flex:none;margin-top:6px;background:currentColor}
 
@@ -318,6 +330,10 @@ body.mode-sider.collapsed .gm-top__brand span{display:none}
   body.mode-sider .gm-app{padding-left:var(--lg-space-5)}
   body.mode-sider .gm-side{display:none}
   body.mode-sider .gm-tabs{display:flex}
+  /* 导航形态切换（侧栏 / 顶栏）在 ≤1280 是**失效控件**：侧栏已被强制隐藏，
+     点「侧栏」不会有任何变化。藏掉后顶栏从三行降到两行（手机档实测 156 → 106px），
+     也去掉一个"点了没反应"的控件（与"不要假控件"的既有裁决一致）。 */
+  .gm-seg{display:none}
 }
 @media (max-width:1024px){
   .gm-2,.gm-2e,.gm-3{grid-template-columns:minmax(0,1fr)}
@@ -327,11 +343,10 @@ body.mode-sider.collapsed .gm-top__brand span{display:none}
   .gm-app{padding:var(--lg-space-4) var(--lg-space-4) var(--lg-space-8)}
   .gm-top{position:static}
   .gm-tabs{width:100%;margin-left:0;flex-wrap:nowrap;overflow-x:auto;-webkit-overflow-scrolling:touch}
-  /* 窄屏：页签占满一行，形态按钮换行后仍靠右 */
-  .gm-seg{margin-left:auto}
+  /* 窄屏：页签占满一行（形态切换在窄屏已隐藏，见 ≤1280 档） */
   .gm-tab{flex:none}
-  .gm-tab,.gm-seg button,.nv,.gm-iconb,.gm-opt{position:relative}
-  .gm-tab::after,.gm-seg button::after,.nv::after,.gm-iconb::after,.gm-opt::after{
+  .gm-tab,.nv,.gm-iconb,.gm-opt{position:relative}
+  .gm-tab::after,.nv::after,.gm-iconb::after,.gm-opt::after{
     content:"";position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);
     width:100%;min-width:44px;height:100%;min-height:44px}
   .gm-chatbar input{height:44px}
@@ -346,6 +361,38 @@ body.mode-sider.collapsed .gm-top__brand span{display:none}
 @media (max-width:1280px){
   .gm-top{position:relative;z-index:90}
 }
+
+/* ── 外壳填充档 Token + 暗色档（02 · 2.1.9）────────────────────────────────────
+   独立产品页没有站点外壳，这里自带一套「白色叠加 / 墨色描边」档位。
+   浅色取值＝抽出前的原值（观感零变化）；暗色只换**档位**（白叠加 14–60% → 6–16%），
+   色相不变、禁纯黑纯白。文字/语义/品牌档由 base_css()（gen-products.py 样式表）带来的
+   `[data-theme="dark"]` 段统一换档，此处不重复声明 —— 同一份口径只写一次。 */
+:root{ --sh-w-30:rgba(255,255,255,.30); --sh-w-32:rgba(255,255,255,.32); --sh-w-44:rgba(255,255,255,.44); --sh-w-5:rgba(255,255,255,.5); --sh-w-54:rgba(255,255,255,.54); --sh-w-55:rgba(255,255,255,.55); --sh-w-6:rgba(255,255,255,.6); --sh-w-64:rgba(255,255,255,.64); --sh-w-65:rgba(255,255,255,.65); --sh-w-66:rgba(255,255,255,.66); --sh-w-7:rgba(255,255,255,.7); --sh-w-72:rgba(255,255,255,.72); --sh-w-75:rgba(255,255,255,.75); --sh-w-78:rgba(255,255,255,.78); --sh-w-80:rgba(255,255,255,.80); --sh-w-85:rgba(255,255,255,.85); --sh-w-88:rgba(255,255,255,.88); --sh-w-9:rgba(255,255,255,.9); --sh-w-95:rgba(255,255,255,.95); --sh-w-96:rgba(255,255,255,.96); --sh-ink-08:rgba(58,52,84,.08); --sh-ink-14:rgba(58,52,84,.14); --sh-ink-28:rgba(58,52,84,.28); --sh-solid:#FFFFFF; }
+[data-theme="dark"]{
+  /* 画布：html 与 .gm-app 共用一套暗底（暖石板，非纯黑、非浅底反色） */
+  background:linear-gradient(165deg,#1B1A21,#221F29 55%,#2A2731);
+  /* 同上：html 自身不写 color 时会落到 UA 默认**纯黑**，暗底上完全不可读
+     （实测侧栏用户名 rgb(0,0,0) / 2.17:1）。 */
+  color:var(--lg-text-primary);
+  --sh-w-30:rgba(255,255,255,.08); --sh-w-32:rgba(255,255,255,.09); --sh-w-44:rgba(255,255,255,.10); --sh-w-5:rgba(255,255,255,.11); --sh-w-54:rgba(255,255,255,.12); --sh-w-55:rgba(255,255,255,.12); --sh-w-6:rgba(255,255,255,.12); --sh-w-64:rgba(255,255,255,.13); --sh-w-65:rgba(255,255,255,.13); --sh-w-66:rgba(255,255,255,.13); --sh-w-7:rgba(255,255,255,.14); --sh-w-72:rgba(255,255,255,.14); --sh-w-75:rgba(255,255,255,.15); --sh-w-78:rgba(255,255,255,.15); --sh-w-80:rgba(255,255,255,.15); --sh-w-85:rgba(255,255,255,.16); --sh-w-88:rgba(255,255,255,.16); --sh-w-9:rgba(255,255,255,.16); --sh-w-95:rgba(255,255,255,.16); --sh-w-96:rgba(255,255,255,.16); --sh-ink-08:rgba(255,255,255,.14); --sh-ink-14:rgba(255,255,255,.20); --sh-ink-28:rgba(255,255,255,.22); --sh-tint-rose:rgba(247,127,163,.12); --sh-solid:rgba(255,255,255,.14);
+}
+[data-theme="dark"] .gm-app{background:
+    radial-gradient(1000px 600px at 90% -8%,rgba(247,127,163,.16),transparent 65%),
+    radial-gradient(900px 560px at -6% 24%,rgba(182,154,255,.13),transparent 65%),
+    radial-gradient(700px 500px at 30% 110%,rgba(255,255,255,.06),transparent 70%),
+    linear-gradient(165deg,#1B1A21,#221F29 55%,#2A2731)}
+
+/* ── 暗色档里「底仍是亮片」的两处特例 ─────────────────────────────────────────
+   ① 侧栏选中项的底是**品牌主行动档渐变（固定亮粉，不随主题变暗）**。其上的徽标文字
+      若跟着 --mmh-rose-700 一起换成浅粉，就是浅字压亮粉 —— 实测 1.46:1。
+      徽标底 --sh-solid 在暗色档是白色 14%，透出来仍是亮粉 → 文字必须用深墨。
+   ② 顶栏「业务菜单 N」计数徽标：底是 12% 粉，文字换成暗色档浅粉后只有 4.20:1；
+      用同色系更亮的 --mmh-rose-200（色相不变，只换档位）。
+   ③ 顶栏业务菜单的下拉面板：底色是白色填充档（暗色档 16%），叠在亮色按钮上仍偏亮，
+      组标题（次级文字 #C9C4CE）只有 3.91:1 → 面板改用深玻璃 Token。 */
+[data-theme="dark"] .nv.is-on .bdg{color:var(--lg-text-on-accent)}
+[data-theme="dark"] .gm-navm__n{color:var(--mmh-rose-200)}
+[data-theme="dark"] .gm-navm__panel{background:linear-gradient(160deg,var(--lg-glass-popover),var(--lg-glass-popover))}
 """
 
 APP_JS = r"""

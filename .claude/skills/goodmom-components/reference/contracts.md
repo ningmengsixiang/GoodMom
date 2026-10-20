@@ -1,4 +1,4 @@
-# 19 个组件的契约（源码实测）
+# 27 个组件的契约（源码实测）
 
 > 「props 名 + 类型 + 默认值」逐条取自两包同名文件。凡两侧有差异，显式标注。
 > 通用规则：两侧**源码 props 名都是 camelCase**（Vue 模板里可写 kebab-case）；React 独有 `className` / `style` / `children`；React 事件 `onXxx` ↔ Vue `emit("xxx")`。
@@ -309,6 +309,114 @@
 | `actions` | `ReactNode \| ReactNode[]`，默认 `[]` | **`ops` 槽** |
 
 - 结构：`.gm-client` + `GmAvatar size={46}` + `.gm-client-main`（`__name` + `__sub`）+ 可选 `.gm-client-extra` + 条件渲染 `.gm-client-ops`
+
+## `GmTable`（V2.10）
+
+| prop | 类型 | 默认 |
+| --- | --- | --- |
+| `columns` | `{ key, title, align?, sortable?, ellipsis?, render? }[]`（必填） | — |
+| `data` | `Record<string, unknown>[]`（必填） | — |
+| `rowKey` | `string` | `"key"`（取不到回落行下标） |
+| `caption` | `ReactNode` / `string` | — |
+| `sortKey` / `sortOrder` | `string` / `"asc" \| "desc" \| null`（受控） | — / `null` |
+| `onSortChange` / `@sort-change` | `(key, order) => void` | — |
+| 空态槽 | React `empty` / Vue `empty` 槽 | 默认 `<GmEmpty title="暂无数据" />` |
+
+- 语义：`<th scope="col">`；排序列表头是 `<button class="gm-tbl__sortbtn">`，组件维护 `aria-sort="ascending|descending|none"`（TB-15-02）；asc → desc → null 循环
+- 操作列：`column.align === "right"` → 表头与单元格都挂 `col-ops`；行内操作 ≤3
+- `ellipsis`：`.gm-tbl__ell` 单行省略 + `title` 全文（TB-15-02）
+- 硬约定：整表 `tabular-nums`；td `padding:12px 14px` 不折行；宽表横滑由外层 `.gm-tbl-wrap` 承担；加载骨架/卡片流/窗口化分别组合 GmSkeleton/GmResponsiveView/GmVirtualList
+
+## `GmCollapse`（V2.10）
+
+| prop | 类型 | 默认 |
+| --- | --- | --- |
+| `items` | `{ key, title, content, tone? }[]`（必填） | — |
+| `defaultOpenKeys` | `string[]` | `[]` |
+| `accordion` | `boolean` | `false` |
+| `maxOpen` | `number` | **3**（11 · 11.2.6 一屏 ≤3 写死，组件内建收最早） |
+
+- 动画内建：展开先 `open` 再 0fr→1fr；收起先推 0fr 等 **300ms** 再摘 `open`（原生 details 收起时 transition 播不出来）；箭头 220ms
+- 语义：原生 `<details>/<summary>` + summary 补 `aria-expanded`/`aria-controls`；键盘 Enter/Space 原生承担
+- `tone` 五色状态点：`data-tone` 挂在 `<details>` 上（neutral/positive/attention/risk/info）
+- 结构硬约定：`.gm-fold__body>div` 代理层**不得带 padding**（0fr 轨道含 padding 不可压缩，实测残留 14px）
+
+## `GmDescriptions`（V2.10）
+
+| prop | 类型 | 默认 |
+| --- | --- | --- |
+| `items` | `{ label, value, title?, num? }[]`（必填） | — |
+| `columns` | `number`（2–4） | **3**（`--gm-desc-cols`） |
+| `columnsSm` | `number` | **1**（`--gm-desc-cols-sm`） |
+
+- 语义：`<dl>` + `<dt class="k">` / `<dd class="v">`；key caption 12/16 **次级色**（三级色 12px 约 2.6:1，D19 裁决）
+- value body-sm 14/20 600 主色；单行省略 + `title` 全文（8.2.13，缺省取 value 字符串形态）；`num` → tabular-nums
+- 断点 1023/767 内建（与站点同一套 CSS 变量）
+
+## `GmModal`（V2.10）
+
+| prop | React | Vue |
+| --- | --- | --- |
+| `open` | `boolean`，默认 `false`（受控） | 同，另有 `v-model:open` |
+| `title` | `ReactNode` | `string` |
+| `okText` / `cancelText` | `string` | 同，默认「确定」/「取消」 |
+| `closable` / `maskClosable` | `boolean`，默认 `true` | 同 |
+| `width` | `number`，默认 **480** | 同 |
+| `footer` | `ReactNode` | `footer` 槽 |
+| 内容 | `children` | 默认插槽 |
+| 事件 | `onOk` / `onCancel` / `onClose` | `@ok` / `@cancel` / `@close`（on* prop 同支持） |
+
+- 时序（MD-18-01）：遮罩淡入 **250ms** + 面板 **320ms**（scale .98→1、下移 12px）；退场 240ms 播完再卸载
+- 行为内建（MD-18-02）：`role="dialog"` + `aria-modal="true"` + `aria-labelledby`；打开锁 body 滚动、焦点进面板；ESC/遮罩点击（e.target===currentTarget）/×/取消 关闭；关闭**归还焦点到触发点**；层叠 ≤2 由调用方保证
+- 移动端（11.2.15）：双按钮竖排（确认在下、取消在上）、单按钮全宽；宽 ≤ 屏宽-64、圆角 24
+
+## `GmPopconfirm`（V2.10）
+
+| prop | 类型 | 默认 |
+| --- | --- | --- |
+| `title` / `description` | `ReactNode` / `string` | — |
+| `okText` / `cancelText` | `string` | 「确定」/「取消」 |
+| `danger` | `boolean` | `false`（确认钮 D5 深档 danger 实底） |
+| 触发器内容 | `children` / 默认插槽（**只能是图标/文字**，整块是按钮） | — |
+| 事件 | `onConfirm` / `onCancel` ↔ `@confirm` / `@cancel` | — |
+
+- 非模态 `role="dialog"` + `aria-labelledby`（Part 18 裁决口径）；触发器 `aria-haspopup="dialog"` + `aria-expanded`
+- 焦点：打开进气泡首按钮；ESC/外点（mousedown outside）关闭并**归还触发点**；进出 180ms / Y4px
+- 移动端由 ActionSheet 承担（10.4），本组件不内置第二套形态
+
+## `GmPopover`（V2.10）
+
+| prop | React | Vue |
+| --- | --- | --- |
+| `title` | `ReactNode` | `string` |
+| 内容 | `content`（ReactNode，必填） | `content` 槽（兼容 `content` prop） |
+| 触发器 | `children` | 默认插槽（**只能是图标/文字**） |
+
+- 面板 `--lg-glass-popover` 材质、圆角 20；**240ms 指向触发点**（MD-18-01）
+- 触发器 `aria-haspopup="dialog"` + `aria-expanded`；气泡 `role="dialog"`（带交互内容）；ESC/外点关闭归还焦点
+
+## `GmTooltip`（V2.10）
+
+| prop | 类型 | 默认 |
+| --- | --- | --- |
+| `title` | `string`（**必填**） | — |
+| 内容 | `children` / 默认插槽 | — |
+
+- MD-18-01：**180ms / Y4px**；`role="tooltip"` + `pointer-events:none`
+- 触发：桌面 hover / 键盘 focus（事件冒泡自内部可聚焦子元素）/ 移动端 tap 开合（10.4 禁 hover 依赖）；Escape 收起
+
+## `GmGrowthCard`（V2.10）
+
+| prop | 类型 | 默认 |
+| --- | --- | --- |
+| `data` | `GmGrowthData`（必填，契约与站点 `window.gmGrowth` **逐字一致**：xName/xUnit/yName/yUnit/source/bandLabel/seriesName/x/p3/p50/p97/actual/focus/xTicks/yTicks/advisories/hint/tone/mini） | — |
+| `showP50` / `showWarnToggle` / `interactive` | `boolean` | `true` |
+| 事件 | `onPoint(index)` / `onRange(range)` ↔ `@point` / `@range` | — |
+
+- 视觉硬约定（13.2）：参考带 alpha **.12**（rose 档 #FFD0D8 .12）+ 细白上界；主曲线 #F77FA3 **2.5px** round + 端点白芯粉描边；警戒线 **1.5px** `--gm-guide` 虚线（告警转 attention）；P50 中线细白 1px 虚线；带外点转琥珀/红 + 玻璃气泡建议；轴刻度 12px 次级色 tabular-nums
+- 交互：PC 悬停单点 + 鼠标拖拽框选（`role="status"` 播报）；M 端长按单点 / 滑动回看（touch 不进框选）；`mini` 形态只留带 + 线 + 端点（200×74）
+- 无障碍：svg `role="img"` + aria-label（含最新读数）；`table.gm-sr-only`（table-layout:fixed）隐藏数据表逐点读数；开关 `aria-pressed`；移动热区 ≥44（toggle ::after 扩热区）
+- 百分位：P3–P50–P97 **分段线性**（单一线性偏 6–8 分位），带外外推夹 1/99
 
 ---
 

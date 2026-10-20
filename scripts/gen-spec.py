@@ -8,27 +8,47 @@ def anchor(fn):
     m=re.match(r'(\d\d)-',b)
     return 'ch-'+m.group(1) if m else 'ch-'+b.split('.')[0]
 TARGET={anchor(f):'#'+anchor(f) for f in FILES}
+# 站点模块名（与 build-site.py 的 MODULES 同名；gen-spec 不能 import build-site，硬编码一份）
+SITE_MODULES={'site-index','site-docs','site-spec','site-manual','preview-index',
+              'preview-examples','preview-mobile','preview-patterns','products'}
 
 def mdlink(m):
     txt=m.group(1); url=m.group(2)
-    if url.startswith(('http','#','mailto')) or url.endswith(('.html','.svg','.png','.pdf')):
-        return '['+txt+']('+url+')'
-    # 相对 md 文档 → 锚点
-    for a in TARGET:
-        pass
+    # 外链：真实 <a>（此前返回原始 `[txt](url)` 文本 → 页面上直接露出 Markdown 原文）
+    if url.startswith(('http','mailto')):
+        return '<a href="%s" target="_blank" rel="noopener noreferrer">%s</a>' % (url, txt)
+    if url.startswith('#'):
+        return '<a href="%s">%s</a>' % (url, txt)
+    # 站内链接 `site/index.html#<模块>` → 模块根锚点（终态形态，含 data-mod 供外壳切模块；
+    # 交给 build-site 的 legacy 重写会产出 `#site-index--<模块>` 悬空锚点）
+    if url.startswith('site/index.html#'):
+        frag=url.split('#',1)[1]
+        if frag in SITE_MODULES:
+            return '<a href="#gm-mod-%s" data-mod="%s">%s</a>' % (frag, frag, txt)
+        return '<a href="#gm-mod-site-index" data-mod="site-index">%s</a>' % txt
+    # 标准手册 Part → 标准手册模块内元素（终态形态 + data-mod；audit html-md 禁止 .md 链接）
+    m3=re.search(r'Part(?:\s|%20)(\d{1,2})', url)
+    if m3 and '标准手册' in url:
+        return '<a href="#site-manual--part-%s" data-mod="site-manual">%s</a>' % (m3.group(1), txt)
+    # 相对 md 文档 → 本页章节锚点（阅读器单页承载全部文档）
     base=os.path.basename(url.split('#')[0])
-    key='ch-readme' if base=='README.md' else (re.match(r'(\d\d)-',base).group(1) if re.match(r'(\d\d)-',base) else None)
-    if key:
-        return '['+txt+']('+('#ch-'+ (key if key!='ch-readme' else 'readme'))+')'
-    # 其他相对路径（html 等）在站点目录需加 ../（相对根）
-    if url.startswith(('../','./','/')) or url.startswith('icons') or url.startswith('preview') or url.startswith('site'):
-        return '['+txt+']('+('../' if not url.startswith(('../','./','/')) else '')+url+')'
-    return '['+txt+']('+url+')'
+    m2=re.match(r'(\d\d)-', base)
+    if base=='README.md' or m2:
+        key='readme' if base=='README.md' else m2.group(1)
+        return '<a href="#ch-%s">%s</a>' % (key, txt)
+    # 其余 .md（CHANGELOG / prd / skills 等）：站点外文件，输出纯文本（不产生死链）
+    if url.lower().endswith('.md'):
+        return txt
+    # 其他相对资源（html/svg/png/pdf/目录）：站点目录需加 ../
+    p=url if url.startswith(('../','./','/')) else '../'+url
+    return '<a href="%s">%s</a>' % (p, txt)
 
 def inline(t):
     t=t.replace('&','&amp;').replace('<','&lt;').replace('>','&gt;')
     t=re.sub(r'`([^`]+)`',r'<code>\1</code>',t)
-    t=re.sub(r'\*\*([^*]+)\*\*',r'<b>\1</b>',t)
+    # 非贪婪配对：加粗范围内允许出现**单个** `*`（常见于已转 <code> 的 Token，如 `--lg-sem-*`）。
+    # 旧写法 `\*\*([^*]+)\*\*` 遇 `**\`--lg-sem-*\` 语义 alias**` 时无法闭合 → 星号原文漏出。
+    t=re.sub(r'\*\*(.+?)\*\*',r'<b>\1</b>',t)
     t=re.sub(r'\[([^\]]+)\]\(([^)]+)\)',mdlink,t)
     return t
 
@@ -61,7 +81,9 @@ def render_md(txt):
     i=0
     def flush_p():
         if para:
-            out.append('<p>'+brk(' '.join(inline(x) for x in para))+'</p>'); para.clear()
+            # 先拼行再整体转换：段落内的 **加粗** / [链接] 允许跨行
+            # （旧实现逐行 inline → 跨行的 `**` 无法配对，星号原文漏出）
+            out.append('<p>'+brk(inline(' '.join(para)))+'</p>'); para.clear()
     while i<len(lines):
         ln=lines[i]
         if ln.strip().startswith('```'):
@@ -74,28 +96,48 @@ def render_md(txt):
         s=ln.strip()
         if not s:
             flush_p(); i+=1; continue
-        # table
+        # table（行间允许夹注释引用行 `>`：渲染为跨列注释行 —— 15 章 15.3.4 实测；
+        # 旧实现遇 `>` 即断表，后半张表整段漏成"带竖线的原文"）
         if s.startswith('|') and i+1<len(lines) and re.match(r'^\s*\|?[\s:|-]+\|?\s*$',lines[i+1].strip()):
             flush_p()
             head=[c.strip() for c in s.strip('|').split('|')]
+            ncol=len(head)
             rows=[]; i+=2
-            while i<len(lines) and lines[i].strip().startswith('|'):
-                rows.append([c.strip() for c in lines[i].strip().strip('|').split('|')]); i+=1
-            out.append('<table><thead><tr>'+''.join('<th>'+inline(c)+'</th>' for c in head)+'</tr></thead><tbody>'+''.join('<tr>'+''.join('<td>'+inline(c)+'</td>' for c in r)+'</tr>' for r in rows)+'</tbody></table>')
+            while i<len(lines):
+                tl=lines[i].strip()
+                if tl.startswith('|'):
+                    cells=[c.strip() for c in lines[i].strip().strip('|').split('|')]
+                    rows.append('<tr>'+''.join('<td>'+inline(c)+'</td>' for c in cells)+'</tr>'); i+=1; continue
+                if tl.startswith('>'):
+                    q=[]
+                    while i<len(lines) and lines[i].strip().startswith('>'):
+                        q.append(inline(lines[i].strip()[1:].strip())); i+=1
+                    rows.append('<tr class="gm-tbl-note"><td colspan="%d">%s</td></tr>'%(ncol,'<br>'.join(q)))
+                    continue
+                if not tl:
+                    # 表内空行：跳过不打断表格（15 章 15.3.4 实测表中间夹空行）
+                    i+=1; continue
+                break
+            out.append('<table><thead><tr>'+''.join('<th>'+inline(c)+'</th>' for c in head)+'</tr></thead><tbody>'+''.join(rows)+'</tbody></table>')
             continue
-        # headings
+        # headings：同时生成 GitHub 风格 slug id（文档内 `[x](#slug)` 锚点链到它；
+        # 此前标题不带 id，而链接被转成真实 <a> 后成为悬空锚点，构建断言直接拒绝产物）
         m=re.match(r'^(#{1,6})\s+(.*)$',s)
         if m:
             flush_p()
             h=min(len(m.group(1))+1,6)
-            out.append('<h%d>%s</h%d>'%(h,brk(inline(m.group(2))),h)); i+=1; continue
+            ht=brk(inline(m.group(2)))
+            slug=re.sub(r'[^\w\u4e00-\u9fff\s-]','',m.group(2),flags=re.U)
+            slug=re.sub(r'\s+','-',slug).lower()
+            out.append('<h%d id="%s">%s</h%d>'%(h,slug,ht,h)); i+=1; continue
         if s=='---':
             flush_p(); out.append('<hr>'); i+=1; continue
         if s.startswith('>'):
             flush_p(); buf2=[]
             while i<len(lines) and lines[i].strip().startswith('>'):
                 buf2.append(lines[i].strip()[1:].strip()); i+=1
-            out.append('<blockquote>'+'<br>'.join(inline(x) for x in buf2)+'</blockquote>')
+            # 引用块内可能含表格/列表（12 章「版本相关变更」实测）—— 递归解析整块
+            out.append('<blockquote>'+render_md('\n'.join(buf2))+'</blockquote>')
             continue
         mlist=re.match(r'^(\s*)[-*]\s+(.*)$',s)
         if mlist:
@@ -190,6 +232,7 @@ a{color:var(--rose-deep)}
 .md table{width:100%;border-collapse:collapse;margin:10px 0;font-size:12.5px}
 .md th,.md td{border:1px solid #EED5CD;padding:7px 9px;text-align:left}
 .md th{background:rgba(247,127,163,.1);color:#A03F60}
+.md tr.gm-tbl-note td{border-top:none;background:rgba(247,127,163,.05);color:var(--t2);font-size:12px;line-height:1.7}
 .md pre{background:#FFF7F4;border:1px solid #F0D4CF;border-radius:18px;padding:12px 14px;overflow:auto;font-size:12px;line-height:1.7}
 .md code{font-family:ui-monospace,Menlo,monospace;background:rgba(247,127,163,.08);padding:1px 5px;border-radius:6px;font-size:12px}
 .md pre code{background:none;padding:0}
@@ -208,8 +251,7 @@ a{color:var(--rose-deep)}
   .wrap{padding-left:12px;padding-right:12px}
   .chap{padding:12px}
 }
-.md blockquote a,.md a{overflow-wrap:anywhere;word-break:break-word}
-.md table,.chap table{display:block;max-width:100%;overflow-x:auto;-webkit-overflow-scrolling:touch}
+.md blockquote a,.md a{overflow-wrap:anywhere;word-break:break-word}.md table,.chap table{display:block;max-width:100%;overflow-x:auto;-webkit-overflow-scrolling:touch}
 @media(max-width:767px){
   .chap{padding:16px}
   /* 17 · 页面壳：顶栏下拉（绝对定位 min-width:210px）与正文宽表在 375px 越界。
@@ -221,6 +263,10 @@ a{color:var(--rose-deep)}
   .md pre{max-width:100%;overflow-x:auto}
   /* 10 · 10.4：可点热区 ≥44×44（原实测 34–38px） */
   .top button,.top a,.drop a,.chapnav button{min-height:44px;display:inline-flex;align-items:center}
+  /* 10 · 10.4 / 11 · 11.2.18：正文行内与表格内链接用 ::after 扩热区 ≥44，
+     不改视觉行高（GmLink 同口径；page-qa 识别上下各外扩 ≥8px 的伪元素） */
+  .md a{position:relative}
+  .md a::after{content:"";position:absolute;top:-11px;bottom:-11px;left:-8px;right:-8px}
 }
 '''
 htmlout='''<!DOCTYPE html>

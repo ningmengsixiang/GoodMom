@@ -5,12 +5,11 @@
 
 ## 0. 一句话结论
 
-- 两库各 **19 个 `Gm*` 组件，完全同名同数**。
-- 99 行总表里**只有 15 行有库实现**；另有 **6 行**在 `00` 里明文写着「库组件待补」（`Table` `Collapse` `Descriptions` `Modal` `Popconfirm` `Popover`/`Tooltip`），生长曲线只有站点外壳 `window.gmGrowth()`。
+- 两库各 **27 个 `Gm*` 组件，完全同名同数**。
+- 99 行总表里**只有 22 行有库实现**（V2.10 新封 7 行 8 组件：`Table` `Collapse` `Descriptions` `Modal` `Popconfirm` `Popover`/`Tooltip`、生长曲线卡）。
 - **代码存在但 `00` 未登记** 2 个：`GmRiskPicker`、`GmClientCard`（在 13.1 / 15.6.1 以领域件口径登记）。
-- 两库 README 都写「16 个组件」，**实际 19**；`16` 章写「16 模块」，实际 React 19 / Vue 19。
 
-## 1. ✅ 库内真实存在的 19 个组件
+## 1. ✅ 库内真实存在的 27 个组件
 
 | 组件 | 用途 | 关键点 |
 | --- | --- | --- |
@@ -33,20 +32,29 @@
 | `GmRiskPicker` | **妊娠风险五色** | `role="radiogroup"`；文字走主文字色，颜色由色点承载 |
 | `GmResponsiveView` | 容器宽度切形态 | 阈值 1024/767；**同一时刻只渲染一个分支** |
 | `GmVirtualList` | 长列表窗口化 | 固定行高；`overscan` 默认 4；`scrollToIndex` **仅 Vue 暴露** |
+| `GmTable` | 玻璃表格（V2.10） | th `scope="col"`；`aria-sort` 排序（TB-15-02）；省略+title；空态 GmEmpty |
+| `GmCollapse` | 折叠面板（V2.10） | 300ms grid-rows + 220ms 箭头；一屏 ≤3（maxOpen 默认 3）；aria-expanded/controls 内建 |
+| `GmDescriptions` | 描述列表（V2.10） | `<dl>` 键值语义；key caption **次级色**（D19）；单行省略 + title |
+| `GmModal` | 弹窗（V2.10） | `role=dialog`+`aria-modal`；ESC/遮罩/× 关闭；锁滚动；焦点进面板/归还触发点；移动竖排 |
+| `GmPopconfirm` | 气泡确认（V2.10） | 非模态 `role=dialog`；触发器 `aria-haspopup`+`aria-expanded`；danger 深档实底；180ms/Y4px |
+| `GmPopover` | 气泡面板（V2.10） | `--lg-glass-popover` 材质、圆角 20；240ms 指向触发点 |
+| `GmTooltip` | 文字气泡（V2.10） | 180ms/Y4px；移动 tap 开合（禁 hover 依赖）；`role="tooltip"` |
+| `GmGrowthCard` | 生长曲线卡（V2.10） | 数据契约与站点 `window.gmGrowth` 逐字一致；P3–P50–P97 分段线性；框选/开关/隐藏数据表 |
 
-## 2. ⚠️ 只有站点 CSS 类、库里没有的（要自己实现或提为组件）
+## 2. 曾经的「站点达标、库待补」清单（V2.10 已全部封进库）
 
 | 文档组件 | 站点类 | 状态 |
 | --- | --- | --- |
-| Table 表格 | `.gm-tbl` | `00` 注明「库组件待补」 |
-| Collapse 折叠 | `.gm-fold` | 同上 |
-| Descriptions 描述列表 | `.gm-desc` | 同上 |
-| Modal / Dialog | 站点演示 | 同上 |
-| Popconfirm 气泡确认 | 站点演示 | 同上 |
-| Popover / Tooltip | 站点 Tooltip | 同上 |
-| 生长曲线卡（百分位带） | `window.gmGrowth()` | 仅有外壳 |
+| Table 表格 | `.gm-tbl` | ✅ V2.10 → `GmTable` |
+| Collapse 折叠 | `.gm-fold` | ✅ V2.10 → `GmCollapse` |
+| Descriptions 描述列表 | `.gm-desc` | ✅ V2.10 → `GmDescriptions` |
+| Modal / Dialog | 站点演示 | ✅ V2.10 → `GmModal` |
+| Popconfirm 气泡确认 | 站点演示 | ✅ V2.10 → `GmPopconfirm` |
+| Popover / Tooltip | 站点 Tooltip | ✅ V2.10 → `GmPopover` / `GmTooltip` |
+| 生长曲线卡（百分位带） | `window.gmGrowth()` | ✅ V2.10 → `GmGrowthCard`（站点外壳仍保留为页面侧唯一实现） |
 
-> 需要这些时：**优先用 Arco 原生 + `gm.css` 皮肤**（① 层），不要手搓第三套。
+> 库组件与站点外壳**同源配方**：`.gm-tbl`/`.gm-fold`/`.gm-desc`/`.gm-growth*` 选择器与数值一致，
+> 由 `check-style-parity.py`（库内）与站点侧 page-qa 共同守护。
 
 ## 3. ✗ 规范有、代码无（还没做，别 import）
 
@@ -64,11 +72,11 @@
 
 **妇幼领域（14 项）**：孕周卡 · 产检计划卡 · 记录卡（胎动/体重/宫高） · 分娩清单 · 宝宝卡 · 生长曲线卡 · 疫苗计划卡 · 儿保体检卡 · 喂养睡眠记录 · 随访队列 · 高危提醒条 · 全生命周期轴 · 机构看板 · 档案时间线 —— **全部待实现**，页面自行按 13 章组装
 
-## 4. 两库映射（19 对同名）
+## 4. 两库映射（27 对同名）
 
 | React `@goodmom/ui` | Vue `@goodmom/vue` | 源文件 |
 | --- | --- | --- |
-| `GmAvatar` `GmButton` `GmButtonGroup` `GmCard` `GmCascader` `GmClientCard` `GmEmpty` `GmLink` `GmProgress` `GmResponsiveView` `GmResult` `GmRiskPicker` `GmSkeleton` `GmSpin` `GmStatusTag` `GmSteps` `GmTag` `GmToast` `GmVirtualList` | 同名同名同名（19 个完全一致） | `Xxx.tsx` ↔ `Xxx.vue` |
+| `GmAvatar` `GmButton` `GmButtonGroup` `GmCard` `GmCascader` `GmClientCard` `GmEmpty` `GmLink` `GmProgress` `GmResponsiveView` `GmResult` `GmRiskPicker` `GmSkeleton` `GmSpin` `GmStatusTag` `GmSteps` `GmTag` `GmToast` `GmVirtualList` `GmTable` `GmCollapse` `GmDescriptions` `GmModal` `GmPopconfirm` `GmPopover` `GmTooltip` `GmGrowthCard` | 同名同名同名（27 个完全一致） | `Xxx.tsx` ↔ `Xxx.vue` |
 
 **写法对照**
 

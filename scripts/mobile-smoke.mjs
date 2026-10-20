@@ -4,6 +4,7 @@
  * 用法（需先在仓库根起静态服务，与 site-smoke.mjs 同一套）：
  *   python3 -m http.server 5288
  *   node scripts/mobile-smoke.mjs
+ *   MOBILE_VW=320 MOBILE_VH=700 node scripts/mobile-smoke.mjs   # 320 档（iPhone SE）
  *
  * 为什么单独一支：`site-smoke.mjs` 对移动端只断言"`.tab` 存在且点了会选中"，
  * 而本模块是一台**可触摸的真机演示**（4 个页面 / 左滑操作 / 下拉刷新 /
@@ -19,6 +20,8 @@
 import { chromium } from "playwright";
 
 const URL = process.env.SITE_URL || "http://localhost:5288/site/index.html";
+const VW = Number(process.env.MOBILE_VW || 375);
+const VH = Number(process.env.MOBILE_VH || 812);
 const M = "#gm-mod-preview-mobile ";
 const id = (n) => `${M}[id="preview-mobile--${n}"]`;
 const results = [];
@@ -31,7 +34,7 @@ function check(name, pass, detail = "") {
 }
 
 const browser = await chromium.launch();
-const ctx = await browser.newContext({ viewport: { width: 375, height: 812 }, hasTouch: true, isMobile: true });
+const ctx = await browser.newContext({ viewport: { width: VW, height: VH }, hasTouch: true, isMobile: true });
 const page = await ctx.newPage();
 const errors = [];
 page.on("console", (m) => { if (m.type() === "error") errors.push(m.text()); });
@@ -288,6 +291,44 @@ for (let i = 0; i < 10; i++) {
 await page.waitForTimeout(200);
 check("步进器到边界即禁用", await page.locator(`${M}.pm-stepper button[data-step="1"]`).isDisabled());
 
+/* ── 9b. 320 档横向溢出（2026-10-19 记录的 P1 回归）─────────────────────
+   实测 @320：OTP 6 格 = 6×44 + 5×8 = 304px > 卡片内容 254px，整页 scrollWidth=337、溢出 17px。
+   旧门禁只测 375、只停在默认总览页、只量关闭态 —— 视口/页面状态/弹层状态三个缺口同时漏掉它。
+   以下三条分别补：记录页整页、OTP 容器、ActionSheet 打开态。 */
+const overflowInfo = () => page.evaluate(() => {
+  const d = document.documentElement;
+  const otp = document.querySelector('[id$="pmOtp"]');
+  const cells = otp ? [...otp.querySelectorAll("input")] : [];
+  const last = cells[cells.length - 1];
+  return {
+    scrollWidth: d.scrollWidth,
+    clientWidth: d.clientWidth,
+    otpScrollWidth: otp ? otp.scrollWidth : -1,
+    otpClientWidth: otp ? otp.clientWidth : -1,
+    otpRight: last ? Math.round(last.getBoundingClientRect().right) : -1,
+  };
+});
+const ov = await overflowInfo();
+check(`记录页无横向溢出（视口 ${VW}）`, ov.scrollWidth <= ov.clientWidth + 1,
+  `scrollWidth=${ov.scrollWidth} clientWidth=${ov.clientWidth} OTP 第 6 格 right=${ov.otpRight}`);
+check("OTP 容器不横向溢出", ov.otpClientWidth > 0 && ov.otpScrollWidth <= ov.otpClientWidth + 1,
+  `scrollWidth=${ov.otpScrollWidth} clientWidth=${ov.otpClientWidth} OTP 第 6 格 right=${ov.otpRight}`);
+
+/* 弹层打开态：复用「主行动 → ActionSheet」的既有打开路径，量完再走既有 Esc 关闭路径 */
+await page.locator(`${M}.tabbar .tab`).first().click();
+await page.waitForTimeout(400);
+await page.locator(id("pmCta")).click();
+await page.waitForTimeout(450);
+const ovSheet = await page.evaluate(() => ({
+  scrollWidth: document.documentElement.scrollWidth,
+  clientWidth: document.documentElement.clientWidth,
+  open: document.querySelector('[id="preview-mobile--pmSheet"]').classList.contains("is-open"),
+}));
+check(`弹层打开态无横向溢出（视口 ${VW}）`, ovSheet.open && ovSheet.scrollWidth <= ovSheet.clientWidth + 1,
+  `scrollWidth=${ovSheet.scrollWidth} clientWidth=${ovSheet.clientWidth}`);
+await page.keyboard.press("Escape");
+await page.waitForTimeout(350);
+
 /* ── 10. 图片预览 ────────────────────────────────────────────────────── */
 await page.locator(`${M}.tabbar .tab`).first().click();
 await page.waitForTimeout(400);
@@ -426,11 +467,14 @@ await page.locator(`${M}.tabbar .tab`).nth(2).click();
 await page.waitForTimeout(450);
 check("Calendar：今天高亮 + 选中态唯一", (await page.locator(`${M}.pm-calday.today`).count()) === 1 &&
   (await page.locator(`${M}.pm-calday[aria-selected="true"]`).count()) === 1);
-check("Calendar：日期格热区 ≥44（内层 36 芯片承载视觉）", await page.evaluate(() => {
+/* <360 档：7 列 × 44 + 间距在 320 卡内物理放不下（254px 内容宽），按 36 下限验收并登记；
+   360 起仍按 10.9 的 ≥44 硬指标。 */
+const CAL_MIN = VW < 360 ? 36 : 44;
+check(`Calendar：日期格热区 ≥${CAL_MIN}（内层 36 芯片承载视觉）`, await page.evaluate((min) => {
   const c = document.querySelector("#gm-mod-preview-mobile .pm-calday[data-k]");
   const r = c.getBoundingClientRect();
-  return r.width >= 44 && r.height >= 44;
-}));
+  return r.width >= min && r.height >= min;
+}, CAL_MIN));
 const calTitle = await page.locator(`${M}[id$='pmCalTitle']`).textContent();
 await page.locator(`${M}[id$='pmCalNext']`).click();
 await page.waitForTimeout(400);
@@ -589,6 +633,415 @@ check("布局体检：模块内容不出手机框", layout.frameOut.length === 0
 check("布局体检：文本容器不溢出", layout.textClip.length === 0, layout.textClip.slice(0, 3).join(" | "));
 check("布局体检：静态兄弟不重叠", layout.overlap.length === 0, layout.overlap.slice(0, 3).join(" | "));
 check("布局体检：纵向堆叠同父同类左边缘一致", layout.columnJitter.length === 0, layout.columnJitter.slice(0, 3).join(" | "));
+
+/* ── 15. 11.5 自述 30 项里原先没有任何断言的 13 个组件 ───────────────────
+   SearchBar / NoticeBar / Chips / Segmented / Upload / Rate / Progress /
+   Steps / CapsuleTabs / Selector / Cell / Footer / SafeArea。
+   每条都真实操作一次或读取运行态（数值 / 选中 / 几何），不做"元素存在"式断言。 */
+await page.locator(`${M}.tabbar .tab`).first().click();
+await page.waitForTimeout(400);
+
+/* SearchBar（11.2.1）：点击 → 聚焦 → 输入 → 清空键 */
+await page.locator(id("pmSearchBtn")).click();
+await page.waitForTimeout(300);
+check("SearchBar：点击后输入框获得焦点", await page.evaluate(() =>
+  !!document.activeElement && document.activeElement.id.endsWith("pmSearchInput")));
+await page.locator(id("pmSearchInput")).fill("孕 20 周");
+await page.waitForTimeout(200);
+check("SearchBar：输入值写回并显示清空键", await page.evaluate(() => {
+  const i = document.querySelector('#gm-mod-preview-mobile [id$="pmSearchInput"]');
+  const c = document.querySelector('#gm-mod-preview-mobile [id$="pmSearchClear"]');
+  return i.value === "孕 20 周" && c.classList.contains("is-on") && getComputedStyle(c).display !== "none";
+}));
+await page.locator(id("pmSearchClear")).click();
+await page.waitForTimeout(200);
+check("SearchBar：清空键清空输入并收起自身", await page.evaluate(() => {
+  const i = document.querySelector('#gm-mod-preview-mobile [id$="pmSearchInput"]');
+  const c = document.querySelector('#gm-mod-preview-mobile [id$="pmSearchClear"]');
+  return i.value === "" && !c.classList.contains("is-on") && document.activeElement === i;
+}));
+await page.locator(id("pmSearchBtn")).click();   /* 收起面板，避免影响后续点击 */
+await page.waitForTimeout(250);
+
+/* NoticeBar（11.2.8）：关闭后消失（不是只移出视觉） */
+check("NoticeBar：关闭前在屏", await page.locator(id("pmNotice")).isVisible());
+await page.locator(`${M}.notice .x`).click();
+await page.waitForTimeout(300);
+check("NoticeBar：点关闭后从布局消失", await page.evaluate(() => {
+  const n = document.querySelector('#gm-mod-preview-mobile [id$="pmNotice"]');
+  return getComputedStyle(n).display === "none" && n.getBoundingClientRect().height === 0;
+}));
+
+/* Chips（11.2.2）：点击切换 aria-checked，组内单选 */
+await page.locator(`${M}.chips .chip`).nth(2).click();
+await page.waitForTimeout(250);
+check("Chips：点击切换 aria-checked（单选唯一）", await page.evaluate(() => {
+  const bs = [...document.querySelectorAll("#gm-mod-preview-mobile .chips .chip")];
+  const checked = bs.map((b) => b.getAttribute("aria-checked"));
+  return checked[2] === "true" && checked.filter((v) => v === "true").length === 1 &&
+    bs[2].classList.contains("on");
+}));
+
+/* Segmented（11.2.2）：点击切换选中 */
+await page.locator(`${id("pmSeg")} .s2`).nth(1).click();
+await page.waitForTimeout(250);
+check("Segmented：点击切换 aria-checked（单选唯一）", await page.evaluate(() => {
+  const bs = [...document.querySelectorAll('#gm-mod-preview-mobile [id$="pmSeg"] .s2')];
+  const checked = bs.map((b) => b.getAttribute("aria-checked"));
+  return checked[1] === "true" && checked.filter((v) => v === "true").length === 1 &&
+    bs[1].classList.contains("on");
+}));
+
+/* Upload（11.2.13）：点「+」先弹拍照 / 相册操作表，选择来源后走既有新增逻辑 */
+const tilesBefore = await page.locator(`${M}.pm-tile`).count();
+await page.locator(id("pmAddPhoto")).click();
+await page.waitForTimeout(400);
+check("Upload：「+」弹出拍照 / 相册 / 取消操作表", await page.evaluate(() => {
+  const s = document.querySelector('#gm-mod-preview-mobile [id$="pmSheet"]');
+  const labels = [...s.querySelectorAll(".pm-sheetitem")].map((b) => b.textContent.trim());
+  const cancel = document.querySelector('#gm-mod-preview-mobile [id$="pmSheetCancel"]');
+  return s.classList.contains("is-open") && labels.length === 2 &&
+    labels.some((t) => t.includes("拍照")) && labels.some((t) => t.includes("相册")) &&
+    /取消/.test(cancel.textContent);
+}));
+await page.locator(`${M}[id$="pmSheetBody"] .pm-sheetitem`).nth(1).click();
+await page.waitForTimeout(450);
+check("Upload：新增后缩略图数量 +1", (await page.locator(`${M}.pm-tile`).count()) === tilesBefore + 1,
+  `${tilesBefore} → ${await page.locator(`${M}.pm-tile`).count()}`);
+await page.locator(`${M}.pm-tile .del`).last().click();
+await page.waitForTimeout(400);
+check("Upload：删除新增项先走二次确认", await page.evaluate(() => {
+  const s = document.querySelector('#gm-mod-preview-mobile [id$="pmSheet"]');
+  const t = document.querySelector('#gm-mod-preview-mobile [id$="pmSheetTitle"]');
+  return s.classList.contains("is-open") && /移除这张照片/.test(t.textContent);
+}));
+await page.locator(`${M}[id$="pmSheetBody"] .pm-sheetitem`).first().click();
+await page.waitForTimeout(600);
+check("Upload：确认删除后数量 -1（回到原值）", (await page.locator(`${M}.pm-tile`).count()) === tilesBefore,
+  `${await page.locator(`${M}.pm-tile`).count()} / ${tilesBefore}`);
+
+/* Rate（11.2.12）：点第 3 星 → 选中 3 颗 */
+await page.locator(`${M}.mrate button`).nth(2).click();
+await page.waitForTimeout(250);
+const rate = await page.evaluate(() => {
+  const bs = [...document.querySelectorAll("#gm-mod-preview-mobile .mrate button")];
+  return {
+    checked: bs.map((b) => b.getAttribute("aria-checked")),
+    on: bs.filter((b) => b.classList.contains("on")).length,
+    text: document.querySelector('#gm-mod-preview-mobile [id$="pmRateText"]').textContent,
+  };
+});
+check("Rate：点第 3 星后选中数=3 且 aria-checked 落在第 3 颗",
+  rate.on === 3 && rate.checked[2] === "true" &&
+  rate.checked.filter((v) => v === "true").length === 1 && rate.text.includes("3 分"),
+  JSON.stringify({ on: rate.on, checked: rate.checked, text: rate.text }));
+
+/* Progress（10.5.2）：仪表条真实生长（宽度 >0 且与 data-w 声明值一致） */
+await page.evaluate(() => window.scrollTo(0, 0));
+await page.waitForTimeout(1800);   /* 兜底 reveal：数字滚动 / 仪表条 900ms */
+const meter = await page.evaluate(() => {
+  return [...document.querySelectorAll("#gm-mod-preview-mobile .meter i[data-w]")].map((i) => ({
+    declared: Number(i.getAttribute("data-w")),
+    width: i.getBoundingClientRect().width,
+    track: i.parentElement.getBoundingClientRect().width,
+  }));
+});
+check("Progress：仪表条宽度真实生长（>0 且与 data-w 一致）",
+  meter.length >= 5 &&
+  meter.every((m) => m.width > 0 && m.width <= m.track + 1 &&
+    Math.abs((m.width / m.track) * 100 - m.declared) <= 3),
+  meter.map((m) => `${Math.round((m.width / m.track) * 100)}%/${m.declared}%`).join(" "));
+
+/* Steps（10.4）：竖版 flex column，每个 step 铺满容器宽度且纵向堆叠 */
+const steps = await page.evaluate(() => {
+  const wrap = document.querySelector("#gm-mod-preview-mobile .msteps");
+  const items = [...wrap.querySelectorAll(":scope > span")];
+  const wr = wrap.getBoundingClientRect();
+  const rs = items.map((s) => s.getBoundingClientRect());
+  return {
+    dir: getComputedStyle(wrap).flexDirection,
+    container: Math.round(wr.width),
+    widths: rs.map((r) => Math.round(r.width)),
+    tops: rs.map((r) => Math.round(r.top)),
+    lefts: rs.map((r) => Math.round(r.left)),
+    rights: rs.map((r) => Math.round(r.right)),
+  };
+});
+check("Steps：竖版 flex-direction:column", steps.dir === "column", steps.dir);
+check("Steps：每个 step 宽度=容器且纵向顺序堆叠",
+  steps.widths.every((w) => Math.abs(w - steps.container) <= 2) &&
+  steps.tops.every((t, i) => i === 0 || t > steps.tops[i - 1]) &&
+  steps.lefts.every((l) => l === steps.lefts[0]) &&
+  steps.rights.every((r) => r <= steps.lefts[0] + steps.container + 2),
+  JSON.stringify(steps));
+
+/* CapsuleTabs（11.6.3）：点击切换 selected，且触发条联动 */
+await page.locator(`${M}.tabbar .tab`).nth(2).click();
+await page.waitForTimeout(450);
+await page.locator(`${M}.pm-caps .pm-cap`).nth(1).click();
+await page.waitForTimeout(250);
+check("CapsuleTabs：点击切换 aria-selected（唯一）且内容联动", await page.evaluate(() => {
+  const bs = [...document.querySelectorAll("#gm-mod-preview-mobile .pm-caps .pm-cap")];
+  const sel = bs.map((b) => b.getAttribute("aria-selected"));
+  const title = document.querySelector('#gm-mod-preview-mobile [id$="pmCapTitle"]').textContent;
+  return sel[1] === "true" && sel.filter((v) => v === "true").length === 1 &&
+    bs[1].classList.contains("on") && title.includes("随访");
+}));
+
+/* Selector（11.6.4）：点击选中唯一；禁用项不参与 */
+await page.locator(`${M}.pm-select`).nth(2).click();
+await page.waitForTimeout(200);
+await page.evaluate(() => {
+  document.querySelectorAll("#gm-mod-preview-mobile .pm-select")[3].click();   /* 禁用项 */
+});
+await page.waitForTimeout(200);
+check("Selector：点击选中唯一且禁用项不参与", await page.evaluate(() => {
+  const bs = [...document.querySelectorAll("#gm-mod-preview-mobile .pm-select")];
+  return bs[2].getAttribute("aria-checked") === "true" &&
+    bs.filter((b) => b.getAttribute("aria-checked") === "true").length === 1 &&
+    bs[3].getAttribute("aria-checked") === "false" && bs[3].disabled;
+}));
+
+/* Cell（11.2.4）：danger 行可点，并真的触发动作（二次确认操作表） */
+await page.locator(`${M}.tabbar .tab`).nth(1).click();
+await page.waitForTimeout(450);
+await page.locator(`${M}.pm-view[data-view="alerts"] .pm-cell.danger`).click();
+await page.waitForTimeout(400);
+check("Cell：danger 行点击触发二次确认操作表", await page.evaluate(() => {
+  const s = document.querySelector('#gm-mod-preview-mobile [id$="pmSheet"]');
+  const t = document.querySelector('#gm-mod-preview-mobile [id$="pmSheetTitle"]');
+  return s.classList.contains("is-open") && /结束本次随访批次/.test(t.textContent);
+}));
+await page.keyboard.press("Escape");
+await page.waitForTimeout(350);
+
+/* Footer（11.6.11）：玻璃细条 + 协议/隐私/备案三个真实 <a> */
+await page.locator(`${M}.tabbar .tab`).nth(3).click();
+await page.waitForTimeout(450);
+const foot = await page.evaluate(() => {
+  const f = document.querySelector("#gm-mod-preview-mobile .pm-foot");
+  const links = [...f.querySelectorAll("a")];
+  const cs = getComputedStyle(f);
+  return {
+    count: links.length,
+    hrefs: links.map((a) => a.getAttribute("href")),
+    hot: links.map((a) => parseFloat(getComputedStyle(a, "::before").height)),
+    bg: cs.backgroundColor,
+    top: cs.borderTopWidth,
+    text: f.textContent,
+  };
+});
+check("Footer：3 个协议/隐私/备案链接且 href 非空",
+  foot.count === 3 && foot.hrefs.every((h) => !!h && h.trim() !== "") &&
+  /用户协议/.test(foot.text) && /隐私政策/.test(foot.text) && /ICP备/.test(foot.text),
+  JSON.stringify({ hrefs: foot.hrefs }));
+check("Footer：玻璃细条（半透明底 + 顶部 hairline + 44 热区）且保留版权",
+  /^rgba\(/.test(foot.bg) && foot.bg !== "rgba(0, 0, 0, 0)" &&
+  parseFloat(foot.top) >= 1 && foot.hot.every((h) => h >= 44) && /妈咪好 GoodMom/.test(foot.text),
+  JSON.stringify({ bg: foot.bg, top: foot.top, hot: foot.hot }));
+
+/* SafeArea（11.6.7）：底部安全区参与 stage 计算 + 可视化开关可观察 */
+const safeBefore = await page.evaluate(() => {
+  const stage = document.querySelector("#gm-mod-preview-mobile .stage");
+  const safe = document.querySelector('#gm-mod-preview-mobile [id$="pmSafe"]');
+  return { pb: parseFloat(getComputedStyle(stage).paddingBottom), on: safe.classList.contains("is-on") };
+});
+check("SafeArea：stage 计算 padding-bottom 含底部安全区增量（env=0 时仍 ≥132）",
+  safeBefore.pb >= 132 && !safeBefore.on, `${safeBefore.pb}px`);
+await page.locator(id("pmSafeToggle")).click();
+await page.waitForTimeout(300);
+const safeAfter = await page.evaluate(() => {
+  const safe = document.querySelector('#gm-mod-preview-mobile [id$="pmSafe"]');
+  const band = safe.querySelector("i.b");
+  return {
+    on: safe.classList.contains("is-on"),
+    display: getComputedStyle(safe).display,
+    height: parseFloat(getComputedStyle(band).height),
+    rectH: band.getBoundingClientRect().height,
+    label: document.querySelector('#gm-mod-preview-mobile [id$="pmSafeLabel"]').textContent,
+  };
+});
+check("SafeArea：开启可视化后底部安全区元素可见（计算高度 ≥0）",
+  safeAfter.on && safeAfter.display !== "none" && safeAfter.height >= 0 && safeAfter.rectH >= 0,
+  JSON.stringify({ on: safeAfter.on, height: safeAfter.height, label: safeAfter.label }));
+await page.locator(id("pmSafeToggle")).click();   /* 还原关闭态 */
+await page.waitForTimeout(200);
+
+/* ── 16. P2 演示项：Dialog / Result / Upload 来源 / 行内校验 ──────────────
+   这四项此前只有规范条文、没有可操作演示。断言全部走真实交互：
+   点击/键盘打开、读 ARIA、量几何、走关闭路径并检查焦点归还。 */
+await page.locator(`${M}.tabbar .tab`).nth(2).click();
+await page.waitForTimeout(450);
+
+/* Dialog：居中玻璃卡 + role=dialog + aria-modal + aria-label + 焦点入面板 */
+await page.locator(id("pmDialogOpen")).scrollIntoViewIfNeeded();
+await page.waitForTimeout(250);
+await page.locator(id("pmDialogOpen")).click();
+await page.waitForTimeout(450);
+check("Dialog：居中玻璃卡打开 · role/aria-modal/aria-label + 焦点入面板", await page.evaluate(() => {
+  const d = document.querySelector('#gm-mod-preview-mobile [id$="pmDialog"]');
+  const stage = document.querySelector('#gm-mod-preview-mobile .stage');
+  const dr = d.getBoundingClientRect(), sr = stage.getBoundingClientRect();
+  return d.classList.contains("is-open") && d.getAttribute("role") === "dialog" &&
+    d.getAttribute("aria-modal") === "true" && (d.getAttribute("aria-label") || "").length > 0 &&
+    d.contains(document.activeElement) &&
+    Math.abs((dr.left + dr.right) / 2 - (sr.left + sr.right) / 2) <= 2;
+}));
+check("Dialog：取消 Ghost 在上、确认 Primary 在下且按钮全宽", await page.evaluate(() => {
+  const d = document.querySelector('#gm-mod-preview-mobile [id$="pmDialog"]');
+  const c = document.querySelector('#gm-mod-preview-mobile [id$="pmDialogCancel"]');
+  const o = document.querySelector('#gm-mod-preview-mobile [id$="pmDialogOk"]');
+  const dr = d.getBoundingClientRect(), cr = c.getBoundingClientRect(), or = o.getBoundingClientRect();
+  const cc = getComputedStyle(c), oc = getComputedStyle(o);
+  return cr.top < or.top && (or.top - cr.bottom) <= 16 &&
+    Math.abs(cr.width - or.width) <= 1 && cr.width >= dr.width - 48 &&
+    /rgba?\(/.test(cc.backgroundColor) && /gradient/.test(oc.backgroundImage) &&
+    c.textContent.trim() === "取消" && o.textContent.trim() === "确认提交";
+}));
+await page.locator(id("pmDialogCancel")).click();
+await page.waitForTimeout(400);
+check("Dialog：取消关闭并把焦点归还触发点", await page.evaluate(() => {
+  const d = document.querySelector('#gm-mod-preview-mobile [id$="pmDialog"]');
+  return !d.classList.contains("is-open") && !!document.activeElement &&
+    document.activeElement.id.endsWith("pmDialogOpen");
+}));
+await page.locator(id("pmDialogOpen")).click();
+await page.waitForTimeout(400);
+await page.keyboard.press("Escape");
+await page.waitForTimeout(350);
+const dlgEsc = await page.evaluate(() => {
+  const d = document.querySelector('#gm-mod-preview-mobile [id$="pmDialog"]');
+  return !d.classList.contains("is-open") && !!document.activeElement &&
+    document.activeElement.id.endsWith("pmDialogOpen");
+});
+await page.locator(id("pmDialogOpen")).click();
+await page.waitForTimeout(400);
+await page.mouse.click(6, 6);   /* 遮罩通道：点面板外 */
+await page.waitForTimeout(350);
+const dlgMask = await page.evaluate(() => {
+  const d = document.querySelector('#gm-mod-preview-mobile [id$="pmDialog"]');
+  return !d.classList.contains("is-open") && !!document.activeElement &&
+    document.activeElement.id.endsWith("pmDialogOpen");
+});
+check("Dialog：Esc 与遮罩两通道关闭并归还触发点", dlgEsc && dlgMask);
+
+/* Result：键盘 Enter 打开；role=status + 56–64 语义色图标 + 关闭路径 */
+await page.locator(id("pmResultOpen")).scrollIntoViewIfNeeded();
+await page.waitForTimeout(250);
+await page.locator(id("pmResultOpen")).focus();
+await page.keyboard.press("Enter");
+await page.waitForTimeout(450);
+check("Result：键盘 Enter 打开 · role=status + 56–64 语义色图标", await page.evaluate(() => {
+  const r = document.querySelector('#gm-mod-preview-mobile [id$="pmResult"]');
+  const st = r.querySelector('[role="status"]');
+  const ic = r.querySelector(".pm-result-icon");
+  const ir = ic ? ic.getBoundingClientRect() : { width: 0, height: 0 };
+  const col = (getComputedStyle(ic).color.match(/\d+/g) || []).map(Number);
+  return r.classList.contains("is-open") && !!st && st.textContent.includes("筛查结果已出") &&
+    ir.width >= 56 && ir.width <= 64 && ir.height >= 56 && ir.height <= 64 &&
+    col[1] > col[0] && col[1] > col[2] && r.contains(document.activeElement);
+}));
+const resultMeta = await page.evaluate(() => {
+  const r = document.querySelector('#gm-mod-preview-mobile [id$="pmResult"]');
+  const p = r.querySelector("p");
+  const btns = [...r.querySelectorAll(".pm-result-actions button")];
+  return { desc: p ? p.textContent.trim() : "", n: btns.length,
+    heights: btns.map((b) => Math.round(b.getBoundingClientRect().height)) };
+});
+await page.locator(id("pmResultClose")).click();
+await page.waitForTimeout(400);
+const resultClosed = await page.evaluate(() => {
+  const r = document.querySelector('#gm-mod-preview-mobile [id$="pmResult"]');
+  return !r.classList.contains("is-open") && !!document.activeElement &&
+    document.activeElement.id.endsWith("pmResultOpen");
+});
+check("Result：主文案 + 说明 + 2 个按钮，返回关闭并归还焦点",
+  resultMeta.desc.length >= 8 && resultMeta.n === 2 &&
+  resultMeta.heights.every((h) => h >= 44) && resultClosed,
+  JSON.stringify(resultMeta));
+
+/* 行内校验：0 → 红边框 + 12px 红文案 + aria-invalid/describedby；合法值清错 */
+await page.locator(id("pmWeightInput")).scrollIntoViewIfNeeded();
+await page.waitForTimeout(300);
+await page.locator(id("pmWeightInput")).fill("0");
+await page.waitForTimeout(300);
+check("行内校验：0 → 红边框 + 12px 红文案 + aria-invalid/describedby", await page.evaluate(() => {
+  const i = document.querySelector('#gm-mod-preview-mobile [id$="pmWeightInput"]');
+  const e = document.querySelector('#gm-mod-preview-mobile [id$="pmWeightErr"]');
+  const ics = getComputedStyle(i), ecs = getComputedStyle(e);
+  const desc = i.getAttribute("aria-describedby") || "";
+  return i.getAttribute("aria-invalid") === "true" && i.classList.contains("is-invalid") &&
+    ics.borderTopColor === "rgb(183, 47, 66)" &&
+    !e.hidden && ecs.fontSize === "12px" && ecs.color === "rgb(183, 47, 66)" &&
+    desc.includes("pmWeightErr") && /大于 0/.test(e.textContent);
+}));
+await page.locator(id("pmWeightInput")).fill("8.6");
+await page.waitForTimeout(250);
+const weightValid = await page.evaluate(() => {
+  const i = document.querySelector('#gm-mod-preview-mobile [id$="pmWeightInput"]');
+  const e = document.querySelector('#gm-mod-preview-mobile [id$="pmWeightErr"]');
+  return { inv: i.getAttribute("aria-invalid"), hidden: e.hidden,
+    border: getComputedStyle(i).borderTopColor };
+});
+await page.locator(id("pmWeightInput")).fill("");
+await page.waitForTimeout(150);
+await page.locator(id("pmWeightInput")).press("Tab");   /* 空值失焦 → 重新报错 */
+await page.waitForTimeout(250);
+const weightEmpty = await page.evaluate(() => {
+  const i = document.querySelector('#gm-mod-preview-mobile [id$="pmWeightInput"]');
+  const e = document.querySelector('#gm-mod-preview-mobile [id$="pmWeightErr"]');
+  return i.getAttribute("aria-invalid") === "true" && !e.hidden && /请输入体重/.test(e.textContent);
+});
+check("行内校验：合法值清错、空值失焦后重新报错",
+  weightValid.inv === "false" && weightValid.hidden === true &&
+  weightValid.border !== "rgb(183, 47, 66)" && weightEmpty,
+  JSON.stringify(weightValid));
+
+/* Upload：相册来源新增 +1，且「已添加 n / 9」同步；失败卡重试真实闭环 */
+await page.locator(`${M}.tabbar .tab`).first().click();
+await page.waitForTimeout(450);
+const upTiles0 = await page.locator(`${M}.pm-tile`).count();
+const upCount0 = Number((await page.locator(id("pmUploadCount")).textContent()).match(/已添加 (\d+)/)[1]);
+await page.locator(id("pmAddPhoto")).scrollIntoViewIfNeeded();
+await page.waitForTimeout(250);
+await page.locator(id("pmAddPhoto")).click();
+await page.waitForTimeout(400);
+await page.locator(`${M}[id$="pmSheetBody"] .pm-sheetitem`).nth(1).click();
+await page.waitForTimeout(500);
+const upTiles1 = await page.locator(`${M}.pm-tile`).count();
+const upCount1 = Number((await page.locator(id("pmUploadCount")).textContent()).match(/已添加 (\d+)/)[1]);
+check("Upload：相册来源走既有新增逻辑（缩略图 +1 且上限计数同步）",
+  upTiles1 === upTiles0 + 1 && upCount1 === upCount0 + 1,
+  `${upTiles0}→${upTiles1} · ${upCount0}→${upCount1}`);
+check("Upload：失败卡红边 + 重试按钮 +「单张上限 9」文案", await page.evaluate(() => {
+  const f = document.querySelector('#gm-mod-preview-mobile [id$="pmUploadFail"]');
+  const up = f ? f.querySelector(".up.fail") : null;
+  const r = document.querySelector('#gm-mod-preview-mobile [id$="pmUploadRetry"]');
+  const meta = document.querySelector('#gm-mod-preview-mobile [id$="pmUploadCount"]');
+  const cs = up ? getComputedStyle(up) : null;
+  return !!f && f.getAttribute("data-state") === "failed" && !!cs &&
+    cs.borderTopColor === "rgb(183, 47, 66)" && parseFloat(cs.borderTopWidth) >= 1 &&
+    !!r && r.getBoundingClientRect().height >= 44 &&
+    /单张上限 9/.test(meta.textContent);
+}));
+await page.locator(id("pmUploadRetry")).scrollIntoViewIfNeeded();
+await page.locator(id("pmUploadRetry")).click();
+await page.waitForTimeout(100);
+const retryBusy = await page.evaluate(() => {
+  const f = document.querySelector('#gm-mod-preview-mobile [id$="pmUploadFail"]');
+  const r = document.querySelector('#gm-mod-preview-mobile [id$="pmUploadRetry"]');
+  return !!f && f.getAttribute("data-state") === "retrying" &&
+    r.getAttribute("aria-busy") === "true";
+});
+await page.waitForTimeout(1200);
+const retryDone = await page.evaluate(() => {
+  const f = document.querySelector('#gm-mod-preview-mobile [id$="pmUploadFail"]');
+  const meta = document.querySelector('#gm-mod-preview-mobile [id$="pmUploadCount"]');
+  return !f && /已添加 4 \/ 9/.test(meta.textContent) &&
+    document.querySelectorAll('#gm-mod-preview-mobile .pm-tile .del').length >= 4;
+});
+check("Upload：重试进入 aria-busy 并成功替换失败卡", retryBusy && retryDone,
+  JSON.stringify({ retryBusy, retryDone }));
 
 check("无控制台错误 / 未捕获异常", errors.length === 0, errors.slice(0, 2).join(" | "));
 

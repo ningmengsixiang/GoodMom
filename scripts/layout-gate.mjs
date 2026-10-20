@@ -99,7 +99,7 @@ const PROBE = ({ rootSel }) => {
       const h = parseFloat(cs.height), t = parseFloat(cs.top), b = parseFloat(cs.bottom);
       if (h >= 44 || (!Number.isNaN(t) && !Number.isNaN(b) && t <= -8 && b <= -8)) return true; } return false; };
 
-  const out = { overflowX: document.documentElement.scrollWidth - vw, white: [], outOfBox: [], overlap: [], textClip: [], collapse: [], touch: [], tiny: [], tinyMock: [] };
+  const out = { overflowX: document.documentElement.scrollWidth - vw, white: [], outOfBox: [], overlap: [], textClip: [], collapse: [], navCover: [], kpiStack: [], touch: [], tiny: [], tinyMock: [] };
 
   /* ① 背景白条：全页网格取点，命中元素到 <html> 之间**没有任何一层**画了底色/渐变 = 露出默认白画布 */
   const paintedAt = (x, y) => { const el = document.elementFromPoint(x, y);
@@ -143,6 +143,33 @@ const PROBE = ({ rootSel }) => {
       }
     }
 
+    /* 导航遮挡（用户两次报「有导航遮挡」）：固定侧栏压住主内容列。
+       ⚠️ 这条只有真实的**几何**能发现 —— 侧栏声明 `width:252px` 但没写 box-sizing 时，
+       实际占 252+padding24+边框2=278px，而内容列按 252px 预留左内边距 → 压住内容 18px。
+       "无溢出 / 无重叠 / 无白条 / 无被切"这些判据全都看不见它（实测 1440 档 h2 的「工」
+       与首张 KPI 卡左沿被盖住，门禁却全绿）。 */
+    if (e.matches && e.matches(".gm-side")) {
+      const wrap = document.querySelector(".gm-app__wrap");
+      if (wrap) {
+        const wr = wrap.getBoundingClientRect();
+        if (r.right - wr.left > 1)
+          out.navCover.push(`${path(e)} 右沿 ${Math.round(r.right)} 压住内容左沿 ${Math.round(wr.left)}（${Math.round(r.right - wr.left)}px）`);
+      }
+    }
+
+    /* KPI 三行必须**纵向堆叠**（label / 数字 / 说明）。按钮默认把子 span 当行内内容排在
+       一条基线上：数字与说明挤在同一行、`margin-top` 完全不生效，窄档（768 的 170px 卡）
+       说明折成两行还压到相邻卡片下。同样没有一条通用判据能发现（不是溢出、不是出框）。 */
+    if (e.classList && e.classList.contains("gm-pm-kpi")) {
+      const lab = e.querySelector(".gm-pm-kpi__l"), val = e.querySelector(".gm-pm-kpi__v"),
+            des = e.querySelector(".gm-pm-kpi__d");
+      if (lab && val && des) {
+        const lb = lab.getBoundingClientRect(), vb = val.getBoundingClientRect(), db = des.getBoundingClientRect();
+        if (vb.top < lb.bottom - 1 || db.top < vb.bottom - 1)
+          out.kpiStack.push(`${path(e)} 数字/说明未纵向堆叠（label ${Math.round(lb.bottom)} / 数字 ${Math.round(vb.top)} / 说明 ${Math.round(db.top)}）`);
+      }
+    }
+
     /* 文字被切：Range 文本宽 > 内容盒 且 布局层面确实溢出（排除伪元素热区虚高与墨迹高估） */
     if (!e.children.length && (e.textContent || "").trim()) {
       let scrollable = false, n2 = e;
@@ -171,7 +198,7 @@ const PROBE = ({ rootSel }) => {
     /* 字号 <12px：分两桶 —— 设备模拟（.phone/.scr/.pm-screen/.mkpi…）里的文字是按缩放画的，
        11px 在 238px 宽的机身里等效于真机 ~17px，属于**刻意**的；真实内容里的 <12px 才要修。 */
     if (!e.children.length && (e.textContent || "").trim() && fs && fs < 12) {
-      const mock = e.closest(".phone,.phones,.scr,.pm-screen,.pm-frame,.mkpi,.demo-card,.demo-stage,.stage,.pm-at-root,.navbar,.tabbar");
+      const mock = e.closest(".phone,.phones,.scr,.pm-screen,.pm-frame,.demo-card,.demo-stage,.pm-at-root");
       (mock ? out.tinyMock : out.tiny).push(`${path(e)} ${fs}px`);
     }
     if (vw < 768 && /^(BUTTON|A|INPUT|SELECT|SUMMARY)$/.test(e.tagName) && !e.disabled
@@ -202,11 +229,14 @@ for (const w of WIDTHS) {
     if (r.overlap.length) findings.P1.push(`${tag} 块级重叠 ${r.overlap.length}：${r.overlap.slice(0, 2).join(" | ")}`);
     if (r.textClip.length) findings.P2.push(`${tag} 文字被切 ${r.textClip.length}：${r.textClip.slice(0, 2).join(" | ")}`);
     if (r.collapse.length) findings.P1.push(`${tag} 布局塌陷 ${r.collapse.length}：${r.collapse.slice(0, 2).join(" | ")}`);
+    if (r.navCover.length) findings.P1.push(`${tag} 导航遮挡 ${r.navCover.length}：${r.navCover.slice(0, 2).join(" | ")}`);
+    if (r.kpiStack.length) findings.P1.push(`${tag} KPI 未纵向堆叠 ${r.kpiStack.length}：${r.kpiStack.slice(0, 2).join(" | ")}`);
     if (r.touch.length) findings.P3.push(`${tag} 热区不足 ${r.touch.length}：${r.touch.slice(0, 2).join(" | ")}`);
     if (r.tiny.length) findings.P3.push(`${tag} 字号 <12px ${r.tiny.length}：${r.tiny.slice(0, 2).join(" | ")}`);
     if (r.tinyMock.length) findings.P3.push(`${tag} 字号 <12px（设备模拟内，登记）${r.tinyMock.length}：${r.tinyMock.slice(0, 1).join("")}`);
     rows.push({ tag, overflowX: r.overflowX, white: r.white.length, outOfBox: r.outOfBox.length,
       overlap: r.overlap.length, textClip: r.textClip.length, collapse: r.collapse.length,
+      navCover: r.navCover.length, kpiStack: r.kpiStack.length,
       touch: r.touch.length, tiny: r.tiny.length, tinyMock: r.tinyMock.length });
   }
   await page.close();
@@ -216,9 +246,9 @@ SRV?.srv.close();
 
 const report = [`# 布局体检（多断点响应式 · 背景白条 · 组件错位）`, ``,
   `断点：${WIDTHS.join(" / ")}　用例：${CASES.length} 个页面/视图 × ${WIDTHS.length} 档 = ${rows.length} 次扫描`, ``,
-  `| 用例 | 溢出 | 白条 | 出框 | 重叠 | 塌陷 | 被切 | 热区 | <12px | <12px（设备模拟，登记） |`,
-  `| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |`,
-  ...rows.map((r) => `| ${r.tag} | ${r.overflowX} | ${r.white} | ${r.outOfBox} | ${r.overlap} | ${r.collapse} | ${r.textClip} | ${r.touch} | ${r.tiny} | ${r.tinyMock} |`), ``];
+  `| 用例 | 溢出 | 白条 | 出框 | 重叠 | 塌陷 | 导航遮挡 | KPI 堆叠 | 被切 | 热区 | <12px | <12px（设备模拟，登记） |`,
+  `| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |`,
+  ...rows.map((r) => `| ${r.tag} | ${r.overflowX} | ${r.white} | ${r.outOfBox} | ${r.overlap} | ${r.collapse} | ${r.navCover} | ${r.kpiStack} | ${r.textClip} | ${r.touch} | ${r.tiny} | ${r.tinyMock} |`), ``];
 for (const lvl of ["P0", "P1", "P2", "P3"]) {
   report.push(`## ${lvl}（${findings[lvl].length}）`, ...(findings[lvl].length ? findings[lvl].slice(0, 40).map((x) => `- ${x}`) : ["（无）"]), ``);
 }

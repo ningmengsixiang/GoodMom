@@ -84,6 +84,9 @@ CSS = r"""
   --mmh-peach-400:#FFC3A0; --mmh-peach-300:#FFDCC7; --mmh-peach-100:#FFF3EA;
   --mmh-mint-600:#4FB59C; --mmh-mint-500:#6FC9B4; --mmh-mint-300:#A9E3D4; --mmh-mint-100:#E2F6F0;
   --mmh-solid-special:#6242B8;
+  --lg-glass-popover:rgba(255,255,255,.60); --pm-tint-info:rgba(109,158,255,.14);
+  /* 头像墨色：亮粉渐变底上必须用**同色系深墨**（02 · 2.1.5 / D35），不随主题变白 */
+  --pm-av-ink:var(--mmh-rose-700);
   --mmh-grad-action-hc:linear-gradient(135deg,#FFC4D6 0%,#F77FA3 100%);
   --mmh-grad-primary:linear-gradient(135deg,#FFA9C2 0%,#F77FA3 45%,#E85D8F 100%);
   --mmh-grad-signature:linear-gradient(120deg,#FFD0D8 0%,#F77FA3 48%,#B69AFF 100%);
@@ -120,6 +123,11 @@ CSS = r"""
   --lg-t-fast:120ms; --lg-t-base:220ms; --lg-t-slow:400ms; --lg-t-breathe:2.4s;
   --lg-ease-out:cubic-bezier(.22,1,.36,1); --lg-ease-in-out:cubic-bezier(.65,0,.35,1);
   --lg-z-control:30; --lg-z-overlay:40;
+
+  /* 填充档（V2.10 抽出）：暗色档只需换这一组 —— 页面**不写**任何暗色专属规则
+     （02 · 2.1.9 口径：白色叠加层由 14–60% 降到 6–16%）。浅色取值＝抽出前的原值，观感零变化。 */
+  --pm-fill-1:rgba(255,255,255,.62); --pm-fill-2:rgba(255,255,255,.55); --pm-fill-3:rgba(255,255,255,.30); --pm-fill-4:rgba(255,255,255,.78); --pm-fill-5:rgba(255,255,255,.52); --pm-fill-6:rgba(255,255,255,.58); --pm-fill-7:rgba(255,255,255,.60);
+  --pm-fill-8:rgba(255,255,255,.65); --pm-fill-9:rgba(255,255,255,.85); --pm-fill-10:rgba(255,255,255,.24); --pm-fill-11:rgba(255,255,255,.32); --pm-brd-1:rgba(255,255,255,.75); --pm-brd-2:rgba(255,255,255,.70); --pm-brd-3:rgba(255,255,255,.85);
 }
 
 /* ── 产品辅助色（PRD §十一「五个业务系统可以拥有不同的辅助色」）──────────────
@@ -196,12 +204,12 @@ CSS = r"""
 
 /* ── 卡片与面板（02 · 2.5 的 L2/L1 配方：白渐变 + 受光白边 + 柔影 + border-box 原点）── */
 .gm-pm-card{border-radius:var(--lg-radius-card);padding:var(--lg-space-5);
-  background:linear-gradient(160deg,rgba(255,255,255,.62),rgba(255,255,255,.30));
-  border:1px solid rgba(255,255,255,.75);box-shadow:var(--lg-glass-highlight),var(--lg-shadow-sm);
+  background:linear-gradient(160deg,var(--pm-fill-1),var(--pm-fill-3));
+  border:1px solid var(--pm-brd-1);box-shadow:var(--lg-glass-highlight),var(--lg-shadow-sm);
   background-origin:border-box;min-width:0}
 .gm-pm-panel{border-radius:var(--lg-radius-card-lg);padding:var(--lg-space-6);
-  background:linear-gradient(160deg,rgba(255,255,255,.55),rgba(255,255,255,.24) 55%,rgba(255,255,255,.32));
-  border:1px solid rgba(255,255,255,.70);box-shadow:var(--lg-glass-highlight),var(--lg-shadow-md);
+  background:linear-gradient(160deg,var(--pm-fill-2),var(--pm-fill-10) 55%,var(--pm-fill-11));
+  border:1px solid var(--pm-brd-2);box-shadow:var(--lg-glass-highlight),var(--lg-shadow-md);
   background-origin:border-box;min-width:0}
 .gm-pm-card h3,.gm-pm-panel h3{margin:0 0 var(--lg-space-3);font-size:var(--lg-fs-section);
   line-height:var(--lg-lh-section);font-weight:600}
@@ -266,7 +274,7 @@ CSS = r"""
 .gm-pm-btn--pri{background:var(--mmh-grad-action-hc);color:var(--lg-text-on-accent);
   box-shadow:0 1px 2px rgba(178,58,99,.22),0 8px 20px rgba(240,127,163,.30);background-origin:border-box}
 .gm-pm-btn--pri:hover{box-shadow:0 2px 4px rgba(178,58,99,.24),0 12px 26px rgba(240,127,163,.38)}
-.gm-pm-btn--line{background:rgba(255,255,255,.55);color:var(--mmh-rose-700);
+.gm-pm-btn--line{background:var(--pm-fill-2);color:var(--mmh-rose-700);
   border:1px solid rgba(232,93,143,.45);box-shadow:var(--lg-shadow-xs)}
 .gm-pm-btn--line:hover{background:rgba(247,127,163,.10);border-color:rgba(232,93,143,.72)}
 
@@ -295,7 +303,12 @@ CSS = r"""
 /* ⚠️ 轨道一律 minmax(0,·)：`1fr` 的自动最小值是 **min-content**，
    而本模块左列含宽表格（表头 6 列），min-content 可到 700px+ ——
    写成 `1.6fr 1fr` 时网格列会被表格撑开，页面横向溢出（实测移动端 +290~391px）。 */
-.gm-pm-grid--wide{grid-template-columns:minmax(0,1.6fr) minmax(0,1fr)}
+.gm-pm-grid--wide{grid-template-columns:minmax(0,1fr)}
+/* 单列档（p03 孕产妇工作台的 6 列宽表用）：**必须显式声明轨道**。
+   只给 `.gm-pm-grid` 的 `display:grid` 时，隐式列是 `auto`（最小值 = min-content），
+   表格把列撑到 885px：1025–1134 档（菜单列还在、内容列 757–932px）页面横向溢出
+   （实测 1080 溢出 53px、1100 溢出 33px；.gm-tbl-wrap 的横滑根本轮不到生效）。 */
+.gm-pm-grid--stack{grid-template-columns:minmax(0,1fr)}
 
 /* 价值卡：序号 + 标题 + 说明（17 · 17.3.1 组合顺序） */
 
@@ -317,13 +330,13 @@ CSS = r"""
   font-size:var(--lg-fs-caption);line-height:var(--lg-lh-caption);font-weight:500;white-space:nowrap}
 .gm-pm-tag i{width:8px;height:8px;border-radius:50%;background:currentColor;flex:none}
 .gm-pm-tag--positive{color:var(--lg-sem-positive);background:rgba(111,201,180,.16)}
-.gm-pm-tag--info{color:var(--lg-sem-info);background:rgba(109,158,255,.14)}
+.gm-pm-tag--info{color:var(--lg-sem-info);background:var(--pm-tint-info)}
 .gm-pm-tag--attention{color:var(--lg-sem-attention);background:rgba(242,178,92,.18)}
 .gm-pm-tag--risk{color:var(--lg-sem-risk);background:rgba(239,106,123,.14)}
 .gm-pm-tag--neutral{color:var(--lg-sem-neutral);background:rgba(88,98,115,.10)}
 .gm-pm-tag--special{color:var(--lg-sem-special);background:rgba(154,120,255,.14)}
 /* 五色分级：色点用 02 · 2.10 专项色板，文字仍走 AA 深档（两者不同轴，不得混用六语义色） */
-.gm-pm-tag--m5{color:var(--lg-text-primary);background:rgba(255,255,255,.62)}
+.gm-pm-tag--m5{color:var(--lg-text-primary);background:var(--pm-fill-1)}
 .gm-pm-tag--m5 i{background:var(--m5)}
 .gm-pm-tag--m5[data-m5="1"]{--m5:var(--mmh-m5-m1)} .gm-pm-tag--m5[data-m5="1"]{color:#1F6B4F}
 .gm-pm-tag--m5[data-m5="2"]{--m5:var(--mmh-m5-m2)} .gm-pm-tag--m5[data-m5="2"]{color:#7A5F0D}
@@ -356,8 +369,8 @@ CSS = r"""
 /* ── 工作台页面壳（17 · 17.3.4：顶栏 → 4 KPI → 左待处理表 + 右快捷工具/概览）── */
 .gm-pm-pcbar{display:flex;align-items:center;gap:var(--lg-space-3);flex-wrap:wrap;
   padding:var(--lg-space-2) var(--lg-space-3);border-radius:var(--lg-radius-pill);
-  background:linear-gradient(160deg,rgba(255,255,255,.78),rgba(255,255,255,.52));
-  border:1px solid rgba(255,255,255,.85);box-shadow:var(--lg-glass-highlight),var(--lg-shadow-md);
+  background:linear-gradient(160deg,var(--pm-fill-4),var(--pm-fill-5));
+  border:1px solid var(--pm-brd-3);box-shadow:var(--lg-glass-highlight),var(--lg-shadow-md);
   -webkit-backdrop-filter:blur(20px) saturate(1.2);backdrop-filter:blur(20px) saturate(1.2);
   background-origin:border-box;margin-bottom:var(--lg-space-4)}
 .gm-pm-pcbar__logo{display:inline-flex;align-items:center;gap:var(--lg-space-2);
@@ -367,7 +380,7 @@ CSS = r"""
 .gm-pm-pcbar__logo small{font-size:var(--lg-fs-caption);font-weight:500;
   color:var(--lg-text-secondary);margin-left:var(--lg-space-1)}
 .gm-pm-search{margin-left:auto;display:flex;align-items:center;gap:var(--lg-space-2);
-  background:rgba(255,255,255,.60);border:1px solid var(--lg-divider);
+  background:var(--pm-fill-7);border:1px solid var(--lg-divider);
   border-radius:var(--lg-radius-control);padding:0 var(--lg-space-3);height:40px;
   min-width:260px;flex:1 1 220px;color:var(--lg-text-secondary)}
 .gm-pm-search svg{width:16px;height:16px;flex:none;fill:none;stroke:currentColor;stroke-width:1.7}
@@ -378,24 +391,35 @@ CSS = r"""
 .gm-pm-pcbar__meta{font-size:var(--lg-fs-caption);color:var(--lg-text-secondary);white-space:nowrap}
 .gm-pm-av{width:36px;height:36px;border-radius:50%;flex:none;display:inline-flex;align-items:center;
   justify-content:center;font-size:var(--lg-fs-body-sm);font-weight:600;
-  color:var(--mmh-rose-700);background:linear-gradient(150deg,#FFDEE8,#FFF0F4)}
+  color:var(--pm-av-ink);background:linear-gradient(150deg,#FFDEE8,#FFF0F4)}
 
-/* 左业务菜单 + 右内容（iPad 8:4 与移动单列由 17 · 17.1.2 的断点接管） */
-.gm-pm-wb{display:grid;grid-template-columns:212px minmax(0,1fr);gap:var(--lg-space-4);align-items:start}
+/* 左业务菜单 + 右内容。默认（<1366）单列：菜单变成内容上方的两条横向 chip 带，
+   内容占满整宽；≥1366 才升级成 212px 菜单列 + 内容列（见文件末 ≥1366 档）。
+   为什么不做"平板也留 212px 列"：1025–1365 档内容列只剩 757–1130px，
+   4 个 KPI 掉到 170~250px/张（数字与说明互相顶），宽表也要横向拖动。 */
+.gm-pm-wb{display:grid;grid-template-columns:minmax(0,1fr);gap:var(--lg-space-4);align-items:start}
+/* 菜单列的**唯一**容器：里面两组菜单（对象视图 / 业务菜单）各自是一个完整 nav。
+   为什么要这层：`.gm-pm-wb` 的列轨道只有一条，两个 nav 直接做子项会多出网格项 —— 右侧
+   内容会被塞进菜单列。 */
+.gm-pm-sidenav{display:flex;flex-direction:row;flex-wrap:wrap;gap:var(--lg-space-2);min-width:0}
+.gm-pm-sidenav>.gm-pm-side{flex:1 1 320px;min-width:0}
 .gm-pm-side{padding:var(--lg-space-3);border-radius:var(--lg-radius-card);
-  background:linear-gradient(160deg,rgba(255,255,255,.58),rgba(255,255,255,.30));
-  border:1px solid rgba(255,255,255,.70);box-shadow:var(--lg-glass-highlight),var(--lg-shadow-sm);
+  background:linear-gradient(160deg,var(--pm-fill-6),var(--pm-fill-3));
+  border:1px solid var(--pm-brd-2);box-shadow:var(--lg-glass-highlight),var(--lg-shadow-sm);
   background-origin:border-box}
 .gm-pm-side h4{margin:0 0 var(--lg-space-2);font-size:var(--lg-fs-caption);
-  line-height:var(--lg-lh-caption);color:var(--lg-text-secondary);font-weight:600;
-  padding-left:var(--lg-space-3)}
-.gm-pm-side a{display:flex;align-items:center;gap:var(--lg-space-2);min-height:40px;
-  padding:0 var(--lg-space-3);border-radius:var(--lg-radius-control);text-decoration:none;
-  font-size:var(--lg-fs-body-sm);color:var(--lg-text-primary);position:relative}
-.gm-pm-side a:hover{background:rgba(255,255,255,.65)}
+  line-height:var(--lg-lh-caption);color:var(--lg-text-secondary);font-weight:600;padding-left:0}
+/* 窄档：菜单项是 chip（标题独占一行 + 链接按内容宽度换行）。
+   ⚠️ 链接包在 `.gm-pm-sidemenu` 里，只给 nav 加 flex 只会看到那一个 div —— 仍是"一列到底" */
+.gm-pm-sidemenu{display:flex;flex-wrap:wrap;gap:var(--lg-space-1)}
+.gm-pm-side a{display:flex;align-items:center;gap:var(--lg-space-2);min-height:36px;
+  padding:0 var(--lg-space-3);border-radius:var(--lg-radius-pill);text-decoration:none;
+  font-size:var(--lg-fs-body-sm);color:var(--lg-text-primary);position:relative;
+  background:var(--pm-fill-6);border:1px solid var(--pm-brd-2)}
+.gm-pm-side a:hover{background:var(--pm-fill-9)}
 /* 选中态 = 产品辅助色浅染 + 左侧 2px 色条（不是实心粉：实心留给主行动，17 · 1.1.3） */
 .gm-pm-side a[aria-current="true"]{background:var(--pm-tint,rgba(247,127,163,.14));font-weight:600}
-.gm-pm-side a[aria-current="true"]::before{content:"";position:absolute;left:0;top:50%;
+.gm-pm-side a[aria-current="true"]::before{display:none;content:"";position:absolute;left:0;top:50%;
   transform:translateY(-50%);width:2px;height:20px;border-radius:2px;
   background:var(--pm-hue,var(--mmh-rose-500))}
 .gm-pm-side a span{margin-left:auto;font-size:var(--lg-fs-caption);color:var(--lg-text-secondary);
@@ -480,7 +504,7 @@ CSS = r"""
 /* AI 边界提示条（13 · 13.5 医疗合规与视觉纪律：边界必须写清，且不靠颜色单独传义） */
 .gm-pm-note{display:flex;gap:var(--lg-space-3);align-items:flex-start;
   padding:var(--lg-space-3) var(--lg-space-4);border-radius:var(--lg-radius-control);
-  background:rgba(255,255,255,.62);border:1px solid var(--lg-divider);
+  background:var(--pm-fill-1);border:1px solid var(--lg-divider);
   font-size:var(--lg-fs-caption);line-height:1.75;color:var(--lg-text-secondary)}
 .gm-pm-note b{color:var(--lg-text-primary)}
 .gm-pm-note--warn{background:rgba(242,178,92,.16);border-color:rgba(242,178,92,.35)}
@@ -497,6 +521,11 @@ CSS = r"""
 /* 07 · 7.6 / 无障碍：系统开启"减弱动态效果"后只保留最简反馈 */
 
 .gm-pm-kpi{font-family:inherit;text-align:left;cursor:pointer;width:100%;
+  /* ⚠️ 显式 flex 列：KPI 的 label / 数字 / 说明是三个 `<span>`，按钮默认把它们当**行内**
+     内容排在一条基线上 —— 于是数字与说明挤在同一行（1440 档看着像"12,849本月新增…"），
+     窄档（768 的 170px 卡）说明被压成两行、溢出到相邻卡片下面。`__v` / `__d` 上的
+     `margin-top` 也从未生效（行内元素不吃纵向 margin）。列布局才是这三个 span 的本意。 */
+  display:flex;flex-direction:column;align-items:flex-start;
   transition:box-shadow var(--lg-t-base) var(--lg-ease-out),transform var(--lg-t-fast) var(--lg-ease-out)}
 .gm-pm-kpi:hover{box-shadow:var(--lg-glass-highlight),var(--lg-shadow-md)}
 .gm-pm-kpi:active{transform:scale(.99)}
@@ -523,7 +552,7 @@ CSS = r"""
 .gm-pm-prod__meta{display:flex;flex-wrap:wrap;gap:var(--lg-space-2);margin-bottom:var(--lg-space-4)}
 .gm-pm-prod__meta span{font-size:var(--lg-fs-caption);line-height:var(--lg-lh-caption);
   color:var(--lg-text-secondary);padding:var(--lg-space-1) var(--lg-space-3);
-  border-radius:var(--lg-radius-pill);background:rgba(255,255,255,.55);border:1px solid var(--lg-divider)}
+  border-radius:var(--lg-radius-pill);background:var(--pm-fill-2);border:1px solid var(--lg-divider)}
 .gm-pm-prod__cta{margin-top:auto}
 
 /* ── 首页 · 互联链路（PRD §四「转入/贯通」把 6 个产品串起来；链路本身即可点导航）── */
@@ -551,8 +580,8 @@ CSS = r"""
 .gm-pm-filter{font-family:inherit;font-size:var(--lg-fs-caption);line-height:var(--lg-lh-caption);
   font-weight:500;cursor:pointer;display:inline-flex;align-items:center;gap:var(--lg-space-2);
   padding:var(--lg-space-1) var(--lg-space-3);border-radius:var(--lg-radius-pill);
-  background:rgba(255,255,255,.55);border:1px solid var(--lg-divider);color:var(--lg-text-secondary)}
-.gm-pm-filter:hover{background:rgba(255,255,255,.85)}
+  background:var(--pm-fill-2);border:1px solid var(--lg-divider);color:var(--lg-text-secondary)}
+.gm-pm-filter:hover{background:var(--pm-fill-9)}
 .gm-pm-filter[aria-pressed="true"]{background:var(--mmh-grad-action-hc);color:var(--lg-text-on-accent);
   border-color:transparent;font-weight:600;box-shadow:0 1px 2px rgba(178,58,99,.22);
   background-origin:border-box}
@@ -578,30 +607,32 @@ CSS = r"""
 @media (max-width:1024px){
   .gm-pm-hero{grid-template-columns:minmax(0,1fr)}
   .gm-pm-prods{grid-template-columns:repeat(2,minmax(0,1fr))}
-  .gm-pm-wb{grid-template-columns:minmax(0,1fr)}
-  .gm-pm-side{display:flex;flex-wrap:wrap;gap:var(--lg-space-1);align-items:center}
-  .gm-pm-side h4{margin:0 var(--lg-space-2) 0 0;padding-left:0}
-  .gm-pm-side a{min-height:36px;padding:0 var(--lg-space-3)}
-  .gm-pm-side a[aria-current="true"]::before{display:none}
 }
-/* ⚠️ 主表要能用，就得在窄平板/小桌面先把两列收成一列：
-   `.gm-tbl td` 的 `white-space:nowrap` 是设计系统的既有裁决（page-qa 的 P2 规则要求表格行高 44–52px，
-   单元格折行会顶破这一档）——所以**不能靠折行**缩短表格。实测数据：
-   1440 档卡片 652px、表格 772px（滚 120px）；1024 档卡片 554px（滚 218px）；768 档卡片 396px（滚 352px）。
-   两列布局在主表侧本来就太窄，把它提前收到 1200 就不需要横向拖动了。 */
-@media (max-width:1200px){
-  .gm-pm-grid--wide{grid-template-columns:minmax(0,1fr)}
+/* 大屏档（≥1366）：恢复「212px 菜单列 + 内容列」的桌面形态。
+   ⚠️ 门槛是 1366 而不是 1200/1280：1201–1365 档内容列只有 933–1130px，
+   4 个 KPI 4×217~253、宽表还要横向拖动；单列反而更稳（内容 933–1130 全给主区）。 */
+@media (min-width:1366px){
+  .gm-pm-wb{grid-template-columns:212px minmax(0,1fr)}
+  .gm-pm-sidenav{flex-direction:column;flex-wrap:nowrap;gap:var(--lg-space-3)}
+  .gm-pm-sidenav>.gm-pm-side{flex:none;width:100%}
+  .gm-pm-side h4{margin:0 0 var(--lg-space-2);padding-left:var(--lg-space-3)}
+  .gm-pm-sidemenu{display:block}
+  .gm-pm-side a{min-height:40px;padding:0 var(--lg-space-3);
+    border-radius:var(--lg-radius-control);background:transparent;border:none}
+  .gm-pm-side a:hover{background:var(--pm-fill-8)}
+  .gm-pm-side a[aria-current="true"]::before{display:block}
 }
-/* 大桌面：主表侧的列比再放宽一档 —— 实测 1440 档「今日待处理」6 列表需要 690px，
-   1.6fr/1fr 只给到 652px（还差 38px 横向滚动）。列比放宽后不需要拖动，侧卡仍有 380px+。 */
-/* 大桌面：两列布局给主表列**最小宽度保障** —— 实测「今日待处理」5 列表需要 726px，
-   纯 `1.85fr` 在 1440 只给到 690px（滚 36px）。`minmax(780px, …)` 保证主表侧永远够宽（卡片内边距 2×20px 要算进去），
-   侧卡仍有 400px+；容器不够宽时下面的断点会把两列收成一列，不会溢出。 */
-@media (min-width:1280px){
+/* 平板档（768–1023，规范第二档）：4 个 KPI 挤成 170–234px 宽，数字与说明互相顶；
+   规范 17 · 17.1.2 的平板形态是 2×2，这里按规范档位落 2 列（≤767 手机档仍 2 列）。 */
+@media (min-width:768px) and (max-width:1023px){
+  .gm-pm-kpis{grid-template-columns:repeat(2,minmax(0,1fr))}
+}
+/* 两列（主表 + 侧卡）只在 ≥1366 生效：`.gm-tbl td` 的 `white-space:nowrap` 是既有裁决
+   （page-qa 要求表格行高 44–52px，不能靠折行缩短表格），所以主表侧必须**给够宽度**：
+   `minmax(780px,…)` 保证 5/6 列表不需要横向拖动（实测「今日待处理」5 列需 726px）。
+   1366 以下一律单列（内容 933–1325px 全给主区），避免 1201–1365 档主表被压到 560px 要拖动。 */
+@media (min-width:1366px){
   .gm-pm-grid--wide{grid-template-columns:minmax(780px,1.85fr) minmax(0,1fr)}
-}
-@media (max-width:1200px){
-  .gm-pm-grid--wide{grid-template-columns:minmax(0,1fr)}
 }
 @media (max-width:900px){
   /* 768~900 档：整宽后仍差几十像素，靠收单元格内边距补上 */
@@ -634,6 +665,55 @@ CSS = r"""
 @media (prefers-reduced-motion:reduce){
   .gm-pm-view.is-on{animation:none}
 }
+
+/* ── 暗色档（02 · 2.1.9 夜间暖石板）────────────────────────────────────────────
+   合并页里 `:root` / `[data-theme="dark"]` 都会被 build-site.py 改写到**模块根**
+   （`.gm-mod--products[data-theme="dark"]`），独立产品页则直接命中 `<html>`。
+   这里**只换变量档位**：模块内没有一条 `.gm-pm-*` 暗色专属规则 —— 那是
+   「暗色不漂移」的唯一保障。禁纯黑/纯白，色相不变，只换档位。 */
+[data-theme="dark"]{
+  /* 画布：暗底暖石板（不是纯黑，也不是浅底反色） */
+  background:linear-gradient(165deg,#1B1A21,#221F29 55%,#2A2731);
+  /* ⚠️ 必须显式给 color：模块根自身不写 color 时，文字会继承**外壳 body 的深墨**，
+     暗底上就是「深字压深底」（实测 h2 1.13:1）。这一条是 81 条暗色失败里最多的一类。 */
+  color:var(--lg-text-primary);
+  /* 文字与分隔（映射表 A） */
+  --lg-text-primary:#F3EFEC; --lg-text-secondary:#C9C4CE; --lg-text-tertiary:#A6ADB9;
+  --lg-text-on-accent:#1B1A21; --lg-divider:rgba(255,255,255,.12); --lg-link:#FFC4D6;
+  --lg-tint-base:#23222A; --lg-tint-pct:8%;
+  /* 六语义：暗底用浅档（映射表 B） */
+  --lg-sem-positive:#6FC9B4; --lg-sem-info:#9CAEFF; --lg-sem-attention:#F2C14E;
+  --lg-sem-risk:#F79AA8; --lg-sem-neutral:#A6ADB9; --lg-sem-special:#B9A0FF;
+  /* 品牌文字档：色相不变，改用 -300 亮档 */
+  --mmh-rose-700:#FFC4D6; --mmh-rose-600:#FF9AB6; --mmh-mint-600:#A9E3D4;
+  /* 填充档：白色叠加 14–60% → 6–16%（映射表 A 第 2 条） */
+--pm-fill-1:rgba(255,255,255,.10); --pm-fill-2:rgba(255,255,255,.09); --pm-fill-3:rgba(255,255,255,.06); --pm-fill-4:rgba(255,255,255,.14); --pm-fill-5:rgba(255,255,255,.10); --pm-fill-6:rgba(255,255,255,.10); --pm-fill-7:rgba(255,255,255,.09);
+  --pm-fill-8:rgba(255,255,255,.13); --pm-fill-9:rgba(255,255,255,.16); --pm-fill-10:rgba(255,255,255,.06); --pm-fill-11:rgba(255,255,255,.07); --pm-brd-1:rgba(255,255,255,.14); --pm-brd-2:rgba(255,255,255,.12); --pm-brd-3:rgba(255,255,255,.16);
+  /* 玻璃与阴影：边缘光只留顶部 1px，阴影换深档 */
+  --lg-glass-highlight:inset 0 1px 0 rgba(255,255,255,.16);
+  --lg-shadow-xs:0 1px 2px rgba(0,0,0,.35),0 2px 8px rgba(0,0,0,.30);
+  --lg-shadow-sm:0 4px 12px rgba(0,0,0,.35);
+  --lg-shadow-md:0 8px 24px rgba(0,0,0,.42),0 2px 6px rgba(0,0,0,.30);
+  --lg-shadow-lg:0 16px 40px rgba(0,0,0,.50),0 4px 12px rgba(0,0,0,.30)
+}
+
+/* 每产品墨色/淡底：**同色相**提亮到暗底可读档（02 · 2.1.9「只换档位不换色相」） */
+[data-theme="dark"] .gm-pm--p01{--pm-ink:#FFC4D6;--pm-tint:rgba(247,127,163,.22);--pm-glow:rgba(247,127,163,.10)}
+[data-theme="dark"] .gm-pm--p02{--pm-ink:#FFDCC7;--pm-tint:rgba(255,195,160,.26);--pm-glow:rgba(255,195,160,.12)}
+[data-theme="dark"] .gm-pm--p03{--pm-ink:#FFC4D6;--pm-tint:rgba(247,127,163,.22);--pm-glow:rgba(247,127,163,.10)}
+[data-theme="dark"] .gm-pm--p04{--pm-ink:#C4B0FF;--pm-tint:rgba(182,154,255,.24);--pm-glow:rgba(182,154,255,.12)}
+[data-theme="dark"] .gm-pm--p05{--pm-ink:#6FC9B4;--pm-tint:rgba(111,201,180,.22);--pm-glow:rgba(111,201,180,.12)}
+[data-theme="dark"] .gm-pm--p06{--pm-ink:#B9A0FF;--pm-tint:rgba(154,120,255,.22);--pm-glow:rgba(154,120,255,.12)}
+[data-theme="dark"]{--pm-av-ink:#1B1A21}
+
+/* 暗底上的「亮片」类：L4 浮层改实底、信息淡底降透明度（02 · 2.1.9 映射表 A） */
+[data-theme="dark"]{
+  --lg-glass-popover:rgba(38,36,46,.92); --pm-tint-info:rgba(109,158,255,.10)
+}
+/* 五色标签：文字改用**同色相亮档**（色点 `i` 仍承载五色本身，D35 口径） */
+[data-theme="dark"] .gm-pm-tag--m5[data-m5="1"]{color:#96E6CF}
+[data-theme="dark"] .gm-pm-tag--m5[data-m5="2"]{color:#FAE1B3}
+[data-theme="dark"] .gm-pm-tag--m5[data-m5="3"]{color:#FFD1A3}
 """
 
 # ══════════════════════════════════════════════════════════════════════════
@@ -836,19 +916,31 @@ def workbench(p: dict, prd: dict) -> str:
     # slug 与独立产品页文件名一致：p01 → p01-women-health（见 products_data.APP 的 slug 字段）
     app_slug = SLUG_BY_PID[pid]
     mods = module_pages(pid, pd, d, pd.get("caps") or [], "")
+    # ⚠️ 两个菜单组必须包在**同一个**列容器（`.gm-pm-sidenav`）里：`.gm-pm-wb` 是
+    # `212px minmax(0,1fr)` 两列网格，直接放两个 <nav> 会让它多出网格项（实测工作台内容区
+    # 塌到 212px、表格横向滚 641px）。容器内再**各自**是一个完整 <nav>，标签分别是
+    # 对象视图 / 业务菜单 —— 两个组各带标题与描边卡，视觉上仍是「菜单列」。
+    # ⚠️ 这里的标签闭合**必须成对**：上一版漏了对象视图组的 `</div>`，HTML 解析器把
+    # 第二个 <nav> 顶成兄弟节点、把右侧内容整块吞进业务菜单 nav 里（站点 6 个工作台
+    # 全部命中：菜单两组并排铺满、内容被塞进 212px 列、各断点下都错位）。
     menu_html = (
-        # ⚠️ 两个菜单组必须包在**同一个**列容器里：`.gm-pm-wb` 是 `212px minmax(0,1fr)` 两列网格，
-        # 直接放两个 <nav> 会让它多出一个网格项 —— 内容被塞进 212px 的菜单列（实测工作台内容区
-        # 塌到 212px、表格横向滚 641px）。包一层之后仍是"菜单列 + 内容列"两项。
-        '<div class="gm-pm-sidemenu">'
+        '<div class="gm-pm-sidenav">\n'
+        '  <nav class="gm-pm-side" aria-label="对象视图">\n'
+        '    <h4>对象视图</h4>\n'
+        '    <div class="gm-pm-sidemenu">'
         + "".join('<a href="../fuyouaicansai/%s.html#%s">%s</a>' % (app_slug, v, esc(label))
                   for v, label in (("work", "工作台"), ("archive", "档案"),
                                    ("ai", "AI 协同"), ("detail", "详情")))
-        + '</nav>\n  <nav class="gm-pm-side" aria-label="业务菜单">\n'
-          '    <h4>业务菜单</h4>\n'
+        + '</div>\n'
+        '  </nav>\n'
+        '  <nav class="gm-pm-side" aria-label="业务菜单">\n'
+        '    <h4>业务菜单</h4>\n'
+        '    <div class="gm-pm-sidemenu">'
         + "".join('<a href="../fuyouaicansai/%s.html#mod-%s">%s</a>'
                   % (app_slug, esc(m["key"]), esc(m["name"])) for m in mods)
-        + '</div>')
+        + '</div>\n'
+        '  </nav>\n'
+        '</div>')
 
     # ── 4 KPI：可点击，按语义筛选待处理清单（accent 档 = 全部）──
     kpis = "".join(
@@ -929,10 +1021,7 @@ def workbench(p: dict, prd: dict) -> str:
         '  <span class="gm-pm-av" aria-hidden="true">王</span>\n'
         '</div>\n'
         '<div class="gm-pm-wb">\n'
-        '  <nav class="gm-pm-side" aria-label="对象视图">\n'
-        '    <h4>对象视图</h4>\n'
-        '    %(menu)s\n'
-        '  </nav>\n'
+        '%(menu)s\n'
         '  <div>\n'
         '    <div class="gm-pm-kpis">%(kpis)s</div>\n'
         '    <div class="gm-pm-grid gm-pm-grid--%(grid)s">\n'
