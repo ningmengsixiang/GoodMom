@@ -43,6 +43,13 @@ check("步骤条渲染", (await page.locator(".gm-step").count()) === 4, `${awai
 check("风险五色渲染", (await page.locator('.gm-risk-it[role="radio"]').count()) === 5)
 check("级联触发点渲染", (await page.locator(".gm-cascader__trigger").count()) >= 3);
 
+/* ── V2.10 Modal：先断言 role=dialog，再点取消关闭回收遮罩 ──
+   演示里 Modal 默认打开（用于断言 DOM），其 fixed 遮罩会拦截页面上**一切**后续点击
+   （实测把 Cascader 展开、RiskPicker 键盘等全部挡住），因此必须在一开始就关掉。 */
+check("Modal role=dialog aria-modal", (await page.locator('.gm-modal__panel[role="dialog"][aria-modal="true"]').count()) >= 1);
+await page.locator(".gm-modal__btn").first().click();
+await page.waitForSelector(".gm-modal", { state: "detached", timeout: 3000 });
+
 /* V2.9 视觉契约（与 React 侧同一口径）：五色**只承载装饰**，文字走主文字色。
    亮色当文字实测 1.57–2.19:1；依据站点五色图例与手册 D6「亮渐变=装饰，文字承载=深档」。 */
 const fiveContract = await page.evaluate(() => {
@@ -201,6 +208,35 @@ check("改尺寸后形态仍可解析", ["table", "condensed", "card"].includes(
    这里补上"输出即须有样式"这一条：演示页里组件渲染出的**每一个 class token**
    都必须能匹配到至少一条 CSS 规则，否则就是死类名（无效档位 / 笔误 / 已改名的残留）。
    框架与状态类（arco-/v-/vue-/is-/js-）不参与判定 —— 它们不由本库的 CSS 定义。 */
+
+/* ── V2.10 新组件：Table / Collapse / Descriptions / 反馈族 / 生长曲线 ── */
+check("表格渲染（th scope=col）", (await page.locator(".gm-tbl th[scope=col]").count()) >= 4,
+  `${await page.locator(".gm-tbl th[scope=col]").count()} 列`);
+check("可排列表头带 aria-sort", (await page.locator(".gm-tbl th[aria-sort]").count()) >= 1);
+await page.locator(".gm-tbl__sortbtn").first().click();
+const sortState = await page.locator(".gm-tbl th[aria-sort]").first().getAttribute("aria-sort");
+check("排序点击切换 ascending（TB-15-02）", sortState === "ascending", String(sortState));
+check("折叠面板 summary aria-expanded+controls",
+  (await page.locator(".gm-fold summary[aria-expanded][aria-controls]").count()) >= 3);
+check("折叠面板展开态", (await page.locator(".gm-fold[open]").count()) >= 1);
+check("描述列表 dd.v 渲染", (await page.locator(".gm-desc dd.v").count()) >= 5,
+  `${await page.locator(".gm-desc dd.v").count()} 项`);
+check("Popconfirm 触发器 aria-haspopup=dialog + 气泡 role=dialog",
+  (await page.locator('.gm-popconfirm__trg[aria-haspopup="dialog"]').count()) >= 1 &&
+  (await page.locator('.gm-popconfirm__pop[role="dialog"]').count()) >= 1);
+check("Popover 气泡 role=dialog", (await page.locator('.gm-popover__pop[role="dialog"]').count()) >= 1);
+check("Tooltip role=tooltip", (await page.locator('.gm-tooltip__tip[role="tooltip"]').count()) >= 1);
+check("生长曲线 svg role=img + aria-label",
+  (await page.locator('.gm-growth__svg[role="img"][aria-label]').count()) >= 1);
+check("生长曲线隐藏数据表（读屏逐点）",
+  (await page.locator(".gm-growth table.gm-sr-only tbody tr").count()) >= 9,
+  `${await page.locator(".gm-growth table.gm-sr-only tbody tr").count()} 行`);
+check("生长曲线 P3/P97 开关 aria-pressed",
+  (await page.locator('.gm-growth__toggle[aria-pressed]').count()) >= 1);
+await page.locator(".gm-growth__toggle").first().click();
+const warnHidden = await page.locator(".gm-growth__warns").first().getAttribute("display");
+check("开关关闭后警戒线组隐藏", warnHidden === "none", String(warnHidden));
+
 const orphanClasses = await page.evaluate(() => {
   const known = new Set();
   const collect = (rules) => {

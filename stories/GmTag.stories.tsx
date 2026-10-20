@@ -1,6 +1,6 @@
 import type { Meta, StoryObj } from '@storybook/react-vite'
 import { expect } from 'storybook/test'
-import GmTag from '../goodmom-ui/src/adapters/GmTag'
+import GmTag from '../goodmom-ui/src/components/GmTag'
 
 const meta = {
   component: GmTag,

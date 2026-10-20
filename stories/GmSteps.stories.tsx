@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/react-vite'
-import GmSteps from '../goodmom-ui/src/adapters/GmSteps'
+import GmSteps from '../goodmom-ui/src/components/GmSteps'
 
 const meta = {
   component: GmSteps,

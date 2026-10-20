@@ -12,7 +12,7 @@
 GmButton（全谱）· GmStatusTag（六语义+五色）· GmTag · GmCard · GmAvatar · GmProgress · GmSteps · GmRiskPicker · GmClientCard · GmEmpty · GmSpin · GmSkeleton · GmLink（链接/文字按钮，外链与禁用语义）· GmCascader（级联选择，popup/inline/picker 三形态）· GmResponsiveView（响应式容器，按容器宽度在表格/紧凑/卡片间切换）· GmVirtualList（虚拟长列表，固定行高窗口渲染）
 （tokens：status / business（semanticOf 40+ 词条）/ design）
 
-> ⚠️ 范围口径：00 目录登记 94 项为**规范全量**；本库为**已封装子集（当前 16 个模块）**。未封装组件请先用 Arco 原生 + 本主题类（gm-*）实现，并按 00 登记制度补封装。
+> ⚠️ 范围口径：00 目录登记 98 项为**规范全量**；本库为**已封装子集（当前 27 个模块，与 @goodmom/vue 同名同契约）**。未封装组件请先用 Arco 原生 + 本主题类（gm-*）实现，并按 00 登记制度补封装。
 
 ## 安装与使用（需可访问 npm）
 ```bash

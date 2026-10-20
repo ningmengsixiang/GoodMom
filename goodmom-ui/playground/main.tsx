@@ -21,7 +21,10 @@ import {
   GmAvatar, GmButton, GmButtonGroup, GmCard, GmCascader, GmClientCard, GmEmpty,
   GmLink, GmProgress, GmResponsiveView, GmResult, GmRiskPicker, GmSkeleton, GmSpin,
   GmStatusTag, GmSteps, GmTag, GmToast, GmVirtualList,
+  GmTable, GmCollapse, GmDescriptions, GmModal, GmPopconfirm, GmPopover, GmTooltip,
+  GmGrowthCard,
   semanticOf, BUSINESS_LABELS, type GmFive, type GmCascaderOption, type GmSemantic,
+  type GmTableColumn, type GmGrowthData,
 } from "../src/index";
 
 const regionOptions: GmCascaderOption[] = [
@@ -36,6 +39,70 @@ const SEMS: GmSemantic[] = ["positive", "info", "attention", "risk", "neutral", 
 const FIVES: GmFive[] = ["m1", "m2", "m3", "m4", "m5"];
 
 const VListRows = Array.from({ length: 1284 }, (_, i) => ({ id: i + 1, name: `档案 ${i + 1}` }));
+
+/* ── V2.10 新组件演示数据 ─────────────────────────────────────────── */
+const TBL_COLS: GmTableColumn[] = [
+  { key: "name", title: "服务对象", sortable: true },
+  { key: "gest", title: "孕周" },
+  { key: "status", title: "状态" },
+  { key: "ops", title: "操作", align: "right", render: () => (
+    <span className="ops">
+      <a href="#ops">随访</a>
+      <a href="#ops">详情</a>
+    </span>
+  ) },
+];
+const TBL_DATA = [
+  { key: 1, name: "张敏", gest: "28 周", status: <GmStatusTag five="m2">黄 · 一般风险</GmStatusTag> },
+  { key: 2, name: "李华", gest: "32 周", status: <GmStatusTag five="m1">绿 · 低风险</GmStatusTag> },
+  { key: 3, name: "王芳", gest: "24 周", status: <GmStatusTag five="m3">橙 · 较高风险</GmStatusTag> },
+  { key: 4, name: "赵兰", gest: "36 周", status: <GmStatusTag semantic="positive">正常</GmStatusTag> },
+];
+const FOLDS = [
+  { key: "a", title: "2024-10 儿保随访记录", tone: "positive" as const, content: "身高体重头围均正常，喂养指导完成；下次重点关注语言发育。" },
+  { key: "b", title: "疫苗接种提示", tone: "attention" as const, content: "13 价肺炎第 3 剂次到期，请携带接种本。" },
+  { key: "c", title: "喂养记录", content: "近 7 天奶量均值 720ml/日，夜醒 1 次。" },
+];
+const DESCS = [
+  { label: "出生日期", value: "2023-04-12 · 足月顺产" },
+  { label: "出生体重 / 身长", value: "3.2kg / 50cm", num: true },
+  { label: "母亲姓名", value: "张敏" },
+  { label: "建档机构", value: "市妇幼保健院儿保科" },
+  { label: "最近随访", value: "2026-10-08 · 王医生" },
+];
+const GROWTH: GmGrowthData = {
+  title: "体重生长曲线", tone: "mint", seriesName: "宝宝实测",
+  source: "WHO 2006 · 0–24 月龄", bandLabel: "P3–P97 · 示意数据",
+  xName: "月龄", xUnit: "月", yName: "体重", yUnit: "kg",
+  x: [0, 3, 6, 9, 12, 15, 18, 21, 24], xTicks: [0, 6, 12, 18, 24], yTicks: [6, 8, 10, 12, 14],
+  p3: [2.5, 4.6, 6.1, 7.1, 7.7, 8.3, 8.8, 9.2, 9.7],
+  p50: [3.3, 6.4, 7.9, 8.9, 9.6, 10.3, 10.9, 11.5, 12.2],
+  p97: [4.3, 7.1, 9.2, 10.5, 11.5, 12.4, 13.2, 13.9, 14.6],
+  actual: [3.4, 6.2, 7.9, 8.9, 9.7, 10.5, 11.5, 12.0, 9.4],
+  focus: 18,
+  advisories: [{ x: 24, tone: "attention", text: "24 月龄 · 体重 9.4kg 低于 P3（9.7kg）：建议 2 周内复测并评估喂养（示意）" }],
+};
+function TableDemo() {
+  const [sortKey, setSortKey] = useState<string | undefined>(undefined);
+  const [sortOrder, setSortOrder] = useState<"asc" | "desc" | null>(null);
+  return (
+    <GmTable
+      columns={TBL_COLS}
+      data={TBL_DATA}
+      sortKey={sortKey}
+      sortOrder={sortOrder}
+      onSortChange={(k, o) => { setSortKey(k); setSortOrder(o); }}
+    />
+  );
+}
+function ModalDemo() {
+  const [open, setOpen] = useState(true); /* 冒烟先断言 role=dialog，再点关闭回收遮罩 */
+  return (
+    <GmModal open={open} title="随访确认" okText="确定" cancelText="取消" onCancel={() => setOpen(false)}>
+      随访记录已保存，是否提交审核？
+    </GmModal>
+  );
+}
 
 function App() {
   const [risk, setRisk] = useState<GmFive>("m2");
@@ -184,6 +251,40 @@ function App() {
         <h2>GmToast · error 走 role=alert</h2>
         <GmToast open message="保存成功" status="success" />
         <GmToast open message="保存失败" status="error" />
+      </section>
+
+      <section>
+        <h2>GmTable · 玻璃表格（排序 / 状态列 / 操作列）</h2>
+        <TableDemo />
+      </section>
+
+      <section>
+        <h2>GmCollapse · 折叠面板（300ms grid-rows / 一屏 ≤3）</h2>
+        <GmCollapse items={FOLDS} defaultOpenKeys={["a"]} />
+      </section>
+
+      <section>
+        <h2>GmDescriptions · 描述列表</h2>
+        <GmDescriptions items={DESCS} />
+      </section>
+
+      <section>
+        <h2>GmModal / GmPopconfirm / GmPopover / GmTooltip</h2>
+        <div className="row">
+          <ModalDemo />
+          <GmPopconfirm title="确认注销该档案？" description="注销后不可恢复" danger okText="确认注销">
+            <span style={{ color: "var(--lg-sem-risk)", fontWeight: 600 }}>注销档案</span>
+          </GmPopconfirm>
+          <GmPopover title="高危随访说明" content="高危孕产妇需在 7 天内完成复访。">
+            <span style={{ color: "var(--lg-link)" }}>高危随访</span>
+          </GmPopover>
+          <GmTooltip title="实时防护已开启"><span style={{ color: "var(--lg-sem-special)" }}>防护状态</span></GmTooltip>
+        </div>
+      </section>
+
+      <section>
+        <h2>GmGrowthCard · 生长曲线（百分位带 / 框选 / 开关）</h2>
+        <GmGrowthCard data={GROWTH} />
       </section>
 
       <section>

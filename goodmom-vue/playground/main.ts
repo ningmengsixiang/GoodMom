@@ -23,9 +23,19 @@ import {
   GmSteps,
   GmTag,
   GmVirtualList,
+  GmTable,
+  GmCollapse,
+  GmDescriptions,
+  GmModal,
+  GmPopconfirm,
+  GmPopover,
+  GmTooltip,
+  GmGrowthCard,
   BUSINESS_LABELS,
   type GmCascaderOption,
   type GmFive,
+  type GmTableColumn,
+  type GmGrowthData,
 } from "../src/index";
 import "../src/styles/index.css";
 
@@ -52,6 +62,7 @@ const App = {
   components: {
     GmAvatar, GmButton, GmCard, GmCascader, GmClientCard, GmEmpty, GmLink, GmProgress,
     GmResponsiveView, GmRiskPicker, GmSkeleton, GmSpin, GmStatusTag, GmSteps, GmTag, GmVirtualList,
+    GmTable, GmCollapse, GmDescriptions, GmModal, GmPopconfirm, GmPopover, GmTooltip, GmGrowthCard,
   },
   setup() {
     const risk = ref<GmFive | undefined>("m2");
@@ -64,7 +75,52 @@ const App = {
     const progress = ref(45);
     const rows = Array.from({ length: 2000 }, (_, i) => ({ id: i, name: `服务对象 ${i + 1}` }));
 
-    return { risk, region, regionProbe, dark, progress, rows, regionOptions, BUSINESS_LABELS };
+    /* ── V2.10 新组件演示数据 ─────────────────────────────────────── */
+    const tblCols: GmTableColumn[] = [
+      { key: "name", title: "服务对象", sortable: true },
+      { key: "gest", title: "孕周" },
+      { key: "status", title: "状态" },
+      { key: "ops", title: "操作", align: "right" },
+    ];
+    const tblData = [
+      { key: 1, name: "张敏", gest: "28 周", status: "黄 · 一般风险", ops: "随访 · 详情" },
+      { key: 2, name: "李华", gest: "32 周", status: "绿 · 低风险", ops: "随访 · 详情" },
+      { key: 3, name: "王芳", gest: "24 周", status: "橙 · 较高风险", ops: "随访 · 详情" },
+      { key: 4, name: "赵兰", gest: "36 周", status: "正常", ops: "随访 · 详情" },
+    ];
+    const tblSortKey = ref<string | undefined>(undefined);
+    const tblSortOrder = ref<"asc" | "desc" | null>(null);
+    const folds = [
+      { key: "a", title: "2024-10 儿保随访记录", tone: "positive", content: "身高体重头围均正常，喂养指导完成；下次重点关注语言发育。" },
+      { key: "b", title: "疫苗接种提示", tone: "attention", content: "13 价肺炎第 3 剂次到期，请携带接种本。" },
+      { key: "c", title: "喂养记录", content: "近 7 天奶量均值 720ml/日，夜醒 1 次。" },
+    ];
+    const descs = [
+      { label: "出生日期", value: "2023-04-12 · 足月顺产" },
+      { label: "出生体重 / 身长", value: "3.2kg / 50cm", num: true },
+      { label: "母亲姓名", value: "张敏" },
+      { label: "建档机构", value: "市妇幼保健院儿保科" },
+      { label: "最近随访", value: "2026-10-08 · 王医生" },
+    ];
+    const growth: GmGrowthData = {
+      title: "体重生长曲线", tone: "mint", seriesName: "宝宝实测",
+      source: "WHO 2006 · 0–24 月龄", bandLabel: "P3–P97 · 示意数据",
+      xName: "月龄", xUnit: "月", yName: "体重", yUnit: "kg",
+      x: [0, 3, 6, 9, 12, 15, 18, 21, 24], xTicks: [0, 6, 12, 18, 24], yTicks: [6, 8, 10, 12, 14],
+      p3: [2.5, 4.6, 6.1, 7.1, 7.7, 8.3, 8.8, 9.2, 9.7],
+      p50: [3.3, 6.4, 7.9, 8.9, 9.6, 10.3, 10.9, 11.5, 12.2],
+      p97: [4.3, 7.1, 9.2, 10.5, 11.5, 12.4, 13.2, 13.9, 14.6],
+      actual: [3.4, 6.2, 7.9, 8.9, 9.7, 10.5, 11.5, 12.0, 9.4],
+      focus: 18,
+      advisories: [{ x: 24, tone: "attention", text: "24 月龄 · 体重 9.4kg 低于 P3（9.7kg）：建议 2 周内复测并评估喂养（示意）" }],
+    };
+    /* 冒烟先断言 role=dialog，再点取消回收遮罩（否则遮罩拦截后续点击） */
+    const modalOpen = ref(true);
+
+    return {
+      risk, region, regionProbe, dark, progress, rows, regionOptions, BUSINESS_LABELS,
+      tblCols, tblData, tblSortKey, tblSortOrder, folds, descs, growth, modalOpen,
+    };
   },
   template: `
   <div :data-theme="dark ? 'dark' : undefined" style="min-height:100vh;background:var(--lg-page-bg);padding:24px;font-family:var(--lg-font)">
@@ -181,6 +237,43 @@ const App = {
       <GmVirtualList :items="rows" :item-height="44" :height="264" aria-label="服务对象长列表">
         <template #default="{ item, index }">{{ index + 1 }}. {{ item.name }}</template>
       </GmVirtualList>
+    </section>
+
+    <section style="margin-top:20px">
+      <GmTable
+        :columns="tblCols"
+        :data="tblData"
+        :sort-key="tblSortKey"
+        :sort-order="tblSortOrder"
+        @sort-change="(k, o) => { tblSortKey = k; tblSortOrder = o; }"
+      />
+    </section>
+
+    <section style="margin-top:20px;max-width:640px">
+      <GmCollapse :items="folds" :default-open-keys="['a']" />
+    </section>
+
+    <section style="margin-top:20px;max-width:640px">
+      <GmDescriptions :items="descs" />
+    </section>
+
+    <section style="margin-top:20px;display:flex;gap:16px;flex-wrap:wrap;align-items:center">
+      <GmModal :open="modalOpen" title="随访确认" ok-text="确定" cancel-text="取消" @cancel="modalOpen = false">
+        随访记录已保存，是否提交审核？
+      </GmModal>
+      <GmPopconfirm title="确认注销该档案？" description="注销后不可恢复" danger ok-text="确认注销">
+        <span style="color:var(--lg-sem-risk);font-weight:600">注销档案</span>
+      </GmPopconfirm>
+      <GmPopover title="高危随访说明" content="高危孕产妇需在 7 天内完成复访。">
+        <span style="color:var(--lg-link)">高危随访</span>
+      </GmPopover>
+      <GmTooltip title="实时防护已开启">
+        <span style="color:var(--lg-sem-special)">防护状态</span>
+      </GmTooltip>
+    </section>
+
+    <section style="margin-top:20px;max-width:560px">
+      <GmGrowthCard :data="growth" />
     </section>
   </div>`,
 };

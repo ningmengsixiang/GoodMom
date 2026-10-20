@@ -97,6 +97,34 @@
 
   /* 字体 */
   --lg-font:"Inter","PingFang SC","MiSans","Noto Sans SC",sans-serif;
+  /* 13 · 13.2 图表导引件专用（网格线/警戒虚线等**非文字**元素）——
+     文字承载一律走 --lg-text-secondary；暗色档自动翻浅。 */
+  --gm-guide:#9AA2B0;
+  /* ── 10 · 10.2 移动端 Token 增量（18 个；尺寸类，不随暗色档变化）────────────────
+     在 theme.css 与 base.css 的 :root 中**逐字节一致**，由 check-style-parity.py 守门。 */
+  /* 间距 */
+  --lg-m-gutter-page:16px;
+  --lg-m-gap-card:12px;
+  --lg-m-pad-card:16px;
+  --lg-m-pad-panel:18px;
+  /* 圆角：移动端空间小、整体小一号，仍 ≥14 */
+  --lg-m-radius-card:20px;
+  --lg-m-radius-control:16px;
+  --lg-m-radius-btn:18px;
+  /* 玻璃：移动端性能档（10.8：单层 blur ≤32） */
+  --lg-m-blur-max:32px;
+  /* 触控：常规 44 / 关键主行动 48 */
+  --lg-m-touch:44px;
+  --lg-m-touch-critical:48px;
+  /* 移动端字号（正文 ≥16 防 iOS 聚焦缩放；行高见 10.2 表） */
+  --lg-m-display:30px;
+  --lg-m-title:20px;
+  --lg-m-section:17px;
+  --lg-m-body:16px;
+  --lg-m-body-sm:14px;
+  --lg-m-caption:12px;
+  --lg-m-num-xl:40px;
+  --lg-m-num-lg:28px;
 }
 
 /* —— 02 · 2.1.9 暗黑模式（夜间暖石板）：任意容器根加 data-theme="dark" —— */
@@ -126,6 +154,7 @@
   /* 语义 alias 暗色档（实测 ≥4.5:1，见 02 · 2.1.9 表 B） */
   --lg-sem-positive:#6FC9B4; --lg-sem-info:#9CAEFF; --lg-sem-attention:#F2C14E;
   --lg-sem-risk:#F79AA8; --lg-sem-neutral:#A6ADB9; --lg-sem-special:#B9A0FF;
+  --gm-guide:#A6ADB9;
 }
 
 /* —— 基础重置（仅限组件作用域，不污染业务全局）—— */
